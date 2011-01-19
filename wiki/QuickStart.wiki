@@ -1,0 +1,19 @@
+#summary Learn how to extend the demo provided.
+
+= Introduction =
+
+awe6 provides a collection of interfaces which describe interaction between related concepts.  The interface does not imply a specific way of joining those concepts.  For ease of use the awe6 library includes core functionality (a basic implementation of the interface) which in turn can be configured using the supplied demo.
+
+The demo is a ready to build game (very basic!).  It demonstrates the core functionality of the awe6 feature set: factory methods, asset management, audio, inputs, gui, overlay, scenes, entities.  It doesn't demonstrate the proper way of using these (Inversion of Control is a more advanced topic to be covered later).
+
+
+= Details =
+
+Basic tutorial:
+
+  * Install [http://www.flashdevelop.org FlashDevelop] and [http://www.haxe.org haXe].
+  * Check out /trunk/app.
+  * Build project.
+  * Edit files in package "demo" to suit your requirements.
+
+More info to follow ...
