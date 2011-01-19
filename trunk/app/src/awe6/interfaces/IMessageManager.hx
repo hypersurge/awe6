@@ -22,6 +22,9 @@
 
 package awe6.interfaces;
 
+/**
+ * @todo	Test functionality
+ */
 interface IMessageManager
 {
 	function addSubscriber<M,T>( subscriber:IEntityCollection, message:Dynamic<M>, handler:M->IEntityCollection->Void, ?sender:IEntityCollection, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;

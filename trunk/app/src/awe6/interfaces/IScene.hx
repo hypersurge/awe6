@@ -22,6 +22,10 @@
 
 package awe6.interfaces;
 
+/**
+ * The IScene interface should be implemented by objects intending to represent scene states in the ISceneManager.
+ * <p>Scenes represent the larger building blocks of the awe6 concept, and contain Entities which do the work.</p> 
+ */
 interface IScene implements IProcess, implements IEntityCollection, implements IViewable
 {
 	var type( default, null ):EScene;
