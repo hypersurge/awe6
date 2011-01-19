@@ -1,0 +1,5 @@
+-cp src
+-swf9 bin/awe6.swf
+-swf-header 600:400:25:000000
+-swf-lib obj\awe6Resources.swf
+-main Main
