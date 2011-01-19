@@ -1,0 +1,275 @@
+/* CSS reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	//font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+body {
+	//line-height: 1; // Too ugly :)
+	color: black;
+	background: white;
+}
+ol, ul {
+	list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
+
+/** STYLE **/
+body {
+	font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	font-size: 13px;
+}
+
+a, a:active, a:visited {
+	color: #0000cc;
+}
+
+.type-frame {
+	margin: 5px;
+}
+
+#class-frame h1{
+	padding-top:5px;
+	padding-bottom:5px;
+	//height:35px;
+	background-color:#DBE2EA;
+	border-bottom: 1px solid #666666;
+}
+
+#types-frame, #packages-frame {
+	margin: 0px;
+}
+
+ul.types, ul.packages, #packages-header ul{
+	margin: 5px;
+}
+
+#types-frame h1, #packages-frame h1 {
+	font-size: 100%;
+	font-weight: bold;
+	padding: 3px;
+	color: #ffffff;
+	border-bottom: 1px solid #666666;
+	background-color: #6E86A0;
+	text-align: center;
+}
+
+#packages-frame h1 {
+	font-size: 100%;
+	padding: 2px;
+	border-bottom: 1px solid #666666;
+	text-align: center;
+	margin-bottom: 0.75em;
+}
+#overview{
+	margin: 5px;
+}
+
+#header{
+	margin-bottom: 0.25em;
+	background-color: #6E86A0;
+	padding:10px 15px 0px 15px;
+	color:#ffffff;
+	//background-image: url(images/headerback.png);
+	min-height:30px;
+}
+img #logo{
+	align:left;
+}
+#footer {
+	font-size: 100%;
+	padding: 3px 0px 3px 10px;
+	background-color:#EFF2F5;
+}
+
+.type-frame h1 {
+	font-size: 130%; // 117
+	font-weight: bold;
+	margin-bottom: 0.75em;
+	padding-left: 20px;
+	background-repeat: no-repeat;
+	min-height: 16px;
+}
+
+ul.types li {
+	background-repeat: no-repeat;
+	min-height: 16px;
+	padding-left: 18px;
+}
+
+.class {
+	background-image: url(images/class.png);
+}
+
+.interface {
+	background-image: url(images/interface.png);
+}
+
+.typedef {
+	background-image: url(images/typedef.png);
+}
+
+.alias {
+	background-image: url(images/alias.png);
+}
+
+.enum {
+	background-image: url(images/enum.png);
+}
+
+dl {
+	margin: 0.75em 0;
+}
+
+.doc {
+	padding: 0 0 0.75em 0;
+	margin: 0.75em 0;
+}
+
+dt {
+	display: block;
+	float: left;
+	width: 80px;
+	font-weight: bold;
+	font-size: 85%;
+	min-height: 1.2em;
+	vertical-align: bottom;
+	border-bottom: 1px solid #dddddd;
+	background-color: #f0f0f0;
+	padding: 2px 2px 2px 4px;
+}
+
+dd {
+	display: block;
+	margin-left: 86px;
+	min-height: 1.2em;
+	padding: 2px 2px 2px 4px;
+	border-left: 1px solid #cccccc;
+	border-bottom: 1px solid #dddddd;
+	font-size: 85%;
+	background-color: #f9f9f9;
+}
+
+pre {
+	border-top: 1px dashed #dddddd;
+	border-bottom: 1px dashed #dddddd;
+	background-color: #f9f9f9;
+	font-family: "Courier New", Courier, mono;
+	font-weight: normal;
+	padding: 0.75em 0 0 0;
+	margin: 0.75em 0;
+	font-size: 85%;
+}
+
+.members-panel {
+	border: 1px solid #cccccc;
+	margin: 0 0 0.75em 0;
+}
+
+.members-panel h2 {
+	border-top: 1px solid #ffffff;
+	border-bottom: 1px solid #e9e9e9;
+	background-color: #f3f3f3;
+	padding: 2px 4px;
+	font-weight: bold;
+	font-size: 85%;
+}
+
+.member .header {
+	padding: 8px 4px 4px;
+	color: #666666;
+	font-size: 87%;
+	border-top: 1px solid #cccccc;
+}
+
+.member .header .name {
+	color: #000000;
+	font-size: 100%;
+	font-weight: bold;
+}
+
+.member .body {
+	padding: 4px 16px;
+}
+
+.member .platforms {
+	padding: 4px 16px;
+}
+
+.member .platforms-list {
+	padding: 4px 16px;
+	font-weight: bold;
+}
+
+#packages-frame li, #types-frame li {
+	background-repeat: no-repeat;
+	min-height: 16px;
+	padding-left: 18px;
+}
+
+#packages-frame ul.packages li {
+	background-image: url(images/package.png);
+}
+
+#packages-header li {
+	font-weight: bold;
+	font-size: 85%;
+}
+
+div.inherited, div.overrides {
+	margin: 2px 0;
+}
+
+.deprecated {
+	color: #FF0000;
+}
+
+.keyword {
+	color: #50C2FF;
+}
+
+.hideInheritedVar {
+        display: none;
+}
+.showInheritedVar {
+        display: inline;
+}
+.hideInheritedMethod {
+        display: none;
+}
+.showInheritedMethod {
+        display: inline;
+}
+

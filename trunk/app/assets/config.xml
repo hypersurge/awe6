@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<settings>
+		<assets>
+			<url1>gui.swf</url1>
+			<url2>audio.swf</url2>
+			<packages default="assets" audio="assets.audio" fonts="assets.fonts" />
+		</assets>
+		<font name="Orbitron" />
+	</settings>
+	<gui>
+		<buttons next="NEXT" />
+		<scenes>
+			<intro title="INTRO SCENE" />
+			<game title="GAME SCENE" />
+			<results title="GAME OVER" win="A new personal best of " lose="You didn't beat your previous time of " />
+		</scenes>
+	</gui>
+</data>
