@@ -22,6 +22,10 @@
 
 package awe6.interfaces;
 
+/**
+ * The ITextStyle interface should be implemented by objects intended to created by the createTextStyle method of IFactory.
+ * @author	Robert Fell
+ */
 interface ITextStyle
 {
 	var font:String;
