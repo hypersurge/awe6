@@ -1,4 +1,5 @@
 #summary Learn how to extend the demo provided.
+#labels Featured
 
 = Introduction =
 
