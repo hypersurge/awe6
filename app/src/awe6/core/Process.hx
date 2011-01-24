@@ -27,7 +27,7 @@ import awe6.interfaces.ITools;
 
 class Process implements IProcess
 {
-	public var isActive( default, __setIsActive ):Bool;
+	public var isActive( default, __set_isActive ):Bool;
 	public var isDisposed( default, null ):Bool;
 	
 	private var _kernel:IKernel;	
@@ -92,7 +92,7 @@ class Process implements IProcess
 		_init();
 	}
 	
-	private function __setIsActive( value:Bool ):Bool
+	private function __set_isActive( value:Bool ):Bool
 	{
 		if ( value == isActive ) return isActive;
 		value ? resume() : pause();

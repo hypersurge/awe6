@@ -164,6 +164,7 @@ class Overlay extends Process, implements IOverlay
 			case UNMUTE : _buttonUnmute;
 			case PAUSE : _buttonPause;
 			case UNPAUSE : _buttonUnpause;
+			case SUB_TYPE( value ) : null;
 		}		
 	}
 	
@@ -243,6 +244,7 @@ class Overlay extends Process, implements IOverlay
 				_drawPause( false );
 				activateButton( EOverlayButton.UNMUTE );
 			}
+			case SUB_TYPE( value ) :
 		}
 	}
 	

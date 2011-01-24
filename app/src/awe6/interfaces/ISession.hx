@@ -25,7 +25,7 @@ package awe6.interfaces;
 interface ISession
 {
 	var id( default, null ):String;
-	var isTester( __getIsTester, null ):Bool;
+	var isTester( __get_isTester, null ):Bool;
 	function clone( newID:String ):ISession;
 	function reset( ?isSaved:Bool = false ):Void;
 	function save():Void;

@@ -38,7 +38,7 @@ class ASession implements ISession
 	private var _version:Int;
 	
 	public var id( default, null ):String;
-	public var isTester( __getIsTester, null ):Bool;
+	public var isTester( __get_isTester, null ):Bool;
 	public var loadCount:Int;
 	public var saveCount:Int;
 	//extend me
@@ -160,7 +160,7 @@ class ASession implements ISession
 		_so.clear();		
 	}
 	
-	private function __getIsTester():Bool
+	private function __get_isTester():Bool
 	{
 		return ( _kernel.isDebug || ( id == DEBUG_ID ) );
 	}

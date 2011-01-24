@@ -24,7 +24,7 @@ package awe6.interfaces;
 
 interface IPauseable 
 {
-	var isActive( default, __setIsActive ):Bool;
+	var isActive( default, __set_isActive ):Bool;
 	function pause():Void;
 	function resume():Void;	
 }
