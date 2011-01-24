@@ -24,5 +24,5 @@ package awe6.interfaces;
 
 interface IPriority 
 {
-	var priority( default, __setPriority ):Int;
+	var priority( default, __set_priority ):Int;
 }

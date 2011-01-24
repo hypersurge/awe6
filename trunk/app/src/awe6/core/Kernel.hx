@@ -56,7 +56,7 @@ class Kernel extends Process, implements IKernel
 	public var factory( default, null ):IFactory;
 	public var isDebug( default, null ):Bool;
 	public var isLocal( default, null ):Bool;
-	public var isEyeCandy( default, __setIsEyeCandy ):Bool;
+	public var isEyeCandy( default, __set_isEyeCandy ):Bool;
 	public var tools( default, null ):ITools;
 	public var assets( default, null ):IAssetManager;
 	public var audio( default, null ):IAudioManager;
@@ -220,7 +220,7 @@ class Kernel extends Process, implements IKernel
 		scenes.setScene( factory.startingSceneType );
 	}
 	
-	private function __setIsEyeCandy( value:Bool ):Bool
+	private function __set_isEyeCandy( value:Bool ):Bool
 	{
 		isEyeCandy = value;
 		_view.sprite.contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );

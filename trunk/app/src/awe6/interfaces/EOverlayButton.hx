@@ -33,4 +33,5 @@ enum EOverlayButton
 	UNMUTE;
 	PAUSE;
 	UNPAUSE;
+	SUB_TYPE( value:Dynamic );
 }

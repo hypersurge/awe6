@@ -37,7 +37,7 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	 * Specify the visibility of this view.
 	 * <p>If true the view will be displayed, if false the view is hidden.</p>
 	 */
-	var isVisible( default, __setIsVisible ):Bool;
+	var isVisible( default, __set_isVisible ):Bool;
 	/**
 	 * Adds a new view child to this view. 
 	 * <p>A view can have multiple children, and when you add a child to a view, it is automatically connected to the parent node through its parent property.</p>

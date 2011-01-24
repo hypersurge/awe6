@@ -38,7 +38,7 @@ interface IKernel implements IPauseable
 	/**
 	 * Toggleable by the user, intended to be used as a switch to disable intensive, but non essential, content (performance vs wow)
 	 */
-	var isEyeCandy( default, __setIsEyeCandy ):Bool;
+	var isEyeCandy( default, __set_isEyeCandy ):Bool;
 	/**
 	 * The topmost visual element, used for chrome & global controls
 	 */

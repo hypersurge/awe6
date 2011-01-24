@@ -31,7 +31,7 @@ interface IAudioManager
 	/**
 	 * If true all audio playback is silenced.
 	 */
-	var isMute( default, __setMute ):Bool;
+	var isMute( default, __set_isMute ):Bool;
 	/**
 	 * Begin playback of any specified sound.  Optional parameters allow further control.
 	 * @param	id	The unique id of the audio media asset.  Can be the className of a loaded asset library.
