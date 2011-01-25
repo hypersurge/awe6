@@ -22,11 +22,46 @@
 
 package awe6.interfaces;
 
+/**
+ * The IJoypad interface should be implemented by an object wishing to be used as a directional pad plus two fire button joypad.
+ * <p>A joypad is useful for a simple game input device.  The device is limited to 6 EJoypadButtons to prevent keyboard lock and overly complex game controls.</p>
+ * <p>A joypad can be configured to accept bespoke key configurations, or alternative user interface control devices (e.g. mouse or touchpad).</p>
+ * @author	Robert Fell
+ */
 interface IJoypad 
 {
+	/**
+	 * Determine if a specific joypad button is currently down.
+	 * @param	type	The joypad button.
+	 * @return	Returns true is the joypad button is currently down, false otherwise.
+	 */
 	function getIsButtonDown( type:EJoypadButton ):Bool;
+	/**
+	 * Determine if a specific joypad button was pressed in the current update frame.
+	 * <p>A press is defined as a new down - i.e. was up previous frame, and is down this frame.</p>
+	 * @param	type	The joypad button.
+	 * @return	Returns true is the joypad button was pressed in the current update, false otherwise.
+	 */
 	function getIsButtonPress( type:EJoypadButton ):Bool;
+	/**
+	 * Determine if a specific joypad button was released in the current update.
+	 * <p>A release is defined as a new up - i.e. was down previous frame, and is up this frame.</p>
+	 * @param	type	The joypad button.
+	 * @return	Returns true is the joypad button was released in the current update, false otherwise.
+	 */	
 	function getIsButtonRelease( type:EJoypadButton ):Bool;
+	/**
+	 * Determine how long a specific joypad button has been down.
+	 * @param	type	The joypad button.
+	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @return	Returns the duration the joypad button has been down.
+	 */
 	function getButtonDownDuration( type:EJoypadButton, ?asTime:Bool = true ):Float;
+	/**
+	 * Determine how long a specific joypad button has been up.
+	 * @param	type	The joypad button.
+	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @return	Returns the duration the joypad button has been up.
+	 */
 	function getButtonUpDuration( type:EJoypadButton, ?asTime:Bool = true ):Float;
 }
