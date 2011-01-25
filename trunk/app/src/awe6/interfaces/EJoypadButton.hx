@@ -23,7 +23,7 @@
 package awe6.interfaces;
 
 /**
- * Representing the buttons on a Joypad for use in the IInputJoypad virtual controller.
+ * Representing the buttons on a Joypad for use in the IJoypad virtual controller.
  * <p>Includes directional buttons and two fire buttons: Primary & Secondary. Fire is used as a shortcut for Primary or Secondary.</p>
  * @author	Robert Fell
  */

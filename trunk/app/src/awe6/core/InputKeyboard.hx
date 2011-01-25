@@ -266,20 +266,31 @@ class InputKeyboard extends Process, implements IInputKeyboard
 			case NUMBER_7: 55; 
 			case NUMBER_8: 56; 
 			case NUMBER_9: 57; 
-			case KEY_COLON: 186; 
-			case KEY_EQUALS: 187; 
-			case KEY_HYPHEN: 189; 
-			case KEY_SLASH: 191; 
-			case KEY_TILDE: 222; 
-			case KEY_SQUARELEFT: 219; 
-			case KEY_SQUARERIGHT: 221; 
-			case KEY_BACKSLASH: 220; 
-			case KEY_APOSTROPHE: 192; 
-			case KEY_TOPLEFT: 223;
+			case COLON: 186; 
+			case EQUALS: 187; 
+			case HYPHEN: 189; 
+			case SLASH: 191; 
+			case TILDE: 222; 
+			case SQUARELEFT: 219; 
+			case SQUARERIGHT: 221; 
+			case BACKSLASH: 220; 
+			case APOSTROPHE: 192; 
+			case TOPLEFT: 223;
 			case SUB_TYPE( value ): Std.int( value );
 		}
 	}
 	
+	public function getKey( keyCode:Int ):EKey
+	{
+		var l_constructors:Array<String> = Type.getEnumConstructs( EKey );
+		l_constructors.pop();
+		for ( i in l_constructors )
+		{
+			var l_key:EKey = Type.createEnum( EKey, i );
+			if ( getKeyCode( l_key ) == keyCode ) return l_key;
+		}
+		return EKey.SUB_TYPE( keyCode );
+	}	
 }
 
 private class _HelperKey
