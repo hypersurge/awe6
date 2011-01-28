@@ -128,5 +128,8 @@ enum EKey
 	BACKSLASH;
 	APOSTROPHE;
 	TOPLEFT;
+	/**
+	 * Allows EKey to be extended (e.g. for using non US / English keyboards)
+	 */
 	SUB_TYPE( value:Dynamic );
 }

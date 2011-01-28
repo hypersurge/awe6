@@ -35,5 +35,8 @@ enum ETextStyle
 	SUBHEAD;
 	SMALLPRINT;
 	OVERSIZED;
+	/**
+	 * Allows ETextStyle to be extended (e.g. for using project specific text styles)
+	 */	
 	SUB_TYPE( value:Dynamic );
 }

@@ -22,9 +22,22 @@
 
 package awe6.interfaces;
 
+/**
+ * The IPauseable interface should be implemented by objects intended to be temporarily disabled from the broad phase update traversal.
+ * @author	Robert Fell
+ */
 interface IPauseable 
 {
+	/**
+	 * Determines if the object is updating or not.
+	 */
 	var isActive( default, __set_isActive ):Bool;
+	/**
+	 * Sets isActive to false.
+	 */
 	function pause():Void;
+	/**
+	 * Sets isActive to true.
+	 */
 	function resume():Void;	
 }

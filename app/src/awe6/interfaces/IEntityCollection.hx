@@ -29,11 +29,6 @@ package awe6.interfaces;
 interface IEntityCollection
 {
 	/**
-	 * The parent of this entity
-	 * <p>The reference is null if this entity has no parent (for exemple an entity not in the entity traversal stack).</p>
-	 */
-	var parent( default, null ):IEntityCollection;
-	/**
 	 * Adds an entity to this object's children.
 	 * @param	entity	The entity to add
 	 * @param	?agenda	Assigns the entity to a specific agenda

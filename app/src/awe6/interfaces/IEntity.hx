@@ -36,6 +36,11 @@ interface IEntity implements IProcess, implements IViewable, implements IEntityC
 	 */
 	var id( default, null ):String;
 	/**
+	 * The parent of this entity
+	 * <p>The reference is null if this entity has no parent (for example an entity not in the entity traversal stack).</p>
+	 */
+	var parent( default, null ):IEntityCollection;
+	/**
 	 * Used to easily remove this entity from its parent.
 	 * @param	?isRemovedFromView	Determines whether this object's view is removed from the view stack at the same time.
 	 */

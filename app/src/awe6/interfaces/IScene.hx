@@ -25,11 +25,25 @@ package awe6.interfaces;
 /**
  * The IScene interface should be implemented by objects intending to represent scene states in the ISceneManager.
  * <p>Scenes represent the larger building blocks of the awe6 concept, and contain Entities which do the work.</p> 
+ * @author	Robert Fell
+ * @todo	Needs more thought - pause entity / view for example?  Should these bools be part of scene or part of a conditional construction of scene specific overlays?
  */
 interface IScene implements IProcess, implements IEntityCollection, implements IViewable
 {
+	/**
+	 * The type of this scene.
+	 */
 	var type( default, null ):EScene;
+	/**
+	 * Sets whether the pause button is displayed / active in the overlay.
+	 */
 	var isPauseable( default, null ):Bool;
+	/**
+	 * Sets whether the mute button is displayed / active in the overlay.
+	 */
 	var isMuteable( default, null ):Bool;
+	/**
+	 * Sets whether the session is automatically saved when this scene is advanced.
+	 */
 	var isSessionSavedOnNext( default, null ):Bool;
 }

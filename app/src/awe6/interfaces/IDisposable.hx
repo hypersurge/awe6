@@ -24,6 +24,7 @@ package awe6.interfaces;
 
 /**
  * The IDisposable interface should be implemented by objects that require specialised garbage collection or memory deallocation.
+ * <p>Once an object is disposed it should be automatically removed from parent heirachies.</p>
  * @author Robert Fell
  */
 interface IDisposable

@@ -67,7 +67,8 @@ class APreloader extends Process, implements IPreloader
 		_context = new LoaderContext( null, ApplicationDomain.currentDomain, _kernel.isLocal ? null : SecurityDomain.currentDomain );
 		_currentAsset = 0;
 		_perc = 0;
-		_next();
+		if ( _assets.length > 0 ) _next();
+		else dispose();
 	}
 	
 	private function _next():Void

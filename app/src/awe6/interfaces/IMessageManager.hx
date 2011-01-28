@@ -23,12 +23,14 @@
 package awe6.interfaces;
 
 /**
- * @todo	Test functionality
+ * The IMessageManager should be implemented by objects intending to fulfill Entity to Entity synchronous messaging (signals).
+ * <p>The interface provides an observer pattern allowing any Entity to listen to anything on any other Entity.</p>
+ * @todo	Very early stages - need basic tests.  Will document when tested (if it works at all?).
  */
 interface IMessageManager
 {
-	function addSubscriber<M,T>( subscriber:IEntityCollection, message:Dynamic<M>, handler:M->IEntityCollection->Void, ?sender:IEntityCollection, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
-	function getSubscribers<M,T>( ?subscriber:IEntityCollection, ?message:Dynamic<M>, ?handler:M->IEntityCollection->Void, ?sender:IEntityCollection, ?senderClassType:Class<T> ):Array<IEntityCollection>;
-	function removeSubscribers<M,T>( ?subscriber:IEntityCollection, ?message:Dynamic<M>, ?handler:M->IEntityCollection->Void, ?sender:IEntityCollection, ?senderClassType:Class<T> ):Void;
-	function sendMessage<M>( message:Dynamic<M>, sender:IEntityCollection, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void;
+	function addSubscriber<M,T>( subscriber:IEntity, message:Dynamic<M>, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
+	function getSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>;
+	function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void;
+	function sendMessage<M>( message:Dynamic<M>, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void;
 }
