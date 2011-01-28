@@ -1,5 +1,5 @@
+#summary Overview of project milestones and objectives.
 #labels Phase-Requirements,Phase-Design
-#Overview of project milestones and objectives.
 
 = Primary Objective =
 
@@ -35,4 +35,3 @@ The roadmap is defined by the gaps between these objectives and the current stat
   * Flash view (95%)
   * Javascript view (20%)
   * C++ view (35%)
-
