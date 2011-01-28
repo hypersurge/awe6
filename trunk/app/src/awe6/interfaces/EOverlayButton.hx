@@ -33,5 +33,8 @@ enum EOverlayButton
 	UNMUTE;
 	PAUSE;
 	UNPAUSE;
+	/**
+	 * Allows EOverlayButton to be extended (e.g. for using project specific overlay buttons - settings, restart, context help)
+	 */	
 	SUB_TYPE( value:Dynamic );
 }

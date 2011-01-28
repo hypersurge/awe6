@@ -22,12 +22,43 @@
 
 package awe6.interfaces;
 
+/**
+ * The IOverlay interface should be implemented by objects representing the top most visual element of the application.
+ * <p>The overlay is intended to provide application wide border / chrome with controls such as back, mute, pause etc.</p>
+ * <p>The overlay also provides flashing which is a useful cheap effect across many game scenarios.</p>
+ * @author	Robert Fell
+ */
 interface IOverlay implements IProcess, implements IViewable
 {
+	/**
+	 * Sets the visibility of a specific overlay button.
+	 * @param	type	The overlay button.
+	 * @param	?isVisible	If true shows the button, if false hides it.
+	 */
 	function showButton( type:EOverlayButton, ?isVisible:Bool = true ):Void;
+	/**
+	 * Set the position of a specific overlay button.
+	 * @param	type	The overlay button.
+	 * @param	x	The horizontal position.
+	 * @param	y	The vertical position.
+	 * @param	?alpha	The transparency of the button.  Range: 0...1.
+	 */
 	function positionButton( type:EOverlayButton, x:Float, y:Float, ?alpha:Float ):Void;
+	/**
+	 * Triggers an overlay button (as if it was clicked on).
+	 * @param	type	The overlay button.
+	 */
 	function activateButton( type:EOverlayButton ):Void;
 //	function showProgress( progress:Float, ?message:String ):Void;
+	/**
+	 * Hides all overlay buttons.
+	 */
 	function hideButtons():Void;
+	/**
+	 * Creates a flash over the top of everything under the overlay.  Fades to invisible over a period of time.
+	 * @param	?duration	The period of time over which the flash should fade to 0.
+	 * @param	?asTime	If true treats the time as milliseconds, otherwise as frame updates.
+	 * @param	?startingAlpha	The alpha at which the flash starts.  Range: 0...1.
+	 */
 	function flash( ?duration:Float, ?asTime:Bool = false, ?startingAlpha:Float = 1 ):Void;
 }

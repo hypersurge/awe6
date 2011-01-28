@@ -22,6 +22,10 @@
 
 package awe6.interfaces;
 
+/**
+ * The IPreloader interface should be implemented by objects intended to act as preloaders.
+ * @author	Robert Fell
+ */
 interface IPreloader implements IProcess, implements IViewable
 {
 }

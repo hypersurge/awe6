@@ -22,6 +22,10 @@
 
 package awe6.interfaces;
 
+/**
+ * The IPriority interface should be implemented by objects intended to be ranked or sorted.
+ * @author	Robert Fell
+ */
 interface IPriority 
 {
 	var priority( default, __set_priority ):Int;

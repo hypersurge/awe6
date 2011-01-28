@@ -26,7 +26,7 @@ package awe6.interfaces;
  * The IFactory interface should be implemented by objects designed to populate an awe6 implementation.
  * <p>The IFactory represents the blueprint and builder for all project specific classes.</p>
  * @author Robert Fell
- * @todo	Many of these descriptions need better thought.
+ * @todo	Many of these descriptions need better thought.  Documentation on IFactory needs to be excellent, currently basic.
  */
 interface IFactory
 {

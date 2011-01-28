@@ -24,6 +24,8 @@ package awe6.interfaces;
 
 /**
  * Handles main updates and provides global locators for all managers 
+ * @author	Robert Fell
+ * @todo	IKernel needs excellent API information - critical.  Currently substandard.
  */
 interface IKernel implements IPauseable
 {

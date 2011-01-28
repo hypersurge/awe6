@@ -22,7 +22,17 @@
 
 package awe6.interfaces;
 
+/**
+ * The ILogger interface should be implemented by objects wishing to act as logging services.
+ * <p>Logging services are useful for debugging or analytics.</p>
+ * <p>The interface is intentionally vague to allow a multitude of implementations.</p>
+ * @author	Robert Fell
+ */
 interface ILogger
 {
+	/**
+	 * Pass a value to the logger to log.
+	 * @param	value	The value (can be anything).
+	 */
 	function log( value:Dynamic ):Void;
 }
