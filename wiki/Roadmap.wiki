@@ -5,7 +5,7 @@
 
 To create a scalable, flexible and approachable tool to assist in the rapid development of quality games.  What types of game, and for what type of platform are intentionally undefined.
 
-= Platform Independence =
+== Platform Independence ==
 
 The independent casual game developer / small team represents the target user of awe6.  Currently the primary targets for casual games are the web via Flash / SWF and mobile via iOS.  It is expected that Android & HTML5 will become increasingly relevent targets.
 
@@ -17,24 +17,22 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
 
 The roadmap is defined by the gaps between these objectives and the current state of the project:
 
-== Code Library ==
+=== Code Library ===
 
   * Interfaces defined and tested (98%)
   * Working core implementation targetting Flash (98%)
   * Working demo and getting started resources (75%)
 
-== Documentation ==
+=== Documentation ===
 
   * API documentation (60%)
   * UML diagrams of packages (80%)
   * Wiki definitions of key concepts (5%)
   * Examples, demos and tutorials (25%)
 
-== Cross Platform Implementation ==
+=== Cross Platform Implementation ===
 
   * Flash view (95%)
   * Javascript view (20%)
   * C++ view (35%)
-
-
 
