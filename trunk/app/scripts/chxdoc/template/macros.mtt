@@ -1,4 +1,5 @@
 <macros>
+<macros>
 	<macro name="typeDocs()">
 		::if docs != null::
 			<!-- Comment block -->
@@ -10,7 +11,7 @@
 
 	<macro name="methodHeader(m)">
 		<h3>
-			<a name="::raw m.name::()"></a>$$showAccess(::m::)$$showDynamic(::m::)$$showInline(::m::)<span class="name">::raw m.name::</span>::m.params::(::if m.args != null::::raw m.args::::end::) : ::raw m.returns::
+			<a name="::raw m.name::()"></a>$$showAccess(::m::)$$showDynamic(::m::)$$showInline(::m::)<span class="name">::raw m.name::</span>::m.params::( ::if m.args != null::::raw m.args::::end:: ) : ::raw m.returns::
 		</h3>
 			::if m.isOverride::
 				<div class="overrides">overrides <a href="::raw m.inheritance.link.href::#::m.name::()">::raw m.inheritance.link.text::</a></div>

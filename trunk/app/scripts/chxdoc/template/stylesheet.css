@@ -76,7 +76,15 @@ a, a:active, a:visited {
 	margin: 5px;
 }
 
-#class-frame h1, #enum-frame h1{
+#class-frame {
+	margin: 20px 0px;
+}
+
+#class-frame, #enum-frame, #todo, #overview {
+	margin: 110px 20px;
+}
+
+#class-frame h1, #enum-frame h1 {
 	padding-top:5px;
 	padding-bottom:5px;
 	//height:35px;
@@ -117,18 +125,11 @@ ul.types, ul.packages, #packages-header ul{
 	text-align: center;
 	margin-bottom: 0.75em;
 }
-#overview{
-	margin: 5px;
-}
 
 #header{
-	margin-bottom: 0.25em;
-	background-color: #0080ff;
-	padding:10px 15px 0px 15px;
-	color:#ffffff;
+	display: block;
 	//background-image: url(images/header.png);
-	min-height:150px;
-	min-width:700px;
+	height:110px;
 }
 img #logo{
 	align:left;
@@ -237,6 +238,7 @@ pre {
 	color: #666666;
 	font-size: 87%;
 	border-top: 1px solid #cccccc;
+	font-family: "Courier New", Courier, mono;
 }
 
 .member .header .name {
