@@ -20,6 +20,7 @@ function windowTitle()
 <noscript></noscript>
 </head>
 <body onload="windowTitle();">
+	::use 'header.mtt'::::end::
 	<div id="enum-frame" class="type-frame">
 	<!-- ======== START OF class DATA ======== -->
 	<h1 class="enum">::nameDots::::raw params::</h1>

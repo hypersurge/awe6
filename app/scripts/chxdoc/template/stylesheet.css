@@ -1,7 +1,7 @@
 /* CSS reset */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
+a, abbr, acronym, address, big, cite, 
 del, dfn, em, font, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 dl, dt, dd, ol, ul, li,
@@ -17,14 +17,30 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	font-family: inherit;
 	vertical-align: baseline;
 }
+code  {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-family: "Courier New", Courier, mono;
+	font-style: inherit;
+	vertical-align: baseline;
+	display: block;
+	float: left;
+	width: 150px;
+}
 /* remember to define focus styles! */
 :focus {
 	outline: 0;
 }
 body {
-	//line-height: 1; // Too ugly :)
+	// line-height: 1; // Too ugly :)
 	color: black;
 	background: white;
+	background-image: url(images/header.png);
+	background-position: top right;
+	background-repeat: no-repeat;
 }
 ol, ul {
 	list-style: none;
@@ -60,16 +76,24 @@ a, a:active, a:visited {
 	margin: 5px;
 }
 
-#class-frame h1{
+#class-frame h1, #enum-frame h1{
 	padding-top:5px;
 	padding-bottom:5px;
 	//height:35px;
-	background-color:#DBE2EA;
+	background-color:#7fbfff;
 	border-bottom: 1px solid #666666;
+	color: #fffffe;
+	font-weight: bold;
 }
 
-#types-frame, #packages-frame {
+#types-frame {
 	margin: 0px;
+	background-color: #bfdfff;
+}
+
+#packages-frame {
+	margin: 0px;
+	background-color: #ffffff;
 }
 
 ul.types, ul.packages, #packages-header ul{
@@ -82,7 +106,7 @@ ul.types, ul.packages, #packages-header ul{
 	padding: 3px;
 	color: #ffffff;
 	border-bottom: 1px solid #666666;
-	background-color: #6E86A0;
+	background-color: #0080ff;
 	text-align: center;
 }
 
@@ -99,11 +123,12 @@ ul.types, ul.packages, #packages-header ul{
 
 #header{
 	margin-bottom: 0.25em;
-	background-color: #6E86A0;
+	background-color: #0080ff;
 	padding:10px 15px 0px 15px;
 	color:#ffffff;
-	//background-image: url(images/headerback.png);
-	min-height:30px;
+	//background-image: url(images/header.png);
+	min-height:150px;
+	min-width:700px;
 }
 img #logo{
 	align:left;
@@ -208,7 +233,7 @@ pre {
 }
 
 .member .header {
-	padding: 8px 4px 4px;
+	padding: 20px 10px 0px;
 	color: #666666;
 	font-size: 87%;
 	border-top: 1px solid #cccccc;
@@ -221,7 +246,7 @@ pre {
 }
 
 .member .body {
-	padding: 4px 16px;
+	padding: 10px 20px 10px;
 }
 
 .member .platforms {

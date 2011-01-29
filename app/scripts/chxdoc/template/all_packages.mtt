@@ -10,9 +10,8 @@
 		<link rel="stylesheet" type="text/css" href="::meta.stylesheet::" />
 	</head>
 	<body>
+		<img src="images/awe6.png" width="250" height="150" border="0" />
 		<div id="packages-frame">
-			<h1>::config.title::</h1>
-			<h2>::config.subtitle::</h2>
 			<div id="packages-header">
 				<ul>
 					<li class="alltypes"><a href="all_classes::config.htmlFileExtension::" target="packageFrame">all types</a></li>
