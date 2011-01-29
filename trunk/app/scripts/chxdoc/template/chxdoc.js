@@ -1,4 +1,3 @@
-
 function showInherited(name, visibile) {
 	//if IE
 	// document.styleSheets[0].rules

@@ -20,6 +20,7 @@ function windowTitle()
 </head>
 <body onload="windowTitle();">
 	<script language="javascript" type="text/javascript" src="::rootRelative::../chxdoc.js"></script>
+	::use 'header.mtt'::::end::
 	<div id="class-frame" class="type-frame">
 	<!-- ======== START OF class DATA ======== -->
 	<h1 class="::type::">::nameDots::::raw params::</h1>
