@@ -28,5 +28,9 @@ package awe6.interfaces;
  */
 interface IPriority 
 {
+	/**
+	 * The rank score of this item.
+	 * <p>Higher numbers should be considered on top of the list, therefore of higher priority.</p>
+	 */
 	var priority( default, __set_priority ):Int;
 }

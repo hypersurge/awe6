@@ -26,6 +26,11 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import flash.display.Sprite;
 
+/**
+ * The View class provides a minimalist implementation of the IView interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class View extends Process, implements IView
 {
 	public var parent( default, null ):IView;

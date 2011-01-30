@@ -23,19 +23,51 @@
 package awe6.interfaces;
 
 /**
- * The ITextStyle interface should be implemented by objects intended to created by the createTextStyle method of IFactory.
+ * The ITextStyle interface should be implemented by objects created by the createTextStyle method of IFactory.
  * @author	Robert Fell
+ * @todo	Add ranges to documentation.
  */
 interface ITextStyle
 {
+	/**
+	 * Font name.
+	 */
 	var font:String;
+	/**
+	 * Font size.
+	 */
 	var size:Float;
+	/**
+	 * Font color.
+	 */
 	var color:Int;
+	/**
+	 * Font horizontal alignment.
+	 */
 	var align:ETextAlign;
+	/**
+	 * Font spacing.
+	 */
 	var spacing:Float;
+	/**
+	 * Font weight.
+	 */
 	var isBold:Bool;
+	/**
+	 * Font emphasis.
+	 */
 	var isItalic:Bool;
+	/**
+	 * Font thickness.  Range: 0...1.
+	 */
 	var thickness:Float;
+	/**
+	 * Collection of visual filters appled to font.
+	 */
 	var filters:Array<Dynamic>;
+	/**
+	 * String representation of this object.
+	 * @return	Representation of this object.
+	 */
 	function toString():String;
 }

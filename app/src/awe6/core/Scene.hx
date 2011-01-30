@@ -29,6 +29,11 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IScene;
 import awe6.interfaces.IView;
 
+/**
+ * The Scene class provides a minimalist implementation of the IScene interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class Scene extends Process, implements IScene
 {
 	public var type( default, null ):EScene;

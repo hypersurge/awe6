@@ -41,6 +41,11 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.text.TextField;
 
+/**
+ * The AFactory class provides a minimalist abstract implementation of the IFactory interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class AFactory implements IFactory
 {
 	private static inline var CONFIG_URL = "config.xml";

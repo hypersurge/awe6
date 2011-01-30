@@ -22,16 +22,23 @@
 
 package awe6;
 
+/**
+ * This collection is intended to provide:
+ * Single dependency for importing all of awe6
+ * Single dependency for generating documentaion of awe6
+ * Alternative shorthand namespace for awe6 - e.g. no need to reference core or interface packages.
+ */
+
 typedef AFactory = awe6.core.AFactory;
 typedef APreloader = awe6.core.APreloader;
 typedef ASession = awe6.core.ASession;
 typedef AssetManager = awe6.core.AssetManager;
 typedef AudioManager = awe6.core.AudioManager;
 typedef Entity = awe6.core.Entity;
+typedef InputJoypad = awe6.core.InputJoypad;
 typedef InputKeyboard = awe6.core.InputKeyboard;
 typedef InputManager = awe6.core.InputManager;
 typedef InputMouse = awe6.core.InputMouse;
-typedef Joypad = awe6.core.Joypad;
 typedef Kernel = awe6.core.Kernel;
 typedef MessageManager = awe6.core.MessageManager;
 typedef Overlay = awe6.core.Overlay;
@@ -60,10 +67,10 @@ typedef IDisposable = awe6.interfaces.IDisposable;
 typedef IEntity = awe6.interfaces.IEntity;
 typedef IEntityCollection = awe6.interfaces.IEntityCollection;
 typedef IFactory = awe6.interfaces.IFactory;
+typedef IInputJoypad = awe6.interfaces.IInputJoypad;
 typedef IInputKeyboard = awe6.interfaces.IInputKeyboard;
 typedef IInputManager = awe6.interfaces.IInputManager;
 typedef IInputMouse = awe6.interfaces.IInputMouse;
-typedef IJoypad = awe6.interfaces.IJoypad;
 typedef IKernel = awe6.interfaces.IKernel;
 typedef ILogger = awe6.interfaces.ILogger;
 typedef IMessageManager = awe6.interfaces.IMessageManager;

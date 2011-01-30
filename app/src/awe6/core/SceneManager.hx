@@ -31,6 +31,11 @@ import awe6.interfaces.IView;
 import flash.display.Sprite;
 import flash.Lib;
 
+/**
+ * The SceneManager class provides a minimalist implementation of the ISceneManager interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class SceneManager extends Process, implements ISceneManager
 {
 	public var scene( default, null ):IScene;

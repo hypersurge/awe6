@@ -38,6 +38,11 @@ import flash.system.SecurityDomain;
 import flash.text.Font;
 import flash.text.TextField;
 
+/**
+ * The APreloader class provides a minimalist abstract implementation of the IPreloader interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class APreloader extends Process, implements IPreloader
 {
 	static inline var FONT_PACKAGE_ID = "assets.fontssss";

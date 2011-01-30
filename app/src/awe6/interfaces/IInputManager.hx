@@ -33,7 +33,7 @@ interface IInputManager
 	/**
 	 * The default virtual joypad user input: simple 4 directional controller with 2 fire buttons.  Listens to cursor keys and WASD keys.
 	 */
-	var joypad( default, null ):IJoypad;
+	var joypad( default, null ):IInputJoypad;
 	/**
 	 * The virtual keyboard user input: every key on the keyboard.
 	 */
@@ -58,7 +58,7 @@ interface IInputManager
 	 * @param	?secondaryAlt	Optional alternative key for secondary fire.
 	 * @return	A virtual joypad with custom key controls.
 	 */
-	function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IJoypad;
+	function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IInputJoypad;
 	/**
 	 * Resets the state of all virtual input devices (e.g. keys down duration, mouse velocities etc).
 	 */

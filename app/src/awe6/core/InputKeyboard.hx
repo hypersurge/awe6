@@ -29,6 +29,11 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.Lib;
 
+/**
+ * The InputKeyboard class provides a minimalist implementation of the IInputKeyboard interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class InputKeyboard extends Process, implements IInputKeyboard
 {
 	private var _stage:Stage;

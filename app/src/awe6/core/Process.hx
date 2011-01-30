@@ -25,6 +25,11 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IProcess;
 import awe6.interfaces.ITools;
 
+/**
+ * The Process class provides a minimalist implementation of the IProcess interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class Process implements IProcess
 {
 	public var isActive( default, __set_isActive ):Bool;

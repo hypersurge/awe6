@@ -33,6 +33,11 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 
+/**
+ * The Overlay class provides a minimalist implementation of the IOverlay interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class Overlay extends Process, implements IOverlay
 {
 	public var view:IView;

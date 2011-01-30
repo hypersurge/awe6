@@ -23,10 +23,15 @@
 package awe6.core;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EJoypadButton;
-import awe6.interfaces.IJoypad;
+import awe6.interfaces.IInputJoypad;
 import awe6.interfaces.IKernel;
 
-class Joypad implements IJoypad
+/**
+ * The InputJoypad class provides a minimalist implementation of the IInputJoypad interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
+class InputJoypad implements IInputJoypad
 {
 	private var _kernel:IKernel;
 	private var _keyUp:EKey;
