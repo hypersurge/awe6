@@ -24,6 +24,11 @@ package awe6.core;
 import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ITextStyle;
 
+/**
+ * The TextStyle class provides a minimalist implementation of the ITextStyle interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class TextStyle implements ITextStyle
 {
 	public var font:String;

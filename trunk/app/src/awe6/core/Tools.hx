@@ -25,6 +25,11 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IPriority;
 import awe6.interfaces.ITools;
 
+/**
+ * The Tools class provides a minimalist implementation of the ITools interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class Tools implements ITools
 {
 	private var _kernel:IKernel;
@@ -47,7 +52,7 @@ class Tools implements ITools
 		return ( originalValue * ( 1 - ease ) ) + ( newValue * ease );
 	}
 	
-	public inline function sortByText( a:String, b:String ):Int
+	public inline function sortByString( a:String, b:String ):Int
 	{
 		return Reflect.compare( a.toLowerCase(), b.toLowerCase() );
 	}	
@@ -231,7 +236,7 @@ class Tools implements ITools
 		return l_result;
 	}
 	
-	public function convertFramesToTime( frames:Int, ?delimiter:String ):String
+	public function convertUpdatesToTime( frames:Int, ?delimiter:String ):String
 	{
 		if ( delimiter == null ) delimiter = "'";
 		if ( frames == 0 ) return "99" + delimiter + "99" + delimiter + "99";

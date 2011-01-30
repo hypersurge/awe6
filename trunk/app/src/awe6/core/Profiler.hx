@@ -14,6 +14,13 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.Lib;
 	
+/**
+ * The Profiler class provides debug information.
+ * @author	Robert Fell
+ * @author	Werner Avenant
+ * @author	Mr.doob
+ * @author	Theo
+ */
 class Profiler extends Sprite
 {
 	private static inline var BG_COLOR = 0x55000000;

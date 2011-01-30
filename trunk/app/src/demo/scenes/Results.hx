@@ -41,7 +41,7 @@ class Results extends AScene
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
 		
-		var l_message:String = _kernel.getConfig( "gui.scenes.results." + ( _session.isWin ? "win" : "lose" ) ) + _tools.convertFramesToTime( ( _kernel.factory.targetFramerate * Game.TIME_LIMIT ) - _session.highScore );
+		var l_message:String = _kernel.getConfig( "gui.scenes.results." + ( _session.isWin ? "win" : "lose" ) ) + _tools.convertUpdatesToTime( ( _kernel.factory.targetFramerate * Game.TIME_LIMIT ) - _session.highScore );
 		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, l_message, _kernel.factory.createTextStyle() );
 		l_result.y = 60;
 		addEntity( l_result, true, 2 );

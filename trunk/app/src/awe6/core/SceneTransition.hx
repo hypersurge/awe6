@@ -28,6 +28,11 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.filters.BlurFilter;
 
+/**
+ * The SceneTransition class provides a minimalist implementation of the ISceneTransition interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class SceneTransition extends Entity, implements ISceneTransition
 {
 	public var progress( default, null ):Float;

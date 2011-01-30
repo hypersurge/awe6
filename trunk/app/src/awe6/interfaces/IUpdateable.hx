@@ -24,6 +24,7 @@ package awe6.interfaces;
 
 /**
  * The IUpdatable interface should be implemented by any object wishing to enter the broad phase update traversal stack.
+ * @author	Robert Fell
  */
 interface IUpdateable
 {

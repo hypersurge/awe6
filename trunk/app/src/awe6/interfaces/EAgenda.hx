@@ -35,5 +35,8 @@ enum EAgenda
 	STANDARD;
 	ATTACK;
 	DEFEND;
+	/**
+	 * Allows EAgenda to be extended (e.g. for using entity specific enumerated agendas)
+	 */
 	SUB_TYPE( value:Dynamic );
 }

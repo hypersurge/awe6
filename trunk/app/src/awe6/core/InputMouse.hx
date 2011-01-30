@@ -29,6 +29,11 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
 
+/**
+ * The InputMouse class provides a minimalist implementation of the IInputMouse interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class InputMouse extends Process, implements IInputMouse
 {
 	public var x( default, null ):Int;

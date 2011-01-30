@@ -43,6 +43,11 @@ import flash.Lib;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
 
+/**
+ * The Kernel class provides a minimalist implementation of the IKernel interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class Kernel extends Process, implements IKernel
 {
 	static inline var POWERED_BY = "Powered by awe6";

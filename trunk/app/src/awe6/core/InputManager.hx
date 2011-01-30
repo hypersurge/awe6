@@ -26,12 +26,17 @@ import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputKeyboard;
 import awe6.interfaces.IInputManager;
 import awe6.interfaces.IInputMouse;
-import awe6.interfaces.IJoypad;
+import awe6.interfaces.IInputJoypad;
 import awe6.interfaces.IKernel;
 
+/**
+ * The InputManager class provides a minimalist implementation of the IInputManager interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class InputManager extends Process, implements IInputManager
 {
-	public var joypad( default, null ):IJoypad;
+	public var joypad( default, null ):IInputJoypad;
 	public var keyboard( default, null ):IInputKeyboard;
 	public var mouse( default, null ):IInputMouse;
 	
@@ -60,9 +65,9 @@ class InputManager extends Process, implements IInputManager
 		super._disposer();		
 	}
 	
-	public function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IJoypad
+	public function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IInputJoypad
 	{
-		return new Joypad( _kernel, up, right, down, left, primary, secondary, upAlt, rightAlt, downAlt, leftAlt, primaryAlt, secondaryAlt );
+		return new InputJoypad( _kernel, up, right, down, left, primary, secondary, upAlt, rightAlt, downAlt, leftAlt, primaryAlt, secondaryAlt );
 	}
 	
 }

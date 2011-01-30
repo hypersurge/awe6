@@ -23,12 +23,12 @@
 package awe6.interfaces;
 
 /**
- * The IJoypad interface should be implemented by an object wishing to be used as a directional pad plus two fire button joypad.
+ * The IInputJoypad interface should be implemented by an object wishing to be used as a directional pad plus two fire button joypad.
  * <p>A joypad is useful for a simple game input device.  The device is limited to 6 EJoypadButtons to prevent keyboard lock and overly complex game controls.</p>
  * <p>A joypad can be configured to accept bespoke key configurations, or alternative user interface control devices (e.g. mouse or touchpad).</p>
  * @author	Robert Fell
  */
-interface IJoypad 
+interface IInputJoypad 
 {
 	/**
 	 * Determine if a specific joypad button is currently down.

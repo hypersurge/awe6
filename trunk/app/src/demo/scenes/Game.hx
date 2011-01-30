@@ -59,7 +59,7 @@ class Game extends Scene
 		super._updater( deltaTime );
 		_score = Std.int( _tools.limit( ( _kernel.factory.targetFramerate * TIME_LIMIT ) - _updates, 0, _tools.BIG_NUMBER ) );
 		if ( _score == 0 ) _gameOver();
-		_timer.text = _tools.convertFramesToTime( _updates );
+		_timer.text = _tools.convertUpdatesToTime( _updates );
 		var l_spheres:Array<Sphere> = getEntitiesByClass( Sphere );
 		if ( l_spheres.length == 0 ) _gameOver();
 	}

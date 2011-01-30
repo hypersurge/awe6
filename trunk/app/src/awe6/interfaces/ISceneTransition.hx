@@ -22,8 +22,20 @@
 
 package awe6.interfaces;
 
+/**
+ * The ISceneTransition interface should be implemented by objects intended to display visual transitions during scene changes.
+ * @author	Robert Fell
+ */
 interface ISceneTransition implements IProcess, implements IViewable
 {
+	/**
+	 * Range: 0...1.  0 represents just starting, 1 represents complete.
+	 */
 	var progress( default, null ):Float;
+	/**
+	 * The time over which the transition occurs.
+	 * @param	?asTime	If true returns duration in milliseconds, else updates.
+	 * @return	The time over which the transition occurs.
+	 */
 	function getDuration( ?asTime:Bool = true ):Float;
 }

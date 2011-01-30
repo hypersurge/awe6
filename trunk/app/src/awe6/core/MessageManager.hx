@@ -25,6 +25,12 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IMessageManager;
 import haxe.FastList;
 
+/**
+ * The MessageManager class provides a minimalist implementation of the IMessageManager interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ * @todo	Test functionality and release
+ */
 class MessageManager extends Process, implements IMessageManager
 {
 	private var _subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>>;

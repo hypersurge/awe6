@@ -22,16 +22,60 @@
 
 package awe6.interfaces;
 
+/**
+ * The ISession interface should be implemented by objects wishing to preserve interactive information interchange.
+ * <p>The session can be used as both memento and arbitrator between subsystems - including entities and scenes.</p>
+ * <p>Sessions can be permanently stored and retrieved on future application ezecution.</p>
+ * @author	Robert Fell
+ */
 interface ISession
 {
+	/**
+	 * The unique identifier of this session.
+	 */
 	var id( default, null ):String;
+	/**
+	 * Useful for testing and debug.
+	 */
 	var isTester( __get_isTester, null ):Bool;
+	/**
+	 * Creates a copy of the current session.
+	 * @param	newID	The unique identifier of the copy.
+	 * @return	A copy of the current session.
+	 */
 	function clone( newID:String ):ISession;
+	/**
+	 * Reverts the session back to factory settings (as if created afresh).
+	 * @param	?isSaved	If true immediately writes the reset session to disk.
+	 */
 	function reset( ?isSaved:Bool = false ):Void;
+	/**
+	 * Writes the session to disk.
+	 */
 	function save():Void;
+	/**
+	 * Removes the session from disk.
+	 */
 	function delete():Void;
+	/**
+	 * Helper function to calculate overall progress of a game / rewards acquired etc. 
+	 * @return	Range 0...1: with 1 representing complete.
+	 */
 	function getPercentageComplete():Float;
+	/**
+	 * Retrieve the collection of sessions identifiers currently saved to disk.
+	 * @param	?suggestions	Prepopulates results with the suggestions.
+	 * @return	A collection of sessions identifiers currently save to disk.
+	 */
 	function getSessionIds( ?suggestions:Array<String> = null ):Array<String>;
-	function getSessions( ?suggestions:Array<String> = null ):Array<ISession>;	
+	/**
+	 * Retrieve the collection of sessions currently saved to disk.
+	 * @param	?suggestions	Prepopulates results with the suggestions.
+	 * @return	A collection of sessions currently save to disk.
+	 */
+	function getSessions( ?suggestions:Array<String> = null ):Array<ISession>;
+	/**
+	 * Removes all session data from disk.
+	 */
 	function deleteAllSessions():Void;
 }

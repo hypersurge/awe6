@@ -22,10 +22,32 @@
 
 package awe6.interfaces;
 
+/**
+ * The ISceneManager should be implemented by objects intended to manage the IScene state machine.
+ * <p>Only a single scene is active at any given update.  Which scene is configured by this manager.</p>
+ * @author	Robert Fell
+ */
 interface ISceneManager
 {
+	/**
+	 * The currently active scene.
+	 */
 	var scene( default, null ):IScene;
+	/**
+	 * Sets the current scene to a new scene.
+	 * @param	type	The new scene.
+	 */
 	function setScene( type:EScene ):Void;
+	/**
+	 * Sets the current scene to the scene returned by IFactory.getBackSceneType().
+	 * <p>The new scene should be representative of retreat.</p> 
+	 * @see awe6.interfaces.IFactory.getBackSceneType
+	 */
 	function back():Void;
+	/**
+	 * Sets the current scene to the scene returned by IFactory.getNextSceneType().
+	 * <p>The new scene should be representative of progress.</p> 
+	 * @see awe6.interfaces.IFactory.getNextSceneType
+	 */
 	function next():Void;
 }

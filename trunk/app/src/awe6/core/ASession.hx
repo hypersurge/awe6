@@ -26,6 +26,11 @@ import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
 import flash.net.SharedObject;
 
+/**
+ * The ASession class provides a minimalist abstract implementation of the ISession interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell
+ */
 class ASession implements ISession
 {
 	public static inline var VERSION_ID = "_____VERSION";
@@ -140,7 +145,7 @@ class ASession implements ISession
 				l_result.push( suggestions.shift() );
 			}
 		}
-		l_result.sort( _tools.sortByText );
+		l_result.sort( _tools.sortByString );
 		return l_result;
 	}
 	
