@@ -1,0 +1,22 @@
+#summary Guidelines on recommended coding styles with awe6.
+
+= Usability through consistency =
+
+Conventions are important for a consistent experience.  They are intended to improve the readability of the source code and make maintenance and extension easier.
+
+No convention should be considered definitive - many of these choices may not be appropriate outside of the scope of this library.  However, the reasons why they have been adopted in awe6 have been diligently researched and considered - the pros outweighed the cons:
+
+  * Interfaces prefixed by `I`.
+  * Abstract classes prefixed by `A`.
+  * Enumerators prefixed by `E`.
+  * Interfaces housed in the `awe6.interfaces` package.
+  * Basic implementation classes housed in the `awe6.core` package.
+  * Inline documentation exists in Interfaces only.
+  * Private scope members prefixed with `_`.
+  * Local scope members prefixed with `l_`.
+  * Reserved members prefixed with `__`.
+  * Enumerated constructors represented as `CONST_CASE`.
+  * Some enumerators extensible via `SUB_TYPE( value:Dynamic )`.
+  * Helper classes kept private and prefixed with `_Helper`.
+  * No uppercase acronyns in `camelCase` or `PascalCase`.
+  * Use of constructor dependency injection instead of statics or singletons.
