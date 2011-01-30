@@ -15,8 +15,6 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
   * haXe implementation of all model and controller functionality
   * Flash implementation of view functionality
 
-The roadmap is defined by the gaps between these objectives and the current state of the project:
-
 === Code Library ===
 
   * Interfaces defined and tested (98%)
@@ -25,8 +23,8 @@ The roadmap is defined by the gaps between these objectives and the current stat
 
 === Documentation ===
 
-  * API documentation (60%)
-  * UML diagrams of packages (80%)
+  * API documentation (90%)
+  * UML diagrams of packages (100%)
   * Wiki definitions of key concepts (5%)
   * Examples, demos and tutorials (25%)
 
