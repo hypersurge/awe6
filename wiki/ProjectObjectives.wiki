@@ -7,24 +7,26 @@ To create a scalable, flexible and approachable tool to assist in the rapid deve
 
 == High Level Abstraction ==
 
-This framework adopts the Entity Component approach (rather than a deep heirachy structure).  For merits of such an approach please read [http://www.devmaster.net/articles/oo-game-design/ Britt L Hannah's article].
+This framework adopts the Entity Component approach (rather than a deep heirachy structure).  For merits of such an approach please read [http://www.devmaster.net/articles/oo-game-design/ Britt L Hannah's article].  In short: exciting possibilites increase.
 
-All components are created using factory methods, and provide methods to allow injection of child components.  Thus an inversion of control is achieved: a factory populates services based on starting state (configuration) and subsequent user input.  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code is possible - including adaptive behaviors.
+All components are created using factory methods, and each component provides further methods to allow injection of child components.  Thus an inversion of control is achieved: a factory populates components based on starting state (configuration) and subsequent controllers defined within those components (reacting to user input).  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code is possible - including runtime adaptive behaviors / "perpetual motion".
+
+The framework is open source, while the option for proprietary components is unrestricted.  The adoption and upgrade rates of the framework is benefitted by a permissive license, thus expanding the market opportunity for commercial components.
 
 == Batteries Included ==
 
 High level concepts must be balanced by practical tools.  So this framework comes "ready to run" with a shallow heirachy providing easy access to frequently required services (e.g. inputs, assets and audio).  The heirachy and associated concepts are:
 
   * Factory: creates all subsequent components based on configuration.
-  * Kernel: handles updates and services
-    * Preloader: loads resources
-    * Assets: handles resources
-    * Session: maintains and arbitrates state
-    * Audio: handles multi-channel music and sounds
-    * Inputs: handles UI input: keyboard, mouse, other virual devices
-    * Overlay: provides application chrome (including: exit, pause, mute controllers)
-    * Scenes: state machine for collections of Entities
-      * Entities: Tree of related and non related components, highly versatile in their purpose
+  * Kernel: handles updates and services.
+    * Preloader: loads initial resources.
+    * Assets: handles access to resources.
+    * Session: maintains and arbitrates state.
+    * Audio: handles multi-channel music and sounds.
+    * Inputs: handles UI input: keyboard, mouse, other virual devices.
+    * Overlay: provides application chrome (including: exit, pause, mute controllers) and view.
+    * Scenes: state machine for collections of active Entities.
+      * Entities: Tree of related and non related components, highly versatile in their purpose.  Additional heirachy is determined by Factory or Entity design.
 
 The framework uses synchronous state throughout all default components.  So the "game" can be serialised, paused, rewound or double timed.
 
@@ -32,27 +34,29 @@ The framework uses synchronous state throughout all default components.  So the 
 
 The independent casual game developer / small team represents the target user of awe6.  Currently the primary targets for casual games are the web via Flash / SWF and mobile via iOS.  It is expected that Android & HTML5 will become increasingly relevent targets.
 
-The Next Big Thing comes along too often to develop specifically for it.  Therefore awe6 is a collection of declarative interfaces, intended to be platform agnostic.  For practical purposes there is a working implementation targetting today's Big Thing.
+The Next Big Thing comes along too often to develop specifically for it.  Therefore awe6 is a collection of declarative interfaces, intended to be platform agnostic.  For practical purposes there is a working implementation targetting today's Big Thing (SWF / Flash).
 
   * cross platform interfaces defining top level game functionality
   * haXe implementation of all model and controller functionality
-  * Flash implementation of view functionality
+  * platform specific implementation of view functionality
 
-=== Code Library ===
+== Current Progress ==
 
-  * Interfaces defined and tested (98%)
-  * Working core implementation targetting Flash (98%)
-  * Working demo and getting started resources (75%)
-
-=== Documentation ===
-
-  * API documentation (90%)
-  * UML diagrams of packages (100%)
-  * Wiki definitions of key concepts (5%)
-  * Examples, demos and tutorials (25%)
-
-=== Cross Platform Implementation ===
-
-  * Flash view (95%)
-  * Javascript view (20%)
-  * C++ view (35%)
+  * *Code Library*
+    * Interfaces defined and tested (98%)
+    * Working core implementation targetting Flash (98%)
+    * Working demo and getting started resources (75%)
+  * *Documentation*
+    * API documentation (90%)
+    * UML diagrams of packages (100%)
+    * Wiki definitions of key concepts (5%)
+    * Examples, demos and tutorials (25%)
+  * *Cross Platform Implementation*
+    * Flash view (95%)
+    * Javascript view (20%)
+    * C++ view (35%)
+  * *Big Ideas*
+    * Automated multi platform builds
+    * Game distribution channel
+    * More extras: free and commercial channel
+    * Adaptive runtime behavior systems
