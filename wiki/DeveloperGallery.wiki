@@ -1,18 +1,16 @@
 #summary Demos and examples of awe6 in the wild.
 #labels Featured
 
-= Introduction =
-
-The following games are powered by awe6:
+The following games are powered by the awe6 inverted game framework:
 
 == LEGO® _Star Wars™_: "Ace Assault" (2011) ==
 
 [http://starwars.lego.com/en-us/Games/AceAssault/Default.aspx http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOStarWars.jpg]
 
-A 3D space duelling game produced by [http://www.4T2.co.uk 4T2].
+A 3D space duelling game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
 
 == LEGO® World Racers: "VS" (2010) ==
 
 [http://worldracers.lego.com/en-us/games/Default.aspx http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOWorldRacers.jpg]
 
-A 3D racing game produced by [http://www.4T2.co.uk 4T2].
+A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
