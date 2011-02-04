@@ -21,11 +21,11 @@ No convention should be considered definitive - many of these choices may not be
   * Some enumerators extensible via `SUB_TYPE( value:Dynamic )`.
   * Helper classes kept private and prefixed with `_Helper`.
   * No uppercase acronyns in `camelCase` or `PascalCase`.
-  * New lines for all braces {}.
+  * New lines for all braces `{}`.
   * Spaces inside paranthesis: `( example )`.
   * Implicit Getter and Setter methods prefixed with `__get_` & `__set_`.
   * Bool property names prefixed with `is`, `as`, or `has`.
   * Use of constructor dependency injection.
   * Casting avoided.
   * Statics avoided (absolutely no Singletons!).
-  * All Interfaces inline documented (using JavaDoc notation).
+  * All Interfaces inline documented for use with [http://code.google.com/p/caffeine-hx/wiki/ChxDoc ChxDoc].
