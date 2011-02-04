@@ -27,5 +27,5 @@ No convention should be considered definitive - many of these choices may not be
   * Bool property names prefixed with `is`, `as`, or `has`.
   * Use of constructor dependency injection.
   * Casting avoided.
-  * Statics avoided (absolutely no Singletons!).
+  * Statics eliminated (no Singletons!).
   * All Interfaces inline documented for use with [http://code.google.com/p/caffeine-hx/wiki/ChxDoc ChxDoc].
