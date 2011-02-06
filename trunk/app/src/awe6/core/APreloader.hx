@@ -69,7 +69,9 @@ class APreloader extends Process, implements IPreloader
 		_sprite = new Sprite();
 		view = new View( _kernel, _sprite );
 		view.isVisible = false;		
-		_context = new LoaderContext( null, ApplicationDomain.currentDomain, _kernel.isLocal ? null : SecurityDomain.currentDomain );
+		_context = new LoaderContext();
+		_context.applicationDomain = ApplicationDomain.currentDomain;
+		if ( !_kernel.isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
 		_currentAsset = 0;
 		_perc = 0;
 		if ( _assets.length > 0 ) _next();
