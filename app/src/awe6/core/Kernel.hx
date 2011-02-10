@@ -114,12 +114,12 @@ class Kernel extends Process, implements IKernel
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
 		factory.create( this );
+		_nativeInit();
 		session = factory.createSession( ASession.DEBUG_ID );
 		session.reset();
 		_preloader = factory.createPreloader();
 		_addProcess( _preloader );
 		_view.addChild( _preloader.view );
-		_nativeInit();
 		_addProcess( _view );
 	}	
 	
