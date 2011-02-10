@@ -75,7 +75,6 @@ class APreloader extends Process, implements IPreloader
 		_currentAsset = 0;
 		_perc = 0;
 		if ( _assets.length > 0 ) _next();
-		else dispose();
 	}
 	
 	private function _next():Void
@@ -102,6 +101,7 @@ class APreloader extends Process, implements IPreloader
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
+		if ( _assets.length == 0 ) dispose(); // needed to be done this way because preloader must be added and removed from kernel
 		view.isVisible = _age > 500;
 	}
 	

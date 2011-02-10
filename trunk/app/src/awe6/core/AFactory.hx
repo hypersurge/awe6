@@ -55,6 +55,7 @@ class AFactory implements IFactory
 	private var _sprite:Sprite;
 	private var _kernel:IKernel;
 	private var _tools:ITools;
+	private var _isConfigRequired:Bool;
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
 	
@@ -84,9 +85,13 @@ class AFactory implements IFactory
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;
 		_init();
-		var l_url:String = CONFIG_URL;
-		if ( untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
-		_loadConfig( l_url );		
+		if ( _isConfigRequired )
+		{
+			var l_url:String = CONFIG_URL;
+			if ( untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
+			_loadConfig( l_url );
+		}
+		else _launchKernel();		
 	}
 	
 	private function _init():Void
@@ -108,12 +113,13 @@ class AFactory implements IFactory
 		keyNext = EKey.SPACE;
 		keyBack = EKey.ESCAPE;
 		keySpecial = EKey.CONTROL;
+		_isConfigRequired = true;
 	}
 	
 	private function _loadConfig( url:String ):Void
 	{
 		if ( isDecached ) url += "?dc=" + Std.random( 99999 );
-		// trace( "Loading Config: \"" + URL + "\"" );		
+		// trace( "Loading Config: \"" + url + "\"" );		
 		var l_loader:URLLoader = new URLLoader( new URLRequest( url ) );
 		l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
 		l_loader.addEventListener( Event.COMPLETE, _onComplete );
