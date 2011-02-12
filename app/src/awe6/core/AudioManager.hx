@@ -37,7 +37,7 @@ import flash.media.SoundTransform;
  */
 class AudioManager extends Process, implements IAudioManager
 {
-	static inline var PACKAGE_ID = "assets.audio";
+	private static inline var _PACKAGE_ID = "assets.audio";
 	public var isMute( default, __set_isMute ):Bool;
 	
 	private var _sounds:Array<HelperSound>;
@@ -48,6 +48,8 @@ class AudioManager extends Process, implements IAudioManager
 		super._init();
 		_sounds = [];
 		_packageId = _kernel.getConfig( "settings.assets.packages.audio" );
+		if ( _packageId == null ) _packageId = _kernel.getConfig( "settings.assets.packages.default" );
+		if ( _packageId == null ) _packageId = _PACKAGE_ID;	
 	}
 	
 	override private function _disposer():Void 

@@ -33,7 +33,7 @@ import flash.net.SharedObject;
  */
 class ASession implements ISession
 {
-	public static inline var VERSION_ID = "_____VERSION";
+	private static inline var _VERSION_ID = "_____VERSION";
 	public static inline var DEBUG_ID = "DEBUG_AWE6";
 
 	private var _kernel:IKernel;
@@ -61,7 +61,7 @@ class ASession implements ISession
 	
 	private function _init()
 	{
-		var l_version:Int = Reflect.field( _so.data, VERSION_ID );
+		var l_version:Int = Reflect.field( _so.data, _VERSION_ID );
 		if ( l_version != _version ) _so.clear();
 		var l_isExistingSession:Bool = Reflect.field( _so.data, id ) != null;
 		reset();
@@ -121,7 +121,7 @@ class ASession implements ISession
 	{
 		saveCount++;
 		_setter();
-		Reflect.setField( _so.data, VERSION_ID, _version );
+		Reflect.setField( _so.data, _VERSION_ID, _version );
 		Reflect.setField( _so.data, id, _data );
 	}
 		
@@ -134,7 +134,7 @@ class ASession implements ISession
 	public function getSessionIds( ?suggestions:Array<String> = null ):Array<String>
 	{
 		var l_result:Array<String> = Reflect.fields( _so.data );
-		l_result.remove( VERSION_ID );
+		l_result.remove( _VERSION_ID );
 		l_result.remove( DEBUG_ID );
 		if ( suggestions != null )
 		{

@@ -23,62 +23,62 @@ import flash.Lib;
  */
 class Profiler extends Sprite
 {
-	private static inline var BG_COLOR = 0x55000000;
-	private static inline var FPS_COLOR = 0xFFFFFF;
-	private static inline var MS_COLOR = 0xFFFFFF00;
-	private static inline var MEM_COLOR = 0xFFFF0000;	
+	private static inline var _BG_COLOR = 0x55000000;
+	private static inline var _FPS_COLOR = 0xFFFFFF;
+	private static inline var _MS_COLOR = 0xFFFFFF00;
+	private static inline var _MEM_COLOR = 0xFFFF0000;	
 	
-	private var graph:BitmapData;		
-	private var fpsText:TextField;
-	private var msText:TextField;
-	private var memText:TextField;
-	private var format:TextFormat;
+	private var _graph:BitmapData;		
+	private var _fpsText:TextField;
+	private var _msText:TextField;
+	private var _memText:TextField;
+	private var _format:TextFormat;
 		
-	private var fps:Int;
-	private var timer:Int;
-	private var ms:Int;
-	private var msPrev:Int;
-	private var mem:Float;
+	private var _fps:Int;
+	private var _timer:Int;
+	private var _ms:Int;
+	private var _msPrev:Int;
+	private var _mem:Float;
 
 	public function new()
 	{
 		super ();
 		this.alpha = 0;
-		msPrev = 0;
-		mem = 0;
+		_msPrev = 0;
+		_mem = 0;
 		
-		graph = new BitmapData( 60, 50, true, BG_COLOR );
-		var gBitmap:Bitmap = new Bitmap( graph );
+		_graph = new BitmapData( 60, 50, true, _BG_COLOR );
+		var gBitmap:Bitmap = new Bitmap( _graph );
 		gBitmap.y = 35;
 		addChild(gBitmap);
 
-		format = new TextFormat( "_sans", 9 );
+		_format = new TextFormat( "_sans", 9 );
 
-		graphics.beginFill( BG_COLOR );
+		graphics.beginFill( _BG_COLOR );
 		graphics.drawRect(0, 0, 60, 35 /*50*/);
 		graphics.endFill();
 
-		fpsText = new TextField();
-		msText = new TextField();
-		memText = new TextField();
+		_fpsText = new TextField();
+		_msText = new TextField();
+		_memText = new TextField();
 
-		fpsText.defaultTextFormat = msText.defaultTextFormat = memText.defaultTextFormat = format;
-		fpsText.width = msText.width = memText.width = 60;
-		fpsText.selectable = msText.selectable = memText.selectable = false;
+		_fpsText.defaultTextFormat = _msText.defaultTextFormat = _memText.defaultTextFormat = _format;
+		_fpsText.width = _msText.width = _memText.width = 60;
+		_fpsText.selectable = _msText.selectable = _memText.selectable = false;
 
-		fpsText.textColor = FPS_COLOR;
-		fpsText.text = "FPS: ";
-		addChild( fpsText );
+		_fpsText.textColor = _FPS_COLOR;
+		_fpsText.text = "FPS: ";
+		addChild( _fpsText );
 
-		msText.y = 10;
-		msText.textColor = MS_COLOR;
-		msText.text = "MS: ";
-		addChild( msText );
+		_msText.y = 10;
+		_msText.textColor = _MS_COLOR;
+		_msText.text = "MS: ";
+		addChild( _msText );
 
-		memText.y = 20;
-		memText.textColor = MEM_COLOR;
-		memText.text = "MEM: ";
-		addChild( memText );
+		_memText.y = 20;
+		_memText.textColor = _MEM_COLOR;
+		_memText.text = "MEM: ";
+		addChild( _memText );
 
 		addEventListener( MouseEvent.CLICK, mouseHandler );
 		addEventListener( Event.ENTER_FRAME, update );
@@ -96,7 +96,7 @@ class Profiler extends Sprite
 		{
 			stage.frameRate ++;
 		}
-		fpsText.text = "FPS: " + fps + " / " + stage.frameRate;
+		_fpsText.text = "FPS: " + _fps + " / " + stage.frameRate;
 	}	
 		
 	private function update( e:Event ):Void
@@ -104,30 +104,30 @@ class Profiler extends Sprite
 		if ( stage == null ) return;
 		if ( alpha < 1 ) alpha += .05;
 //		if ( stage != null ) x = stage.stageWidth - 60;
-		timer = Lib.getTimer();
-		fps++;
+		_timer = Lib.getTimer();
+		_fps++;
 
-		if ( timer - 1000 > msPrev )
+		if ( _timer - 1000 > _msPrev )
 		{
-			msPrev = timer;
-			mem = Std.int ( ( System.totalMemory / 1048576 ) * 1000 ) / 1000;
+			_msPrev = _timer;
+			_mem = Std.int ( ( System.totalMemory / 1048576 ) * 1000 ) / 1000;
 
-			var fpsGraph : Int = Std.int( Math.min( 50, 50 / stage.frameRate * fps ) );
-			var memGraph : Int = Std.int( Math.min( 50, Math.sqrt( Math.sqrt( mem * 5000 ) ) ) ) - 2;
+			var fpsGraph : Int = Std.int( Math.min( 50, 50 / stage.frameRate * _fps ) );
+			var memGraph : Int = Std.int( Math.min( 50, Math.sqrt( Math.sqrt( _mem * 5000 ) ) ) ) - 2;
 
-			graph.scroll( 1, 0 );
-			graph.fillRect( new Rectangle( 0, 0, 1, graph.height ), BG_COLOR );
-			graph.setPixel( 0, graph.height - fpsGraph, FPS_COLOR );
-			graph.setPixel( 0, graph.height - ( ( timer - ms ) >> 1 ), MS_COLOR );
-			graph.setPixel( 0, graph.height - memGraph, MEM_COLOR );
+			_graph.scroll( 1, 0 );
+			_graph.fillRect( new Rectangle( 0, 0, 1, _graph.height ), _BG_COLOR );
+			_graph.setPixel( 0, _graph.height - fpsGraph, _FPS_COLOR );
+			_graph.setPixel( 0, _graph.height - ( ( _timer - _ms ) >> 1 ), _MS_COLOR );
+			_graph.setPixel( 0, _graph.height - memGraph, _MEM_COLOR );
 
-			fpsText.text = "FPS: " + fps + " / " + stage.frameRate;
-			memText.text = "MEM: " + mem;
+			_fpsText.text = "FPS: " + _fps + " / " + stage.frameRate;
+			_memText.text = "MEM: " + _mem;
 
-			fps = 0;
+			_fps = 0;
 		}
 
-		msText.text = "MS: " + ( timer - ms );
-		ms = timer;
+		_msText.text = "MS: " + ( _timer - _ms );
+		_ms = _timer;
 	}
 }

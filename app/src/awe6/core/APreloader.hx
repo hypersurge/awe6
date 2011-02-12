@@ -45,7 +45,7 @@ import flash.text.TextField;
  */
 class APreloader extends Process, implements IPreloader
 {
-	static inline var FONT_PACKAGE_ID = "assets.fontssss";
+	private static inline var _FONT_PACKAGE_ID = "assets.fonts";
 	public var view( default, null ):IView;
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
@@ -68,7 +68,7 @@ class APreloader extends Process, implements IPreloader
 		super._init();
 		_sprite = new Sprite();
 		view = new View( _kernel, _sprite );
-		view.isVisible = false;		
+		view.isVisible = false;
 		_context = new LoaderContext();
 		_context.applicationDomain = ApplicationDomain.currentDomain;
 		if ( !_kernel.isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
@@ -118,7 +118,7 @@ class APreloader extends Process, implements IPreloader
 	{
 		var l_packageId:String = _kernel.getConfig( "settings.assets.packages.fonts" );
 		if ( l_packageId == null ) l_packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		if ( l_packageId == null ) l_packageId = FONT_PACKAGE_ID;		
+		if ( l_packageId == null ) l_packageId = _FONT_PACKAGE_ID;		
 		for ( i in Type.getEnumConstructs( ETextStyle ) )
 		{
 			var l_className:String = _tools.toCamelCase( i );

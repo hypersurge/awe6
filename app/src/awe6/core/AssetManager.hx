@@ -32,12 +32,12 @@ import flash.display.BitmapData;
  */
 class AssetManager extends Process, implements IAssetManager
 {
-	static inline var PACKAGE_ID = "assets";	
+	private static inline var _PACKAGE_ID = "assets";	
 
 	public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
 	{
 		if ( packageId == null ) packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		if ( packageId == null ) packageId = PACKAGE_ID;
+		if ( packageId == null ) packageId = _PACKAGE_ID;
 		
 		var l_assetName:String = id;
 		if ( packageId.length > 0 ) l_assetName = packageId + "." + id;
