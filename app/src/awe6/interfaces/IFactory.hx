@@ -128,6 +128,12 @@ interface IFactory
 	 */
 	function createOverlay():IOverlay;
 	/**
+	 * Builds an empty Entity for injection.
+	 * @param	?id	The unique identifier of this entity.
+	 * @return	An empty Entity.
+	 */
+	function createEntity( ?id:String ):IEntity;
+	/**
 	 * Builds the application's scenes which contain specific functionality.
 	 * @param	type	The type of scene.
 	 * @return	Scene which contain specific functionality.
