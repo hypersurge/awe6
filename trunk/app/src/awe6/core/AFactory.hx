@@ -24,6 +24,7 @@ package awe6.core;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IEntity;
 import awe6.interfaces.IFactory;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ILogger;
@@ -226,6 +227,12 @@ class AFactory implements IFactory
 	{
 		var l_overlay:Overlay = new Overlay( _kernel );
 		return l_overlay;
+	}
+	
+	public function createEntity( ?id:String ):IEntity
+	{
+		var l_entity:Entity = new Entity( _kernel, id );
+		return l_entity;
 	}
 	
 	public function createScene( type:EScene ):IScene
