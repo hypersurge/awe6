@@ -19,6 +19,10 @@ No convention should be considered definitive - many of these choices may not be
   * Enumerated constructors represented as `CONST_CASE`.
   * Some enumerators extensible via `SUB_TYPE( value:Dynamic )`.
   * Helper classes kept private and prefixed with `_Helper`.
+  * Direct-context type enumerators publicly scoped and named `type`.
+  * Non-direct-context type enumerators named `%context%Type`.
+  * Strict typing throughout.
+  * All scope clearly defined (e.g. `private`).
   * No uppercase acronyns in `camelCase` or `PascalCase`.
   * New lines for all braces `{}`.
   * Spaces inside paranthesis: `( example )`.
