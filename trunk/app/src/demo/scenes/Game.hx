@@ -27,7 +27,7 @@ import awe6.extras.gui.Text;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;
 import demo.Session;
-import demo.Sphere;
+import demo.entities.Sphere;
 
 class Game extends Scene
 {

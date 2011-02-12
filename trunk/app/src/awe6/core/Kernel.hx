@@ -50,11 +50,11 @@ import flash.ui.ContextMenuItem;
  */
 class Kernel extends Process, implements IKernel
 {
-	static inline var POWERED_BY = "Powered by awe6";
-	static inline var RELEASE_CAUTION = "PUBLIC RELEASE NOT ADVISED";
-	static inline var RESET_SESSIONS = "Reset All Saved Information";
-	static inline var EYE_CANDY_ENABLE = "Enable Eye Candy";
-	static inline var EYE_CANDY_DISABLE = "Disable Eye Candy";
+	private static inline var _POWERED_BY = "Powered by awe6";
+	private static inline var _RELEASE_CAUTION = "PUBLIC RELEASE NOT ADVISED";
+	private static inline var _RESET_SESSIONS = "Reset All Saved Information";
+	private static inline var _EYE_CANDY_ENABLE = "Enable Eye Candy";
+	private static inline var _EYE_CANDY_DISABLE = "Disable Eye Candy";
 	
 	// instance properties
 	public var overlay( default, null ):IOverlay;
@@ -151,16 +151,16 @@ class Kernel extends Process, implements IKernel
 		
 		var l_contextMenu:ContextMenu = new ContextMenu();
 		l_contextMenu.customItems.push( new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, false ) );
-		l_contextMenu.customItems.push( new ContextMenuItem( POWERED_BY, false, false ) );
-		if ( factory.isDecached || factory.isDebug ) l_contextMenu.customItems.push( new ContextMenuItem( RELEASE_CAUTION, false, false ) );
+		l_contextMenu.customItems.push( new ContextMenuItem( _POWERED_BY, false, false ) );
+		if ( factory.isDecached || factory.isDebug ) l_contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
 		
-		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : RESET_SESSIONS );
+		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : _RESET_SESSIONS );
 		l_contextMenu.customItems.push( l_reset );
 		l_reset.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance._totalReset(); } );
 		
-		_eyeCandyEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyEnable" ) ? getConfig( "settings.contextMenu.eyeCandyEnable" ) : EYE_CANDY_ENABLE );
+		_eyeCandyEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyEnable" ) ? getConfig( "settings.contextMenu.eyeCandyEnable" ) : _EYE_CANDY_ENABLE );
 		_eyeCandyEnableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isEyeCandy = true; } );
-		_eyeCandyDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyDisable" ) ? getConfig( "settings.contextMenu.eyeCandyDisable" ) : EYE_CANDY_DISABLE );
+		_eyeCandyDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyDisable" ) ? getConfig( "settings.contextMenu.eyeCandyDisable" ) : _EYE_CANDY_DISABLE );
 		_eyeCandyDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isEyeCandy = false; } );
 		
 		l_contextMenu.hideBuiltInItems();

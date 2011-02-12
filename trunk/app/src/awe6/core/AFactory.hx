@@ -49,9 +49,9 @@ import flash.text.TextField;
  */
 class AFactory implements IFactory
 {
-	private static inline var CONFIG_URL = "config.xml";
-	private static inline var CONFIG_JOIN_NODE = "settings.joinXml";
-	private static inline var CONFIG_ASSETS_NODE = "settings.assets.url";
+	private static inline var _CONFIG_URL = "config.xml";
+	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
+	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
 	private var _sprite:Sprite;
 	private var _kernel:IKernel;
@@ -88,7 +88,7 @@ class AFactory implements IFactory
 		_init();
 		if ( _isConfigRequired )
 		{
-			var l_url:String = CONFIG_URL;
+			var l_url:String = _CONFIG_URL;
 			if ( untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
 			_loadConfig( l_url );
 		}
@@ -146,10 +146,10 @@ class AFactory implements IFactory
 	{
 		_countConfigsLoaded++;
 		_traverseElements( Xml.parse( event.target.data ).firstElement().elements(), "" );
-		if ( config.exists( CONFIG_JOIN_NODE ) && ( _countConfigsLoaded < 100 ) )
+		if ( config.exists( _CONFIG_JOIN_NODE ) && ( _countConfigsLoaded < 100 ) )
 		{
-			var l_url:String = config.get( CONFIG_JOIN_NODE );
-			config.remove( CONFIG_JOIN_NODE );
+			var l_url:String = config.get( _CONFIG_JOIN_NODE );
+			config.remove( _CONFIG_JOIN_NODE );
 			var l_urls:Array<String> = l_url.split( "," );
 			for ( i in l_urls ) _loadConfig( i );
 			return;
@@ -193,7 +193,7 @@ class AFactory implements IFactory
 		var l_result:Array<String> = [];
 		for ( i in 0...1000 )
 		{
-			var l_nodeName:String = CONFIG_ASSETS_NODE + i;
+			var l_nodeName:String = _CONFIG_ASSETS_NODE + i;
 			if ( config.exists( l_nodeName ) ) l_result.push( Std.string( config.get( l_nodeName ) ) );
 		}
 		return l_result;
