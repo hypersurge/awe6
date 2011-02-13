@@ -27,6 +27,7 @@ package awe6.interfaces;
  * <p>A joypad is useful for a simple game input device.  The device is limited to 6 EJoypadButtons to prevent keyboard lock and overly complex game controls.</p>
  * <p>A joypad can be configured to accept bespoke key configurations, or alternative user interface control devices (e.g. mouse or touchpad).</p>
  * @author	Robert Fell
+ * @todo	Add previousDurations
  */
 interface IInputJoypad 
 {

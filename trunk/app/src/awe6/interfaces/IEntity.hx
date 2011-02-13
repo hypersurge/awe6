@@ -38,6 +38,7 @@ interface IEntity implements IProcess, implements IViewable, implements IEntityC
 	/**
 	 * The parent of this entity
 	 * <p>The reference is null if this entity has no parent (for example an entity not in the entity traversal stack).</p>
+	 * <p>Consider this a runtime only property, rather than calling it during constructor or initialization phases.</p>
 	 */
 	var parent( default, null ):IEntityCollection;
 	/**

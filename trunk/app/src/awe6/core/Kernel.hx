@@ -67,7 +67,7 @@ class Kernel extends Process, implements IKernel
 	public var audio( default, null ):IAudioManager;
 	public var inputs( default, null ):IInputManager;
 	public var scenes( default, null ):ISceneManager;
-	public var messenger( default, null ):IMessageManager;
+	public var messenger( default, null ):MessageManager; // temporary
 	public var session:ISession;	
 	
 	// internal mechanics

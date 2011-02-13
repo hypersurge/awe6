@@ -88,6 +88,7 @@ class SceneManager extends Process, implements ISceneManager
 			_sceneTransition = l_newSceneTransition;
 			_kernel.inputs.reset();
 			scene.dispose();
+			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();
 		Lib.current.stage.focus = Lib.current;

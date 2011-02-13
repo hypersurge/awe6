@@ -45,12 +45,14 @@ interface IEntityCollection
 	function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void;
 	/**
 	 * Retrieves all child entities.
+	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
 	 * @param	?agenda	Used to filter results to the specified agenda
 	 * @return	Array of matching entities
 	 */
 	function getEntities( ?agenda:EAgenda ):Array<IEntity>;
 	/**
 	 * Retrieves all child entities that match type.
+	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
 	 * @param	classType	The type of class to match (can be any class, type or interface)
 	 * @param	agenda	Used to filter results to the specified agenda
 	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity
@@ -61,6 +63,7 @@ interface IEntityCollection
 	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>;
 	/**
 	 * Retrieves the child entity with the specified id. 
+	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
 	 * @param	id	The unique identifier of the entity you want to retrieve
 	 * @param	?agenda
 	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity
