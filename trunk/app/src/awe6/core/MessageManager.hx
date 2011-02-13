@@ -70,18 +70,26 @@ class MessageManager extends Process
 	
 	public function sendMessage<M>( message:M, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
 	{
+		_sendMessage( message, sender, sender, bubbleDown, bubbleUp, bubbleEverywhere );
+	}
+	
+	/**
+	 * @todo	Might need to make message an enum for best constructor based comparison?
+	 */
+	private function _sendMessage<M>( message:M, sender:IEntity, target:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
+	{
 		trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
-		if ( bubbleEverywhere ) return sendMessage( message, _kernel.scenes.scene.getEntities()[0], true );		
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, null );
+		if ( bubbleEverywhere ) return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, Type.getClass( sender ) );
 		for ( i in l_subscriptions )
 		{
 			_send( i, message, sender );
 			if ( bubbleDown )
 			{
 				var l_children:Array<IEntity> = cast sender.getEntities();
-				for ( j in l_children ) sendMessage( message, j, true );
+				for ( j in l_children ) _sendMessage( message, sender, j, true );
 			}
-			if ( bubbleUp && ( sender.parent != null ) && ( Std.is( sender.parent, IEntity ) ) ) sendMessage( message, cast sender.parent, false, true );
+			if ( bubbleUp && ( sender.parent != null ) && ( Std.is( sender.parent, IEntity ) ) ) _sendMessage( message, sender, cast sender.parent, false, true );
 		}
 		return;
 	}
@@ -103,10 +111,9 @@ class MessageManager extends Process
 			trace( 2 );
 			if ( ( handler != null ) && ( !Reflect.compareMethods( i.handler, handler ) ) ) continue;
 			trace( 3 );
-			trace( i.sender.id + ":" + sender.id );
 			if ( ( i.sender != null ) && ( i.sender != sender ) ) continue;
 			trace( 4 );
-			if ( ( senderClassType != null ) && ( !Std.is( i.senderClassType, senderClassType ) ) ) continue;
+			if ( ( i.senderClassType != null ) && ( !Std.is( sender, i.senderClassType ) ) ) continue;
 			trace( 5 );
 			l_result.add( i );
 		}
@@ -121,7 +128,7 @@ private class _HelperSubscription<M,T>
 	public var messageClass( default, null ):Class<M>;
 	public var handler( default, null ):M->IEntity->Void;
 	public var sender( default, null ):IEntity;
-	public var senderClassType( default, null ):T;
+	public var senderClassType( default, null ):Class<T>;
 	public var isRemovedAfterFirstSend( default, null ):Bool;
 	
 	public function new( subscriber:IEntity, message:M, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false )
@@ -130,6 +137,7 @@ private class _HelperSubscription<M,T>
 		this.message = message;
 		this.handler = handler;
 		this.sender = sender;
+		this.senderClassType = senderClassType;
 		this.isRemovedAfterFirstSend = isRemovedAfterFirstSend;
 	}
 	
