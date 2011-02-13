@@ -21,6 +21,7 @@
  */
 
 package awe6.interfaces;
+import awe6.core.MessageManager;
 
 /**
  * Handles main updates and provides global locators for all managers 
@@ -64,7 +65,7 @@ interface IKernel implements IPauseable
 	/**
 	 * Messenger manager.  Arbitrator for observer pattern across IEntityCollections.
 	 */
-	var messenger( default, null ):IMessageManager;
+	var messenger( default, null ):MessageManager; // temporary while I test this
 	/**
 	 * Helper methods
 	 */

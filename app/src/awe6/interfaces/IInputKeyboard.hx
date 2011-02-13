@@ -25,6 +25,7 @@ package awe6.interfaces;
 /**
  * The IInputKeyboard interface should be implemented by an object wishing to be used as a virtual keyboard input device.
  * @author	Robert Fell
+ * @todo	Add previousDurations
  */
 interface IInputKeyboard 
 {

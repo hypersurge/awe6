@@ -109,21 +109,21 @@ class Entity extends Process, implements IEntity
 	
 	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>
 	{
-		if ( bubbleEverywhere ) return _kernel.scenes.scene.getEntitiesByClass( classType, true );
+		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntitiesByClass( classType, true );
 		var l_result:Array<T> = new Array<T>();
 		for ( i in _entities )
 		{
 			if ( Std.is( i, classType ) ) l_result.push( cast i );
 			if ( bubbleDown ) l_result.concat( i.getEntitiesByClass( classType, true ) );
 		}
-		if ( bubbleUp ) l_result.concat( this.parent.getEntitiesByClass( classType, false, true ) );
+		if ( bubbleUp && ( parent != null ) ) l_result.concat( parent.getEntitiesByClass( classType, false, true ) );
 		return l_result;
 	}
 	
 	public function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity
 	{
 		if ( this.id == id ) return this;
-		if ( bubbleEverywhere ) return _kernel.scenes.scene.getEntityById( id, true );
+		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntityById( id, true );
 		var l_result:IEntity = null;
 		for ( i in _entities )
 		{
@@ -131,7 +131,7 @@ class Entity extends Process, implements IEntity
 			if ( bubbleDown ) l_result = i.getEntityById( id, true );
 			if ( l_result != null ) return l_result;
 		}
-		if ( bubbleUp ) l_result = this.parent.getEntityById( id, false, true );
+		if ( bubbleUp && ( parent != null ) ) l_result = parent.getEntityById( id, false, true );
 		return l_result;
 	}
 	

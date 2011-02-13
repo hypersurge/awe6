@@ -31,7 +31,8 @@ import haxe.FastList;
  * @author	Robert Fell
  * @todo	Test functionality and release
  */
-class MessageManager extends Process, implements IMessageManager
+class MessageManager extends Process
+//, implements IMessageManager
 {
 	private var _subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>>;
 
@@ -41,13 +42,13 @@ class MessageManager extends Process, implements IMessageManager
 		_subscriptions = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 	}
 	
-	public function addSubscriber<M,T>( subscriber:IEntity, message:Dynamic<M>, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void
+	public function addSubscriber<M,T>( subscriber:IEntity, message:M, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void
 	{
 		var l_subscription:_HelperSubscription<M,T> = new _HelperSubscription( subscriber, message, handler, sender, senderClassType );
 		_subscriptions.add( l_subscription );
 	}
 	
-	public function getSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>
+	public function getSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>
 	{
 		var l_result:Array<IEntity> = [];
 		var l_subscriptions = _getSubscriptions( subscriber, message, handler, sender, senderClassType );
@@ -67,8 +68,9 @@ class MessageManager extends Process, implements IMessageManager
 		}		
 	}
 	
-	public function sendMessage<M>( message:Dynamic<M>, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
+	public function sendMessage<M>( message:M, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
 	{
+		trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
 		if ( bubbleEverywhere ) return sendMessage( message, _kernel.scenes.scene.getEntities()[0], true );		
 		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, null );
 		for ( i in l_subscriptions )
@@ -84,22 +86,28 @@ class MessageManager extends Process, implements IMessageManager
 		return;
 	}
 	
-	private function _send( subscription:_HelperSubscription<Dynamic,Dynamic>, message, sender ):Void
+	private function _send<M>( subscription:_HelperSubscription<Dynamic,Dynamic>, message:M, sender:IEntity ):Void
 	{
 		Reflect.callMethod( subscription.subscriber, subscription.handler, [message, sender] );		
 		if ( subscription.isRemovedAfterFirstSend ) _subscriptions.remove( subscription );
 	}
 	
-	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Class<Dynamic>>>
+	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Class<Dynamic>>>
 	{
 		var l_result:FastList<_HelperSubscription<Dynamic,Dynamic>> = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 		for ( i in _subscriptions )
 		{
 			if ( ( subscriber != null ) && ( i.subscriber != subscriber ) ) continue;
-			if ( ( message != null ) && ( i.messageClass != Type.getClass( message ) ) ) continue;
+			trace( 1 );
+			if ( ( message != null ) && ( ( message != i.message ) && ( !Std.is( message, i.messageClass ) ) ) ) continue;
+			trace( 2 );
 			if ( ( handler != null ) && ( !Reflect.compareMethods( i.handler, handler ) ) ) continue;
-			if ( ( sender != null ) && ( i.sender != sender ) ) continue;
+			trace( 3 );
+			trace( i.sender.id + ":" + sender.id );
+			if ( ( i.sender != null ) && ( i.sender != sender ) ) continue;
+			trace( 4 );
 			if ( ( senderClassType != null ) && ( !Std.is( i.senderClassType, senderClassType ) ) ) continue;
+			trace( 5 );
 			l_result.add( i );
 		}
 		return l_result;
@@ -109,14 +117,14 @@ class MessageManager extends Process, implements IMessageManager
 private class _HelperSubscription<M,T>
 {
 	public var subscriber( default, null ):IEntity;
-	public var message( default, null ):Dynamic<M>;
-	public var messageClass( default, null ):M;
+	public var message( default, null ):M;
+	public var messageClass( default, null ):Class<M>;
 	public var handler( default, null ):M->IEntity->Void;
 	public var sender( default, null ):IEntity;
 	public var senderClassType( default, null ):T;
 	public var isRemovedAfterFirstSend( default, null ):Bool;
 	
-	public function new( subscriber:IEntity, message:Dynamic<M>, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false )
+	public function new( subscriber:IEntity, message:M, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false )
 	{
 		this.subscriber = subscriber;
 		this.message = message;

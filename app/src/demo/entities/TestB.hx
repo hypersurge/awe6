@@ -20,36 +20,37 @@
  * THE SOFTWARE.
  */
 
-package demo.scenes;
-import awe6.interfaces.EScene;
-import awe6.interfaces.IKernel;
-import demo.entities.TestA;
-import demo.entities.TestB;
-import demo.gui.Button;
+package demo.entities;
+import awe6.Types;
 
-class Intro extends AScene
+class TestB extends Entity
 {
+	var _friend:IEntity;
 	
-	public function new( kernel:IKernel, type:EScene ) 
+	public function new( kernel:IKernel, friend:IEntity ) 
 	{
-		super( kernel, type );
+		_friend = friend;
+		super( kernel, "B" );
 	}
 	
 	override private function _init():Void 
 	{
-		super._init();	
-		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.next" ) );
-		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
-		addEntity( l_button, true, 1 );
-		var l_a:TestA = new TestA( _kernel );
-		var l_b:TestB = new TestB( _kernel, l_a );
-		addEntity( l_a );
-		addEntity( l_b );
+		super._init();
+		_kernel.messenger.addSubscriber( this, "test", _onMessage, _friend );
+	}
+	
+	private function _onMessage( value:String, sender:IEntity ):Void
+	{
+		trace( "message received on B:" + value );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
+		if ( _kernel.inputs.keyboard.getIsKeyPress( EKey.W ) )
+		{
+			trace( "B" );
+		}
 	}
 	
 }
