@@ -31,31 +31,31 @@ import awe6.core.MessageManager;
 interface IKernel implements IPauseable
 {
 	/**
-	 * Defined by the IFactory, can be used for conditional logic relating to build modes and debug 
+	 * Defined by the IFactory, can be used for conditional logic relating to build modes and debug.
 	 */
 	var isDebug( default, null ):Bool;
 	/**
-	 * Identifies a non network location, can be used for conditional logic relating to build modes and debug
+	 * Identifies a non network location, can be used for conditional logic relating to build modes and debug.
 	 */
 	var isLocal( default, null ):Bool;
 	/**
-	 * Toggleable by the user, intended to be used as a switch to disable intensive, but non essential, content (performance vs wow)
+	 * Toggleable by the user, intended to be used as a switch to disable intensive, but non essential, content (performance vs wow).
 	 */
 	var isEyeCandy( default, __set_isEyeCandy ):Bool;
 	/**
-	 * The topmost visual element, used for chrome & global controls
+	 * The topmost visual element, used for chrome & global controls.
 	 */
 	var overlay( default, null ):IOverlay;
 	/**
-	 * Assets manager
+	 * Assets manager.
 	 */
 	var assets( default, null ):IAssetManager;
 	/**
-	 * Audio manager
+	 * Audio manager.
 	 */
 	var audio( default, null ):IAudioManager;
 	/**
-	 * Inputs manager
+	 * Inputs manager.
 	 */
 	var inputs( default, null ):IInputManager;
 	/**
@@ -65,39 +65,39 @@ interface IKernel implements IPauseable
 	/**
 	 * Messenger manager.  Arbitrator for observer pattern across IEntityCollections.
 	 */
-	var messenger( default, null ):MessageManager; // temporary while I test this
+	var messenger( default, null ):IMessageManager;
 	/**
-	 * Helper methods
+	 * Helper methods.
 	 */
 	var tools( default, null ):ITools;
 	/**
-	 * Build properties and factory methods to create the application
+	 * Build properties and factory methods to create the application.
 	 */
 	var factory( default, null ):IFactory;
 	/**
-	 * Read and write globally accessible variables
+	 * Read and write globally accessible variables.
 	 */
 	var session:ISession;
 	/**
 	 * Used for read only application settings and localisation text.
-	 * @param	ID	Unique identifier for the config setting (e.g. XML node name)
-	 * @return	Value of the corresponding config setting
+	 * @param	ID	Unique identifier for the config setting (e.g. XML node name).
+	 * @return	Value of the corresponding config setting.
 	 */
 	function getConfig( id:String ):Dynamic;
 	/**
-	 * Request the framerate of the application
-	 * @param	?asActual	Use actual framerate (potentially laggy), or the desired framerate (from IFactory)
-	 * @return	Frames per second
+	 * Request the framerate of the application.
+	 * @param	?asActual	Use actual framerate (potentially laggy), or the desired framerate (from IFactory).
+	 * @return	Frames per second.
 	 */
 	function getFramerate( ?asActual:Bool = true ):Float;
 	/**
-	 * Internal method called when preloader completes - launches the starting screen
-	 * @param	preloader	Corresponding IPreloader
+	 * Internal method called when preloader completes - launches the starting screen.
+	 * @param	preloader	Corresponding IPreloader.
 	 */
 	function onPreloaderComplete( preloader:IPreloader ):Void;
 	/**
-	 * Used for write only application output - e.g. trace functions or analytic triggers
-	 * @param	value	Value to be logged
+	 * Used for write only application output - e.g. trace functions or analytic triggers.
+	 * @param	value	Value to be logged.
 	 */
 	function log( value:Dynamic ):Void;	
 }

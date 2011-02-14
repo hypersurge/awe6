@@ -41,7 +41,7 @@ enum EScene
 	 */
 	TEST;
 	/**
-	 * Allows EScene to be extended (e.g. for using project specific enumerated scene types)
+	 * Allows EScene to be extended (e.g. for using project specific enumerated scene types).
 	 */
 	SUB_TYPE( value:Dynamic );
 }

@@ -31,6 +31,7 @@ interface ISceneManager
 {
 	/**
 	 * The currently active scene.
+	 * <p>Use as a runtime property and not as an initialization property.</p>
 	 */
 	var scene( default, null ):IScene;
 	/**

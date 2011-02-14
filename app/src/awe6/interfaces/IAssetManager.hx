@@ -24,6 +24,7 @@ package awe6.interfaces;
 
 /**
  * Provides functions to interact with media assets embedded or loaded in the application.
+ * <p>Use with caution, there are usually more type safe ways to utilise assets.</p>
  * @author	Robert Fell
  */
 interface IAssetManager 

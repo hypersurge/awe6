@@ -37,9 +37,10 @@ class TestB extends Entity
 	{
 		super._init();
 		_kernel.messenger.addSubscriber( this, "test", _onMessage, _friend );
+		_kernel.messenger.addSubscriber( this, EMessage.SUB_TYPE( 55 ), _onMessage, _friend );
 	}
 	
-	private function _onMessage( value:String, sender:IEntity ):Void
+	private function _onMessage( value:Dynamic, sender:IEntity ):Void
 	{
 		trace( "message received on B:" + value );
 	}

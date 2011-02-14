@@ -101,8 +101,7 @@ interface IFactory
 	
 	/**
 	 * Called by the kernel to initiate the factory.
-	 * @param	kernel	?
-	 * @todo	Can this method be cleaner?
+	 * @param	kernel	An intialized kernel offering services to the factory.
 	 */
 	function create( kernel:IKernel ):Void;
 	/**

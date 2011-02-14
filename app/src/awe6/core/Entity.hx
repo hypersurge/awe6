@@ -65,6 +65,7 @@ class Entity extends Process, implements IEntity
 	override private function _disposer():Void 
 	{
 		remove();
+		_kernel.messenger.removeSubscribers( this );
 		_entities.reverse();
 		for ( i in _entities ) i.dispose();
 		view.dispose();

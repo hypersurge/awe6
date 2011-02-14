@@ -41,15 +41,15 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	/**
 	 * Adds a new view child to this view. 
 	 * <p>A view can have multiple children, and when you add a child to a view, it is automatically connected to the parent node through its parent property.</p>
-	 * @param	child	The child view to add
+	 * @param	child	The child view to add.
 	 * @param	?priority	The sorting priority of the child view to add.  Higher numbers will appear towards the top of the view stack.  Default value is 0.
 	 */
 	function addChild( child:IView, ?priority:Int ):Void;
 	/**
 	 * Remove the specified view.
 	 * <p>The removed view will no longer be included in the view traversal stack so will no longer be visible.</p>
-	 * <p>The view itself is still in memory, if you want to free them completely call child.dispose()</p>
-	 * @param	child	The view to remove
+	 * <p>The view itself is still in memory, if you want to free them completely call child.dispose().</p>
+	 * @param	child	The view to remove.
 	 */
 	function removeChild( child:IView ):Void;
 	/**
@@ -59,7 +59,7 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	function clear():Void;
 	/**
 	 * Removes this view from the view traversal stack and subsequently all of its child views.
-	 * <p>The view itself is still in memory, if you want to free it completely call dispose()</p>
+	 * <p>The view itself is still in memory, if you want to free it completely call dispose().</p>
 	 */
 	function remove():Void;
 }
