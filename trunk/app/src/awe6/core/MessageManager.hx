@@ -29,16 +29,16 @@ import haxe.FastList;
  * The MessageManager class provides a minimalist implementation of the IMessageManager interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
- * @todo	Test functionality and release
  */
-class MessageManager extends Process
-//, implements IMessageManager
+class MessageManager extends Process, implements IMessageManager
 {
 	private var _subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>>;
+	private var _isVerbose:Bool;
 
 	override private function _init():Void 
 	{
 		super._init();
+		_isVerbose = false;
 		_subscriptions = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 	}
 	
@@ -59,12 +59,13 @@ class MessageManager extends Process
 		return l_result;
 	}
 	
-	public function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void
+	public function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void
 	{
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( subscriber, message, null, sender, senderClassType );
+		var l_subscriptions = _getSubscriptions( subscriber, message, handler, sender, senderClassType );
 		for ( i in l_subscriptions )
 		{
 			_subscriptions.remove( i );
+			if ( _isVerbose ) trace( "Removing " + i.sender + ":" + i.message );
 		}		
 	}
 	
@@ -73,12 +74,9 @@ class MessageManager extends Process
 		_sendMessage( message, sender, sender, bubbleDown, bubbleUp, bubbleEverywhere );
 	}
 	
-	/**
-	 * @todo	Might need to make message an enum for best constructor based comparison?
-	 */
 	private function _sendMessage<M>( message:M, sender:IEntity, target:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
 	{
-		trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
+		if ( _isVerbose ) trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
 		if ( bubbleEverywhere ) return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
 		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, Type.getClass( sender ) );
 		for ( i in l_subscriptions )
@@ -106,15 +104,22 @@ class MessageManager extends Process
 		for ( i in _subscriptions )
 		{
 			if ( ( subscriber != null ) && ( i.subscriber != subscriber ) ) continue;
-			trace( 1 );
-			if ( ( message != null ) && ( ( message != i.message ) && ( !Std.is( message, i.messageClass ) ) ) ) continue;
-			trace( 2 );
+			if ( _isVerbose ) trace( 1 );
+			if ( ( message != null ) && !Std.is( message, i.messageClass ) )
+			{
+				switch ( Type.typeof( message ) )
+				{
+					case ValueType.TEnum( e ) : if ( !Type.enumEq( message, i.message ) ) continue;
+					default : if ( message != i.message ) continue;
+				}
+			}
+			if ( _isVerbose ) trace( 2 );
 			if ( ( handler != null ) && ( !Reflect.compareMethods( i.handler, handler ) ) ) continue;
-			trace( 3 );
-			if ( ( i.sender != null ) && ( i.sender != sender ) ) continue;
-			trace( 4 );
+			if ( _isVerbose ) trace( 3 );
+			if ( ( sender != null ) && ( i.sender != null ) && ( i.sender != sender ) ) continue;
+			if ( _isVerbose ) trace( 4 );
 			if ( ( i.senderClassType != null ) && ( !Std.is( sender, i.senderClassType ) ) ) continue;
-			trace( 5 );
+			if ( _isVerbose ) trace( 5 );
 			l_result.add( i );
 		}
 		return l_result;

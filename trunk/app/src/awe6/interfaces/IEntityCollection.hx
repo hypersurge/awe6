@@ -30,46 +30,46 @@ interface IEntityCollection
 {
 	/**
 	 * Adds an entity to this object's children.
-	 * @param	entity	The entity to add
-	 * @param	?agenda	Assigns the entity to a specific agenda
-	 * @param	?isAddedToView	If true will add the child entity's view to this object's view
-	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack)
+	 * @param	entity	The entity to add.
+	 * @param	?agenda	Assigns the entity to a specific agenda.
+	 * @param	?isAddedToView	If true will add the child entity's view to this object's view.
+	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack).
 	 */
 	function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int ):Void;
 	/**
 	 * Removes an entity from this object's children.
-	 * @param	entity	The entity to remove
-	 * @param	?agenda	If set then will only remove the specified entity from this agenda
-	 * @param	?isRemovedFromView	If true the child entity's view will be removed from this object's view
+	 * @param	entity	The entity to remove.
+	 * @param	?agenda	If set then will only remove the specified entity from this agenda.
+	 * @param	?isRemovedFromView	If true the child entity's view will be removed from this object's view.
 	 */
 	function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void;
 	/**
 	 * Retrieves all child entities.
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
-	 * @param	?agenda	Used to filter results to the specified agenda
-	 * @return	Array of matching entities
+	 * @param	?agenda	Used to filter results to the specified agenda.
+	 * @return	Array of matching entities.
 	 */
 	function getEntities( ?agenda:EAgenda ):Array<IEntity>;
 	/**
 	 * Retrieves all child entities that match type.
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
-	 * @param	classType	The type of class to match (can be any class, type or interface)
-	 * @param	agenda	Used to filter results to the specified agenda
-	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity
-	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity
-	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity
-	 * @return	Array of matching entities
+	 * @param	classType	The type of class to match (can be any class, type or interface).
+	 * @param	agenda	Used to filter results to the specified agenda.
+	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity.
+	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity.
+	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
+	 * @return	Array of matching entities.
 	 */
 	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>;
 	/**
 	 * Retrieves the child entity with the specified id. 
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
-	 * @param	id	The unique identifier of the entity you want to retrieve
-	 * @param	?agenda
-	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity
-	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity
-	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity
-	 * @return	The requested entity or null if no entity with this id was found
+	 * @param	id	The unique identifier of the entity you want to retrieve.
+	 * @param	?agenda	Used to filter results to the specified agenda.
+	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity.
+	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity.
+	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
+	 * @return	The requested entity or null if no entity with this id was found.
 	 */
 	function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity;
 }

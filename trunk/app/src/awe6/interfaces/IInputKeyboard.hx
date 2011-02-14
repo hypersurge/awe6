@@ -72,7 +72,7 @@ interface IInputKeyboard
 	/**
 	 * Translate a keyCode to a specific key.
 	 * @param	type	The keyCode.
-	 * @return	Returns the key of the corresponding keyboard keyCode .
+	 * @return	Returns the key of the corresponding keyboard keyCode.
 	 */
 	function getKey( keyCode:Int ):EKey;
 }

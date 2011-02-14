@@ -43,6 +43,7 @@ class TestA extends Entity
 		{
 			trace( "A" );
 			_kernel.messenger.sendMessage( "test", this, false, false, true );
+			_kernel.messenger.sendMessage( EMessage.SUB_TYPE( 55 ), this, false, false, true );
 		}
 	}
 	

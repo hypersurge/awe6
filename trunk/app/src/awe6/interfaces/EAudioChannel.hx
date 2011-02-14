@@ -35,7 +35,7 @@ enum EAudioChannel
 	INTERFACE;
 	MUSIC;
 	/**
-	 * Allows EAudioChannel to be extended (e.g. for using project specific enumerated audio channels)
+	 * Allows EAudioChannel to be extended (e.g. for using project specific enumerated audio channels).
 	 */
 	SUB_TYPE( value:Dynamic );
 }

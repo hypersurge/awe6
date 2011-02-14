@@ -23,14 +23,58 @@
 package awe6.interfaces;
 
 /**
- * The IMessageManager should be implemented by objects intending to fulfill Entity to Entity synchronous messaging (signals).
- * <p>The interface provides an observer pattern allowing any Entity to listen to anything on any other Entity.</p>
- * @todo	Very early stages - need basic tests.  Will document when tested (if it works at all?).
+ * The IMessageManager should be implemented by objects intending to fulfill Entity to Entity synchronous messaging (also known as events or signals).
+ * <p>The interface provides an observer pattern oriented manager allowing any Entity to listen to anything on any other Entity.</p>
+ * <p>Note, the author is not a fan of observer pattern and provides this manager with a note of caution - there is <i>always</i> a better way to communicate than to fire shots into the dark!</p>
+ * <p>This manager is intentionally abstract / generic.  It allows expressive synchronous events - i.e. use anything as a message (string, enumerator, type, state based object etc).</p>
+ * <p>It may make more sense to handle events using an alternative, event or signal specific library.  Adapt one as an IEntity and inject into any scene as needed.</p>
  */
 interface IMessageManager
 {
-	function addSubscriber<M,T>( subscriber:IEntity, message:Dynamic<M>, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
-	function getSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>;
-	function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:Dynamic<M>, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void;
-	function sendMessage<M>( message:Dynamic<M>, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void;
+	/**
+	 * Register an entity's interest in a subject.
+	 * @param	subscriber	Entity listening / observing for messages.
+	 * @param	message	Specific message to listen for.
+	 * @param	handler	Function to pass observed messages to.
+	 * @param	?sender	Only listen to messages from this entity.
+	 * @param	?senderClassType	Only listen to messages from this type of entity.
+	 * @param	?isRemovedAfterFirstSend	Once a message has been received, no longer listen for further messages under the same criteria.
+	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
+	 * @type	<T>	Senders' type.
+	 */
+	function addSubscriber<M,T>( subscriber:IEntity, message:M, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
+	/**
+	 * Retrieve all entity's interested in a subject.
+	 * <p>All parameters are optional to allow wildcard filtering.</p>
+	 * @param	?subscriber	Entity listening / observing for messages.
+	 * @param	?message	Specific message to listen for.
+	 * @param	?handler	Function to pass observed messages to.
+	 * @param	?sender	Only listen to messages from this entity.
+	 * @param	?senderClassType	Only listen to messages from this type of entity.
+	 * @return	An array of entities corresponding to the specified filters.
+	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
+	 * @type	<T>	Senders' type.
+	 */
+	function getSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>;
+	/**
+	 * Unsubscribes entities matching the specified criteria.
+	 * @param	?subscriber	Entity listening / observing for messages.
+	 * @param	?message	Specific message to listen for.
+	 * @param	?handler	Function to pass observed messages to.
+	 * @param	?sender	Only listen to messages from this entity.
+	 * @param	?senderClassType	Only listen to messages from this type of entity.
+	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
+	 * @type	<T>	Senders' type.
+	 */
+	function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void;
+	/**
+	 * Dispatch a message from a specific entity.
+	 * @param	message	Message to dispatch.
+	 * @param	sender	The originator of the message (can be spoofed).
+	 * @param	?bubbleDown	Set to true if you want to dispatch this message to the sender's children.
+	 * @param	?bubbleUp	Set to true if you want to dispatch this message to the sender's parent.
+	 * @param	?bubbleEverywhere	Set to true if you want to dispatch this message to the entity traversal stack.
+	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
+	 */
+	function sendMessage<M>( message:M, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void;
 }
