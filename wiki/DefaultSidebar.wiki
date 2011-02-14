@@ -1,14 +1,13 @@
 #summary Wiki sidebar menu
 
   * Overview
-    * [ProjectObjectives]
-    * [DeveloperGallery]
-    * [CodingConventions]
+    * [ProjectObjectives Objectives]
+    * [DeveloperGallery Gallery]
+    * [CodingConventions Coding Conventions]
     * Key Components
-      * [ComponentFactory]
-      * [ComponentKernel]
-      * [ComponentAssetManager]
-      * [ComponentInputManager]
+      * [ComponentFactory Factory]
+      * [ComponentKernel Kernel]
+      * [ComponentAssetManager Asset Management]
+      * [ComponentInputManager Input Management]
   * Using awe6
-    * [QuickStart]
-
+    * [QuickStart Quick Start Tutorial]
