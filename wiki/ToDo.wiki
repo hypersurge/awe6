@@ -1,0 +1,32 @@
+#summary List of anything that is needed, but doesn't yet exist.
+
+= To Do =
+
+Please help towards achieving the following tasks:
+
+  * Document key components:
+    * [ComponentAgenda]
+    * [ComponentAssetManager]
+    * [ComponentAudioManager]
+    * [ComponentEntity]
+    * [ComponentFactory]
+    * [ComponentInputManager]
+    * [ComponentKernel]
+    * [ComponentMessageManager]
+    * [ComponentOverlay]
+    * [ComponentPreloader]
+    * [ComponentScene]
+    * [ComponentSceneTransition]
+    * [ComponentSession]
+    * [ComponentTextStyle]
+    * [ComponentView]
+  * MessageManager IMessage design & test
+  * Inline documentation of Factory & Kernel
+  * Design of type safe asset prefabrication
+  * Design of multi target asset management
+  * Design of multi target views
+  * Design of multi target inputs
+  * Tutorials:
+    * OOP approach
+    * Data driven approach
+    * Adapter approach
