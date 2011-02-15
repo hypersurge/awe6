@@ -237,13 +237,13 @@ class Kernel extends Process, implements IKernel
 	override private function _pauser():Void
 	{
 		super._pauser();
-		scenes.scene.pause();
+		if ( scenes.scene != null ) scenes.scene.pause();
 	}
 	
 	override private function _resumer():Void
 	{
 		super._resumer();
-		scenes.scene.resume();
+		if ( scenes.scene != null ) scenes.scene.resume();
 	}	
 }
 
