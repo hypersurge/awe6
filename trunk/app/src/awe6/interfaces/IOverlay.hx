@@ -49,7 +49,12 @@ interface IOverlay implements IProcess, implements IViewable
 	 * @param	type	The overlay button.
 	 */
 	function activateButton( type:EOverlayButton ):Void;
-//	function showProgress( progress:Float, ?message:String ):Void;
+	/**
+	 * Simple representation of progress.
+	 * @param	progress	Range: 0...1.
+	 * @param	?message	An optional string to display.
+	 */
+	function showProgress( progress:Float, ?message:String ):Void;
 	/**
 	 * Hides all overlay buttons.
 	 */
