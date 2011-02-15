@@ -42,6 +42,7 @@ class Overlay extends Process, implements IOverlay
 {
 	public var view:IView;
 	private var _background:Bitmap;
+	private var _progresserSprite:Sprite;
 	private var _pauserSprite:Sprite;
 	private var _pauserSnapshot:BitmapData;
 	private var _pauseColor:UInt;
@@ -78,6 +79,9 @@ class Overlay extends Process, implements IOverlay
 	{
 		super._init();
 		
+		_progresserSprite = new Sprite();
+		_progresserSprite.visible = false;
+		
 		_pauserSprite = new Sprite();
 		_pauserSprite.visible = false;
 		_pauserSprite.mouseEnabled = false;
@@ -109,6 +113,7 @@ class Overlay extends Process, implements IOverlay
 		l_sprite.mouseEnabled = false;
 		l_sprite.addChild( _flasher );
 		l_sprite.addChild( _pauserSprite );
+		l_sprite.addChild( _progresserSprite );
 		l_sprite.addChild( _background );
 		l_sprite.addChild( _buttonBack );
 		l_sprite.addChild( _buttonUnmute );
@@ -186,12 +191,9 @@ class Overlay extends Process, implements IOverlay
 		if ( alpha != null ) l_button.alpha = alpha;		
 	}
 	
-	/**
-	 * @todo Implement progress bar display
-	 */
 	public function showProgress( progress:Float, ?message:String ):Void
 	{
-		
+		_progresserSprite.visible = progress < 1;		
 	}
 	
 	public function hideButtons():Void
