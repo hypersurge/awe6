@@ -71,6 +71,11 @@ class Entity extends Process, implements IEntity
 		view.dispose();
 		super._disposer();
 	}
+	
+	override public function reset():Void
+	{
+		// each entity needs its own reset considerations
+	}
 
 	/**
 	 * @todo	Enable agenda state machine
