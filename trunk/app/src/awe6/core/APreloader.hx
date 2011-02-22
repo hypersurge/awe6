@@ -124,7 +124,11 @@ class APreloader extends Process, implements IPreloader
 			var l_className:String = _tools.toCamelCase( i );
 			if ( l_packageId.length > 0 ) l_className = l_packageId + "." + l_className;
 			var l_fontClass:Class<Dynamic> = Type.resolveClass( l_className );
-			if ( l_fontClass != null ) Font.registerFont( l_fontClass );
+			if ( l_fontClass != null )
+			{
+				try { Font.registerFont( l_fontClass ); }
+				catch ( error:Dynamic ) {}
+			}
 		}
 	}
 	

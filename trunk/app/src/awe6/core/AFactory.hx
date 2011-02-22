@@ -80,20 +80,26 @@ class AFactory implements IFactory
 
 	public function new( sprite:Sprite, isDebug:Bool = true )
 	{
-		_sprite = new Sprite();
-		sprite.addChild( _sprite );
+		sprite.addChild( _sprite = new Sprite() );
 		this.isDebug = isDebug;
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;
+		if ( sprite.stage != null ) _hasStage();
+		else sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
+	}
+	
+	private function _hasStage( ?event:Event ):Void
+	{
+		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		_init();
 		if ( _isConfigRequired )
 		{
 			var l_url:String = _CONFIG_URL;
-			if ( untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
+			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
 			_loadConfig( l_url );
 		}
 		else _launchKernel();		
-	}
+	}	
 	
 	private function _init():Void
 	{
