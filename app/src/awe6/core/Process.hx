@@ -91,10 +91,10 @@ class Process implements IProcess
 		// override me
 	}
 	
-	public function reset():Void
+	public inline function reset():Void
 	{
 		dispose();
-		_init();		
+		_init();
 	}
 	
 	private function __set_isActive( value:Bool ):Bool

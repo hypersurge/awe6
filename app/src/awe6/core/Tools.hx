@@ -239,7 +239,7 @@ class Tools implements ITools
 	public function convertUpdatesToTime( frames:Int, ?delimiter:String ):String
 	{
 		if ( delimiter == null ) delimiter = "'";
-		if ( frames == 0 ) return "99" + delimiter + "99" + delimiter + "99";
+		if ( frames < 0 ) return "99" + delimiter + "99" + delimiter + "99";
 		var l_seconds:Int = Math.floor( frames / _kernel.factory.targetFramerate );
 		var l_remainder:String = Std.string( Math.round( ( ( frames / _kernel.factory.targetFramerate ) - l_seconds ) * 100 ) );
 		var l_minutes:Int = 0;
