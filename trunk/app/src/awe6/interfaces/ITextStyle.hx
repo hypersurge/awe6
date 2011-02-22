@@ -69,5 +69,10 @@ interface ITextStyle
 	 * String representation of this object.
 	 * @return	Representation of this object.
 	 */
-	function toString():String;
+	function toString():String;	
+	/**
+	 * Duplicates this TextStyle.
+	 * @return	A duplicate.
+	 */
+	function clone():ITextStyle;
 }

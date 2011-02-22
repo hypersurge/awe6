@@ -59,4 +59,9 @@ class TextStyle implements ITextStyle
 		return Std.string( font + "," + size + "," + color + "," + align + "," + spacing + "," + isBold + "," + isItalic + "," + thickness + "," + filters );
 	}
 	
+	public function clone():ITextStyle
+	{
+		return new TextStyle( font, size, color, align, spacing, isBold, isItalic, thickness, filters );
+	}
+	
 }
