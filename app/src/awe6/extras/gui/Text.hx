@@ -25,6 +25,7 @@ import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
 import flash.text.AntiAliasType;
+import flash.text.Font;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
@@ -97,7 +98,15 @@ class Text extends GuiEntity
 			_textField.selectable = _isInput;
 			_textField.thickness = textStyle.thickness * 200;
 			_textField.antiAliasType = AntiAliasType.ADVANCED;
-			_textField.embedFonts = true;
+			_textField.embedFonts = false;
+			for ( i in Font.enumerateFonts() )
+			{
+				if ( i.fontName == _textFormat.font )
+				{
+					_textField.embedFonts = true;					
+					break;
+				}				
+			}			
 			_textField.filters = textStyle.filters;
 			_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
 			_textField.multiline = _isMultiline;
