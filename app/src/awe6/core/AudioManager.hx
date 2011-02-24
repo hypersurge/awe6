@@ -22,6 +22,7 @@
 
 package awe6.core;
 import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.IAudio;
 import awe6.interfaces.IAudioManager;
 import awe6.interfaces.IKernel;
 import flash.events.Event;
@@ -40,7 +41,7 @@ class AudioManager extends Process, implements IAudioManager
 	private static inline var _PACKAGE_ID = "assets.audio";
 	public var isMute( default, __set_isMute ):Bool;
 	
-	private var _sounds:Array<HelperSound>;
+	private var _sounds:Array<IAudio>;
 	private var _packageId:String;
 
 	override private function _init():Void 
@@ -52,32 +53,40 @@ class AudioManager extends Process, implements IAudioManager
 		if ( _packageId == null ) _packageId = _PACKAGE_ID;	
 	}
 	
+	override private function _updater( ?deltaTime:Int = 0 ):Void
+	{
+		super._updater( deltaTime );
+		for ( i in _sounds ) if ( i.isDisposed ) _sounds.remove( i );
+	}
+	
 	override private function _disposer():Void 
 	{
 		for ( i in _sounds ) i.dispose();
-		super._disposer();		
+		super._disposer();
 	}
 	
-	public function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false ):Void
+	public function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false ):IAudio
 	{
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
-		if ( isIgnoredIfPlaying && ( _getSound( id, audioChannelType ).length != 0 ) )
+		var l_existingSound:Array<IAudio> = _getSound( id, audioChannelType );
+		if ( isIgnoredIfPlaying && ( l_existingSound.length != 0 ) )
 		{
-			return;
+			return l_existingSound[0];
 		}
-		var l_sound:HelperSound = new HelperSound( _kernel, this, id, _packageId, audioChannelType, loops, startTime, volume, pan );
+		var l_sound:Audio = new Audio( _kernel, this, id, _packageId, audioChannelType, loops, startTime, volume, pan );
 		_sounds.push( l_sound );
+		return l_sound;
 	}
 	
 	public function stop( ?id:String = "", ?audioChannelType:EAudioChannel ):Void
 	{
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
-		if ( ( id == "" ) && ( audioChannelType == EAudioChannel.DEFAULT ) )
+		if ( ( id == "" ) && Type.enumEq( audioChannelType, EAudioChannel.DEFAULT ) )
 		{
 			id = "*";
 			audioChannelType = EAudioChannel.ALL;
 		}
-		var l_sounds:Array<HelperSound> = _getSounds( id, audioChannelType );
+		var l_sounds:Array<IAudio> = _getSounds( id, audioChannelType );
 		for ( i in l_sounds )
 		{
 			i.stop();
@@ -87,7 +96,7 @@ class AudioManager extends Process, implements IAudioManager
 	public function transform( ?id:String = "", ?audioChannelType:EAudioChannel, ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
 	{
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
-		var l_sounds:Array<HelperSound> = _getSounds( id, audioChannelType );
+		var l_sounds:Array<IAudio> = _getSounds( id, audioChannelType );
 		for ( i in l_sounds )
 		{
 			i.transform( volume, pan, asRelative );
@@ -102,32 +111,32 @@ class AudioManager extends Process, implements IAudioManager
 		return this.isMute;
 	}	
 	
-	private function _getSound( ?id:String = "", ?audioChannelType:EAudioChannel ):Array<HelperSound>
+	private function _getSound( ?id:String = "", ?audioChannelType:EAudioChannel ):Array<IAudio>
 	{
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
-		var l_result:Array<HelperSound> = [];
+		var l_result:Array<IAudio> = [];
 		for ( i in _sounds )
 		{
-			if ( ( i.id == id ) && ( i.audioChannelType == audioChannelType ) ) l_result.push( i );
+			if ( ( i.id == id ) && Type.enumEq( i.audioChannelType, audioChannelType ) ) l_result.push( i );
 		}
 		return l_result;
 	}
 
-	private function _getAudioChannel( audioChannelType:EAudioChannel ):Array<HelperSound>
+	private function _getAudioChannel( audioChannelType:EAudioChannel ):Array<IAudio>
 	{
-		var l_result:Array<HelperSound> = [];
+		var l_result:Array<IAudio> = [];
 		for ( i in _sounds )
 		{
-			if ( i.audioChannelType == audioChannelType ) l_result.push( i );
+			if ( Type.enumEq( i.audioChannelType, audioChannelType ) ) l_result.push( i );
 		}
 		return l_result;
 	}
 
-	private function _getSounds( ?id:String = "", ?audioChannelType:EAudioChannel ):Array<HelperSound>
+	private function _getSounds( ?id:String = "", ?audioChannelType:EAudioChannel ):Array<IAudio>
 	{
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
-		var l_result:Array<HelperSound> = [];
-		if ( ( id == "*" ) && ( audioChannelType == EAudioChannel.ALL ) )
+		var l_result:Array<IAudio> = [];
+		if ( ( id == "*" ) && Type.enumEq( audioChannelType, EAudioChannel.ALL ) )
 		{
 			l_result = _sounds;
 		}
@@ -144,81 +153,7 @@ class AudioManager extends Process, implements IAudioManager
 	
 	public function isPlaying( ?id:String = "", ?audioChannelType:EAudioChannel ):Bool
 	{
-		var l_result:Array<HelperSound> = _getSounds( id, audioChannelType );
+		var l_result:Array<IAudio> = _getSounds( id, audioChannelType );
 		return ( l_result.length != 0 );
-	}
-}
-
-private class HelperSound
-{
-	private var _isDisposed:Bool;
-	private var _kernel:IKernel;
-	private var _audioManager:AudioManager;
-	public var id:String;
-	public var packageId:String;
-	public var audioChannelType:EAudioChannel;
-	public var loops:Int;
-	public var startTime:Int;
-	public var volume:Float;
-	public var pan:Float;
-	private var _sound:Sound;
-	private var _soundChannel:SoundChannel;
-	
-	public function new( kernel:IKernel, audioManager:AudioManager, id:String, packageId:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0 )
-	{
-		_isDisposed = false;
-		_kernel = kernel;
-		_audioManager = audioManager;
-		this.id = id;
-		this.packageId = packageId;
-		this.audioChannelType = ( audioChannelType != null ) ? audioChannelType : EAudioChannel.DEFAULT;
-		this.loops = loops;
-		if ( loops == -1 ) this.loops = _kernel.tools.BIG_NUMBER;
-		this.startTime = startTime;
-		_sound = cast( _kernel.assets.getAsset( this.id, this.packageId ), Sound );
-		if ( _sound == null ) return dispose();
-		_soundChannel = _sound.play( this.startTime, this.loops );
-		if ( _soundChannel == null ) return dispose(); // perhaps sounds are flooded?
-		transform( volume, pan );
-		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
-		return;
-	}
-	
-	public function transform( ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
-	{
-		if ( _isDisposed ) return;
-		if ( asRelative )
-		{
-			volume *= _soundChannel.soundTransform.volume;
-			pan *= _soundChannel.soundTransform.pan;
-		}
-		this.volume = volume;
-		this.pan = _kernel.tools.limit( pan, -1, 1 );
-		var soundTransform:SoundTransform = new SoundTransform( volume, pan );
-		_soundChannel.soundTransform = soundTransform;		
-	}
-	
-	public function stop():Void
-	{
-		if ( _isDisposed ) return;
-		_soundChannel.stop();
-		dispose();
-	}
-	
-	private function _onSoundComplete( event:Event ):Void
-	{
-		dispose();
-	}
-	
-	public function dispose():Void
-	{
-		if ( _isDisposed ) return;
-		_isDisposed = true;
-		if ( _soundChannel != null )
-		{
-			stop();
-			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
-		}
-		untyped _audioManager._sounds.remove( this );
 	}
 }

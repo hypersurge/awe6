@@ -41,8 +41,9 @@ interface IAudioManager
 	 * @param	?volume	Adjusts this sound's amplitude relative to the audioChannel.  0...1: 0 is silent, 1 is full.
 	 * @param	?pan	Adjusts this sound's stereo effect relative to the audioChannel.  -1...1: -1 is left channel only, 0 is central, 1 is right channel only.
 	 * @param	?isIgnoredIfPlaying	If true and this sound is already playing in the specified channel the start request will be skipped.  If false there is a potential for the same sound to play over the top of itself.
+	 * @return	The sound.
 	 */
-	function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false ):Void;
+	 function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false ):IAudio;
 	/**
 	 * End playback of any specified sound.  To stop all sounds on all channels, leave all parameters blank.
 	 * @param	?id	The unique id of the audio media asset intended to be stopped.  If blank will stop all sounds on the specific audioChannel.
