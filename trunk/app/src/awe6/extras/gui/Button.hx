@@ -31,7 +31,7 @@ import flash.events.MouseEvent;
 class Button extends GuiEntity
 {
 	public static inline var DEFAULT_LABEL = "Button";
-	public var label( default, __setLabel ):String;
+	public var label( default, __set_label ):String;
 	
 	private var _key:EKey;
 	private var _onClickCallback:Void->Void;
@@ -142,7 +142,7 @@ class Button extends GuiEntity
 		Reflect.callMethod( this, _onRollOutCallback, [] );		
 	}
 	
-	private function __setLabel( value:String ):String
+	private function __set_label( value:String ):String
 	{
 		if ( value == label ) return label;
 		label = value;
