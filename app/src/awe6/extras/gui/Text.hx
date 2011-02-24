@@ -33,7 +33,7 @@ import flash.text.TextFormatAlign;
 
 class Text extends GuiEntity
 {
-	public var text( default, __setText ):String;
+	public var text( default, __set_text ):String;
 	public var textStyle:ITextStyle;
 	
 	private var _textField:TextField;
@@ -116,7 +116,7 @@ class Text extends GuiEntity
 		_isDirty = false;
 	}
 	
-	private function __setText( value:String ):String
+	private function __set_text( value:String ):String
 	{
 		if ( text == value ) return text;
 		text = value;

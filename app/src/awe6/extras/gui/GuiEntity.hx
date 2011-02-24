@@ -27,12 +27,12 @@ import flash.display.Sprite;
 
 class GuiEntity extends Entity
 {
-	public var x( default, __setX ):Float;
-	public var y( default, __setY ):Float;
+	public var x( default, __set_x ):Float;
+	public var y( default, __set_y ):Float;
 	public var width( default, null ):Float;
 	public var height( default, null ):Float;
-	public var isFlippedX( default, __setIsFlippedX ):Bool;
-	public var isFlippedY( default, __setIsFlippedY ):Bool;
+	public var isFlippedX( default, __set_isFlippedX ):Bool;
+	public var isFlippedY( default, __set_isFlippedY ):Bool;
 	
 	private var _sprite:Sprite;
 	
@@ -55,10 +55,10 @@ class GuiEntity extends Entity
 	}
 	
 	public function setPosition( x:Float, y:Float ):Void { this.x = x; this.y = y; }
-	private function __setX( value:Float ):Float { x = value; _sprite.x = x; return x; }
-	private function __setY( value:Float ):Float { y = value; _sprite.y = y; return y; }
+	private function __set_x( value:Float ):Float { x = value; _sprite.x = x; return x; }
+	private function __set_y( value:Float ):Float { y = value; _sprite.y = y; return y; }
 	
-	private function __setIsFlippedX( value:Bool ):Bool
+	private function __set_isFlippedX( value:Bool ):Bool
 	{
 		if ( value == isFlippedX ) return isFlippedX;
 		isFlippedX = value;
@@ -68,7 +68,7 @@ class GuiEntity extends Entity
 		return isFlippedX;
 	}
 
-	private function __setIsFlippedY( value:Bool ):Bool
+	private function __set_isFlippedY( value:Bool ):Bool
 	{
 		if ( value == isFlippedY ) return isFlippedY;
 		isFlippedY = value;
