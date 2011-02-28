@@ -115,5 +115,11 @@ class SceneManager extends Process, implements ISceneManager
 		setScene( _kernel.factory.getNextSceneType( scene.type ) );
 	}
 	
+	public function restart():Void
+	{
+		if ( scene == null ) setScene( _kernel.factory.startingSceneType );
+		setScene( scene.type );
+	}
+	
 }
 

@@ -51,4 +51,9 @@ interface ISceneManager
 	 * @see awe6.interfaces.IFactory.getNextSceneType
 	 */
 	function next():Void;
+	/**
+	 * Restarts the current scene.
+	 * <p>Equivalent of disposing current scene and then setScene to current scene again.</p>
+	 */
+	function restart():Void;
 }

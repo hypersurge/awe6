@@ -41,6 +41,8 @@ import flash.filters.BlurFilter;
 class Overlay extends Process, implements IOverlay
 {
 	public var view:IView;
+	
+	private var _sprite:Sprite;
 	private var _background:Bitmap;
 	private var _progresserSprite:Sprite;
 	private var _pauserSprite:Sprite;
@@ -54,6 +56,7 @@ class Overlay extends Process, implements IOverlay
 	private var _flasherStartingAlpha:Float;
 	private var _flasherStartingDuration:Float;
 	private var _flasherAsTime:Bool;
+	private var _wasMute:Bool;
 	
 	private var _buttonBack:SimpleButton;
 	private var _buttonMute:SimpleButton;
@@ -78,6 +81,7 @@ class Overlay extends Process, implements IOverlay
 	override private function _init():Void 
 	{
 		super._init();
+		_wasMute = _kernel.audio.isMute;
 		
 		_progresserSprite = new Sprite();
 		_progresserSprite.visible = false;
@@ -109,17 +113,17 @@ class Overlay extends Process, implements IOverlay
 		_buttonPause.addEventListener( MouseEvent.CLICK, _onClickPause );
 		_buttonUnpause.addEventListener( MouseEvent.CLICK, _onClickUnpause );
 		
-		var l_sprite:Sprite = new Sprite();
-		l_sprite.mouseEnabled = false;
-		l_sprite.addChild( _flasher );
-		l_sprite.addChild( _pauserSprite );
-		l_sprite.addChild( _progresserSprite );
-		l_sprite.addChild( _background );
-		l_sprite.addChild( _buttonBack );
-		l_sprite.addChild( _buttonUnmute );
-		l_sprite.addChild( _buttonMute );
-		l_sprite.addChild( _buttonUnpause );
-		l_sprite.addChild( _buttonPause );
+		_sprite = new Sprite();
+		_sprite.mouseEnabled = false;
+		_sprite.addChild( _flasher );
+		_sprite.addChild( _pauserSprite );
+		_sprite.addChild( _progresserSprite );
+		_sprite.addChild( _background );
+		_sprite.addChild( _buttonBack );
+		_sprite.addChild( _buttonUnmute );
+		_sprite.addChild( _buttonMute );
+		_sprite.addChild( _buttonUnpause );
+		_sprite.addChild( _buttonPause );
 		
 		var l_height:Float = _buttonBack.upState.height;
 		var l_width:Float = _buttonBack.upState.width;
@@ -131,7 +135,7 @@ class Overlay extends Process, implements IOverlay
 		positionButton( EOverlayButton.PAUSE, l_x += l_width, l_y );
 		positionButton( EOverlayButton.UNPAUSE, l_x, l_y );
 		
-		view = new View( _kernel, l_sprite );
+		view = new View( _kernel, _sprite );
 	}
 	
 	private function _onClickBack( event:MouseEvent ):Void { activateButton( EOverlayButton.BACK ); }
@@ -229,7 +233,7 @@ class Overlay extends Process, implements IOverlay
 				showButton( EOverlayButton.UNMUTE, true );
 				_kernel.audio.isMute = true;
 			}
-			case UNMUTE : if ( _buttonUnmute.visible )
+			case UNMUTE : if ( _buttonUnmute.visible && _buttonPause.visible )
 			{
 				showButton( EOverlayButton.MUTE, true );
 				showButton( EOverlayButton.UNMUTE, false );
@@ -237,6 +241,7 @@ class Overlay extends Process, implements IOverlay
 			}
 			case PAUSE : if ( _buttonPause.visible )
 			{
+				_wasMute = _kernel.audio.isMute;
 				showButton( EOverlayButton.PAUSE, false );
 				showButton( EOverlayButton.UNPAUSE, true );
 				_kernel.pause();
@@ -249,7 +254,7 @@ class Overlay extends Process, implements IOverlay
 				showButton( EOverlayButton.UNPAUSE, false );
 				_kernel.resume();
 				_drawPause( false );
-				activateButton( EOverlayButton.UNMUTE );
+				activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
 			}
 			case SUB_TYPE( value ) :
 		}
