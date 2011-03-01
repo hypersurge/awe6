@@ -53,6 +53,7 @@ class AFactory implements IFactory
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
+	private var _configUrl:String;
 	private var _sprite:Sprite;
 	private var _kernel:IKernel;
 	private var _tools:ITools;
@@ -78,10 +79,11 @@ class AFactory implements IFactory
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 
-	public function new( sprite:Sprite, isDebug:Bool = true )
+	public function new( sprite:Sprite, isDebug:Bool = true, ?configUrl:String )
 	{
 		sprite.addChild( _sprite = new Sprite() );
 		this.isDebug = isDebug;
+		_configUrl = configUrl;
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;
 		if ( sprite.stage != null ) _hasStage();
@@ -94,8 +96,8 @@ class AFactory implements IFactory
 		_init();
 		if ( _isConfigRequired )
 		{
-			var l_url:String = _CONFIG_URL;
-			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;		
+			var l_url:String = ( _configUrl != null ) ? _configUrl : _CONFIG_URL;
+			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;
 			_loadConfig( l_url );
 		}
 		else _launchKernel();		
