@@ -24,6 +24,7 @@ package awe6.core;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IDisposable;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IFactory;
 import awe6.interfaces.IKernel;
@@ -47,7 +48,7 @@ import flash.text.TextField;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class AFactory implements IFactory
+class AFactory implements IFactory, implements IDisposable
 {
 	private static inline var _CONFIG_URL = "config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
@@ -60,7 +61,9 @@ class AFactory implements IFactory
 	private var _isConfigRequired:Bool;
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
+	private var __kernel:Kernel;
 	
+	public var isDisposed( default, null ):Bool;
 	public var id( default, null ):String;
 	public var version( default, null ):String;
 	public var author( default, null ):String;
@@ -167,8 +170,14 @@ class AFactory implements IFactory
 	
 	private function _launchKernel():Void
 	{
-		var l_kernel:Kernel = new Kernel( this, _sprite );
-		_sprite.addEventListener( Event.ENTER_FRAME, function( event:Event ) { l_kernel.mainUpdate(); } );		
+		__kernel = new Kernel( this, _sprite );
+		_sprite.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
+	}
+	
+	private function _onEnterFrame( event:Event ):Void
+	{
+		__kernel.mainUpdate();
+//		if ( untyped __kernel.scenes._updates == 140 ) dispose();
 	}
 	
 	private function _traverseElements( elements:Iterator<Xml>, prefix:String ):Void
@@ -273,6 +282,21 @@ class AFactory implements IFactory
 	public function getNextSceneType( type:EScene ):EScene
 	{
 		return null;
+	}
+	
+	public function dispose():Void
+	{
+		if ( isDisposed ) return;
+		if ( __kernel == null ) return;
+		isDisposed = true;
+		_sprite.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
+		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		_sprite.parent.removeChild( _sprite );
+		__kernel.dispose();
+		__kernel = null;
+		_kernel = null;
+		config = null;
+		trace( "disposed" );
 	}
 	
 }

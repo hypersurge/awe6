@@ -35,6 +35,7 @@ import awe6.interfaces.ISceneManager;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
 import flash.display.Sprite;
+import flash.display.Stage;
 import flash.display.StageDisplayState;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
@@ -77,6 +78,7 @@ class Kernel extends Process, implements IKernel
 	public var session:ISession;	
 	
 	// internal mechanics
+	private var _stage:Stage;
 	private var _view:View;
 	private var _assetManager:AssetManager;
 	private var _audioManager:AudioManager;
@@ -87,7 +89,7 @@ class Kernel extends Process, implements IKernel
 	private var _isPreloaded:Bool;
 	private var _preloader:IPreloader;
 	private var _profiler:Profiler;
-	private var _processes:Array<IProcess>;
+	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
 	private var _eyeCandyEnableContextMenuItem:ContextMenuItem;
 	private var _eyeCandyDisableContextMenuItem:ContextMenuItem;
@@ -99,6 +101,7 @@ class Kernel extends Process, implements IKernel
 		this.factory = factory;
 		tools = _tools = new Tools( this );
 		_view = new View( this, sprite );
+		_stage = sprite.stage;
 		super( this );
 	}
 	
@@ -106,9 +109,9 @@ class Kernel extends Process, implements IKernel
 	{
 		super._init();
 		isDebug = factory.isDebug;
-		isLocal = !( Lib.current.stage.loaderInfo.url.indexOf( "file:" ) == -1 );
+		isLocal = !( _stage.loaderInfo.url.indexOf( "file:" ) == -1 );
 		_isPreloaded = false;
-		_processes = new Array<IProcess>();
+		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
 		assets = _assetManager = new AssetManager( _kernel );
 		audio =	_audioManager = new AudioManager( _kernel );
@@ -135,6 +138,7 @@ class Kernel extends Process, implements IKernel
 	{
 		_isPreloaded = true;
 		_removeProcess( _preloader );
+		_preloader = null;
 		_logger = factory.createLogger();
 		overlay = factory.createOverlay();
 		_addProcess( overlay, false );
@@ -147,9 +151,9 @@ class Kernel extends Process, implements IKernel
 	{
 		var l_instance:Kernel = this;
 		Lib.current.focusRect = false;
-		Lib.current.stage.frameRate = factory.targetFramerate;
-		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		Lib.current.stage.quality = StageQuality.LOW;
+		_stage.frameRate = factory.targetFramerate;
+		_stage.scaleMode = StageScaleMode.NO_SCALE;
+		_stage.quality = StageQuality.LOW;
 
 		var l_mask:Sprite = new Sprite();
 		l_mask.graphics.beginFill( 0xFFFFFF );
@@ -176,7 +180,7 @@ class Kernel extends Process, implements IKernel
 		_fullScreenDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.fullScreenDisable" ) ? getConfig( "settings.contextMenu.fullScreenDisable" ) : _FULL_SCREEN_DISABLE );
 		_fullScreenDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = false; } );
 		
-		Lib.current.stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		_stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		
 		l_contextMenu.hideBuiltInItems();
 		_view.sprite.contextMenu = l_contextMenu;
@@ -199,7 +203,17 @@ class Kernel extends Process, implements IKernel
 	{
 		for ( i in _processes ) _removeProcess( i );
 		_view.dispose();
-		Lib.current.stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		_view = null;
+		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		assets = _assetManager = null;
+		audio =	_audioManager = null;
+		inputs = _inputManager = null;
+		scenes = _sceneManager = null;
+		messenger = _messageManager = null;
+		tools = _tools = null;
+		_logger = null;
+		_preloader = null;
+		session = null;
 		super._disposer();
 	}	
 	
@@ -226,11 +240,11 @@ class Kernel extends Process, implements IKernel
 		_updater( l_deltaTime ); // avoid isActive
 	}
 	
-	private function _addProcess( process:IProcess, ?isPush:Bool = true ):Void
+	private function _addProcess( process:IProcess, ?isLast:Bool = true ):Void
 	{
 		if ( process == null ) return;
-		if ( isPush ) _processes.push( process );
-		else _processes.unshift( process );
+		if ( isLast ) _processes.add( process );
+		else _processes.push( process );
 	}
 	
 	private function _removeProcess( process:IProcess ):Bool
@@ -262,8 +276,8 @@ class Kernel extends Process, implements IKernel
 		_view.sprite.contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_view.sprite.contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
-		Lib.current.stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		Lib.current.stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN : StageDisplayState.NORMAL;
+		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN : StageDisplayState.NORMAL;
 		return isEyeCandy;
 	}	
 	
