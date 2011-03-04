@@ -35,10 +35,13 @@ import awe6.interfaces.ISceneManager;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
 import flash.display.Sprite;
+import flash.display.StageDisplayState;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.ContextMenuEvent;
 import flash.events.Event;
+import flash.events.FullScreenEvent;
+import flash.geom.Rectangle;
 import flash.Lib;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
@@ -55,6 +58,8 @@ class Kernel extends Process, implements IKernel
 	private static inline var _RESET_SESSIONS = "Reset All Saved Information";
 	private static inline var _EYE_CANDY_ENABLE = "Enable Eye Candy";
 	private static inline var _EYE_CANDY_DISABLE = "Disable Eye Candy";
+	private static inline var _FULL_SCREEN_ENABLE = "Enter Full Screen Mode";
+	private static inline var _FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 	
 	// instance properties
 	public var overlay( default, null ):IOverlay;
@@ -62,6 +67,7 @@ class Kernel extends Process, implements IKernel
 	public var isDebug( default, null ):Bool;
 	public var isLocal( default, null ):Bool;
 	public var isEyeCandy( default, __set_isEyeCandy ):Bool;
+	public var isFullScreen( default, __set_isFullScreen ):Bool;
 	public var tools( default, null ):ITools;
 	public var assets( default, null ):IAssetManager;
 	public var audio( default, null ):IAudioManager;
@@ -85,6 +91,8 @@ class Kernel extends Process, implements IKernel
 	private var _helperFramerate:_HelperFramerate;
 	private var _eyeCandyEnableContextMenuItem:ContextMenuItem;
 	private var _eyeCandyDisableContextMenuItem:ContextMenuItem;
+	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
+	private var _fullScreenDisableContextMenuItem:ContextMenuItem;
 
 	public function new( factory:IFactory, sprite:Sprite )
 	{
@@ -163,10 +171,23 @@ class Kernel extends Process, implements IKernel
 		_eyeCandyDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyDisable" ) ? getConfig( "settings.contextMenu.eyeCandyDisable" ) : _EYE_CANDY_DISABLE );
 		_eyeCandyDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isEyeCandy = false; } );
 		
+		_fullScreenEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.fullScreenEnable" ) ? getConfig( "settings.contextMenu.fullScreenEnable" ) : _FULL_SCREEN_ENABLE );
+		_fullScreenEnableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = true; } );
+		_fullScreenDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.fullScreenDisable" ) ? getConfig( "settings.contextMenu.fullScreenDisable" ) : _FULL_SCREEN_DISABLE );
+		_fullScreenDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = false; } );
+		
+		Lib.current.stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		
 		l_contextMenu.hideBuiltInItems();
 		_view.sprite.contextMenu = l_contextMenu;
 		isEyeCandy = true;
-	}	
+		isFullScreen = false;
+	}
+	
+	private function _onFullScreen( ?event:FullScreenEvent ):Void
+	{
+		isFullScreen = event.fullScreen;
+	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
@@ -178,6 +199,7 @@ class Kernel extends Process, implements IKernel
 	{
 		for ( i in _processes ) _removeProcess( i );
 		_view.dispose();
+		Lib.current.stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		super._disposer();
 	}	
 	
@@ -233,6 +255,17 @@ class Kernel extends Process, implements IKernel
 		_view.sprite.contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );		
 		return isEyeCandy;
 	}
+	
+	private function __set_isFullScreen( value:Bool ):Bool
+	{
+		isFullScreen = value;
+		_view.sprite.contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
+		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
+		_view.sprite.contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
+		Lib.current.stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		Lib.current.stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN : StageDisplayState.NORMAL;
+		return isEyeCandy;
+	}	
 	
 	override private function _pauser():Void
 	{

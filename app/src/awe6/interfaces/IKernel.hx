@@ -43,6 +43,10 @@ interface IKernel implements IPauseable
 	 */
 	var isEyeCandy( default, __set_isEyeCandy ):Bool;
 	/**
+	 * Toggleable by the user, enables or disabled full screen mode.
+	 */
+	var isFullScreen( default, __set_isFullScreen ):Bool;
+	/**
 	 * The topmost visual element, used for chrome & global controls.
 	 */
 	var overlay( default, null ):IOverlay;
