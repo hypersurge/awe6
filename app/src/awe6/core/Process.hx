@@ -58,8 +58,7 @@ class Process implements IProcess
 	
 	public inline function dispose():Void
 	{
-		if ( !isActive ) return;
-		else if ( isDisposed ) return;
+		if ( isDisposed ) return;
 		else
 		{
 			isActive = false;
