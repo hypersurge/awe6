@@ -50,6 +50,7 @@ class APreloader extends Process, implements IPreloader
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
+	private var _loader:Loader;
 	private var _context:LoaderContext;
 	private var _currentPerc:Float;
 	private var _currentAsset:Int;
@@ -91,11 +92,11 @@ class APreloader extends Process, implements IPreloader
 		var l_url:String = url;
 		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
 		// trace( "Loading Asset: " + l_url );
-		var l_loader:Loader = new Loader();
-		l_loader.load( new URLRequest( l_url ), _context );
-		l_loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, _onError );
-		l_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );		
-		l_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
+		_loader = new Loader();
+		_loader.load( new URLRequest( l_url ), _context );
+		_loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, _onError );
+		_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );		
+		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -109,6 +110,7 @@ class APreloader extends Process, implements IPreloader
 	{
 		_registerFonts();		
 		view.dispose();
+		_loader.unloadAndStop();
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
@@ -156,6 +158,7 @@ class APreloader extends Process, implements IPreloader
 		cast( event.target, LoaderInfo ).removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		cast( event.target, LoaderInfo ).removeEventListener( ProgressEvent.PROGRESS, _onProgress );
 		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
+		cast( event.target, LoaderInfo ).loader.unloadAndStop();
 		_next();
 	}
 	
