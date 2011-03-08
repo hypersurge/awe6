@@ -130,12 +130,16 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _loadConfig( url:String ):Void
 	{
-		if ( isDecached ) url += "?dc=" + Std.random( 99999 );
-		// trace( "Loading Config: \"" + url + "\"" );		
-		var l_loader:URLLoader = new URLLoader( new URLRequest( url ) );
-		l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
-		l_loader.addEventListener( Event.COMPLETE, _onComplete );
-		_countConfigsToLoad++;
+		if ( url.substr( 0, 5 ) == "<?xml" ) _parseXml( url );
+		else
+		{
+			if ( isDecached ) url += "?dc=" + Std.random( 99999 );
+			// trace( "Loading Config: \"" + url + "\"" );		
+			var l_loader:URLLoader = new URLLoader( new URLRequest( url ) );
+			l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
+			l_loader.addEventListener( Event.COMPLETE, _onComplete );
+			_countConfigsToLoad++;
+		}
 	}
 	
 	private function _onIOError( event:IOErrorEvent ):Void
@@ -156,7 +160,12 @@ class AFactory implements IFactory, implements IDisposable
 	private function _onComplete( event:Event ):Void
 	{
 		_countConfigsLoaded++;
-		_traverseElements( Xml.parse( event.target.data ).firstElement().elements(), "" );
+		_parseXml( event.target.data );
+	}
+		
+	private function _parseXml( data:String ):Void
+	{
+		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
 		if ( config.exists( _CONFIG_JOIN_NODE ) && ( _countConfigsLoaded < 100 ) )
 		{
 			var l_url:String = config.get( _CONFIG_JOIN_NODE );
