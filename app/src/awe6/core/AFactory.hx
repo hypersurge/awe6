@@ -180,7 +180,7 @@ class AFactory implements IFactory, implements IDisposable
 	private function _launchKernel():Void
 	{
 		__kernel = new Kernel( this, _sprite );
-		_sprite.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
+		_sprite.stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 	}
 	
 	private function _onEnterFrame( event:Event ):Void
@@ -298,7 +298,7 @@ class AFactory implements IFactory, implements IDisposable
 		if ( isDisposed ) return;
 		if ( __kernel == null ) return;
 		isDisposed = true;
-		_sprite.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
+		_sprite.stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		_sprite.parent.removeChild( _sprite );
 		__kernel.dispose();
