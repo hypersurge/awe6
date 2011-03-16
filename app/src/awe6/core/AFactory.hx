@@ -69,6 +69,9 @@ class AFactory implements IFactory, implements IDisposable
 	public var author( default, null ):String;
 	public var isDebug( default, null ):Bool;
 	public var isDecached( default, null ):Bool;
+	public var isEyeCandyOptionEnabled( default, null ):Bool;
+	public var isFullScreenOptionEnabled( default, null ):Bool;
+	public var isResetSessionsOptionEnabled( default, null ):Bool;
 	public var width( default, null ):Int;
 	public var height( default, null ):Int;
 	public var bgColor( default, null ):Int;
@@ -113,6 +116,9 @@ class AFactory implements IFactory, implements IDisposable
 		version = "0.0.1";
 		author = "awe6 guru";
 		isDecached = false;
+		isEyeCandyOptionEnabled = true;
+		isFullScreenOptionEnabled = true;
+		isResetSessionsOptionEnabled = true;
 		width = 600;
 		height = 400;
 		bgColor = 0xFF0000;

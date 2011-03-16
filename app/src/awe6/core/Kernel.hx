@@ -167,7 +167,7 @@ class Kernel extends Process, implements IKernel
 		if ( factory.isDecached || factory.isDebug ) l_contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
 		
 		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : _RESET_SESSIONS );
-		l_contextMenu.customItems.push( l_reset );
+		if ( factory.isResetSessionsOptionEnabled ) l_contextMenu.customItems.push( l_reset );
 		l_reset.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance._totalReset(); } );
 		
 		_eyeCandyEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyEnable" ) ? getConfig( "settings.contextMenu.eyeCandyEnable" ) : _EYE_CANDY_ENABLE );
@@ -263,6 +263,11 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isEyeCandy( value:Bool ):Bool
 	{
+		if ( !factory.isEyeCandyOptionEnabled )
+		{
+			isEyeCandy = true;
+			return isEyeCandy;
+		}
 		isEyeCandy = value;
 		_view.sprite.contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_view.sprite.contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
@@ -272,6 +277,11 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isFullScreen( value:Bool ):Bool
 	{
+		if ( !factory.isFullScreenOptionEnabled )
+		{
+			isFullScreen = false;
+			return isFullScreen;
+		}
 		isFullScreen = value;
 		_view.sprite.contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
