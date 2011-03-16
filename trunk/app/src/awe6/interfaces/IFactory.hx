@@ -51,6 +51,18 @@ interface IFactory
 	 */
 	var isDecached( default, null ):Bool;
 	/**
+	 * Disable to hide any eye candy options.
+	 */
+	var isEyeCandyOptionEnabled( default, null ):Bool;
+	/**
+	 * Disable to hide any full screen options.
+	 */
+	var isFullScreenOptionEnabled( default, null ):Bool;
+	/**
+	 * Disable to hide any session resetting options.
+	 */
+	var isResetSessionsOptionEnabled( default, null ):Bool;
+	/**
 	 * The horizontal width of this application's bounding rectangle.
 	 */
 	var width( default, null ):Int;
