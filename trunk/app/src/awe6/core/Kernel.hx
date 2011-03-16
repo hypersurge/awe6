@@ -23,6 +23,7 @@
 package awe6.core;
 import awe6.interfaces.IAssetManager;
 import awe6.interfaces.IAudioManager;
+import awe6.interfaces.IDisposable;
 import awe6.interfaces.IFactory;
 import awe6.interfaces.IInputManager;
 import awe6.interfaces.IKernel;
@@ -181,6 +182,7 @@ class Kernel extends Process, implements IKernel
 		_fullScreenDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = false; } );
 		
 		_stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		
 		l_contextMenu.hideBuiltInItems();
 		_view.sprite.contextMenu = l_contextMenu;
@@ -193,6 +195,13 @@ class Kernel extends Process, implements IKernel
 		isFullScreen = event.fullScreen;
 	}
 	
+	private function _onEnterFrame( event:Event ):Void
+	{
+		_helperFramerate.update();
+		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
+		_updater( l_deltaTime ); // avoid isActive
+	}	
+	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
@@ -202,20 +211,23 @@ class Kernel extends Process, implements IKernel
 	override private function _disposer():Void
 	{
 		for ( i in _processes ) _removeProcess( i );
+		if ( Std.is( factory, IDisposable ) ) cast( factory, IDisposable ).dispose();
 		_view.dispose();
 		_view = null;
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		assets = _assetManager = null;
 		audio =	_audioManager = null;
 		inputs = _inputManager = null;
 		scenes = _sceneManager = null;
 		messenger = _messageManager = null;
+		factory = null;
 		tools = _tools = null;
 		_logger = null;
 		_preloader = null;
 		session = null;
 		super._disposer();
-	}	
+	}
 	
 	public function getConfig( id:String ):Dynamic
 	{
@@ -231,13 +243,6 @@ class Kernel extends Process, implements IKernel
 	public function getFramerate( ?asActual:Bool = true ):Float
 	{
 		return asActual ? _helperFramerate.framerate : factory.targetFramerate;
-	}
-	
-	public function mainUpdate():Void
-	{
-		_helperFramerate.update();
-		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
-		_updater( l_deltaTime ); // avoid isActive
 	}
 	
 	private function _addProcess( process:IProcess, ?isLast:Bool = true ):Void
