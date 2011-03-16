@@ -87,13 +87,14 @@ class AFactory implements IFactory, implements IDisposable
 
 	public function new( sprite:Sprite, isDebug:Bool = true, ?configUrl:String )
 	{
-		sprite.addChild( _sprite = new Sprite() );
 		this.isDebug = isDebug;
 		_configUrl = configUrl;
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;
-		if ( sprite.stage != null ) _hasStage();
-		else sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		_sprite = new Sprite();
+		sprite.addChild( _sprite );
+		if ( _sprite.stage != null ) _hasStage();
+		else _sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
 	}
 	
 	private function _hasStage( ?event:Event ):Void
@@ -185,14 +186,8 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _launchKernel():Void
 	{
+		if ( __kernel != null ) return;
 		__kernel = new Kernel( this, _sprite );
-		_sprite.stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
-	}
-	
-	private function _onEnterFrame( event:Event ):Void
-	{
-		__kernel.mainUpdate();
-//		if ( untyped __kernel.scenes._updates == 140 ) dispose();
 	}
 	
 	private function _traverseElements( elements:Iterator<Xml>, prefix:String ):Void
@@ -276,11 +271,8 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createTextStyle( ?type:ETextStyle ):ITextStyle
 	{
-		if ( type == null ) type = ETextStyle.BODY;
-		return switch ( type )
-		{
-			default: new TextStyle();
-		}
+		var l_textStyle:TextStyle = new TextStyle();
+		return l_textStyle;
 	}	
 	
 	public function createSceneTransition( ?typeIncoming:EScene, ?typeOutgoing:EScene ):ISceneTransition
@@ -304,14 +296,12 @@ class AFactory implements IFactory, implements IDisposable
 		if ( isDisposed ) return;
 		if ( __kernel == null ) return;
 		isDisposed = true;
-		_sprite.stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		_sprite.parent.removeChild( _sprite );
+		if ( _sprite.parent != null ) _sprite.parent.removeChild( _sprite );
 		__kernel.dispose();
 		__kernel = null;
 		_kernel = null;
 		config = null;
-		trace( "disposed" );
 	}
 	
 }
