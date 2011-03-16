@@ -29,13 +29,12 @@ package awe6.interfaces;
  */
 enum EAudioChannel
 {
-	ALL;
 	DEFAULT;
 	EFFECTS;
 	INTERFACE;
 	MUSIC;
 	/**
-	 * Allows EAudioChannel to be extended (e.g. for using project specific enumerated audio channels).
+	 * Allows EAudioChannel to be extended (e.g. for using project specific enumerated audio channels or entity specific channels).
 	 */
 	SUB_TYPE( value:Dynamic );
 }
