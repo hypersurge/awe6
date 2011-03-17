@@ -33,7 +33,7 @@ interface ISession
 	/**
 	 * The unique identifier of this session.
 	 */
-	var id( __get_id, null ):String;
+	var id( default, null ):String;
 	/**
 	 * Useful for testing and debug.
 	 */

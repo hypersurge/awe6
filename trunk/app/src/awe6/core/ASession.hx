@@ -42,7 +42,7 @@ class ASession implements ISession
 	private var _data:Dynamic;
 	private var _version:Int;
 	
-	public var id( __get_id, null ):String;
+	public var id( default, null ):String;
 	public var isTester( __get_isTester, null ):Bool;
 	public var loadCount:Int;
 	public var saveCount:Int;
@@ -164,8 +164,6 @@ class ASession implements ISession
 	{
 		_so.clear();		
 	}
-	
-	private function __get_id():String { return id; }
 	
 	private function __get_isTester():Bool
 	{

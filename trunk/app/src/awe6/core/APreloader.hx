@@ -46,9 +46,7 @@ import flash.text.TextField;
 class APreloader extends Process, implements IPreloader
 {
 	private static inline var _FONT_PACKAGE_ID = "assets.fonts";
-	
 	public var view( __get_view, null ):IView;
-	
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
