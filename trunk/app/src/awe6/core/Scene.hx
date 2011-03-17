@@ -38,10 +38,10 @@ class Scene extends Process, implements IScene
 {
 	public var type( default, null ):EScene;
 	public var view( default, null ):IView;
+	public var isDisposable( default, null ):Bool;
 	public var isPauseable( default, null ):Bool;
 	public var isMuteable( default, null ):Bool;	
 	public var isSessionSavedOnNext( default, null ):Bool;
-	public var parent( default, null ):IEntityCollection;
 
 	private var _entity( default, null ):IEntity;
 
@@ -57,8 +57,8 @@ class Scene extends Process, implements IScene
 	override private function _init():Void 
 	{
 		super._init();
+		isDisposable = true;
 		_entity = new Entity( _kernel );
-		this.parent = _entity; // jury's out on this?
 		view = _entity.view;
 	}
 	
