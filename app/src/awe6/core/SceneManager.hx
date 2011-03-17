@@ -73,10 +73,6 @@ class SceneManager extends Process, implements ISceneManager
 		super._disposer();
 	}
 	
-	/**
-	 * @todo	Allow persitence of state by making dispose optional
-	 * @param	type
-	 */
 	public function setScene( type:EScene ):Void
 	{
 		var l_previousType:EScene = null;
@@ -87,7 +83,7 @@ class SceneManager extends Process, implements ISceneManager
 			if ( _sceneTransition != null ) _sceneTransition.dispose();
 			_sceneTransition = l_newSceneTransition;
 			_kernel.inputs.reset();
-			scene.dispose();
+			if ( scene.isDisposable ) scene.dispose();
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();

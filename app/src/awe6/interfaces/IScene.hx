@@ -35,6 +35,10 @@ interface IScene implements IProcess, implements IEntityCollection, implements I
 	 */
 	var type( default, null ):EScene;
 	/**
+	 * Sets whether the scene is disposed when no longer the active scene.  In most cases this should be true.
+	 */
+	var isDisposable( default, null ):Bool;
+	/**
 	 * Sets whether the pause button is displayed / active in the overlay.
 	 */
 	var isPauseable( default, null ):Bool;
@@ -43,7 +47,7 @@ interface IScene implements IProcess, implements IEntityCollection, implements I
 	 */
 	var isMuteable( default, null ):Bool;
 	/**
-	 * Sets whether the session is automatically saved when this scene is advanced.
+	 * Sets whether the session is automatically saved when this scene is advanced.  In most cases this should be true.
 	 */
 	var isSessionSavedOnNext( default, null ):Bool;
 }
