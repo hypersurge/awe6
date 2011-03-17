@@ -32,7 +32,7 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	 * The parent view of this view.
 	 * <p>The reference is null if this view has no parent (for exemple a view not in the view traversal stack).</p>
 	 */
-	var parent( default, null ):IView;
+	var parent( __get_parent, null ):IView;
 	/**
 	 * Specify the visibility of this view.
 	 * <p>If true the view will be displayed, if false the view is hidden.</p>

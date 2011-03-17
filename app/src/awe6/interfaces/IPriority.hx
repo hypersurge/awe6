@@ -32,5 +32,5 @@ interface IPriority
 	 * The rank score of this item.
 	 * <p>Higher numbers should be considered on top of the list, therefore of higher priority.</p>
 	 */
-	var priority( default, __set_priority ):Int;
+	var priority( __get_priority, __set_priority ):Int;
 }

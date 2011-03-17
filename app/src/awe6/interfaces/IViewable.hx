@@ -31,5 +31,5 @@ interface IViewable
 	/**
 	 * The view bound to this object.
 	 */
-	var view( default, null ):IView;
+	var view( __get_view, null ):IView;
 }

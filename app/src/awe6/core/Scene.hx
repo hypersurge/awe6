@@ -37,7 +37,7 @@ import awe6.interfaces.IView;
 class Scene extends Process, implements IScene
 {
 	public var type( default, null ):EScene;
-	public var view( default, null ):IView;
+	public var view( __get_view, null ):IView;
 	public var isDisposable( default, null ):Bool;
 	public var isPauseable( default, null ):Bool;
 	public var isMuteable( default, null ):Bool;	
@@ -80,5 +80,7 @@ class Scene extends Process, implements IScene
 	public function getEntities( ?agenda:EAgenda ):Array<IEntity> { return _entity.getEntities( agenda ); }
 	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T> { return _entity.getEntitiesByClass( classType, agenda, bubbleDown, bubbleUp, false ); }
 	public function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity { return _entity.getEntityById( id, agenda, bubbleDown, bubbleUp, false ); }
+	
+	private function __get_view():IView { return view; }
 }
 

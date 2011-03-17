@@ -64,19 +64,19 @@ class Kernel extends Process, implements IKernel
 	private static inline var _FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 	
 	// instance properties
-	public var overlay( default, null ):IOverlay;
-	public var factory( default, null ):IFactory;
 	public var isDebug( default, null ):Bool;
-	public var isLocal( default, null ):Bool;
 	public var isEyeCandy( default, __set_isEyeCandy ):Bool;
-	public var isFullScreen( default, __set_isFullScreen ):Bool;
-	public var tools( default, null ):ITools;
-	public var assets( default, null ):IAssetManager;
-	public var audio( default, null ):IAudioManager;
-	public var inputs( default, null ):IInputManager;
-	public var scenes( default, null ):ISceneManager;
-	public var messenger( default, null ):IMessageManager;
-	public var session:ISession;	
+	public var isFullScreen( default, __set_isFullScreen ):Bool;	
+	public var isLocal( default, null ):Bool;
+	public var assets( __get_assets, null ):IAssetManager;
+	public var audio( __get_audio, null ):IAudioManager;
+	public var factory( __get_factory, null ):IFactory;
+	public var inputs( __get_inputs, null ):IInputManager;
+	public var messenger( __get_messenger, null ):IMessageManager;
+	public var overlay( __get_overlay, null ):IOverlay;
+	public var scenes( __get_scenes, null ):ISceneManager;
+	public var session( __get_session, __set_session ):ISession;	
+	public var tools( __get_tools, null ):ITools;
 	
 	// internal mechanics
 	private var _stage:Stage;
@@ -84,8 +84,8 @@ class Kernel extends Process, implements IKernel
 	private var _assetManager:AssetManager;
 	private var _audioManager:AudioManager;
 	private var _inputManager:InputManager;
-	private var _sceneManager:SceneManager;
 	private var _messageManager:MessageManager;
+	private var _sceneManager:SceneManager;
 	private var _logger:ILogger;
 	private var _isPreloaded:Bool;
 	private var _preloader:IPreloader;
@@ -114,11 +114,11 @@ class Kernel extends Process, implements IKernel
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
-		assets = _assetManager = new AssetManager( _kernel );
-		audio =	_audioManager = new AudioManager( _kernel );
-		inputs = _inputManager = new InputManager( _kernel );
-		scenes = _sceneManager = new SceneManager( _kernel );
-		messenger = _messageManager = new MessageManager( _kernel );
+		_assetManager = new AssetManager( _kernel );
+		_audioManager = new AudioManager( _kernel );
+		_inputManager = new InputManager( _kernel );
+		_sceneManager = new SceneManager( _kernel );
+		_messageManager = new MessageManager( _kernel );
 		_view.addChild( _sceneManager.view );
 		_addProcess( _assetManager );
 		_addProcess( _audioManager );
@@ -306,7 +306,18 @@ class Kernel extends Process, implements IKernel
 	{
 		super._resumer();
 		if ( scenes.scene != null ) scenes.scene.resume();
-	}	
+	}
+	
+	private function __get_assets():IAssetManager { return _assetManager; }
+	private function __get_audio():IAudioManager { return _audioManager; }
+	private function __get_inputs():IInputManager { return _inputManager; }
+	private function __get_overlay():IOverlay { return overlay; }
+	private function __get_tools():ITools { return tools; }
+	private function __get_messenger():IMessageManager { return _messageManager; }
+	private function __get_factory():IFactory { return factory; }
+	private function __get_scenes():ISceneManager { return _sceneManager; }
+	private function __get_session():ISession { return session; }
+	private function __set_session( value:ISession ):ISession { session = value;  return session; }
 }
 
 private class _HelperFramerate

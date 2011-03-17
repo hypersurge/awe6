@@ -35,10 +35,10 @@ import flash.display.Sprite;
  */
 class Entity extends Process, implements IEntity
 {
-	public var id( default, null ):String;
-	public var parent( default, null ):IEntityCollection;
-	public var view( default, null ):IView;
-	public var agenda( default, null ):EAgenda;
+	public var id( __get_id, null ):String;
+	public var parent( __get_parent, null ):IEntityCollection;
+	public var view( __get_view, null ):IView;
+	public var agenda( __get_agenda, null ):EAgenda;
 	
 	private var _entities:Array<Entity>;
 
@@ -148,7 +148,9 @@ class Entity extends Process, implements IEntity
 		this.parent = parent;
 	}
 	
-	
-	
+	private function __get_id():String { return id; }
+	private function __get_parent():IEntityCollection { return parent; }
+	private function __get_view():IView { return view; }
+	private function __get_agenda():EAgenda { return agenda; }
 }
 

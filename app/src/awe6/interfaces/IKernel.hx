@@ -49,39 +49,39 @@ interface IKernel implements IPauseable
 	/**
 	 * The topmost visual element, used for chrome & global controls.
 	 */
-	var overlay( default, null ):IOverlay;
+	var overlay( __get_overlay, null ):IOverlay;
 	/**
 	 * Assets manager.
 	 */
-	var assets( default, null ):IAssetManager;
+	var assets( __get_assets, null ):IAssetManager;
 	/**
 	 * Audio manager.
 	 */
-	var audio( default, null ):IAudioManager;
+	var audio( __get_audio, null ):IAudioManager;
 	/**
 	 * Inputs manager.
 	 */
-	var inputs( default, null ):IInputManager;
+	var inputs( __get_inputs, null ):IInputManager;
 	/**
 	 * Scene manager.  State machine containing IEntities.
 	 */
-	var scenes( default, null ):ISceneManager;
+	var scenes( __get_scenes, null ):ISceneManager;
 	/**
 	 * Messenger manager.  Arbitrator for observer pattern across IEntityCollections.
 	 */
-	var messenger( default, null ):IMessageManager;
+	var messenger( __get_messenger, null ):IMessageManager;
 	/**
 	 * Helper methods.
 	 */
-	var tools( default, null ):ITools;
+	var tools( __get_tools, null ):ITools;
 	/**
 	 * Build properties and factory methods to create the application.
 	 */
-	var factory( default, null ):IFactory;
+	var factory( __get_factory, null ):IFactory;
 	/**
 	 * Read and write globally accessible variables.
 	 */
-	var session:ISession;
+	var session( __get_session, __set_session ):ISession;
 	/**
 	 * Used for read only application settings and localisation text.
 	 * @param	ID	Unique identifier for the config setting (e.g. XML node name).

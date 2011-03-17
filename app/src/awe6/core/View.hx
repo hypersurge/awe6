@@ -33,8 +33,8 @@ import flash.display.Sprite;
  */
 class View extends Process, implements IView
 {
-	public var parent( default, null ):IView;
-	public var priority( default, __set_priority ):Int;
+	public var parent( __get_parent, null ):IView;
+	public var priority( __get_priority, __set_priority ):Int;
 	public var isVisible( default, __set_isVisible ):Bool;	
 	public var sprite( default, null ):Sprite;
 	
@@ -46,7 +46,7 @@ class View extends Process, implements IView
 	{
 		this.sprite = ( sprite != null ) ? sprite : new Sprite();
 		this.priority = priority;
-		super( kernel );		
+		super( kernel );
 	}
 	
 	override private function _init():Void 
@@ -122,10 +122,14 @@ class View extends Process, implements IView
 		_isDirty = false;
 	}
 	
+	private function __get_parent():IView { return parent; }
+	
 	private function _setParent( parent:IView ):Void
 	{
 		this.parent = parent;
 	}
+	
+	private function __get_priority():Int { return priority; }
 	
 	private function __set_priority( value:Int ):Int
 	{
