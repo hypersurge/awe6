@@ -24,10 +24,13 @@ package awe6.core;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IKernel;
+import flash.display.Loader;
+import flash.display.LoaderInfo;
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
+import flash.utils.ByteArray;
 
 /**
  * The InputMouse class provides a minimalist implementation of the IInputMouse interface.
@@ -57,6 +60,7 @@ class InputMouse extends Process, implements IInputMouse
 	private var _stillUpdates:Int;
 	private var _stillDuration:Int;
 	private var _buttonLeft:_HelperButton;
+	private var _mouseClicks:Loader;
 	
 	override private function _init():Void 
 	{
@@ -78,8 +82,67 @@ class InputMouse extends Process, implements IInputMouse
 		_stage.addEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
 		_stage.addEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
 		_stage.addEventListener( Event.DEACTIVATE, _reset );
+		
+		_mouseClicks = new Loader();
+//		_mouseClicks.load( new URLRequest( "mouseClicks.swf" ) );
+//		_mouseClicks.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
+
+		var l_data:String = "4657530a7901000060003e80003e80001801004411000000004302ffffff3f031e010000885f0009002a00536563757269747900616c6c6f77496e736563757265446f6d61696e00616c6c6f77446f6d61696e006d6f757365427574746f6e730041536e6174697665006f6e456e7465724672616d65005f7769647468005f686569676874009609000800070100000008011c960200080252179609000800070100000008011c96020008035217961300080407020000000720030000070200000008053d3c96020008068e0800000000026a006a00960c000702000000070100000008043d129d020012009609000401080707320000004f9902000d009609000401080707640000004f960c000704000000070100000008043d129d020012009609000401080807320000004f9902000d009609000401080807640000004f1d00bf0025000000010060003e80003e80010000000001140000000011158fa0fa1e8830e9830e87d0e97d0000860606010001000040000000";
+		var l_bytes:ByteArray = _fromHex( l_data );
+		_mouseClicks.loadBytes( l_bytes );
+		
 		_reset();
 	}
+	
+	private function _onComplete( event:Event ):Void
+	{
+		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
+		var l_bytes:ByteArray = cast( event.target, LoaderInfo ).bytes;
+//		trace( _toHex( l_bytes ) );
+	}
+	
+/*	function _hex2( value:Int ):String
+	{
+		value &= 0xFF;
+		var l_hex:String = "0123456789abcdef";
+		return l_hex.charAt( value >> 4 ) + l_hex.charAt( value & 0xF );
+	}
+	
+	function _toHex( byteArray:ByteArray ):String
+	{
+		var l_string:String = "";
+		byteArray.position = 0;
+		for ( i in 0...byteArray.length ) l_string += _hex2( byteArray.readUnsignedByte() );
+		return l_string;
+	}*/
+	
+	function _fromHex( value:String ):ByteArray
+	{
+		var isValid:Bool = true;
+		var l_hex:String = "0123456789abcdefABCDEF";
+		var l_byteArray:ByteArray = new ByteArray();
+		
+		value = StringTools.replace( value, " ", "" );
+		for ( i in 0...( value.length - 1 ) )
+		{
+			if ( i % 2 == 0 )
+			{
+				var l_c1:String = value.charAt( i );
+				var l_p1:Int = l_hex.indexOf( l_c1 );
+				if ( l_p1 >= 16 ) l_p1 -= 6;
+				if ( l_p1 >= 16 || l_p1 < 0 ) isValid = false;
+				var l_c2:String = value.charAt( i + 1 );
+				var l_p2:Int = l_hex.indexOf( l_c2 );
+				if ( l_p2 >= 16 ) l_p2 -= 6;
+				if ( l_p2 >= 16 || l_p2 < 0 ) isValid = false;
+				l_byteArray.writeByte( ( l_p1 << 4 ) + l_p2 );
+			}
+		}
+		return isValid ? l_byteArray: null;
+	}
+	
+	private function _isRightDown():Bool { return _mouseClicks.width == 50; }
+	private function _isMiddleDown():Bool { return _mouseClicks.height == 50; }
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{

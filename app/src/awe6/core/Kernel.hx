@@ -110,7 +110,7 @@ class Kernel extends Process, implements IKernel
 	{
 		super._init();
 		isDebug = factory.isDebug;
-		isLocal = !( _stage.loaderInfo.url.indexOf( "file:" ) == -1 );
+		isLocal = flash.system.Security.sandboxType != flash.system.Security.REMOTE;
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
