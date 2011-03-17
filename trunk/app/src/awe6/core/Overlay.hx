@@ -67,11 +67,11 @@ class Overlay extends Process, implements IOverlay
 	public function new( kernel:IKernel, ?background:BitmapData, ?backUp:BitmapData, ?backOver:BitmapData, ?muteUp:BitmapData, ?muteOver:BitmapData, ?unmuteUp:BitmapData, ?unmuteOver:BitmapData, ?pauseUp:BitmapData, ?pauseOver:BitmapData, ?unpauseUp:BitmapData, ?unpauseOver:BitmapData, ?pauseBlur:Float = 8, ?pauseColor:UInt = 0x000000, ?pauseAlpha:Float = .35  )
 	{
 		_background = new Bitmap( background );
-		_buttonBack = new SimpleButton( new Bitmap( backUp ), new Bitmap( backOver ), null, new Bitmap( backUp ) );
-		_buttonMute = new SimpleButton( new Bitmap( muteUp ), new Bitmap( muteOver ), null, new Bitmap( muteUp ) );
-		_buttonUnmute = new SimpleButton( new Bitmap( unmuteUp ), new Bitmap( unmuteOver ), null, new Bitmap( unmuteUp ) );
-		_buttonPause = new SimpleButton( new Bitmap( pauseUp ), new Bitmap( pauseOver ), null, new Bitmap( pauseUp ) );
-		_buttonUnpause = new SimpleButton( new Bitmap( unpauseUp ), new Bitmap( unpauseOver ), null, new Bitmap( unpauseUp ) );
+		_buttonBack = new SimpleButton( new Bitmap( backUp ), new Bitmap( backOver ), new Bitmap( backOver ), new Bitmap( backUp ) );
+		_buttonMute = new SimpleButton( new Bitmap( muteUp ), new Bitmap( muteOver ), new Bitmap( muteOver ), new Bitmap( muteUp ) );
+		_buttonUnmute = new SimpleButton( new Bitmap( unmuteUp ), new Bitmap( unmuteOver ), new Bitmap( unmuteOver ), new Bitmap( unmuteUp ) );
+		_buttonPause = new SimpleButton( new Bitmap( pauseUp ), new Bitmap( pauseOver ), new Bitmap( pauseOver ), new Bitmap( pauseUp ) );
+		_buttonUnpause = new SimpleButton( new Bitmap( unpauseUp ), new Bitmap( unpauseOver ), new Bitmap( unpauseOver ), new Bitmap( unpauseUp ) );
 		_pauseBlur = pauseBlur;
 		_pauseColor = pauseColor;
 		_pauseAlpha = pauseAlpha;
