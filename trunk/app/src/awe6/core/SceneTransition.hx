@@ -35,7 +35,7 @@ import flash.filters.BlurFilter;
  */
 class SceneTransition extends Entity, implements ISceneTransition
 {
-	public var progress( default, null ):Float;
+	public var progress( __get_progress, null ):Float;
 	
 	private var _duration:Int;
 	private var _sprite:Sprite;
@@ -79,5 +79,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 	{
 		return asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
 	}
+	
+	private function __get_progress():Float { return progress; }
 }
 

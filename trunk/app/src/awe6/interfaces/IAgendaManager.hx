@@ -31,7 +31,7 @@ interface IAgendaManager
 	/**
 	 * The object's current agenda.
 	 */
-	var agenda( default, null ):EAgenda;
+	var agenda( __get_agenda, null ):EAgenda;
 	/**
 	 * Change the object's current agenda.
 	 * @param	type	The new agenda.

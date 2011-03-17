@@ -46,7 +46,9 @@ import flash.text.TextField;
 class APreloader extends Process, implements IPreloader
 {
 	private static inline var _FONT_PACKAGE_ID = "assets.fonts";
-	public var view( default, null ):IView;
+	
+	public var view( __get_view, null ):IView;
+	
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
@@ -169,5 +171,5 @@ class APreloader extends Process, implements IPreloader
 		_perc = _tools.limit( ( _currentAsset - 1 + _currentPerc ) / _assets.length , 0, 1 );
 	}
 	
-	
+	private function __get_view():IView { return view; }	
 }

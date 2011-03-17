@@ -40,7 +40,7 @@ import flash.filters.BlurFilter;
  */
 class Overlay extends Process, implements IOverlay
 {
-	public var view:IView;
+	public var view( __get_view, null ):IView;
 	
 	private var _sprite:Sprite;
 	private var _background:Bitmap;
@@ -56,8 +56,7 @@ class Overlay extends Process, implements IOverlay
 	private var _flasherStartingAlpha:Float;
 	private var _flasherStartingDuration:Float;
 	private var _flasherAsTime:Bool;
-	private var _wasMute:Bool;
-	
+	private var _wasMute:Bool;	
 	private var _buttonBack:SimpleButton;
 	private var _buttonMute:SimpleButton;
 	private var _buttonUnmute:SimpleButton;
@@ -269,5 +268,6 @@ class Overlay extends Process, implements IOverlay
 		catch ( error:Dynamic ) {}
 	}
 	
+	private function __get_view():IView { return view; }	
 }
 

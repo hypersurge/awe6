@@ -38,7 +38,7 @@ import flash.Lib;
  */
 class SceneManager extends Process, implements ISceneManager
 {
-	public var scene( default, null ):IScene;
+	public var scene( __get_scene, null ):IScene;
 	public var view( default, null ):IView;
 	
 	private var _sceneTransition:ISceneTransition;
@@ -116,6 +116,8 @@ class SceneManager extends Process, implements ISceneManager
 		if ( scene == null ) setScene( _kernel.factory.startingSceneType );
 		setScene( scene.type );
 	}
+	
+	private function __get_scene():IScene { return scene; }
 	
 }
 
