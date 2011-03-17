@@ -33,15 +33,15 @@ interface IInputManager
 	/**
 	 * The default virtual joypad user input: simple 4 directional controller with 2 fire buttons.  Listens to cursor keys and WASD keys.
 	 */
-	var joypad( __get_joypad, null ):IInputJoypad;
+	var joypad( default, null ):IInputJoypad;
 	/**
 	 * The virtual keyboard user input: every key on the keyboard.
 	 */
-	var keyboard( __get_keyboard, null ):IInputKeyboard;
+	var keyboard( default, null ):IInputKeyboard;
 	/**
 	 * The virtual mouse user input: 3 button mouse and scroll wheel.
 	 */
-	var mouse( __get_mouse, null ):IInputMouse;
+	var mouse( default, null ):IInputMouse;
 	/**
 	 * Factory method to create a virtual joypad with custom key controls.
 	 * @param	?up	The key for up directional movement.  Defaults to up cursor.

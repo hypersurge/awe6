@@ -118,6 +118,5 @@ class SceneManager extends Process, implements ISceneManager
 	}
 	
 	private function __get_scene():IScene { return scene; }
-	
 }
 

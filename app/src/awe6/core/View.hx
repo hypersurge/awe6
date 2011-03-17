@@ -46,7 +46,7 @@ class View extends Process, implements IView
 	{
 		this.sprite = ( sprite != null ) ? sprite : new Sprite();
 		this.priority = priority;
-		super( kernel );
+		super( kernel );		
 	}
 	
 	override private function _init():Void 
@@ -122,15 +122,12 @@ class View extends Process, implements IView
 		_isDirty = false;
 	}
 	
-	private function __get_parent():IView { return parent; }
-	
 	private function _setParent( parent:IView ):Void
 	{
 		this.parent = parent;
 	}
 	
 	private function __get_priority():Int { return priority; }
-	
 	private function __set_priority( value:Int ):Int
 	{
 		if ( value == priority ) return priority;
@@ -151,5 +148,7 @@ class View extends Process, implements IView
 		}
 		return isVisible;
 	}
+	
+	private function __get_parent():IView { return parent; }
 }
 

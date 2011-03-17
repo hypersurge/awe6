@@ -36,9 +36,9 @@ import awe6.interfaces.IKernel;
  */
 class InputManager extends Process, implements IInputManager
 {
-	public var joypad( __get_joypad, null ):IInputJoypad;
-	public var keyboard( __get_keyboard, null ):IInputKeyboard;
-	public var mouse( __get_mouse, null ):IInputMouse;
+	public var joypad( default, null ):IInputJoypad;
+	public var keyboard( default, null ):IInputKeyboard;
+	public var mouse( default, null ):IInputMouse;
 	
 	private var _inputKeyboard:InputKeyboard;
 	private var _inputMouse:InputMouse;	
@@ -69,9 +69,5 @@ class InputManager extends Process, implements IInputManager
 	{
 		return new InputJoypad( _kernel, up, right, down, left, primary, secondary, upAlt, rightAlt, downAlt, leftAlt, primaryAlt, secondaryAlt );
 	}
-	
-	private function __get_joypad():IInputJoypad { return joypad; }
-	private function __get_keyboard():IInputKeyboard { return keyboard; }
-	private function __get_mouse():IInputMouse { return mouse; }
 	
 }

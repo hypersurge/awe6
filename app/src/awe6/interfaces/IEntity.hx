@@ -34,7 +34,7 @@ interface IEntity implements IProcess, implements IViewable, implements IEntityC
 	 * The unique identifier of this entity.
 	 * <p>This value is very useful for retrieving a specific entity.</p> 
 	 */
-	var id( __get_id, null ):String;
+	var id( default, null ):String;
 	/**
 	 * The parent of this entity
 	 * <p>The reference is null if this entity has no parent (for example an entity not in the entity traversal stack).</p>
