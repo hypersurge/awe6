@@ -277,7 +277,7 @@ class Tools implements ITools
 	
 	public function hexToBytes( value:String ):BytesData
 	{
-		var isValid:Bool = true;
+		var l_isValid:Bool = true;
 		var l_hex:String = "0123456789abcdefABCDEF";
 		var l_bytesData:BytesData = new BytesData();
 		
@@ -289,15 +289,16 @@ class Tools implements ITools
 				var l_c1:String = value.charAt( i );
 				var l_p1:Int = l_hex.indexOf( l_c1 );
 				if ( l_p1 >= 16 ) l_p1 -= 6;
-				if ( l_p1 >= 16 || l_p1 < 0 ) isValid = false;
+				if ( l_p1 >= 16 || l_p1 < 0 ) l_isValid = false;
 				var l_c2:String = value.charAt( i + 1 );
 				var l_p2:Int = l_hex.indexOf( l_c2 );
 				if ( l_p2 >= 16 ) l_p2 -= 6;
-				if ( l_p2 >= 16 || l_p2 < 0 ) isValid = false;
+				if ( l_p2 >= 16 || l_p2 < 0 ) l_isValid = false;
 				l_bytesData.writeByte( ( l_p1 << 4 ) + l_p2 );
 			}
 		}
-		return isValid ? l_bytesData: null;
+		l_bytesData.position = 0;
+		return l_isValid ? l_bytesData: null;
 	}	
 	
 }
