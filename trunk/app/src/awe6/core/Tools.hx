@@ -24,6 +24,7 @@ package awe6.core;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPriority;
 import awe6.interfaces.ITools;
+import haxe.io.BytesData;
 
 /**
  * The Tools class provides a minimalist implementation of the ITools interface.
@@ -258,5 +259,45 @@ class Tools implements ITools
 		if ( l_minutes == 0 ) l_mins = "00";
 		return Std.string( l_mins + delimiter + l_secs + delimiter + l_remainder );
 	}
+	
+	public function intToHex( value:Int ):String
+	{
+		value &= 0xFF;
+		var l_hex:String = "0123456789abcdef";
+		return l_hex.charAt( value >> 4 ) + l_hex.charAt( value & 0xF );
+	}
+	
+	public function bytesToHex( bytesData:BytesData ):String
+	{
+		var l_string:String = "";
+		bytesData.position = 0;
+		for ( i in 0...bytesData.length ) l_string += intToHex( bytesData.readUnsignedByte() );
+		return l_string;
+	}
+	
+	public function hexToBytes( value:String ):BytesData
+	{
+		var isValid:Bool = true;
+		var l_hex:String = "0123456789abcdefABCDEF";
+		var l_bytesData:BytesData = new BytesData();
+		
+		value = StringTools.replace( value, " ", "" );
+		for ( i in 0...( value.length - 1 ) )
+		{
+			if ( i % 2 == 0 )
+			{
+				var l_c1:String = value.charAt( i );
+				var l_p1:Int = l_hex.indexOf( l_c1 );
+				if ( l_p1 >= 16 ) l_p1 -= 6;
+				if ( l_p1 >= 16 || l_p1 < 0 ) isValid = false;
+				var l_c2:String = value.charAt( i + 1 );
+				var l_p2:Int = l_hex.indexOf( l_c2 );
+				if ( l_p2 >= 16 ) l_p2 -= 6;
+				if ( l_p2 >= 16 || l_p2 < 0 ) isValid = false;
+				l_bytesData.writeByte( ( l_p1 << 4 ) + l_p2 );
+			}
+		}
+		return isValid ? l_bytesData: null;
+	}	
 	
 }
