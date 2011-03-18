@@ -21,6 +21,7 @@
  */
 
 package awe6.interfaces;
+import haxe.io.BytesData;
 
 /**
  * The ITools interface should be implemented by objects intended to provide tool box functionality.
@@ -180,4 +181,23 @@ interface ITools
 	 * Creates any enumerator from the supplied class. 
 	 */
 	function getRandomType<T>( e:Enum<T> ):T;
+	/**
+	 * Converts an Int to a Hex string.
+	 * @param	value	The Int to convert.
+	 * @return	Hex value.
+	 */
+	function intToHex( value:Int ):String;
+	/**
+	 * Converts bytes to a Hex string.
+	 * @param	bytesData	The bytes to convert.
+	 * @return	Hex value.
+	 */
+	function bytesToHex( bytesData:BytesData ):String;
+	/**
+	 * Converts Hex string to bytes.
+	 * @param	value	The Hex string to convert.
+	 * @return	Bytes (same as ByteArray in Flash).
+	 */
+	function hexToBytes( value:String ):BytesData;
+	
 }
