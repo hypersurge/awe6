@@ -35,6 +35,17 @@ import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
+import demo.assets.BackOver;
+import demo.assets.BackUp;
+import demo.assets.MuteOver;
+import demo.assets.MuteUp;
+import demo.assets.OverlayBackground;
+import demo.assets.PauseOver;
+import demo.assets.PauseUp;
+import demo.assets.UnmuteOver;
+import demo.assets.UnmuteUp;
+import demo.assets.UnpauseOver;
+import demo.assets.UnpauseUp;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
@@ -72,6 +83,7 @@ class Factory extends AFactory
 	override public function createOverlay():IOverlay
 	{
 		// rather than use getAsset, better form is to use extern classes, or create an empty BitmapData and copypixel data from the getAsset over the top (guarantees a match)
+		/*
 		var l_background:BitmapData = _kernel.assets.getAsset( "OverlayBackground" );
 		var l_backUp:BitmapData = _kernel.assets.getAsset( "BackUp" );
 		var l_backOver:BitmapData = _kernel.assets.getAsset( "BackOver" );
@@ -83,6 +95,23 @@ class Factory extends AFactory
 		var l_pauseOver:BitmapData = _kernel.assets.getAsset( "PauseOver" );
 		var l_unpauseUp:BitmapData = _kernel.assets.getAsset( "UnpauseUp" );
 		var l_unpauseOver:BitmapData = _kernel.assets.getAsset( "UnpauseOver" );
+		*/
+		var l_background:BitmapData = new OverlayBackground( _kernel );
+		var l_backUp:BitmapData = new BackUp( _kernel );
+		var l_backOver:BitmapData = new BackOver( _kernel );
+		var l_muteUp:BitmapData = new MuteUp( _kernel );
+		var l_muteOver:BitmapData = new MuteOver( _kernel );
+		var l_unmuteUp:BitmapData = new UnmuteUp( _kernel );
+		var l_unmuteOver:BitmapData = new UnmuteOver( _kernel );
+		var l_pauseUp:BitmapData = new PauseUp( _kernel );
+		var l_pauseOver:BitmapData = new PauseOver( _kernel );
+		var l_unpauseUp:BitmapData = new UnpauseUp( _kernel );
+		var l_unpauseOver:BitmapData = new UnpauseOver( _kernel );
+		
+/*		var l_bitmapData:BitmapData = l_muteUp;
+		trace( _tools.bytesToHex( l_bitmapData.getPixels( l_bitmapData.rect ) ) );
+		trace( l_bitmapData.width + "," + l_bitmapData.height );*/
+		
 		var l_overlay:Overlay = new Overlay( _kernel, l_background, l_backUp, l_backOver, l_muteUp, l_muteOver, l_unmuteUp, l_unmuteOver, l_pauseUp, l_pauseOver, l_unpauseUp, l_unpauseOver );
 		var l_width:Int = 40;
 		var l_x:Int = 599 - ( 3 * l_width );
