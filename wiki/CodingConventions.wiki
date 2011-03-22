@@ -27,8 +27,11 @@ No convention should be considered definitive - many of these choices may not be
   * New lines for all braces `{}`.
   * Spaces inside paranthesis: `( example )`.
   * Implicit Getter and Setter methods prefixed with `__get_` & `__set_`.
+  * Getters for all readable interface variables that are not Bool or Enum and relate to state (i.e. are likely to change after initialization).
+  * Setters for all writeable interface variables.
   * Bool property names prefixed with `is`, `as`, or `has`.
   * Use of constructor dependency injection.
   * Casting avoided.
+  * Two phase initialization avoided.
   * Statics eliminated (therefore no Singletons!).
   * All Interfaces inline documented for use with [http://code.google.com/p/caffeine-hx/wiki/ChxDoc ChxDoc].
