@@ -54,7 +54,7 @@ class AScene extends Scene
 		l_title.y = 10;
 		addEntity( l_title, true, 100 );
 		
-		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .35, 0, true );
+		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
 	
 }
