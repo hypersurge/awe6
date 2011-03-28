@@ -62,6 +62,7 @@ class AudioManager extends Process, implements IAudioManager
 	override private function _disposer():Void 
 	{
 		for ( i in _sounds ) i.dispose();
+		isMute = false;
 		super._disposer();
 	}
 	

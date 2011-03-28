@@ -1,5 +1,7 @@
 -cp src
--swf9 bin/awe6.swf
+-swf-version 10
+-swf bin/game.swf
 -swf-header 600:400:25:000000
--swf-lib obj\awe6Resources.swf
+-swf-lib assets\preloader.swf
 -main Main
+-cmd bin\game.swf

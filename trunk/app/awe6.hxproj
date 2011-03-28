@@ -4,7 +4,7 @@
   <output>
     <movie disabled="False" />
     <movie input="" />
-    <movie path="bin\awe6.swf" />
+    <movie path="bin\game.swf" />
     <movie fps="25" />
     <movie width="600" />
     <movie height="400" />
@@ -21,7 +21,7 @@
     <option flashStrict="False" />
     <option mainClass="Main" />
     <option enabledebug="False" />
-    <option additional="" />
+    <option additional="-swf-lib assets\preloader.swf" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -33,7 +33,7 @@
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
-    <asset path="assets\preloader.swf" />
+    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
