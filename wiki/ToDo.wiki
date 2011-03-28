@@ -4,6 +4,7 @@
 
 Please help towards achieving the following tasks:
 
+  * Inline documentation of Factory & Kernel
   * Document key components:
     * [ComponentAgenda]
     * [ComponentAssetManager]
@@ -20,12 +21,22 @@ Please help towards achieving the following tasks:
     * [ComponentSession]
     * [ComponentTextStyle]
     * [ComponentView]
-  * MessageManager IMessage design & test
-  * Inline documentation of Factory & Kernel
-  * Design of type safe asset prefabrication
-  * Design of multi target asset management
-  * Design of multi target views
-  * Design of multi target inputs
+  * Hands on:
+    * MessageManager types
+    * Input durations
+    * Audio pause
+    * Asset manager from factory
+    * Entity recursive disposal
+    * Agendas
+    * Kernel native tidyup
+    * Demo graphics & audio
+    * Branding & logo
+    * Touchpad & accelerometer input
+  * Architecture
+    * Type safe asset prefabrication
+    * Multi target asset management
+    * Multi target views
+    * Multi target inputs
   * Tutorials:
     * OOP approach
     * Data driven approach
