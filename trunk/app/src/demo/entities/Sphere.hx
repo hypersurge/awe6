@@ -22,6 +22,7 @@
 
 package demo.entities;
 import awe6.core.Entity;
+import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -86,7 +87,11 @@ class Sphere extends Entity
 		_y = _tools.limit( _y, _height2, _kernel.factory.height - _height2 );
 		_sprite.x = _x;
 		_sprite.y = _y;
-		if ( _isHit() ) dispose();
+		if ( _isHit() )
+		{
+			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _x / _kernel.factory.width );
+			dispose();
+		}
 	}
 	
 	private function _isHit():Bool

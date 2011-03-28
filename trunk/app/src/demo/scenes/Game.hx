@@ -24,6 +24,7 @@ package demo.scenes;
 import awe6.core.Scene;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
+import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;
 import demo.Session;
@@ -51,6 +52,8 @@ class Game extends Scene
 		_timer.y = 10;
 		addEntity( _timer, true, 1000 );
 		
+		_kernel.audio.stop( "MusicMenu", EAudioChannel.MUSIC );
+		_kernel.audio.start( "MusicGame", EAudioChannel.MUSIC, -1, 0, .5, 0, true );
 		for ( i in 0...10 ) addEntity( new Sphere( _kernel ), true, i + 10 );
 	}
 	
@@ -66,6 +69,7 @@ class Game extends Scene
 	
 	private function _gameOver():Void
 	{
+		_kernel.audio.stop( "MusicGame", EAudioChannel.MUSIC );
 		if ( _score > _session.highScore )
 		{
 			_session.isWin = true;
