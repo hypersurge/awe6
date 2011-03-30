@@ -9,6 +9,7 @@
           <DOMSoundItem name="gui/ButtonOver" itemID="4d90fc4e-00000071" linkageExportForAS="true" linkageClassName="assets.audio.ButtonOver" sourceExternalFilepath=".\LIBRARY\gui\ButtonOver.mp3" sourceLastImported="1295562150" externalFileSize="7634" href="gui\ButtonOver.mp3" soundDataHRef="M 19 1288840748.dat" format="44kHz 16bit Mono" sampleCount="20736" dataLength="8359"/>
           <DOMSoundItem name="gui/Invalid" itemID="4d90fc4e-00000072" linkageExportForAS="true" linkageClassName="assets.audio.Invalid" sourceExternalFilepath=".\LIBRARY\gui\Invalid.mp3" sourceLastImported="1295562150" externalFileSize="10970" href="gui\Invalid.mp3" soundDataHRef="M 15 1288840748.dat" format="44kHz 16bit Mono" sampleCount="29952" dataLength="16808"/>
           <DOMSoundItem name="music/MusicGame" itemID="4d90fc4e-00000073" linkageExportForAS="true" linkageClassName="assets.audio.MusicGame" sourceExternalFilepath=".\LIBRARY\music\MusicGame.wav" sourceLastImported="1301347331" externalFileSize="1114452" href="music\MusicGame.wav" soundDataHRef="M 11 1301347321.dat" format="44kHz 16bit Mono" sampleCount="557164"/>
+          <DOMSoundItem name="music/MusicGameStereo" itemID="4d93b602-00000024" linkageExportForAS="true" linkageClassName="assets.audio.MusicGameStereo" sourceExternalFilepath=".\LIBRARY\music\MusicGameStereo.wav" sourceLastImported="1301525988" externalFileSize="2228780" href="music\MusicGameStereo.wav" soundDataHRef="M 13 1301525980.dat" format="44kHz 16bit Stereo" sampleCount="557164"/>
           <DOMSoundItem name="music/MusicMenu" itemID="4d90fc4e-00000074" linkageExportForAS="true" linkageClassName="assets.audio.MusicMenu" sourceExternalFilepath=".\LIBRARY\music\MusicMenu.wav" sourceLastImported="1301347334" externalFileSize="556142" href="music\MusicMenu.wav" soundDataHRef="M 12 1301347321.dat" format="44kHz 16bit Mono" sampleCount="278009"/>
           <DOMSoundItem name="gui/ScrollDown" itemID="4d90fc4e-00000075" linkageExportForAS="true" linkageClassName="assets.audio.ScrollDown" sourceExternalFilepath=".\LIBRARY\gui\ScrollDown.mp3" sourceLastImported="1295562150" externalFileSize="12638" href="gui\ScrollDown.mp3" soundDataHRef="M 26 1288843813.dat" format="44kHz 16bit Mono" sampleCount="34560" dataLength="5433"/>
           <DOMSoundItem name="gui/ScrollUp" itemID="4d90fc4e-00000076" linkageExportForAS="true" linkageClassName="assets.audio.ScrollUp" sourceExternalFilepath=".\LIBRARY\gui\ScrollUp.mp3" sourceLastImported="1295562150" externalFileSize="8885" href="gui\ScrollUp.mp3" soundDataHRef="M 30 1288843813.dat" format="44kHz 16bit Mono" sampleCount="24192" dataLength="5433"/>
@@ -34,7 +35,7 @@
                                                             </FillStyle>
                                                        </fills>
                                                        <edges>
-                                                            <Edge fillStyle1="1" edges="!0 0|4000 0!4000 0|4000 4000!4000 4000|0 4000!0 4000|0 0"/>
+                                                            <Edge fillStyle1="1" edges="!4000 0|4000 4000!4000 4000|0 4000!0 4000|0 0!0 0|4000 0"/>
                                                        </edges>
                                                   </DOMShape>
                                              </members>
@@ -362,6 +363,9 @@
      </extendedSwatchLists>
      <PrinterSettings/>
      <publishHistory>
+          <PublishItem publishSize="522423" publishTime="1301526007"/>
+          <PublishItem publishSize="347365" publishTime="1301524757"/>
+          <PublishItem publishSize="128257" publishTime="1301524566"/>
           <PublishItem publishSize="20718" publishTime="1294449824"/>
           <PublishItem publishSize="1490824" publishTime="1294276440"/>
           <PublishItem publishSize="1664745" publishTime="1292282735"/>
@@ -379,8 +383,5 @@
           <PublishItem publishSize="997025" publishTime="1289174431"/>
           <PublishItem publishSize="776532" publishTime="1289169779"/>
           <PublishItem publishSize="776536" publishTime="1289168997"/>
-          <PublishItem publishSize="775786" publishTime="1289168882"/>
-          <PublishItem publishSize="775767" publishTime="1289168392"/>
-          <PublishItem publishSize="763459" publishTime="1289168053"/>
      </publishHistory>
 </DOMDocument>
