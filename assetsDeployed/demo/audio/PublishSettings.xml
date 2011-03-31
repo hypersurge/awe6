@@ -59,7 +59,7 @@
   <PublishFlashProperties enabled="true">
     <TopDown></TopDown>
     <FireFox></FireFox>
-    <Report>1</Report>
+    <Report>0</Report>
     <Protect>0</Protect>
     <OmitTraceActions>0</OmitTraceActions>
     <Quality>80</Quality>
@@ -67,7 +67,7 @@
     <StreamFormat>0</StreamFormat>
     <StreamCompress>7</StreamCompress>
     <EventFormat>3</EventFormat>
-    <EventCompress>15</EventCompress>
+    <EventCompress>13</EventCompress>
     <OverrideSounds>1</OverrideSounds>
     <Version>9</Version>
     <ExternalPlayer></ExternalPlayer>
