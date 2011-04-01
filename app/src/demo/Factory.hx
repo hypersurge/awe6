@@ -125,7 +125,7 @@ class Factory extends AFactory
 	{
 		if ( type == null ) type = ETextStyle.BODY;
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
-		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, ETextAlign.CENTER, 0, false, false, 0, [ new GlowFilter( 0x000000, 1, 4, 4, 3, 2 ) ] );
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new GlowFilter( 0x000000, 1, 4, 4, 3, 2 ) ] );
 		l_result.size = switch ( type )
 		{
 			case ETextStyle.HEADLINE : 36;
