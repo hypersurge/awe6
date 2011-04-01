@@ -126,7 +126,6 @@ interface ITools
 	 * @param	min	The floor.
 	 * @param	max	The ceiling.
 	 * @return	A value between floor and ceiling proportional to over or under shoot.
-	 * @todo	Better description.
 	 */
 	function range( value:Float, min:Float, max:Float ):Float;
 	/**

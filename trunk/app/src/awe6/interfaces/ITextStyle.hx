@@ -25,20 +25,19 @@ package awe6.interfaces;
 /**
  * The ITextStyle interface should be implemented by objects created by the createTextStyle method of IFactory.
  * @author	Robert Fell
- * @todo	Add ranges to documentation.
  */
 interface ITextStyle
 {
 	/**
-	 * Font name.
+	 * The name of the font, as a string.
 	 */
 	var font:String;
 	/**
-	 * Font size.
+	 * The point size of text.
 	 */
 	var size:Float;
 	/**
-	 * Font color.
+	 * The color of the text.
 	 */
 	var color:Int;
 	/**
@@ -46,9 +45,13 @@ interface ITextStyle
 	 */
 	var align:ETextAlign;
 	/**
-	 * Font spacing.
+	 * Space in pixels added between each character.
 	 */
-	var spacing:Float;
+	var spacingHorizontal:Float;
+	/**
+	 * Space in pixels added between each new line (often called leading).
+	 */
+	var spacingVertical:Float;
 	/**
 	 * Font weight.
 	 */
@@ -58,7 +61,7 @@ interface ITextStyle
 	 */
 	var isItalic:Bool;
 	/**
-	 * Font thickness.  Range: 0...1.
+	 * Thickness of the glyph edges of this font.  Range: -1...1.  Default is 0.
 	 */
 	var thickness:Float;
 	/**

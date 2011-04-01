@@ -35,33 +35,35 @@ class TextStyle implements ITextStyle
 	public var size:Float;
 	public var color:UInt;
 	public var align:ETextAlign;
-	public var spacing:Float;
+	public var spacingHorizontal:Float;
+	public var spacingVertical:Float;
 	public var isBold:Bool;
 	public var isItalic:Bool;
 	public var thickness:Float;
 	public var filters:Array<Dynamic>;
 
-	public function new( ?font:String, ?size:Float, ?color:UInt, ?align:ETextAlign, ?spacing:Float, ?isBold:Bool = false, ?isItalic = false, ?thickness:Float = 0, ?filters:Array<Dynamic> ) 
+	public function new( ?font:String, ?size:Float, ?color:UInt, ?isBold:Bool = false, ?isItalic = false, ?align:ETextAlign, ?spacingHorizontal:Float, ?spacingVertical:Float, ?thickness:Float = 0, ?filters:Array<Dynamic> ) 
 	{
 		this.font = ( font != null ) ? font : "_sans";
 		this.size = ( size != null ) ? size : 12;
 		this.color = ( color != null ) ? color : 0x000000;
-		this.align = ( align != null ) ? align : ETextAlign.LEFT;
-		this.spacing = ( spacing != null ) ? spacing : 0;
 		this.isBold = isBold;
 		this.isItalic = isItalic;
+		this.align = ( align != null ) ? align : ETextAlign.LEFT;
+		this.spacingHorizontal = ( spacingHorizontal != null ) ? spacingHorizontal : 0;
+		this.spacingVertical = ( spacingVertical != null ) ? spacingVertical : 0;
 		this.thickness = thickness;
 		this.filters = filters;
 	}
 	
 	public function toString():String
 	{
-		return Std.string( font + "," + size + "," + color + "," + align + "," + spacing + "," + isBold + "," + isItalic + "," + thickness + "," + filters );
+		return Std.string( font + "," + size + "," + color + "," + isBold + "," + isItalic + "," + align + "," + spacingHorizontal + "," + spacingVertical + "," + thickness + "," + filters );
 	}
 	
 	public function clone():ITextStyle
 	{
-		return new TextStyle( font, size, color, align, spacing, isBold, isItalic, thickness, filters );
+		return new TextStyle( font, size, color, isBold, isItalic, align, spacingHorizontal, spacingVertical, thickness, filters );
 	}
 	
 }

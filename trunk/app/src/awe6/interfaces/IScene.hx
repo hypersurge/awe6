@@ -26,7 +26,6 @@ package awe6.interfaces;
  * The IScene interface should be implemented by objects intending to represent scene states in the ISceneManager.
  * <p>Scenes represent the larger building blocks of the awe6 concept, and contain Entities which do the work.</p> 
  * @author	Robert Fell
- * @todo	Needs more thought - pause entity / view for example?  Should these bools be part of scene or part of a conditional construction of scene specific overlays?
  */
 interface IScene implements IProcess, implements IEntityCollection, implements IViewable
 {

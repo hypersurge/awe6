@@ -88,7 +88,8 @@ class Text extends GuiEntity
 			_textFormat.color = textStyle.color;
 			_textFormat.font = textStyle.font;
 			_textFormat.size = textStyle.size;
-			_textFormat.letterSpacing = textStyle.spacing;
+			_textFormat.letterSpacing = textStyle.spacingHorizontal;
+			_textFormat.leading = textStyle.spacingVertical;
 			_textFormat.italic = textStyle.isItalic;
 			_textFormat.bold = textStyle.isBold;
 			
