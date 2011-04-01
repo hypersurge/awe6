@@ -64,7 +64,6 @@ class Kernel extends Process, implements IKernel
 	private static inline var _FULL_SCREEN_ENABLE = "Enter Full Screen Mode";
 	private static inline var _FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 	
-	// instance properties
 	public var overlay( default, null ):IOverlay;
 	public var factory( default, null ):IFactory;
 	public var isDebug( default, null ):Bool;
@@ -79,7 +78,6 @@ class Kernel extends Process, implements IKernel
 	public var messenger( default, null ):IMessageManager;
 	public var session( __get_session, __set_session ):ISession;	
 	
-	// internal mechanics
 	private var _stage:Stage;
 	private var _view:View;
 	private var _assetManager:AssetManager;
@@ -224,6 +222,7 @@ class Kernel extends Process, implements IKernel
 		inputs = _inputManager = null;
 		scenes = _sceneManager = null;
 		messenger = _messageManager = null;
+		overlay = _overlayProcess = null;
 		factory = null;
 		tools = _tools = null;
 		_logger = null;
