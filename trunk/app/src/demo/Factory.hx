@@ -29,7 +29,7 @@ import awe6.interfaces.EScene;
 import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.ILogger;
-import awe6.interfaces.IOverlay;
+import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
@@ -80,10 +80,10 @@ class Factory extends AFactory
 		return new Session( _kernel );
 	}
 	
-	override public function createOverlay():IOverlay
+	override public function createOverlay():IOverlayProcess
 	{
 		// rather than use getAsset, better form is to use extern classes, or create an empty BitmapData and copypixel data from the getAsset over the top (guarantees a match)
-		/*
+		
 		var l_background:BitmapData = _kernel.assets.getAsset( "OverlayBackground" );
 		var l_backUp:BitmapData = _kernel.assets.getAsset( "BackUp" );
 		var l_backOver:BitmapData = _kernel.assets.getAsset( "BackOver" );
@@ -95,7 +95,7 @@ class Factory extends AFactory
 		var l_pauseOver:BitmapData = _kernel.assets.getAsset( "PauseOver" );
 		var l_unpauseUp:BitmapData = _kernel.assets.getAsset( "UnpauseUp" );
 		var l_unpauseOver:BitmapData = _kernel.assets.getAsset( "UnpauseOver" );
-		*/
+		/*
 		var l_background:BitmapData = new OverlayBackground( _kernel );
 		var l_backUp:BitmapData = new BackUp( _kernel );
 		var l_backOver:BitmapData = new BackOver( _kernel );
@@ -107,10 +107,7 @@ class Factory extends AFactory
 		var l_pauseOver:BitmapData = new PauseOver( _kernel );
 		var l_unpauseUp:BitmapData = new UnpauseUp( _kernel );
 		var l_unpauseOver:BitmapData = new UnpauseOver( _kernel );
-		
-/*		var l_bitmapData:BitmapData = l_muteUp;
-		trace( _tools.bytesToHex( l_bitmapData.getPixels( l_bitmapData.rect ) ) );
-		trace( l_bitmapData.width + "," + l_bitmapData.height );*/
+		*/
 		
 		var l_overlay:Overlay = new Overlay( _kernel, l_background, l_backUp, l_backOver, l_muteUp, l_muteOver, l_unmuteUp, l_unmuteOver, l_pauseUp, l_pauseOver, l_unpauseUp, l_unpauseOver );
 		var l_width:Int = 40;

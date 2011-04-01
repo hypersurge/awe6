@@ -112,10 +112,10 @@ interface IFactory
 	var keySpecial( default, null ):EKey;
 	
 	/**
-	 * Called by the kernel to initiate the factory.
+	 * Called by the kernel to complete initialization (due to both requiring an initialized instance of eahc).
 	 * @param	kernel	An intialized kernel offering services to the factory.
 	 */
-	function create( kernel:IKernel ):Void;
+	function onInitComplete( kernel:IKernel ):Void;
 	/**
 	 * Builds the application's preloader to load initial media assets.
 	 * @return	Preloader to load initial media assets.
@@ -137,7 +137,7 @@ interface IFactory
 	 * @todo	Return Overlay specific to each EScene.
 	 * @return	Overlay to decorate and provide top level functionality.
 	 */
-	function createOverlay():IOverlay;
+	function createOverlay():IOverlayProcess;
 	/**
 	 * Builds an empty Entity for injection.
 	 * @param	?id	The unique identifier of this entity.

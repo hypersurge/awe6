@@ -23,7 +23,7 @@
 package awe6.core;
 import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.IKernel;
-import awe6.interfaces.IOverlay;
+import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -38,7 +38,7 @@ import flash.filters.BlurFilter;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class Overlay extends Process, implements IOverlay
+class Overlay extends Process, implements IOverlayProcess
 {
 	public var view( __get_view, null ):IView;
 	

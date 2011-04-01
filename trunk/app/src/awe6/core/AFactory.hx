@@ -29,7 +29,7 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IFactory;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ILogger;
-import awe6.interfaces.IOverlay;
+import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
@@ -226,8 +226,9 @@ class AFactory implements IFactory, implements IDisposable
 		return l_result;
 	}
 	
-	public inline function create( kernel:IKernel ):Void
+	public inline function onInitComplete( kernel:IKernel ):Void
 	{
+		if ( _kernel != null ) return;
 		_kernel = kernel;
 		_tools = _kernel.tools;
 		id = ( _tools.toConstCase( StringTools.trim( id ) ) ).substr( 0, 16 );
@@ -250,7 +251,7 @@ class AFactory implements IFactory, implements IDisposable
 		return null;
 	}	
 	
-	public function createOverlay():IOverlay
+	public function createOverlay():IOverlayProcess
 	{
 		var l_overlay:Overlay = new Overlay( _kernel );
 		return l_overlay;

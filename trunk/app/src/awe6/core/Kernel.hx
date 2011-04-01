@@ -30,6 +30,7 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.ILogger;
 import awe6.interfaces.IMessageManager;
 import awe6.interfaces.IOverlay;
+import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IProcess;
 import awe6.interfaces.ISceneManager;
@@ -86,6 +87,7 @@ class Kernel extends Process, implements IKernel
 	private var _inputManager:InputManager;
 	private var _sceneManager:SceneManager;
 	private var _messageManager:MessageManager;
+	private var _overlayProcess:IOverlayProcess;
 	private var _logger:ILogger;
 	private var _isPreloaded:Bool;
 	private var _preloader:IPreloader;
@@ -125,7 +127,7 @@ class Kernel extends Process, implements IKernel
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
-		factory.create( this );
+		factory.onInitComplete( this );
 		_nativeInit();
 		session = factory.createSession( ASession.DEBUG_ID );
 		session.reset();
@@ -141,9 +143,10 @@ class Kernel extends Process, implements IKernel
 		_removeProcess( _preloader );
 		_preloader = null;
 		_logger = factory.createLogger();
-		overlay = factory.createOverlay();
-		_addProcess( overlay, false );
-		_view.addChild( overlay.view );
+		_overlayProcess = factory.createOverlay();
+		overlay = cast( _overlayProcess, IOverlay );
+		_addProcess( _overlayProcess, false );
+		_view.addChild( _overlayProcess.view );
 		scenes.setScene( factory.startingSceneType );
 		if ( isDebug ) _view.addChild( new View( this, new Profiler(), _tools.BIG_NUMBER ) );
 	}
