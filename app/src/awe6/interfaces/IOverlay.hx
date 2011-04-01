@@ -28,7 +28,7 @@ package awe6.interfaces;
  * <p>The overlay also provides flashing which is a useful cheap effect across many game scenarios.</p>
  * @author	Robert Fell
  */
-interface IOverlay implements IProcess, implements IViewable
+interface IOverlay
 {
 	/**
 	 * Sets the visibility of a specific overlay button.
