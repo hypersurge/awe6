@@ -22,6 +22,7 @@
 
 package awe6.core;
 import awe6.interfaces.EOverlayButton;
+import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IView;
@@ -40,22 +41,24 @@ import flash.filters.BlurFilter;
  */
 class Overlay extends Process, implements IOverlayProcess
 {
+	public var pauseEntity( __get_pauseEntity, __set_pauseEntity ):IEntity;
 	public var view( __get_view, null ):IView;
 	
 	private var _sprite:Sprite;
 	private var _background:Bitmap;
-	private var _progresserSprite:Sprite;
-	private var _pauserSprite:Sprite;
-	private var _pauserSnapshot:BitmapData;
+	private var _progressSprite:Sprite;
+	private var _pauseSprite:Sprite;
+	private var _pauseView:View;
+	private var _pauseSnapshot:BitmapData;
 	private var _pauseColor:UInt;
 	private var _pauseAlpha:Float;
 	private var _pauseBlur:Float;
-	private var _flasher:Sprite;
-	private var _flasherDuration:Float;
-	private var _flasherAlpha:Float;
-	private var _flasherStartingAlpha:Float;
-	private var _flasherStartingDuration:Float;
-	private var _flasherAsTime:Bool;
+	private var _flashSprite:Sprite;
+	private var _flashDuration:Float;
+	private var _flashAlpha:Float;
+	private var _flashStartingAlpha:Float;
+	private var _flashStartingDuration:Float;
+	private var _flashAsTime:Bool;
 	private var _wasMute:Bool;	
 	private var _buttonBack:SimpleButton;
 	private var _buttonMute:SimpleButton;
@@ -82,29 +85,30 @@ class Overlay extends Process, implements IOverlayProcess
 		super._init();
 		_wasMute = _kernel.audio.isMute;
 		
-		_progresserSprite = new Sprite();
-		_progresserSprite.visible = false;
+		_progressSprite = new Sprite();
+		_progressSprite.visible = false;
 		
-		_pauserSprite = new Sprite();
-		_pauserSprite.visible = false;
-		_pauserSprite.mouseEnabled = false;
-		_pauserSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
-		var l_bitmap:Bitmap = new Bitmap( _pauserSnapshot );
+		_pauseSprite = new Sprite();
+		_pauseSprite.visible = false;
+		_pauseSprite.mouseEnabled = false;
+		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
+		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
 		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
-		_pauserSprite.addChild( l_bitmap );
+		_pauseSprite.addChild( l_bitmap );
 		var l_color:Sprite = new Sprite();
 		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
 		l_color.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
-		_pauserSprite.addChild( l_color );
+		_pauseSprite.addChild( l_color );
+		_pauseView = new View( _kernel, _pauseSprite );
 		
-		_flasher = new Sprite();
-		_flasher.mouseEnabled = false;
-		_flasher.blendMode = BlendMode.ADD;
-		_flasher.graphics.beginFill( 0xFFFFFF );
-		_flasher.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		_flasherStartingAlpha = 1;
-		_flasherAsTime = true;
-		_flasherDuration = _flasherStartingDuration = 100;
+		_flashSprite = new Sprite();
+		_flashSprite.mouseEnabled = false;
+		_flashSprite.blendMode = BlendMode.ADD;
+		_flashSprite.graphics.beginFill( 0xFFFFFF );
+		_flashSprite.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		_flashStartingAlpha = 1;
+		_flashAsTime = true;
+		_flashDuration = _flashStartingDuration = 100;
 		
 		_buttonBack.addEventListener( MouseEvent.CLICK, _onClickBack );
 		_buttonMute.addEventListener( MouseEvent.CLICK, _onClickMute );
@@ -114,9 +118,9 @@ class Overlay extends Process, implements IOverlayProcess
 		
 		_sprite = new Sprite();
 		_sprite.mouseEnabled = false;
-		_sprite.addChild( _flasher );
-		_sprite.addChild( _pauserSprite );
-		_sprite.addChild( _progresserSprite );
+		_sprite.addChild( _flashSprite );
+		_sprite.addChild( _pauseSprite );
+		_sprite.addChild( _progressSprite );
 		_sprite.addChild( _background );
 		_sprite.addChild( _buttonBack );
 		_sprite.addChild( _buttonUnmute );
@@ -146,15 +150,20 @@ class Overlay extends Process, implements IOverlayProcess
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _flasherDuration > 0 )
+		if ( _flashDuration > 0 )
 		{
-			_flasherDuration -= _flasherAsTime ? deltaTime : 1;
-			_flasherAlpha = _tools.limit( _flasherStartingAlpha * ( _flasherDuration / _flasherStartingDuration ), 0, 1 );
+			_flashDuration -= _flashAsTime ? deltaTime : 1;
+			_flashAlpha = _tools.limit( _flashStartingAlpha * ( _flashDuration / _flashStartingDuration ), 0, 1 );
 		}
-		_flasher.alpha = _flasherAlpha;
+		_flashSprite.alpha = _flashAlpha;
 		if ( ( _kernel.factory.keyBack != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyBack ) ) ) activateButton( _kernel.isActive ? EOverlayButton.BACK : EOverlayButton.UNPAUSE );
 		if ( ( _kernel.factory.keyPause != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyPause ) ) ) activateButton( _kernel.isActive ? EOverlayButton.PAUSE : EOverlayButton.UNPAUSE );
 		if ( ( _kernel.factory.keyMute != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyMute ) ) ) activateButton( _kernel.audio.isMute ? EOverlayButton.UNMUTE : EOverlayButton.MUTE );
+		if ( ( pauseEntity != null ) && !_kernel.isActive )
+		{
+			pauseEntity.update( deltaTime );
+			_pauseView.update( deltaTime );
+		}
 	}
 	
 	override private function _disposer():Void 
@@ -164,6 +173,7 @@ class Overlay extends Process, implements IOverlayProcess
 		_buttonUnmute.removeEventListener( MouseEvent.CLICK, _onClickUnmute );
 		_buttonPause.removeEventListener( MouseEvent.CLICK, _onClickPause );
 		_buttonUnpause.removeEventListener( MouseEvent.CLICK, _onClickUnpause );
+		if ( pauseEntity != null ) pauseEntity.dispose();
 		view.dispose();
 		super._disposer();		
 	}
@@ -196,7 +206,7 @@ class Overlay extends Process, implements IOverlayProcess
 	
 	public function showProgress( progress:Float, ?message:String ):Void
 	{
-		_progresserSprite.visible = progress < 1;		
+		_progressSprite.visible = progress < 1;		
 	}
 	
 	public function hideButtons():Void
@@ -211,9 +221,9 @@ class Overlay extends Process, implements IOverlayProcess
 	public function flash( ?duration:Float, ?asTime:Bool = false, ?startingAlpha:Float = 1 ):Void
 	{
 		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
-		_flasherDuration = _flasherStartingDuration = duration;
-		_flasherAsTime = asTime;
-		_flasherAlpha = _flasherStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
+		_flashDuration = _flashStartingDuration = duration;
+		_flashAsTime = asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
 	}
 	
 	public function activateButton( type:EOverlayButton ):Void
@@ -222,6 +232,7 @@ class Overlay extends Process, implements IOverlayProcess
 		{
 			case BACK : if ( _buttonBack.visible )
 			{
+				if ( !_kernel.isActive ) activateButton( EOverlayButton.UNPAUSE );
 				_drawPause( false );
 				_kernel.resume();
 				_kernel.scenes.back();
@@ -232,7 +243,7 @@ class Overlay extends Process, implements IOverlayProcess
 				showButton( EOverlayButton.UNMUTE, true );
 				_kernel.audio.isMute = true;
 			}
-			case UNMUTE : if ( _buttonUnmute.visible && _buttonPause.visible )
+			case UNMUTE : if ( _buttonUnmute.visible && !_buttonUnpause.visible )
 			{
 				showButton( EOverlayButton.MUTE, true );
 				showButton( EOverlayButton.UNMUTE, false );
@@ -261,13 +272,23 @@ class Overlay extends Process, implements IOverlayProcess
 	
 	private function _drawPause( ?isVisible:Bool = true ):Void
 	{
-		_pauserSprite.visible = isVisible;
+		_pauseSprite.visible = isVisible;
 		if ( !isVisible ) return;
-		_pauserSnapshot.fillRect( _pauserSnapshot.rect, 0x00 );
-		try { _pauserSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite ); }
+		_pauseSnapshot.fillRect( _pauseSnapshot.rect, 0x00 );
+		try { _pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite ); }
 		catch ( error:Dynamic ) {}
 	}
 	
-	private function __get_view():IView { return view; }	
+	private function __get_view():IView { return view; }
+	
+	private function __get_pauseEntity():IEntity { return pauseEntity; }
+	private function __set_pauseEntity( value:IEntity ):IEntity
+	{
+		if ( pauseEntity != null ) pauseEntity.view.remove();
+		pauseEntity = value;
+		_pauseView.addChild( pauseEntity.view );
+		return pauseEntity;
+	}	
+	
 }
 

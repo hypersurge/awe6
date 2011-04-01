@@ -55,6 +55,8 @@ class Game extends Scene
 		_kernel.audio.stop( "MusicMenu", EAudioChannel.MUSIC );
 		_kernel.audio.start( "MusicGame", EAudioChannel.MUSIC, -1, 0, .5, 0, true );
 		for ( i in 0...10 ) addEntity( new Sphere( _kernel ), true, i + 10 );
+		
+		_kernel.overlay.pauseEntity = new Sphere( _kernel );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 

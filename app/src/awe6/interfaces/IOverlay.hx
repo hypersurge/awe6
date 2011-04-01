@@ -31,6 +31,10 @@ package awe6.interfaces;
 interface IOverlay
 {
 	/**
+	 * An optional IEntity which is displayed and updated when the game is paused.
+	 */
+	var pauseEntity( __get_pauseEntity, __set_pauseEntity ):IEntity;
+	/**
 	 * Sets the visibility of a specific overlay button.
 	 * @param	type	The overlay button.
 	 * @param	?isVisible	If true shows the button, if false hides it.
