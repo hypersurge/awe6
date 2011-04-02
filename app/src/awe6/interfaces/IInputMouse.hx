@@ -27,7 +27,7 @@ package awe6.interfaces;
  * <p>Screen bounds are based on IFactory.width & IFactory.height.</p>
  * @author	Robert Fell
  * @todo	Add isPressed and isReleased etc
- * @todo	Add previousDurations
+ * @todo	Add previousDurations to public interface
  */
 interface IInputMouse 
 {
