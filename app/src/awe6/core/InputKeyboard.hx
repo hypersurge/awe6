@@ -114,6 +114,8 @@ class InputKeyboard extends Process, implements IInputKeyboard
 		var l_current:_HelperKey = _keys[keyCode];
 		l_current.isUsed = true;
 		l_current.isDown = true;
+		l_current.timeUpPrevious = l_current.timeUp;
+		l_current.updatesUpPrevious = l_current.updatesUp;
 		l_current.updatesUp = 0;
 		l_current.timeUp = 0;
 	}
@@ -129,6 +131,8 @@ class InputKeyboard extends Process, implements IInputKeyboard
 	{
 		var l_current:_HelperKey = _keys[keyCode];
 		l_current.isDown = false;
+		l_current.timeDownPrevious = l_current.timeDown;
+		l_current.updatesDownPrevious = l_current.updatesDown;
 		l_current.updatesDown = 0;
 		l_current.timeDown = 0;
 	}
@@ -164,17 +168,19 @@ class InputKeyboard extends Process, implements IInputKeyboard
 		return ( _keys[l_keyCode].isUsed && ( _keys[l_keyCode].updatesUp == 1 ) );
 	}	
 	
-	public function getKeyDownDuration( type:EKey, ?asTime:Bool = true ):Float
+	public function getKeyDownDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
 	{
 		if ( type == null ) return 0;
 		var l_keyCode:Int = getKeyCode( type );
+		if ( isPrevious ) return asTime ? _keys[l_keyCode].timeDownPrevious : _keys[l_keyCode].updatesDownPrevious;
 		return asTime ? _keys[l_keyCode].timeDown : _keys[l_keyCode].updatesDown;
 	}
 	
-	public function getKeyUpDuration( type:EKey, ?asTime:Bool = true ):Float
+	public function getKeyUpDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float
 	{
 		if ( type == null ) return _tools.BIG_NUMBER;
 		var l_keyCode:Int = getKeyCode( type );
+		if ( isPrevious ) return asTime ? _keys[l_keyCode].timeUpPrevious : _keys[l_keyCode].updatesUpPrevious;
 		return asTime ? _keys[l_keyCode].timeUp : _keys[l_keyCode].updatesUp;
 	}
 	
@@ -306,6 +312,10 @@ private class _HelperKey
 	public var updatesUp:Int;
 	public var timeDown:Int;
 	public var timeUp:Int;
+	public var updatesDownPrevious:Int;
+	public var updatesUpPrevious:Int;
+	public var timeDownPrevious:Int;
+	public var timeUpPrevious:Int;
 	
 	public function new( kernel:IKernel )
 	{
@@ -314,6 +324,10 @@ private class _HelperKey
 		updatesUp = kernel.tools.BIG_NUMBER;
 		timeDown = 0;
 		timeUp = kernel.tools.BIG_NUMBER;
+		updatesDownPrevious = 0;
+		updatesUpPrevious = kernel.tools.BIG_NUMBER;
+		timeDownPrevious = 0;
+		timeUpPrevious = kernel.tools.BIG_NUMBER;
 	}
 }
 

@@ -26,7 +26,6 @@ package awe6.interfaces;
  * The IInputMouse interface should be implemented by objects wishing to act as virtual mouse controllers.
  * <p>Screen bounds are based on IFactory.width & IFactory.height.</p>
  * @author	Robert Fell
- * @todo	Add previousDurations to public interface
  */
 interface IInputMouse 
 {
@@ -122,16 +121,18 @@ interface IInputMouse
 	 * Determine the duration a specific mouse button is down.
 	 * @param	?type	The mouse button.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	The duration a specific mouse button is down.
 	 */
-	function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true ):Float;
+	function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
 	/**
 	 * Determine the duration a specific mouse button is up.
 	 * @param	?type	The mouse button.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	The duration a specific mouse button is up.
 	 */
-	function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true ):Float;
+	function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
 	/**
 	 * Determine the horizontal movement of the mouse since a specific mouse button was pressed.
 	 * @param	?type	The mouse button.

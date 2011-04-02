@@ -27,7 +27,6 @@ package awe6.interfaces;
  * <p>A joypad is useful for a simple game input device.  The device is limited to 6 EJoypadButtons to prevent keyboard lock and overly complex game controls.</p>
  * <p>A joypad can be configured to accept bespoke key configurations, or alternative user interface control devices (e.g. mouse or touchpad).</p>
  * @author	Robert Fell
- * @todo	Add previousDurations
  */
 interface IInputJoypad 
 {
@@ -55,14 +54,16 @@ interface IInputJoypad
 	 * Determine how long a specific joypad button has been down.
 	 * @param	type	The joypad button.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	Returns the duration the joypad button has been down.
 	 */
-	function getButtonDownDuration( type:EJoypadButton, ?asTime:Bool = true ):Float;
+	function getButtonDownDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
 	/**
 	 * Determine how long a specific joypad button has been up.
 	 * @param	type	The joypad button.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
+	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	Returns the duration the joypad button has been up.
 	 */
-	function getButtonUpDuration( type:EJoypadButton, ?asTime:Bool = true ):Float;
+	function getButtonUpDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float;
 }

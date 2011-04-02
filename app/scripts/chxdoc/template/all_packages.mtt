@@ -10,7 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="::meta.stylesheet::" />
 	</head>
 	<body>
-		<img src="images/awe6.png" width="250" height="150" border="0" />
+		<a href="http://www.awe6.org" target="_top"><img src="images/awe6.png" width="250" height="150" border="0" alt="awe6" /></a>
 		<div id="packages-frame">
 			<div id="packages-header">
 				<ul>
