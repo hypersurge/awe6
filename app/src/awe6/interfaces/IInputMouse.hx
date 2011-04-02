@@ -26,7 +26,6 @@ package awe6.interfaces;
  * The IInputMouse interface should be implemented by objects wishing to act as virtual mouse controllers.
  * <p>Screen bounds are based on IFactory.width & IFactory.height.</p>
  * @author	Robert Fell
- * @todo	Add isPressed and isReleased etc
  * @todo	Add previousDurations to public interface
  */
 interface IInputMouse 
@@ -42,11 +41,11 @@ interface IInputMouse
 	/**
 	 * The horizontal velocity of the mouse position (difference in pixels between current position and previous update's position).
 	 */
-	var vx( default, null ):Int;
+	var deltaX( default, null ):Int;
 	/**
 	 * The vertical velocity of the mouse position (difference in pixels between current position and previous update's position).
 	 */
-	var vy( default, null ):Int;
+	var deltaY( default, null ):Int;
 	/**
 	 * The horizontal position of the mouse relative to screen width.  Range 0...1.
 	 */
@@ -78,7 +77,7 @@ interface IInputMouse
 	/**
 	 * The change in scroll position between the current frame and the previous update.
 	 */
-	var vScroll( default, null ):Int;
+	var deltaScroll( default, null ):Int;
 	/**
 	 * Determine how long the mouse has been still.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
@@ -86,25 +85,39 @@ interface IInputMouse
 	 */
 	function getStillCount( ?asTime:Bool = true ):Int;
 	/**
-	 * Determine if a specific mouse button is currently down.
-	 * @param	?type	The mouse button.
-	 * @return	Returns true is the mouse button is currently down, false otherwise.
-	 */
-	function getIsButtonDown( ?type:EMouseButton ):Bool;
-	/**
 	 * Determine if a specific mouse button was clicked twice (within the defined time).
 	 * @param	?type	The mouse button.
 	 * @param	?delay	The time within which the mouse button must be clicked twice.
 	 * @return	Returns true if the mouse button was clicked twice (within the defined time).
 	 */
-	function getIsDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
+	function getIsButtonDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
 	/**
 	 * Determine if the mouse is being dragged with a specific mouse button down (for at least the defined delay).
 	 * @param	?type	The mouse button.
 	 * @param	?delay	The time which, if exceeded, assumes the mouse is being dragged. 
 	 * @return	Returns true if the mouse button was down for a duration exceeding delay.
 	 */
-	function getIsDragging( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
+	function getIsButtonDrag( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
+	/**
+	 * Determine if a specific mouse button is currently down.
+	 * @param	?type	The mouse button.
+	 * @return	Returns true is the mouse button is currently down, false otherwise.
+	 */
+	function getIsButtonDown( ?type:EMouseButton ):Bool;
+	/**
+	 * Determine if a specific mouse button was pressed in the current update frame.
+	 * <p>A press is defined as a new down - i.e. was up previous frame, and is down this frame.</p>
+	 * @param	type	The mouse button.
+	 * @return	Returns true is the mouse button was pressed in the current update, false otherwise.
+	 */
+	function getIsButtonPress( ?type:EMouseButton ):Bool;
+	/**
+	 * Determine if a specific mouse button was released in the current update.
+	 * <p>A release is defined as a new up - i.e. was down previous frame, and is up this frame.</p>
+	 * @param	type	The mouse button.
+	 * @return	Returns true is the mouse button was released in the current update, false otherwise.
+	 */
+	function getIsButtonRelease( ?type:EMouseButton ):Bool;
 	/**
 	 * Determine the duration a specific mouse button is down.
 	 * @param	?type	The mouse button.

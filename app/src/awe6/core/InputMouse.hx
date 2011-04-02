@@ -24,7 +24,6 @@ package awe6.core;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IKernel;
-import flash.display.AVM1Movie;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
 import flash.display.Stage;
@@ -42,8 +41,8 @@ class InputMouse extends Process, implements IInputMouse
 {
 	public var x( default, null ):Int;
 	public var y( default, null ):Int;
-	public var vx( default, null ):Int;
-	public var vy( default, null ):Int;
+	public var deltaX( default, null ):Int;
+	public var deltaY( default, null ):Int;
 	public var relativeX( default, null ):Float;
 	public var relativeY( default, null ):Float;
 	public var relativeCentralisedX( default, null ):Float;
@@ -51,7 +50,7 @@ class InputMouse extends Process, implements IInputMouse
 	public var isWithinScreenBounds( default, null ):Bool;
 	public var isMoving( default, null ):Bool;	
 	public var scroll( default, null ):Int;
-	public var vScroll( default, null ):Int;
+	public var deltaScroll( default, null ):Int;
 	
 	private var _stage:Stage;
 	private var _buffer:Array<Bool>;
@@ -69,7 +68,7 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		super._init();
 		_stage = Lib.current.stage;
-		x = y = vx = vy = scroll = vScroll = 0;
+		x = y = deltaX = deltaY = scroll = deltaScroll = 0;
 		relativeX = relativeY = relativeCentralisedX = relativeCentralisedY = 0;
 		isMoving = false;		
 		_buffer = [];
@@ -77,7 +76,7 @@ class InputMouse extends Process, implements IInputMouse
 		y = Math.round( _stage.mouseY );
 		isMoving = false;
 		scroll = 0;
-		vScroll = 0;
+		deltaScroll = 0;
 		_scrollPrev = 0;
 		_stillUpdates = 0;
 		_stillDuration = 0;
@@ -113,15 +112,15 @@ class InputMouse extends Process, implements IInputMouse
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
 		_handleButton( EMouseButton.RIGHT, _isRightDown(), deltaTime );
 		
-		vScroll = scroll - _scrollPrev;
+		deltaScroll = scroll - _scrollPrev;
 		_scrollPrev = scroll;
 
 		_xPrev = x;
 		_yPrev = y;
 		x = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
 		y = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
-		vx = x - _xPrev;
-		vy = y - _yPrev;
+		deltaX = x - _xPrev;
+		deltaY = y - _yPrev;
 		isMoving = ( ( x != _xPrev ) || ( y != _yPrev ) );
 		if ( isMoving )
 		{
@@ -218,13 +217,13 @@ class InputMouse extends Process, implements IInputMouse
 		}
 	}
 	
-	public function getIsDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool
+	public function getIsButtonDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool
 	{
 		var l_button:_HelperButton = _getButton( type );
 		return l_button.isDown ? ( l_button.timeUpPrevious <= delay ) : false;
 	}
 	
-	public function getIsDragging( ?type:EMouseButton, ?delay:Int = 100 ):Bool
+	public function getIsButtonDrag( ?type:EMouseButton, ?delay:Int = 100 ):Bool
 	{
 		var l_button:_HelperButton = _getButton( type );
 		return l_button.isDown ? l_button.timeDown > delay : false;
@@ -239,6 +238,18 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		var l_button:_HelperButton = _getButton( type );
 		return l_button.isDown;
+	}
+	
+	public function getIsButtonPress( ?type:EMouseButton ):Bool
+	{
+		var l_button:_HelperButton = _getButton( type );
+		return l_button.updatesDown == 1;		
+	}
+	
+	public function getIsButtonRelease( ?type:EMouseButton ):Bool
+	{
+		var l_button:_HelperButton = _getButton( type );
+		return l_button.updatesUp == 1;		
 	}
 	
 	public function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true ):Float

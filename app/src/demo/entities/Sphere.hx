@@ -97,7 +97,7 @@ class Sphere extends Entity
 	
 	private function _isHit():Bool
 	{
-		if ( !_kernel.inputs.mouse.getIsDoubleClick( EMouseButton.LEFT ) ) return false;
+		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) ) return false;
 		var l_dx:Float = _kernel.inputs.mouse.x - _x;
 		var l_dy:Float = _kernel.inputs.mouse.y - _y;
 		var l_dist:Float = ( ( l_dx * l_dx ) + ( l_dy * l_dy ) );
