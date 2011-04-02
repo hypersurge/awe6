@@ -252,15 +252,17 @@ class InputMouse extends Process, implements IInputMouse
 		return l_button.updatesUp == 1;		
 	}
 	
-	public function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true ):Float
+	public function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
 	{
 		var l_button:_HelperButton = _getButton( type );
+		if ( isPrevious ) return asTime ? l_button.timeDownPrevious : l_button.updatesDownPrevious;
 		return asTime ? l_button.timeDown : l_button.updatesDown;
 	}
 	
-	public function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true ):Float
+	public function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float
 	{
 		var l_button:_HelperButton = _getButton( type );
+		if ( isPrevious ) return asTime ? l_button.timeUpPrevious : l_button.updatesUpPrevious;
 		return asTime ? l_button.timeUp : l_button.updatesUp;
 	}
 	
