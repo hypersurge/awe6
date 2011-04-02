@@ -69,9 +69,14 @@ class Game extends Scene
 		if ( l_spheres.length == 0 ) _gameOver();
 	}
 	
-	private function _gameOver():Void
+	override private function _disposer():Void 
 	{
 		_kernel.audio.stop( "MusicGame", EAudioChannel.MUSIC );
+		super._disposer();		
+	}	
+	
+	private function _gameOver():Void
+	{
 		if ( _score > _session.highScore )
 		{
 			_session.isWin = true;

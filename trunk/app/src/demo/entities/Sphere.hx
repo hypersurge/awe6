@@ -23,6 +23,7 @@
 package demo.entities;
 import awe6.core.Entity;
 import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IKernel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -96,7 +97,7 @@ class Sphere extends Entity
 	
 	private function _isHit():Bool
 	{
-		if ( !_kernel.inputs.mouse.getIsButtonDown() ) return false;
+		if ( !_kernel.inputs.mouse.getIsDoubleClick( EMouseButton.LEFT ) ) return false;
 		var l_dx:Float = _kernel.inputs.mouse.x - _x;
 		var l_dy:Float = _kernel.inputs.mouse.y - _y;
 		var l_dist:Float = ( ( l_dx * l_dx ) + ( l_dy * l_dy ) );

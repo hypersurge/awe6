@@ -132,7 +132,6 @@ interface IFactory
 	function createLogger():ILogger;
 	/**
 	 * Builds the application's overlay to decorate and provide top level functionality.
-	 * @todo	Return Overlay specific to each EScene.
 	 * @return	Overlay to decorate and provide top level functionality.
 	 */
 	function createOverlay():IOverlayProcess;
