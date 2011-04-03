@@ -1,4 +1,5 @@
 #summary Guidelines on coding styles used within awe6.
+#labels awe
 
 = Usability through consistency =
 
@@ -8,11 +9,12 @@ No convention should be considered definitive - many of these choices may not be
 
   * Clear, intuitive, obvious naming.
   * Americanized spelling.
+  * Interfaces housed in the `awe6.interfaces` package.
+  * Implementation classes housed in the `awe6.core` package.
+  * Non-framework essential, but routinely useful, extensions housed in the `awe6.extras` package.
   * Interfaces prefixed by `I`.
   * Abstract classes prefixed by `A`.
   * Enumerators prefixed by `E`.
-  * Interfaces housed in the `awe6.interfaces` package.
-  * Basic implementation classes housed in the `awe6.core` package.
   * Private scope members prefixed with `_`.
   * Local scope members prefixed with `l_`.
   * Reserved members prefixed with `__`.
