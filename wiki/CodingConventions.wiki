@@ -7,7 +7,7 @@ Conventions are important for a consistent experience.  They are intended to imp
 No convention should be considered definitive - many of these choices may not be appropriate outside of the scope of this library.
 
   * Clear, intuitive, obvious naming.
-  * Americanised spelling.
+  * Americanized spelling.
   * Interfaces prefixed by `I`.
   * Abstract classes prefixed by `A`.
   * Enumerators prefixed by `E`.
@@ -29,7 +29,7 @@ No convention should be considered definitive - many of these choices may not be
   * Implicit Getter and Setter methods prefixed with `__get_` & `__set_`.
   * Getters for all readable interface variables that are not Bool or Enum and relate to state (i.e. are likely to change after initialization).
   * Setters for all writeable interface variables.
-  * Bool property names prefixed with `is`, `as`, or `has`.
+  * Bool property names prefixed with `is`, `as`, `has` or `was`.
   * Use of constructor dependency injection.
   * Casting avoided.
   * Two phase initialization avoided.
