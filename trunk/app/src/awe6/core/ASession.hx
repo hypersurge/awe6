@@ -28,6 +28,7 @@ import flash.net.SharedObject;
 
 /**
  * The ASession class provides a minimalist abstract implementation of the ISession interface.
+ * <p>It is intended as an abstract class to be extended.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */

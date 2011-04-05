@@ -22,6 +22,7 @@
 
 package awe6.core;
 import awe6.interfaces.IAssetManager;
+import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IAudioManager;
 import awe6.interfaces.IDisposable;
 import awe6.interfaces.IFactory;
@@ -80,7 +81,7 @@ class Kernel extends Process, implements IKernel
 	
 	private var _stage:Stage;
 	private var _view:View;
-	private var _assetManager:AssetManager;
+	private var _assetManagerProcess:IAssetManagerProcess;
 	private var _audioManager:AudioManager;
 	private var _inputManager:InputManager;
 	private var _sceneManager:SceneManager;
@@ -114,13 +115,13 @@ class Kernel extends Process, implements IKernel
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
-		assets = _assetManager = new AssetManager( _kernel );
+		assets = _assetManagerProcess = new AAssetManager( _kernel );
 		audio =	_audioManager = new AudioManager( _kernel );
 		inputs = _inputManager = new InputManager( _kernel );
 		scenes = _sceneManager = new SceneManager( _kernel );
 		messenger = _messageManager = new MessageManager( _kernel );
 		_view.addChild( _sceneManager.view );
-		_addProcess( _assetManager );
+		_addProcess( _assetManagerProcess );
 		_addProcess( _audioManager );
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
@@ -141,8 +142,14 @@ class Kernel extends Process, implements IKernel
 		_removeProcess( _preloader );
 		_preloader = null;
 		_logger = factory.createLogger();
-		_overlayProcess = factory.createOverlay();
-		overlay = cast( _overlayProcess, IOverlay );
+		var l_assetManagerProcess = factory.createAssetManager();
+		if ( l_assetManagerProcess != _assetManagerProcess )
+		{
+			_removeProcess( _assetManagerProcess );
+			assets = _assetManagerProcess = l_assetManagerProcess;
+			_addProcess( _assetManagerProcess );
+		}
+		overlay = _overlayProcess = factory.createOverlay();
 		_addProcess( _overlayProcess, false );
 		_view.addChild( _overlayProcess.view );
 		scenes.setScene( factory.startingSceneType );
@@ -217,7 +224,7 @@ class Kernel extends Process, implements IKernel
 		_view = null;
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
-		assets = _assetManager = null;
+		assets = _assetManagerProcess = null;
 		audio =	_audioManager = null;
 		inputs = _inputManager = null;
 		scenes = _sceneManager = null;
