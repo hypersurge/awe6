@@ -29,10 +29,10 @@ package awe6;
  * Alternative shorthand namespace for awe6 - e.g. no need to reference core or interface packages.
  */
 
+typedef AAssetManager = awe6.core.AAssetManager;
 typedef AFactory = awe6.core.AFactory;
 typedef APreloader = awe6.core.APreloader;
 typedef ASession = awe6.core.ASession;
-typedef AssetManager = awe6.core.AssetManager;
 typedef AudioManager = awe6.core.AudioManager;
 typedef Entity = awe6.core.Entity;
 typedef InputJoypad = awe6.core.InputJoypad;

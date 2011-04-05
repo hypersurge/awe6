@@ -24,6 +24,7 @@ package awe6.core;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IDisposable;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IFactory;
@@ -45,6 +46,7 @@ import flash.text.TextField;
 
 /**
  * The AFactory class provides a minimalist abstract implementation of the IFactory interface.
+ * <p>It is intended as an abstract class to be extended.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
@@ -235,6 +237,11 @@ class AFactory implements IFactory, implements IDisposable
 		version = StringTools.trim( version ).substr( 0, 10 );
 		author = StringTools.trim( author ).substr( 0, 16 );
 	}
+	
+	public function createAssetManager():IAssetManagerProcess
+	{
+		return ( Std.is( _kernel.assets, IAssetManagerProcess ) ) ? cast( _kernel.assets, IAssetManagerProcess ) : new AAssetManager( _kernel );
+	}	
 	
 	public function createPreloader():IPreloader
 	{

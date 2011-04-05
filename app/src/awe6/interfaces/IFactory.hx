@@ -120,10 +120,15 @@ interface IFactory
 	 */
 	function createPreloader():IPreloader;
 	/**
+	 * Builds the application's asset manager which store images, sounds etc.
+	 * @return	Asset manager.
+	 */
+	function createAssetManager():IAssetManagerProcess;
+	/**
 	 * Builds the application's session to store user progress.
 	 * @param	id	The unique identifier of the session.  If session already exists will load existing.
 	 * @return	Session to store user progress.
-	 */	
+	 */
 	function createSession( ?id:String ):ISession;
 	/**
 	 * Builds the application's logger to log events / analytics.

@@ -21,16 +21,17 @@
  */
 
 package awe6.core;
-import awe6.interfaces.IAssetManager;
+import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IKernel;
 import flash.display.BitmapData;
 
 /**
- * The AssetManager class provides a minimalist implementation of the IAssetManager interface.
+ * The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
+ * <p>It is intended as an abstract class to be extended.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class AssetManager extends Process, implements IAssetManager
+class AAssetManager extends Process, implements IAssetManagerProcess
 {
 	private static inline var _PACKAGE_ID = "assets";	
 
