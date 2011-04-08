@@ -1,0 +1,5 @@
+-D compileAs3
+-cp src
+-swf-version 10
+-as3 bin\as3
+awe6.Types

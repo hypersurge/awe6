@@ -31,11 +31,11 @@ class Main
 {
 	static function main() 
 	{
-#if debug
+		#if debug
 		var l_isDebug:Bool = true;
-#else
+		#else
 		var l_isDebug:Bool = false;
-#end
+		#end
 		if ( l_isDebug ) FlashConnect.redirect();
 		else Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
 		
