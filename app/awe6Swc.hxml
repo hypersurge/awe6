@@ -1,0 +1,10 @@
+-D compileSwc
+-cp src
+-swf-version 10
+-swf bin/awe6.swc
+-swf-header 600:400:25:000000
+-swf-lib assets\preloader.swf
+-swf-lib assets\audio.swf
+-swf-lib assets\gui.swf
+-resource assets\configSwc.xml@config.xml
+demo.Factory

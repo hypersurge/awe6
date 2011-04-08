@@ -21,6 +21,7 @@
  */
 
 package demo.scenes;
+import assets.Background;
 import awe6.core.Scene;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
@@ -47,7 +48,7 @@ class AScene extends Scene
 	{
 		super._init();
 		
-		addEntity( new Image( _kernel, _kernel.assets.getAsset( "Background" ) ), true, 0 );
+		addEntity( new Image( _kernel, new Background() ), true, 0 );
 		var l_sceneID:String = _tools.toCamelCase( Std.string( type ), true );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneID + ".title" ) );
 		var l_title:Text = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle() );
