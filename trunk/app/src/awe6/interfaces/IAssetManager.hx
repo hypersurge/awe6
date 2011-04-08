@@ -27,7 +27,7 @@ package awe6.interfaces;
  * <p>Use with caution, there are usually more type safe ways to utilise assets.</p>
  * @author	Robert Fell
  */
-interface IAssetManager 
+interface IAssetManager
 {
 	/**
 	 * Request an embedded or loaded media asset.  E.g. bitmap or sound.
