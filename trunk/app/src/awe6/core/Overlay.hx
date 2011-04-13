@@ -218,7 +218,7 @@ class Overlay extends Process, implements IOverlayProcess
 		showButton( EOverlayButton.UNPAUSE, false );
 	}
 	
-	public function flash( ?duration:Float, ?asTime:Bool = false, ?startingAlpha:Float = 1 ):Void
+	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1 ):Void
 	{
 		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
 		_flashDuration = _flashStartingDuration = duration;
