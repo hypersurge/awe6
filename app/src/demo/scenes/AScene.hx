@@ -35,6 +35,7 @@ class AScene extends Scene
 {
 	private var _session:Session;
 	private var _title:String;
+	private var _titleText:Text;
 	private var _isMusic:Bool;
 	
 	private function new( kernel:IKernel, type:EScene, ?isPauseable:Bool = false, ?isMutable:Bool = true, ?isSessionSavedOnNext:Bool = false ) 
@@ -51,9 +52,9 @@ class AScene extends Scene
 		addEntity( new Image( _kernel, new Background() ), true, 0 );
 		var l_sceneID:String = _tools.toCamelCase( Std.string( type ), true );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneID + ".title" ) );
-		var l_title:Text = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle() );
-		l_title.y = 10;
-		addEntity( l_title, true, 100 );
+		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle() );
+		_titleText.y = 10;
+		addEntity( _titleText, true, 100 );
 		
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
