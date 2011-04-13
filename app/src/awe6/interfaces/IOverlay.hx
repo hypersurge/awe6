@@ -69,5 +69,5 @@ interface IOverlay
 	 * @param	?asTime	If true treats the time as milliseconds, otherwise as frame updates.
 	 * @param	?startingAlpha	The alpha at which the flash starts.  Range: 0...1.
 	 */
-	function flash( ?duration:Float, ?asTime:Bool = false, ?startingAlpha:Float = 1 ):Void;
+	function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1 ):Void;
 }
