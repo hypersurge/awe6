@@ -14,3 +14,9 @@ A 3D space duelling game produced by [http://www.4T2.co.uk 4T2] for [http://www.
 [http://worldracers.lego.com/en-us/games/Default.aspx http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOWorldRacers.jpg]
 
 A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
+
+== Exxon Mobil 1®: "Track Challenge" (2011) ==
+
+[http://www.grid1.tv/game http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/MobilTrackChallenge.jpg]
+
+A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.grid1.tv Exxon Mobil].
