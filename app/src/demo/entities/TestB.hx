@@ -40,9 +40,10 @@ class TestB extends Entity
 		_kernel.messenger.addSubscriber( this, EMessage.SUB_TYPE( 55 ), _onMessage, _friend );
 	}
 	
-	private function _onMessage( value:Dynamic, sender:IEntity ):Void
+	private function _onMessage( value:Dynamic, sender:IEntity ):Bool
 	{
 		trace( "message received on B:" + value );
+		return true;
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 

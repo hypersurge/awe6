@@ -301,7 +301,7 @@ class Kernel extends Process, implements IKernel
 		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_view.sprite.contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN : StageDisplayState.NORMAL;
+		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN_INTERACTIVE : StageDisplayState.NORMAL;
 		return isEyeCandy;
 	}	
 	

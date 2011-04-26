@@ -35,14 +35,14 @@ interface IMessageManager
 	 * Register an entity's interest in a subject.
 	 * @param	subscriber	Entity listening / observing for messages.
 	 * @param	message	Specific message to listen for.
-	 * @param	handler	Function to pass observed messages to.
+	 * @param	handler	Function to pass observed messages to: receives Message & Sender and returns true if send propogation is to continue (true should be default behavior).
 	 * @param	?sender	Only listen to messages from this entity.
 	 * @param	?senderClassType	Only listen to messages from this type of entity.
 	 * @param	?isRemovedAfterFirstSend	Once a message has been received, no longer listen for further messages under the same criteria.
 	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
 	 * @type	<T>	Senders' type.
 	 */
-	function addSubscriber<M,T>( subscriber:IEntity, message:M, handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
+	function addSubscriber<M,T>( subscriber:IEntity, message:M, handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void;
 	/**
 	 * Retrieve all entity's interested in a subject.
 	 * <p>All parameters are optional to allow wildcard filtering.</p>
@@ -55,7 +55,7 @@ interface IMessageManager
 	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
 	 * @type	<T>	Senders' type.
 	 */
-	function getSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>;
+	function getSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>;
 	/**
 	 * Unsubscribes entities matching the specified criteria.
 	 * @param	?subscriber	Entity listening / observing for messages.
@@ -66,7 +66,7 @@ interface IMessageManager
 	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
 	 * @type	<T>	Senders' type.
 	 */
-	function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Void, ?sender:IEntity, ?senderClassType:Class<T> ):Void;
+	function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):Void;
 	/**
 	 * Dispatch a message from a specific entity.
 	 * @param	message	Message to dispatch.
