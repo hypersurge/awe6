@@ -57,7 +57,6 @@ class View extends Process, implements IView
 		_children = new Array<View>();
 	}
 	
-	/** @inheritDoc */
 	public function addChild( child:IView, ?priority:Int ):Void
 	{
 		if ( isDisposed ) return;
@@ -72,7 +71,6 @@ class View extends Process, implements IView
 		_isDirty = true;
 	}
 	
-	/** @inheritDoc */
 	public function removeChild( child:IView ):Void
 	{
 		if ( isDisposed ) return;
