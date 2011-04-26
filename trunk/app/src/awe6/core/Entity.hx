@@ -66,6 +66,7 @@ class Entity extends Process, implements IEntity
 	{
 		remove();
 		_kernel.messenger.removeSubscribers( this );
+		_kernel.messenger.removeSubscribers( null, null, null, this );
 		_entities.reverse();
 		for ( i in _entities ) i.dispose();
 		view.dispose();
