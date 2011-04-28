@@ -5,18 +5,18 @@ The following games are powered by the awe6 inverted game framework:
 
 == LEGO® _Star Wars™_: "Ace Assault" (2011) ==
 
-[http://starwars.lego.com/en-us/Games/AceAssault/Default.aspx http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOStarWars.jpg]
+[http://starwars.lego.com/en-us/Games/AceAssault/Default.aspx https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOStarWars.jpg]
 
 A 3D space duelling game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
 
 == LEGO® World Racers: "VS" (2010) ==
 
-[http://worldracers.lego.com/en-us/games/Default.aspx http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOWorldRacers.jpg]
+[http://worldracers.lego.com/en-us/games/Default.aspx https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOWorldRacers.jpg]
 
 A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
 
 == Exxon Mobil 1®: "Track Challenge" (2011) ==
 
-[http://www.grid1.tv/game http://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/MobilTrackChallenge.jpg]
+[http://www.grid1.tv/game https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/MobilTrackChallenge.jpg]
 
 A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.grid1.tv Exxon Mobil].
