@@ -27,6 +27,8 @@ import awe6.interfaces.IEntityCollection;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import flash.display.Sprite;
+import haxe.FastList;
+import haxe.FastList;
 
 /**
  * The Entity class provides a minimalist implementation of the IEntity interface.
@@ -40,7 +42,8 @@ class Entity extends Process, implements IEntity
 	public var parent( __get_parent, null ):IEntityCollection;
 	public var view( __get_view, null ):IView;
 	
-	private var _entities:Array<Entity>;
+//	private var _entities:Array<Entity>;
+	private var _agendas:FastList<_HelperAgenda>;
 
 	public function new( kernel:IKernel, ?id:String, ?sprite:Sprite ) 
 	{
@@ -53,13 +56,15 @@ class Entity extends Process, implements IEntity
 	{
 		super._init();
 		agenda = EAgenda.ALL;
-		_entities = new Array<Entity>();
+//		_entities = new Array<Entity>();
+		_agendas = new FastList<_HelperAgenda>();
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		for ( i in _entities ) i.update( deltaTime );
+		var l_entities:Array<IEntity> = _getEntities( agenda );
+		for ( i in l_entities ) i.update( deltaTime );
 	}
 	
 	override private function _disposer():Void 
@@ -67,8 +72,9 @@ class Entity extends Process, implements IEntity
 		remove();
 		_kernel.messenger.removeSubscribers( this );
 		_kernel.messenger.removeSubscribers( null, null, null, this );
-		_entities.reverse();
-		for ( i in _entities ) i.dispose();
+//		_entities.reverse();
+		var l_entities:Array<IEntity> = _getEntities();
+		for ( i in l_entities ) i.dispose();
 		view.dispose();
 		super._disposer();
 	}
@@ -84,7 +90,8 @@ class Entity extends Process, implements IEntity
 		if ( l_parent != this )
 		{
 			entity.remove( isAddedToView );
-			_entities.push( l_child );
+//			_entities.push( l_child );
+			_agendas.add( new _HelperAgenda( entity, agenda ) );
 			l_child._setParent( this );
 		}
 		if ( isAddedToView ) view.addChild( entity.view, viewPriority );		
@@ -94,7 +101,11 @@ class Entity extends Process, implements IEntity
 	{
 		if ( isDisposed ) return;
 		var l_child:Entity = cast entity;
-		_entities.remove( l_child );
+		for ( i in _agendas )
+		{
+			if ( ( i.entity == entity ) && ( i.agenda == agenda ) ) _agendas.remove( i );
+		}
+//		_entities.remove( l_child );
 		l_child._setParent( null );
 		if ( isRemovedFromView ) entity.view.remove();
 	}
@@ -106,14 +117,26 @@ class Entity extends Process, implements IEntity
 	
 	public function getEntities( ?agenda:EAgenda ):Array<IEntity>
 	{
-		return cast _entities;
+		return _getEntities( agenda );
+//		return cast _entities;
+	}
+	
+	private function _getEntities( ?agenda:EAgenda ):Array<IEntity>
+	{
+		var l_result:Array<IEntity> = new Array<IEntity>();
+		for ( i in _agendas )
+		{
+			l_result.push( i.entity );
+		}
+		return l_result;
 	}
 	
 	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>
 	{
 		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntitiesByClass( classType, true );
 		var l_result:Array<T> = new Array<T>();
-		for ( i in _entities )
+		var l_entities:Array<IEntity> = _getEntities( agenda );
+		for ( i in l_entities )
 		{
 			if ( Std.is( i, classType ) ) l_result.push( cast i );
 			if ( bubbleDown ) l_result.concat( i.getEntitiesByClass( classType, true ) );
@@ -127,7 +150,8 @@ class Entity extends Process, implements IEntity
 		if ( this.id == id ) return this;
 		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntityById( id, true );
 		var l_result:IEntity = null;
-		for ( i in _entities )
+		var l_entities:Array<IEntity> = _getEntities( agenda );
+		for ( i in l_entities )
 		{
 			if ( i.id == id ) return i;
 			if ( bubbleDown ) l_result = i.getEntityById( id, true );
@@ -141,6 +165,8 @@ class Entity extends Process, implements IEntity
 	{
 		if ( agenda == type ) return false;
 		agenda = type;
+		// remove all current entity views?
+		// should cache current entities at this point
 		return true;
 	}
 	
@@ -156,3 +182,14 @@ class Entity extends Process, implements IEntity
 	
 }
 
+private class _HelperAgenda
+{
+	public var entity( default, null ):IEntity;
+	public var agenda( default, null ):EAgenda;
+	
+	public function new( entity:IEntity, ?agenda:EAgenda )
+	{
+		this.entity = entity;
+		this.agenda = agenda;
+	}
+}
