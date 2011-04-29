@@ -28,7 +28,6 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import flash.display.Sprite;
 import haxe.FastList;
-import haxe.FastList;
 
 /**
  * The Entity class provides a minimalist implementation of the IEntity interface.
@@ -55,7 +54,7 @@ class Entity extends Process, implements IEntity
 	override private function _init():Void 
 	{
 		super._init();
-		agenda = EAgenda.ALL;
+//		agenda = EAgenda.ALL;
 //		_entities = new Array<Entity>();
 		_agendas = new FastList<_HelperAgenda>();
 	}
@@ -87,14 +86,19 @@ class Entity extends Process, implements IEntity
 		if ( isDisposed ) return;
 		var l_child:Entity = cast entity;
 		var l_parent:Entity = cast l_child.parent;
+		var l_helperAgenda:_HelperAgenda = new _HelperAgenda( entity, agenda );
 		if ( l_parent != this )
 		{
 			entity.remove( isAddedToView );
 //			_entities.push( l_child );
-			_agendas.add( new _HelperAgenda( entity, agenda ) );
+			_agendas.add( l_helperAgenda );
 			l_child._setParent( this );
 		}
-		if ( isAddedToView ) view.addChild( entity.view, viewPriority );		
+		if ( isAddedToView )
+		{
+			if ( agenda == this.agenda ) view.addChild( entity.view, viewPriority );
+			else l_helperAgenda.isAddedToView = true;
+		}
 	}
 	
 	public function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void
@@ -126,7 +130,7 @@ class Entity extends Process, implements IEntity
 		var l_result:Array<IEntity> = new Array<IEntity>();
 		for ( i in _agendas )
 		{
-			l_result.push( i.entity );
+			if ( Type.enumEq( agenda, i.agenda ) ) l_result.push( i.entity );
 		}
 		return l_result;
 	}
@@ -164,7 +168,17 @@ class Entity extends Process, implements IEntity
 	public function setAgenda( type:EAgenda ):Bool
 	{
 		if ( agenda == type ) return false;
+		for ( i in _agendas )
+		{
+			var l_isAddedToView:Bool = ( Type.enumEq( agenda, i.agenda ) && ( i.entity.view.parent == view ) );
+			if ( l_isAddedToView ) i.entity.view.remove();
+			i.isAddedToView = i.isAddedToView || l_isAddedToView;			
+		}
 		agenda = type;
+		for ( i in _agendas )
+		{
+			if ( Type.enumEq( agenda, i.agenda ) && ( i.isAddedToView ) ) view.addChild( i.entity.view ); 
+		}
 		// remove all current entity views?
 		// should cache current entities at this point
 		return true;
@@ -186,10 +200,12 @@ private class _HelperAgenda
 {
 	public var entity( default, null ):IEntity;
 	public var agenda( default, null ):EAgenda;
+	public var isAddedToView:Bool;
 	
 	public function new( entity:IEntity, ?agenda:EAgenda )
 	{
 		this.entity = entity;
 		this.agenda = agenda;
+		this.isAddedToView = false;
 	}
 }
