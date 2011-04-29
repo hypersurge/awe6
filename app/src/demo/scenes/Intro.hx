@@ -21,6 +21,9 @@
  */
 
 package demo.scenes;
+import assets.ButtonOver;
+import assets.ButtonUp;
+import awe6.core.BasicButton;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;
 import demo.entities.TestA;
@@ -45,6 +48,9 @@ class Intro extends AScene
 		var l_b:TestB = new TestB( _kernel, l_a );
 		addEntity( l_a );
 		addEntity( l_b );
+		
+		var l_but:BasicButton = new BasicButton( _kernel, new ButtonUp(), new ButtonOver(), 100, 50 );
+		addEntity( l_but, true );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
