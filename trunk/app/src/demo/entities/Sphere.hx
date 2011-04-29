@@ -91,6 +91,7 @@ class Sphere extends Entity
 		if ( _isHit() )
 		{
 			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _x / _kernel.factory.width );
+			_kernel.overlay.flash();
 			dispose();
 		}
 	}
