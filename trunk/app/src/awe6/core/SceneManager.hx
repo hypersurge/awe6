@@ -87,7 +87,7 @@ class SceneManager extends Process, implements ISceneManager
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();
-		Lib.current.stage.focus = Lib.current;
+		Lib.current.stage.focus = Lib.current.stage;
 		scene = _kernel.factory.createScene( type );
 		_kernel.overlay.showButton( EOverlayButton.BACK, _kernel.factory.getBackSceneType( scene.type ) != null );
 		_kernel.overlay.showButton( EOverlayButton.MUTE, scene.isMuteable && !_kernel.audio.isMute );
