@@ -34,7 +34,7 @@ interface IAgendaManager
 	var agenda( __get_agenda, null ):EAgenda;
 	/**
 	 * Change the object's current agenda.
-	 * @param	type	The new agenda.
+	 * @param	type	The new agenda.  If none is specified will assign to EAgenda.ALWAYS.
 	 * @return	Returns true if the agenda has changed, false otherwise.
 	 */
 	function setAgenda( type:EAgenda ):Bool;
