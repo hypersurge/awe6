@@ -31,7 +31,7 @@ interface IEntityCollection
 	/**
 	 * Adds an entity to this object's children.
 	 * @param	entity	The entity to add.
-	 * @param	?agenda	Assigns the entity to a specific agenda.
+	 * @param	?agenda	Assigns the entity to a specific agenda.  If none is specified will assign to EAgenda.ALWAYS.
 	 * @param	?isAddedToView	If true will add the child entity's view to this object's view.
 	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack).
 	 */
@@ -39,7 +39,7 @@ interface IEntityCollection
 	/**
 	 * Removes an entity from this object's children.
 	 * @param	entity	The entity to remove.
-	 * @param	?agenda	If set then will only remove the specified entity from this agenda.
+	 * @param	?agenda	If set then will only remove the specified entity from this agenda, else will remove from all agendas.
 	 * @param	?isRemovedFromView	If true the child entity's view will be removed from this object's view.
 	 */
 	function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void;

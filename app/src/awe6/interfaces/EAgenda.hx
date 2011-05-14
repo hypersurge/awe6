@@ -29,7 +29,7 @@ package awe6.interfaces;
  */
 enum EAgenda
 {
-	ALL;
+	ALWAYS;
 	BIRTH;
 	DEATH;
 	STANDARD;
