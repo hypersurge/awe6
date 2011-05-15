@@ -41,9 +41,9 @@ class Entity extends Process, implements IEntity
 	public var parent( __get_parent, null ):IEntityCollection;
 	public var view( __get_view, null ):IView;
 	
-	private var _agendas:FastList<_HelperAgenda>;
+	private var _entityAgendaPairs:FastList<_HelperEntityAgendaPair>;
 	private var _isAgendaDirty:Bool;
-	private var _cachedAgendas:Array<IEntity>;
+	private var _cachedEntities:Array<IEntity>;
 
 	public function new( kernel:IKernel, ?id:String, ?sprite:Sprite ) 
 	{
@@ -56,9 +56,9 @@ class Entity extends Process, implements IEntity
 	{
 		super._init();
 		agenda = EAgenda.ALWAYS;
-		_agendas = new FastList<_HelperAgenda>();
+		_entityAgendaPairs = new FastList<_HelperEntityAgendaPair>();
 		_isAgendaDirty = true;
-		_cachedAgendas = [];
+		_cachedEntities = [];
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -66,11 +66,11 @@ class Entity extends Process, implements IEntity
 		super._updater( deltaTime );
 		if ( _isAgendaDirty )
 		{
-			_cachedAgendas = _getEntities( agenda );
-			if ( ( agenda != null ) && !Type.enumEq( agenda, EAgenda.ALWAYS ) ) _cachedAgendas.concat( _getEntities( EAgenda.ALWAYS ) );
+			_cachedEntities = _getEntities( agenda );
+			if ( !Type.enumEq( agenda, EAgenda.ALWAYS ) ) _cachedEntities.concat( _getEntities( EAgenda.ALWAYS ) );
 			_isAgendaDirty = false;
 		}
-		for ( i in _cachedAgendas ) i.update( deltaTime );
+		for ( i in _cachedEntities ) i.update( deltaTime );
 	}
 	
 	override private function _disposer():Void 
@@ -81,7 +81,7 @@ class Entity extends Process, implements IEntity
 		var l_entities:Array<IEntity> = _getEntities();
 		l_entities.reverse();
 		for ( i in l_entities ) i.dispose();
-		_agendas = null;
+		_entityAgendaPairs = null;
 		view.dispose();
 		super._disposer();
 	}
@@ -90,24 +90,23 @@ class Entity extends Process, implements IEntity
 	{
 		if ( isDisposed ) return;
 		if ( agenda == null ) agenda = EAgenda.ALWAYS;
-		for ( i in _agendas )
+		for ( i in _entityAgendaPairs )
 		{
 			if ( ( i.entity == entity ) && ( Type.enumEq( i.agenda, agenda ) ) ) return; // already exists
 		}
 		_isAgendaDirty = true;
 		var l_child:Entity = cast entity;
-		var l_parent:Entity = cast l_child.parent;
-		var l_helperAgenda:_HelperAgenda = new _HelperAgenda( entity, agenda );
-		if ( l_parent != this )
+		var l_helperEntityAgendaPair:_HelperEntityAgendaPair = new _HelperEntityAgendaPair( entity, agenda );
+		if ( l_child.parent != this )
 		{
-			entity.remove( isAddedToView );
+			l_child.remove( isAddedToView );
 			l_child._setParent( this );
 		}
-		_agendas.add( l_helperAgenda );
+		_entityAgendaPairs.add( l_helperEntityAgendaPair );
 		if ( isAddedToView )
 		{
-			if ( agenda == this.agenda ) view.addChild( entity.view, viewPriority );
-			else l_helperAgenda.isAddedToView = true;
+			if ( Type.enumEq( agenda, this.agenda ) ) view.addChild( entity.view, viewPriority );
+			else l_helperEntityAgendaPair.isAddedToView = true;
 		}
 	}
 	
@@ -116,11 +115,11 @@ class Entity extends Process, implements IEntity
 		if ( isDisposed ) return;
 		var l_child:Entity = cast entity;
 		var l_isRemoved:Bool = false;
-		for ( i in _agendas )
+		for ( i in _entityAgendaPairs )
 		{
 			if ( ( i.entity == entity ) && ( ( agenda == null ) || ( Type.enumEq( i.agenda, agenda ) ) ) )
 			{
-				_agendas.remove( i );
+				_entityAgendaPairs.remove( i );
 				l_isRemoved = true;
 			}
 		}
@@ -145,7 +144,7 @@ class Entity extends Process, implements IEntity
 	private function _getEntities( ?agenda:EAgenda ):Array<IEntity>
 	{
 		var l_result:Array<IEntity> = new Array<IEntity>();
-		for ( i in _agendas )
+		for ( i in _entityAgendaPairs )
 		{
 			if ( ( agenda == null ) || Type.enumEq( agenda, i.agenda ) ) l_result.push( i.entity );
 		}
@@ -187,14 +186,14 @@ class Entity extends Process, implements IEntity
 		if ( type == null ) type = EAgenda.ALWAYS;
 		if ( agenda == type ) return false;
 		_isAgendaDirty = true;
-		for ( i in _agendas )
+		for ( i in _entityAgendaPairs )
 		{
 			var l_isAddedToView:Bool = ( Type.enumEq( agenda, i.agenda ) && ( i.entity.view.parent == view ) );
 			if ( l_isAddedToView ) i.entity.view.remove();
 			i.isAddedToView = i.isAddedToView || l_isAddedToView;			
 		}
 		agenda = type;
-		for ( i in _agendas )
+		for ( i in _entityAgendaPairs )
 		{
 			if ( i.isAddedToView && ( Type.enumEq( EAgenda.ALWAYS, i.agenda ) || Type.enumEq( agenda, i.agenda ) ) ) view.addChild( i.entity.view ); 
 		}
@@ -213,7 +212,7 @@ class Entity extends Process, implements IEntity
 	
 }
 
-private class _HelperAgenda
+private class _HelperEntityAgendaPair
 {
 	public var entity( default, null ):IEntity;
 	public var agenda( default, null ):EAgenda;
