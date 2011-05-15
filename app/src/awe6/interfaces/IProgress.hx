@@ -23,23 +23,13 @@
 package awe6.interfaces;
 
 /**
- * Can be used to influence the internal state of an IEntity via IAgendaManager.
- * <p>Can be extended with SubType by using concrete project values.</p> 
+ * The IProgress interface should be implemented by objects intended to progress from start to finish ( 0...1 ).
  * @author	Robert Fell
  */
-enum EAgenda
+interface IProgress
 {
 	/**
-	 * The default EAgenda.  Anything assigned to this will be run each update irrespective of what agenda the parent is assigned. 
+	 * Range: 0...1.  0 represents just starting, 1 represents complete.
 	 */
-	ALWAYS;
-	BIRTH;
-	DEATH;
-	STANDARD;
-	ATTACK;
-	DEFEND;
-	/**
-	 * Allows EAgenda to be extended (e.g. for using entity specific enumerated agendas).
-	 */
-	SUB_TYPE( value:Dynamic );
+	var progress( __get_progress, null ):Float;
 }
