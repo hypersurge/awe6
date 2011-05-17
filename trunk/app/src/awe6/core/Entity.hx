@@ -67,7 +67,10 @@ class Entity extends Process, implements IEntity
 		if ( _isAgendaDirty )
 		{
 			_cachedEntities = _getEntities( agenda );
-			if ( !Type.enumEq( agenda, EAgenda.ALWAYS ) ) _cachedEntities.concat( _getEntities( EAgenda.ALWAYS ) );
+			if ( !Type.enumEq( agenda, EAgenda.ALWAYS ) )
+			{
+				_cachedEntities = _cachedEntities.concat( _getEntities( EAgenda.ALWAYS ) );
+			}
 			_isAgendaDirty = false;
 		}
 		for ( i in _cachedEntities ) i.update( deltaTime );
@@ -81,7 +84,7 @@ class Entity extends Process, implements IEntity
 		var l_entities:Array<IEntity> = _getEntities();
 		l_entities.reverse();
 		for ( i in l_entities ) i.dispose();
-		_entityAgendaPairs = null;
+		for ( i in _entityAgendaPairs ) _entityAgendaPairs.remove( i );
 		view.dispose();
 		super._disposer();
 	}
@@ -184,7 +187,7 @@ class Entity extends Process, implements IEntity
 	public function setAgenda( type:EAgenda ):Bool
 	{
 		if ( type == null ) type = EAgenda.ALWAYS;
-		if ( agenda == type ) return false;
+		if ( Type.enumEq( agenda, type ) ) return false;
 		_isAgendaDirty = true;
 		for ( i in _entityAgendaPairs )
 		{
