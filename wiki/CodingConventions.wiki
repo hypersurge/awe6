@@ -1,5 +1,4 @@
 #summary Guidelines on coding styles used within awe6.
-#labels awe
 
 = Usability through consistency =
 
