@@ -6,6 +6,6 @@ The Kernel is the central component for the awe6 framework.  It contains access 
 
 = Things you need to know about Kernel =
 
-  * [source:/trunk/app/src/awe6/core/Kernel.hx Kernel] comes ready to run - you shouldn't need to edit it, extend it or compose it (it's automatically composed in the default AFactory).
+  * [svn:/trunk/app/src/awe6/core/Kernel.hx Kernel] comes ready to run - you shouldn't need to edit it, extend it or compose it (it's automatically composed in the default AFactory).
   * Can be used as a service locator - a single point of reference to the other managers.  If you like that sort of thing!
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IKernel.html IKernel].
