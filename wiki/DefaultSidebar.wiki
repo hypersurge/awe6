@@ -8,7 +8,7 @@
     * Key Components
       * [ComponentFactory Factory]
       * [ComponentKernel Kernel]
-      * [ComponentAssetManager Asset Management]
-      * [ComponentInputManager Input Management]
+      * [ComponentAssets Assets]
+      * [ComponentInputs Inputs]
   * Using awe6
     * [QuickStart Quick Start Tutorial]
