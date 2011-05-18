@@ -6,6 +6,6 @@ User input comes in many forms, and this component handles them and provides an 
 
 == Things you should know about Inputs ==
 
-  * [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/InputManager.hx InputManager] comes ready to run with working implementations for Mouse, Keyboard and virtual Joypads.  Multitouch support coming soon.
-  * Inputs are state based, rather than event based - so code queries the current state of a button, key, position etc.  Use [https://awe6.googlecode.com/svn/trunk/app/src/awe6/extras/Trigger.hx Trigger] + ComponentMessages if you want to "listen".
+  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/InputManager.hx InputManager] comes ready to run with working implementations for Mouse, Keyboard and virtual Joypads.  Multitouch support coming soon.
+  * Inputs are state based, rather than event based - so code queries the current state of a button, key, position etc.  Use [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/extras/Trigger.hx Trigger] + [ComponentMessages Messages] if you want to "listen".
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IInputManager.html IInputManager].

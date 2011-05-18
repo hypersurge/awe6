@@ -9,8 +9,8 @@ The !AssetManager provides a (potentially) type safe route to any asset, of any 
 == Things you should know about Assets ==
 
   * No two projects are the same.  So it is safe to assume that because assets are concrete, reference to them should be too.
-   * Consider extending [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/AAssetManager.hx AAssetManager] for your project to include factory methods for each asset - and inject Entities with their required assets from Factory (good).
-   * Or cast IKernel.assets in situation as they arise - e.g. ComponentScene or ComponentEntity (bad).
+   * Consider extending [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/AAssetManager.hx AAssetManager] for your project to include factory methods for each asset - and inject Entities with their required assets from Factory (good).
+   * Or cast IKernel.assets in situation as they arise - e.g. [ComponentScene Scene] or [ComponentEntity Entity] (bad).
    * Or use string keys and identifiers to reference assets at runtime (ugly).
-  * Perhaps a good asset manager is also a [ComponentPreloader] - when creating these concrete implementations consider their union.
+  * Perhaps a good asset manager is also a [ComponentPreloader Preloader] - when creating these concrete implementations consider their union.
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IAssetManager.html IAssetManager].

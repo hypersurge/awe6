@@ -6,7 +6,7 @@ The Kernel is the central component for the awe6 framework.  It contains access 
 
 == Things you should know about Kernel ==
 
-  * [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/Kernel.hx Kernel] comes ready to run - you shouldn't need to edit it, extend it or compose it (it's automatically composed in the default ComponentFactory).
+  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/Kernel.hx Kernel] comes ready to run - you shouldn't need to edit it, extend it or compose it (it's automatically composed in the default [ComponentFactory Factory]).
   * Can be used as a service locator - a single point of reference to the other managers.  If you like that sort of thing:
    * Constructor inject only the sub components you need (good).
    * Or constructor inject full Kernel from class to class "tramp" (bad).
