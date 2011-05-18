@@ -1,0 +1,11 @@
+#summary Inputs
+
+[https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IInputManager.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/inputs.png]
+
+User input comes in many forms, and this component handles them: mouse, keyboard, virtual joypad.
+
+= Things you need to know about Inputs =
+
+  * [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/InputManager.html InputManager] comes ready to run with working input implementations for Mouse, Keyboard and a virtual Joypad.  Multitouch support soon.
+  * Inputs are state based, rather than event based - so code queries the current state of a button, key, position etc.  Use [https://awe6.googlecode.com/svn/trunk/app/src/awe6/extras/Trigger.html Trigger] + [ComponentMessages] if you want to "listen".
+  * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IInputManager.html IInputManager].

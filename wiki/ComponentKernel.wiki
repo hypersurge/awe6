@@ -1,14 +1,11 @@
 #summary All hail to the Kernel!
 
-= Introduction =
-
 [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IKernel.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/kernel.png]
 
 The Kernel is the central component for the awe6 framework.  It contains access to the Managers and keeps the engine ticking.  Literally, the Kernel is the "main loop" and updates all other components on a per frame / interval basis.
 
-= Details =
+= Things you need to know about Kernel =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/Kernel.html Kernel] comes ready to run - you shouldn't need to edit it, extend it or compose it (it's automatically composed in the default AFactory).
+  * Can be used as a service locator - a single point of reference to the other managers.  If you like that sort of thing!
+  * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IKernel.html IKernel].

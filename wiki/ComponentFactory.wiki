@@ -1,0 +1,11 @@
+#summary Everything gets made at the Factory!
+
+[https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IFactory.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/factory.png]
+
+The Factory is your game's best friend - it's both the blueprint and the manufacturer for your game.  The factory creates and populates the [ComponentKernel], all managers and provides answers to runtime configuration requests (like where to go next, or what font a title should be).
+
+= Things you need to know about Factory =
+
+  * [https://awe6.googlecode.com/svn/trunk/app/src/awe6/core/AFactory.html AFactory] contains almost everything you need out of the tin.  Extending this class, override a few methods and you're running!
+  * AFactory takes configuration data (e.g. string, XML etc) and a native application node (e.g. DisplayObject) and builds everything from there using a template pattern.
+  * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IFactory.html IFactory].
