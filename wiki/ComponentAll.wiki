@@ -1,0 +1,3 @@
+#summary Key Components: All
+
+<p align="center">https://awe6.googlecode.com/svn/trunk/docs/images/awe6Overview.png</p>

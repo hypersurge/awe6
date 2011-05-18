@@ -1,4 +1,4 @@
-#summary All hail to the Kernel!
+#summary Key Components: Kernel
 
 [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IKernel.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/kernel.png]
 
@@ -12,3 +12,7 @@ The Kernel is the central component for the awe6 framework.  It contains access 
    * Or constructor inject full Kernel from class to class "tramp" (bad).
    * Or throw good sense out the window and go global! Use a static reference (i.e. a Singleton) to it from your Factory (ugly).
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IKernel.html IKernel].
+  
+== Did you know? ==
+
+  * `isDebug` can be used to write conditional code in your classes to improve building or testing efficiency.

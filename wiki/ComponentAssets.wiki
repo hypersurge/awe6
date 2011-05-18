@@ -1,4 +1,4 @@
-#summary Everyone loves assets!
+#summary Key Components: Assets
 
 [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IAssetManager.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/assets.png]
 
@@ -10,7 +10,11 @@ The !AssetManager provides a (potentially) type safe route to any asset, of any 
 
   * No two projects are the same.  So it is safe to assume that because assets are concrete, reference to them should be too.
    * Consider extending [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/AAssetManager.hx AAssetManager] for your project to include factory methods for each asset - and inject Entities with their required assets from Factory (good).
-   * Or cast IKernel.assets in situation as they arise - e.g. [ComponentScene Scene] or [ComponentEntity Entity] (bad).
+   * Or cast IKernel.assets in situations as they arise - e.g. [ComponentScene Scene] or [ComponentEntity Entity] (bad).
    * Or use string keys and identifiers to reference assets at runtime (ugly).
   * Perhaps a good asset manager is also a [ComponentPreloader Preloader] - when creating these concrete implementations consider their union.
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IAssetManager.html IAssetManager].
+  
+== Did you know? ==
+
+  * Yyped assets (e.g. via haXe generate intrinsics) allows compile time safe querying of any asset which reduces runtime errors significantly.

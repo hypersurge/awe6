@@ -1,4 +1,4 @@
-#summary Everything gets made at the Factory!
+#summary Key Components: Factory
 
 [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IFactory.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/factory.png]
 
@@ -10,3 +10,6 @@ The Factory creates and populates the [ComponentKernel Kernel], all managers and
   * AFactory takes configuration data (e.g. string, XML etc) and a native application node (e.g. !DisplayObject) and builds everything from there using a template pattern.
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IFactory.html IFactory].
   
+== Did you know? ==
+
+  * `isDecached` can be set false to force reloading of runtime loaded assets - great for testing on network deployments.

@@ -1,0 +1,17 @@
+#summary Key Components: Scene
+
+[https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IScene.html https://awe6.googlecode.com/svn/trunk/docs/images/icons/scene.png]
+
+One Scene leads to another.  A game is composed from multiple Scenes - e.g.: Intro, Menu, Game, Results etc.  Each Scene contains it's own [ComponentEntity Entities] who's interaction may lead to the scene changing (e.g. if the game is won).
+
+== Things you should know about Scene ==
+
+  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/Scene.hx Scene] comes ready to run - inject [ComponentEntity Entities] into it, or extend as required.
+  * A Scene can contain [ComponentEntity Entities].
+  * A Scene has a [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IView.html View], which forms the main visible display underneath the [ComponentOverlay Overlay].
+  * When the Scene changes it will trigger a new [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/ISceneTransition.html ISceneTransition], creating a smooth visual change from one to the next.  The default [ComponentFactory Factory] includes a simple fade [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/SceneTransition.hx SceneTransition].
+  * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IScene.html IScene].
+  
+== Did you know? ==
+
+  * Each Scene self determines whether the [ComponentOverlay Overlay] displays pause or mute options.
