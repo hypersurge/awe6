@@ -3,7 +3,7 @@
 	<ModulePrefs title="awe6OverviewImagemap" /> 
 	<Content type="html">
 		<![CDATA[
-			<img src="https://awe6.googlecode.com/svn/trunk/docs/images/awe6Overview.png" width="600" height="600" border="0" alt="awe6 overview" usemap="#awe6Overview" />
+			<img align="center" src="https://awe6.googlecode.com/svn/trunk/docs/images/awe6Overview.png" width="600" height="600" border="0" alt="awe6 overview" usemap="#awe6Overview" />
 			<map name="awe6Overview">
 				<area shape="rect" coords="260,11,352,115" href="http://code.google.com/p/awe6/wiki/ComponentFactory" alt="Factory" title="Factory"    />
 				<area shape="rect" coords="103,41,195,145" href="http://code.google.com/p/awe6/wiki/ComponentOverlay" alt="Overlay" title="Overlay"    />
