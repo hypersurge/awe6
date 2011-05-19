@@ -6,11 +6,13 @@ Please help towards achieving the following tasks:
 
   * Multi-target:
     * Implementation of BasicButton for JEASH & NME tests
+    * Any R&D into injecting native UI callbacks for mobile devices
     * Any R&D into Unity3D
-	* SWC testing (from AS3 target)
+    * SWC testing (from AS3 target)
   * Architecture
-    * Type safe asset demo
+    * Type safe asset demo (e.g. extending AAssetManager)
   * Tutorials:
+    * Make the demo look good (and easy)
     * OOP approach
     * Data driven approach
     * Adapter approach
