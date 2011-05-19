@@ -7,14 +7,14 @@
 	<body>
 	::use 'header.mtt'::::end::
 		<div id="overview">
-			<h1>::config.title::</h1>
-			<h2>::config.subtitle::</h2>
+<!--			<h1>::config.title::</h1>
+			<h2>::config.subtitle::</h2> -->
 			<div id="main">
+				<br/><br/><p align="center"><img src="images/awe6Overview.png" /></p><br/><br/><br/>
 ::if config.generateTodo::
 	::if config.todoLines.length > 0::
 				<p>There are <a href="::config.todoFile::">TODO tasks</a> to be done.</p>
 	::else::
-				<p>There are no pending TODO tasks.</p>
 	::end::
 ::end::
 			</div>
