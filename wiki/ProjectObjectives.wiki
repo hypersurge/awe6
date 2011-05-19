@@ -21,6 +21,8 @@ The framework is [http://www.opensource.org/licenses/mit-license.php open source
 
 High level concepts must be balanced by deployable practical tools.  So this framework comes "ready to run" with a shallow heirarchy providing easy access to frequently required services (e.g. user input, assets and audio).  The heirarchy and associated concepts are:
 
+<p align="center"><wiki:gadget url="https://awe6.googlecode.com/svn/trunk/docs/awe6OverviewImagemapGadget.xml?dc=3" border="0" width="800" height="620" /></p>
+
   * [ComponentFactory Factory]: creates all subsequent components based on configuration.
   * [ComponentKernel Kernel]: handles updates and services.  The "main loop" in gaming terms.
     * [ComponentPreloader Preloader]: loads initial resources.
@@ -45,3 +47,4 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
   # Cross platform interfaces defining top level game functionality. All public signatures are platform agnostic.
   # [http://www.haxe.org HaXe] implementation of all model and controller functionality.  All code can run, or be adapted to run, on multiple targets.
   # Platform specific implementation of view and input functionality.  Can't escape concrete entirely, but anything native is restricted to constructor signatures and internal implementation only.
+
