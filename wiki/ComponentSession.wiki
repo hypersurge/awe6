@@ -9,7 +9,7 @@ As all games are different, and all state persitence requirements different the 
 == Things you should know about Session ==
 
   * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/ASession.hx ASession] comes ready to run (it's created automatically in the default [ComponentFactory Factory]).
-  * Session automatically saves game state to a SharedObject.
+  * Session automatically saves game state to a !SharedObject.
   * Session is the unspoken evil of application design - somewhere arbitration must exist, somewhere concrete values must be retained.  Therefore assume each project should extend ASession for its own requirements:
    * Inject Session properties into Scenes from within Factory (good).
    * Or cast IKernel.session in situations as they arise - e.g. [ComponentScene Scene] or [ComponentEntity Entity] (bad).
