@@ -17,4 +17,4 @@ The !AssetManager provides a (potentially) type safe route to any asset, of any 
   
 == Did you know? ==
 
-  * Yyped assets (e.g. via haXe generate intrinsics) allows compile time safe querying of any asset which reduces runtime errors significantly.
+  * Typed assets (e.g. via haXe generate intrinsics) allows compile time safe querying of any asset which reduces runtime errors significantly.

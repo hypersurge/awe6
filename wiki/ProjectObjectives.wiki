@@ -1,36 +1,38 @@
 #summary Overview of project milestones and objectives.
 #labels Phase-Design,Phase-Requirements,Featured
 
+https://awe6.googlecode.com/svn/trunk/docs/images/icons/awe6.png
+
 = Primary Objective =
 
 Pronounced "awesome"; `awe6` is `game` inverted.
 
-Its purpose is to create a scalable, flexible and approachable tool to assist in the rapid development of quality games.  What types of game, and for what type of platform are intentionally undefined to embrace extensibility.
+Its purpose is to create a scalable, flexible and approachable tool to assist in the rapid development of [DeveloperGallery quality games].  What types of game, and for what type of platform are intentionally undefined to embrace extensibility.
 
 == High Level Abstraction ==
 
-This framework adopts the Entity Component approach (rather than a deep heirarchy structure).  For merits of such an approach please read [http://www.devmaster.net/articles/oo-game-design/ Britt L Hannah's article].  In short: boundaries removed.
+This framework adopts the [ComponentEntity Entity Component] approach (rather than a deep heirarchy structure).  For merits of such an approach please read [http://www.devmaster.net/articles/oo-game-design/ Britt L Hannah's article].  In short: boundaries removed.
 
-All components are created using factory methods, and each component provides further methods to allow injection of child components.  Thus an inversion of control is achieved: a factory populates components based on starting state (configuration) and subsequent controllers defined within those components (reacting to user input).  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code is possible - including runtime adaptive behaviors / "perpetual motion".
+All components are created using factory methods, and each component provides further methods to allow injection of child components.  Thus an inversion of control is achieved: a [ComponentFactory Factory] populates components based on starting state (configuration) and subsequent controllers defined within those components (reacting to user [ComponentInputs input]).  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code is possible - including runtime adaptive behaviors / "perpetual motion".
 
-The interface has been designed to encourage Entities to extend existing libraries whenever possible - awe6 should normally be considered a facade or the "cement between the bricks".
+The [https://awe6.googlecode.com/svn/tags/api/index.html interface] has been designed to encourage [ComponentEntity Entities] to extend existing libraries whenever possible - awe6 should normally be considered a facade or the "cement between the bricks".
 
-The framework is open source, while the option for proprietary components is unrestricted.  The adoption and upgrade rates of the framework is benefited by a permissive license, thus expanding the market opportunity for commercial components.
+The framework is [http://www.opensource.org/licenses/mit-license.php open source], while the option for proprietary components is unrestricted.  The adoption and upgrade rates of the framework is benefited by a permissive license, thus expanding the market opportunity for commercial components.
 
 == Batteries Included ==
 
-High level concepts must be balanced by deployable practical tools.  So this framework comes "ready to run" with a shallow heirarchy providing easy access to frequently required services (e.g. inputs, assets and audio).  The heirarchy and associated concepts are:
+High level concepts must be balanced by deployable practical tools.  So this framework comes "ready to run" with a shallow heirarchy providing easy access to frequently required services (e.g. [ComponentInputs inputs], [ComponentAssets assets] and [ComponentAudio audio]).  The heirarchy and associated concepts are:
 
-  * Factory: creates all subsequent components based on configuration.
-  * Kernel: handles updates and services.
-    * Preloader: loads initial resources.
-    * Assets: handles access to resources.
-    * Session: maintains and arbitrates state.
-    * Audio: handles multi-channel music and sounds.
-    * Inputs: handles UI input: keyboard, mouse, other virtual devices.
-    * Overlay: provides application chrome (including: exit, pause, mute controllers) and view.
-    * Scenes: state machine for collections of active Entities.
-      * Entities: Tree of related and non related components, highly versatile in their purpose.  Additional heirarchy is determined by Factory or Entity design.
+  * [ComponentFactory Factory]: creates all subsequent components based on configuration.
+  * [ComponentKernel Kernel]: handles updates and services.
+    * [ComponentPreloader Preloader]: loads initial resources.
+    * [ComponentAssets Assets]: handles access to resources.
+    * [ComponentSession Session]: maintains and arbitrates state.
+    * [ComponentAudio Audio]: handles multi-channel music and sounds.
+    * [ComponentInputs Inputs]: handles UI input: keyboard, mouse, other virtual devices.
+    * [ComponentOverlay Overlay]: provides application chrome (including: exit, pause, mute controllers) and view.
+    * [ComponentScene Scenes]: state machine for collections of active Entities.
+      * [ComponentEntity Entities]: Tree of related and non related components, highly versatile in their purpose.  Additional heirarchy is determined by Factory or Entity design.
 
 The framework uses synchronous state throughout all default components.  So the "game" can be serialised, paused, rewound or double timed.
 
@@ -44,24 +46,3 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
   * [http://www.haxe.org HaXe] implementation of all model and controller functionality.
   * Platform specific implementation of view functionality.
 
-== Current Progress ==
-
-  * *Code Library:*
-    * Interfaces defined and tested (98%).
-    * Working core implementation targeting Flash (98%).
-    * Working demo and getting started resources (75%).
-  * *Documentation:*
-    * API documentation (90%).
-    * UML diagrams of packages (100%).
-    * Wiki definitions of key concepts (5%).
-    * Examples, demos and tutorials (25%).
-  * *Cross Platform Implementation:*
-    * Flash view (95%).
-    * Javascript view (20%).
-    * C++ view (35%).
-  * *Big Ideas:*
-    * Automated multi platform builds.
-    * Game builder IDE.
-    * Game distribution channel.
-    * More extras: free and commercial channel.
-    * Adaptive runtime behavior systems.

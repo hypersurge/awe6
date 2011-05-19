@@ -4,39 +4,12 @@
 
 Please help towards achieving the following tasks:
 
-  * Inline documentation of Factory & Kernel
-  * Document key components:
-    * [ComponentAgenda]
-    * [ComponentAssetManager]
-    * [ComponentAudioManager]
-    * [ComponentEntity]
-    * [ComponentFactory]
-    * [ComponentInputManager]
-    * [ComponentKernel]
-    * [ComponentMessageManager]
-    * [ComponentOverlay]
-    * [ComponentPreloader]
-    * [ComponentScene]
-    * [ComponentSceneTransition]
-    * [ComponentSession]
-    * [ComponentTextStyle]
-    * [ComponentView]
-  * Hands on:
-    * MessageManager types
-    * Input durations
-    * Audio pause
-    * Asset manager from factory
-    * Entity recursive disposal
-    * Agendas
-    * Kernel native tidyup
-    * Demo graphics & audio
-    * Branding & logo
-    * Touchpad & accelerometer input
+  * Multi-target:
+    * Implementation of BasicButton for JEASH & NME tests
+    * Any R&D into Unity3D
+	* SWC testing (from AS3 target)
   * Architecture
-    * Type safe asset prefabrication
-    * Multi target asset management
-    * Multi target views
-    * Multi target inputs
+    * Type safe asset demo
   * Tutorials:
     * OOP approach
     * Data driven approach

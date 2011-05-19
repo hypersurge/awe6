@@ -6,7 +6,7 @@ Entities can communicate directly using invoker methods or indirectly via observ
 
 == Things you should know about Messages ==
 
-  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/MessageManager.hx Kernel] comes ready to run (it's automatically composed in [ComponentKernel Kernel]).
+  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/MessageManager.hx MessageManager] comes ready to run (it's automatically composed in [ComponentKernel Kernel]).
   * Any [ComponentEntity Entity] can subscribe to messages from any other Entity (or type of Entity).
   * Messages can be anything, from simple strings to complex types.  Handlers are type safe.
   * Messages are rarely needed as they can be unreliable.  Use [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/extras/Trigger.hx Triggers] instead.

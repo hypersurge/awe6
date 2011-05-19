@@ -6,7 +6,7 @@ Sounds and music over multiple channels are handled by the !AudioManager.  It pr
 
 == Things you should know about Audio ==
 
-  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/AudioManager.hx Kernel] comes ready to run (it's automatically composed in [ComponentKernel Kernel]).
+  * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/core/AudioManager.hx AudioManager] comes ready to run (it's automatically composed in [ComponentKernel Kernel]).
   * Any sound must be an [ComponentAssets Asset] referenced by unique key.
   * [https://code.google.com/p/awe6/source/browse/trunk/app/src/awe6/interfaces/EAudioChannel.hx AudioChannels] allow discrete control or transformation of multiple sounds.
   * Implements [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/IAudioManager.html IAudioManager].
