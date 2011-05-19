@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+	<ModulePrefs title="awe6OverviewImagemap" /> 
+	<Content type="html">
+		<![CDATA[
+			<img src="https://awe6.googlecode.com/svn/trunk/docs/images/awe6Overview.png" width="600" height="600" border="0" alt="awe6 overview" usemap="#awe6Overview" />
+			<map name="awe6Overview">
+				<area shape="rect" coords="260,11,352,115" href="http://code.google.com/p/awe6/wiki/ComponentFactory" alt="Factory" title="Factory"    />
+				<area shape="rect" coords="103,41,195,145" href="http://code.google.com/p/awe6/wiki/ComponentOverlay" alt="Overlay" title="Overlay"    />
+				<area shape="rect" coords="404,43,496,147" href="http://code.google.com/p/awe6/wiki/ComponentPreloader" alt="Preloader" title="Preloader"    />
+				<area shape="rect" coords="33,126,125,230" href="http://code.google.com/p/awe6/wiki/ComponentInputs" alt="Inputs" title="Inputs"    />
+				<area shape="rect" coords="469,123,561,227" href="http://code.google.com/p/awe6/wiki/ComponentAssets" alt="Assets" title="Assets"    />
+				<area shape="rect" coords="103,208,195,312" href="http://code.google.com/p/awe6/wiki/ComponentAudio" alt="Audio" title="Audio"    />
+				<area shape="rect" coords="403,212,495,316" href="http://code.google.com/p/awe6/wiki/ComponentSession" alt="Session" title="Session"    />
+				<area shape="rect" coords="231,234,368,338" href="http://code.google.com/p/awe6/wiki/ComponentScene" alt="Scene" title="Scene"    />
+				<area shape="rect" coords="111,374,486,478" href="http://code.google.com/p/awe6/wiki/ComponentEntity" alt="Entity" title="Entity"    />
+				<area shape="rect" coords="251,478,349,570" href="http://code.google.com/p/awe6/wiki/ComponentMessages" alt="Messages" title="Messages"    />
+				<area shape="rect" coords="208,140,383,232" href="http://code.google.com/p/awe6/wiki/ComponentKernel" alt="Kernel" title="Kernel"    />
+			</map>
+		]]>
+	</Content> 
+</Module>
