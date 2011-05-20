@@ -33,7 +33,7 @@ class TextStyle implements ITextStyle
 {
 	public var font:String;
 	public var size:Float;
-	public var color:UInt;
+	public var color:Int;
 	public var align:ETextAlign;
 	public var spacingHorizontal:Float;
 	public var spacingVertical:Float;
@@ -42,7 +42,7 @@ class TextStyle implements ITextStyle
 	public var thickness:Float;
 	public var filters:Array<Dynamic>;
 
-	public function new( ?font:String, ?size:Float, ?color:UInt, ?isBold:Bool = false, ?isItalic = false, ?align:ETextAlign, ?spacingHorizontal:Float, ?spacingVertical:Float, ?thickness:Float = 0, ?filters:Array<Dynamic> ) 
+	public function new( ?font:String, ?size:Float, ?color:Int, ?isBold:Bool = false, ?isItalic = false, ?align:ETextAlign, ?spacingHorizontal:Float, ?spacingVertical:Float, ?thickness:Float = 0, ?filters:Array<Dynamic> ) 
 	{
 		this.font = ( font != null ) ? font : "_sans";
 		this.size = ( size != null ) ? size : 12;
