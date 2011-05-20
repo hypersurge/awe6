@@ -34,18 +34,21 @@ import flash.display.Sprite;
 class View extends Process, implements IView
 {
 	public var parent( __get_parent, null ):IView;
-	public var priority( __get_priority, __set_priority ):Int;
-	public var isVisible( default, __set_isVisible ):Bool;	
 	public var sprite( default, null ):Sprite;
+	public var priority( __get_priority, __set_priority ):Int;
+	public var owner( default, null ):Dynamic;
+	public var isVisible( default, __set_isVisible ):Bool;	
+	public var isInViewStack( __get_isInViewStack, null ):Bool;	
 	
 	private var _isDirty:Bool;
 	private var _container:Sprite;
 	private var _children:Array<View>;
 	
-	public function new( kernel:IKernel, ?sprite:Sprite, ?priority:Int = 0 ) 
+	public function new( kernel:IKernel, ?sprite:Sprite, ?priority:Int = 0, ?owner:Dynamic ) 
 	{
 		this.sprite = ( sprite != null ) ? sprite : new Sprite();
 		this.priority = priority;
+		this.owner = owner;
 		super( kernel );		
 	}
 	
@@ -148,5 +151,13 @@ class View extends Process, implements IView
 	}
 	
 	private function __get_parent():IView { return parent; }
+	
+	private function __get_isInViewStack():Bool
+	{
+		if ( !isVisible ) return false;
+		if ( owner == _kernel ) return true;
+		if ( parent == null ) return false;
+		return parent.isInViewStack;
+	}
 }
 
