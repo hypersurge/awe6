@@ -29,6 +29,10 @@ package awe6.interfaces;
 interface IView implements IPriority, implements IDisposable, implements IUpdateable
 {
 	/**
+	 * Optional: the object who this view represents.
+	 */
+	public var owner( default, null ):Dynamic;
+	/**
 	 * The parent view of this view.
 	 * <p>The reference is null if this view has no parent (for exemple a view not in the view traversal stack).</p>
 	 */
@@ -38,6 +42,11 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	 * <p>If true the view will be displayed, if false the view is hidden.</p>
 	 */
 	var isVisible( default, __set_isVisible ):Bool;
+	/**
+	 * Determined by whether this view is visible and included in a visible branch of the view stack (i.e. actually has the potential to be drawn within the overlay).
+	 * <p>If true the view is potentially visible, if false the view is impossible to be seen.</p>
+	 */
+	var isInViewStack( __get_isInViewStack, null ):Bool;	
 	/**
 	 * Adds a new view child to this view. 
 	 * <p>A view can have multiple children, and when you add a child to a view, it is automatically connected to the parent node through its parent property.</p>

@@ -25,13 +25,10 @@ import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
-import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
-import flash.display.SimpleButton;
 import flash.display.Sprite;
-import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 
 /**
@@ -39,10 +36,9 @@ import flash.filters.BlurFilter;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class Overlay extends Process, implements IOverlayProcess
+class Overlay extends Entity, implements IOverlayProcess
 {
 	public var pauseEntity( __get_pauseEntity, __set_pauseEntity ):IEntity;
-	public var view( __get_view, null ):IView;
 	
 	private var _sprite:Sprite;
 	private var _background:Bitmap;
@@ -60,24 +56,25 @@ class Overlay extends Process, implements IOverlayProcess
 	private var _flashStartingDuration:Float;
 	private var _flashAsTime:Bool;
 	private var _wasMute:Bool;	
-	private var _buttonBack:SimpleButton;
-	private var _buttonMute:SimpleButton;
-	private var _buttonUnmute:SimpleButton;
-	private var _buttonPause:SimpleButton;
-	private var _buttonUnpause:SimpleButton;
+	private var _buttonBack:BasicButton;
+	private var _buttonMute:BasicButton;
+	private var _buttonUnmute:BasicButton;
+	private var _buttonPause:BasicButton;
+	private var _buttonUnpause:BasicButton;
 	
 	public function new( kernel:IKernel, ?background:BitmapData, ?backUp:BitmapData, ?backOver:BitmapData, ?muteUp:BitmapData, ?muteOver:BitmapData, ?unmuteUp:BitmapData, ?unmuteOver:BitmapData, ?pauseUp:BitmapData, ?pauseOver:BitmapData, ?unpauseUp:BitmapData, ?unpauseOver:BitmapData, ?pauseBlur:Float = 8, ?pauseColor:UInt = 0x000000, ?pauseAlpha:Float = .35  )
 	{
 		_background = new Bitmap( background );
-		_buttonBack = new SimpleButton( new Bitmap( backUp ), new Bitmap( backOver ), new Bitmap( backOver ), new Bitmap( backUp ) );
-		_buttonMute = new SimpleButton( new Bitmap( muteUp ), new Bitmap( muteOver ), new Bitmap( muteOver ), new Bitmap( muteUp ) );
-		_buttonUnmute = new SimpleButton( new Bitmap( unmuteUp ), new Bitmap( unmuteOver ), new Bitmap( unmuteOver ), new Bitmap( unmuteUp ) );
-		_buttonPause = new SimpleButton( new Bitmap( pauseUp ), new Bitmap( pauseOver ), new Bitmap( pauseOver ), new Bitmap( pauseUp ) );
-		_buttonUnpause = new SimpleButton( new Bitmap( unpauseUp ), new Bitmap( unpauseOver ), new Bitmap( unpauseOver ), new Bitmap( unpauseUp ) );
+		_buttonBack = new BasicButton( kernel, backUp, backOver );
+		_buttonMute = new BasicButton( kernel, muteUp, muteOver );
+		_buttonUnmute = new BasicButton( kernel, unmuteUp, unmuteOver );
+		_buttonPause = new BasicButton( kernel, pauseUp, pauseOver );
+		_buttonUnpause = new BasicButton( kernel, unpauseUp, unpauseOver );
 		_pauseBlur = pauseBlur;
 		_pauseColor = pauseColor;
 		_pauseAlpha = pauseAlpha;
-		super( kernel );
+		_sprite = new Sprite();
+		super( kernel, _sprite );
 	}
 	
 	override private function _init():Void 
@@ -104,32 +101,29 @@ class Overlay extends Process, implements IOverlayProcess
 		_flashSprite = new Sprite();
 		_flashSprite.mouseEnabled = false;
 		_flashSprite.blendMode = BlendMode.ADD;
-		_flashSprite.graphics.beginFill( 0xFFFFFF );
-		_flashSprite.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		_flashStartingAlpha = 1;
 		_flashAsTime = true;
 		_flashDuration = _flashStartingDuration = 100;
 		
-		_buttonBack.addEventListener( MouseEvent.CLICK, _onClickBack );
-		_buttonMute.addEventListener( MouseEvent.CLICK, _onClickMute );
-		_buttonUnmute.addEventListener( MouseEvent.CLICK, _onClickUnmute );
-		_buttonPause.addEventListener( MouseEvent.CLICK, _onClickPause );
-		_buttonUnpause.addEventListener( MouseEvent.CLICK, _onClickUnpause );
+		_buttonBack.onClickCallback = callback( activateButton, EOverlayButton.BACK );
+		_buttonMute.onClickCallback = callback( activateButton, EOverlayButton.MUTE );
+		_buttonPause.onClickCallback = callback( activateButton, EOverlayButton.PAUSE );
+		_buttonUnmute.onClickCallback = callback( activateButton, EOverlayButton.UNMUTE );
+		_buttonUnpause.onClickCallback = callback( activateButton, EOverlayButton.UNPAUSE );
 		
-		_sprite = new Sprite();
 		_sprite.mouseEnabled = false;
 		_sprite.addChild( _flashSprite );
 		_sprite.addChild( _pauseSprite );
 		_sprite.addChild( _progressSprite );
 		_sprite.addChild( _background );
-		_sprite.addChild( _buttonBack );
-		_sprite.addChild( _buttonUnmute );
-		_sprite.addChild( _buttonMute );
-		_sprite.addChild( _buttonUnpause );
-		_sprite.addChild( _buttonPause );
+		addEntity( _buttonBack, true, 21 );
+		addEntity( _buttonUnmute, true, 22 );
+		addEntity( _buttonMute, true, 23 );
+		addEntity( _buttonUnpause, true, 24 );
+		addEntity( _buttonPause, true, 25 );
 		
-		var l_height:Float = _buttonBack.upState.height;
-		var l_width:Float = _buttonBack.upState.width;
+		var l_height:Float = _buttonBack.height;
+		var l_width:Float = _buttonBack.width;
 		var l_x:Float = _kernel.factory.width - ( l_width * 4 );
 		var l_y:Float = l_height;
 		positionButton( EOverlayButton.BACK, l_x, l_y );
@@ -137,15 +131,7 @@ class Overlay extends Process, implements IOverlayProcess
 		positionButton( EOverlayButton.UNMUTE, l_x, l_y );
 		positionButton( EOverlayButton.PAUSE, l_x += l_width, l_y );
 		positionButton( EOverlayButton.UNPAUSE, l_x, l_y );
-		
-		view = new View( _kernel, _sprite );
 	}
-	
-	private function _onClickBack( event:MouseEvent ):Void { activateButton( EOverlayButton.BACK ); }
-	private function _onClickMute( event:MouseEvent ):Void { activateButton( EOverlayButton.MUTE ); }
-	private function _onClickUnmute( event:MouseEvent ):Void { activateButton( EOverlayButton.UNMUTE ); }
-	private function _onClickPause( event:MouseEvent ):Void { activateButton( EOverlayButton.PAUSE ); }
-	private function _onClickUnpause( event:MouseEvent ):Void { activateButton( EOverlayButton.UNPAUSE ); }
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
@@ -169,17 +155,12 @@ class Overlay extends Process, implements IOverlayProcess
 	
 	override private function _disposer():Void 
 	{
-		_buttonBack.removeEventListener( MouseEvent.CLICK, _onClickBack );
-		_buttonMute.removeEventListener( MouseEvent.CLICK, _onClickMute );
-		_buttonUnmute.removeEventListener( MouseEvent.CLICK, _onClickUnmute );
-		_buttonPause.removeEventListener( MouseEvent.CLICK, _onClickPause );
-		_buttonUnpause.removeEventListener( MouseEvent.CLICK, _onClickUnpause );
 		if ( pauseEntity != null ) pauseEntity.dispose();
 		view.dispose();
 		super._disposer();		
 	}
 	
-	private function _getButton( type:EOverlayButton ):SimpleButton
+	private function _getButton( type:EOverlayButton ):BasicButton
 	{
 		return switch( type )
 		{
@@ -194,12 +175,14 @@ class Overlay extends Process, implements IOverlayProcess
 	
 	public function showButton( type:EOverlayButton, ?isVisible:Bool = true ):Void
 	{
-		_getButton( type ).visible = isVisible;
+		var l_button:BasicButton = _getButton( type );
+		if ( isVisible ) addEntity( l_button, true );
+		else removeEntity( l_button, true );
 	}
 	
 	public function positionButton( type:EOverlayButton, x:Float, y:Float, ?alpha:Float ):Void
 	{
-		var l_button:SimpleButton = _getButton( type );
+		var l_button:BasicButton = _getButton( type );
 		l_button.x = x;
 		l_button.y = y;
 		if ( alpha != null ) l_button.alpha = alpha;		
@@ -219,8 +202,11 @@ class Overlay extends Process, implements IOverlayProcess
 		showButton( EOverlayButton.UNPAUSE, false );
 	}
 	
-	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1 ):Void
+	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:UInt = 0xFFFFFF ):Void
 	{
+		_flashSprite.graphics.clear();
+		_flashSprite.graphics.beginFill( color );
+		_flashSprite.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
 		_flashDuration = _flashStartingDuration = duration;
 		_flashAsTime = asTime;
@@ -231,26 +217,26 @@ class Overlay extends Process, implements IOverlayProcess
 	{
 		switch( type )
 		{
-			case BACK : if ( _buttonBack.visible )
+			case BACK : if ( _buttonBack.view.isInViewStack )
 			{
 				if ( !_kernel.isActive ) activateButton( EOverlayButton.UNPAUSE );
 				_drawPause( false );
 				_kernel.resume();
 				_kernel.scenes.back();
 			}
-			case MUTE : if ( _buttonMute.visible )
+			case MUTE : if ( ( _buttonMute.view.isInViewStack ) )
 			{
 				showButton( EOverlayButton.MUTE, false );
 				showButton( EOverlayButton.UNMUTE, true );
 				_kernel.audio.isMute = true;
 			}
-			case UNMUTE : if ( _buttonUnmute.visible && !_buttonUnpause.visible )
+			case UNMUTE : if ( _buttonUnmute.view.isInViewStack && !_buttonUnpause.view.isInViewStack )
 			{
 				showButton( EOverlayButton.MUTE, true );
 				showButton( EOverlayButton.UNMUTE, false );
 				_kernel.audio.isMute = false;
 			}
-			case PAUSE : if ( _buttonPause.visible )
+			case PAUSE : if ( _buttonPause.view.isInViewStack )
 			{
 				_wasMute = _kernel.audio.isMute;
 				showButton( EOverlayButton.PAUSE, false );
@@ -259,7 +245,7 @@ class Overlay extends Process, implements IOverlayProcess
 				_drawPause( true );
 				activateButton( EOverlayButton.MUTE );
 			}
-			case UNPAUSE : if ( _buttonUnpause.visible )
+			case UNPAUSE : if ( _buttonUnpause.view.isInViewStack )
 			{
 				showButton( EOverlayButton.PAUSE, true );
 				showButton( EOverlayButton.UNPAUSE, false );
@@ -279,8 +265,6 @@ class Overlay extends Process, implements IOverlayProcess
 		try { _pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite ); }
 		catch ( error:Dynamic ) {}
 	}
-	
-	private function __get_view():IView { return view; }
 	
 	private function __get_pauseEntity():IEntity { return pauseEntity; }
 	private function __set_pauseEntity( value:IEntity ):IEntity

@@ -68,6 +68,7 @@ interface IOverlay
 	 * @param	?duration	The period of time over which the flash should fade to 0.
 	 * @param	?asTime	If true treats the time as milliseconds, otherwise as frame updates.
 	 * @param	?startingAlpha	The alpha at which the flash starts.  Range: 0...1.
+	 * @param	?color	The color of the flash.  Defaults to white.
 	 */
-	function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1 ):Void;
+	function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:UInt = 0xFFFFFF ):Void;
 }

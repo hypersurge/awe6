@@ -102,7 +102,7 @@ class Kernel extends Process, implements IKernel
 	{
 		this.factory = factory;
 		tools = _tools = new Tools( this );
-		_view = new View( this, sprite );
+		_view = new View( this, sprite, 0, this );
 		_stage = sprite.stage;
 		super( this );
 	}

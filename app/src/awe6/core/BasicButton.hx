@@ -27,45 +27,53 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.DisplayObject;
+import flash.display.IBitmapDrawable;
 import flash.display.Sprite;
 
 class BasicButton extends Entity
 {
+	public var x( default, __set_x ):Float;
+	public var y( default, __set_y ):Float;
+	public var width( default, __set_width ):Float;
+	public var height( default, __set_height ):Float;
+	public var alpha( default, __set_alpha ):Float;
+	public var isOver( default, null ):Bool;
+	public var onClickCallback:Void->Void;
+	public var onRollOverCallback:Void->Void;
+	public var onRollOutCallback:Void->Void;
+	public var displaceX:Float;
+	public var displaceY:Float;
+	
 	private var _stateUp:_HelperState;
 	private var _stateOver:_HelperState;
-	private var _x:Int;
-	private var _y:Int;
-	private var _width:Int;
-	private var _height:Int;
-	private var _key:EKey;
-	private var _onClickCallback:Void->Void;
-	private var _onRollOverCallback:Void->Void;
-	private var _onRollOutCallback:Void->Void;
+	private var _keyType:EKey;
 	private var _sprite:Sprite;
-	private var _isOver:Bool;
 	
-	public function new( kernel:IKernel, up:BitmapData, over:BitmapData, x:Int, y:Int, ?key:EKey, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void )
+	public function new( kernel:IKernel, up:IBitmapDrawable, over:IBitmapDrawable, ?x:Float = 0, ?y:Float = 0, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void )
 	{
 		_stateUp = new _HelperState( kernel, up );
 		_stateOver = new _HelperState( kernel, over );
-		_x = x;
-		_y = y;
-		_width = up.width;
-		_height = up.height;
-		_key = key;
-		_onClickCallback = onClick;
-		_onRollOverCallback = onRollOver;
-		_onRollOutCallback = onRollOut;
+		Reflect.setField( this, "x", x );
+		Reflect.setField( this, "y", y );
+		width = _stateUp.width;
+		height = _stateUp.height;
+		_keyType = key;
+		this.onClickCallback = onClickCallback;
+		this.onRollOverCallback = onRollOverCallback;
+		this.onRollOutCallback = onRollOutCallback;
 		_sprite = new Sprite();
-		_sprite.x = _x;
-		_sprite.y = _y;
+		_sprite.x = this.x;
+		_sprite.y = this.y;
 		super( kernel, _sprite );
 	}
 	
 	override private function _init():Void
 	{
 		super._init();
-		_isOver = false;
+		alpha = 1;
+		isOver = false;
+		displaceX = displaceY = 0;
 		addEntity( _stateUp, EAgenda.SUB_TYPE( _HelperEState.UP ), true );
 		addEntity( _stateOver, EAgenda.SUB_TYPE( _HelperEState.OVER ), true );
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
@@ -74,16 +82,18 @@ class BasicButton extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x, _kernel.inputs.mouse.y, _x, _y, _width, _height );
-		if ( l_isOver && !_isOver ) onRollOver();
-		if ( !l_isOver && _isOver ) onRollOut();
-		_isOver = l_isOver;
-		if ( _isOver && _kernel.inputs.mouse.getIsButtonRelease() ) onClick();
-		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) ) onClick();
+		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x, _kernel.inputs.mouse.y, x, y, width, height );
+		if ( l_isOver && !isOver ) onRollOver();
+		if ( !l_isOver && isOver ) onRollOut();
+		isOver = l_isOver;
+		if ( isOver && _kernel.inputs.mouse.getIsButtonRelease() ) onClick();
+		if ( ( _keyType != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _keyType ) ) ) onClick();
 	}
 	
-	private function _isPointInsideRectangle( pointX:Int, pointY:Int, rectX:Int, rectY:Int, rectWidth:Int, rectHeight:Int ):Bool
+	private function _isPointInsideRectangle( pointX:Float, pointY:Float, rectX:Float, rectY:Float, rectWidth:Float, rectHeight:Float ):Bool
 	{
+		pointX -= displaceX;
+		pointY -= displaceY;
 		if ( pointX < rectX ) return false;
 		if ( pointY < rectY ) return false;
 		if ( pointX > ( rectX + rectWidth ) ) return false;
@@ -91,43 +101,48 @@ class BasicButton extends Entity
 		return true;
 	}
 	
-	override private function _disposer():Void 
-	{
-		super._disposer();		
-	}
-	
 	public function onClick():Void
 	{
-		trace( "click" );
-		if ( _onClickCallback == null ) return;
-		Reflect.callMethod( this, _onClickCallback, [] );
+		if ( onClickCallback == null ) return;
+		Reflect.callMethod( this, onClickCallback, [] );
 	}
 	
 	public function onRollOver():Void
 	{
-		trace( "rollOver" );
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.OVER ) );
-		if ( _onRollOverCallback == null ) return;
-		Reflect.callMethod( this, _onRollOverCallback, [] );		
+		if ( onRollOverCallback == null ) return;
+		Reflect.callMethod( this, onRollOverCallback, [] );		
 	}
 	
 	public function onRollOut():Void
 	{
-		trace( "rollOut" );
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
-		if ( _onRollOutCallback == null ) return;
-		Reflect.callMethod( this, _onRollOutCallback, [] );		
+		if ( onRollOutCallback == null ) return;
+		Reflect.callMethod( this, onRollOutCallback, [] );		
 	}
 	
+	public function setPosition( x:Float, y:Float ):Void { this.x = x; this.y = y; }
+	private function __set_x( value:Float ):Float { x = value; _sprite.x = x; return x; }
+	private function __set_y( value:Float ):Float { y = value; _sprite.y = y; return y; }
+	private function __set_width( value:Float ):Float { width = value;  return width; }
+	private function __set_height( value:Float ):Float { height = value;  return height; }	
+	private function __set_alpha( value:Float ):Float { alpha = value; _sprite.alpha = alpha; return alpha; }
 }
 
 private class _HelperState extends Entity
 {
-	public function new( kernel:IKernel, bitmapData:BitmapData )
+	public var width:Float;
+	public var height:Float;
+	
+	public function new( kernel:IKernel, bitmapDrawable:IBitmapDrawable )
 	{
 		var l_sprite:Sprite = new Sprite();
-		var l_bitmap:Bitmap = new Bitmap( bitmapData );
-		l_sprite.addChild( l_bitmap );
+		var l_displayObject:DisplayObject = cast Std.is( bitmapDrawable, BitmapData ) ? new Bitmap( cast bitmapDrawable ) : bitmapDrawable;
+		l_sprite.addChild( l_displayObject );
+		l_sprite.useHandCursor = true;
+		l_sprite.buttonMode = true;
+		width = l_sprite.width;
+		height = l_sprite.height;
 		super( kernel, l_sprite );
 	}
 }
