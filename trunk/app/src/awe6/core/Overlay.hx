@@ -46,7 +46,7 @@ class Overlay extends Entity, implements IOverlayProcess
 	private var _pauseSprite:Sprite;
 	private var _pauseView:View;
 	private var _pauseSnapshot:BitmapData;
-	private var _pauseColor:UInt;
+	private var _pauseColor:Int;
 	private var _pauseAlpha:Float;
 	private var _pauseBlur:Float;
 	private var _flashSprite:Sprite;
@@ -62,7 +62,7 @@ class Overlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( kernel:IKernel, ?background:BitmapData, ?backUp:BitmapData, ?backOver:BitmapData, ?muteUp:BitmapData, ?muteOver:BitmapData, ?unmuteUp:BitmapData, ?unmuteOver:BitmapData, ?pauseUp:BitmapData, ?pauseOver:BitmapData, ?unpauseUp:BitmapData, ?unpauseOver:BitmapData, ?pauseBlur:Float = 8, ?pauseColor:UInt = 0x000000, ?pauseAlpha:Float = .35  )
+	public function new( kernel:IKernel, ?background:BitmapData, ?backUp:BitmapData, ?backOver:BitmapData, ?muteUp:BitmapData, ?muteOver:BitmapData, ?unmuteUp:BitmapData, ?unmuteOver:BitmapData, ?pauseUp:BitmapData, ?pauseOver:BitmapData, ?unpauseUp:BitmapData, ?unpauseOver:BitmapData, ?pauseBlur:Float = 8, ?pauseColor:Int = 0x000000, ?pauseAlpha:Float = .35  )
 	{
 		_background = new Bitmap( background );
 		_buttonBack = new BasicButton( kernel, backUp, backOver );
@@ -202,7 +202,7 @@ class Overlay extends Entity, implements IOverlayProcess
 		showButton( EOverlayButton.UNPAUSE, false );
 	}
 	
-	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:UInt = 0xFFFFFF ):Void
+	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void
 	{
 		_flashSprite.graphics.clear();
 		_flashSprite.graphics.beginFill( color );
@@ -224,7 +224,7 @@ class Overlay extends Entity, implements IOverlayProcess
 				_kernel.resume();
 				_kernel.scenes.back();
 			}
-			case MUTE : if ( ( _buttonMute.view.isInViewStack ) )
+			case MUTE : if ( _buttonMute.view.isInViewStack )
 			{
 				showButton( EOverlayButton.MUTE, false );
 				showButton( EOverlayButton.UNMUTE, true );

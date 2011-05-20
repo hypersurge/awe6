@@ -48,7 +48,7 @@ class PrePreloader extends Sprite
 	
 	private var _isDecached:Bool;
 	private var _url:String;
-	private var _bgColor:UInt;
+	private var _bgColor:Int;
 	private var _isLocal:Bool;
 	private var _stage:Stage;
 	private var _loader:Loader;
@@ -87,7 +87,7 @@ class PrePreloader extends Sprite
 		
 		graphics.beginFill( _bgColor );
 		graphics.drawRect( 0, 0, _stage.stageWidth, _stage.stageHeight );
-		var l_color:UInt = _bgColor < 0x808080 ? 0xFFFFFF : 0x000000;
+		var l_color:Int = _bgColor < 0x808080 ? 0xFFFFFF : 0x000000;
 		_progressBar = new Sprite();
 		_progressBarLine = new Sprite();
 		_progressBarLine.graphics.beginFill( l_color, .75 );
