@@ -100,7 +100,7 @@ class MessageManager extends Process, implements IMessageManager
 		return l_isBreak;
 	}
 	
-	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Class<Dynamic>>>
+	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Dynamic>>
 	{
 		var l_result:FastList<_HelperSubscription<Dynamic,Dynamic>> = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 		for ( i in _subscriptions )
