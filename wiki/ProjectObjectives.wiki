@@ -13,7 +13,7 @@ This framework adopts an entity component approach (rather than a deep heirarchy
 
 All components are created using factory methods, and each component provides further methods to allow injection of child components.  Thus an inversion of control is achieved: a Factory populates components based on starting state (configuration) and subsequent controllers defined within those components (reacting to user input).  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code becomes possible - including runtime adaptation.
 
-The [https://awe6.googlecode.com/svn/tags/api/index.html interface] has been designed to encourage entities to extend existing libraries whenever possible - awe6 is a framework rather than a games development kit so should normally be considered a facade or the "cement between the bricks".
+The [https://awe6.googlecode.com/svn/tags/api/index.html interface] has been designed to encourage entities to extend existing libraries whenever possible - awe6 is a framework rather than a games development kit so (with the exception of the [ProjectObjectives#Batteries_included batteries included]) should normally be considered a facade or the "cement between the bricks".
 
 The framework is [http://www.opensource.org/licenses/mit-license.php open source], while the option for proprietary components is unrestricted.  The adoption and upgrade rates of the framework is benefited by a permissive license, thus expanding the market opportunity for commercial components.
 
@@ -47,4 +47,3 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
   # Cross platform interfaces defining top level game functionality. All public signatures are platform agnostic.
   # [http://www.haxe.org HaXe] implementation of all model and controller functionality.  All code can run, or be adapted to run, on multiple targets.
   # Platform specific implementation of view and input functionality.  Can't escape concrete entirely, but anything native is restricted to constructor signatures and internal implementation only.
-
