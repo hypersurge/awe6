@@ -21,7 +21,10 @@
  */
 
 package demo.scenes;
+import flash.display.BitmapData;
+#if flash
 import assets.Background;
+#end
 import awe6.core.Scene;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
@@ -49,7 +52,14 @@ class AScene extends Scene
 	{
 		super._init();
 		
-		addEntity( new Image( _kernel, new Background() ), true, 0 );
+		var l_background:BitmapData;
+		#if flash
+		l_background = new Background();
+		#elseif js
+		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/";
+		l_background = _getBitmapData( l_folder + "scenes/Background.png", 600, 400 );
+		#end
+		addEntity( new Image( _kernel, l_background ), true, 0 );
 		var l_sceneID:String = _tools.toCamelCase( Std.string( type ), true );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneID + ".title" ) );
 		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle() );
@@ -58,5 +68,15 @@ class AScene extends Scene
 		
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
+	
+	#if js
+	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):flash.display.BitmapData
+	{
+		var l_result:flash.display.BitmapData = new flash.display.BitmapData( width, height, true );
+		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
+		return l_result;
+	}
+	#end
+	
 	
 }

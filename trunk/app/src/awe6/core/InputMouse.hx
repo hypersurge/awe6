@@ -85,12 +85,14 @@ class InputMouse extends Process, implements IInputMouse
 		_stage.addEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
 		_stage.addEventListener( Event.DEACTIVATE, _reset );
 		
+		#if flash
 		_mouseClicks = new Loader();
 //		_mouseClicks.load( new URLRequest( "mouseClicks.swf" ) );
 //		_mouseClicks.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 		var l_data:String = "4657530a7901000060003e80003e80001801004411000000004302ffffff3f031e010000885f0009002a00536563757269747900616c6c6f77496e736563757265446f6d61696e00616c6c6f77446f6d61696e006d6f757365427574746f6e730041536e6174697665006f6e456e7465724672616d65005f7769647468005f686569676874009609000800070100000008011c960200080252179609000800070100000008011c96020008035217961300080407020000000720030000070200000008053d3c96020008068e0800000000026a006a00960c000702000000070100000008043d129d020012009609000401080707320000004f9902000d009609000401080707640000004f960c000704000000070100000008043d129d020012009609000401080807320000004f9902000d009609000401080807640000004f1d00bf0025000000010060003e80003e80010000000001140000000011158fa0fa1e8830e9830e87d0e97d0000860606010001000040000000";
 		var l_bytes:ByteArray = _tools.hexToBytes( l_data );
 		_mouseClicks.loadBytes( l_bytes );
+		#end
 		_reset();
 	}
 	
@@ -109,8 +111,10 @@ class InputMouse extends Process, implements IInputMouse
 		super._updater( deltaTime );
 		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, deltaTime );
+		#if flash
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
 		_handleButton( EMouseButton.RIGHT, _isRightDown(), deltaTime );
+		#end
 		
 		deltaScroll = scroll - _scrollPrev;
 		_scrollPrev = scroll;

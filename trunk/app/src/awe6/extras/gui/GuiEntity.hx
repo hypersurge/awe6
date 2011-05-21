@@ -38,8 +38,10 @@ class GuiEntity extends Entity
 	
 	public function new( kernel:IKernel, ?width:Float = 100, ?height:Float = 100, ?isMasked:Bool = true )
 	{
-		this.isFlippedX = false;
-		this.isFlippedY = false;
+		Reflect.setField( this, "isFlippedX", false );
+		Reflect.setField( this, "isFlippedY", false );
+//		this.isFlippedX = false;
+//		this.isFlippedY = false;
 		this.width = width;
 		this.height = height;
 		_sprite = new Sprite();

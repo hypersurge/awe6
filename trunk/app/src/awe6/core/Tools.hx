@@ -270,8 +270,10 @@ class Tools implements ITools
 	public function bytesToHex( bytesData:BytesData ):String
 	{
 		var l_string:String = "";
+		#if flash
 		bytesData.position = 0;
 		for ( i in 0...bytesData.length ) l_string += intToHex( bytesData.readUnsignedByte() );
+		#end
 		return l_string;
 	}
 	
@@ -294,10 +296,14 @@ class Tools implements ITools
 				var l_p2:Int = l_hex.indexOf( l_c2 );
 				if ( l_p2 >= 16 ) l_p2 -= 6;
 				if ( l_p2 >= 16 || l_p2 < 0 ) l_isValid = false;
+				#if flash
 				l_bytesData.writeByte( ( l_p1 << 4 ) + l_p2 );
+				#end
 			}
 		}
+		#if flash
 		l_bytesData.position = 0;
+		#end
 		return l_isValid ? l_bytesData: null;
 	}	
 	

@@ -62,7 +62,7 @@ class Sphere extends Entity
 		_vy = ( Math.random() - .5 ) * 20;
 		_x = _kernel.factory.width * Math.random();
 		_y = _kernel.factory.height * Math.random();
-		var l_source:BitmapData = new demo.assets.Sphere( _kernel );
+		var l_source:BitmapData = new assets.Sphere();
 		var l_bitmapData:BitmapData = new BitmapData( Std.int( _width ), Std.int( _height ), true, 0x00 );
 		var l_matrix:Matrix = new Matrix();
 		l_matrix.scale( l_scale, l_scale );

@@ -21,13 +21,11 @@
  */
 
 package demo.scenes;
-import assets.ButtonOver;
-import assets.ButtonUp;
 import awe6.core.BasicButton;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;
-import demo.entities.TestA;
-import demo.entities.TestB;
+//import demo.entities.TestA;
+//import demo.entities.TestB;
 import demo.gui.Button;
 
 class Intro extends AScene
@@ -41,16 +39,16 @@ class Intro extends AScene
 	override private function _init():Void 
 	{
 		super._init();	
+		#if flash
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.next" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
-		var l_a:TestA = new TestA( _kernel );
+		#end
+/*		var l_a:TestA = new TestA( _kernel );
 		var l_b:TestB = new TestB( _kernel, l_a );
 		addEntity( l_a );
-		addEntity( l_b );
-		
-		var l_but:BasicButton = new BasicButton( _kernel, new ButtonUp(), new ButtonOver(), 100, 50 );
-		addEntity( l_but, true );
+		addEntity( l_b );*/
+
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
