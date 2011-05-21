@@ -39,11 +39,9 @@ class Intro extends AScene
 	override private function _init():Void 
 	{
 		super._init();	
-		#if flash
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.next" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
-		#end
 /*		var l_a:TestA = new TestA( _kernel );
 		var l_b:TestB = new TestB( _kernel, l_a );
 		addEntity( l_a );

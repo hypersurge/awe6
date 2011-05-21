@@ -40,9 +40,10 @@ class Button extends GuiEntity
 	private var _marginHeight:Float;
 	private var _isBlank:Bool;
 
-	public function new( kernel:IKernel, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void, ?label:String = DEFAULT_LABEL, ?width:Float = 100, ?height:Float = 25, ?marginWidth:Float = 10, ?marginHeight:Float = 10, ?isBlank:Bool = false )
+	public function new( kernel:IKernel, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void, ?label:String = null, ?width:Float = 100, ?height:Float = 25, ?marginWidth:Float = 10, ?marginHeight:Float = 10, ?isBlank:Bool = false )
 	{
 		_key = key;
+		if ( label == null ) label = DEFAULT_LABEL;
 		_spriteUp = new Sprite();
 		_spriteOver = new Sprite();
 		_basicButton = new BasicButton( kernel, _spriteUp, _spriteOver, 0, 0, key, onClickCallback, onRollOverCallback, onRollOutCallback );

@@ -144,6 +144,9 @@ private class _HelperState extends Entity
 		l_sprite.buttonMode = true;
 		width = l_sprite.width;
 		height = l_sprite.height;
+		#if js
+		l_sprite.x = 0; // needed for jeash?
+		#end
 		super( kernel, l_sprite );
 	}
 }
