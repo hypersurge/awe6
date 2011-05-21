@@ -24,7 +24,9 @@ package awe6.core;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
+#if flash
 import flash.net.SharedObject;
+#end
 
 /**
  * The ASession class provides a minimalist abstract implementation of the ISession interface.
@@ -38,7 +40,11 @@ class ASession implements ISession
 	public static inline var DEBUG_ID = "DEBUG_AWE6";
 
 	private var _kernel:IKernel;
+	#if flash
 	private var _so:SharedObject;
+	#else
+	private var _so:Dynamic;
+	#end
 	private var _tools:ITools;
 	private var _data:Dynamic;
 	private var _version:Int;
@@ -55,7 +61,11 @@ class ASession implements ISession
 		if ( id == "" ) id = DEBUG_ID;
 		this.id = id;
 		_tools = _kernel.tools;
+		#if flash
 		_so = SharedObject.getLocal( _kernel.factory.id );
+		#else
+		_so = { data:{}, clear:function(){} };
+		#end
 		_version = 1;
 		_init();
 	}

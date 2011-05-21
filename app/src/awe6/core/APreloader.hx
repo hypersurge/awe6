@@ -32,9 +32,11 @@ import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.net.URLRequest;
+#if flash
 import flash.system.ApplicationDomain;
-import flash.system.LoaderContext;
 import flash.system.SecurityDomain;
+#end
+import flash.system.LoaderContext;
 import flash.text.Font;
 import flash.text.TextField;
 
@@ -72,10 +74,16 @@ class APreloader extends Process, implements IPreloader
 		view = new View( _kernel, _sprite );
 		view.isVisible = false;
 		_context = new LoaderContext();
+		#if flash
 		_context.applicationDomain = ApplicationDomain.currentDomain;
 		if ( !_kernel.isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
+		#end
 		_currentAsset = 0;
 		_perc = 0;
+		#if js
+		dispose();
+		return;
+		#end
 		if ( _assets.length > 0 ) _next();
 	}
 	
@@ -83,7 +91,7 @@ class APreloader extends Process, implements IPreloader
 	{
 		_currentAsset++;
 		if ( _currentAsset > _assets.length ) return dispose();
-		else _load( _assets[_currentAsset-1] );
+		else _load( _assets[_currentAsset - 1] );
 		_currentPerc = 0;
 		return;
 	}
@@ -96,8 +104,11 @@ class APreloader extends Process, implements IPreloader
 		_loader = new Loader();
 		_loader.load( new URLRequest( l_url ), _context );
 		_loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, _onError );
-		_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );		
+		_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );
 		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
+		#if js
+		_onComplete();
+		#end
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -109,9 +120,11 @@ class APreloader extends Process, implements IPreloader
 	
 	override private function _disposer():Void 
 	{
-		_registerFonts();		
+		_registerFonts();
 		view.dispose();
+		#if flash
 		if ( _loader != null ) _loader.unloadAndStop();
+		#end
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
@@ -154,19 +167,25 @@ class APreloader extends Process, implements IPreloader
 		view.clear();
 	}
 	
-	private function _onComplete( event:Event ):Void
+	private function _onComplete( ?event:Event ):Void
 	{
+		#if flash
 		cast( event.target, LoaderInfo ).removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		cast( event.target, LoaderInfo ).removeEventListener( ProgressEvent.PROGRESS, _onProgress );
 		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
 		cast( event.target, LoaderInfo ).loader.unloadAndStop();
+		#end
 		_next();
 	}
 	
 	private function _onProgress( ?event:ProgressEvent ):Void
 	{
+		#if flash
 		var l_loaderInfo:LoaderInfo = cast( event.target, LoaderInfo );
 		_currentPerc = l_loaderInfo.bytesLoaded / l_loaderInfo.bytesTotal;
+		#else
+		_currentPerc = event.bytesLoaded / event.bytesTotal;
+		#end		
 		_perc = _tools.limit( ( _currentAsset - 1 + _currentPerc ) / _assets.length , 0, 1 );
 	}
 	

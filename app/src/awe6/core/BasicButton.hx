@@ -138,6 +138,7 @@ private class _HelperState extends Entity
 	{
 		var l_sprite:Sprite = new Sprite();
 		var l_displayObject:DisplayObject = cast Std.is( bitmapDrawable, BitmapData ) ? new Bitmap( cast bitmapDrawable ) : bitmapDrawable;
+		if ( bitmapDrawable == null ) l_displayObject = new Sprite();
 		l_sprite.addChild( l_displayObject );
 		l_sprite.useHandCursor = true;
 		l_sprite.buttonMode = true;
