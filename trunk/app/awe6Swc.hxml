@@ -1,3 +1,6 @@
+-cmd scripts\prebuild.bat
+--next
+
 -D compileSwc
 -cp src
 -swf-version 10

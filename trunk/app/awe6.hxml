@@ -1,3 +1,6 @@
+-cmd scripts\prebuild.bat
+--next
+
 -cp src
 -swf-version 10
 -swf bin/game.swf

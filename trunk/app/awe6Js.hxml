@@ -1,3 +1,6 @@
+-cmd scripts\prebuild.bat
+--next
+
 -D compileJs
 --remap flash:jeash
 -cp libs
