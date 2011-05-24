@@ -1,3 +1,6 @@
+-cmd scripts\prebuild.bat
+--next
+
 -D compileAs3
 -cp src
 -swf-version 10
