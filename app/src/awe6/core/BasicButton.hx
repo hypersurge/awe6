@@ -140,15 +140,10 @@ private class _HelperState extends Entity
 		var l_displayObject:DisplayObject = cast Std.is( bitmapDrawable, BitmapData ) ? new Bitmap( cast bitmapDrawable ) : bitmapDrawable;
 		if ( bitmapDrawable == null ) l_displayObject = new Sprite();
 		l_sprite.addChild( l_displayObject );
-		#if ( flash || js )
 		l_sprite.useHandCursor = true;
 		l_sprite.buttonMode = true;
-		#end
 		width = l_sprite.width;
 		height = l_sprite.height;
-		#if js
-		l_sprite.x = 0; // needed for jeash?
-		#end
 		super( kernel, l_sprite );
 	}
 }

@@ -46,44 +46,24 @@ class Button extends awe6.extras.gui.Button
 	override private function _init():Void
 	{
 		super._init();
-		#if flash
 		if ( _isShineEnabled )
 		{
 			_shine = new Shine( _kernel, width, height, _kernel.assets.getAsset( "ButtonShine" ) );
 			addEntity( _shine, true, 1 );
 		}
-		#end
 	}
 	
 	override private function _createButtonState( ?isOver:Bool = false ):Sprite
 	{
 		var l_result:Sprite = new Sprite();
 		var l_bitmapData:BitmapData;
-		#if flash
 		l_bitmapData = isOver ? cast _kernel.assets.getAsset( "ButtonOver" ) : cast _kernel.assets.getAsset( "ButtonUp" );
-		#elseif ( js || cpp )
-		l_bitmapData = _getBitmapData( "../../assetsDeployed/demo/gui/LIBRARY/Button" + ( isOver ? "Over" : "Up" ) + ".png" );
-		#end
 		l_result.addChild( new Bitmap( l_bitmapData ) );		
 		var l_text:Text = new Text( _kernel, width - ( 2 * _marginWidth ), height - ( 2 * _marginHeight ), label, _kernel.factory.createTextStyle( ETextStyle.BUTTON ) );
 		l_text.setPosition( _marginWidth, _marginHeight );
 		l_result.addChild( cast( l_text, GuiEntity)._sprite ); // safe ancestry cast
 		return l_result;
 	}
-	
-	#if ( js || cpp )
-	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
-	{
-		#if js
-		var l_result:BitmapData = new BitmapData( width, height, true );
-		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
-		return l_result;
-		#end
-		#if cpp
-		return BitmapData.load( id );
-		#end
-	}
-	#end
 	
 	override public function onClick():Void
 	{

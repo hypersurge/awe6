@@ -27,9 +27,7 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-#if ( flash || js )
 import flash.display.BlendMode;
-#end
 import flash.display.Sprite;
 import flash.filters.BlurFilter;
 
@@ -92,7 +90,7 @@ class Overlay extends Entity, implements IOverlayProcess
 		_pauseSprite.mouseEnabled = false;
 		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
 		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
-		l_bitmap.filters = #if ( js || cpp ) cast #end [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
+		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
 		_pauseSprite.addChild( l_bitmap );
 		var l_color:Sprite = new Sprite();
 		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
@@ -102,9 +100,7 @@ class Overlay extends Entity, implements IOverlayProcess
 		
 		_flashSprite = new Sprite();
 		_flashSprite.mouseEnabled = false;
-		#if ( flash || js )
 		_flashSprite.blendMode = BlendMode.ADD;
-		#end
 		_flashStartingAlpha = 1;
 		_flashAsTime = true;
 		_flashDuration = _flashStartingDuration = 100;

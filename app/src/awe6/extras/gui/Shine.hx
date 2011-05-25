@@ -24,9 +24,7 @@ package awe6.extras.gui;
 import awe6.interfaces.IKernel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-#if ( flash || js )
 import flash.display.BlendMode;
-#end
 import flash.display.GradientType;
 import flash.display.SpreadMethod;
 import flash.display.Sprite;
@@ -56,9 +54,7 @@ class Shine extends GuiEntity
 		_animated = new Sprite();
 		_canvas = new BitmapData( _mask.width, _mask.height, true, 0x00 );
 		_bitmap = new Bitmap( _canvas );
-		#if ( flash || js )
 		_bitmap.blendMode = BlendMode.ADD;
-		#end
 		_sprite.addChild( _bitmap );
 		_sprite.mouseEnabled = false;
 		_sprite.mouseChildren = false;
@@ -74,9 +70,7 @@ class Shine extends GuiEntity
 		_animated.graphics.beginGradientFill( GradientType.LINEAR, [ 0x000000, 0xFFFFFF, 0x333333, 0xa6a6a6, 0xbfbfbf, 0xa6a6a6, 0xFFFFFF, 0x000000 ], [ 1, 1, 1, 1, 1, 1, 1, 1 ], [ 35, 75, 125, 200, 210, 220, 225, 250 ], _matrix, SpreadMethod.REFLECT );
 		_animated.graphics.drawRect( 0, 0, width, height );
 		_canvas.draw( _animated );
-		#if flash
 		_canvas.copyChannel( _mask, _mask.rect, _mask.rect.topLeft, 8, 8 );
-		#end
 		_canvas.unlock();
 	}
 	
