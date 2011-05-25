@@ -1,0 +1,10 @@
+-cmd scripts\prebuild.bat
+--next
+
+-cp src
+-swf-version 10
+-swf bin/game.swf
+-swf-header 600:400:25:000000
+-swf-lib assets\preloader.swf
+-main Main
+-cmd bin\game.swf
