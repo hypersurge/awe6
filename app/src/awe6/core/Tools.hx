@@ -44,9 +44,13 @@ class Tools implements ITools
 
 	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
 	{
-		var l_S4 = function() { return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 ); }
+		#if !cpp
+		var l_S4 = function():String { return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 ); }
 		return isSmall ? prefix + ( l_S4() + l_S4() + l_S4() ).substr( 0, 10 ) : prefix + ( l_S4() + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + l_S4() + l_S4() );
-	}	
+		#else
+		return "GUID";
+		#end
+	}
 	
 	public inline function ease( originalValue:Float, newValue:Float, ease:Float ):Float
 	{

@@ -115,7 +115,9 @@ class Kernel extends Process, implements IKernel
 	{
 		super._init();
 		isDebug = factory.isDebug;
+		#if !cpp
 		isLocal = flash.system.Security.sandboxType != flash.system.Security.REMOTE;
+		#end
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -165,7 +167,9 @@ class Kernel extends Process, implements IKernel
 	private function _nativeInit():Void
 	{
 		var l_instance:Kernel = this;
+		#if !cpp
 		Lib.current.focusRect = false;
+		#end
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;

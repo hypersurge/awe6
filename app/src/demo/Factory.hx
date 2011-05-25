@@ -35,6 +35,7 @@ import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
+#if flash
 import assets.BackOver;
 import assets.BackUp;
 import assets.MuteOver;
@@ -46,6 +47,7 @@ import assets.UnmuteOver;
 import assets.UnmuteUp;
 import assets.UnpauseOver;
 import assets.UnpauseUp;
+#end
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
@@ -106,7 +108,7 @@ class Factory extends AFactory
 		var l_pauseOver:BitmapData = new PauseOver();
 		var l_unpauseUp:BitmapData = new UnpauseUp();
 		var l_unpauseOver:BitmapData = new UnpauseOver();
-		#elseif js
+		#elseif ( js || cpp )
 		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/overlay/";
 		var l_backUp:BitmapData = _getBitmapData( l_folder + "buttons/BackUp.png" );
 		var l_backOver:BitmapData = _getBitmapData( l_folder + "buttons/BackOver.png" );
@@ -133,12 +135,17 @@ class Factory extends AFactory
 		return l_overlay;
 	}
 	
-	#if js
+	#if ( js || cpp )
 	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
 	{
+		#if js
 		var l_result:BitmapData = new BitmapData( width, height, true );
 		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
 		return l_result;
+		#end
+		#if cpp
+		return BitmapData.load( id );
+		#end
 	}
 	#end
 	

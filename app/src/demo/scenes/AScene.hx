@@ -55,7 +55,7 @@ class AScene extends Scene
 		var l_background:BitmapData;
 		#if flash
 		l_background = new Background();
-		#elseif js
+		#elseif ( js || cpp )
 		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/";
 		l_background = _getBitmapData( l_folder + "scenes/Background.png", 600, 400 );
 		#end
@@ -69,12 +69,17 @@ class AScene extends Scene
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
 	
-	#if js
-	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):flash.display.BitmapData
+	#if ( js || cpp )
+	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
 	{
-		var l_result:flash.display.BitmapData = new flash.display.BitmapData( width, height, true );
+		#if js
+		var l_result:BitmapData = new BitmapData( width, height, true );
 		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
 		return l_result;
+		#end
+		#if cpp
+		return BitmapData.load( id );
+		#end
 	}
 	#end
 	

@@ -26,7 +26,9 @@ import awe6.interfaces.ISceneTransition;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
+#if flash
 import flash.filters.BlurFilter;
+#end
 
 /**
  * The SceneTransition class provides a minimalist implementation of the ISceneTransition interface.
@@ -39,7 +41,9 @@ class SceneTransition extends Entity, implements ISceneTransition
 	
 	private var _duration:Int;
 	private var _sprite:Sprite;
+	#if flash
 	private var _blurFilter:BlurFilter;
+	#end
 
 	public function new( kernel:IKernel, ?duration:Int = 500 ) 
 	{
@@ -51,6 +55,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 	override private function _init():Void 
 	{
 		super._init();
+		#if flash
 		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
 		try
 		{
@@ -62,6 +67,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 		_sprite.filters = [ _blurFilter ];
 		_sprite.mouseEnabled = false;
 		_sprite.addChild( new Bitmap( l_bitmapData ) );
+		#end
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -70,8 +76,10 @@ class SceneTransition extends Entity, implements ISceneTransition
 		if ( _age > _duration ) return dispose();
 		var l_perc:Float = _age / _duration;
 		_sprite.alpha = 1 - l_perc;
+		#if flash
 		_blurFilter.blurX = _blurFilter.blurY = l_perc * 32;
 		_sprite.filters = [ _blurFilter ];
+		#end
 		return;
 	}
 	

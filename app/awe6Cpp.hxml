@@ -1,0 +1,11 @@
+-cmd scripts\prebuild.bat
+--next
+
+-D compileCpp
+-lib nme
+-lib hxcpp
+--remap flash:nme
+-cp libs
+-cp src
+-cpp bin\cpp
+-main Main
