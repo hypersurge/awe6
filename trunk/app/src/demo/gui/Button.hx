@@ -61,7 +61,7 @@ class Button extends awe6.extras.gui.Button
 		var l_bitmapData:BitmapData;
 		#if flash
 		l_bitmapData = isOver ? cast _kernel.assets.getAsset( "ButtonOver" ) : cast _kernel.assets.getAsset( "ButtonUp" );
-		#elseif js
+		#elseif ( js || cpp )
 		l_bitmapData = _getBitmapData( "../../assetsDeployed/demo/gui/LIBRARY/Button" + ( isOver ? "Over" : "Up" ) + ".png" );
 		#end
 		l_result.addChild( new Bitmap( l_bitmapData ) );		
@@ -71,14 +71,19 @@ class Button extends awe6.extras.gui.Button
 		return l_result;
 	}
 	
-	#if js
-	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):flash.display.BitmapData
+	#if ( js || cpp )
+	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
 	{
-		var l_result:flash.display.BitmapData = new flash.display.BitmapData( width, height, true );
+		#if js
+		var l_result:BitmapData = new BitmapData( width, height, true );
 		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
 		return l_result;
+		#end
+		#if cpp
+		return BitmapData.load( id );
+		#end
 	}
-	#end	
+	#end
 	
 	override public function onClick():Void
 	{

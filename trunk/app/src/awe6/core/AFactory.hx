@@ -106,7 +106,9 @@ class AFactory implements IFactory, implements IDisposable
 		if ( _isConfigRequired )
 		{
 			var l_url:String = ( _configUrl != null ) ? _configUrl : _CONFIG_URL;
+			#if flash
 			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;
+			#end
 			_loadConfig( l_url );
 		}
 		else _launchKernel();		
@@ -162,7 +164,9 @@ class AFactory implements IFactory, implements IDisposable
 		l_textField.height = height - 100;
 		l_textField.x = ( width - l_textField.width ) / 2;
 		l_textField.y = ( height - l_textField.height ) / 2;
+		#if ( flash || js )
 		l_textField.text += event.text + "\n\n";
+		#end
 		_sprite.addChild( l_textField );
 	}	
 	
