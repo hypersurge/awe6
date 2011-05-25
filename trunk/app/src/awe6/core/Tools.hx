@@ -44,12 +44,8 @@ class Tools implements ITools
 
 	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
 	{
-		#if !cpp
 		var l_S4 = function():String { return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 ); }
 		return isSmall ? prefix + ( l_S4() + l_S4() + l_S4() ).substr( 0, 10 ) : prefix + ( l_S4() + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + l_S4() + l_S4() );
-		#else
-		return "GUID";
-		#end
 	}
 	
 	public inline function ease( originalValue:Float, newValue:Float, ease:Float ):Float
@@ -274,10 +270,8 @@ class Tools implements ITools
 	public function bytesToHex( bytesData:BytesData ):String
 	{
 		var l_string:String = "";
-		#if flash
 		bytesData.position = 0;
 		for ( i in 0...bytesData.length ) l_string += intToHex( bytesData.readUnsignedByte() );
-		#end
 		return l_string;
 	}
 	
@@ -300,14 +294,10 @@ class Tools implements ITools
 				var l_p2:Int = l_hex.indexOf( l_c2 );
 				if ( l_p2 >= 16 ) l_p2 -= 6;
 				if ( l_p2 >= 16 || l_p2 < 0 ) l_isValid = false;
-				#if flash
 				l_bytesData.writeByte( ( l_p1 << 4 ) + l_p2 );
-				#end
 			}
 		}
-		#if flash
 		l_bytesData.position = 0;
-		#end
 		return l_isValid ? l_bytesData: null;
 	}	
 	

@@ -35,7 +35,6 @@ import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
-#if flash
 import assets.BackOver;
 import assets.BackUp;
 import assets.MuteOver;
@@ -47,7 +46,6 @@ import assets.UnmuteOver;
 import assets.UnmuteUp;
 import assets.UnpauseOver;
 import assets.UnpauseUp;
-#end
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
@@ -73,9 +71,6 @@ class Factory extends AFactory
 		version = "0.0.1"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
-		#if js
-		isDecached = false;
-		#end
 		width = 600;
 		height = 400;
 		bgColor = 0x000000;
@@ -96,7 +91,6 @@ class Factory extends AFactory
 	override public function createOverlay():IOverlayProcess
 	{
 		// rather than use getAsset, better form is to use extern classes, or create an empty BitmapData and copypixel data from the getAsset over the top (guarantees a match)
-		#if flash
 		var l_background:BitmapData = new OverlayBackground();
 		var l_backUp:BitmapData = new BackUp();
 		var l_backOver:BitmapData = new BackOver();
@@ -108,20 +102,6 @@ class Factory extends AFactory
 		var l_pauseOver:BitmapData = new PauseOver();
 		var l_unpauseUp:BitmapData = new UnpauseUp();
 		var l_unpauseOver:BitmapData = new UnpauseOver();
-		#elseif ( js || cpp )
-		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/overlay/";
-		var l_backUp:BitmapData = _getBitmapData( l_folder + "buttons/BackUp.png" );
-		var l_backOver:BitmapData = _getBitmapData( l_folder + "buttons/BackOver.png" );
-		var l_muteUp:BitmapData = _getBitmapData( l_folder + "buttons/MuteUp.png" );
-		var l_muteOver:BitmapData = _getBitmapData( l_folder + "buttons/MuteOver.png" );
-		var l_unmuteUp:BitmapData = _getBitmapData( l_folder + "buttons/UnmuteUp.png" );
-		var l_unmuteOver:BitmapData = _getBitmapData( l_folder + "buttons/UnmuteOver.png" );
-		var l_pauseUp:BitmapData = _getBitmapData( l_folder + "buttons/PauseUp.png" );
-		var l_pauseOver:BitmapData = _getBitmapData( l_folder + "buttons/PauseOver.png" );
-		var l_unpauseUp:BitmapData = _getBitmapData( l_folder + "buttons/UnpauseUp.png" );
-		var l_unpauseOver:BitmapData = _getBitmapData( l_folder + "buttons/UnpauseOver.png" );
-		var l_background:BitmapData = _getBitmapData( l_folder + "OverlayBackground.png", 600, 400 );
-		#end
 		
 		var l_overlay:Overlay = new Overlay( _kernel, l_background, l_backUp, l_backOver, l_muteUp, l_muteOver, l_unmuteUp, l_unmuteOver, l_pauseUp, l_pauseOver, l_unpauseUp, l_unpauseOver );
 		var l_width:Int = 40;
@@ -135,19 +115,6 @@ class Factory extends AFactory
 		return l_overlay;
 	}
 	
-	#if ( js || cpp )
-	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
-	{
-		#if js
-		var l_result:BitmapData = new BitmapData( width, height, true );
-		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
-		return l_result;
-		#end
-		#if cpp
-		return BitmapData.load( id );
-		#end
-	}
-	#end
 	
 	override public function createTextStyle( ?type:ETextStyle ):ITextStyle
 	{

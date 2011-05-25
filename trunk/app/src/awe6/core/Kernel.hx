@@ -45,12 +45,10 @@ import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.geom.Rectangle;
 import flash.Lib;
-#if flash
 import flash.events.ContextMenuEvent;
 import flash.events.FullScreenEvent;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
-#end
 
 /**
  * The Kernel class provides a minimalist implementation of the IKernel interface.
@@ -95,12 +93,10 @@ class Kernel extends Process, implements IKernel
 	private var _profiler:Profiler;
 	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
-	#if flash
 	private var _eyeCandyEnableContextMenuItem:ContextMenuItem;
 	private var _eyeCandyDisableContextMenuItem:ContextMenuItem;
 	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
 	private var _fullScreenDisableContextMenuItem:ContextMenuItem;
-	#end
 
 	public function new( factory:IFactory, sprite:Sprite )
 	{
@@ -115,9 +111,7 @@ class Kernel extends Process, implements IKernel
 	{
 		super._init();
 		isDebug = factory.isDebug;
-		#if !cpp
 		isLocal = flash.system.Security.sandboxType != flash.system.Security.REMOTE;
-		#end
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -159,17 +153,13 @@ class Kernel extends Process, implements IKernel
 		_addProcess( _overlayProcess, false );
 		_view.addChild( _overlayProcess.view );
 		scenes.setScene( factory.startingSceneType );
-		#if flash
 		if ( isDebug ) _view.addChild( new View( this, new Profiler(), _tools.BIG_NUMBER ) );
-		#end
 	}
 	
 	private function _nativeInit():Void
 	{
 		var l_instance:Kernel = this;
-		#if !cpp
 		Lib.current.focusRect = false;
-		#end
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
@@ -180,7 +170,6 @@ class Kernel extends Process, implements IKernel
 		l_mask.graphics.endFill();
 		_view.sprite.mask = l_mask;
 		
-		#if flash
 		var l_contextMenu:ContextMenu = new ContextMenu();
 		l_contextMenu.customItems.push( new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, false ) );
 		l_contextMenu.customItems.push( new ContextMenuItem( _POWERED_BY, false, false ) );
@@ -204,19 +193,16 @@ class Kernel extends Process, implements IKernel
 		
 		l_contextMenu.hideBuiltInItems();
 		_view.sprite.contextMenu = l_contextMenu;
-		#end
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		
 		isEyeCandy = true;
 		isFullScreen = false;
 	}
 	
-	#if flash
 	private function _onFullScreen( ?event:FullScreenEvent ):Void
 	{
 		isFullScreen = event.fullScreen;
 	}
-	#end
 	
 	private function _onEnterFrame( event:Event ):Void
 	{
@@ -237,10 +223,8 @@ class Kernel extends Process, implements IKernel
 		if ( Std.is( factory, IDisposable ) ) cast( factory, IDisposable ).dispose();
 		_view.dispose();
 		_view = null;
-		#if flash
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
-		#end
 		assets = _assetManagerProcess = null;
 		audio =	_audioManager = null;
 		inputs = _inputManager = null;
@@ -300,11 +284,9 @@ class Kernel extends Process, implements IKernel
 			return isEyeCandy;
 		}
 		isEyeCandy = value;
-		#if flash
 		_view.sprite.contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_view.sprite.contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_view.sprite.contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
-		#end
 		return isEyeCandy;
 	}
 	
@@ -316,13 +298,11 @@ class Kernel extends Process, implements IKernel
 			return isFullScreen;
 		}
 		isFullScreen = value;
-		#if flash
 		_view.sprite.contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_view.sprite.contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN_INTERACTIVE : StageDisplayState.NORMAL;
-		#end
 		return isEyeCandy;
 	}	
 	

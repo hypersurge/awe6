@@ -28,9 +28,7 @@ import awe6.interfaces.IKernel;
 import flash.events.Event;
 import flash.media.Sound;
 import flash.media.SoundChannel;
-#if flash
 import flash.media.SoundMixer;
-#end
 import flash.media.SoundTransform;
 
 /**
@@ -70,9 +68,6 @@ class AudioManager extends Process, implements IAudioManager
 	
 	public function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false, ?onCompleteCallback:Void->Void ):Void
 	{
-		#if !flash
-		return;
-		#end
 		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
 		if ( isIgnoredIfPlaying )
 		{
@@ -105,9 +100,7 @@ class AudioManager extends Process, implements IAudioManager
 	{
 		if ( isMute == null ) isMute = !this.isMute;
 		this.isMute = isMute;
-		#if flash
 		SoundMixer.soundTransform = new SoundTransform( isMute ? 0 : 1 );
-		#end
 		return this.isMute;
 	}	
 	

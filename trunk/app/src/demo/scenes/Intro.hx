@@ -33,7 +33,6 @@ class Intro extends AScene
 	
 	public function new( kernel:IKernel, type:EScene ) 
 	{
-		trace( "INTRO SCENE" );
 		super( kernel, type );
 	}
 	

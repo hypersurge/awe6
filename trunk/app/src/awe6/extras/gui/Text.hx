@@ -24,10 +24,8 @@ package awe6.extras.gui;
 import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
-#if ( flash || js )
 import flash.text.AntiAliasType;
 import flash.text.Font;
-#end
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
@@ -99,7 +97,6 @@ class Text extends GuiEntity
 			_textField.width = width;
 			_textField.height = height;
 			_textField.selectable = _isInput;
-			#if ( flash || js )
 			_textField.thickness = textStyle.thickness * 200;
 			_textField.antiAliasType = AntiAliasType.ADVANCED;
 			_textField.embedFonts = false;
@@ -111,8 +108,7 @@ class Text extends GuiEntity
 					break;
 				}				
 			}			
-			#end
-			_textField.filters = #if ( js || cpp ) cast #end textStyle.filters;
+			_textField.filters = textStyle.filters;
 			_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
 			_textField.multiline = _isMultiline;
 			_textField.wordWrap = _isMultiline;		

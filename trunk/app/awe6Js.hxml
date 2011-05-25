@@ -1,9 +1,0 @@
--cmd scripts\prebuild.bat
---next
-
--D compileJs
---remap flash:jeash
--cp libs
--cp src
--js bin\game.js
--main Main

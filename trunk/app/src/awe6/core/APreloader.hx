@@ -30,14 +30,12 @@ import flash.display.LoaderInfo;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
-#if flash
 import flash.events.ProgressEvent;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.SecurityDomain;
 import flash.system.LoaderContext;
 import flash.text.Font;
-#end
 import flash.text.TextField;
 
 /**
@@ -54,9 +52,7 @@ class APreloader extends Process, implements IPreloader
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
 	private var _loader:Loader;
-	#if flash 
 	private var _context:LoaderContext;
-	#end
 	private var _currentPerc:Float;
 	private var _currentAsset:Int;
 	private var _perc:Float;
@@ -75,21 +71,14 @@ class APreloader extends Process, implements IPreloader
 		_sprite = new Sprite();
 		view = new View( _kernel, _sprite );
 		view.isVisible = false;
-		#if flash
 		_context = new LoaderContext();
 		_context.applicationDomain = ApplicationDomain.currentDomain;
 		if ( !_kernel.isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
-		#end
 		_currentAsset = 0;
 		_perc = 0;
-		#if flash
 		if ( _assets.length > 0 ) _next();
-		#else
-		dispose();
-		#end
 	}
 	
-	#if flash
 	private function _next():Void
 	{
 		_currentAsset++;
@@ -117,21 +106,16 @@ class APreloader extends Process, implements IPreloader
 		if ( _assets.length == 0 ) dispose(); // needed to be done this way because preloader must be added and removed from kernel
 		view.isVisible = _age > 500;
 	}
-	#end
 	
 	override private function _disposer():Void 
 	{
 		view.dispose();
-		#if flash
 		_registerFonts();
 		if ( _loader != null ) _loader.unloadAndStop();
-		#end
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
 	}
-	
-	#if flash
 	
 	private function _registerFonts():Void
 	{
@@ -185,8 +169,6 @@ class APreloader extends Process, implements IPreloader
 		_currentPerc = l_loaderInfo.bytesLoaded / l_loaderInfo.bytesTotal;
 		_perc = _tools.limit( ( _currentAsset - 1 + _currentPerc ) / _assets.length , 0, 1 );
 	}
-	
-	#end
 	
 	private function __get_view():IView { return view; }	
 }
