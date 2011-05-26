@@ -21,34 +21,34 @@
  */
 
 package awe6.extras.gui;
-import awe6.core.BasicButton;
 import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
+import flash.display.SimpleButton;
 import flash.display.Sprite;
+import flash.events.MouseEvent;
 
 class Button extends GuiEntity
 {
 	public static inline var DEFAULT_LABEL = "Button";
 	public var label( default, __set_label ):String;
 	
-	private var _basicButton:BasicButton;
-	private var _spriteUp:Sprite;
-	private var _spriteOver:Sprite;
 	private var _key:EKey;
+	private var _onClickCallback:Void->Void;
+	private var _onRollOverCallback:Void->Void;
+	private var _onRollOutCallback:Void->Void;
+	private var _simpleButton:SimpleButton;
+	
 	private var _marginWidth:Float;
 	private var _marginHeight:Float;
 	private var _isBlank:Bool;
 
-	public function new( kernel:IKernel, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void, ?label:String = null, ?width:Float = 100, ?height:Float = 25, ?marginWidth:Float = 10, ?marginHeight:Float = 10, ?isBlank:Bool = false )
+	public function new( kernel:IKernel, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void, ?label:String = DEFAULT_LABEL, ?width:Float = 100, ?height:Float = 25, ?marginWidth:Float = 10, ?marginHeight:Float = 10, ?isBlank:Bool = false )
 	{
 		_key = key;
-		if ( label == null ) label = DEFAULT_LABEL;
-		_spriteUp = new Sprite();
-		_spriteOver = new Sprite();
-		_basicButton = new BasicButton( kernel, _spriteUp, _spriteOver, 0, 0, key, onClickCallback, onRollOverCallback, onRollOutCallback );
-		_basicButton.width = width;
-		_basicButton.height = height;
+		_onClickCallback = onClickCallback;
+		_onRollOverCallback = onRollOverCallback;
+		_onRollOutCallback = onRollOutCallback;
 		_marginWidth = marginWidth;
 		_marginHeight = marginHeight;
 		_isBlank = isBlank;
@@ -59,15 +59,39 @@ class Button extends GuiEntity
 	override private function _init():Void
 	{
 		super._init();
-		addEntity( _basicButton, true );
+		var l_instance:Button = this;
+
+		_simpleButton = new SimpleButton();
+		
+		_simpleButton.addEventListener( MouseEvent.CLICK, _onClick );
+		_simpleButton.addEventListener( MouseEvent.ROLL_OVER, _onRollOver );
+		_simpleButton.addEventListener( MouseEvent.ROLL_OUT, _onRollOut );
+		
+		_sprite.addChild( _simpleButton );
+	}
+	
+	private function _onClick( event:MouseEvent ):Void
+	{
+		onClick();
+		event.stopImmediatePropagation();
+	}
+	
+	private function _onRollOver( event:MouseEvent ):Void
+	{
+		onRollOver();
+		event.stopImmediatePropagation();
+	}
+	
+	private function _onRollOut( event:MouseEvent ):Void
+	{
+		onRollOut();
+		event.stopImmediatePropagation();
 	}
 	
 	private function _draw():Void
 	{
-		while( _spriteUp.numChildren > 0 ) _spriteUp.removeChildAt( 0 );
-		_spriteUp.addChild( _createButtonState( false ) );
-		while( _spriteOver.numChildren > 0 ) _spriteOver.removeChildAt( 0 );
-		_spriteOver.addChild( _createButtonState( true ) );
+		_simpleButton.upState = _simpleButton.downState = _createButtonState( false );
+		_simpleButton.overState = _simpleButton.hitTestState = _createButtonState( true );
 	}
 	
 	private function _createButtonState( ?isOver:Bool = false ):Sprite
@@ -86,19 +110,36 @@ class Button extends GuiEntity
 		return l_result;
 	}
 	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) ) onClick();
+	}
+	
+	override private function _disposer():Void 
+	{
+		_simpleButton.removeEventListener( MouseEvent.CLICK, _onClick );
+		_simpleButton.removeEventListener( MouseEvent.ROLL_OVER, _onRollOver );
+		_simpleButton.removeEventListener( MouseEvent.ROLL_OUT, _onRollOut );
+		super._disposer();		
+	}
+	
 	public function onClick():Void
 	{
-		_basicButton.onClick();
+		if ( _onClickCallback == null ) return;
+		Reflect.callMethod( this, _onClickCallback, [] );
 	}
 	
 	public function onRollOver():Void
 	{
-		_basicButton.onRollOver();
+		if ( _onRollOverCallback == null ) return;
+		Reflect.callMethod( this, _onRollOverCallback, [] );		
 	}
 	
 	public function onRollOut():Void
 	{
-		_basicButton.onRollOut();
+		if ( _onRollOutCallback == null ) return;
+		Reflect.callMethod( this, _onRollOutCallback, [] );		
 	}
 	
 	private function __set_label( value:String ):String
@@ -108,17 +149,4 @@ class Button extends GuiEntity
 		_draw();
 		return label;
 	}
-	
-	override private function __set_x( value:Float ):Float
-	{
-		_basicButton.displaceX = value;
-		return super.__set_x( value );
-	}
-	
-	override private function __set_y( value:Float ):Float
-	{
-		_basicButton.displaceY = value;
-		return super.__set_y( value );
-	}
-	
 }
