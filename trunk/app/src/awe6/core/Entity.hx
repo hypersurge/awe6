@@ -151,6 +151,7 @@ class Entity extends Process, implements IEntity
 		{
 			if ( ( agenda == null ) || Type.enumEq( agenda, i.agenda ) ) l_result.push( i.entity );
 		}
+		l_result.reverse();
 		return l_result;
 	}
 	
