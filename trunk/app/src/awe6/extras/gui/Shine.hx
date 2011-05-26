@@ -74,4 +74,11 @@ class Shine extends GuiEntity
 		_canvas.unlock();
 	}
 	
+	override private function _disposer():Void 
+	{
+		_canvas.dispose();
+		super._disposer();
+	}
+	
+	
 }
