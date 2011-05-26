@@ -77,6 +77,7 @@ class Shine extends GuiEntity
 	override private function _disposer():Void 
 	{
 		_canvas.dispose();
+		_mask.dispose();
 		super._disposer();
 	}
 	
