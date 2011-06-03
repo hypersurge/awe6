@@ -26,6 +26,7 @@ import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IDisposable;
+import awe6.interfaces.IEncrypter;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IFactory;
 import awe6.interfaces.IKernel;
@@ -77,6 +78,7 @@ class AFactory implements IFactory, implements IDisposable
 	public var width( default, null ):Int;
 	public var height( default, null ):Int;
 	public var bgColor( default, null ):Int;
+	public var secret( default, null ):String;
 	public var targetFramerate( default, null ):Int;
 	public var isFixedUpdates( default, null ):Bool;
 	public var config( default, null ):Hash<Dynamic>;
@@ -125,6 +127,7 @@ class AFactory implements IFactory, implements IDisposable
 		width = 600;
 		height = 400;
 		bgColor = 0xFF0000;
+		secret = "YouMustOverrideThis";
 		targetFramerate = 25;
 		isFixedUpdates = true;
 		config = new Hash<Dynamic>();
@@ -243,15 +246,16 @@ class AFactory implements IFactory, implements IDisposable
 		return ( Std.is( _kernel.assets, IAssetManagerProcess ) ) ? cast( _kernel.assets, IAssetManagerProcess ) : new AAssetManager( _kernel );
 	}	
 	
-	public function createPreloader():IPreloader
+	public function createEncrypter():IEncrypter
 	{
-		return new APreloader( _kernel, _getAssetUrls(), isDecached );
-	}	
+		return new Encrypter( secret );
+	}
 	
-	public function createSession( ?id:String ):ISession
+	public function createEntity( ?id:String ):IEntity
 	{
-		return new ASession( _kernel, id );
-	}	
+		var l_entity:Entity = new Entity( _kernel, id );
+		return l_entity;
+	}
 	
 	public function createLogger():ILogger
 	{
@@ -264,11 +268,10 @@ class AFactory implements IFactory, implements IDisposable
 		return l_overlay;
 	}
 	
-	public function createEntity( ?id:String ):IEntity
+	public function createPreloader():IPreloader
 	{
-		var l_entity:Entity = new Entity( _kernel, id );
-		return l_entity;
-	}
+		return new APreloader( _kernel, _getAssetUrls(), isDecached );
+	}	
 	
 	public function createScene( type:EScene ):IScene
 	{
@@ -277,17 +280,22 @@ class AFactory implements IFactory, implements IDisposable
 		return l_scene;
 	}
 	
-	public function createTextStyle( ?type:ETextStyle ):ITextStyle
-	{
-		var l_textStyle:TextStyle = new TextStyle();
-		return l_textStyle;
-	}	
-	
 	public function createSceneTransition( ?typeIncoming:EScene, ?typeOutgoing:EScene ):ISceneTransition
 	{
 		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
 		return l_sceneTransition;
 	}
+
+	public function createSession( ?id:String ):ISession
+	{
+		return new ASession( _kernel, id );
+	}	
+	
+	public function createTextStyle( ?type:ETextStyle ):ITextStyle
+	{
+		var l_textStyle:TextStyle = new TextStyle();
+		return l_textStyle;
+	}	
 	
 	public function getBackSceneType( type:EScene ):EScene
 	{
