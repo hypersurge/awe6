@@ -44,6 +44,7 @@ import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.text.TextField;
+import haxe.io.Bytes;
 
 /**
  * The AFactory class provides a minimalist abstract implementation of the IFactory interface.
@@ -172,7 +173,12 @@ class AFactory implements IFactory, implements IDisposable
 	private function _onComplete( event:Event ):Void
 	{
 		_countConfigsLoaded++;
-		_parseXml( event.target.data );
+		var l_string:String = event.target.data;
+		if ( l_string.substr( 0, 5 ) != "<?xml" )
+		{
+			l_string = createEncrypter().decrypt( Bytes.ofString( l_string ) ).toString();
+		}
+		_parseXml( l_string );
 	}
 		
 	private function _parseXml( data:String ):Void
