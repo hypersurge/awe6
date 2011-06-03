@@ -22,6 +22,7 @@
 
 package awe6.core;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IEncrypter;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IView;
@@ -31,12 +32,16 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
+import flash.net.URLLoader;
+import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.SecurityDomain;
 import flash.system.LoaderContext;
 import flash.text.Font;
 import flash.text.TextField;
+import haxe.io.Bytes;
+import haxe.io.BytesData;
 
 /**
  * The APreloader class provides a minimalist abstract implementation of the IPreloader interface.
@@ -51,13 +56,15 @@ class APreloader extends Process, implements IPreloader
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
+	private var _encrypter:IEncrypter;
 	private var _loader:Loader;
-	private var _context:LoaderContext;
+	private var _urlLoader:URLLoader;
+	private var _loaderContext:LoaderContext;
 	private var _currentPerc:Float;
 	private var _currentAsset:Int;
 	private var _perc:Float;
 	private var _textField:TextField;
-
+	
 	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
 	{
 		_assets = assets;
@@ -68,12 +75,13 @@ class APreloader extends Process, implements IPreloader
 	override private function _init():Void
 	{
 		super._init();
+		_encrypter = _tools;
 		_sprite = new Sprite();
 		view = new View( _kernel, _sprite );
 		view.isVisible = false;
-		_context = new LoaderContext();
-		_context.applicationDomain = ApplicationDomain.currentDomain;
-		if ( !_kernel.isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
+		_loaderContext = new LoaderContext();
+		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+		if ( !_kernel.isLocal ) _loaderContext.securityDomain = SecurityDomain.currentDomain;
 		_currentAsset = 0;
 		_perc = 0;
 		if ( _assets.length > 0 ) _next();
@@ -93,11 +101,12 @@ class APreloader extends Process, implements IPreloader
 		var l_url:String = url;
 		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
 		// trace( "Loading Asset: " + l_url );
-		_loader = new Loader();
-		_loader.load( new URLRequest( l_url ), _context );
-		_loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, _onError );
-		_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );
-		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
+		_urlLoader = new URLLoader();
+		_urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+		_urlLoader.load( new URLRequest( l_url ) );
+		_urlLoader.addEventListener( IOErrorEvent.IO_ERROR, _onError );
+		_urlLoader.addEventListener( ProgressEvent.PROGRESS, _onProgress );
+		_urlLoader.addEventListener( Event.COMPLETE, _onComplete );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -112,6 +121,7 @@ class APreloader extends Process, implements IPreloader
 		view.dispose();
 		_registerFonts();
 		if ( _loader != null ) _loader.unloadAndStop();
+		if ( _urlLoader != null ) _urlLoader.close();
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
@@ -156,17 +166,19 @@ class APreloader extends Process, implements IPreloader
 	
 	private function _onComplete( ?event:Event ):Void
 	{
-		cast( event.target, LoaderInfo ).removeEventListener( IOErrorEvent.IO_ERROR, _onError );
-		cast( event.target, LoaderInfo ).removeEventListener( ProgressEvent.PROGRESS, _onProgress );
-		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
-		cast( event.target, LoaderInfo ).loader.unloadAndStop();
+		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
+		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
+		_urlLoader.removeEventListener( Event.COMPLETE, _onComplete );
+		var l_data:BytesData = _urlLoader.data;
+		var l_isOriginal:Bool = ( ( l_data.readByte() == 67 ) && ( l_data.readByte() == 87 ) && ( l_data.readByte() == 83 ) );
+		_loader = new Loader();
+		_loader.loadBytes( l_isOriginal ? _urlLoader.data : _encrypter.decrypt( Bytes.ofData( cast _urlLoader.data ) ).getData(), _loaderContext );			
 		_next();
 	}
 	
 	private function _onProgress( ?event:ProgressEvent ):Void
 	{
-		var l_loaderInfo:LoaderInfo = cast( event.target, LoaderInfo );
-		_currentPerc = l_loaderInfo.bytesLoaded / l_loaderInfo.bytesTotal;
+		_currentPerc = event.bytesLoaded / event.bytesTotal;
 		_perc = _tools.limit( ( _currentAsset - 1 + _currentPerc ) / _assets.length , 0, 1 );
 	}
 	
