@@ -21,9 +21,11 @@
  */
 
 package awe6.core;
+import awe6.interfaces.IEncrypter;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPriority;
 import awe6.interfaces.ITools;
+import haxe.io.Bytes;
 import haxe.io.BytesData;
 
 /**
@@ -33,13 +35,16 @@ import haxe.io.BytesData;
  */
 class Tools implements ITools
 {
-	private var _kernel:IKernel;
 	public var BIG_NUMBER( default, null ):Int;
+	
+	private var _kernel:IKernel;
+	private var _encrypter:IEncrypter;
 	
 	public function new( kernel:IKernel )
 	{
 		_kernel = kernel;
 		BIG_NUMBER = 9999998;
+		_encrypter = _kernel.factory.createEncrypter();
 	}	
 
 	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
@@ -300,5 +305,17 @@ class Tools implements ITools
 		l_bytesData.position = 0;
 		return l_isValid ? l_bytesData: null;
 	}	
+	
+	public function encrypt( value:Bytes, ?secret:String = "" ):Bytes
+	{
+		return _encrypter.encrypt( value, secret );
+	}
+	
+	public function decrypt( value:Bytes, ?secret:String = "" ):Bytes
+	{
+		return _encrypter.decrypt( value, secret );
+	}	
+	
+	
 	
 }

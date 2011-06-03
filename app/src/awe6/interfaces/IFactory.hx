@@ -74,6 +74,10 @@ interface IFactory
 	 */
 	var bgColor( default, null ):Int;
 	/**
+	 * The default secret key used to encrypt data.  Set it to something specific for your project, and conceal it's value.
+	 */
+	var secret( default, null ):String;
+	/**
 	 * The intended frequency of the update broad phase traversal stack.  Technical limitations may prevent desired framerate from occurring.
 	 */
 	var targetFramerate( default, null ):Int;
@@ -115,21 +119,21 @@ interface IFactory
 	 */
 	function onInitComplete( kernel:IKernel ):Void;
 	/**
-	 * Builds the application's preloader to load initial media assets.
-	 * @return	Preloader to load initial media assets.
-	 */
-	function createPreloader():IPreloader;
-	/**
 	 * Builds the application's asset manager which store images, sounds etc.
 	 * @return	Asset manager.
 	 */
 	function createAssetManager():IAssetManagerProcess;
 	/**
-	 * Builds the application's session to store user progress.
-	 * @param	id	The unique identifier of the session.  If session already exists will load existing.
-	 * @return	Session to store user progress.
+	 * Builds the application's encrypter to encrypt sensitive data / assets.
+	 * @return Encrypter to encrypt sensitive data / assets.
 	 */
-	function createSession( ?id:String ):ISession;
+	function createEncrypter():IEncrypter;
+	/**
+	 * Builds an empty Entity for injection.
+	 * @param	?id	The unique identifier of this entity.
+	 * @return	An empty Entity.
+	 */
+	function createEntity( ?id:String ):IEntity;
 	/**
 	 * Builds the application's logger to log events / analytics.
 	 * @return	Logger to log events / analytics.
@@ -141,11 +145,10 @@ interface IFactory
 	 */
 	function createOverlay():IOverlayProcess;
 	/**
-	 * Builds an empty Entity for injection.
-	 * @param	?id	The unique identifier of this entity.
-	 * @return	An empty Entity.
+	 * Builds the application's preloader to load initial media assets.
+	 * @return	Preloader to load initial media assets.
 	 */
-	function createEntity( ?id:String ):IEntity;
+	function createPreloader():IPreloader;
 	/**
 	 * Builds the application's scenes which contain specific functionality.
 	 * @param	type	The type of scene.
@@ -153,18 +156,24 @@ interface IFactory
 	 */
 	function createScene( type:EScene ):IScene;
 	/**
-	 * Builds the application's textStyle to configure font formatting.
-	 * @param	?type	The type of textStyle.
-	 * @return	TextStyle to configure font formatting.
-	 */
-	function createTextStyle( ?type:ETextStyle ):ITextStyle;
-	/**
 	 * Builds the application's transition between scenes.  Can be individually tailored for any combination of incoming and outgoing scene.
 	 * @param	?typeIncoming	The type of the incoming scene.
 	 * @param	?typeOutgoing	The type of the outgoing scene.
 	 * @return	Transition between scenes.
 	 */
 	function createSceneTransition( ?typeIncoming:EScene, ?typeOutgoing:EScene ):ISceneTransition;
+	/**
+	 * Builds the application's session to store user progress.
+	 * @param	id	The unique identifier of the session.  If session already exists will load existing.
+	 * @return	Session to store user progress.
+	 */
+	function createSession( ?id:String ):ISession;
+	/**
+	 * Builds the application's textStyle to configure font formatting.
+	 * @param	?type	The type of textStyle.
+	 * @return	TextStyle to configure font formatting.
+	 */
+	function createTextStyle( ?type:ETextStyle ):ITextStyle;
 	/**
 	 * When a scene is backed out of it will be replaced by the scene returned here.
 	 * @param	type	Type of scene to back out from.

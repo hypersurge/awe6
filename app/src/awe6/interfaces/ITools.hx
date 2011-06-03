@@ -29,7 +29,7 @@ import haxe.io.BytesData;
  * <p>The other functions are often regularly used in entity creation.</p>
  * @author	Robert Fell
  */
-interface ITools 
+interface ITools implements IEncrypter
 {
 	/**
 	 * Used as an arbitrarily high number to avoid infinity and division by zero issues.

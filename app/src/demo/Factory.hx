@@ -74,6 +74,7 @@ class Factory extends AFactory
 		width = 600;
 		height = 400;
 		bgColor = 0x000000;
+		secret = "ThereIsAWayToConcealThis";
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;
 	}
