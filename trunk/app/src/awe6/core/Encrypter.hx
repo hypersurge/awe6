@@ -54,7 +54,7 @@ class Encrypter implements IEncrypter
 	/**
 	 * XOR favours size over strength.  It is also two-directional for easy testing.
 	 * <p>XOR is the default encryption routine used in awe6 because (due to the ease of client side application decompiling) the obfuscation routine is secondary to the secret key concealment.</p>
-	 * <p>Tip: haXe offers some interesting approaches towards conceal the key from plainsite.</p>
+	 * <p>Tip: haXe offers some interesting approaches towards concealing the key from plainsite.</p>
 	 */
 	private function _xor( value:BytesData, secret:String ):BytesData
 	{
