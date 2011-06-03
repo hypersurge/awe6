@@ -43,6 +43,7 @@ import haxe.io.BytesData;
 /**
  * The PrePreloader class provides a simple loader to show progress as the Main application loads (prior to preloader displaying).
  * <p>This class is intended to be compiled directly rather than included in any project.</p>
+ * <p>By default this class provides basic obfuscation, but even basic common sense can reveal the secret key.  To avoid exposing the key see notes below ...</p>
  * @author	Robert Fell
  */
 class PrePreloader extends Sprite
@@ -70,6 +71,7 @@ class PrePreloader extends Sprite
 	public function new() 
 	{
 		__isExisting = true;
+		// security tip #1: the secret must not be inlined, it must be referenced from data outside of the actionscript code.  I can't tell you how exactly else it wouldn't be as "secure".  Security through vagueness ;-)
 		_SECRET = "ThereAreWaysToConcealThis";
 		super();
 		_stage = Lib.current.stage;
@@ -140,6 +142,7 @@ class PrePreloader extends Sprite
 		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
 		_urlLoader.removeEventListener( Event.COMPLETE, _onComplete );
 		var l_data:BytesData = _urlLoader.data;
+		// security tip #2: this next line is to make things user friendly - this prepreloader can load in an encrypted or unaltered swf.  That's risky, because a spoofed, unaltered swf could be loaded (who's purpose is only to reveal the secret).  So the next line must become: var l_isOriginal:Bool = false; and, correspondingly, the loaded game must be encrypted.
 		var l_isOriginal:Bool = ( ( l_data.readByte() == 67 ) && ( l_data.readByte() == 87 ) && ( l_data.readByte() == 83 ) );
 		_loader.loadBytes( l_isOriginal ? _urlLoader.data : _encrypter.decrypt( Bytes.ofData( cast _urlLoader.data ) ).getData(), _loaderContext );		
 		removeChild( _progressBar );
