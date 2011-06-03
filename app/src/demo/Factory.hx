@@ -79,10 +79,10 @@ class Factory extends AFactory
 		targetFramerate = 20;
 	}
 	
-/*	override public function createPreloader():IPreloader
+	override public function createPreloader():IPreloader
 	{
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
-	}*/
+	}
 	
 	override public function createSession( ?ID:String ):ISession
 	{		

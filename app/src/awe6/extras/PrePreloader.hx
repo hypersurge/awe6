@@ -21,6 +21,7 @@
  */
 
 package awe6.extras;
+import awe6.core.Encrypter;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
 import flash.display.Sprite;
@@ -29,11 +30,15 @@ import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.Lib;
+import flash.net.URLLoader;
+import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.system.SecurityDomain;
 import flash.text.TextField;
+import haxe.io.Bytes;
+import haxe.io.BytesData;
 
 /**
  * The PrePreloader class provides a simple loader to show progress as the Main application loads (prior to preloader displaying).
@@ -42,6 +47,8 @@ import flash.text.TextField;
  */
 class PrePreloader extends Sprite
 {
+	public static var __isExisting:Bool;
+	private static var _SECRET:String;
 	private static inline var _IS_DECACHED = false;
 	private static inline var _GAME_URL = "game.swf";
 	private static inline var _BG_COLOR = 0xFFFFFF;
@@ -51,8 +58,10 @@ class PrePreloader extends Sprite
 	private var _bgColor:Int;
 	private var _isLocal:Bool;
 	private var _stage:Stage;
+	private var _encrypter:Encrypter;
 	private var _loader:Loader;
-	private var _context:LoaderContext;
+	private var _urlLoader:URLLoader;
+	private var _loaderContext:LoaderContext;
 	private var _textField:TextField;
 	private var _progressBar:Sprite;
 	private var _progressBarLine:Sprite;
@@ -60,6 +69,8 @@ class PrePreloader extends Sprite
 
 	public function new() 
 	{
+		__isExisting = true;
+		_SECRET = "ThereAreWaysToConcealThis";
 		super();
 		_stage = Lib.current.stage;
 		var l_loaderInfo:LoaderInfo = Lib.current.loaderInfo;
@@ -72,19 +83,21 @@ class PrePreloader extends Sprite
 	
 	private function _init():Void
 	{
+		_encrypter = new Encrypter( _SECRET );
 		_stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
-		_context = new LoaderContext();
-		_context.applicationDomain = ApplicationDomain.currentDomain;
-		if ( !_isLocal ) _context.securityDomain = SecurityDomain.currentDomain;
+		_loaderContext = new LoaderContext();
+		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+		if ( !_isLocal ) _loaderContext.securityDomain = SecurityDomain.currentDomain;
 		var l_url:String = _url;
 		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
 		_loader = new Loader();
-		_loader.load( new URLRequest( l_url ), _context );
-		_loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, _onError );
-		_loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, _onProgress );		
-		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 		addChild( _loader );
-		
+		_urlLoader = new URLLoader();
+		_urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+		_urlLoader.load( new URLRequest( l_url ) );
+		_urlLoader.addEventListener( IOErrorEvent.IO_ERROR, _onError );
+		_urlLoader.addEventListener( ProgressEvent.PROGRESS, _onProgress );		
+		_urlLoader.addEventListener( Event.COMPLETE, _onComplete );
 		graphics.beginFill( _bgColor );
 		graphics.drawRect( 0, 0, _stage.stageWidth, _stage.stageHeight );
 		var l_color:Int = _bgColor < 0x808080 ? 0xFFFFFF : 0x000000;
@@ -123,22 +136,24 @@ class PrePreloader extends Sprite
 	
 	private function _onComplete( event:Event ):Void
 	{
-		cast( event.target, LoaderInfo ).removeEventListener( IOErrorEvent.IO_ERROR, _onError );
-		cast( event.target, LoaderInfo ).removeEventListener( ProgressEvent.PROGRESS, _onProgress );
-		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
+		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
+		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
+		_urlLoader.removeEventListener( Event.COMPLETE, _onComplete );
+		var l_data:BytesData = _urlLoader.data;
+		var l_isOriginal:Bool = ( ( l_data.readByte() == 67 ) && ( l_data.readByte() == 87 ) && ( l_data.readByte() == 83 ) );
+		_loader.loadBytes( l_isOriginal ? _urlLoader.data : _encrypter.decrypt( Bytes.ofData( cast _urlLoader.data ) ).getData(), _loaderContext );		
 		removeChild( _progressBar );
 	}
 	
 	private function _onProgress( ?event:ProgressEvent ):Void
 	{
-		var l_loaderInfo:LoaderInfo = cast( event.target, LoaderInfo );
-		var l_perc:Float = l_loaderInfo.bytesLoaded / l_loaderInfo.bytesTotal;
+		var l_perc:Float = event.bytesLoaded / event.bytesTotal;
 		_progressBarLine.scaleX = l_perc;
 	}
 	
 	static function main()
 	{
-		Lib.current.addChild( new PrePreloader() );
+		if ( !__isExisting ) Lib.current.addChild( new PrePreloader() );
 	}
 	
 }

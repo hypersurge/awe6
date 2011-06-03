@@ -32,6 +32,7 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
+import flash.Lib;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
@@ -40,8 +41,10 @@ import flash.system.SecurityDomain;
 import flash.system.LoaderContext;
 import flash.text.Font;
 import flash.text.TextField;
+import flash.utils.SetIntervalTimer;
 import haxe.io.Bytes;
 import haxe.io.BytesData;
+import haxe.Timer;
 
 /**
  * The APreloader class provides a minimalist abstract implementation of the IPreloader interface.
@@ -63,6 +66,7 @@ class APreloader extends Process, implements IPreloader
 	private var _currentPerc:Float;
 	private var _currentAsset:Int;
 	private var _perc:Float;
+	private var _isComplete:Bool;
 	private var _textField:TextField;
 	
 	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
@@ -84,16 +88,24 @@ class APreloader extends Process, implements IPreloader
 		if ( !_kernel.isLocal ) _loaderContext.securityDomain = SecurityDomain.currentDomain;
 		_currentAsset = 0;
 		_perc = 0;
+		_isComplete = false;
 		if ( _assets.length > 0 ) _next();
 	}
 	
 	private function _next():Void
 	{
 		_currentAsset++;
-		if ( _currentAsset > _assets.length ) return dispose();
+		if ( _currentAsset > _assets.length )
+		{
+			if ( !_isComplete )
+			{
+				Timer.delay( dispose, 100 ); // delayed because some assets aren't available instantly (?)
+				_isComplete = true;
+			}
+			return;
+		}
 		else _load( _assets[_currentAsset - 1] );
 		_currentPerc = 0;
-		return;
 	}
 	
 	private function _load( url:String ):Void
