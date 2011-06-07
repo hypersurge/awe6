@@ -13,7 +13,7 @@ High level best practices:
   * OOP Game Design: http://www.devmaster.net/articles/oo-game-design/
   * States: http://www.icad.puc-rio.br/~lvalente/docs/2006_sbgames.pdf
   * Interface injection: http://martinfowler.com/articles/injection.html
-  * SOLID: http://en.wikipedia.org/wiki/Solid_(object-oriented_design)
+  * SOLID: [http://en.wikipedia.org/wiki/Solid_(object-oriented_design)]
   * Functional Reactive Programming: http://en.wikipedia.org/wiki/Functional_reactive_programming
 
 And ideas supported by others' commercial experience:
