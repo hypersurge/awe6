@@ -22,17 +22,10 @@
 
 package demo.scenes;
 import awe6.extras.gui.Text;
-import awe6.interfaces.EScene;
-import awe6.interfaces.IKernel;
 import demo.gui.Button;
 
 class Results extends AScene
 {
-	
-	public function new( kernel:IKernel, type:EScene ) 
-	{
-		super( kernel, type );
-	}
 	
 	override private function _init():Void 
 	{
@@ -46,11 +39,6 @@ class Results extends AScene
 		l_result.y = 60;
 		addEntity( l_result, true, 2 );
 		
-	}
-	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
-	{
-		super._updater( deltaTime );
 	}
 	
 }
