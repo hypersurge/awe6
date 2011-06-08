@@ -132,7 +132,14 @@ class APreloader extends Process, implements IPreloader
 	{
 		view.dispose();
 		_registerFonts();
-		if ( _loader != null ) _loader.unloadAndStop();
+		if ( _loader != null )
+		{
+			#if flash10
+			_loader.unloadAndStop();
+			#else
+			_loader.unload();
+			#end
+		}
 		if ( _urlLoader != null ) _urlLoader.close();
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
