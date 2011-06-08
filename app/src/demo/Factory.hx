@@ -28,42 +28,23 @@ import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ETextStyle;
-import awe6.interfaces.ILogger;
+import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
-import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
-import assets.BackOver;
-import assets.BackUp;
-import assets.MuteOver;
-import assets.MuteUp;
-import assets.OverlayBackground;
-import assets.PauseOver;
-import assets.PauseUp;
-import assets.UnmuteOver;
-import assets.UnmuteUp;
-import assets.UnpauseOver;
-import assets.UnpauseUp;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.filters.GlowFilter;
 import haxe.Resource;
 
 class Factory extends AFactory
 {
-	#if compileSwc
-	public function new( sprite:Sprite, isDebug:Bool = true )
-	{
-		super( sprite, isDebug, Resource.getString( "config.xml" ) );
-	}
-	#end
-
+	private var _assetManager:AssetManager;
+	
 	override private function _init():Void
 	{		
 		super._init();
@@ -79,32 +60,15 @@ class Factory extends AFactory
 		targetFramerate = 20;
 	}
 	
-	override public function createPreloader():IPreloader
+	override public function createAssetManager():IAssetManagerProcess
 	{
-		return new Preloader( _kernel, _getAssetUrls(), isDecached );
-	}
-	
-	override public function createSession( ?ID:String ):ISession
-	{		
-		return new Session( _kernel );
+		if ( _assetManager == null ) _assetManager = new AssetManager( _kernel );
+		return _assetManager;
 	}
 	
 	override public function createOverlay():IOverlayProcess
 	{
-		// rather than use getAsset, better form is to use extern classes, or create an empty BitmapData and copypixel data from the getAsset over the top (guarantees a match)
-		var l_background:BitmapData = new OverlayBackground();
-		var l_backUp:BitmapData = new BackUp();
-		var l_backOver:BitmapData = new BackOver();
-		var l_muteUp:BitmapData = new MuteUp();
-		var l_muteOver:BitmapData = new MuteOver();
-		var l_unmuteUp:BitmapData = new UnmuteUp();
-		var l_unmuteOver:BitmapData = new UnmuteOver();
-		var l_pauseUp:BitmapData = new PauseUp();
-		var l_pauseOver:BitmapData = new PauseOver();
-		var l_unpauseUp:BitmapData = new UnpauseUp();
-		var l_unpauseOver:BitmapData = new UnpauseOver();
-		
-		var l_overlay:Overlay = new Overlay( _kernel, l_background, l_backUp, l_backOver, l_muteUp, l_muteOver, l_unmuteUp, l_unmuteOver, l_pauseUp, l_pauseOver, l_unpauseUp, l_unpauseOver );
+		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
 		var l_width:Int = 40;
 		var l_x:Int = 599 - ( 3 * l_width );
 		var l_y:Int = 400 - 28;
@@ -114,8 +78,29 @@ class Factory extends AFactory
 		l_overlay.positionButton( EOverlayButton.MUTE, l_x += l_width, l_y );
 		l_overlay.positionButton( EOverlayButton.UNMUTE, l_x, l_y );
 		return l_overlay;
+	}	
+	
+	override public function createPreloader():IPreloader
+	{
+		return new Preloader( _kernel, _getAssetUrls(), isDecached );
 	}
 	
+	override public function createSession( ?id:String ):ISession
+	{		
+		return new Session( _kernel );
+	}
+	
+	override public function createScene( type:EScene ):IScene
+	{
+		switch ( type )
+		{
+			case INTRO : return new Intro( _kernel, type );
+			case GAME : return new Game( _kernel, type );
+			case RESULTS : return new Results( _kernel, type );
+			default :
+		}
+		return super.createScene( type );
+	}	
 	
 	override public function createTextStyle( ?type:ETextStyle ):ITextStyle
 	{
@@ -132,18 +117,6 @@ class Factory extends AFactory
 			default : 12;
 		}
 		return l_result;
-	}
-	
-	override public function createScene( type:EScene ):IScene
-	{
-		switch ( type )
-		{
-			case INTRO : return new Intro( _kernel, type );
-			case GAME : return new Game( _kernel, type );
-			case RESULTS : return new Results( _kernel, type );
-			default :
-		}
-		return super.createScene( type );
 	}
 	
 	override public function getBackSceneType( type:EScene ):EScene

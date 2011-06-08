@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="PreloaderMovieClip" itemID="4d2e5279-000000ac" linkageExportForAS="true" linkageClassName="demo.PreloaderMovieClip" sourceLibraryItemHRef="Symbol 1" lastModified="1294881406" lastUniqueIdentifier="4">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="PreloaderMovieClip" itemID="4d2e5279-000000ac" linkageExportForAS="true" linkageClassName="assets.PreloaderMovieClip" sourceLibraryItemHRef="Symbol 1" lastModified="1307490066" lastUniqueIdentifier="4">
   <timeline>
     <DOMTimeline name="PreloaderMovieClip">
       <layers>

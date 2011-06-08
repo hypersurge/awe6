@@ -21,7 +21,6 @@
  */
 
 package demo.scenes;
-import flash.display.BitmapData;
 import assets.Background;
 import awe6.core.Scene;
 import awe6.extras.gui.Image;
@@ -30,7 +29,7 @@ import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;
 import demo.Session;
-import flash.display.Bitmap;
+import flash.display.BitmapData;
 
 class AScene extends Scene
 {
@@ -39,7 +38,7 @@ class AScene extends Scene
 	private var _titleText:Text;
 	private var _isMusic:Bool;
 	
-	private function new( kernel:IKernel, type:EScene, ?isPauseable:Bool = false, ?isMutable:Bool = true, ?isSessionSavedOnNext:Bool = false ) 
+	public function new( kernel:IKernel, type:EScene, ?isPauseable:Bool = false, ?isMutable:Bool = true, ?isSessionSavedOnNext:Bool = false ) 
 	{
 		_session = cast kernel.session;
 		_title = "?";

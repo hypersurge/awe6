@@ -21,6 +21,7 @@
  */
 
 package demo;
+import assets.PreloaderMovieClip;
 import awe6.core.APreloader;
 
 class Preloader extends APreloader
@@ -42,8 +43,3 @@ class Preloader extends APreloader
 	}	
 }
 
-extern class PreloaderMovieClip extends flash.display.MovieClip
-{
-	var progress:flash.display.MovieClip;
-	function new() : Void;
-}

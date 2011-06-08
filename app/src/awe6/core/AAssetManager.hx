@@ -46,7 +46,7 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 		// trace( l_assetName + ":" + l_assetClass );
 		if ( l_assetClass == null )
 		{
-			trace( "ERROR: no such asset [" + l_assetName + "]" );
+			// trace( "ERROR: no such asset [" + l_assetName + "]" );
 			return null;			
 		}
 		if ( args == null )

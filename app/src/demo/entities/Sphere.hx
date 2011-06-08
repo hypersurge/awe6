@@ -25,28 +25,26 @@ import awe6.core.Entity;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IKernel;
+import demo.AssetManager;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
-import flash.utils.ByteArray;
-import haxe.Resource;
 
 class Sphere extends Entity
 {
+	private var _assetManager:AssetManager;
 	private var _sprite:Sprite;
 	private var _width:Float;
 	private var _height:Float;
 	private var _width2:Float;
 	private var _height2:Float;
-	private var _vx:Float;
-	private var _vy:Float;
-	private var _x:Float;
-	private var _y:Float;
+	private var _bouncer:Bouncer;
 	
 	public function new( kernel:IKernel ) 
 	{
 		_sprite = new Sprite();
+		_assetManager = cast kernel.assets;
 		super( kernel, _sprite );
 	}
 	
@@ -58,11 +56,8 @@ class Sphere extends Entity
 		_height = 100 * l_scale;
 		_width2 = _width / 2;
 		_height2 = _height / 2;
-		_vx = ( Math.random() - .5 ) * 20;
-		_vy = ( Math.random() - .5 ) * 20;
-		_x = _kernel.factory.width * Math.random();
-		_y = _kernel.factory.height * Math.random();
-		var l_source:BitmapData = new assets.Sphere();
+		addEntity( _bouncer = new Bouncer( _kernel, _width, _height ) );
+		var l_source:BitmapData = _assetManager.sphere.clone();
 		var l_bitmapData:BitmapData = new BitmapData( Std.int( _width ), Std.int( _height ), true, 0x00 );
 		var l_matrix:Matrix = new Matrix();
 		l_matrix.scale( l_scale, l_scale );
@@ -78,20 +73,12 @@ class Sphere extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		_x += _vx;
-		_y += _vy;
-		if ( _x > ( _kernel.factory.width - _width2 ) ) _vx *= -1;
-		if ( _y > ( _kernel.factory.height - _height2 ) ) _vy *= -1;
-		if ( _x < _width2 ) _vx *= -1;
-		if ( _y < _height2 ) _vy *= -1;
-		_x = _tools.limit( _x, _width2, _kernel.factory.width - _width2 );
-		_y = _tools.limit( _y, _height2, _kernel.factory.height - _height2 );
-		_sprite.x = _x;
-		_sprite.y = _y;
+		_sprite.x = _bouncer.x;
+		_sprite.y = _bouncer.y;
 		if ( _isHit() )
 		{
-			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _x / _kernel.factory.width );
-			_kernel.overlay.flash( 100, true, 1, Std.random( 12346577 ) );
+			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _bouncer.x / _kernel.factory.width );
+			_kernel.overlay.flash( 100, true, 1, Std.random( 0xFFFFFF ) );
 			dispose();
 		}
 	}
@@ -99,8 +86,8 @@ class Sphere extends Entity
 	private function _isHit():Bool
 	{
 		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) ) return false;
-		var l_dx:Float = _kernel.inputs.mouse.x - _x;
-		var l_dy:Float = _kernel.inputs.mouse.y - _y;
+		var l_dx:Float = _kernel.inputs.mouse.x - _bouncer.x;
+		var l_dy:Float = _kernel.inputs.mouse.y - _bouncer.y;
 		var l_dist:Float = ( ( l_dx * l_dx ) + ( l_dy * l_dy ) );
 		return ( l_dist < ( _width2 * _width2 ) );
 	}
