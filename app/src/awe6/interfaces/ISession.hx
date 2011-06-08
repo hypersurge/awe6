@@ -40,10 +40,10 @@ interface ISession
 	var isTester( __get_isTester, null ):Bool;
 	/**
 	 * Creates a copy of the current session.
-	 * @param	newID	The unique identifier of the copy.
+	 * @param	newId	The unique identifier of the copy.
 	 * @return	A copy of the current session.
 	 */
-	function clone( newID:String ):ISession;
+	function clone( newId:String ):ISession;
 	/**
 	 * Reverts the session back to factory settings (as if created afresh).
 	 * @param	?isSaved	If true immediately writes the reset session to disk.
