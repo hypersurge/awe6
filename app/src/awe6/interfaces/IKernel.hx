@@ -27,7 +27,7 @@ import awe6.core.MessageManager;
  * Handles main updates and provides global locators for all managers 
  * @author	Robert Fell
  */
-interface IKernel implements IPauseable
+interface IKernel implements IPauseable, implements ILogger
 {
 	/**
 	 * Defined by the IFactory, can be used for conditional logic relating to build modes and debug.
@@ -42,7 +42,7 @@ interface IKernel implements IPauseable
 	 */
 	var isEyeCandy( default, __set_isEyeCandy ):Bool;
 	/**
-	 * Toggleable by the user, enables or disabled full screen mode.
+	 * Toggleable by the user, enables or disables full screen mode.
 	 */
 	var isFullScreen( default, __set_isFullScreen ):Bool;
 	/**
@@ -98,9 +98,4 @@ interface IKernel implements IPauseable
 	 * @param	preloader	Corresponding IPreloader.
 	 */
 	function onPreloaderComplete( preloader:IPreloader ):Void;
-	/**
-	 * Used for write only application output - e.g. trace functions or analytic triggers.
-	 * @param	value	Value to be logged.
-	 */
-	function log( value:Dynamic ):Void;	
 }
