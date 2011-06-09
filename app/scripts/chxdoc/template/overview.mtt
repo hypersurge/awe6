@@ -10,7 +10,21 @@
 <!--			<h1>::config.title::</h1>
 			<h2>::config.subtitle::</h2> -->
 			<div id="main">
-				<br/><br/><p align="center"><img src="images/awe6Overview.png" /></p><br/><br/><br/>
+				<br/><br/><p align="center"><img src="images/awe6Overview.png"  width="600" height="600" border="0" alt="awe6 overview" usemap="#awe6Overview" /></p><br/><br/><br/>
+			<map name="awe6Overview">
+				<area shape="rect" coords="260,11,352,115" href="types/awe6/interfaces/IFactory.html" alt="Factory" title="Factory"    />
+				<area shape="rect" coords="103,41,195,145" href="types/awe6/interfaces/IOverlay.html" alt="Overlay" title="Overlay"    />
+				<area shape="rect" coords="404,43,496,147" href="types/awe6/interfaces/IPreloader.html" alt="Preloader" title="Preloader"    />
+				<area shape="rect" coords="33,126,125,230" href="types/awe6/interfaces/IInputManager.html" alt="Inputs" title="Inputs"    />
+				<area shape="rect" coords="469,123,561,227" href="types/awe6/interfaces/IAssetManager.html" alt="Assets" title="Assets"    />
+				<area shape="rect" coords="103,208,195,312" href="types/awe6/interfaces/IAudioManager.html" alt="Audio" title="Audio"    />
+				<area shape="rect" coords="403,212,495,316" href="types/awe6/interfaces/ISession.html" alt="Session" title="Session"    />
+				<area shape="rect" coords="231,234,368,338" href="types/awe6/interfaces/ISceneManager.html" alt="Scene" title="Scene"    />
+				<area shape="rect" coords="111,374,486,478" href="types/awe6/interfaces/IEntity.html" alt="Entity" title="Entity"    />
+				<area shape="rect" coords="251,478,349,570" href="types/awe6/interfaces/IMessageManager.html" alt="Messages" title="Messages"    />
+				<area shape="rect" coords="208,140,383,232" href="types/awe6/interfaces/IKernel.html" alt="Kernel" title="Kernel"    />
+			</map>
+				
 ::if config.generateTodo::
 	::if config.todoLines.length > 0::
 				<p>There are <a href="::config.todoFile::">TODO tasks</a> to be done.</p>
