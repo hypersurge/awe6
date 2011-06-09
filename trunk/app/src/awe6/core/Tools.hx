@@ -109,7 +109,7 @@ class Tools implements ITools
 		return true;
 	}
 	
-	public function toCamelCase( value:String, ?isLower:Bool = true ):String
+	public function toCamelCase( value:String, ?isUpper:Bool = false ):String
 	{
 		if ( ( value == null ) || ( value == "" ) ) return "";
 		if ( _isCamelCase( value ) ) return value;
@@ -124,9 +124,8 @@ class Tools implements ITools
 		var l_words:Array<String> = value.split( l_del );
 		for ( i in l_words )
 		{
-			if ( isLower ) l_result += i.toLowerCase();
-			else l_result += toUpperCaseFirst( i );
-			isLower = false;
+			l_result += isUpper ? toUpperCaseFirst( i ) : i.toLowerCase();
+			isUpper = true;
 		}
 		return l_result;
 	}

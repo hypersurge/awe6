@@ -81,10 +81,10 @@ interface ITools implements IEncrypter
 	 * Turns a word or sentence into camelCase.
 	 * <p>E.g. "this example string" becomes "thisExampleString".</p>
 	 * @param	value	The string to transform.
-	 * @param	?isLower	If false returns PascalCase (first character uppercased).
+	 * @param	?isUpper	If true returns PascalCase (first character uppercased).
 	 * @return	camelCase or PascalCase representation of a string.
 	 */
-	function toCamelCase( value:String, ?isLower:Bool = true ):String;
+	function toCamelCase( value:String, ?isUpper:Bool = false ):String;
 	/**
 	 * Turns a word of sentence into CONST_CASE.
 	 * <p>E.g. "this example string" becomes "THIS_EXAMPLE_STRING".</p>
