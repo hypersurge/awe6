@@ -28,13 +28,13 @@ class Bouncer extends Entity
 {
 	public var x( default, null ):Float;
 	public var y( default, null ):Float;
+	public var vx( default, null ):Float;
+	public var vy( default, null ):Float;
 	
 	private var _width:Float;
 	private var _height:Float;
 	private var _width2:Float;
 	private var _height2:Float;
-	private var _vx:Float;
-	private var _vy:Float;
 	
 	public function new( kernel:IKernel, width:Float, height:Float ) 
 	{
@@ -48,8 +48,10 @@ class Bouncer extends Entity
 		super._init();
 		_width2 = _width / 2;
 		_height2 = _height / 2;
-		_vx = ( Math.random() - .5 ) * 20;
-		_vy = ( Math.random() - .5 ) * 20;
+		var l_speed:Float = ( Math.random() * 10 ) + 2;
+		vx = Math.random() < .5 ? l_speed : -l_speed;
+		l_speed /= 4;
+		vy = Math.random() < .5 ? l_speed : -l_speed;
 		x = _kernel.factory.width * Math.random();
 		y = _kernel.factory.height * Math.random();
 	}	
@@ -57,12 +59,12 @@ class Bouncer extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		x += _vx;
-		y += _vy;
-		if ( x > ( _kernel.factory.width - _width2 ) ) _vx *= -1;
-		if ( y > ( _kernel.factory.height - _height2 ) ) _vy *= -1;
-		if ( x < _width2 ) _vx *= -1;
-		if ( y < _height2 ) _vy *= -1;
+		x += vx;
+		y += vy;
+		if ( x > ( _kernel.factory.width - _width2 ) ) vx *= -1;
+		if ( y > ( _kernel.factory.height - _height2 ) ) vy *= -1;
+		if ( x < _width2 ) vx *= -1;
+		if ( y < _height2 ) vy *= -1;
 		x = _tools.limit( x, _width2, _kernel.factory.width - _width2 );
 		y = _tools.limit( y, _height2, _kernel.factory.height - _height2 );
 	}

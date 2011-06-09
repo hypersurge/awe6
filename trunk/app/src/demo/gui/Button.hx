@@ -37,10 +37,10 @@ class Button extends awe6.extras.gui.Button
 	private var _shine:Shine;
 	private var _isShineEnabled:Bool;
 
-	public function new( kernel:IKernel, ?key:EKey, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void, ?label:String, ?isShineEnabled:Bool = true )
+	public function new( kernel:IKernel, ?key:EKey, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void, ?label:String, ?isShineEnabled:Bool = false )
 	{
 		_isShineEnabled = isShineEnabled;
-		super( kernel, key, onClick, onRollOver, onRollOut, label, 120, 35, 9, 9 );
+		super( kernel, key, onClick, onRollOver, onRollOut, label, 160, 40, 20, 12 );
 	}
 	
 	override private function _init():Void
