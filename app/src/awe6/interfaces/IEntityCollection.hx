@@ -62,21 +62,21 @@ interface IEntityCollection
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
 	 * @param	classType	The type of class to match (can be any class, type or interface).
 	 * @param	agenda	Used to filter results to the specified agenda.
-	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity.
-	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity.
-	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
+	 * @param	?isBubbleDown	Set to true if you want to search this object's children for the requested entity.
+	 * @param	?isBubbleUp	Set to true if you want to search this object's parent for the requested entity.
+	 * @param	?isBubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
 	 * @return	Array of matching entities.
 	 */
-	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>;
+	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Array<T>;
 	/**
 	 * Retrieves the child entity with the specified id. 
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
 	 * @param	id	The unique identifier of the entity you want to retrieve.
 	 * @param	?agenda	Used to filter results to the specified agenda.
-	 * @param	?bubbleDown	Set to true if you want to search this object's children for the requested entity.
-	 * @param	?bubbleUp	Set to true if you want to search this object's parent for the requested entity.
-	 * @param	?bubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
+	 * @param	?isBubbleDown	Set to true if you want to search this object's children for the requested entity.
+	 * @param	?isBubbleUp	Set to true if you want to search this object's parent for the requested entity.
+	 * @param	?isBubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
 	 * @return	The requested entity or null if no entity with this id was found.
 	 */
-	function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity;
+	function getEntityById( id:String, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):IEntity;
 }

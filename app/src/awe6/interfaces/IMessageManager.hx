@@ -78,10 +78,10 @@ interface IMessageManager
 	 * Dispatch a message from a specific entity.
 	 * @param	message	Message to dispatch.
 	 * @param	sender	The originator of the message (can be spoofed).
-	 * @param	?bubbleDown	Set to true if you want to dispatch this message to the sender's children.
-	 * @param	?bubbleUp	Set to true if you want to dispatch this message to the sender's parent.
-	 * @param	?bubbleEverywhere	Set to true if you want to dispatch this message to the entity traversal stack.
+	 * @param	?isBubbleDown	Set to true if you want to dispatch this message to the sender's children.
+	 * @param	?isBubbleUp	Set to true if you want to dispatch this message to the sender's parent.
+	 * @param	?isBubbleEverywhere	Set to true if you want to dispatch this message to the entity traversal stack.
 	 * @type	<M>	Messages can be any type.  For recursive types use Enums.
 	 */
-	function sendMessage<M>( message:M, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void;
+	function sendMessage<M>( message:M, sender:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void;
 }
