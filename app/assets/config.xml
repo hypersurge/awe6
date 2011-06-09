@@ -9,10 +9,10 @@
 		<font name="Orbitron" />
 	</settings>
 	<gui>
-		<buttons next="NEXT" />
+		<buttons next="NEXT" start="START" />
 		<scenes>
-			<intro title="INTRO SCENE" />
-			<game title="GAME SCENE" />
+			<intro title="INTRODUCTION" instructions="Click on all the invaders as fast as possible!" />
+			<game />
 			<results title="GAME OVER" win="A new personal best of " lose="You didn't beat your previous time of " />
 		</scenes>
 	</gui>

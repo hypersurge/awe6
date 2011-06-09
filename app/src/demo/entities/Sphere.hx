@@ -52,13 +52,14 @@ class Sphere extends Entity
 	{
 		super._init();
 		var l_scale:Float = _tools.range( Math.random(), .5, 1 );
+//		l_scale = 1;
 		_width = 100 * l_scale;
 		_height = 100 * l_scale;
 		_width2 = _width / 2;
 		_height2 = _height / 2;
 		addEntity( _bouncer = new Bouncer( _kernel, _width, _height ) );
 		var l_source:BitmapData = _assetManager.sphere.clone();
-		var l_bitmapData:BitmapData = new BitmapData( Std.int( _width ), Std.int( _height ), true, 0x00 );
+		var l_bitmapData:BitmapData = new BitmapData( Std.int( _width ), Std.int( _height * 1.5 ), true, 0x00 );
 		var l_matrix:Matrix = new Matrix();
 		l_matrix.scale( l_scale, l_scale );
 		l_bitmapData.draw( l_source, l_matrix, true );
@@ -75,6 +76,8 @@ class Sphere extends Entity
 		super._updater( deltaTime );
 		_sprite.x = _bouncer.x;
 		_sprite.y = _bouncer.y;
+		_sprite.scaleX = _bouncer.vx > 1 ? 1 : -1;
+		view.priority = Std.int( _bouncer.y );
 		if ( _isHit() )
 		{
 			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _bouncer.x / _kernel.factory.width );

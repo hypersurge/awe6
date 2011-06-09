@@ -27,6 +27,7 @@ import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EScene;
+import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
 import demo.Session;
 import flash.display.BitmapData;
@@ -54,8 +55,8 @@ class AScene extends Scene
 		addEntity( new Image( _kernel, l_background ), true, 0 );
 		var l_sceneID:String = _tools.toCamelCase( Std.string( type ), true );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneID + ".title" ) );
-		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle() );
-		_titleText.y = 10;
+		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
+		_titleText.y = 40;
 		addEntity( _titleText, true, 100 );
 		
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );

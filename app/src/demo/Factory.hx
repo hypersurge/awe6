@@ -69,9 +69,9 @@ class Factory extends AFactory
 	override public function createOverlay():IOverlayProcess
 	{
 		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
-		var l_width:Int = 40;
-		var l_x:Int = 599 - ( 3 * l_width );
-		var l_y:Int = 400 - 28;
+		var l_width:Int = 30;
+		var l_x:Int = 590 - ( 3 * l_width );
+		var l_y:Int = 400 - 30;
 		l_overlay.positionButton( EOverlayButton.BACK, l_x, l_y );
 		l_overlay.positionButton( EOverlayButton.PAUSE, l_x += l_width, l_y );
 		l_overlay.positionButton( EOverlayButton.UNPAUSE, l_x, l_y );
@@ -106,10 +106,10 @@ class Factory extends AFactory
 	{
 		if ( type == null ) type = ETextStyle.BODY;
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
-		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new GlowFilter( 0x000000, 1, 4, 4, 3, 2 ) ] );
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( type )
 		{
-			case ETextStyle.HEADLINE : 36;
+			case ETextStyle.HEADLINE : 24;
 			case ETextStyle.OVERSIZED : 72;
 			case ETextStyle.SUBHEAD : 18;
 			case ETextStyle.BUTTON : 10;
