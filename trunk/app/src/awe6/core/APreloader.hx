@@ -56,6 +56,7 @@ class APreloader extends Process, implements IPreloader
 {
 	private static inline var _FONT_PACKAGE_ID = "assets.fonts";
 	public var view( __get_view, null ):IView;
+	public var progress( __get_progress, null ):Float;
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
@@ -63,9 +64,8 @@ class APreloader extends Process, implements IPreloader
 	private var _loader:Loader;
 	private var _urlLoader:URLLoader;
 	private var _loaderContext:LoaderContext;
-	private var _currentPerc:Float;
+	private var _currentProgress:Float;
 	private var _currentAsset:Int;
-	private var _perc:Float;
 	private var _isComplete:Bool;
 	private var _textField:TextField;
 	
@@ -87,7 +87,7 @@ class APreloader extends Process, implements IPreloader
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
 		if ( !_kernel.isLocal ) _loaderContext.securityDomain = SecurityDomain.currentDomain;
 		_currentAsset = 0;
-		_perc = 0;
+		progress = 0;
 		_isComplete = false;
 		if ( _assets.length > 0 ) _next();
 	}
@@ -105,7 +105,7 @@ class APreloader extends Process, implements IPreloader
 			return;
 		}
 		else _load( _assets[_currentAsset - 1] );
-		_currentPerc = 0;
+		_currentProgress = 0;
 	}
 	
 	private function _load( url:String ):Void
@@ -197,9 +197,10 @@ class APreloader extends Process, implements IPreloader
 	
 	private function _onProgress( ?event:ProgressEvent ):Void
 	{
-		_currentPerc = event.bytesLoaded / event.bytesTotal;
-		_perc = _tools.limit( ( _currentAsset - 1 + _currentPerc ) / _assets.length , 0, 1 );
+		_currentProgress = event.bytesLoaded / event.bytesTotal;
+		progress = _tools.limit( ( _currentAsset - 1 + _currentProgress ) / _assets.length , 0, 1 );
 	}
 	
 	private function __get_view():IView { return view; }	
+	private function __get_progress():Float { return progress; }	
 }
