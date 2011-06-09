@@ -109,7 +109,7 @@ class Tools implements ITools
 		return true;
 	}
 	
-	public function toCamelCase( value:String, ?isLower:Bool = false  ):String
+	public function toCamelCase( value:String, ?isLower:Bool = true ):String
 	{
 		if ( ( value == null ) || ( value == "" ) ) return "";
 		if ( _isCamelCase( value ) ) return value;
