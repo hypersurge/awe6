@@ -53,8 +53,8 @@ class AScene extends Scene
 		var l_background:BitmapData;
 		l_background = new Background();
 		addEntity( new Image( _kernel, l_background ), true, 0 );
-		var l_sceneID:String = _tools.toCamelCase( Std.string( type ), true );
-		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneID + ".title" ) );
+		var l_sceneType:String = _tools.toCamelCase( Std.string( type ), true );
+		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
 		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
 		_titleText.y = 40;
 		addEntity( _titleText, true, 100 );

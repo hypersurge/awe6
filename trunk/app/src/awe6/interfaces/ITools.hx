@@ -84,7 +84,7 @@ interface ITools implements IEncrypter
 	 * @param	?isLower	If false returns PascalCase (first character uppercased).
 	 * @return	camelCase or PascalCase representation of a string.
 	 */
-	function toCamelCase( value:String, ?isLower:Bool = false ):String;
+	function toCamelCase( value:String, ?isLower:Bool = true ):String;
 	/**
 	 * Turns a word of sentence into CONST_CASE.
 	 * <p>E.g. "this example string" becomes "THIS_EXAMPLE_STRING".</p>

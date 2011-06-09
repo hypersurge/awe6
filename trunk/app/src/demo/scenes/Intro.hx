@@ -41,6 +41,13 @@ class Intro extends AScene
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
+		
+		
+		var l_original:String = "I am a word";
+		var l_original:String = "U me me me and ILL be back";
+		trace( _tools.toCamelCase( l_original ) );
+		trace( _entity.id );
+		
 	}
 	
 }
