@@ -1,4 +1,11 @@
 /*
+ *                        _____ 
+ *     _____      _____  / ___/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
+ *    awe6 is game, inverted
+ * 
  * Copyright (c) 2010, Robert Fell, awe6.org
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
