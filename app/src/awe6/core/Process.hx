@@ -28,6 +28,8 @@
  */
 
 package awe6.core;
+import awe6.interfaces.EMessage;
+import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IProcess;
 import awe6.interfaces.ITools;
@@ -46,13 +48,14 @@ class Process implements IProcess
 	private var _tools:ITools;
 	private var _age:Int;	
 	private var _updates:Int;
+	private var _isEntity:Bool;
 
 	public function new( kernel:IKernel ) 
 	{
 		_kernel = kernel;
 		_tools = _kernel.tools;
-//		trace( "new " + this );
 		_init();
+		_isEntity = Std.is( this, IEntity );
 	}
 	
 	private function _init():Void
@@ -68,8 +71,9 @@ class Process implements IProcess
 		if ( isDisposed ) return;
 		else
 		{
-			isActive = false;
 			isDisposed = true;
+			isActive = false;
+			if ( _isEntity ) _kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
 			_disposer();
 			return;
 		}
@@ -88,6 +92,7 @@ class Process implements IProcess
 			_age += deltaTime;
 			_updates++;
 			_updater( deltaTime );
+			if ( _isEntity ) _kernel.messenger.sendMessage( EMessage.UPDATE( deltaTime ), cast this );
 			return;
 		}
 	}
@@ -117,6 +122,7 @@ class Process implements IProcess
 		{
 			Reflect.setField( this, "isActive", false ); // avoids the setter
 			_pauser();
+			if ( _isEntity && !isDisposed ) _kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
 			return;
 		}
 	}
@@ -133,6 +139,7 @@ class Process implements IProcess
 		{
 			Reflect.setField( this, "isActive", true ); // avoids the setter
 			_resumer();
+			if ( _isEntity && !isDisposed ) _kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
 			return;
 		}
 	}

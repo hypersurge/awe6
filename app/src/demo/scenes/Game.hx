@@ -32,9 +32,12 @@ import awe6.core.Scene;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
 import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EMessage;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
+import demo.entities.Bouncer;
 import demo.Session;
 import demo.entities.Sphere;
 
@@ -44,6 +47,8 @@ class Game extends Scene
 	private var _session:Session;
 	private var _timer:Text;
 	private var _score:Int;
+	
+	private var _temp:IEntity;
 	
 	public function new( kernel:IKernel, type:EScene ) 
 	{
@@ -63,11 +68,40 @@ class Game extends Scene
 		_kernel.audio.stop( "MusicMenu", EAudioChannel.MUSIC );
 		_kernel.audio.start( "MusicGame", EAudioChannel.MUSIC, -1, 0, .5, 0, true );
 		for ( i in 0...10 ) addEntity( new Sphere( _kernel ), true, i + 10 );
+		
+		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
+		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
+		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE, _mh, l_sphere );
+//		_kernel.messenger.addSubscriber( _entity, EMessage, _mn, l_sphere );
+		_temp = l_sphere;
+	}
+	
+	private function _mn( message:Enum<EMessage>, sender:IEntity ):Bool
+	{
+		var l_message:EMessage = cast message;
+		switch ( l_message )
+		{
+			case EMessage.UPDATE( deltaTime ) : trace( deltaTime );
+			default : trace( l_message );
+		}
+		return true;		
+	}
+	
+	private function _mh( deltaTime:Int->EMessage, sender:IEntity ):Bool
+	{
+		trace( deltaTime + " : sender" );
+		return true;		
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
+		
+		if ( _kernel.inputs.mouse.getIsButtonRelease() )
+		{
+			_temp.isActive = !_temp.isActive;
+		}
+		
 		_score = Std.int( _tools.limit( ( _kernel.factory.targetFramerate * TIME_LIMIT ) - _updates, 0, _tools.BIG_NUMBER ) );
 		if ( _score == 0 ) _gameOver();
 		_timer.text = _tools.convertUpdatesToTime( _updates );

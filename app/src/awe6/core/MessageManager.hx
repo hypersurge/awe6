@@ -86,17 +86,19 @@ class MessageManager extends Process, implements IMessageManager
 	{
 		if ( _isVerbose ) trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
 		if ( isBubbleEverywhere ) return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, Type.getClass( sender ) );
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( null, message, null, target );
+		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
-			if ( !_send( i, message, sender ) ) break;
-			if ( isBubbleDown )
-			{
-				var l_children:Array<IEntity> = cast sender.getEntities();
-				for ( j in l_children ) _sendMessage( message, sender, j, true );
-			}
-			if ( isBubbleUp && ( sender.parent != null ) && ( Std.is( sender.parent, IEntity ) ) ) _sendMessage( message, sender, cast sender.parent, false, true );
+			l_isContinue = _send( i, message, sender );
+			if ( !l_isContinue ) return;
 		}
+		if ( isBubbleDown )
+		{
+			var l_children:Array<IEntity> = target.getEntities();
+			for ( j in l_children ) _sendMessage( message, sender, j, true );
+		}
+		if ( isBubbleUp && ( target.parent != null ) && ( Std.is( target.parent, IEntity ) ) ) _sendMessage( message, sender, cast target.parent, false, true );
 		return;
 	}
 	
@@ -118,7 +120,10 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				switch ( Type.typeof( message ) )
 				{
-					case ValueType.TEnum( e ) : if ( !Type.enumEq( message, i.message ) ) continue;
+					case ValueType.TEnum( e ) : 
+//					trace( message + ":" + i.message ) ;
+					if ( !Type.enumEq( message, i.message ) ) continue;
+//					case ValueType.TFunction : if ( !Type.typeof( message, i.message ) ) continue;
 					default : if ( message != i.message ) continue;
 				}
 			}
@@ -149,9 +154,11 @@ private class _HelperSubscription<M,T>
 	{
 		this.subscriber = subscriber;
 		this.message = message;
+		this.messageClass = Type.getClass( message );
 		this.handler = handler;
 		this.sender = sender;
 		this.senderClassType = senderClassType;
 		this.isRemovedAfterFirstSend = isRemovedAfterFirstSend;
+//		trace( message + ":" + messageClass + ":" + Type.typeof( message ) );
 	}
 }
