@@ -85,8 +85,8 @@ class Scene extends Process, implements IScene
 	public function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int ):Void { return _entity.addEntity( entity, agenda, isAddedToView, viewPriority ); }
 	public function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void { _entity.removeEntity( entity, agenda, isRemovedFromView ); }
 	public function getEntities( ?agenda:EAgenda ):Array<IEntity> { return _entity.getEntities( agenda ); }
-	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T> { return _entity.getEntitiesByClass( classType, agenda, bubbleDown, bubbleUp, false ); }
-	public function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity { return _entity.getEntityById( id, agenda, bubbleDown, bubbleUp, false ); }
+	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Array<T> { return _entity.getEntitiesByClass( classType, agenda, isBubbleDown, isBubbleUp, false ); }
+	public function getEntityById( id:String, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):IEntity { return _entity.getEntityById( id, agenda, isBubbleDown, isBubbleUp, false ); }
 	
 	private function __get_view():IView { return view; }
 }

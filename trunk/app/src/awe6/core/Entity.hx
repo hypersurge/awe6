@@ -162,33 +162,33 @@ class Entity extends Process, implements IEntity
 		return l_result;
 	}
 	
-	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Array<T>
+	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Array<T>
 	{
-		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntitiesByClass( classType, agenda, true );
+		if ( isBubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntitiesByClass( classType, agenda, true );
 		var l_result:Array<T> = new Array<T>();
 		var l_entities:Array<IEntity> = _getEntities( agenda );
 		for ( i in l_entities )
 		{
 			if ( Std.is( i, classType ) ) l_result.push( cast i );
-			if ( bubbleDown ) l_result.concat( i.getEntitiesByClass( classType, agenda, true ) );
+			if ( isBubbleDown ) l_result.concat( i.getEntitiesByClass( classType, agenda, true ) );
 		}
-		if ( bubbleUp && ( parent != null ) ) l_result.concat( parent.getEntitiesByClass( classType, agenda, false, true ) );
+		if ( isBubbleUp && ( parent != null ) ) l_result.concat( parent.getEntitiesByClass( classType, agenda, false, true ) );
 		return l_result;
 	}
 	
-	public function getEntityById( id:String, ?agenda:EAgenda, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):IEntity
+	public function getEntityById( id:String, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):IEntity
 	{
 		if ( this.id == id ) return this;
-		if ( bubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntityById( id, agenda, true );
+		if ( isBubbleEverywhere && ( _kernel.scenes.scene != null ) ) return _kernel.scenes.scene.getEntityById( id, agenda, true );
 		var l_result:IEntity = null;
 		var l_entities:Array<IEntity> = _getEntities( agenda );
 		for ( i in l_entities )
 		{
 			if ( i.id == id ) return i;
-			if ( bubbleDown ) l_result = i.getEntityById( id, agenda, true );
+			if ( isBubbleDown ) l_result = i.getEntityById( id, agenda, true );
 			if ( l_result != null ) return l_result;
 		}
-		if ( bubbleUp && ( parent != null ) ) l_result = parent.getEntityById( id, agenda, false, true );
+		if ( isBubbleUp && ( parent != null ) ) l_result = parent.getEntityById( id, agenda, false, true );
 		return l_result;
 	}
 	

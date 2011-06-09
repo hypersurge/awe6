@@ -77,34 +77,34 @@ class MessageManager extends Process, implements IMessageManager
 		}		
 	}
 	
-	public function sendMessage<M>( message:M, sender:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
+	public function sendMessage<M>( message:M, sender:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void
 	{
-		_sendMessage( message, sender, sender, bubbleDown, bubbleUp, bubbleEverywhere );
+		_sendMessage( message, sender, sender, isBubbleDown, isBubbleUp, isBubbleEverywhere );
 	}
 	
-	private function _sendMessage<M>( message:M, sender:IEntity, target:IEntity, ?bubbleDown:Bool = false, ?bubbleUp:Bool = false, ?bubbleEverywhere:Bool = false ):Void
+	private function _sendMessage<M>( message:M, sender:IEntity, target:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void
 	{
 		if ( _isVerbose ) trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
-		if ( bubbleEverywhere ) return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
+		if ( isBubbleEverywhere ) return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
 		var l_subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>> = _getSubscriptions( null, message, null, sender, Type.getClass( sender ) );
 		for ( i in l_subscriptions )
 		{
-			if ( _send( i, message, sender ) ) break;
-			if ( bubbleDown )
+			if ( !_send( i, message, sender ) ) break;
+			if ( isBubbleDown )
 			{
 				var l_children:Array<IEntity> = cast sender.getEntities();
 				for ( j in l_children ) _sendMessage( message, sender, j, true );
 			}
-			if ( bubbleUp && ( sender.parent != null ) && ( Std.is( sender.parent, IEntity ) ) ) _sendMessage( message, sender, cast sender.parent, false, true );
+			if ( isBubbleUp && ( sender.parent != null ) && ( Std.is( sender.parent, IEntity ) ) ) _sendMessage( message, sender, cast sender.parent, false, true );
 		}
 		return;
 	}
 	
 	private function _send<M>( subscription:_HelperSubscription<Dynamic,Dynamic>, message:M, sender:IEntity ):Bool
 	{
-		var l_isBreak:Bool = Reflect.callMethod( subscription.subscriber, subscription.handler, [message, sender] );		
+		var l_isContinue:Bool = Reflect.callMethod( subscription.subscriber, subscription.handler, [message, sender] );		
 		if ( subscription.isRemovedAfterFirstSend ) _subscriptions.remove( subscription );
-		return l_isBreak;
+		return l_isContinue;
 	}
 	
 	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Dynamic>>
@@ -113,7 +113,7 @@ class MessageManager extends Process, implements IMessageManager
 		for ( i in _subscriptions )
 		{
 			if ( ( subscriber != null ) && ( i.subscriber != subscriber ) ) continue;
-			if ( _isVerbose ) trace( 1 );
+//			if ( _isVerbose ) trace( 1 );
 			if ( ( message != null ) && !Std.is( message, i.messageClass ) )
 			{
 				switch ( Type.typeof( message ) )
@@ -122,13 +122,13 @@ class MessageManager extends Process, implements IMessageManager
 					default : if ( message != i.message ) continue;
 				}
 			}
-			if ( _isVerbose ) trace( 2 );
+//			if ( _isVerbose ) trace( 2 );
 			if ( ( handler != null ) && ( !Reflect.compareMethods( i.handler, handler ) ) ) continue;
-			if ( _isVerbose ) trace( 3 );
+//			if ( _isVerbose ) trace( 3 );
 			if ( ( sender != null ) && ( i.sender != null ) && ( i.sender != sender ) ) continue;
-			if ( _isVerbose ) trace( 4 );
+//			if ( _isVerbose ) trace( 4 );
 			if ( ( i.senderClassType != null ) && ( !Std.is( sender, i.senderClassType ) ) ) continue;
-			if ( _isVerbose ) trace( 5 );
+//			if ( _isVerbose ) trace( 5 );
 			l_result.add( i );
 		}
 		return l_result;
