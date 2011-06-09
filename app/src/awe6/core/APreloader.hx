@@ -153,7 +153,7 @@ class APreloader extends Process, implements IPreloader
 		if ( l_packageId == null ) l_packageId = _FONT_PACKAGE_ID;		
 		for ( i in Type.getEnumConstructs( ETextStyle ) )
 		{
-			var l_className:String = _tools.toCamelCase( i, false );
+			var l_className:String = _tools.toCamelCase( i, true );
 			if ( l_packageId.length > 0 ) l_className = l_packageId + "." + l_className;
 			var l_fontClass:Class<Dynamic> = Type.resolveClass( l_className );
 			if ( l_fontClass != null )

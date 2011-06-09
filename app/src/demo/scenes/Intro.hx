@@ -45,7 +45,7 @@ class Intro extends AScene
 		
 		var l_original:String = "I am a word";
 		var l_original:String = "U me me me and ILL be back";
-		trace( _tools.toCamelCase( l_original ) );
+		trace( _tools.toCamelCase( l_original, true ) );
 		trace( _entity.id );
 		
 	}
