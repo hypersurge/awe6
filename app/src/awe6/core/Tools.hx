@@ -27,6 +27,8 @@ import awe6.interfaces.IPriority;
 import awe6.interfaces.ITools;
 import haxe.io.Bytes;
 import haxe.io.BytesData;
+import haxe.Serializer;
+import haxe.Unserializer;
 
 /**
  * The Tools class provides a minimalist implementation of the ITools interface.
@@ -39,18 +41,28 @@ class Tools implements ITools
 	
 	private var _kernel:IKernel;
 	private var _encrypter:IEncrypter;
+	private var _invSqrtMemory:BytesData;
 	
 	public function new( kernel:IKernel )
 	{
 		_kernel = kernel;
 		BIG_NUMBER = 9999998;
 		_encrypter = _kernel.factory.createEncrypter();
-	}	
+		#if flash
+		_invSqrtMemory = new BytesData();
+		_invSqrtMemory.length = 1024;
+		flash.Memory.select( _invSqrtMemory );
+		#end
+	}
 
 	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
 	{
-		var l_S4 = function():String { return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 ); }
-		return isSmall ? prefix + ( l_S4() + l_S4() + l_S4() ).substr( 0, 10 ) : prefix + ( l_S4() + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + "-" + l_S4() + l_S4() + l_S4() );
+		return isSmall ? prefix + ( _randomCharacter() + _randomCharacter() + _randomCharacter() ).substr( 0, 10 ) : prefix + ( _randomCharacter() + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + _randomCharacter() + _randomCharacter() );
+	}
+	
+	private function _randomCharacter():String
+	{
+		return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 );
 	}
 	
 	public inline function ease( originalValue:Float, newValue:Float, ease:Float ):Float
@@ -212,6 +224,27 @@ class Tools implements ITools
 		else return -1;
 	}
 	
+	public inline function invSqrt( value:Float, ?isAccurate:Bool = false  ):Float
+	{
+		if ( isAccurate ) return 1 / Math.sqrt( value );
+		else
+		{
+			#if flash
+			// http://ncannasse.fr/blog/fast_inverse_square_root, remember this needs to be inlined (i.e. not used as interface) else Math is faster
+			var l_half:Float = 0.5 * value;
+			flash.Memory.setFloat( 0, value );
+			var l_i:Int = flash.Memory.getI32( 0 );
+			l_i = 0x5f3759df - ( l_i >> 1 );
+			flash.Memory.setI32( 0, l_i );
+			value = flash.Memory.getFloat( 0 );
+			value = value * ( 1.5 - l_half * value * value );
+			return value;
+			#else
+			return 1 / Math.sqrt( value );
+			#end
+		}
+	}	
+	
 	public inline function isBool( value:Dynamic ):Bool
 	{
 		return ( value != 0 && value != null && value != false );		
@@ -265,46 +298,22 @@ class Tools implements ITools
 		return Std.string( l_mins + delimiter + l_secs + delimiter + l_remainder );
 	}
 	
-	public function intToHex( value:Int ):String
+	public inline function intToHex( value:Int ):String
 	{
 		value &= 0xFF;
 		var l_hex:String = "0123456789abcdef";
 		return l_hex.charAt( value >> 4 ) + l_hex.charAt( value & 0xF );
 	}
 	
-	public function bytesToHex( bytesData:BytesData ):String
+	public inline function serialize( value:Dynamic ):String
 	{
-		var l_string:String = "";
-		bytesData.position = 0;
-		for ( i in 0...bytesData.length ) l_string += intToHex( bytesData.readUnsignedByte() );
-		return l_string;
+		return Serializer.run( value );
 	}
 	
-	public function hexToBytes( value:String ):BytesData
+	public inline function unserialize( value:String ):Dynamic
 	{
-		var l_isValid:Bool = true;
-		var l_hex:String = "0123456789abcdefABCDEF";
-		var l_bytesData:BytesData = new BytesData();
-		
-		value = StringTools.replace( value, " ", "" );
-		for ( i in 0...( value.length - 1 ) )
-		{
-			if ( i % 2 == 0 )
-			{
-				var l_c1:String = value.charAt( i );
-				var l_p1:Int = l_hex.indexOf( l_c1 );
-				if ( l_p1 >= 16 ) l_p1 -= 6;
-				if ( l_p1 >= 16 || l_p1 < 0 ) l_isValid = false;
-				var l_c2:String = value.charAt( i + 1 );
-				var l_p2:Int = l_hex.indexOf( l_c2 );
-				if ( l_p2 >= 16 ) l_p2 -= 6;
-				if ( l_p2 >= 16 || l_p2 < 0 ) l_isValid = false;
-				l_bytesData.writeByte( ( l_p1 << 4 ) + l_p2 );
-			}
-		}
-		l_bytesData.position = 0;
-		return l_isValid ? l_bytesData: null;
-	}	
+		return Unserializer.run( value );
+	}
 	
 	public function encrypt( value:Bytes, ?secret:String = "" ):Bytes
 	{
@@ -314,8 +323,5 @@ class Tools implements ITools
 	public function decrypt( value:Bytes, ?secret:String = "" ):Bytes
 	{
 		return _encrypter.decrypt( value, secret );
-	}	
-	
-	
-	
+	}
 }

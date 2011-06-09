@@ -151,6 +151,13 @@ interface ITools implements IEncrypter
 	 */
 	function sgn( value:Float ):Int;
 	/**
+	 * An optimized routine to calculate inverse square roots equivalent to: 1 / Math.sqrt( value )
+	 * @param	value	The value to find the inverse square root of.
+	 * @param	isAccurate	If false favours performance over accuracy.  Default is false.
+	 * @return	The inverse square root.
+	 */
+	function invSqrt( value:Float, ?isAccurate:Bool = false ):Float;
+	/**
 	 * Determine whether a value is true.
 	 * <p>Results vary based on the context of checked value.  Usually safer to do your own Bool checks.</p>
 	 * @param	value	The value to check.
@@ -187,16 +194,16 @@ interface ITools implements IEncrypter
 	 */
 	function intToHex( value:Int ):String;
 	/**
-	 * Converts bytes to a Hex string.
-	 * @param	bytesData	The bytes to convert.
-	 * @return	Hex value.
+	 * Converts an object into a serialized string.
+	 * @param	value	The object to convert.
+	 * @return	The serialized object.
 	 */
-	function bytesToHex( bytesData:BytesData ):String;
+	function serialize( value:Dynamic ):String;
 	/**
-	 * Converts Hex string to bytes.
-	 * @param	value	The Hex string to convert.
-	 * @return	Bytes (same as ByteArray in Flash).
+	 * Restores an object from a serialized string.
+	 * @param	value	The serialised object.
+	 * @return	The object to restore.
 	 */
-	function hexToBytes( value:String ):BytesData;
+	function unserialize( value:String ):Dynamic;	
 	
 }
