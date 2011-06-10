@@ -36,7 +36,6 @@ package awe6.interfaces;
 enum EMessage 
 {
 	DISPOSE;
-	UPDATE;
 	PAUSE;
 	RESUME;
 	/**
