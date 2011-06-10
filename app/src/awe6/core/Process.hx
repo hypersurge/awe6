@@ -92,7 +92,6 @@ class Process implements IProcess
 			_age += deltaTime;
 			_updates++;
 			_updater( deltaTime );
-			if ( _isEntity ) _kernel.messenger.sendMessage( EMessage.UPDATE, cast this );
 			return;
 		}
 	}

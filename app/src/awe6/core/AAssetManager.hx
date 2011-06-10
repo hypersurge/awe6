@@ -59,9 +59,13 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 		if ( args == null )
 		{
 			if ( Type.getSuperClass( l_assetClass ) == BitmapData )
+			{
 				args = [0, 0];
+			}
 			else
+			{
 				args = [];
+			}
 		}
 		return Type.createInstance( l_assetClass, args );
 	}

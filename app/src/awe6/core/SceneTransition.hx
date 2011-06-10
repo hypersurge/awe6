@@ -75,9 +75,8 @@ class SceneTransition extends Entity, implements ISceneTransition
 	{
 		super._updater( deltaTime );
 		if ( _age > _duration ) return dispose();
-		var l_perc:Float = _age / _duration;
-		_sprite.alpha = 1 - l_perc;
-		_blurFilter.blurX = _blurFilter.blurY = l_perc * 32;
+		_sprite.alpha = 1 - progress;
+		_blurFilter.blurX = _blurFilter.blurY = progress * 32;
 		_sprite.filters = [ _blurFilter ];
 		return;
 	}
@@ -87,6 +86,6 @@ class SceneTransition extends Entity, implements ISceneTransition
 		return asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
 	}
 	
-	private function __get_progress():Float { return progress; }
+	private function __get_progress():Float { return _tools.limit( _age / _duration, 0, 1 ); }
 }
 
