@@ -36,10 +36,9 @@ package awe6.interfaces;
 enum EMessage 
 {
 	DISPOSE;
-	UPDATE( ?deltaTime:Int );
+	UPDATE;
 	PAUSE;
 	RESUME;
-	AGENDA( value:EAgenda );	
 	/**
 	 * Allows EMessage to be extended (e.g. for using project specific mesages).
 	 */	
