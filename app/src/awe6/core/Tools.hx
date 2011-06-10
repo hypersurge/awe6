@@ -197,8 +197,11 @@ class Tools implements ITools
 	{
 		var l_d:Float = max - min;
 		if ( l_d == 0 ) return value;
-		var l_o:Float = value - min;
-		return ( l_o - ( Math.floor( l_o / l_d ) * l_d ) ) + min;
+		else
+		{
+			var l_o:Float = value - min;
+			return ( l_o - ( Math.floor( l_o / l_d ) * l_d ) ) + min;
+		}
 	}
 	
 	public inline function swap<T>( a:T, b:T ):Void

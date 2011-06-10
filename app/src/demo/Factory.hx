@@ -28,19 +28,7 @@
  */
 
 package demo;
-import awe6.core.AFactory;
-import awe6.core.Overlay;
-import awe6.core.TextStyle;
-import awe6.interfaces.EOverlayButton;
-import awe6.interfaces.EScene;
-import awe6.interfaces.ETextAlign;
-import awe6.interfaces.ETextStyle;
-import awe6.interfaces.IAssetManagerProcess;
-import awe6.interfaces.IOverlayProcess;
-import awe6.interfaces.IPreloader;
-import awe6.interfaces.IScene;
-import awe6.interfaces.ISession;
-import awe6.interfaces.ITextStyle;
+import awe6.Types;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
