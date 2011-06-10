@@ -100,6 +100,7 @@ class Kernel extends Process, implements IKernel
 	private var _profiler:Profiler;
 	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
+	private var _contextMenu:ContextMenu;
 	private var _eyeCandyEnableContextMenuItem:ContextMenuItem;
 	private var _eyeCandyDisableContextMenuItem:ContextMenuItem;
 	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
@@ -177,13 +178,13 @@ class Kernel extends Process, implements IKernel
 		l_mask.graphics.endFill();
 		_view.sprite.mask = l_mask;
 		
-		var l_contextMenu:ContextMenu = new ContextMenu();
-		l_contextMenu.customItems.push( new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, false ) );
-		l_contextMenu.customItems.push( new ContextMenuItem( _POWERED_BY, false, false ) );
-		if ( factory.isDecached || factory.isDebug ) l_contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
+		_contextMenu = new ContextMenu();
+		_contextMenu.customItems.push( new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, false ) );
+		_contextMenu.customItems.push( new ContextMenuItem( _POWERED_BY, false, false ) );
+		if ( factory.isDecached || factory.isDebug ) _contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
 		
 		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : _RESET_SESSIONS );
-		if ( factory.isResetSessionsOptionEnabled ) l_contextMenu.customItems.push( l_reset );
+		if ( factory.isResetSessionsOptionEnabled ) _contextMenu.customItems.push( l_reset );
 		l_reset.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance._totalReset(); } );
 		
 		_eyeCandyEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyEnable" ) ? getConfig( "settings.contextMenu.eyeCandyEnable" ) : _EYE_CANDY_ENABLE );
@@ -198,8 +199,8 @@ class Kernel extends Process, implements IKernel
 		
 		_stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		
-		l_contextMenu.hideBuiltInItems();
-		_view.sprite.contextMenu = l_contextMenu;
+		_contextMenu.hideBuiltInItems();
+		Lib.current.contextMenu = _contextMenu;
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		
 		isEyeCandy = true;
@@ -291,9 +292,9 @@ class Kernel extends Process, implements IKernel
 			return isEyeCandy;
 		}
 		isEyeCandy = value;
-		_view.sprite.contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
-		_view.sprite.contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
-		_view.sprite.contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
+		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
+		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
+		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
 		return isEyeCandy;
 	}
 	
@@ -305,9 +306,9 @@ class Kernel extends Process, implements IKernel
 			return isFullScreen;
 		}
 		isFullScreen = value;
-		_view.sprite.contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
-		_view.sprite.contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
-		_view.sprite.contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
+		_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
+		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
+		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN_INTERACTIVE : StageDisplayState.NORMAL;
 		return isEyeCandy;
