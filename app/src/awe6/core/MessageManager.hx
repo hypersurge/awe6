@@ -120,10 +120,7 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				switch ( Type.typeof( message ) )
 				{
-					case ValueType.TEnum( e ) : 
-//					trace( message + ":" + i.message ) ;
-					if ( !Type.enumEq( message, i.message ) ) continue;
-//					case ValueType.TFunction : if ( !Type.typeof( message, i.message ) ) continue;
+					case ValueType.TEnum( e ) : if ( !Type.enumEq( message, i.message ) ) continue;
 					default : if ( message != i.message ) continue;
 				}
 			}
@@ -154,11 +151,11 @@ private class _HelperSubscription<M,T>
 	{
 		this.subscriber = subscriber;
 		this.message = message;
-		this.messageClass = Type.getClass( message );
 		this.handler = handler;
 		this.sender = sender;
 		this.senderClassType = senderClassType;
 		this.isRemovedAfterFirstSend = isRemovedAfterFirstSend;
 //		trace( message + ":" + messageClass + ":" + Type.typeof( message ) );
+		this.messageClass = Type.getClass( message );
 	}
 }

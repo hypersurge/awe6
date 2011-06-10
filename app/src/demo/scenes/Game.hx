@@ -71,27 +71,23 @@ class Game extends Scene
 		
 		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
 		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
-		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE, _mh, l_sphere );
-//		_kernel.messenger.addSubscriber( _entity, EMessage, _mn, l_sphere );
+//		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE, _mn, l_sphere );
+//		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE( 50 ), _mn, l_sphere );
+
 		_temp = l_sphere;
 	}
 	
-	private function _mn( message:Enum<EMessage>, sender:IEntity ):Bool
+	private function _mn( message:EMessage, sender:IEntity ):Bool
 	{
-		var l_message:EMessage = cast message;
-		switch ( l_message )
-		{
-			case EMessage.UPDATE( deltaTime ) : trace( deltaTime );
-			default : trace( l_message );
-		}
+		trace( message );
 		return true;		
 	}
 	
-	private function _mh( deltaTime:Int->EMessage, sender:IEntity ):Bool
+/*	private function _mh( deltaTime:Int->EMessage, sender:IEntity ):Bool
 	{
 		trace( deltaTime + " : sender" );
 		return true;		
-	}
+	}*/
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
