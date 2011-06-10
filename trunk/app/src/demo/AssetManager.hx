@@ -40,8 +40,7 @@ import assets.UnmuteOver;
 import assets.UnmuteUp;
 import assets.UnpauseOver;
 import assets.UnpauseUp;
-import awe6.core.AAssetManager;
-import awe6.interfaces.IKernel;
+import awe6.Types;
 import flash.display.BitmapData;
 
 class AssetManager extends AAssetManager

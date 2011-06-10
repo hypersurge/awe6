@@ -29,13 +29,9 @@
 
 package demo.scenes;
 import assets.Background;
-import awe6.core.Scene;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
-import awe6.interfaces.EAudioChannel;
-import awe6.interfaces.EScene;
-import awe6.interfaces.ETextStyle;
-import awe6.interfaces.IKernel;
+import awe6.Types;
 import demo.Session;
 import flash.display.BitmapData;
 

@@ -28,8 +28,7 @@
  */
 
 package demo.entities;
-import awe6.core.Entity;
-import awe6.interfaces.IKernel;
+import awe6.Types;
 
 class Bouncer extends Entity
 {

@@ -29,7 +29,7 @@
 
 package demo;
 import assets.PreloaderMovieClip;
-import awe6.core.APreloader;
+import awe6.Types;
 
 class Preloader extends APreloader
 {

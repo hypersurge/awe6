@@ -45,7 +45,7 @@ class Process implements IProcess
 	public var isDisposed( default, null ):Bool;
 	
 	private var _kernel:IKernel;	
-	private var _tools:ITools;
+	private var _tools:Tools; // direct reference for inline performance gains (approx 100% faster for methods like range and limit)
 	private var _age:Int;	
 	private var _updates:Int;
 	private var _isEntity:Bool;
@@ -53,7 +53,7 @@ class Process implements IProcess
 	public function new( kernel:IKernel ) 
 	{
 		_kernel = kernel;
-		_tools = _kernel.tools;
+		_tools = cast _kernel.tools;
 		_init();
 		_isEntity = Std.is( this, IEntity );
 	}
@@ -147,6 +147,5 @@ class Process implements IProcess
 	{
 		// override me		
 	}
-	
 	
 }

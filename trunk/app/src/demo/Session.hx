@@ -28,8 +28,7 @@
  */
 
 package demo;
-import awe6.core.ASession;
-import awe6.interfaces.IKernel;
+import awe6.Types;
 
 class Session extends ASession
 {

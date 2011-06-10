@@ -29,9 +29,7 @@
 
 package demo.scenes;
 import awe6.extras.gui.Text;
-import awe6.interfaces.EScene;
-import awe6.interfaces.ETextStyle;
-import awe6.interfaces.IKernel;
+import awe6.Types;
 import demo.gui.Button;
 
 class Intro extends AScene
@@ -48,7 +46,6 @@ class Intro extends AScene
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
-		
 	}
 	
 }

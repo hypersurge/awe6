@@ -64,6 +64,7 @@ typedef EAgenda = awe6.interfaces.EAgenda;
 typedef EAudioChannel = awe6.interfaces.EAudioChannel;
 typedef EJoypadButton = awe6.interfaces.EJoypadButton;
 typedef EKey = awe6.interfaces.EKey;
+typedef EMessage = awe6.interfaces.EMessage;
 typedef EMouseButton = awe6.interfaces.EMouseButton;
 typedef EOverlayButton = awe6.interfaces.EOverlayButton;
 typedef EScene = awe6.interfaces.EScene;
@@ -71,6 +72,7 @@ typedef ETextAlign = awe6.interfaces.ETextAlign;
 typedef ETextStyle = awe6.interfaces.ETextStyle;
 typedef IAgendaManager = awe6.interfaces.IAgendaManager;
 typedef IAssetManager = awe6.interfaces.IAssetManager;
+typedef IAssetManagerProcess = awe6.interfaces.IAssetManagerProcess;
 typedef IAudioManager = awe6.interfaces.IAudioManager;
 typedef IDisposable = awe6.interfaces.IDisposable;
 typedef IEncrypter = awe6.interfaces.IEncrypter;
@@ -100,3 +102,13 @@ typedef ITools = awe6.interfaces.ITools;
 typedef IUpdateable = awe6.interfaces.IUpdateable;
 typedef IView = awe6.interfaces.IView;
 typedef IViewable = awe6.interfaces.IViewable;
+
+/**
+ * Adding a class here improves some editors' shortcut keys.  It has no other purpose, hence being private.
+ */
+class Types
+{
+	private function new() 
+	{
+	}
+}
