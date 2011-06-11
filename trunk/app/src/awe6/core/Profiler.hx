@@ -1,133 +1,127 @@
+/*
+ *                        _____ 
+ *     _____      _____  / ___/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
+ *    awe6 is game, inverted
+ * 
+ * Copyright (c) 2010, Robert Fell, awe6.org
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 package awe6.core;
-
-// Werner Avenant based on net.hires.utils.Stats by Mr.doob & Theo v1.3
-
+import awe6.interfaces.IKernel;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
-import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import flash.system.System;
 import flash.text.TextField;
 import flash.text.TextFormat;
-import flash.Lib;
 	
 /**
- * The Profiler class provides debug information.
- * @author	Robert Fell
+ * The Profiler class provides debug information.  Based on net.hires.utils.Stats by Mr.doob & Theo v1.3
  * @author	Werner Avenant
  * @author	Mr.doob
  * @author	Theo
+ * @author	Robert Fell
  */
-class Profiler extends Sprite
+class Profiler extends Entity
 {
-	private static inline var _BG_COLOR = 0x55000000;
+	private static inline var _MARGIN_HEIGHT = 25;
+	private static inline var _MARGIN_COLOR = 0x000080;
+	private static inline var _BACKGROUND_COLOR = 0x80000080;
 	private static inline var _FPS_COLOR = 0xFFFFFF;
-	private static inline var _MS_COLOR = 0xFFFFFF00;
-	private static inline var _MEM_COLOR = 0xFFFF0000;	
+	private static inline var _MEMORY_COLOR = 0xFF8000;
+	private static inline var _FPS_LABEL = "FPS";
+	private static inline var _MEMORY_LABEL = "MBs";
+	private static inline var _WIDTH = 60;
+	private static inline var _HEIGHT = 50;
 	
-	private var _graph:BitmapData;		
-	private var _fpsText:TextField;
-	private var _msText:TextField;
-	private var _memText:TextField;
-	private var _format:TextFormat;
+	private var _sprite:Sprite;
+	private var _bitmapData:BitmapData;
+	private var _textFormat:TextFormat;
+	private var _fpsTextField:TextField;
+	private var _memoryTextField:TextField;
+	private var _agePrev:Int;
 		
-	private var _fps:Int;
-	private var _timer:Int;
-	private var _ms:Int;
-	private var _msPrev:Int;
-	private var _mem:Float;
-
-	public function new()
+	public function new( kernel:IKernel )
 	{
-		super ();
-		this.alpha = 0;
-		_msPrev = 0;
-		_mem = 0;
+		_sprite = new Sprite();
+		super( kernel, _sprite );
+	}
+	
+	override private function _init():Void
+	{
+		super._init();
+		_agePrev = 0;
 		
-		_graph = new BitmapData( 60, 50, true, _BG_COLOR );
-		var gBitmap:Bitmap = new Bitmap( _graph );
-		gBitmap.y = 35;
-		addChild(gBitmap);
+		_bitmapData = new BitmapData( _WIDTH, _HEIGHT, true, _BACKGROUND_COLOR );
+		var l_bitmap:Bitmap = new Bitmap( _bitmapData );
+		l_bitmap.y = _MARGIN_HEIGHT;
+		_sprite.addChild( l_bitmap );
 
-		_format = new TextFormat( "_sans", 9 );
+		_textFormat = new TextFormat( "_sans", 9 );
 
-		graphics.beginFill( _BG_COLOR );
-		graphics.drawRect(0, 0, 60, 35 /*50*/);
-		graphics.endFill();
+		_sprite.graphics.beginFill( _MARGIN_COLOR );
+		_sprite.graphics.drawRect(0, 0, _WIDTH, _MARGIN_HEIGHT );
+		_sprite.graphics.endFill();
 
-		_fpsText = new TextField();
-		_msText = new TextField();
-		_memText = new TextField();
+		_fpsTextField = new TextField();
+		_memoryTextField = new TextField();
 
-		_fpsText.defaultTextFormat = _msText.defaultTextFormat = _memText.defaultTextFormat = _format;
-		_fpsText.width = _msText.width = _memText.width = 60;
-		_fpsText.selectable = _msText.selectable = _memText.selectable = false;
+		_fpsTextField.defaultTextFormat = _memoryTextField.defaultTextFormat = _textFormat;
+		_fpsTextField.width = _memoryTextField.width = _WIDTH;
+		_fpsTextField.selectable = _memoryTextField.selectable = false;
 
-		_fpsText.textColor = _FPS_COLOR;
-		_fpsText.text = "FPS: ";
-		addChild( _fpsText );
+		_fpsTextField.textColor = _FPS_COLOR;
+		_fpsTextField.text = _FPS_LABEL + ": ";
+		_sprite.addChild( _fpsTextField );
 
-		_msText.y = 10;
-		_msText.textColor = _MS_COLOR;
-		_msText.text = "MS: ";
-		addChild( _msText );
-
-		_memText.y = 20;
-		_memText.textColor = _MEM_COLOR;
-		_memText.text = "MEM: ";
-		addChild( _memText );
-
-		addEventListener( MouseEvent.CLICK, mouseHandler );
-		addEventListener( Event.ENTER_FRAME, update );
+		_memoryTextField.y = 10;
+		_memoryTextField.textColor = _MEMORY_COLOR;
+		_memoryTextField.text = _MEMORY_LABEL + ": ";
+		_sprite.addChild( _memoryTextField );
 		
-		x = y = 2;
+		_sprite.x = _sprite.y = 2;
 	}
 		
-	private function mouseHandler( e:MouseEvent ):Void
+	override private function _updater( ?deltaTime:Int = 0 ):Void
 	{
-		if (this.mouseY > this.height * .35)
-		{
-			stage.frameRate --;
-		}
-		else
-		{
-			stage.frameRate ++;
-		}
-		_fpsText.text = "FPS: " + _fps + " / " + stage.frameRate;
-	}	
+		super._updater( deltaTime );
+		if ( _age < _agePrev + 250 ) return;
 		
-	private function update( e:Event ):Void
-	{
-		if ( stage == null ) return;
-		if ( alpha < 1 ) alpha += .05;
-//		if ( stage != null ) x = stage.stageWidth - 60;
-		_timer = Lib.getTimer();
-		_fps++;
+		_agePrev = _age;
+		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );
+		var l_memory:Int = Std.int( System.totalMemory / 1048576 );
 
-		if ( _timer - 1000 > _msPrev )
-		{
-			_msPrev = _timer;
-			_mem = Std.int ( ( System.totalMemory / 1048576 ) * 1000 ) / 1000;
+		var l_fpsValue:Int = Std.int( Math.min( _HEIGHT, _HEIGHT / _kernel.factory.targetFramerate * l_fps ) );
+		var l_memoryNode:Int = Std.int( Math.min( _HEIGHT, Math.sqrt( Math.sqrt( l_memory * 10 * _HEIGHT ) ) ) ) - 2;
 
-			var fpsGraph : Int = Std.int( Math.min( 50, 50 / stage.frameRate * _fps ) );
-			var memGraph : Int = Std.int( Math.min( 50, Math.sqrt( Math.sqrt( _mem * 5000 ) ) ) ) - 2;
+		_bitmapData.scroll( 1, 0 );
+		_bitmapData.fillRect( new Rectangle( 0, 0, 1, _bitmapData.height ), _BACKGROUND_COLOR );
+		_bitmapData.setPixel( 0, _bitmapData.height - l_fpsValue, _FPS_COLOR );
+		_bitmapData.setPixel( 0, _bitmapData.height - l_memoryNode, _MEMORY_COLOR );
 
-			_graph.scroll( 1, 0 );
-			_graph.fillRect( new Rectangle( 0, 0, 1, _graph.height ), _BG_COLOR );
-			_graph.setPixel( 0, _graph.height - fpsGraph, _FPS_COLOR );
-			_graph.setPixel( 0, _graph.height - ( ( _timer - _ms ) >> 1 ), _MS_COLOR );
-			_graph.setPixel( 0, _graph.height - memGraph, _MEM_COLOR );
-
-			_fpsText.text = "FPS: " + _fps + " / " + stage.frameRate;
-			_memText.text = "MEM: " + _mem;
-
-			_fps = 0;
-		}
-
-		_msText.text = "MS: " + ( _timer - _ms );
-		_ms = _timer;
+		_fpsTextField.text = _FPS_LABEL + ": " + l_fps + " / " + _kernel.factory.targetFramerate;
+		_memoryTextField.text = _MEMORY_LABEL + ": " + l_memory;
 	}
 }
