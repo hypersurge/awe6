@@ -54,6 +54,7 @@ import flash.geom.Rectangle;
 import flash.Lib;
 import flash.events.ContextMenuEvent;
 import flash.events.FullScreenEvent;
+import flash.net.URLRequest;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
 
@@ -65,6 +66,7 @@ import flash.ui.ContextMenuItem;
 class Kernel extends Process, implements IKernel
 {
 	private static inline var _POWERED_BY = "Powered by awe6";
+	private static inline var _POWERED_BY_URL = "http://awe6.org";
 	private static inline var _RELEASE_CAUTION = "PUBLIC RELEASE NOT ADVISED";
 	private static inline var _RESET_SESSIONS = "Reset All Saved Information";
 	private static inline var _EYE_CANDY_ENABLE = "Enable Eye Candy";
@@ -179,8 +181,17 @@ class Kernel extends Process, implements IKernel
 		_view.sprite.mask = l_mask;
 		
 		_contextMenu = new ContextMenu();
-		_contextMenu.customItems.push( new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, false ) );
-		_contextMenu.customItems.push( new ContextMenuItem( _POWERED_BY, false, false ) );
+		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
+		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
+		if ( l_isAuthorUrl ) l_author.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( l_instance.getConfig( "settings.contextMenu.authorUrl" ) ) ); } );
+		_contextMenu.customItems.push( l_author );
+		
+		var l_isPoweredByUrl:Bool = getConfig( "settings.contextMenu.isPoweredByUrlEnabled" ) != "false";
+		trace( getConfig( "settings.contextMenu.isPoweredByUrlEnabled" ) );
+		var l_poweredBy:ContextMenuItem = new ContextMenuItem( _POWERED_BY, false, l_isPoweredByUrl );
+		if ( l_isPoweredByUrl ) l_poweredBy.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( _POWERED_BY_URL ) ); } );
+		_contextMenu.customItems.push( l_poweredBy );
+		
 		if ( factory.isDecached || factory.isDebug ) _contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
 		
 		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : _RESET_SESSIONS );

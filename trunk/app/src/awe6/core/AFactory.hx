@@ -127,7 +127,7 @@ class AFactory implements IFactory, implements IDisposable
 		// override me
 		id = "awe6";
 		version = "0.0.1";
-		author = "awe6 guru";
+		author = "unknown";
 		isDecached = false;
 		isEyeCandyOptionEnabled = true;
 		isFullScreenOptionEnabled = true;
@@ -215,20 +215,17 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			var l_name:String = prefix + i.nodeName;
 			if ( i.elements().hasNext() ) _traverseElements( i.elements(), l_name );
-			else
+			if ( ( i.firstChild() != null ) && ( i.firstChild().toString().substr( 0, 9 ) == "<![CDATA[" ) )
 			{
-				if ( ( i.firstChild() != null ) && ( i.firstChild().toString().substr( 0, 9 ) == "<![CDATA[" ) )
-				{
-					i.firstChild().nodeValue = i.firstChild().toString().split( "<![CDATA[" ).join( "" ).split( "]]>" ).join( "" );
-				}
-				config.set( l_name, i.firstChild() == null ? "" : i.firstChild().nodeValue );
-//				trace( l_name + " = " + config.get( l_name ) );
-				for ( j in i.attributes() )
-				{
-					var l_aName:String = l_name + "." + j;
-					config.set( l_aName, i.get( j ) );
-//					trace( l_aName + " = " + config.get( l_aName ) );
-				}
+				i.firstChild().nodeValue = i.firstChild().toString().split( "<![CDATA[" ).join( "" ).split( "]]>" ).join( "" );
+			}
+			config.set( l_name, i.firstChild() == null ? "" : i.firstChild().nodeValue );
+//			trace( l_name + " = " + config.get( l_name ) );
+			for ( j in i.attributes() )
+			{
+				var l_aName:String = l_name + "." + j;
+				config.set( l_aName, i.get( j ) );
+//				trace( l_aName + " = " + config.get( l_aName ) );
 			}
 		}
 	}
