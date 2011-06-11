@@ -162,8 +162,12 @@ class Kernel extends Process, implements IKernel
 		overlay = _overlayProcess = factory.createOverlay();
 		_addProcess( _overlayProcess, false );
 		_view.addChild( _overlayProcess.view );
+		if ( isDebug )
+		{
+			_addProcess( _profiler = new Profiler( this ) );
+			_view.addChild( _profiler.view, _tools.BIG_NUMBER );
+		}
 		scenes.setScene( factory.startingSceneType );
-		if ( isDebug ) _view.addChild( new View( this, new Profiler(), _tools.BIG_NUMBER ) );
 	}
 	
 	private function _nativeInit():Void
@@ -187,7 +191,6 @@ class Kernel extends Process, implements IKernel
 		_contextMenu.customItems.push( l_author );
 		
 		var l_isPoweredByUrl:Bool = getConfig( "settings.contextMenu.isPoweredByUrlEnabled" ) != "false";
-		trace( getConfig( "settings.contextMenu.isPoweredByUrlEnabled" ) );
 		var l_poweredBy:ContextMenuItem = new ContextMenuItem( _POWERED_BY, false, l_isPoweredByUrl );
 		if ( l_isPoweredByUrl ) l_poweredBy.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( _POWERED_BY_URL ) ); } );
 		_contextMenu.customItems.push( l_poweredBy );
