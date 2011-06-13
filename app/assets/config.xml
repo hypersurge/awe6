@@ -4,7 +4,7 @@
 		<assets>
 			<url1>gui.swf</url1>
 			<url2>audio.swf</url2>
-			<packages default="assets" audio="assets.audio" fonts="assets.fonts" />
+			<packages default="assets" audio="assets.audio" />
 		</assets>
 		<font name="Orbitron" />
 	</settings>

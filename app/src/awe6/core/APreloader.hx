@@ -28,29 +28,26 @@
  */
 
 package awe6.core;
-import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IEncrypter;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IView;
 import flash.display.Loader;
-import flash.display.LoaderInfo;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
-import flash.Lib;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
-import flash.system.SecurityDomain;
 import flash.system.LoaderContext;
+import flash.system.SecurityDomain;
 import flash.text.Font;
 import flash.text.TextField;
-import flash.utils.SetIntervalTimer;
 import haxe.io.Bytes;
 import haxe.io.BytesData;
+import haxe.io.BytesInput;
 import haxe.Timer;
 
 /**
@@ -61,9 +58,9 @@ import haxe.Timer;
  */
 class APreloader extends Process, implements IPreloader
 {
-	private static inline var _FONT_PACKAGE_ID = "assets.fonts";
 	public var view( __get_view, null ):IView;
 	public var progress( __get_progress, null ):Float;
+	
 	private var _sprite:Sprite;
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
@@ -75,6 +72,7 @@ class APreloader extends Process, implements IPreloader
 	private var _currentAsset:Int;
 	private var _isComplete:Bool;
 	private var _textField:TextField;
+	private var _swfData:BytesData;
 	
 	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
 	{
@@ -138,7 +136,6 @@ class APreloader extends Process, implements IPreloader
 	override private function _disposer():Void 
 	{
 		view.dispose();
-		_registerFonts();
 		if ( _loader != null )
 		{
 			#if flash10
@@ -151,24 +148,6 @@ class APreloader extends Process, implements IPreloader
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
-	}
-	
-	private function _registerFonts():Void
-	{
-		var l_packageId:String = _kernel.getConfig( "settings.assets.packages.fonts" );
-		if ( l_packageId == null ) l_packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		if ( l_packageId == null ) l_packageId = _FONT_PACKAGE_ID;		
-		for ( i in Type.getEnumConstructs( ETextStyle ) )
-		{
-			var l_className:String = _tools.toCamelCase( i, true );
-			if ( l_packageId.length > 0 ) l_className = l_packageId + "." + l_className;
-			var l_fontClass:Class<Dynamic> = Type.resolveClass( l_className );
-			if ( l_fontClass != null )
-			{
-				try { Font.registerFont( l_fontClass ); }
-				catch ( error:Dynamic ) {}
-			}
-		}
 	}
 	
 	private function _onError( event:IOErrorEvent ):Void
@@ -195,11 +174,21 @@ class APreloader extends Process, implements IPreloader
 		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
 		_urlLoader.removeEventListener( Event.COMPLETE, _onComplete );
-		var l_data:BytesData = _urlLoader.data;
-		var l_isOriginal:Bool = ( ( l_data.readByte() == 67 ) && ( l_data.readByte() == 87 ) && ( l_data.readByte() == 83 ) );
+		_swfData = _urlLoader.data;
+		_swfData.endian = flash.utils.Endian.LITTLE_ENDIAN;
+		var l_headerFormat:String = _swfData.readUTFBytes( 3 );
+		var l_isOriginal:Bool = ( ( l_headerFormat == "FWS" ) || ( l_headerFormat == "CWS" ) );
+		_swfData = l_isOriginal ? _swfData : _encrypter.decrypt( Bytes.ofData( cast _swfData ) ).getData();
 		_loader = new Loader();
-		_loader.loadBytes( l_isOriginal ? _urlLoader.data : _encrypter.decrypt( Bytes.ofData( cast _urlLoader.data ) ).getData(), _loaderContext );			
+		_loader.loadBytes( _swfData, _loaderContext );
+		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderComplete );
 		_next();
+	}
+	
+	private function _onLoaderComplete( event:Event ):Void
+	{
+		_loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, _onLoaderComplete );
+		new _HelperSwfParser( _swfData );
 	}
 	
 	private function _onProgress( ?event:ProgressEvent ):Void
@@ -210,4 +199,121 @@ class APreloader extends Process, implements IPreloader
 	
 	private function __get_view():IView { return view; }	
 	private function __get_progress():Float { return progress; }	
+}
+
+private class _HelperSwfParser
+{
+	public var isCompressed:Bool;
+	public var version:Int;
+	public var width:Int;
+	public var height:Int;
+	public var framerate:Int;
+	public var frames:Int;
+	public var size:Int;
+	public var classes:Array<Class<Dynamic>>;
+	
+	private var _data:BytesData;
+	
+	//swf parsing routines by Denis V. Chumakov: http://flashpanoramas.com/blog/
+	public function new( data:BytesData )
+	{
+		_data = data;
+		_data.endian = flash.utils.Endian.LITTLE_ENDIAN;
+		_data.position = 0;
+		var l_headerFormat:String = _data.readUTFBytes( 3 );
+		isCompressed = l_headerFormat == "CWS";
+		if ( ( l_headerFormat == "FWS" ) || ( l_headerFormat == "CWS" ) )
+		{
+			version =  _data.readByte();
+			size = _data.readUnsignedInt();
+		}
+		else throw( "Invalid SWF file." );
+		_data.readBytes( _data );
+		_data.length -= 8;
+		if ( isCompressed ) _data.uncompress();
+		_data.position = 0;
+		_readBox();
+		var l_fpsF:UInt = _data.readUnsignedByte();
+		var l_fpsI:UInt = _data.readUnsignedByte();
+		framerate = Std.int( l_fpsI + l_fpsF / 256 );
+		frames = _data.readUnsignedShort();
+		classes = [];
+		while ( _data.bytesAvailable > 0 )
+		{
+			_readSwfTag();
+		}
+		for ( i in classes )
+		{
+			if ( Std.is( Type.createEmptyInstance( i ), Font ) )
+			{
+				try { Font.registerFont( i ); }
+				catch ( error:Dynamic ) {}
+			}
+		}
+	}
+	
+	// read compressed box format
+	private function _readBox():Void
+	{
+		var l_frame:Array<Int> = [];
+		var l_current:UInt = _data.readUnsignedByte();
+		var l_size:UInt = l_current >> 3;
+		var l_off:Int = 3;
+		for ( i in 0...4 )
+		{
+			l_frame[i] = l_current << ( 32 - l_off ) >> ( 32 - l_size );
+			l_off -= l_size;
+			while ( l_off < 0 )
+			{
+				l_current = _data.readUnsignedByte();
+				l_frame[i] |= l_off < -8 ? l_current << ( -l_off - 8) : l_current >> ( -l_off - 8 );
+				l_off += 8;
+			}
+		}
+		width = Math.ceil( ( l_frame[1] - l_frame[0] ) / 20 );
+		height = Math.ceil( ( l_frame[3] - l_frame[2] ) / 20 );
+	}
+
+	// read SWF tag and call handler if present
+	private function _readSwfTag():Void
+	{
+		var l_result:String = "";
+		var l_tag:UInt = _data.readUnsignedShort();
+		var l_id:Int = l_tag >> 6;
+		var l_size:Int = l_tag & 0x3F;
+		if ( l_size == 0x3F ) l_size = _data.readUnsignedInt();
+		var l_dump:BytesData = new BytesData();
+		if ( l_size != 0 ) _data.readBytes( l_dump, 0, l_size );
+		_handleTag( l_tag, l_id, l_size, l_dump );
+	}
+	
+	private function _handleTag( p_tag:UInt, p_id:Int, p_size:Int, p_dump:BytesData ):Void
+	{
+		p_dump.position = 0;
+		p_dump.endian = flash.utils.Endian.LITTLE_ENDIAN;
+		var l_bytes:BytesInput = new BytesInput( Bytes.ofData( p_dump ) );
+		switch ( p_id )
+		{
+			case 76 : // SymbolClass, for more see format.swf.TagId
+				for ( n in 0...l_bytes.readUInt16() )
+				{
+					l_bytes.readUInt16();
+					var l_className:String = l_bytes.readUntil(0);
+					var l_resolvedClass:Class<Dynamic> = Type.resolveClass( l_className );
+					if ( l_resolvedClass != null ) classes.push( l_resolvedClass );
+				}
+		}
+	}
+	
+	public function toString():String
+	{
+		var l_result:String = "";
+		l_result += "SWF version: " + version;
+		l_result += ", MBs: " + ( Math.round( 100 * size / ( 1024 * 1024 ) ) / 100 );
+		l_result += ", width: " + width + ", height: " + height;
+		l_result += ", framerate: " + framerate;
+		l_result += ", frames: " + frames + "\n";
+		l_result += "Classes: " + classes + "\n";
+		return l_result;
+	}
 }
