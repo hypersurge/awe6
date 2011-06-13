@@ -104,7 +104,6 @@ class SceneManager extends Process, implements ISceneManager
 		
 		view.addChild( scene.view );
 		if ( _sceneTransition != null ) scene.view.addChild( _sceneTransition.view, _tools.BIG_NUMBER + 1 );
-		view.update();
 	}
 	
 	public function back():Void
