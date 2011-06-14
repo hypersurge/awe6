@@ -120,7 +120,7 @@ class SceneManager extends Process, implements ISceneManager
 	public function restart():Void
 	{
 		if ( scene == null ) setScene( _kernel.factory.startingSceneType );
-		setScene( scene.type );
+		else setScene( scene.type );
 	}
 	
 	private function __get_scene():IScene { return scene; }
