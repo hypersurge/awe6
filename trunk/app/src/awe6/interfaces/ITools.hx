@@ -185,7 +185,14 @@ interface ITools implements IEncrypter
 	 * @param	?delimiter	The character used to separate the components (default: "'").
 	 * @return	String representing a clock in the format "hh:mm:ss".
 	 */
-	function convertUpdatesToTime( updates:Int, ?delimiter:String ):String;
+	function convertUpdatesToFormattedTime( updates:Int, ?delimiter:String ):String;
+	/**
+	 * Creates a string representing a clock in the format "hh'mm'ss".
+	 * @param	age	The time elapsed in the duration as milliseconds.
+	 * @param	?delimiter	The character used to separate the components (default: "'").
+	 * @return	String representing a clock in the format "hh:mm:ss".
+	 */
+	function convertAgeToFormattedTime( age:Int, ?delimiter:String ):String;
 	/**
 	 * Randomly sorts an array.
 	 */

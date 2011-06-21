@@ -53,6 +53,7 @@ class Factory extends AFactory
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;
+		isFixedUpdates = false;
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess

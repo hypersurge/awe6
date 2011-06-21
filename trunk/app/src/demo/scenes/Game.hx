@@ -87,14 +87,14 @@ class Game extends Scene
 	{
 		super._updater( deltaTime );
 		
-		if ( _kernel.inputs.mouse.getIsButtonRelease() )
+/*		if ( _kernel.inputs.mouse.getIsButtonRelease() )
 		{
 			_temp.isActive = !_temp.isActive;
-		}
+		}*/
 		
-		_score = Std.int( _tools.limit( ( _kernel.factory.targetFramerate * TIME_LIMIT ) - _updates, 0, _tools.BIG_NUMBER ) );
+		_score = Std.int( _tools.limit( ( 1000 * TIME_LIMIT ) - _age, 0, _tools.BIG_NUMBER ) );
 		if ( _score == 0 ) _gameOver();
-		_timer.text = _tools.convertUpdatesToTime( _updates );
+		_timer.text = _tools.convertAgeToFormattedTime( _age );
 		var l_spheres:Array<Sphere> = getEntitiesByClass( Sphere );
 		if ( l_spheres.length == 0 ) _gameOver();
 	}
