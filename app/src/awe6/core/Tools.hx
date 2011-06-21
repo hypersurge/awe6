@@ -284,12 +284,19 @@ class Tools implements ITools
 		return l_result;
 	}
 	
-	public function convertUpdatesToTime( frames:Int, ?delimiter:String ):String
+	public function convertUpdatesToFormattedTime( frames:Int, ?delimiter:String ):String
+	{
+		var l_age:Int = Math.round( 1000 * frames / _kernel.factory.targetFramerate );
+		return convertAgeToFormattedTime( l_age, delimiter );
+	}	
+	
+	public function convertAgeToFormattedTime( age:Int, ?delimiter:String ):String
 	{
 		if ( delimiter == null ) delimiter = "'";
-		if ( frames < 0 ) return "99" + delimiter + "99" + delimiter + "99";
-		var l_seconds:Int = Math.floor( frames / _kernel.factory.targetFramerate );
-		var l_remainder:String = Std.string( Math.round( ( ( frames / _kernel.factory.targetFramerate ) - l_seconds ) * 100 ) );
+		if ( age < 0 ) return "99" + delimiter + "99" + delimiter + "99";
+		var l_age:Float = age / 1000;
+		var l_seconds:Int = Math.floor( l_age );
+		var l_remainder:String = Std.string( Math.round( ( l_age - l_seconds ) * 100 ) );
 		var l_minutes:Int = 0;
 		while ( l_seconds > 59 )
 		{

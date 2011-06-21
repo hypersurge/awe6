@@ -9,24 +9,15 @@
 
 THINGS TO DO ASAP:
 	
-Get into fit state for haXelib:
-DONE hexToBytes review
-DONE const case review
-api regen
-DONE process messages?
-DONE right click size
-DONE url on context
-DONE rebuild profiler
-package for haxelib
 
-Get into fit state for RC 0.4:
+Revised preloader
 DONE Revised graphics
 better component test (movable, drawable, swarms?)
 flashdevelop template
 invader flipping
-deltaTime speeds
 
-Build RC 0.4:
+ReBuild RC 0.4:
+api regen
 SWC
 haxelib
 zip

@@ -50,8 +50,6 @@ class InputMouse extends Process, implements IInputMouse
 {
 	public var x( default, null ):Int;
 	public var y( default, null ):Int;
-	public var deltaX( default, null ):Int;
-	public var deltaY( default, null ):Int;
 	public var relativeX( default, null ):Float;
 	public var relativeY( default, null ):Float;
 	public var relativeCentralisedX( default, null ):Float;
@@ -59,12 +57,15 @@ class InputMouse extends Process, implements IInputMouse
 	public var isWithinScreenBounds( default, null ):Bool;
 	public var isMoving( default, null ):Bool;	
 	public var scroll( default, null ):Int;
-	public var deltaScroll( default, null ):Int;
 	
 	private var _stage:Stage;
 	private var _buffer:Array<Bool>;
 	private var _xPrev:Int;
 	private var _yPrev:Int;
+	private var _deltaX:Int;
+	private var _deltaY:Int;
+	private var _deltaTimePrev:Int;
+	private var _deltaScroll:Int;
 	private var _scrollPrev:Int;
 	private var _stillUpdates:Int;
 	private var _stillDuration:Int;
@@ -77,7 +78,7 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		super._init();
 		_stage = Lib.current.stage;
-		x = y = deltaX = deltaY = scroll = deltaScroll = 0;
+		x = y = _deltaX = _deltaY = scroll = _deltaScroll = 0;
 		relativeX = relativeY = relativeCentralisedX = relativeCentralisedY = 0;
 		isMoving = false;		
 		_buffer = [];
@@ -85,7 +86,6 @@ class InputMouse extends Process, implements IInputMouse
 		y = Math.round( _stage.mouseY );
 		isMoving = false;
 		scroll = 0;
-		deltaScroll = 0;
 		_scrollPrev = 0;
 		_stillUpdates = 0;
 		_stillDuration = 0;
@@ -117,13 +117,14 @@ class InputMouse extends Process, implements IInputMouse
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
+		_deltaTimePrev = deltaTime;
 		super._updater( deltaTime );
 		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, deltaTime );
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
 		_handleButton( EMouseButton.RIGHT, _isRightDown(), deltaTime );
 		
-		deltaScroll = scroll - _scrollPrev;
+		_deltaScroll = scroll - _scrollPrev;
 		_scrollPrev = scroll;
 		
 		if (_isMiddleDown() ) trace( "B" );
@@ -132,8 +133,8 @@ class InputMouse extends Process, implements IInputMouse
 		_yPrev = y;
 		x = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
 		y = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
-		deltaX = x - _xPrev;
-		deltaY = y - _yPrev;
+		_deltaX = x - _xPrev;
+		_deltaY = y - _yPrev;
 		isMoving = ( ( x != _xPrev ) || ( y != _yPrev ) );
 		if ( isMoving )
 		{
@@ -229,6 +230,35 @@ class InputMouse extends Process, implements IInputMouse
 			case RIGHT : _buttonRight;
 		}
 	}
+	
+	public function getDeltaX( ?asTime:Bool = true ):Int
+	{
+		var l_result:Float = _deltaX;
+		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		return Math.round( l_result );
+	}
+	
+	public function getDeltaY( ?asTime:Bool = true ):Int
+	{
+		var l_result:Float = _deltaY;
+		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		return Math.round( l_result );
+	}
+	
+	public function getSpeed( ?asTime:Bool = true ):Int
+	{
+		var l_dx:Int = getDeltaX( asTime );
+		var l_dy:Int = getDeltaY( asTime );
+		var l_result:Float = Math.sqrt( ( l_dx * l_dx ) + ( l_dy * l_dy ) );
+		return Math.round( l_result );
+	}
+
+	public function getDeltaScroll( ?asTime:Bool = true ):Int
+	{
+		var l_result:Float = _deltaScroll;
+		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		return Math.round( l_result );
+	}	
 	
 	public function getIsButtonDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool
 	{

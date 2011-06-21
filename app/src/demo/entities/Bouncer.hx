@@ -54,7 +54,7 @@ class Bouncer extends Entity
 		super._init();
 		_width2 = _width / 2;
 		_height2 = _height / 2;
-		var l_speed:Float = ( Math.random() * 10 ) + 2;
+		var l_speed:Float = ( Math.random() * 200 ) + 100;
 		vx = Math.random() < .5 ? l_speed : -l_speed;
 		l_speed /= 4;
 		vy = Math.random() < .5 ? l_speed : -l_speed;
@@ -65,8 +65,8 @@ class Bouncer extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		x += vx;
-		y += vy;
+		x += vx * ( deltaTime / 1000 );
+		y += vy * ( deltaTime / 1000 );
 		if ( x > ( _kernel.factory.width - _width2 ) ) vx *= -1;
 		if ( y > ( _kernel.factory.height - _height2 ) ) vy *= -1;
 		if ( x < _width2 ) vx *= -1;

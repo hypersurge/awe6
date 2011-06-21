@@ -45,14 +45,6 @@ interface IInputMouse
 	 */
 	var y( default, null ):Int;
 	/**
-	 * The horizontal velocity of the mouse position (difference in pixels between current position and previous update's position).
-	 */
-	var deltaX( default, null ):Int;
-	/**
-	 * The vertical velocity of the mouse position (difference in pixels between current position and previous update's position).
-	 */
-	var deltaY( default, null ):Int;
-	/**
 	 * The horizontal position of the mouse relative to screen width.  Range 0...1.
 	 */
 	var relativeX( default, null ):Float;
@@ -81,9 +73,29 @@ interface IInputMouse
 	 */
 	var scroll( default, null ):Int;
 	/**
-	 * The change in scroll position between the current frame and the previous update.
+	 * The horizontal velocity of the mouse position.
+	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
+	 * @return	The horizontal velocity of the mouse.
 	 */
-	var deltaScroll( default, null ):Int;
+	function getDeltaX( ?asTime:Bool = true ):Int;
+	/**
+	 * The vertical velocity of the mouse position.
+	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
+	 * @return	The vertical velocity of the mouse.
+	 */
+	function getDeltaY( ?asTime:Bool = true ):Int;
+	/**
+	 * The velocity of the mouse.
+	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
+	 * @return	The velocity of the mouse.
+	 */
+	function getSpeed( ?asTime:Bool = true ):Int;
+	/**
+	 * The velocity of scrolling.
+	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as scroll moved in previous update.
+	 * @return	The scroll velocity of the mouse.
+	 */
+	function getDeltaScroll( ?asTime:Bool = true ):Int;
 	/**
 	 * Determine how long the mouse has been still.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
