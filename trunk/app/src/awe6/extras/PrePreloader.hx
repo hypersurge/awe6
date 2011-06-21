@@ -96,7 +96,6 @@ class PrePreloader extends Sprite
 		_stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		_loaderContext = new LoaderContext();
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
-		if ( !_isLocal ) _loaderContext.securityDomain = SecurityDomain.currentDomain;
 		var l_url:String = _url;
 		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
 		_loader = new Loader();
