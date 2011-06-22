@@ -46,7 +46,7 @@ class Preloader extends APreloader
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		if ( _preloaderMovieClip != null ) _preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		super._updater( deltaTime );	
+		super._updater( deltaTime );
 	}	
 }
 

@@ -1,23 +1,28 @@
-<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" backgroundColor="#000000" width="200" height="200" frameRate="12" currentTimeline="1" xflVersion="2.0" creatorInfo="Adobe Flash Professional CS5" platform="Windows" versionInfo="Saved by Adobe Flash Windows 11.0 build 489" majorVersion="11" buildNumber="489" viewAngle3D="21.4381852880442" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false">
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" width="200" height="200" frameRate="12" currentTimeline="1" xflVersion="2.0" creatorInfo="Adobe Flash Professional CS5" platform="Windows" versionInfo="Saved by Adobe Flash Windows 11.0 build 489" majorVersion="11" buildNumber="489" viewAngle3D="21.4381852880442" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false">
      <folders>
+          <DOMFolderItem name="eggTimer" itemID="4e01312c-00000074" isExpanded="true"/>
           <DOMFolderItem name="overlay" itemID="4cf41f8a-00000034" isExpanded="true"/>
-          <DOMFolderItem name="progresser" itemID="4c114d9c-000005d3" isExpanded="true"/>
      </folders>
      <media>
-          <DOMBitmapItem name="overlay/bg.png" itemID="4d2e5027-00000035" sourceExternalFilepath=".\LIBRARY\overlay\bg.png" sourceLastImported="1294880807" externalFileSize="2474" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="overlay\bg.png" bitmapDataHRef="M 5 1294880440.dat" frameRight="12000" frameBottom="8000"/>
-          <DOMBitmapItem name="overlay/fg.png" itemID="4d2e5027-00000034" sourceExternalFilepath=".\LIBRARY\overlay\fg.png" sourceLastImported="1294880729" externalFileSize="3918" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="overlay\fg.png" bitmapDataHRef="M 81 1273518883.dat" frameRight="12000" frameBottom="8000"/>
-          <DOMBitmapItem name="progresser/progress1.png" itemID="4d2e4ef2-0000002b" sourceExternalFilepath=".\LIBRARY\progresser\progress1.png" sourceLastImported="1294880498" externalFileSize="1309" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="progresser\progress1.png" bitmapDataHRef="M 225 1276196934.dat" frameRight="4000" frameBottom="1000"/>
-          <DOMBitmapItem name="progresser/progress2.png" itemID="4d2e4ef2-0000002c" sourceExternalFilepath=".\LIBRARY\progresser\progress2.png" sourceLastImported="1294880498" externalFileSize="1208" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="progresser\progress2.png" bitmapDataHRef="M 226 1276196935.dat" frameRight="4000" frameBottom="1000"/>
-          <DOMBitmapItem name="progresser/progress3.png" itemID="4d2e4ef2-0000002d" sourceExternalFilepath=".\LIBRARY\progresser\progress3.png" sourceLastImported="1294880498" externalFileSize="1923" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="progresser\progress3.png" bitmapDataHRef="M 223 1276196934.dat" frameRight="4000" frameBottom="1000"/>
+          <DOMBitmapItem name="overlay/bg.png" itemID="4e0132b6-0000008a" sourceExternalFilepath=".\LIBRARY\overlay\bg.png" sourceLastImported="1307563769" externalFileSize="40557" originalCompressionType="lossless" quality="50" href="overlay\bg.png" bitmapDataHRef="M 25 1308701351.dat" frameRight="12000" frameBottom="8000"/>
+          <DOMBitmapItem name="eggTimer/egg1.png" itemID="4e0132b6-0000008b" sourceExternalFilepath=".\LIBRARY\eggTimer\egg1.png" sourceLastImported="1308700836" externalFileSize="1527" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg1.png" bitmapDataHRef="M 15 1308700910.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg10.png" itemID="4e0132b6-0000008c" sourceExternalFilepath=".\LIBRARY\eggTimer\egg10.png" sourceLastImported="1308700898" externalFileSize="1644" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg10.png" bitmapDataHRef="M 24 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg2.png" itemID="4e0132b6-0000008d" sourceExternalFilepath=".\LIBRARY\eggTimer\egg2.png" sourceLastImported="1308700841" externalFileSize="1795" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg2.png" bitmapDataHRef="M 16 1308700910.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg3.png" itemID="4e0132b7-0000008e" sourceExternalFilepath=".\LIBRARY\eggTimer\egg3.png" sourceLastImported="1308700846" externalFileSize="1954" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg3.png" bitmapDataHRef="M 17 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg4.png" itemID="4e0132b7-0000008f" sourceExternalFilepath=".\LIBRARY\eggTimer\egg4.png" sourceLastImported="1308700851" externalFileSize="2047" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg4.png" bitmapDataHRef="M 18 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg5.png" itemID="4e0132b7-00000090" sourceExternalFilepath=".\LIBRARY\eggTimer\egg5.png" sourceLastImported="1308700860" externalFileSize="2113" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg5.png" bitmapDataHRef="M 19 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg6.png" itemID="4e0132b7-00000091" sourceExternalFilepath=".\LIBRARY\eggTimer\egg6.png" sourceLastImported="1308700865" externalFileSize="2118" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg6.png" bitmapDataHRef="M 20 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg7.png" itemID="4e0132b7-00000092" sourceExternalFilepath=".\LIBRARY\eggTimer\egg7.png" sourceLastImported="1308700873" externalFileSize="2049" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg7.png" bitmapDataHRef="M 21 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg8.png" itemID="4e0132b7-00000093" sourceExternalFilepath=".\LIBRARY\eggTimer\egg8.png" sourceLastImported="1308700878" externalFileSize="1996" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg8.png" bitmapDataHRef="M 22 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/egg9.png" itemID="4e0132b7-00000094" sourceExternalFilepath=".\LIBRARY\eggTimer\egg9.png" sourceLastImported="1308700886" externalFileSize="1840" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\egg9.png" bitmapDataHRef="M 23 1308700911.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="eggTimer/eggBackground.png" itemID="4e0132b7-00000095" sourceExternalFilepath=".\LIBRARY\eggTimer\eggBackground.png" sourceLastImported="1308700189" externalFileSize="5331" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="eggTimer\eggBackground.png" bitmapDataHRef="M 6 1308700341.dat" frameRight="1600" frameBottom="2800"/>
+          <DOMBitmapItem name="overlay/fg.png" itemID="4e012aff-00000021" sourceExternalFilepath=".\LIBRARY\overlay\fg.png" sourceLastImported="1307560685" externalFileSize="13024" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="overlay\fg.png" bitmapDataHRef="M 81 1273518883.dat" frameRight="12000" frameBottom="8000"/>
      </media>
      <symbols>
+          <Include href="eggTimer/egg.xml" loadImmediate="false"/>
           <Include href="overlay/bg.xml" loadImmediate="false"/>
           <Include href="overlay/fg.xml" loadImmediate="false"/>
           <Include href="PreloaderMovieClip.xml"/>
-          <Include href="progresser/bar.xml" loadImmediate="false"/>
-          <Include href="progresser/progress.xml" loadImmediate="false"/>
-          <Include href="progresser/progress1.xml" loadImmediate="false"/>
-          <Include href="progresser/progress2.xml" loadImmediate="false"/>
      </symbols>
      <timelines>
           <DOMTimeline name="Scene 1">
@@ -35,7 +40,7 @@
                                                             </FillStyle>
                                                        </fills>
                                                        <edges>
-                                                            <Edge fillStyle1="1" edges="!4000 4000|0 4000!0 4000|0 0!0 0|4000 0!4000 0|4000 4000"/>
+                                                            <Edge fillStyle1="1" edges="!0 4000|0 0!0 0|4000 0!4000 0|4000 4000!4000 4000|0 4000"/>
                                                        </edges>
                                                   </DOMShape>
                                              </members>
@@ -363,6 +368,7 @@
      </extendedSwatchLists>
      <PrinterSettings/>
      <publishHistory>
+          <PublishItem publishSize="23382" publishTime="1308701046"/>
           <PublishItem publishSize="9186" publishTime="1307490086"/>
           <PublishItem publishSize="9183" publishTime="1294958394"/>
           <PublishItem publishSize="7694" publishTime="1294449791"/>
@@ -382,6 +388,5 @@
           <PublishItem publishSize="33332" publishTime="1291077604"/>
           <PublishItem publishSize="39225" publishTime="1291077478"/>
           <PublishItem publishSize="38981" publishTime="1291077434"/>
-          <PublishItem publishSize="38966" publishTime="1291077374"/>
      </publishHistory>
 </DOMDocument>

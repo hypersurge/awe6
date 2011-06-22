@@ -9,12 +9,8 @@
 
 THINGS TO DO ASAP:
 	
-
-Revised preloader
-DONE Revised graphics
 better component test (movable, drawable, swarms?)
 flashdevelop template
-invader flipping
 
 ReBuild RC 0.4:
 api regen

@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="PreloaderMovieClip" itemID="4d2e5279-000000ac" linkageExportForAS="true" linkageClassName="assets.PreloaderMovieClip" sourceLibraryItemHRef="Symbol 1" lastModified="1307490066" lastUniqueIdentifier="4">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="PreloaderMovieClip" itemID="4d2e5279-000000ac" linkageExportForAS="true" linkageClassName="assets.PreloaderMovieClip" sourceLibraryItemHRef="Symbol 1" lastModified="1308701346" lastUniqueIdentifier="5">
   <timeline>
     <DOMTimeline name="PreloaderMovieClip">
       <layers>
@@ -15,23 +15,23 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="progress" color="#FF800A" current="true" isSelected="true" autoNamed="false">
+        <DOMLayer name="progress" color="#9933CC" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="progresser/progress" name="progress" centerPoint3DX="500" centerPoint3DY="245">
+                <DOMSymbolInstance libraryItemName="eggTimer/egg" name="progress" centerPoint3DX="300" centerPoint3DY="200">
                   <matrix>
-                    <Matrix tx="200" ty="195"/>
+                    <Matrix tx="260" ty="130"/>
                   </matrix>
                   <transformationPoint>
-                    <Point x="300" y="50"/>
+                    <Point x="40" y="70"/>
                   </transformationPoint>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="bg" color="#4F80FF" locked="true" autoNamed="false">
+        <DOMLayer name="bg" color="#4F80FF" locked="true" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
