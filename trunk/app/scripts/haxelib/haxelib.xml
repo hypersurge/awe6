@@ -3,5 +3,5 @@
 	<tag v="flash"/>
 	<tag v="game"/>
 	<description>Pronounced "awesome"; awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.</description>
-	<version name="0.4.185">Initial release.</version>
+	<version name="0.4.199">SecurityDomain preloader fix.</version>
 </project>
