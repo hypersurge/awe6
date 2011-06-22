@@ -1,6 +1,0 @@
--cp src
--swf-version 10
--swf bin/loader.swf
--swf-header 100:100:25:FFFFFF
--main awe6.extras.PrePreloader
--cmd bin\loader.swf
