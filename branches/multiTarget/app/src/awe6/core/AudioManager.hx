@@ -32,11 +32,13 @@ import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IAudioManager;
 import awe6.interfaces.IDisposable;
 import awe6.interfaces.IKernel;
+#if flash
 import flash.events.Event;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundMixer;
 import flash.media.SoundTransform;
+#end
 
 /**
  * The AudioManager class provides a minimalist implementation of the IAudioManager interface.
@@ -107,7 +109,9 @@ class AudioManager extends Process, implements IAudioManager
 	{
 		if ( isMute == null ) isMute = !this.isMute;
 		this.isMute = isMute;
+		#if flash
 		SoundMixer.soundTransform = new SoundTransform( isMute ? 0 : 1 );
+		#end
 		return this.isMute;
 	}	
 	
@@ -155,8 +159,10 @@ private class _HelperSound implements IDisposable
 	private var _onCompleteCallback:Void->Void;
 	
 	private var _kernel:IKernel;
+	#if flash
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
+	#end
 	
 	public function new( kernel:IKernel, id:String, packageId:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
 	{
@@ -176,6 +182,7 @@ private class _HelperSound implements IDisposable
 	
 	private function _init():Void
 	{
+		#if flash
 		_sound = cast( _kernel.assets.getAsset( this.id, _packageId ), Sound );
 		if ( _sound == null ) return dispose();
 		_soundChannel = _sound.play( _startTime, _loops );
@@ -183,10 +190,12 @@ private class _HelperSound implements IDisposable
 		transform( _volume, _pan );
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		return;
+		#end
 	}
 	
 	public function transform( ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
 	{
+		#if flash
 		if ( isDisposed ) return;
 		if ( asRelative )
 		{
@@ -198,23 +207,29 @@ private class _HelperSound implements IDisposable
 		if ( _soundChannel == null ) return;
 		var soundTransform:SoundTransform = new SoundTransform( volume, pan );
 		_soundChannel.soundTransform = soundTransform;		
+		#end
 	}
 	
 	public function stop():Void
 	{
+		#if flash
 		if ( _soundChannel == null ) return;
 		_soundChannel.stop();
 		dispose();
+		#end
 	}
 	
+	#if flash
 	private function _onSoundComplete( event:Event ):Void
 	{
 		if ( _onCompleteCallback != null ) Reflect.callMethod( this, _onCompleteCallback, [] );
 		dispose();
 	}
+	#end
 	
 	public function dispose():Void
 	{
+		#if flash
 		if ( isDisposed ) return;
 		isDisposed = true;
 		if ( _soundChannel != null )
@@ -222,5 +237,6 @@ private class _HelperSound implements IDisposable
 			stop();
 			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		}
+		#end
 	}
 }

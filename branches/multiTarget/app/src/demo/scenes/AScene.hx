@@ -32,6 +32,7 @@ import assets.Background;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
 import awe6.Types;
+import demo.AssetManager;
 import demo.Session;
 import flash.display.BitmapData;
 
@@ -52,17 +53,17 @@ class AScene extends Scene
 	override private function _init():Void 
 	{
 		super._init();
-		
-		var l_background:BitmapData;
-		l_background = new Background();
-		addEntity( new Image( _kernel, l_background ), true, 0 );
+		addEntity( new Image( _kernel, cast( _kernel.assets, AssetManager ).background ), true, 0 );
+		#if flash
 		var l_sceneType:String = _tools.toCamelCase( Std.string( type ) );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
 		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
 		_titleText.y = 40;
 		addEntity( _titleText, true, 100 );
+		#end
+		trace( "ascene init" );
 		
-		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
+		//_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
 	
 }

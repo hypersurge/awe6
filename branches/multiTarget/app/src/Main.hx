@@ -32,7 +32,9 @@ import demo.Factory;
 import flash.Lib;
 import haxe.Log;
 import haxe.PosInfos;
+#if flash
 import org.flashdevelop.utils.FlashConnect;
+#end
 
 class Main
 {
@@ -43,8 +45,10 @@ class Main
 		#else
 		var l_isDebug:Bool = false;
 		#end
+		#if flash
 		if ( l_isDebug ) FlashConnect.redirect();
-		else Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
+		else Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void { };
+		#end
 		var l_factory = new Factory( Lib.current );
 	}	
 }

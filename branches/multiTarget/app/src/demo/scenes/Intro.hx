@@ -37,8 +37,8 @@ class Intro extends AScene
 	
 	override private function _init():Void 
 	{
-		super._init();	
-		
+		super._init();
+		#if flash
 		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, _kernel.getConfig( "gui.scenes.intro.instructions" ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		l_result.y = 70;
 		addEntity( l_result, true, 2 );
@@ -46,6 +46,8 @@ class Intro extends AScene
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
+		#end
+		trace( 1 );
 	}
 	
 }

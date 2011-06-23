@@ -72,7 +72,9 @@ class InputMouse extends Process, implements IInputMouse
 	private var _buttonLeft:_HelperButton;
 	private var _buttonMiddle:_HelperButton;
 	private var _buttonRight:_HelperButton;
+	#if flash
 	private var _mouseClicks:Loader;
+	#end
 	
 	override private function _init():Void 
 	{
@@ -94,16 +96,18 @@ class InputMouse extends Process, implements IInputMouse
 		_stage.addEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
 		_stage.addEventListener( Event.DEACTIVATE, _reset );
 		
+		#if flash
 		_mouseClicks = new Loader();
 //		_mouseClicks.load( new URLRequest( "mouseClicks.swf" ) );
 //		_mouseClicks.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 
 		var l_data:String = "s503:RldTCnkBAABgAD6AAD6AABgBAEQRAAAAAEMC::::PwMeAQAAiF8ACQAqAFNlY3VyaXR5AGFsbG93SW5zZWN1cmVEb21haW4AYWxsb3dEb21haW4AbW91c2VCdXR0b25zAEFTbmF0aXZlAG9uRW50ZXJGcmFtZQBfd2lkdGgAX2hlaWdodACWCQAIAAcBAAAACAEclgIACAJSF5YJAAgABwEAAAAIARyWAgAIA1IXlhMACAQHAgAAAAcgAwAABwIAAAAIBT08lgIACAaOCAAAAAACagBqAJYMAAcCAAAABwEAAAAIBD0SnQIAEgCWCQAEAQgHBzIAAABPmQIADQCWCQAEAQgHB2QAAABPlgwABwQAAAAHAQAAAAgEPRKdAgASAJYJAAQBCAgHMgAAAE%ZAgANAJYJAAQBCAgHZAAAAE8dAL8AJQAAAAEAYAA%gAA%gAEAAAAAARQAAAAAERWPoPoeiDDpgw6H0Ol9AACGBgYBAAEAAEAAAAA";
 		_mouseClicks.loadBytes( cast( _tools.unserialize( l_data ), Bytes ).getData() );
-
+		#end
 		_reset();
 	}
 	
+	#if flash
 /*	private function _onComplete( event:Event ):Void
 	{
 		cast( event.target, LoaderInfo ).removeEventListener( Event.COMPLETE, _onComplete );
@@ -114,6 +118,7 @@ class InputMouse extends Process, implements IInputMouse
 	
 	inline private function _isMiddleDown():Bool { return _mouseClicks.height == 50; }
 	inline private function _isRightDown():Bool { return _mouseClicks.width == 50; }
+	#end
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
@@ -121,14 +126,14 @@ class InputMouse extends Process, implements IInputMouse
 		super._updater( deltaTime );
 		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, deltaTime );
+		#if flash
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
 		_handleButton( EMouseButton.RIGHT, _isRightDown(), deltaTime );
+		#end
 		
 		_deltaScroll = scroll - _scrollPrev;
 		_scrollPrev = scroll;
 		
-		if (_isMiddleDown() ) trace( "B" );
-
 		_xPrev = x;
 		_yPrev = y;
 		x = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );

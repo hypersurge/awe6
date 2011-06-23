@@ -31,7 +31,9 @@ package awe6.core;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
+#if flash
 import flash.net.SharedObject;
+#end
 
 /**
  * The ASession class provides a minimalist abstract implementation of the ISession interface.
@@ -45,7 +47,9 @@ class ASession implements ISession
 	public static inline var DEBUG_ID = "DEBUG_AWE6";
 
 	private var _kernel:IKernel;
+	#if flash
 	private var _so:SharedObject;
+	#end
 	private var _tools:ITools;
 	private var _data:Dynamic;
 	private var _version:Int;
@@ -62,13 +66,16 @@ class ASession implements ISession
 		if ( id == "" ) id = DEBUG_ID;
 		this.id = id;
 		_tools = _kernel.tools;
+		#if flash
 		_so = SharedObject.getLocal( _kernel.factory.id );
+		#end
 		_version = 1;
 		_init();
 	}
 	
 	private function _init()
 	{
+		#if flash
 		var l_version:Int = Reflect.field( _so.data, _VERSION_ID );
 		if ( l_version != _version ) _so.clear();
 		var l_isExistingSession:Bool = Reflect.field( _so.data, id ) != null;
@@ -79,6 +86,7 @@ class ASession implements ISession
 			_getter();
 			loadCount++;
 		}
+		#end
 	}
 	
 	private function _getter():Void
@@ -107,9 +115,13 @@ class ASession implements ISession
 	
 	public inline function clone( newId:String ):ISession
 	{
+		#if flash
 		_setter();
 		Reflect.setField( _so.data, newId, _data );
 		return Type.createInstance( Type.getClass( this ), [ _kernel, newId ] );
+		#else
+		return this;
+		#end
 	}
 	
 	public inline function reset( ?isSaved:Bool = false ):Void
@@ -122,15 +134,19 @@ class ASession implements ISession
 	
 	public inline function delete():Void
 	{
+		#if flash
 		Reflect.deleteField( _so.data, id );
+		#end
 	}	
 	
 	public inline function save():Void
 	{
 		saveCount++;
 		_setter();
+		#if flash
 		Reflect.setField( _so.data, _VERSION_ID, _version );
 		Reflect.setField( _so.data, id, _data );
+		#end
 	}
 		
 	public function getPercentageComplete():Float
@@ -141,6 +157,7 @@ class ASession implements ISession
 	
 	public function getSessionIds( ?suggestions:Array<String> = null ):Array<String>
 	{
+		#if flash
 		var l_result:Array<String> = Reflect.fields( _so.data );
 		l_result.remove( _VERSION_ID );
 		l_result.remove( DEBUG_ID );
@@ -154,6 +171,9 @@ class ASession implements ISession
 			}
 		}
 		l_result.sort( _tools.sortByString );
+		#else
+		var l_result:Array<String> = [];
+		#end
 		return l_result;
 	}
 	
@@ -170,7 +190,9 @@ class ASession implements ISession
 	
 	public function deleteAllSessions():Void
 	{
+		#if flash
 		_so.clear();		
+		#end
 	}
 	
 	private function __get_isTester():Bool

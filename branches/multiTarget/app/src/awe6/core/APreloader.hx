@@ -28,10 +28,11 @@
  */
 
 package awe6.core;
-import awe6.interfaces.IEncrypter;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IView;
+ #if flash
+import awe6.interfaces.IEncrypter;
 import flash.display.Loader;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -316,3 +317,19 @@ private class _HelperSwfParser
 		return l_result;
 	}
 }
+#else
+class APreloader extends Process, implements IPreloader
+{
+	public var view( __get_view, null ):IView;
+	public var progress( __get_progress, null ):Float;
+	
+	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
+	{
+		super( kernel );
+	}
+	
+	private function __get_view():IView { return view; }	
+	private function __get_progress():Float { return progress; }	
+}
+
+#end

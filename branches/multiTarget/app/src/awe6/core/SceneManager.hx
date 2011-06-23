@@ -103,7 +103,10 @@ class SceneManager extends Process, implements ISceneManager
 		_kernel.overlay.showButton( EOverlayButton.UNPAUSE, scene.isPauseable && !_kernel.isActive );
 		
 		view.addChild( scene.view );
-		if ( _sceneTransition != null ) scene.view.addChild( _sceneTransition.view, _tools.BIG_NUMBER + 1 );
+		//if ( _sceneTransition != null ) scene.view.addChild( _sceneTransition.view, _tools.BIG_NUMBER + 1 );
+		#if !flash
+		view.update();
+		#end
 	}
 	
 	public function back():Void

@@ -28,6 +28,7 @@
  */
 
 package demo;
+import assets.Background;
 import assets.BackOver;
 import assets.BackUp;
 import assets.MuteOver;
@@ -45,6 +46,7 @@ import flash.display.BitmapData;
 
 class AssetManager extends AAssetManager
 {
+	public var background( default, null ):BitmapData;
 	public var overlayBackground( default, null ):BitmapData;
 	public var backUp( default, null ):BitmapData;
 	public var backOver( default, null ):BitmapData;
@@ -61,6 +63,8 @@ class AssetManager extends AAssetManager
 	override private function _init():Void
 	{
 		super._init();
+		#if flash
+		background = new Background();
 		overlayBackground = new OverlayBackground();
 		backUp = new BackUp();
 		backOver = new BackOver();
@@ -73,7 +77,42 @@ class AssetManager extends AAssetManager
 		unpauseUp = new UnpauseUp();
 		unpauseOver = new UnpauseOver();
 		sphere = new Sphere();
+		#else
+		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/scenes/";
+		background = _getBitmapData( l_folder + "background.png", 600, 400 );
+		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/overlay/";
+		overlayBackground = _getBitmapData( l_folder + "OverlayBackground.png", 600, 400 );
+		backUp = _getBitmapData( l_folder + "buttons/BackUp.png" );
+		backOver = _getBitmapData( l_folder + "buttons/BackOver.png" );
+		muteUp = _getBitmapData( l_folder + "buttons/MuteUp.png" );
+		muteOver = _getBitmapData( l_folder + "buttons/MuteOver.png" );
+		unmuteUp = _getBitmapData( l_folder + "buttons/UnmuteUp.png" );
+		unmuteOver = _getBitmapData( l_folder + "buttons/UnmuteOver.png" );
+		pauseUp = _getBitmapData( l_folder + "buttons/PauseUp.png" );
+		pauseOver = _getBitmapData( l_folder + "buttons/PauseOver.png" );
+		unpauseUp = _getBitmapData( l_folder + "buttons/UnpauseUp.png" );
+		unpauseOver = _getBitmapData( l_folder + "buttons/UnpauseOver.png" );
+		var l_folder:String = "../../assetsDeployed/demo/gui/LIBRARY/";
+		sphere = _getBitmapData( l_folder + "Sphere.png", 600, 400 );		
+		#end
+		
+		//flash.Lib.current.addChild( new flash.display.Bitmap( backUp ) );
 	}
+	
+	#if ( js || cpp )
+	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
+	{
+		#if js
+		var l_result:BitmapData = new BitmapData( width, height, true );
+		l_result.LoadFromFile( id, flash.display.LoaderInfo.create( null ) );
+		return l_result;
+		#end
+		#if cpp
+		return BitmapData.load( id );
+		#end
+	}
+	#end
+	
 	
 }
 

@@ -47,9 +47,12 @@ class Factory extends AFactory
 		version = "0.0.1"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
+		#if js
+		isDecached = false;
+		#end
 		width = 600;
 		height = 400;
-		bgColor = 0xFFFFFF;
+		bgColor = 0xFF0000;
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;

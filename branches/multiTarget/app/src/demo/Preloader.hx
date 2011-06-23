@@ -33,6 +33,7 @@ import awe6.Types;
 
 class Preloader extends APreloader
 {
+	#if flash
 	private var _preloaderMovieClip:PreloaderMovieClip;
 
 	override private function _init():Void
@@ -47,6 +48,18 @@ class Preloader extends APreloader
 	{
 		if ( _preloaderMovieClip != null ) _preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
 		super._updater( deltaTime );
-	}	
+	}
+	#else
+	
+	override private function _init():Void
+	{
+		super._init();
+		_kernel.onPreloaderComplete( this );
+		_kernel.overlay.flash();
+		dispose();
+	}
+
+	#end
+	
 }
 

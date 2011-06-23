@@ -58,6 +58,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 	override private function _init():Void 
 	{
 		super._init();
+		#if flash
 		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
 		try
 		{
@@ -69,6 +70,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 		_sprite.filters = [ _blurFilter ];
 		_sprite.mouseEnabled = false;
 		_sprite.addChild( new Bitmap( l_bitmapData ) );
+		#end
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -76,8 +78,10 @@ class SceneTransition extends Entity, implements ISceneTransition
 		super._updater( deltaTime );
 		if ( _age > _duration ) return dispose();
 		_sprite.alpha = 1 - progress;
+		#if flash
 		_blurFilter.blurX = _blurFilter.blurY = progress * 32;
 		_sprite.filters = [ _blurFilter ];
+		#end
 		return;
 	}
 	

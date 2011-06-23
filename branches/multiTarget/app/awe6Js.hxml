@@ -1,0 +1,10 @@
+-cmd scripts\prebuild.bat
+-cmd copy assets\jeash.htm bin\jeash.htm
+--next
+
+-D compileJs
+--remap flash:jeash
+-cp libs
+-cp src
+-js bin\game.js
+-main Main

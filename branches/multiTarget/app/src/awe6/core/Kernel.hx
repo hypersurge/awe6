@@ -53,10 +53,12 @@ import flash.events.Event;
 import flash.geom.Rectangle;
 import flash.Lib;
 import flash.events.ContextMenuEvent;
-import flash.events.FullScreenEvent;
 import flash.net.URLRequest;
+#if flash
+import flash.events.FullScreenEvent;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
+#end
 
 /**
  * The Kernel class provides a minimalist implementation of the IKernel interface.
@@ -102,11 +104,13 @@ class Kernel extends Process, implements IKernel
 	private var _profiler:Profiler;
 	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
+	#if flash
 	private var _contextMenu:ContextMenu;
 	private var _eyeCandyEnableContextMenuItem:ContextMenuItem;
 	private var _eyeCandyDisableContextMenuItem:ContextMenuItem;
 	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
 	private var _fullScreenDisableContextMenuItem:ContextMenuItem;
+	#end
 
 	public function new( factory:IFactory, sprite:Sprite )
 	{
@@ -162,11 +166,13 @@ class Kernel extends Process, implements IKernel
 		overlay = _overlayProcess = factory.createOverlay();
 		_addProcess( _overlayProcess, false );
 		_view.addChild( _overlayProcess.view );
+		#if flash
 		if ( isDebug )
 		{
 			_addProcess( _profiler = new Profiler( this ) );
 			_view.addChild( _profiler.view, _tools.BIG_NUMBER );
 		}
+		#end
 		scenes.setScene( factory.startingSceneType );
 	}
 	
@@ -184,6 +190,7 @@ class Kernel extends Process, implements IKernel
 		l_mask.graphics.endFill();
 		_view.sprite.mask = l_mask;
 		
+		#if flash
 		_contextMenu = new ContextMenu();
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
@@ -215,16 +222,20 @@ class Kernel extends Process, implements IKernel
 		
 		_contextMenu.hideBuiltInItems();
 		Lib.current.contextMenu = _contextMenu;
+		#end
+		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		
 		isEyeCandy = true;
 		isFullScreen = false;
 	}
 	
+	#if flash
 	private function _onFullScreen( ?event:FullScreenEvent ):Void
 	{
 		isFullScreen = event.fullScreen;
 	}
+	#end
 	
 	private function _onEnterFrame( event:Event ):Void
 	{
@@ -245,7 +256,9 @@ class Kernel extends Process, implements IKernel
 		if ( Std.is( factory, IDisposable ) ) cast( factory, IDisposable ).dispose();
 		_view.dispose();
 		_view = null;
+		#if flash
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
+		#end
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		assets = _assetManagerProcess = null;
 		audio =	_audioManager = null;
@@ -306,9 +319,11 @@ class Kernel extends Process, implements IKernel
 			return isEyeCandy;
 		}
 		isEyeCandy = value;
+		#if flash
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
+		#end
 		return isEyeCandy;
 	}
 	
@@ -334,6 +349,7 @@ class Kernel extends Process, implements IKernel
 		#end
 	}
 	
+	#if flash
 	private function _getFlashVersion():Float
 	{
 		var l_version:String = flash.system.Capabilities.version;
@@ -341,6 +357,7 @@ class Kernel extends Process, implements IKernel
 		var l_result:Float = Std.parseFloat( l_parts[0].split( " " )[1] ) + ( ( ( Std.parseFloat( l_parts[1] ) * 10000000 ) + ( Std.parseFloat( l_parts[2] ) * 1000 ) ) / 100000000 );
 		return l_result;
 	}
+	#end
 	
 	override private function _pauser():Void
 	{
