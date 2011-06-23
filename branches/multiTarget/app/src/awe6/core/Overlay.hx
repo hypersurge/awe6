@@ -87,6 +87,7 @@ class Overlay extends Entity, implements IOverlayProcess
 	override private function _init():Void 
 	{
 		super._init();
+
 		_wasMute = _kernel.audio.isMute;
 		
 		_progressSprite = new Sprite();
@@ -97,7 +98,9 @@ class Overlay extends Entity, implements IOverlayProcess
 		_pauseSprite.mouseEnabled = false;
 		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
 		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
+		#if flash
 		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
+		#end
 		_pauseSprite.addChild( l_bitmap );
 		var l_color:Sprite = new Sprite();
 		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
