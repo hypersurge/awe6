@@ -55,7 +55,7 @@ class Tools implements ITools
 		_kernel = kernel;
 		BIG_NUMBER = 9999998;
 		_encrypter = _kernel.factory.createEncrypter();
-		#if flash
+		#if flash10
 		_invSqrtMemory = new BytesData();
 		_invSqrtMemory.length = 1024;
 		flash.Memory.select( _invSqrtMemory );
@@ -238,7 +238,7 @@ class Tools implements ITools
 		if ( isAccurate ) return 1 / Math.sqrt( value );
 		else
 		{
-			#if flash
+			#if flash10
 			// http://ncannasse.fr/blog/fast_inverse_square_root, remember this needs to be inlined (i.e. not used as interface) else Math is faster
 			var l_half:Float = 0.5 * value;
 			flash.Memory.setFloat( 0, value );

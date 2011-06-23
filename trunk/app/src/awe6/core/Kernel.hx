@@ -314,7 +314,11 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isFullScreen( value:Bool ):Bool
 	{
-		if ( !factory.isFullScreenOptionEnabled )
+		#if !flash
+		isFullScreen = false;
+		return isFullScreen;
+		#else
+		if ( !factory.isFullScreenOptionEnabled || ( _getFlashVersion() < 10.1 ) ) // FullScreen proved unreliable for all Flash Players in all browsers < 10.1
 		{
 			isFullScreen = false;
 			return isFullScreen;
@@ -324,9 +328,19 @@ class Kernel extends Process, implements IKernel
 		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		_stage.displayState = isFullScreen ? StageDisplayState.FULL_SCREEN_INTERACTIVE : StageDisplayState.NORMAL;
+		if ( isFullScreen ) _stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+		else _stage.displayState = StageDisplayState.NORMAL; // intentionally longwinded to avoid string to enum conflicts in older VMs
 		return isEyeCandy;
-	}	
+		#end
+	}
+	
+	private function _getFlashVersion():Float
+	{
+		var l_version:String = flash.system.Capabilities.version;
+		var l_parts:Array<String> = l_version.split( "," );
+		var l_result:Float = Std.parseFloat( l_parts[0].split( " " )[1] ) + ( ( ( Std.parseFloat( l_parts[1] ) * 10000000 ) + ( Std.parseFloat( l_parts[2] ) * 1000 ) ) / 100000000 );
+		return l_result;
+	}
 	
 	override private function _pauser():Void
 	{
