@@ -1,0 +1,11 @@
+-D air
+-cp src
+-swf bin/app.swf
+-swf-header 480:320:25:FFFFFF
+-swf-version 10
+-swf-lib assets\preloader.swf
+-swf-lib assets\audio.swf
+-swf-lib assets\gui.swf
+-resource assets\configAir.xml@config
+-main Main
+-cmd bin\app.swf

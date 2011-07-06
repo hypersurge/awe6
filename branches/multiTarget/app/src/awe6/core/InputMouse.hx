@@ -101,8 +101,10 @@ class InputMouse extends Process, implements IInputMouse
 //		_mouseClicks.load( new URLRequest( "mouseClicks.swf" ) );
 //		_mouseClicks.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 
+		#if !air
 		var l_data:String = "s503:RldTCnkBAABgAD6AAD6AABgBAEQRAAAAAEMC::::PwMeAQAAiF8ACQAqAFNlY3VyaXR5AGFsbG93SW5zZWN1cmVEb21haW4AYWxsb3dEb21haW4AbW91c2VCdXR0b25zAEFTbmF0aXZlAG9uRW50ZXJGcmFtZQBfd2lkdGgAX2hlaWdodACWCQAIAAcBAAAACAEclgIACAJSF5YJAAgABwEAAAAIARyWAgAIA1IXlhMACAQHAgAAAAcgAwAABwIAAAAIBT08lgIACAaOCAAAAAACagBqAJYMAAcCAAAABwEAAAAIBD0SnQIAEgCWCQAEAQgHBzIAAABPmQIADQCWCQAEAQgHB2QAAABPlgwABwQAAAAHAQAAAAgEPRKdAgASAJYJAAQBCAgHMgAAAE%ZAgANAJYJAAQBCAgHZAAAAE8dAL8AJQAAAAEAYAA%gAA%gAEAAAAAARQAAAAAERWPoPoeiDDpgw6H0Ol9AACGBgYBAAEAAEAAAAA";
 		_mouseClicks.loadBytes( cast( _tools.unserialize( l_data ), Bytes ).getData() );
+		#end
 		#end
 		_reset();
 	}

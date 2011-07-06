@@ -57,6 +57,12 @@ class Factory extends AFactory
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;
 		isFixedUpdates = false;
+		#if air
+		width = 480;
+		height = 320;
+		_configUrl = haxe.Resource.getString( "config" );
+		isDebug = true;
+		#end		
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess
@@ -69,8 +75,8 @@ class Factory extends AFactory
 	{
 		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
 		var l_width:Int = 30;
-		var l_x:Int = 590 - ( 3 * l_width );
-		var l_y:Int = 400 - 30;
+		var l_x:Int = width - 10 - ( 3 * l_width );
+		var l_y:Int = height - 30;
 		l_overlay.positionButton( EOverlayButton.BACK, l_x, l_y );
 		l_overlay.positionButton( EOverlayButton.PAUSE, l_x += l_width, l_y );
 		l_overlay.positionButton( EOverlayButton.UNPAUSE, l_x, l_y );

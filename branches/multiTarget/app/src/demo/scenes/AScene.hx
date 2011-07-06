@@ -53,7 +53,7 @@ class AScene extends Scene
 	override private function _init():Void 
 	{
 		super._init();
-		addEntity( new Image( _kernel, cast( _kernel.assets, AssetManager ).background ), true, 0 );
+		addEntity( new Image( _kernel, cast( _kernel.assets, AssetManager ).background.clone() ), true, 0 );
 		#if flash
 		var l_sceneType:String = _tools.toCamelCase( Std.string( type ) );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
@@ -61,7 +61,7 @@ class AScene extends Scene
 		_titleText.y = 40;
 		addEntity( _titleText, true, 100 );
 		#end
-		trace( "ascene init" );
+//		trace( "ascene init" );
 		
 		//_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}

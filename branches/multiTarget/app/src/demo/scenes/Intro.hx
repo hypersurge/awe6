@@ -47,7 +47,7 @@ class Intro extends AScene
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
 		#end
-		trace( 1 );
+//		trace( 1 );
 	}
 	
 }

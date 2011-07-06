@@ -179,7 +179,9 @@ class Kernel extends Process, implements IKernel
 	private function _nativeInit():Void
 	{
 		var l_instance:Kernel = this;
+		#if !air
 		Lib.current.focusRect = false;
+		#end
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
@@ -188,10 +190,12 @@ class Kernel extends Process, implements IKernel
 		l_mask.graphics.beginFill( 0xFFFFFF );
 		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_mask.graphics.endFill();
+		_view.sprite.addChild( l_mask );
 		_view.sprite.mask = l_mask;
 		
 		#if flash
 		_contextMenu = new ContextMenu();
+		#if !air
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
 		if ( l_isAuthorUrl ) l_author.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( l_instance.getConfig( "settings.contextMenu.authorUrl" ) ) ); } );
@@ -222,6 +226,7 @@ class Kernel extends Process, implements IKernel
 		
 		_contextMenu.hideBuiltInItems();
 		Lib.current.contextMenu = _contextMenu;
+		#end
 		#end
 		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
@@ -313,6 +318,9 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isEyeCandy( value:Bool ):Bool
 	{
+		#if air
+		return value;
+		#end
 		if ( !factory.isEyeCandyOptionEnabled )
 		{
 			isEyeCandy = true;
@@ -329,6 +337,9 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isFullScreen( value:Bool ):Bool
 	{
+		#if air
+		return value;
+		#end
 		#if !flash
 		isFullScreen = false;
 		return isFullScreen;
