@@ -186,6 +186,7 @@ class Kernel extends Process, implements IKernel
 		_view.sprite.mask = l_mask;
 		
 		_contextMenu = new ContextMenu();
+		#if ( flash && !air )
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
 		if ( l_isAuthorUrl ) l_author.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( l_instance.getConfig( "settings.contextMenu.authorUrl" ) ) ); } );
@@ -216,6 +217,7 @@ class Kernel extends Process, implements IKernel
 		
 		_contextMenu.hideBuiltInItems();
 		Lib.current.contextMenu = _contextMenu;
+		#end
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		
 		isEyeCandy = true;
@@ -307,15 +309,17 @@ class Kernel extends Process, implements IKernel
 			return isEyeCandy;
 		}
 		isEyeCandy = value;
+		#if ( flash && !air )
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
+		#end
 		return isEyeCandy;
 	}
 	
 	private function __set_isFullScreen( value:Bool ):Bool
 	{
-		#if !flash
+		#if ( !flash || air )
 		isFullScreen = false;
 		return isFullScreen;
 		#else
