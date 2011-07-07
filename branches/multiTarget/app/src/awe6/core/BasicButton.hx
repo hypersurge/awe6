@@ -93,7 +93,11 @@ class BasicButton extends Entity
 		if ( l_isOver && !isOver ) onRollOver();
 		if ( !l_isOver && isOver ) onRollOut();
 		isOver = l_isOver;
+		#if !air
 		if ( isOver && _kernel.inputs.mouse.getIsButtonRelease() ) onClick();
+		#else
+		if ( isOver && _kernel.inputs.mouse.getIsButtonPress() ) onClick();		
+		#end
 		if ( ( _keyType != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _keyType ) ) ) onClick();
 	}
 	
