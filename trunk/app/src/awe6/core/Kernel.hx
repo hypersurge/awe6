@@ -182,6 +182,7 @@ class Kernel extends Process, implements IKernel
 		l_mask.graphics.beginFill( 0xFFFFFF );
 		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_mask.graphics.endFill();
+		_view.sprite.addChild( l_mask );
 		_view.sprite.mask = l_mask;
 		
 		_contextMenu = new ContextMenu();
