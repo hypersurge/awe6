@@ -8,4 +8,4 @@
 -swf-lib assets\gui.swf
 -resource assets\configAir.xml@config
 -main Main
--cmd bin\app.swf
+# -cmd bin\app.swf

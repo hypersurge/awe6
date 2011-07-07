@@ -38,6 +38,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
 import flash.net.URLRequest;
+import flash.system.LoaderContext;
 import flash.system.System;
 import haxe.io.Bytes;
 
@@ -80,12 +81,13 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		super._init();
 		_stage = Lib.current.stage;
-		x = y = _deltaX = _deltaY = scroll = _deltaScroll = 0;
+		x = y = _xPrev = _yPrev = _deltaX = _deltaY = scroll = _deltaScroll = 0;
 		relativeX = relativeY = relativeCentralisedX = relativeCentralisedY = 0;
 		isMoving = false;		
 		_buffer = [];
-		x = Math.round( _stage.mouseX );
-		y = Math.round( _stage.mouseY );
+//		x = Math.round( _stage.mouseX );
+//		y = Math.round( _stage.mouseY );
+		_getPosition();
 		isMoving = false;
 		scroll = 0;
 		_scrollPrev = 0;
@@ -101,12 +103,13 @@ class InputMouse extends Process, implements IInputMouse
 //		_mouseClicks.load( new URLRequest( "mouseClicks.swf" ) );
 //		_mouseClicks.contentLoaderInfo.addEventListener( Event.COMPLETE, _onComplete );
 
-		#if !air
 		var l_data:String = "s503:RldTCnkBAABgAD6AAD6AABgBAEQRAAAAAEMC::::PwMeAQAAiF8ACQAqAFNlY3VyaXR5AGFsbG93SW5zZWN1cmVEb21haW4AYWxsb3dEb21haW4AbW91c2VCdXR0b25zAEFTbmF0aXZlAG9uRW50ZXJGcmFtZQBfd2lkdGgAX2hlaWdodACWCQAIAAcBAAAACAEclgIACAJSF5YJAAgABwEAAAAIARyWAgAIA1IXlhMACAQHAgAAAAcgAwAABwIAAAAIBT08lgIACAaOCAAAAAACagBqAJYMAAcCAAAABwEAAAAIBD0SnQIAEgCWCQAEAQgHBzIAAABPmQIADQCWCQAEAQgHB2QAAABPlgwABwQAAAAHAQAAAAgEPRKdAgASAJYJAAQBCAgHMgAAAE%ZAgANAJYJAAQBCAgHZAAAAE8dAL8AJQAAAAEAYAA%gAA%gAEAAAAAARQAAAAAERWPoPoeiDDpgw6H0Ol9AACGBgYBAAEAAEAAAAA";
-		_mouseClicks.loadBytes( cast( _tools.unserialize( l_data ), Bytes ).getData() );
-		#else
+		var l_loaderContext:LoaderContext = new LoaderContext( false, null );
+		#if air
+		l_loaderContext.allowLoadBytesCodeExecution = true;
 		flash.ui.Multitouch.inputMode = flash.ui.MultitouchInputMode.NONE;
 		#end
+		_mouseClicks.loadBytes( cast( _tools.unserialize( l_data ), Bytes ).getData(), l_loaderContext );
 		#end
 		_reset();
 	}
@@ -140,8 +143,16 @@ class InputMouse extends Process, implements IInputMouse
 		
 		_xPrev = x;
 		_yPrev = y;
-		x = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
-		y = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+//		x = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
+//		y = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+//		x = Math.round( _stage.mouseX );
+//		y = Math.round( _stage.mouseY );
+//		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
+//		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+//		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
+//		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;
+		_getPosition();
+
 		_deltaX = x - _xPrev;
 		_deltaY = y - _yPrev;
 		isMoving = ( ( x != _xPrev ) || ( y != _yPrev ) );
@@ -161,6 +172,14 @@ class InputMouse extends Process, implements IInputMouse
 		isWithinScreenBounds = ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
 		
 //		trace( _buttonLeft.timeUpPrevious + ":" + _buttonMiddle.timeUpPrevious + ":" + _buttonRight.timeUpPrevious );
+	}
+	
+	private function _getPosition():Void
+	{
+		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
+		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
+		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
 	}
 	
 	private function _handleButton( ?type:EMouseButton, isDown:Bool, ?deltaTime:Int = 0 ):Void

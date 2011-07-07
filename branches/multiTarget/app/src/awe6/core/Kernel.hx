@@ -179,9 +179,7 @@ class Kernel extends Process, implements IKernel
 	private function _nativeInit():Void
 	{
 		var l_instance:Kernel = this;
-		#if !air
 		Lib.current.focusRect = false;
-		#end
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
@@ -195,6 +193,7 @@ class Kernel extends Process, implements IKernel
 		
 		#if flash
 		_contextMenu = new ContextMenu();
+		
 		#if !air
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
@@ -221,12 +220,11 @@ class Kernel extends Process, implements IKernel
 		_fullScreenEnableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = true; } );
 		_fullScreenDisableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.fullScreenDisable" ) ? getConfig( "settings.contextMenu.fullScreenDisable" ) : _FULL_SCREEN_DISABLE );
 		_fullScreenDisableContextMenuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance.isFullScreen = false; } );
-		
+				
+		#end
 		_stage.addEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
-		
 		_contextMenu.hideBuiltInItems();
 		Lib.current.contextMenu = _contextMenu;
-		#end
 		#end
 		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
@@ -318,16 +316,13 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isEyeCandy( value:Bool ):Bool
 	{
-		#if air
-		return value;
-		#end
 		if ( !factory.isEyeCandyOptionEnabled )
 		{
 			isEyeCandy = true;
 			return isEyeCandy;
 		}
 		isEyeCandy = value;
-		#if flash
+		#if ( flash && !air )
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
@@ -337,10 +332,7 @@ class Kernel extends Process, implements IKernel
 	
 	private function __set_isFullScreen( value:Bool ):Bool
 	{
-		#if air
-		return value;
-		#end
-		#if !flash
+		#if ( !flash || air )
 		isFullScreen = false;
 		return isFullScreen;
 		#else
@@ -350,9 +342,11 @@ class Kernel extends Process, implements IKernel
 			return isFullScreen;
 		}
 		isFullScreen = value;
+		#if air
 		_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
-		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
+		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );
+		#end
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		if ( isFullScreen ) _stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 		else _stage.displayState = StageDisplayState.NORMAL; // intentionally longwinded to avoid string to enum conflicts in older VMs

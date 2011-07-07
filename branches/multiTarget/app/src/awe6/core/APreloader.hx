@@ -91,6 +91,9 @@ class APreloader extends Process, implements IPreloader
 		view.isVisible = false;
 		_loaderContext = new LoaderContext();
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+		#if air
+		_loaderContext.allowLoadBytesCodeExecution = true;
+		#end		
 		_currentAsset = 0;
 		progress = 0;
 		_isComplete = false;

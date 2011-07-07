@@ -66,4 +66,11 @@ class AScene extends Scene
 		//_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
 	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		_titleText.text = _kernel.inputs.mouse.x + ", " + _kernel.inputs.mouse.y + ": " + _kernel.inputs.mouse.getIsButtonDown() + ": " + _kernel.inputs.mouse.getIsButtonDown( EMouseButton.MIDDLE );
+	}
+	
+	
 }

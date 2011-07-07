@@ -146,6 +146,7 @@ class ASession implements ISession
 		#if flash
 		Reflect.setField( _so.data, _VERSION_ID, _version );
 		Reflect.setField( _so.data, id, _data );
+		_so.flush();
 		#end
 	}
 		
