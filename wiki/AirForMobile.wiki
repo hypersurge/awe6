@@ -1,0 +1,15 @@
+#summary Develop for mobile devices using awe6.
+
+[https://awe6.googlecode.com/svn/trunk/docs/images/IosMockup.jpg]
+
+awe6 powered games have been deployed to multiple mobile devices (iOS and Android).  A Mac is not required.  No fee (other than iOS Developer Membership) is incurred.  Follow these steps to target your game to Web via awe6 + Flash Player, iPhone, iPod, iPad, Android via awe6 + AIR:
+
+ # Install [http://www.adobe.com/products/air/sdk/ AIR SDK (2.7+)].
+ # Follow the [QuickStart Quick Start Tutorial] and build awe6 demo from Trunk.
+ # Build the AIR target using [https://awe6.googlecode.com/svn/trunk/app/awe6Air.hxml awe6Air.hxml].  Note: the "air" conditional compilation tag disables some minor incompatible aspects (e.g. ContextMenu).
+ # iOS: Build the generated "app.swf" into an AIR app using [http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html Adobe's Help].
+ # Android: Build the generated "app.swf" into an AIR app using [http://help.adobe.com/en_US/air/build/WS901d38e593cd1bac25d3d8c712b2d86751e-8000.html Adobe's Help].
+
+Note: deployment to iOS requires a valid membership of the Adobe Developer iOS program.  Certificate creation and application packaging can be done from either a Mac or Windows following [http://www.adobe.com/devnet/air/articles/packaging-air-apps-ios.html these steps].
+
+Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling in your Entities and blitting / copyPixels in your Views.
