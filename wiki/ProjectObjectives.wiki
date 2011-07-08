@@ -38,9 +38,9 @@ The framework uses synchronous state throughout all default components.  So the 
 
 == Platform Independence ==
 
-The independent casual game developer / small team represents the target user of awe6.  Currently the primary targets for casual games are the web via Flash / SWF and mobile via iOS.  It is expected that Android, HTML5 & Unity3D will become increasingly relevant targets.
+The independent casual game developer / small team represents the target user of awe6.  Currently the primary targets for casual games are the web via Flash / SWF and mobile via iOS / AIR.  It is expected that HTML5, Android & Unity3D will become increasingly relevant targets.
 
-The Next Big Thing comes along too often to develop specifically for it.  Therefore awe6 is a collection of declarative interfaces, intended to be platform agnostic.  For practical purposes there is a working implementation targeting today's Big Thing (SWF).
+The Next Big Thing comes along too often to develop specifically for it.  Therefore awe6 is a collection of declarative interfaces, intended to be platform agnostic.  For practical purposes there is a working implementation targeting today's Big Thing (SWF for web & AIR for mobile).
 
 === Approach ===
 
