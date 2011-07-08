@@ -28,7 +28,6 @@
  */
 
 package demo;
-import awe6.extras.gui.Scale9BitmapData;
 import awe6.Types;
 import demo.scenes.Game;
 import demo.scenes.Intro;
@@ -46,7 +45,7 @@ class Factory extends AFactory
 	{		
 		super._init();
 		id = "awe6Demo";
-		version = "0.0.1"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+		version = "0.4.200"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
 		width = 600;
@@ -62,7 +61,7 @@ class Factory extends AFactory
 		var l_config:String = haxe.Resource.getString( "config" );
 		_configUrl = l_config.split( "<assets>" )[0] + l_config.split( "</assets>" )[1];
 		isDebug = true;
-		#end		
+		#end
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess
@@ -73,7 +72,7 @@ class Factory extends AFactory
 	
 	override public function createOverlay():IOverlayProcess
 	{
-		var l_overlayBackground:BitmapData = new Scale9BitmapData( _assetManager.overlayBackground, 110, 20, 550, 350, width, height, true );
+		var l_overlayBackground:BitmapData = new awe6.extras.gui.BitmapDataScale9( _assetManager.overlayBackground, 110, 20, 550, 350, width, height, true );
 		var l_overlay:Overlay = new Overlay( _kernel, l_overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
 		var l_width:Int = 30;
 		var l_x:Int = width - 10 - ( 3 * l_width );

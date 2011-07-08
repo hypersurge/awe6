@@ -32,7 +32,7 @@ import flash.display.BitmapData;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
-class Scale9BitmapData extends BitmapData
+class BitmapDataScale9 extends BitmapData
 {
 	private var _source:BitmapData;
 	private var _topLeftX:Int;
