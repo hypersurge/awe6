@@ -3,6 +3,7 @@
   * Overview
     * [ProjectObjectives Objectives]
     * [DeveloperGallery Gallery]
+    * [DeveloperBenefits Benefits]
     * [CodingConventions Coding Conventions]
     * [ToDo Tasks Under Construction]
     * Key Components
@@ -21,3 +22,4 @@
   * Using awe6
     * [QuickStart Quick Start Tutorial]
     * [AirForMobile Mobile Device Deployment]	
+    * [GameGenres Game Genre Examples]
