@@ -60,6 +60,7 @@ class InputKeyboard extends Process, implements IInputKeyboard
 	override private function _updater( timeInterval = 0 ):Void 
 	{
 		super._updater( timeInterval );
+		Lib.current.stage.focus = Lib.current.stage;
 		var l_encounteredKeyCodes:Hash<Bool> = new Hash<Bool>();
 		var l_nextBuffer:Array<_HelperKeyEvent> = [];
 		for ( i in _buffer )

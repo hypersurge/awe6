@@ -121,6 +121,7 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		_deltaTimePrev = deltaTime;
 		super._updater( deltaTime );
+		Lib.current.stage.focus = Lib.current.stage;
 		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, deltaTime );
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
