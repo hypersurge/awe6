@@ -43,6 +43,7 @@ enum EScene
 	SETTINGS;
 	GAME;
 	RESULTS;
+	REWARDS;
 	/**
 	 * Recommended to be used as a testing sandbox to test new entities etc.
 	 */
