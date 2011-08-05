@@ -335,7 +335,7 @@ class Kernel extends Process, implements IKernel
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		if ( isFullScreen ) _stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 		else _stage.displayState = StageDisplayState.NORMAL; // intentionally longwinded to avoid string to enum conflicts in older VMs
-		return isEyeCandy;
+		return isFullScreen;
 		#end
 	}
 	
