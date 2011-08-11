@@ -66,7 +66,10 @@ class Factory extends AFactory
 	
 	override public function createAssetManager():IAssetManagerProcess
 	{
-		if ( _assetManager == null ) _assetManager = new AssetManager( _kernel );
+		if ( _assetManager == null )
+		{
+			_assetManager = new AssetManager( _kernel );
+		}
 		return _assetManager;
 	}
 	
@@ -109,7 +112,10 @@ class Factory extends AFactory
 	
 	override public function createTextStyle( ?type:ETextStyle ):ITextStyle
 	{
-		if ( type == null ) type = ETextStyle.BODY;
+		if ( type == null )
+		{
+			type = ETextStyle.BODY;
+		}
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( type )

@@ -71,7 +71,10 @@ class Encrypter implements IEncrypter
 		{
 			l_result[i] = value[i] ^ secret.charCodeAt( l_secretIndex );
 			l_secretIndex++;
-			if ( l_secretIndex >= secret.length ) l_secretIndex = 0;
+			if ( l_secretIndex >= secret.length )
+			{
+				l_secretIndex = 0;
+			}
 		}
 		return l_result;
 	}	

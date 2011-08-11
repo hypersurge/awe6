@@ -47,8 +47,6 @@ class GuiEntity extends Entity
 	{
 		Reflect.setField( this, "isFlippedX", false );
 		Reflect.setField( this, "isFlippedY", false );
-//		this.isFlippedX = false;
-//		this.isFlippedY = false;
 		this.width = width;
 		this.height = height;
 		_sprite = new Sprite();
@@ -63,27 +61,61 @@ class GuiEntity extends Entity
 		super( kernel, _sprite );
 	}
 	
-	public function setPosition( x:Float, y:Float ):Void { this.x = x; this.y = y; }
-	private function __set_x( value:Float ):Float { x = value; _sprite.x = x; return x; }
-	private function __set_y( value:Float ):Float { y = value; _sprite.y = y; return y; }
+	public function setPosition( x:Float, y:Float ):Void
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	private function __set_x( value:Float ):Float
+	{
+		x = value;
+		_sprite.x = x;
+		return x;
+	}
+	
+	private function __set_y( value:Float ):Float
+	{
+		y = value;
+		_sprite.y = y;
+		return y;
+	}
 	
 	private function __set_isFlippedX( value:Bool ):Bool
 	{
-		if ( value == isFlippedX ) return isFlippedX;
+		if ( value == isFlippedX )
+		{
+			return isFlippedX;
+		}
 		isFlippedX = value;
 		_sprite.scaleX *= -1;
-		if ( isFlippedX ) x += width;
-		else x -= width;
+		if ( isFlippedX )
+		{
+			x += width;
+		}
+		else
+		{
+			x -= width;
+		}
 		return isFlippedX;
 	}
 
 	private function __set_isFlippedY( value:Bool ):Bool
 	{
-		if ( value == isFlippedY ) return isFlippedY;
+		if ( value == isFlippedY )
+		{
+			return isFlippedY;
+		}
 		isFlippedY = value;
 		_sprite.scaleY *= -1;
-		if ( isFlippedY ) y += height;
-		else y -= height;
+		if ( isFlippedY )
+		{
+			y += height;
+		}
+		else
+		{
+			y -= height;
+		}
 		return isFlippedY;
 	}
 }

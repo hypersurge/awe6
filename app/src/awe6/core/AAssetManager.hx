@@ -44,16 +44,22 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 
 	public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
 	{
-		if ( packageId == null ) packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		if ( packageId == null ) packageId = _PACKAGE_ID;
-		
+		if ( packageId == null )
+		{
+			packageId = _kernel.getConfig( "settings.assets.packages.default" );
+		}
+		if ( packageId == null )
+		{
+			packageId = _PACKAGE_ID;
+		}		
 		var l_assetName:String = id;
-		if ( packageId.length > 0 ) l_assetName = packageId + "." + id;
+		if ( packageId.length > 0 )
+		{
+			l_assetName = packageId + "." + id;
+		}
 		var l_assetClass:Class<Dynamic> = Type.resolveClass( l_assetName );
-		// trace( l_assetName + ":" + l_assetClass );
 		if ( l_assetClass == null )
 		{
-			// trace( "ERROR: no such asset [" + l_assetName + "]" );
 			return null;			
 		}
 		if ( args == null )

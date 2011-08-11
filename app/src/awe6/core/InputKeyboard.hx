@@ -60,7 +60,7 @@ class InputKeyboard extends Process, implements IInputKeyboard
 	override private function _updater( timeInterval = 0 ):Void 
 	{
 		super._updater( timeInterval );
-		Lib.current.stage.focus = Lib.current.stage;
+		_stage.focus = _stage;
 		var l_encounteredKeyCodes:Hash<Bool> = new Hash<Bool>();
 		var l_nextBuffer:Array<_HelperKeyEvent> = [];
 		for ( i in _buffer )
@@ -112,7 +112,10 @@ class InputKeyboard extends Process, implements IInputKeyboard
 	
 	private function _onKeyDown( event:KeyboardEvent ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
 		return;
 	}
@@ -130,7 +133,10 @@ class InputKeyboard extends Process, implements IInputKeyboard
 	
 	private function _onKeyUp( event:KeyboardEvent ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
 		return;
 	}
@@ -157,38 +163,59 @@ class InputKeyboard extends Process, implements IInputKeyboard
 
 	public function getIsKeyDown( type:EKey ):Bool
 	{
-		if ( type == null ) return false;
+		if ( type == null )
+		{
+			return false;
+		}
 		var l_keyCode:Int = getKeyCode( type );
 		return _keys[l_keyCode].isDown;
 	}
 	
 	public function getIsKeyPress( type:EKey ):Bool
 	{
-		if ( type == null ) return false;
+		if ( type == null )
+		{
+			return false;
+		}
 		var l_keyCode:Int = getKeyCode( type );
 		return ( _keys[l_keyCode].updatesDown == 1 );
 	}
 	
 	public function getIsKeyRelease( type:EKey ):Bool
 	{
-		if ( type == null ) return false;
+		if ( type == null )
+		{
+			return false;
+		}
 		var l_keyCode:Int = getKeyCode( type );
 		return ( _keys[l_keyCode].isUsed && ( _keys[l_keyCode].updatesUp == 1 ) );
 	}	
 	
 	public function getKeyDownDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
 	{
-		if ( type == null ) return 0;
+		if ( type == null )
+		{
+			return 0;
+		}
 		var l_keyCode:Int = getKeyCode( type );
-		if ( isPrevious ) return asTime ? _keys[l_keyCode].timeDownPrevious : _keys[l_keyCode].updatesDownPrevious;
+		if ( isPrevious )
+		{
+			return asTime ? _keys[l_keyCode].timeDownPrevious : _keys[l_keyCode].updatesDownPrevious;
+		}
 		return asTime ? _keys[l_keyCode].timeDown : _keys[l_keyCode].updatesDown;
 	}
 	
 	public function getKeyUpDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float
 	{
-		if ( type == null ) return _tools.BIG_NUMBER;
+		if ( type == null )
+		{
+			return _tools.BIG_NUMBER;
+		}
 		var l_keyCode:Int = getKeyCode( type );
-		if ( isPrevious ) return asTime ? _keys[l_keyCode].timeUpPrevious : _keys[l_keyCode].updatesUpPrevious;
+		if ( isPrevious )
+		{
+			return asTime ? _keys[l_keyCode].timeUpPrevious : _keys[l_keyCode].updatesUpPrevious;
+		}
 		return asTime ? _keys[l_keyCode].timeUp : _keys[l_keyCode].updatesUp;
 	}
 	
@@ -306,7 +333,10 @@ class InputKeyboard extends Process, implements IInputKeyboard
 		for ( i in l_constructors )
 		{
 			var l_key:EKey = Type.createEnum( EKey, i );
-			if ( getKeyCode( l_key ) == keyCode ) return l_key;
+			if ( getKeyCode( l_key ) == keyCode )
+			{
+				return l_key;
+			}
 		}
 		return EKey.SUB_TYPE( keyCode );
 	}	

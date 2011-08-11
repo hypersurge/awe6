@@ -68,14 +68,26 @@ class SceneManager extends Process, implements ISceneManager
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( scene != null ) scene.update( deltaTime );
-		if ( _sceneTransition != null ) _sceneTransition.update( deltaTime );
+		if ( scene != null )
+		{
+			scene.update( deltaTime );
+		}
+		if ( _sceneTransition != null )
+		{
+			_sceneTransition.update( deltaTime );
+		}
 	}
 	
 	override private function _disposer():Void 
 	{
-		if ( scene != null ) scene.dispose();
-		if ( _sceneTransition != null ) _sceneTransition.dispose();
+		if ( scene != null )
+		{
+			scene.dispose();
+		}
+		if ( _sceneTransition != null )
+		{
+			_sceneTransition.dispose();
+		}
 		view.dispose();
 		super._disposer();
 	}
@@ -87,10 +99,16 @@ class SceneManager extends Process, implements ISceneManager
 		{
 			l_previousType = scene.type;
 			var l_newSceneTransition:ISceneTransition = _kernel.factory.createSceneTransition( type, l_previousType );
-			if ( _sceneTransition != null ) _sceneTransition.dispose();
+			if ( _sceneTransition != null )
+			{
+				_sceneTransition.dispose();
+			}
 			_sceneTransition = l_newSceneTransition;
 			_kernel.inputs.reset();
-			if ( scene.isDisposable ) scene.dispose();
+			if ( scene.isDisposable )
+			{
+				scene.dispose();
+			}
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();
@@ -103,7 +121,10 @@ class SceneManager extends Process, implements ISceneManager
 		_kernel.overlay.showButton( EOverlayButton.UNPAUSE, scene.isPauseable && !_kernel.isActive );
 		
 		view.addChild( scene.view );
-		if ( _sceneTransition != null ) scene.view.addChild( _sceneTransition.view, _tools.BIG_NUMBER + 1 );
+		if ( _sceneTransition != null )
+		{
+			scene.view.addChild( _sceneTransition.view, _tools.BIG_NUMBER + 1 );
+		}
 	}
 	
 	public function back():Void
@@ -113,16 +134,25 @@ class SceneManager extends Process, implements ISceneManager
 	
 	public function next():Void
 	{
-		if ( scene.isSessionSavedOnNext && ( _kernel.session != null ) ) _kernel.session.save();
+		if ( scene.isSessionSavedOnNext && ( _kernel.session != null ) )
+		{
+			_kernel.session.save();
+		}
 		setScene( _kernel.factory.getNextSceneType( scene.type ) );
 	}
 	
 	public function restart():Void
 	{
-		if ( scene == null ) setScene( _kernel.factory.startingSceneType );
+		if ( scene == null )
+		{
+			setScene( _kernel.factory.startingSceneType );
+		}
 		else setScene( scene.type );
 	}
 	
-	private function __get_scene():IScene { return scene; }
+	private function __get_scene():IScene
+	{
+		return scene;
+	}
 }
 

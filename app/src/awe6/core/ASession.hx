@@ -59,7 +59,10 @@ class ASession implements ISession
 	public function new( kernel:IKernel, ?id:String = "" )
 	{
 		_kernel = kernel;
-		if ( id == "" ) id = DEBUG_ID;
+		if ( id == "" )
+		{
+			id = DEBUG_ID;
+		}
 		this.id = id;
 		_tools = _kernel.tools;
 		_so = SharedObject.getLocal( _kernel.factory.id );
@@ -70,7 +73,10 @@ class ASession implements ISession
 	private function _init()
 	{
 		var l_version:Int = Reflect.field( _so.data, _VERSION_ID );
-		if ( l_version != _version ) _so.clear();
+		if ( l_version != _version )
+		{
+			_so.clear();
+		}
 		var l_isExistingSession:Bool = Reflect.field( _so.data, id ) != null;
 		reset();
 		if ( l_isExistingSession )
@@ -147,7 +153,10 @@ class ASession implements ISession
 		if ( suggestions != null )
 		{
 			var l_desiredLength:Int = suggestions.length;
-			for ( i in l_result ) suggestions.remove( i );
+			for ( i in l_result )
+			{
+				suggestions.remove( i );
+			}
 			while ( l_result.length < l_desiredLength )
 			{
 				l_result.push( suggestions.shift() );
@@ -170,7 +179,7 @@ class ASession implements ISession
 	
 	public function deleteAllSessions():Void
 	{
-		_so.clear();		
+		_so.clear();
 	}
 	
 	private function __get_isTester():Bool

@@ -56,30 +56,51 @@ class AudioManager extends Process, implements IAudioManager
 		super._init();
 		_sounds = [];
 		_packageId = _kernel.getConfig( "settings.assets.packages.audio" );
-		if ( _packageId == null ) _packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		if ( _packageId == null ) _packageId = _PACKAGE_ID;	
+		if ( _packageId == null )
+		{
+			_packageId = _kernel.getConfig( "settings.assets.packages.default" );
+		}
+		if ( _packageId == null )
+		{
+			_packageId = _PACKAGE_ID;	
+		}
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void
 	{
 		super._updater( deltaTime );
-		for ( i in _sounds ) if ( i.isDisposed ) _sounds.remove( i );
+		for ( i in _sounds )
+		{
+			if ( i.isDisposed )
+			{
+				_sounds.remove( i );
+			}
+		}
 	}
 	
 	override private function _disposer():Void 
 	{
-		for ( i in _sounds ) i.dispose();
+		for ( i in _sounds )
+		{
+			i.dispose();
+		}
 		isMute = false;
 		super._disposer();
 	}
 	
 	public function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false, ?onCompleteCallback:Void->Void ):Void
 	{
-		if ( audioChannelType == null ) audioChannelType = EAudioChannel.DEFAULT;
+		if ( audioChannelType == null )
+		{
+			audioChannelType = EAudioChannel.DEFAULT;
+		}
 		if ( isIgnoredIfPlaying )
 		{
 			var l_existingSound:Array<_HelperSound> = _getSounds( id, audioChannelType );
-			if ( l_existingSound.length != 0 ) return;
+			if ( l_existingSound.length != 0 )
+			{
+				return;
+			}
 		}
 		var l_sound:_HelperSound = new _HelperSound( _kernel, id, _packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
 		_sounds.push( l_sound );
@@ -105,7 +126,10 @@ class AudioManager extends Process, implements IAudioManager
 	
 	private function __set_isMute( ?isMute:Bool ):Bool
 	{
-		if ( isMute == null ) isMute = !this.isMute;
+		if ( isMute == null )
+		{
+			isMute = !this.isMute;
+		}
 		this.isMute = isMute;
 		SoundMixer.soundTransform = new SoundTransform( isMute ? 0 : 1 );
 		return this.isMute;
@@ -120,15 +144,33 @@ class AudioManager extends Process, implements IAudioManager
 		}
 		else if ( audioChannelType == null )
 		{
-			for ( i in _sounds ) if ( i.id == id ) l_result.push( i );			
+			for ( i in _sounds )
+			{
+				if ( i.id == id )
+				{
+					l_result.push( i );			
+				}
+			}
 		}
 		else if ( id == null )
 		{
-			for ( i in _sounds ) if ( Type.enumEq( i.audioChannelType, audioChannelType ) ) l_result.push( i );
+			for ( i in _sounds )
+			{
+				if ( Type.enumEq( i.audioChannelType, audioChannelType ) )
+				{
+					l_result.push( i );
+				}
+			}
 		}
 		else
 		{
-			for ( i in _sounds ) if ( ( i.id == id ) && Type.enumEq( i.audioChannelType, audioChannelType ) ) l_result.push( i );						
+			for ( i in _sounds )
+			{
+				if ( ( i.id == id ) && Type.enumEq( i.audioChannelType, audioChannelType ) )
+				{
+					l_result.push( i );						
+				}
+			}
 		}		
 		return l_result;
 	}
@@ -165,7 +207,10 @@ private class _HelperSound implements IDisposable
 		this.id = id;
 		_packageId = packageId;
 		this.audioChannelType = ( audioChannelType != null ) ? audioChannelType : EAudioChannel.DEFAULT;
-		if ( loops == -1 ) loops = _kernel.tools.BIG_NUMBER;
+		if ( loops == -1 )
+		{
+			loops = _kernel.tools.BIG_NUMBER;
+		}
 		_loops = loops;
 		_startTime = startTime;
 		_volume = volume;
@@ -177,9 +222,15 @@ private class _HelperSound implements IDisposable
 	private function _init():Void
 	{
 		_sound = cast( _kernel.assets.getAsset( this.id, _packageId ), Sound );
-		if ( _sound == null ) return dispose();
+		if ( _sound == null )
+		{
+			return dispose();
+		}
 		_soundChannel = _sound.play( _startTime, _loops );
-		if ( _soundChannel == null ) return dispose(); // perhaps sounds are flooded?
+		if ( _soundChannel == null )
+		{
+			return dispose(); // perhaps sounds are flooded?
+		}
 		transform( _volume, _pan );
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		return;
@@ -187,7 +238,10 @@ private class _HelperSound implements IDisposable
 	
 	public function transform( ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
 	{
-		if ( isDisposed ) return;
+		if ( isDisposed )
+		{
+			return;
+		}
 		if ( asRelative )
 		{
 			volume *= _soundChannel.soundTransform.volume;
@@ -195,27 +249,39 @@ private class _HelperSound implements IDisposable
 		}
 		_volume = _kernel.tools.limit( volume, 0, 1 );
 		_pan = _kernel.tools.limit( pan, -1, 1 );
-		if ( _soundChannel == null ) return;
+		if ( _soundChannel == null )
+		{
+			return;
+		}
 		var soundTransform:SoundTransform = new SoundTransform( volume, pan );
 		_soundChannel.soundTransform = soundTransform;		
 	}
 	
 	public function stop():Void
 	{
-		if ( _soundChannel == null ) return;
+		if ( _soundChannel == null )
+		{
+			return;
+		}
 		_soundChannel.stop();
 		dispose();
 	}
 	
 	private function _onSoundComplete( event:Event ):Void
 	{
-		if ( _onCompleteCallback != null ) Reflect.callMethod( this, _onCompleteCallback, [] );
+		if ( _onCompleteCallback != null )
+		{
+			Reflect.callMethod( this, _onCompleteCallback, [] );
+		}
 		dispose();
 	}
 	
 	public function dispose():Void
 	{
-		if ( isDisposed ) return;
+		if ( isDisposed )
+		{
+			return;
+		}
 		isDisposed = true;
 		if ( _soundChannel != null )
 		{

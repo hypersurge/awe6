@@ -56,7 +56,6 @@ class Sphere extends Entity
 	{
 		super._init();
 		var l_scale:Float = _tools.range( Math.random(), .5, 1 );
-//		l_scale = 1;
 		_width = 100 * l_scale;
 		_height = 100 * l_scale;
 		_width2 = _width / 2;
@@ -92,7 +91,10 @@ class Sphere extends Entity
 	
 	private function _isHit():Bool
 	{
-		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) ) return false;
+		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) )
+		{
+			return false;
+		}
 		var l_dx:Float = _kernel.inputs.mouse.x - _bouncer.x;
 		var l_dy:Float = _kernel.inputs.mouse.y - _bouncer.y;
 		var l_dist:Float = ( ( l_dx * l_dx ) + ( l_dy * l_dy ) );

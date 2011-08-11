@@ -43,8 +43,14 @@ class Main
 		#else
 		var l_isDebug:Bool = false;
 		#end
-		if ( l_isDebug ) FlashConnect.redirect();
-		else Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
+		if ( l_isDebug )
+		{
+			FlashConnect.redirect();
+		}
+		else 
+		{
+			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
+		}
 		var l_factory = new Factory( Lib.current, l_isDebug );
 	}	
 }

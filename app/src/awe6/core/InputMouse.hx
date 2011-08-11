@@ -121,7 +121,7 @@ class InputMouse extends Process, implements IInputMouse
 	{
 		_deltaTimePrev = deltaTime;
 		super._updater( deltaTime );
-		Lib.current.stage.focus = Lib.current.stage;
+		_stage.focus = _stage;
 		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, deltaTime );
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), deltaTime );
@@ -202,19 +202,28 @@ class InputMouse extends Process, implements IInputMouse
 	
 	private function _onMouseDown( event:MouseEvent ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		_buffer.push( true );
 	}
 	
 	private function _onMouseUp( event:MouseEvent ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		_buffer.push( false );
 	}
 	
 	private function _onMouseWheel( event:MouseEvent ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		scroll += event.delta;
 	}
 	
@@ -228,7 +237,10 @@ class InputMouse extends Process, implements IInputMouse
 	
 	private function _getButton( ?type:EMouseButton ):_HelperButton
 	{
-		if ( type == null ) type = LEFT;
+		if ( type == null )
+		{
+			type = LEFT;
+		}
 		return switch ( type )
 		{
 			case LEFT : _buttonLeft;
@@ -240,14 +252,20 @@ class InputMouse extends Process, implements IInputMouse
 	public function getDeltaX( ?asTime:Bool = true ):Int
 	{
 		var l_result:Float = _deltaX;
-		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		if ( asTime )
+		{
+			l_result *= 1000 / _deltaTimePrev;
+		}
 		return Math.round( l_result );
 	}
 	
 	public function getDeltaY( ?asTime:Bool = true ):Int
 	{
 		var l_result:Float = _deltaY;
-		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		if ( asTime )
+		{
+			l_result *= 1000 / _deltaTimePrev;
+		}
 		return Math.round( l_result );
 	}
 	
@@ -262,7 +280,10 @@ class InputMouse extends Process, implements IInputMouse
 	public function getDeltaScroll( ?asTime:Bool = true ):Int
 	{
 		var l_result:Float = _deltaScroll;
-		if ( asTime ) l_result *= 1000 / _deltaTimePrev;
+		if ( asTime )
+		{
+			l_result *= 1000 / _deltaTimePrev;
+		}
 		return Math.round( l_result );
 	}	
 	
@@ -304,14 +325,20 @@ class InputMouse extends Process, implements IInputMouse
 	public function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
 	{
 		var l_button:_HelperButton = _getButton( type );
-		if ( isPrevious ) return asTime ? l_button.timeDownPrevious : l_button.updatesDownPrevious;
+		if ( isPrevious )
+		{
+			return asTime ? l_button.timeDownPrevious : l_button.updatesDownPrevious;
+		}
 		return asTime ? l_button.timeDown : l_button.updatesDown;
 	}
 	
 	public function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float
 	{
 		var l_button:_HelperButton = _getButton( type );
-		if ( isPrevious ) return asTime ? l_button.timeUpPrevious : l_button.updatesUpPrevious;
+		if ( isPrevious )
+		{
+			return asTime ? l_button.timeUpPrevious : l_button.updatesUpPrevious;
+		}
 		return asTime ? l_button.timeUp : l_button.updatesUp;
 	}
 	

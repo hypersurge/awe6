@@ -76,8 +76,11 @@ class Text extends GuiEntity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _prevTextStyle != textStyle.toString() ) _isDirty = true;
-		if ( _isDirty ) _draw();
+		_isDirty = _isDirty || ( _prevTextStyle != textStyle.toString() );
+		if ( _isDirty )
+		{
+			_draw();
+		}
 		_prevTextStyle = textStyle.toString();
 	}
 		
@@ -126,7 +129,10 @@ class Text extends GuiEntity
 	
 	private function __set_text( value:String ):String
 	{
-		if ( text == value ) return text;
+		if ( text == value )
+		{
+			return text;
+		}
 		text = value;
 		_textField.htmlText = text;
 		_isDirty = true;
