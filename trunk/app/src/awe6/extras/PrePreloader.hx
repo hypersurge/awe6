@@ -97,7 +97,10 @@ class PrePreloader extends Sprite
 		_loaderContext = new LoaderContext();
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
 		var l_url:String = _url;
-		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
+		if ( _isDecached )
+		{
+			l_url += "?dc=" + Std.random( 99999 );
+		}
 		_loader = new Loader();
 		addChild( _loader );
 		_urlLoader = new URLLoader();
@@ -162,7 +165,10 @@ class PrePreloader extends Sprite
 	
 	static function main()
 	{
-		if ( !__isExisting ) Lib.current.addChild( new PrePreloader() );
+		if ( !__isExisting )
+		{
+			Lib.current.addChild( new PrePreloader() );
+		}
 	}
 	
 }

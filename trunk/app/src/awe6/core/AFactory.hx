@@ -105,8 +105,14 @@ class AFactory implements IFactory, implements IDisposable
 		_countConfigsToLoad = 0;
 		_sprite = new Sprite();
 		sprite.addChild( _sprite );
-		if ( _sprite.stage != null ) _hasStage();
-		else _sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		if ( _sprite.stage != null )
+		{
+			_hasStage();
+		}
+		else
+		{
+			_sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		}
 	}
 	
 	private function _hasStage( ?event:Event ):Void
@@ -116,10 +122,16 @@ class AFactory implements IFactory, implements IDisposable
 		if ( _isConfigRequired )
 		{
 			var l_url:String = ( _configUrl != null ) ? _configUrl : _CONFIG_URL;
-			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null ) l_url = untyped _sprite.loaderInfo.parameters.configUrl;
+			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null )
+			{
+				l_url = untyped _sprite.loaderInfo.parameters.configUrl;
+			}
 			_loadConfig( l_url );
 		}
-		else _launchKernel();		
+		else
+		{
+			_launchKernel();		
+		}
 	}	
 	
 	private function _init():Void
@@ -150,10 +162,16 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _loadConfig( url:String ):Void
 	{
-		if ( url.substr( 0, 5 ) == "<?xml" ) _parseXml( url );
+		if ( url.substr( 0, 5 ) == "<?xml" )
+		{
+			_parseXml( url );
+		}
 		else
 		{
-			if ( isDecached ) url += "?dc=" + Std.random( 99999 );
+			if ( isDecached )
+			{
+				url += "?dc=" + Std.random( 99999 );
+			}
 			// trace( "Loading Config: \"" + url + "\"" );		
 			var l_loader:URLLoader = new URLLoader( new URLRequest( url ) );
 			l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
@@ -196,7 +214,10 @@ class AFactory implements IFactory, implements IDisposable
 			var l_url:String = config.get( _CONFIG_JOIN_NODE );
 			config.remove( _CONFIG_JOIN_NODE );
 			var l_urls:Array<String> = l_url.split( "," );
-			for ( i in l_urls ) _loadConfig( i );
+			for ( i in l_urls )
+			{
+				_loadConfig( i );
+			}
 			return;
 		}
 		if ( _countConfigsLoaded == _countConfigsToLoad ) _launchKernel();
@@ -210,11 +231,17 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _traverseElements( elements:Iterator<Xml>, prefix:String ):Void
 	{
-		if ( prefix.length != 0 ) prefix += ".";
+		if ( prefix.length != 0 )
+		{
+			prefix += ".";
+		}
 		for ( i in elements )
 		{
 			var l_name:String = prefix + i.nodeName;
-			if ( i.elements().hasNext() ) _traverseElements( i.elements(), l_name );
+			if ( i.elements().hasNext() )
+			{
+				_traverseElements( i.elements(), l_name );
+			}
 			if ( ( i.firstChild() != null ) && ( i.firstChild().toString().substr( 0, 9 ) == "<![CDATA[" ) )
 			{
 				i.firstChild().nodeValue = i.firstChild().toString().split( "<![CDATA[" ).join( "" ).split( "]]>" ).join( "" );
@@ -236,14 +263,20 @@ class AFactory implements IFactory, implements IDisposable
 		for ( i in 0...1000 )
 		{
 			var l_nodeName:String = _CONFIG_ASSETS_NODE + i;
-			if ( config.exists( l_nodeName ) ) l_result.push( Std.string( config.get( l_nodeName ) ) );
+			if ( config.exists( l_nodeName ) )
+			{
+				l_result.push( Std.string( config.get( l_nodeName ) ) );
+			}
 		}
 		return l_result;
 	}
 	
 	public inline function onInitComplete( kernel:IKernel ):Void
 	{
-		if ( _kernel != null ) return;
+		if ( _kernel != null )
+		{
+			return;
+		}
 		_kernel = kernel;
 		_tools = _kernel.tools;
 		id = ( _tools.toConstCase( StringTools.trim( id ) ) ).substr( 0, 16 );
@@ -253,7 +286,7 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createAssetManager():IAssetManagerProcess
 	{
-		return ( Std.is( _kernel.assets, IAssetManagerProcess ) ) ? cast( _kernel.assets, IAssetManagerProcess ) : new AAssetManager( _kernel );
+		return ( Std.is( _kernel.assets, IAssetManagerProcess ) ) ? cast( _kernel.assets, IAssetManagerProcess ) : new AAssetManager( _kernel ); // safe downcast
 	}	
 	
 	public function createEncrypter():IEncrypter
@@ -285,7 +318,10 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createScene( type:EScene ):IScene
 	{
-		if ( type == null ) type = startingSceneType;
+		if ( type == null )
+		{
+			type = startingSceneType;
+		}
 		var l_scene:Scene = new Scene( _kernel, type );
 		return l_scene;
 	}
@@ -319,11 +355,16 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function dispose():Void
 	{
-		if ( isDisposed ) return;
-		if ( __kernel == null ) return;
+		if ( isDisposed || ( __kernel == null ) )
+		{
+			return;
+		}
 		isDisposed = true;
 		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		if ( _sprite.parent != null ) _sprite.parent.removeChild( _sprite );
+		if ( _sprite.parent != null )
+		{
+			_sprite.parent.removeChild( _sprite );
+		}
 		__kernel.dispose();
 		__kernel = null;
 		_kernel = null;

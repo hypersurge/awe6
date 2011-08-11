@@ -68,12 +68,18 @@ class Process implements IProcess
 	
 	public inline function dispose():Void
 	{
-		if ( isDisposed ) return;
+		if ( isDisposed )
+		{
+			return;
+		}
 		else
 		{
 			isDisposed = true;
 			isActive = false;
-			if ( _isEntity ) _kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
+			if ( _isEntity )
+			{
+				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
+			}
 			_disposer();
 			return;
 		}
@@ -86,7 +92,10 @@ class Process implements IProcess
 	
 	public inline function update( ?deltaTime:Int = 0 ):Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		else
 		{
 			_age += deltaTime;
@@ -109,19 +118,28 @@ class Process implements IProcess
 	
 	private function __set_isActive( value:Bool ):Bool
 	{
-		if ( value == isActive ) return isActive;
+		if ( value == isActive )
+		{
+			return isActive;
+		}
 		value ? resume() : pause();
 		return isActive;
 	}
 	
 	public inline function pause():Void
 	{
-		if ( !isActive ) return;
+		if ( !isActive )
+		{
+			return;
+		}
 		else
 		{
 			Reflect.setField( this, "isActive", false ); // avoids the setter
 			_pauser();
-			if ( _isEntity && !isDisposed ) _kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
+			if ( _isEntity && !isDisposed )
+			{
+				_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
+			}
 			return;
 		}
 	}
@@ -133,12 +151,18 @@ class Process implements IProcess
 	
 	public inline function resume():Void
 	{
-		if ( isActive ) return;
+		if ( isActive )
+		{
+			return;
+		}
 		else
 		{
 			Reflect.setField( this, "isActive", true ); // avoids the setter
 			_resumer();
-			if ( _isEntity && !isDisposed ) _kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
+			if ( _isEntity && !isDisposed )
+			{
+				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
+			}
 			return;
 		}
 	}

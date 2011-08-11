@@ -107,7 +107,10 @@ class Profiler extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void
 	{
 		super._updater( deltaTime );
-		if ( _age < _agePrev + 250 ) return;
+		if ( _age < _agePrev + 250 )
+		{
+			return;
+		}
 		
 		_agePrev = _age;
 		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );

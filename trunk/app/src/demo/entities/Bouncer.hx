@@ -67,10 +67,22 @@ class Bouncer extends Entity
 		super._updater( deltaTime );
 		x += vx * ( deltaTime / 1000 );
 		y += vy * ( deltaTime / 1000 );
-		if ( x > ( _kernel.factory.width - _width2 ) ) vx *= -1;
-		if ( y > ( _kernel.factory.height - _height2 ) ) vy *= -1;
-		if ( x < _width2 ) vx *= -1;
-		if ( y < _height2 ) vy *= -1;
+		if ( x > ( _kernel.factory.width - _width2 ) )
+		{
+			vx *= -1;
+		}
+		if ( y > ( _kernel.factory.height - _height2 ) )
+		{
+			vy *= -1;
+		}
+		if ( x < _width2 )
+		{
+			vx *= -1;
+		}
+		if ( y < _height2 )
+		{
+			vy *= -1;
+		}
 		x = _tools.limit( x, _width2, _kernel.factory.width - _width2 );
 		y = _tools.limit( y, _height2, _kernel.factory.height - _height2 );
 	}

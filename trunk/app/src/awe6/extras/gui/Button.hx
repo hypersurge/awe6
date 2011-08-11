@@ -120,7 +120,10 @@ class Button extends GuiEntity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) ) onClick();
+		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) )
+		{
+			onClick();
+		}
 	}
 	
 	override private function _disposer():Void 
@@ -133,25 +136,37 @@ class Button extends GuiEntity
 	
 	public function onClick():Void
 	{
-		if ( _onClickCallback == null ) return;
+		if ( _onClickCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, _onClickCallback, [] );
 	}
 	
 	public function onRollOver():Void
 	{
-		if ( _onRollOverCallback == null ) return;
+		if ( _onRollOverCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, _onRollOverCallback, [] );		
 	}
 	
 	public function onRollOut():Void
 	{
-		if ( _onRollOutCallback == null ) return;
+		if ( _onRollOutCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, _onRollOutCallback, [] );		
 	}
 	
 	private function __set_label( value:String ):String
 	{
-		if ( value == label ) return label;
+		if ( value == label )
+		{
+			return label;
+		}
 		label = value;
 		_draw();
 		return label;

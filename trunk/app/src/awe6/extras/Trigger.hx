@@ -58,8 +58,14 @@ class Trigger extends Entity
 	{
 		super._updater( deltaTime );
 		var l_value:String = _getValue();
-		if ( l_value != _previousValue ) activate( true );
-		if ( _entity.isDisposed ) dispose();
+		if ( l_value != _previousValue )
+		{
+			activate( true );
+		}
+		if ( _entity.isDisposed )
+		{
+			dispose();
+		}
 	}
 	
 	private function _getValue():String

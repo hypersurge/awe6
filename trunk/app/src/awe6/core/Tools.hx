@@ -91,8 +91,14 @@ class Tools implements ITools
 	{
 		var l_ap:Int = a.priority;
 		var l_bp:Int = b.priority;
-		if ( l_ap < l_bp ) return -1;
-        if ( l_ap > l_bp ) return 1;
+		if ( l_ap < l_bp )
+		{
+			return -1;
+		}
+        if ( l_ap > l_bp )
+		{
+			return 1;
+		}
         return 0;
 	}	
 	
@@ -103,24 +109,48 @@ class Tools implements ITools
 	
 	private function _isCamelCase( value:String ):Bool
 	{
-		if ( value.toUpperCase() == value ) return false;
-		if ( value.indexOf( " " ) > -1 ) return false;
-		if ( value.indexOf( "_" ) > -1 ) return false;
+		if ( value.toUpperCase() == value )
+		{
+			return false;
+		}
+		if ( value.indexOf( " " ) > -1 )
+		{
+			return false;
+		}
+		if ( value.indexOf( "_" ) > -1 )
+		{
+			return false;
+		}
 		return true;
 	}
 	
 	private function _isConstCase( value:String ):Bool
 	{
-		if ( value.toUpperCase() != value ) return false;
-		if ( value.indexOf( " " ) > -1 ) return false;
+		if ( value.toUpperCase() != value )
+		{
+			return false;
+		}
+		if ( value.indexOf( " " ) > -1 )
+		{
+			return false;
+		}
 		return true;
 	}
 	
 	public function toCamelCase( value:String, ?isUpper:Bool = false ):String
 	{
-		if ( ( value == null ) || ( value == "" ) ) return "";
-		if ( _isCamelCase( value ) ) return value;
-		if ( _isConstCase( value ) ) value = fromConstCase( value );		
+		if ( ( value == null ) || ( value == "" ) )
+		{
+			return "";
+		}
+		if ( _isCamelCase( value ) )
+		{
+			return value;
+		}
+		if ( _isConstCase( value ) )
+		{
+			value = fromConstCase( value );		
+		}
 		var l_result:String = "";
 		value = StringTools.replace( value, "     ", " " );
 		value = StringTools.replace( value, "    ", " " );
@@ -139,7 +169,10 @@ class Tools implements ITools
 	
 	public function fromCamelCase( value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) ) return "";
+		if ( ( value == null ) || ( value == "" ) )
+		{
+			return "";
+		}
 		var l_result:String = "";
 		var l_chars:Array<String> = value.split( "" );
 		var l_space:String = "";
@@ -154,9 +187,18 @@ class Tools implements ITools
 	
 	public function toConstCase( value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) ) return "";
-		if ( _isConstCase( value ) ) return value;
-		if ( _isCamelCase( value ) ) value = fromCamelCase( value );		
+		if ( ( value == null ) || ( value == "" ) )
+		{
+			return "";
+		}
+		if ( _isConstCase( value ) )
+		{
+			return value;
+		}
+		if ( _isCamelCase( value ) )
+		{
+			value = fromCamelCase( value );		
+		}
 		var l_result:String = "";
 		value = StringTools.replace( value, "     ", " " );
 		value = StringTools.replace( value, "    ", " " );
@@ -169,7 +211,10 @@ class Tools implements ITools
 	
 	public function fromConstCase( value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) ) return "";
+		if ( ( value == null ) || ( value == "" ) )
+		{
+			return "";
+		}
 		var l_result:String = "";
 		var l_words:Array<String> = value.split( "_" );
 		var l_space:String = "";
@@ -183,8 +228,14 @@ class Tools implements ITools
 	
 	public function toWords( value:String ):String
 	{
-		if ( _isCamelCase( value ) ) return fromCamelCase( value );
-		if ( _isConstCase( value ) ) return fromConstCase( value );
+		if ( _isCamelCase( value ) )
+		{
+			return fromCamelCase( value );
+		}
+		if ( _isConstCase( value ) )
+		{
+			return fromConstCase( value );
+		}
 		return value;
 	}
 	
@@ -196,7 +247,10 @@ class Tools implements ITools
 	public inline function range( value:Float, min:Float, max:Float ):Float
 	{
 		var l_d:Float = max - min;
-		if ( l_d == 0 ) return value;
+		if ( l_d == 0 )
+		{
+			return value;
+		}
 		else
 		{
 			var l_o:Float = value - min;
@@ -228,14 +282,26 @@ class Tools implements ITools
 
 	public inline function sgn( value:Float ):Int
 	{
-		if ( value > 0 ) return 1;
-		else if ( value == 0 ) return 0;
-		else return -1;
+		if ( value > 0 )
+		{
+			return 1;
+		}
+		else if ( value == 0 )
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
 	}
 	
 	public inline function invSqrt( value:Float, ?isAccurate:Bool = false  ):Float
 	{
-		if ( isAccurate ) return 1 / Math.sqrt( value );
+		if ( isAccurate )
+		{
+			return 1 / Math.sqrt( value );
+		}
 		else
 		{
 			#if flash10
@@ -261,7 +327,10 @@ class Tools implements ITools
 	
 	public inline function nearestSquare( value:Float ):Int
 	{
-		if ( value == 0 ) return 0;
+		if ( value == 0 )
+		{
+			return 0;
+		}
 		else
 		{
 			var l_sqrt:Int = Math.round( Math.sqrt( Math.abs( value ) ) );
@@ -292,8 +361,14 @@ class Tools implements ITools
 	
 	public function convertAgeToFormattedTime( age:Int, ?delimiter:String ):String
 	{
-		if ( delimiter == null ) delimiter = "'";
-		if ( age < 0 ) return "99" + delimiter + "99" + delimiter + "99";
+		if ( delimiter == null )
+		{
+			delimiter = "'";
+		}
+		if ( age < 0 )
+		{
+			return "99" + delimiter + "99" + delimiter + "99";
+		}
 		var l_age:Float = age / 1000;
 		var l_seconds:Int = Math.floor( l_age );
 		var l_remainder:String = Std.string( Math.round( ( l_age - l_seconds ) * 100 ) );
@@ -303,14 +378,32 @@ class Tools implements ITools
 			l_minutes++;
 			l_seconds -= 60;
 		}
-		if ( l_minutes > 99 ) l_minutes = 99;
-		while ( l_remainder.length < 2 ) l_remainder = "0" + l_remainder;
+		if ( l_minutes > 99 )
+		{
+			l_minutes = 99;
+		}
+		while ( l_remainder.length < 2 )
+		{
+			l_remainder = "0" + l_remainder;
+		}
 		var l_secs:String = Std.string( l_seconds );
-		if ( l_seconds < 10 ) l_secs = "0" + l_secs;
+		if ( l_seconds < 10 )
+		{
+			l_secs = "0" + l_secs;
+		}
 		var l_mins:String = Std.string( l_minutes );
-		if ( l_minutes < 10 ) l_mins = "0" + l_mins;
-		if ( l_seconds == 0 ) l_secs = "00";
-		if ( l_minutes == 0 ) l_mins = "00";
+		if ( l_minutes < 10 )
+		{
+			l_mins = "0" + l_mins;
+		}
+		if ( l_seconds == 0 )
+		{
+			l_secs = "00";
+		}
+		if ( l_minutes == 0 )
+		{
+			l_mins = "00";
+		}
 		return Std.string( l_mins + delimiter + l_secs + delimiter + l_remainder );
 	}
 	

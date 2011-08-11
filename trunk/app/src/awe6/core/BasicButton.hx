@@ -90,50 +90,115 @@ class BasicButton extends Entity
 	{
 		super._updater( deltaTime );
 		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x, _kernel.inputs.mouse.y, x, y, width, height );
-		if ( l_isOver && !isOver ) onRollOver();
-		if ( !l_isOver && isOver ) onRollOut();
+		if ( l_isOver && !isOver )
+		{
+			onRollOver();
+		}
+		if ( !l_isOver && isOver )
+		{
+			onRollOut();
+		}
 		isOver = l_isOver;
-		if ( isOver && _kernel.inputs.mouse.getIsButtonRelease() ) onClick();
-		if ( ( _keyType != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _keyType ) ) ) onClick();
+		if ( isOver && _kernel.inputs.mouse.getIsButtonRelease() )
+		{
+			onClick();
+		}
+		if ( ( _keyType != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _keyType ) ) )
+		{
+			onClick();
+		}
 	}
 	
 	private function _isPointInsideRectangle( pointX:Float, pointY:Float, rectX:Float, rectY:Float, rectWidth:Float, rectHeight:Float ):Bool
 	{
 		pointX -= displaceX;
 		pointY -= displaceY;
-		if ( pointX < rectX ) return false;
-		if ( pointY < rectY ) return false;
-		if ( pointX > ( rectX + rectWidth ) ) return false;
-		if ( pointY > ( rectY + rectHeight ) ) return false;
+		if ( pointX < rectX )
+		{
+			return false;
+		}
+		if ( pointY < rectY )
+		{
+			return false;
+		}
+		if ( pointX > ( rectX + rectWidth ) )
+		{
+			return false;
+		}
+		if ( pointY > ( rectY + rectHeight ) )
+		{
+			return false;
+		}
 		return true;
 	}
 	
 	public function onClick():Void
 	{
-		if ( onClickCallback == null ) return;
+		if ( onClickCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, onClickCallback, [] );
 	}
 	
 	public function onRollOver():Void
 	{
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.OVER ) );
-		if ( onRollOverCallback == null ) return;
+		if ( onRollOverCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, onRollOverCallback, [] );		
 	}
 	
 	public function onRollOut():Void
 	{
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
-		if ( onRollOutCallback == null ) return;
+		if ( onRollOutCallback == null )
+		{
+			return;
+		}
 		Reflect.callMethod( this, onRollOutCallback, [] );		
 	}
 	
-	public function setPosition( x:Float, y:Float ):Void { this.x = x; this.y = y; }
-	private function __set_x( value:Float ):Float { x = value; _sprite.x = x; return x; }
-	private function __set_y( value:Float ):Float { y = value; _sprite.y = y; return y; }
-	private function __set_width( value:Float ):Float { width = value;  return width; }
-	private function __set_height( value:Float ):Float { height = value;  return height; }	
-	private function __set_alpha( value:Float ):Float { alpha = value; _sprite.alpha = alpha; return alpha; }
+	public function setPosition( x:Float, y:Float ):Void
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	private function __set_x( value:Float ):Float
+	{
+		x = value;
+		_sprite.x = x;
+		return x;
+	}
+	
+	private function __set_y( value:Float ):Float
+	{
+		y = value;
+		_sprite.y = y;
+		return y;
+	}
+	
+	private function __set_width( value:Float ):Float
+	{
+		width = value;
+		return width;
+	}
+	
+	private function __set_height( value:Float ):Float
+	{
+		height = value;
+		return height;
+	}
+	
+	private function __set_alpha( value:Float ):Float
+	{
+		alpha = value;
+		_sprite.alpha = alpha;
+		return alpha;
+	}
 }
 
 private class _HelperState extends Entity
@@ -145,7 +210,10 @@ private class _HelperState extends Entity
 	{
 		var l_sprite:Sprite = new Sprite();
 		var l_displayObject:DisplayObject = cast Std.is( bitmapDrawable, BitmapData ) ? new Bitmap( cast bitmapDrawable ) : bitmapDrawable;
-		if ( bitmapDrawable == null ) l_displayObject = new Sprite();
+		if ( bitmapDrawable == null )
+		{
+			l_displayObject = new Sprite();
+		}
 		l_sprite.addChild( l_displayObject );
 		l_sprite.useHandCursor = true;
 		l_sprite.buttonMode = true;

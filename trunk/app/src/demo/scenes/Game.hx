@@ -65,8 +65,6 @@ class Game extends Scene
 		
 		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
 		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
-//		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE, _mn, l_sphere );
-//		_kernel.messenger.addSubscriber( _entity, EMessage.UPDATE( 50 ), _mn, l_sphere );
 
 		_temp = l_sphere;
 	}
@@ -77,26 +75,21 @@ class Game extends Scene
 		return true;		
 	}
 	
-/*	private function _mh( deltaTime:Int->EMessage, sender:IEntity ):Bool
-	{
-		trace( deltaTime + " : sender" );
-		return true;		
-	}*/
-	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
 		
-/*		if ( _kernel.inputs.mouse.getIsButtonRelease() )
-		{
-			_temp.isActive = !_temp.isActive;
-		}*/
-		
 		_score = Std.int( _tools.limit( ( 1000 * TIME_LIMIT ) - _age, 0, _tools.BIG_NUMBER ) );
-		if ( _score == 0 ) _gameOver();
+		if ( _score == 0 )
+		{
+			_gameOver();
+		}
 		_timer.text = _tools.convertAgeToFormattedTime( _age );
 		var l_spheres:Array<Sphere> = getEntitiesByClass( Sphere );
-		if ( l_spheres.length == 0 ) _gameOver();
+		if ( l_spheres.length == 0 )
+		{
+			_gameOver();
+		}
 	}
 	
 	override private function _disposer():Void 

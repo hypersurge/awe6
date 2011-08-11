@@ -46,12 +46,18 @@ class ProxyEntity extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _proxyUpdate != null ) Reflect.callMethod( this, _proxyUpdate, [] );
+		if ( _proxyUpdate != null )
+		{
+			Reflect.callMethod( this, _proxyUpdate, [] );
+		}
 	}
 	
 	override private function _disposer():Void 
 	{
-		if ( _proxyDispose != null ) Reflect.callMethod( this, _proxyDispose, [] );
+		if ( _proxyDispose != null )
+		{
+			Reflect.callMethod( this, _proxyDispose, [] );
+		}
 		super._disposer();		
 	}
 	

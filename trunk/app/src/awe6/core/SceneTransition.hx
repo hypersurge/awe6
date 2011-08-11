@@ -64,7 +64,10 @@ class SceneTransition extends Entity, implements ISceneTransition
 			var l_view:View = cast _kernel.scenes.scene.view;
 			l_bitmapData.draw( l_view.sprite );
 		}
-		catch ( error:Dynamic ) { trace( error ); }
+		catch ( error:Dynamic )
+		{
+			trace( error );
+		}
 		_blurFilter = new BlurFilter( 0, 0, 1 );
 		_sprite.filters = [ _blurFilter ];
 		_sprite.mouseEnabled = false;
@@ -74,7 +77,10 @@ class SceneTransition extends Entity, implements ISceneTransition
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _age > _duration ) return dispose();
+		if ( _age > _duration )
+		{
+			return dispose();
+		}
 		_sprite.alpha = 1 - progress;
 		_blurFilter.blurX = _blurFilter.blurY = progress * 32;
 		_sprite.filters = [ _blurFilter ];
@@ -86,6 +92,9 @@ class SceneTransition extends Entity, implements ISceneTransition
 		return asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
 	}
 	
-	private function __get_progress():Float { return _tools.limit( _age / _duration, 0, 1 ); }
+	private function __get_progress():Float
+	{
+		return _tools.limit( _age / _duration, 0, 1 );
+	}
 }
 

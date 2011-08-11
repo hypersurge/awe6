@@ -189,18 +189,30 @@ class Kernel extends Process, implements IKernel
 		#if ( flash && !air )
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
-		if ( l_isAuthorUrl ) l_author.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( l_instance.getConfig( "settings.contextMenu.authorUrl" ) ) ); } );
+		if ( l_isAuthorUrl )
+		{
+			l_author.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( l_instance.getConfig( "settings.contextMenu.authorUrl" ) ) ); } );
+		}
 		_contextMenu.customItems.push( l_author );
 		
 		var l_isPoweredByUrl:Bool = getConfig( "settings.contextMenu.isPoweredByUrlEnabled" ) != "false";
 		var l_poweredBy:ContextMenuItem = new ContextMenuItem( _POWERED_BY, false, l_isPoweredByUrl );
-		if ( l_isPoweredByUrl ) l_poweredBy.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( _POWERED_BY_URL ) ); } );
+		if ( l_isPoweredByUrl )
+		{
+			l_poweredBy.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { Lib.getURL( new URLRequest( _POWERED_BY_URL ) ); } );
+		}
 		_contextMenu.customItems.push( l_poweredBy );
 		
-		if ( factory.isDecached || factory.isDebug ) _contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
+		if ( factory.isDecached || factory.isDebug )
+		{
+			_contextMenu.customItems.push( new ContextMenuItem( _RELEASE_CAUTION, false, false ) );
+		}
 		
 		var l_reset:ContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.resetSessions" ) ? getConfig( "settings.contextMenu.resetSessions" ) : _RESET_SESSIONS );
-		if ( factory.isResetSessionsOptionEnabled ) _contextMenu.customItems.push( l_reset );
+		if ( factory.isResetSessionsOptionEnabled )
+		{
+			_contextMenu.customItems.push( l_reset );
+		}
 		l_reset.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, function( ?event:Event ) { l_instance._totalReset(); } );
 		
 		_eyeCandyEnableContextMenuItem = new ContextMenuItem( factory.config.exists( "settings.contextMenu.eyeCandyEnable" ) ? getConfig( "settings.contextMenu.eyeCandyEnable" ) : _EYE_CANDY_ENABLE );
@@ -239,13 +251,22 @@ class Kernel extends Process, implements IKernel
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		for ( i in _processes ) i.update( deltaTime );
+		for ( i in _processes )
+		{
+			i.update( deltaTime );
+		}
 	}
 	
 	override private function _disposer():Void
 	{
-		for ( i in _processes ) _removeProcess( i );
-		if ( Std.is( factory, IDisposable ) ) cast( factory, IDisposable ).dispose();
+		for ( i in _processes )
+		{
+			_removeProcess( i );
+		}
+		if ( Std.is( factory, IDisposable ) )
+		{
+			cast( factory, IDisposable ).dispose();
+		}
 		_view.dispose();
 		_view = null;
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
@@ -271,8 +292,14 @@ class Kernel extends Process, implements IKernel
 	
 	public function log( value:Dynamic ):Void
 	{
-		if ( _logger != null ) _logger.log( value );
-		else if ( isDebug ) trace( "LOG: " + value );
+		if ( _logger != null )
+		{
+			_logger.log( value );
+		}
+		else if ( isDebug )
+		{
+			trace( "LOG: " + value );
+		}
 	}	
 	
 	public function getFramerate( ?asActual:Bool = true ):Float
@@ -282,21 +309,33 @@ class Kernel extends Process, implements IKernel
 	
 	private function _addProcess( process:IProcess, ?isLast:Bool = true ):Void
 	{
-		if ( process == null ) return;
-		if ( isLast ) _processes.add( process );
+		if ( process == null )
+		{
+			return;
+		}
+		if ( isLast )
+		{
+			_processes.add( process );
+		}
 		else _processes.push( process );
 	}
 	
 	private function _removeProcess( process:IProcess ):Bool
 	{
-		if ( process == null ) return false;
+		if ( process == null )
+		{
+			return false;
+		}
 		process.dispose();
 		return _processes.remove( process );
 	}
 	
 	private function _totalReset():Void
 	{
-		if ( !_isPreloaded ) return;
+		if ( !_isPreloaded )
+		{
+			return;
+		}
 		session.deleteAllSessions();
 		scenes.setScene( factory.startingSceneType );
 	}
@@ -333,8 +372,14 @@ class Kernel extends Process, implements IKernel
 		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
 		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		if ( isFullScreen ) _stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-		else _stage.displayState = StageDisplayState.NORMAL; // intentionally longwinded to avoid string to enum conflicts in older VMs
+		if ( isFullScreen )
+		{
+			_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+		}
+		else
+		{
+			_stage.displayState = StageDisplayState.NORMAL; // intentionally longwinded to avoid string to enum conflicts in older VMs
+		}
 		return isFullScreen;
 		#end
 	}
@@ -350,17 +395,31 @@ class Kernel extends Process, implements IKernel
 	override private function _pauser():Void
 	{
 		super._pauser();
-		if ( scenes.scene != null ) scenes.scene.pause();
+		if ( scenes.scene != null )
+		{
+			scenes.scene.pause();
+		}
 	}
 	
 	override private function _resumer():Void
 	{
 		super._resumer();
-		if ( scenes.scene != null ) scenes.scene.resume();
+		if ( scenes.scene != null )
+		{
+			scenes.scene.resume();
+		}
 	}
 	
-	private function __get_session():ISession { return session; }
-	private function __set_session( value:ISession ):ISession { session = value; return session; }
+	private function __get_session():ISession
+	{
+		return session;
+	}
+	
+	private function __set_session( value:ISession ):ISession
+	{
+		session = value;
+		return session;
+	}
 }
 
 private class _HelperFramerate

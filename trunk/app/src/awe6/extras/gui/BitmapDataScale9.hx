@@ -47,7 +47,10 @@ class BitmapDataScale9 extends BitmapData
 		_topLeftY = topLeftY;
 		_bottomRightX = bottomRightX;
 		_bottomRightY = bottomRightY;
-		if ( isTransparent && ( fillColor == 0xFFFFFFFF ) ) fillColor = 0x00;
+		if ( isTransparent && ( fillColor == 0xFFFFFFFF ) )
+		{
+			fillColor = 0x00;
+		}
 		super( width, height, isTransparent, fillColor );
 		_init();
 	}

@@ -96,7 +96,10 @@ class APreloader extends Process, implements IPreloader
 		_currentAsset = 0;
 		progress = 0;
 		_isComplete = false;
-		if ( _assets.length > 0 ) _next();
+		if ( _assets.length > 0 )
+		{
+			_next();
+		}
 	}
 	
 	private function _next():Void
@@ -111,7 +114,10 @@ class APreloader extends Process, implements IPreloader
 			}
 			return;
 		}
-		else _load( _assets[_currentAsset - 1] );
+		else
+		{
+			_load( _assets[_currentAsset - 1] );
+		}
 		_currentProgress = 0;
 	}
 	
@@ -131,7 +137,10 @@ class APreloader extends Process, implements IPreloader
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _assets.length == 0 ) dispose(); // needed to be done this way because preloader must be added and removed from kernel
+		if ( _assets.length == 0 )
+		{
+			dispose(); // needed to be done this way because preloader must be added and removed from kernel
+		}
 		view.isVisible = _age > 500;
 	}
 	
@@ -146,7 +155,10 @@ class APreloader extends Process, implements IPreloader
 			_loader.unload();
 			#end
 		}
-		if ( _urlLoader != null ) _urlLoader.close();
+		if ( _urlLoader != null )
+		{
+			_urlLoader.close();
+		}
 		super._disposer();
 		_kernel.onPreloaderComplete( this );
 		_kernel.overlay.flash();
@@ -229,10 +241,16 @@ private class _HelperSwfParser
 			version =  _data.readByte();
 			size = _data.readUnsignedInt();
 		}
-		else throw( "Invalid SWF file." );
+		else
+		{
+			throw( "Invalid SWF file." );
+		}
 		_data.readBytes( _data );
 		_data.length -= 8;
-		if ( isCompressed ) _data.uncompress();
+		if ( isCompressed )
+		{
+			_data.uncompress();
+		}
 		_data.position = 0;
 		_readBox();
 		var l_fpsF:UInt = _data.readUnsignedByte();
@@ -248,7 +266,10 @@ private class _HelperSwfParser
 		{
 			if ( Std.is( Type.createEmptyInstance( i ), Font ) )
 			{
-				try { Font.registerFont( i ); }
+				try
+				{
+					Font.registerFont( i );
+				}
 				catch ( error:Dynamic ) {}
 			}
 		}
@@ -283,9 +304,15 @@ private class _HelperSwfParser
 		var l_tag:UInt = _data.readUnsignedShort();
 		var l_id:Int = l_tag >> 6;
 		var l_size:Int = l_tag & 0x3F;
-		if ( l_size == 0x3F ) l_size = _data.readUnsignedInt();
+		if ( l_size == 0x3F )
+		{
+			l_size = _data.readUnsignedInt();
+		}
 		var l_dump:BytesData = new BytesData();
-		if ( l_size != 0 ) _data.readBytes( l_dump, 0, l_size );
+		if ( l_size != 0 )
+		{
+			_data.readBytes( l_dump, 0, l_size );
+		}
 		_handleTag( l_tag, l_id, l_size, l_dump );
 	}
 	
@@ -302,7 +329,10 @@ private class _HelperSwfParser
 					l_bytes.readUInt16();
 					var l_className:String = l_bytes.readUntil(0);
 					var l_resolvedClass:Class<Dynamic> = Type.resolveClass( l_className );
-					if ( l_resolvedClass != null ) classes.push( l_resolvedClass );
+					if ( l_resolvedClass != null )
+					{
+						classes.push( l_resolvedClass );
+					}
 				}
 		}
 	}

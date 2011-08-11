@@ -69,7 +69,10 @@ class View extends Process, implements IView
 	
 	public function addChild( child:IView, ?priority:Int ):Void
 	{
-		if ( isDisposed ) return;
+		if ( isDisposed )
+		{
+			return;
+		}
 		var l_child:View = cast child;
 		if ( l_child.parent != this )
 		{
@@ -77,15 +80,24 @@ class View extends Process, implements IView
 			_children.push( l_child );
 			l_child._setParent( this );
 		}
-		if ( priority != null ) child.priority = priority;
+		if ( priority != null )
+		{
+			child.priority = priority;
+		}
 		_isDirty = true;
 	}
 	
 	public function removeChild( child:IView ):Void
 	{
-		if ( isDisposed ) return;
+		if ( isDisposed )
+		{
+			return;
+		}
 		var l_child:View = cast child;
-		if ( l_child.parent != this ) return;
+		if ( l_child.parent != this )
+		{
+			return;
+		}
 		_children.remove( l_child );
 		l_child._setParent( null );
 		_isDirty = true;
@@ -93,25 +105,40 @@ class View extends Process, implements IView
 	
 	public function remove():Void
 	{
-		if ( parent != null ) parent.removeChild( this );
+		if ( parent != null )
+		{
+			parent.removeChild( this );
+		}
 	}
 	
 	public function clear():Void
 	{
-		for ( i in _children ) removeChild( i );
+		for ( i in _children )
+		{
+			removeChild( i );
+		}
 	}
 		
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		for ( i in _children ) i.update( deltaTime );
-		if ( _isDirty ) _draw();
+		for ( i in _children )
+		{
+			i.update( deltaTime );
+		}
+		if ( _isDirty )
+		{
+			_draw();
+		}
 	}
 	
 	override private function _disposer():Void 
 	{
 		remove();
-		if ( sprite.parent != null ) sprite.parent.removeChild( sprite );
+		if ( sprite.parent != null )
+		{
+			sprite.parent.removeChild( sprite );
+		}
 		clear();
 		super._disposer();	
 	}
@@ -119,13 +146,19 @@ class View extends Process, implements IView
 	private function _draw():Void
 	{
 		_children.sort( _tools.sortByPriority );
-		if ( _container != null && _container.parent != null ) _container.parent.removeChild( _container );
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
 		_container = new Sprite();
 		_container.mouseEnabled = false;
 		sprite.addChild( _container );
 		for ( i in _children )
 		{
-			if ( i.isVisible ) _container.addChild( i.sprite );
+			if ( i.isVisible )
+			{
+				_container.addChild( i.sprite );
+			}
 		}
 		_isDirty = false;
 	}
@@ -135,19 +168,32 @@ class View extends Process, implements IView
 		this.parent = parent;
 	}
 	
-	private function __get_priority():Int { return priority; }
+	private function __get_priority():Int
+	{
+		return priority;
+	}
+	
 	private function __set_priority( value:Int ):Int
 	{
-		if ( value == priority ) return priority;
+		if ( value == priority )
+		{
+			return priority;
+		}
 		priority = value;
 		var l_parent:View = cast parent;
-		if ( l_parent != null ) l_parent._isDirty = true;
+		if ( l_parent != null )
+		{
+			l_parent._isDirty = true;
+		}
 		return priority;
 	}
 	
 	private function __set_isVisible( value:Bool ):Bool
 	{
-		if ( value == isVisible ) return isVisible;
+		if ( value == isVisible )
+		{
+			return isVisible;
+		}
 		isVisible = value;
 		var l_parent:View = cast parent;
 		if ( l_parent != null )
@@ -157,13 +203,25 @@ class View extends Process, implements IView
 		return isVisible;
 	}
 	
-	private function __get_parent():IView { return parent; }
+	private function __get_parent():IView
+	{
+		return parent;
+	}
 	
 	private function __get_isInViewStack():Bool
 	{
-		if ( !isVisible ) return false;
-		if ( owner == _kernel ) return true;
-		if ( parent == null ) return false;
+		if ( !isVisible )
+		{
+			return false;
+		}
+		if ( owner == _kernel )
+		{
+			return true;
+		}
+		if ( parent == null )
+		{
+			return false;
+		}
 		return parent.isInViewStack;
 	}
 }

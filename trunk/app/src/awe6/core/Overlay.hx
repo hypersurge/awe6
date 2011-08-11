@@ -150,9 +150,18 @@ class Overlay extends Entity, implements IOverlayProcess
 		}
 		_flashSprite.alpha = _flashAlpha;
 		_flashSprite.visible = _flashAlpha > 0;
-		if ( ( _kernel.factory.keyBack != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyBack ) ) ) activateButton( _kernel.isActive ? EOverlayButton.BACK : EOverlayButton.UNPAUSE );
-		if ( ( _kernel.factory.keyPause != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyPause ) ) ) activateButton( _kernel.isActive ? EOverlayButton.PAUSE : EOverlayButton.UNPAUSE );
-		if ( ( _kernel.factory.keyMute != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyMute ) ) ) activateButton( _kernel.audio.isMute ? EOverlayButton.UNMUTE : EOverlayButton.MUTE );
+		if ( ( _kernel.factory.keyBack != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyBack ) ) )
+		{
+			activateButton( _kernel.isActive ? EOverlayButton.BACK : EOverlayButton.UNPAUSE );
+		}
+		if ( ( _kernel.factory.keyPause != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyPause ) ) )
+		{
+			activateButton( _kernel.isActive ? EOverlayButton.PAUSE : EOverlayButton.UNPAUSE );
+		}
+		if ( ( _kernel.factory.keyMute != null ) && ( _kernel.inputs.keyboard.getIsKeyPress( _kernel.factory.keyMute ) ) )
+		{
+			activateButton( _kernel.audio.isMute ? EOverlayButton.UNMUTE : EOverlayButton.MUTE );
+		}
 		if ( ( pauseEntity != null ) && !_kernel.isActive )
 		{
 			pauseEntity.update( deltaTime );
@@ -162,7 +171,10 @@ class Overlay extends Entity, implements IOverlayProcess
 	
 	override private function _disposer():Void 
 	{
-		if ( pauseEntity != null ) pauseEntity.dispose();
+		if ( pauseEntity != null )
+		{
+			pauseEntity.dispose();
+		}
 		view.dispose();
 		super._disposer();		
 	}
@@ -183,8 +195,14 @@ class Overlay extends Entity, implements IOverlayProcess
 	public function showButton( type:EOverlayButton, ?isVisible:Bool = true ):Void
 	{
 		var l_button:BasicButton = _getButton( type );
-		if ( isVisible ) addEntity( l_button, true );
-		else removeEntity( l_button, true );
+		if ( isVisible )
+		{
+			addEntity( l_button, true );
+		}
+		else
+		{
+			removeEntity( l_button, true );
+		}
 	}
 	
 	public function positionButton( type:EOverlayButton, x:Float, y:Float, ?alpha:Float ):Void
@@ -192,7 +210,10 @@ class Overlay extends Entity, implements IOverlayProcess
 		var l_button:BasicButton = _getButton( type );
 		l_button.x = x;
 		l_button.y = y;
-		if ( alpha != null ) l_button.alpha = alpha;		
+		if ( alpha != null )
+		{
+			l_button.alpha = alpha;		
+		}
 	}
 	
 	public function showProgress( progress:Float, ?message:String ):Void
@@ -226,7 +247,10 @@ class Overlay extends Entity, implements IOverlayProcess
 		{
 			case BACK : if ( _buttonBack.view.isInViewStack )
 			{
-				if ( !_kernel.isActive ) activateButton( EOverlayButton.UNPAUSE );
+				if ( !_kernel.isActive )
+				{
+					activateButton( EOverlayButton.UNPAUSE );
+				}
 				_drawPause( false );
 				_kernel.resume();
 				_kernel.scenes.back();
@@ -267,16 +291,29 @@ class Overlay extends Entity, implements IOverlayProcess
 	private function _drawPause( ?isVisible:Bool = true ):Void
 	{
 		_pauseSprite.visible = isVisible;
-		if ( !isVisible ) return;
+		if ( !isVisible )
+		{
+			return;
+		}
 		_pauseSnapshot.fillRect( _pauseSnapshot.rect, 0x00 );
-		try { _pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite ); }
+		try
+		{
+			_pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite );
+		}
 		catch ( error:Dynamic ) {}
 	}
 	
-	private function __get_pauseEntity():IEntity { return pauseEntity; }
+	private function __get_pauseEntity():IEntity
+	{
+		return pauseEntity;
+	}
+	
 	private function __set_pauseEntity( value:IEntity ):IEntity
 	{
-		if ( pauseEntity != null ) pauseEntity.view.remove();
+		if ( pauseEntity != null )
+		{
+			pauseEntity.view.remove();
+		}
 		pauseEntity = value;
 		_pauseView.addChild( pauseEntity.view );
 		return pauseEntity;
