@@ -123,7 +123,10 @@ class ASession implements ISession
 		_data = { };
 		_resetter();
 		_setter();
-		if ( isSaved ) save();
+		if ( isSaved )
+		{
+			save();
+		}
 	}
 	
 	public inline function delete():Void

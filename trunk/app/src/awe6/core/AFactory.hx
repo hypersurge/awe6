@@ -225,7 +225,10 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _launchKernel():Void
 	{
-		if ( __kernel != null ) return;
+		if ( __kernel != null )
+		{
+			return;
+		}
 		__kernel = new Kernel( this, _sprite );
 	}
 	

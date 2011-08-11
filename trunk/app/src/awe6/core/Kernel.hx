@@ -317,7 +317,10 @@ class Kernel extends Process, implements IKernel
 		{
 			_processes.add( process );
 		}
-		else _processes.push( process );
+		else
+		{
+			_processes.push( process );
+		}
 	}
 	
 	private function _removeProcess( process:IProcess ):Bool

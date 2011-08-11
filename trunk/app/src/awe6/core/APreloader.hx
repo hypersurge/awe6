@@ -124,7 +124,10 @@ class APreloader extends Process, implements IPreloader
 	private function _load( url:String ):Void
 	{
 		var l_url:String = url;
-		if ( _isDecached ) l_url += "?dc=" + Std.random( 99999 );
+		if ( _isDecached )
+		{
+			l_url += "?dc=" + Std.random( 99999 );
+		}
 		// trace( "Loading Asset: " + l_url );
 		_urlLoader = new URLLoader();
 		_urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
@@ -211,8 +214,15 @@ class APreloader extends Process, implements IPreloader
 		progress = _tools.limit( ( _currentAsset - 1 + _currentProgress ) / _assets.length , 0, 1 );
 	}
 	
-	private function __get_view():IView { return view; }	
-	private function __get_progress():Float { return progress; }	
+	private function __get_view():IView
+	{
+		return view;
+	}
+	
+	private function __get_progress():Float
+	{
+		return progress;
+	}
 }
 
 private class _HelperSwfParser

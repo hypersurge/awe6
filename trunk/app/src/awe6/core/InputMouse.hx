@@ -114,8 +114,15 @@ class InputMouse extends Process, implements IInputMouse
 		trace( l_clip );
 	}*/
 	
-	inline private function _isMiddleDown():Bool { return _mouseClicks.height == 50; }
-	inline private function _isRightDown():Bool { return _mouseClicks.width == 50; }
+	inline private function _isMiddleDown():Bool
+	{
+		return _mouseClicks.height == 50;
+	}
+	
+	inline private function	_isRightDown():Bool
+	{
+		return _mouseClicks.width == 50;
+	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{

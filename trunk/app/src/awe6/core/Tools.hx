@@ -178,7 +178,10 @@ class Tools implements ITools
 		var l_space:String = "";
 		for ( i in l_chars )
 		{
-			if ( i.toLowerCase() != i ) l_result += l_space;
+			if ( i.toLowerCase() != i )
+			{
+				l_result += l_space;
+			}
 			l_result += i;
 			l_space = " ";
 		}
