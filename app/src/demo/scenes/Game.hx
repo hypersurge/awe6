@@ -61,18 +61,15 @@ class Game extends Scene
 		
 		_kernel.audio.stop( "MusicMenu", EAudioChannel.MUSIC );
 		_kernel.audio.start( "MusicGame", EAudioChannel.MUSIC, -1, 0, .5, 0, true );
-		for ( i in 0...10 ) addEntity( new Sphere( _kernel ), true, i + 10 );
+		for ( i in 0...10 )
+		{
+			addEntity( new Sphere( _kernel ), true, i + 10 );
+		}
 		
 		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
 		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
 
 		_temp = l_sphere;
-	}
-	
-	private function _mn( message:EMessage, sender:IEntity ):Bool
-	{
-		trace( message );
-		return true;		
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
