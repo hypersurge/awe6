@@ -100,7 +100,7 @@ class AssetManager extends AAssetManager
 	}
 	
 	#if ( js || cpp )
-	private function _getBitmapData( id:String, ?width:Int = 40, ?height:Int = 28 ):BitmapData
+	private function _getBitmapData( id:String, ?width:Int = 30, ?height:Int = 30 ):BitmapData
 	{
 		#if js
 		var l_result:BitmapData = new BitmapData( width, height, true );

@@ -329,6 +329,7 @@ class APreloader extends Process, implements IPreloader
 	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
 	{
 		super( kernel );
+		view = new View( kernel );
 	}
 	
 	private function __get_view():IView { return view; }	

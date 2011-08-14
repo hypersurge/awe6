@@ -69,7 +69,9 @@ class AScene extends Scene
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
+		#if flash
 		_titleText.text = _kernel.inputs.mouse.x + ", " + _kernel.inputs.mouse.y + ": " + _kernel.inputs.mouse.getIsButtonDown() + ": " + _kernel.inputs.mouse.getIsButtonDown( EMouseButton.MIDDLE );
+		#end
 	}
 	
 	
