@@ -54,7 +54,7 @@ class InputMouse extends Process, implements IInputMouse
 	public var relativeY( default, null ):Float;
 	public var relativeCentralisedX( default, null ):Float;
 	public var relativeCentralisedY( default, null ):Float;
-	public var isWithinScreenBounds( default, null ):Bool;
+	public var isWithinBounds( default, null ):Bool;
 	public var isMoving( default, null ):Bool;	
 	public var scroll( default, null ):Int;
 	
@@ -156,7 +156,7 @@ class InputMouse extends Process, implements IInputMouse
 		relativeY = y / _kernel.factory.height;
 		relativeCentralisedX = ( relativeX - .5 ) * 2;
 		relativeCentralisedY = ( relativeY - .5 ) * 2;
-		isWithinScreenBounds = ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
+		isWithinBounds = ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
 	}
 	
 	private function _getPosition():Void
@@ -306,7 +306,7 @@ class InputMouse extends Process, implements IInputMouse
 		return l_button.isDown ? l_button.timeDown > delay : false;
 	}	
 	
-	public function getStillCount( ?asTime:Bool = true ):Int
+	public function getStillDuration( ?asTime:Bool = true ):Int
 	{
 		return asTime ? _stillDuration : _stillUpdates;
 	}
