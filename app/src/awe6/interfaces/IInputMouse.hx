@@ -61,9 +61,9 @@ interface IInputMouse
 	 */
 	var relativeCentralisedY( default, null ):Float;
 	/**
-	 * Returns true if the mouse position is within the screen's bounding rectangle (width x height).
+	 * Returns true if the mouse position is within the bounding rectangle (factory width x factory height).
 	 */
-	var isWithinScreenBounds( default, null ):Bool;
+	var isWithinBounds( default, null ):Bool;
 	/**
 	 * Returns true if the mouse position is different to the previous update's position.
 	 */
@@ -101,7 +101,7 @@ interface IInputMouse
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
 	 * @return	Returns the duration the mouse has been still.
 	 */
-	function getStillCount( ?asTime:Bool = true ):Int;
+	function getStillDuration( ?asTime:Bool = true ):Int;
 	/**
 	 * Determine if a specific mouse button was clicked twice (within the defined time).
 	 * @param	?type	The mouse button.
