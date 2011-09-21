@@ -27,13 +27,9 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
-#if cpp
-typedef InputKeyboard = awe6.core.drivers.cpp.InputKeyboard;
-#elseif flash
-typedef InputKeyboard = awe6.core.drivers.flash.InputKeyboard;
-#elseif js
-typedef InputKeyboard = awe6.core.drivers.js.InputKeyboard;
-#else
-typedef InputKeyboard = awe6.core.drivers.AInputKeyboard;
-#end
+package awe6.core.drivers.cpp;
+import awe6.core.drivers.AInputKeyboard;
+
+class InputKeyboard extends AInputKeyboard
+{
+}
