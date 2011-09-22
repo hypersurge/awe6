@@ -27,64 +27,14 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.flash;
-import awe6.core.drivers.AInputKeyboard;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.Lib;
+package awe6.core.drivers.cpp;
+import awe6.core.drivers.AInputMouse;
 
 /**
- * This InputKeyboard class provides Flash target overrides.
+ * This InputMouse class provides CPP target overrides.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class InputMouse extends AInputMouse
 {
-	private var _stage:Stage;
-	
-	override private function _init():Void 
-	{
-		_stage = Lib.current.stage;
-		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.addEventListener( Event.DEACTIVATE, _reset );
-		super._init();
-	}
-	
-	override private function _updater( timeInterval = 0 ):Void 
-	{
-		_stage.focus = _stage;
-		super._updater( timeInterval );
-	}
-	
-	override private function _disposer():Void 
-	{
-		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.removeEventListener( Event.DEACTIVATE, _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
-		return;
-	}
-	
-	private function _onKeyUp( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
-		return;
-	}
-	
-	
 }

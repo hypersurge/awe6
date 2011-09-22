@@ -28,60 +28,86 @@
  */
 
 package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
+import awe6.core.drivers.AInputMouse;
 import js.Dom;
 import js.Lib;
 
 /**
- * This InputKeyboard class provides JS target overrides.
+ * This InputMouse class provides JS target overrides.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class InputMouse extends AInputMouse
 {
 	private var _document:Document;
+	private var _isWithinBounds:Bool;
 	
 	override private function _init():Void 
 	{
 		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
+		untyped _document.addEventListener( "mousedown", _onMouseDown );
+		untyped _document.addEventListener( "mouseup", _onMouseUp );
+		untyped _document.addEventListener( "mousemove", _onMouseMove );
 		untyped _document.addEventListener( "blur", _reset );
+		_isWithinBounds = false;
 		super._init();
-	}
-	
-	override private function _updater( timeInterval = 0 ):Void 
-	{
-		_stage.focus();
-		super._updater( timeInterval );
 	}
 	
 	override private function _disposer():Void 
 	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
+		untyped _document.removeEventListener( "mousedown", _onMouseDown );
+		untyped _document.removeEventListener( "mouseup", _onMouseUp );
+		untyped _document.removeEventListener( "mousemove", _onMouseMove );
 		untyped _document.removeEventListener( "blur", _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:Dynamic ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
-		return;
-	}
-	
-	private function _onKeyUp( event:Dynamic ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
-		return;
+		super._disposer();		
 	}	
+	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		_document.focus();
+		super._updater( deltaTime );
+	}
+	
+	override private function _isWithinBounds():Bool
+	{
+		return _isWithinBounds;
+	}
+	
+	override private function _getPosition():Void
+	{
+		var l_x:Int = Std.int( _tools.limit( x, 0, _kernel.factory.width ) );
+		var l_y:Int = Std.int( _tools.limit( y, 0, _kernel.factory.height ) );
+		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
+		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
+	}
+	
+	private function _onMouseDown( ?event:Dynamic ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_buffer.push( true );
+	}
+	
+	private function _onMouseUp( ?event:Dynamic ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_buffer.push( false );
+	}
+	
+	private function _onMouseMove( ?event:Dynamic ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		x = event.clientX;
+		y = event.clientY;
+		_isWithinBounds = ( x >= 0 ) && ( x <= _kernel.factory.width ) && ( y >= 0 ) && ( y <= _kernel.factory.height );
+		_getPosition();
+	}
 }
-

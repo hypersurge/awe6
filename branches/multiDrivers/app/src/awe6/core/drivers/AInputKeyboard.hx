@@ -28,13 +28,10 @@
  */
 
 package awe6.core.drivers;
+import awe6.core.Process;
 import awe6.interfaces.EKey;
 import awe6.interfaces.IInputKeyboard;
 import awe6.interfaces.IKernel;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.Lib;
 
 /**
  * The InputKeyboard class provides a minimalist implementation of the IInputKeyboard interface.
@@ -43,24 +40,18 @@ import flash.Lib;
  */
 class AInputKeyboard extends Process, implements IInputKeyboard
 {
-	private var _stage:Stage;
 	private var _keys:Array<_HelperKey>;
 	private var _buffer:Array<_HelperKeyEvent>;
 
 	override private function _init():Void 
 	{
 		super._init();
-		_stage = Lib.current.stage;
-		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.addEventListener( Event.DEACTIVATE, _reset );
 		_reset();
 	}
 	
 	override private function _updater( timeInterval = 0 ):Void 
 	{
 		super._updater( timeInterval );
-		_stage.focus = _stage;
 		var l_encounteredKeyCodes:Hash<Bool> = new Hash<Bool>();
 		var l_nextBuffer:Array<_HelperKeyEvent> = [];
 		for ( i in _buffer )
@@ -98,9 +89,6 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	
 	override private function _disposer():Void 
 	{
-		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.removeEventListener( Event.DEACTIVATE, _reset );
 		_keys = null;
 		super._disposer();
 	}
@@ -108,16 +96,6 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	private function _addEvent( keyCodeValue:Int, isDown:Bool ):Void
 	{
 		_buffer.push( new _HelperKeyEvent( keyCodeValue, isDown ) );
-	}
-	
-	private function _onKeyDown( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
-		return;
 	}
 	
 	private function _onDown( keyCode ):Void
@@ -131,16 +109,6 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeUp = 0;
 	}
 	
-	private function _onKeyUp( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
-		return;
-	}
-	
 	private function _onUp( keyCode:Int ):Void
 	{
 		var l_current:_HelperKey = _keys[keyCode];
@@ -151,7 +119,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeDown = 0;
 	}
 		
-	private function _reset( ?event:Event = null ):Void
+	private function _reset( ?event:Dynamic = null ):Void
 	{
 		_buffer = [];
 		_keys = [];
