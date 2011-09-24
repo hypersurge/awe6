@@ -28,7 +28,15 @@
  */
 
 package awe6.core.drivers;
+import awe6.core.AAssetManager;
+import awe6.core.APreloader;
+import awe6.core.Encrypter;
+import awe6.core.Entity;
 import awe6.core.Kernel;
+import awe6.core.Overlay;
+import awe6.core.Scene;
+import awe6.core.SceneTransition;
+import awe6.core.TextStyle;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
