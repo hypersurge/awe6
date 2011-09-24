@@ -33,7 +33,7 @@ import js.Dom;
 import js.Lib;
 
 /**
- * This InputMouse class provides JS target overrides.
+ * This InputMouse class provides js target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

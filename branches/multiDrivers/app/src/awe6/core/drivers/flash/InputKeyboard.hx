@@ -35,7 +35,7 @@ import flash.events.KeyboardEvent;
 import flash.Lib;
 
 /**
- * This InputKeyboard class provides Flash target overrides.
+ * This InputKeyboard class provides flash target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

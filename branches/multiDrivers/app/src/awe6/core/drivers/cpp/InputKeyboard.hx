@@ -31,7 +31,7 @@ package awe6.core.drivers.cpp;
 import awe6.core.drivers.AInputKeyboard;
 
 /**
- * This InputKeyboard class provides CPP target overrides.
+ * This InputKeyboard class provides cpp target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

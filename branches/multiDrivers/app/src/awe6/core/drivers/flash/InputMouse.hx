@@ -39,7 +39,7 @@ import flash.ui.MultitouchInputMode;
 import haxe.io.Bytes;
 
 /**
- * This InputMouse class provides Flash target overrides.
+ * This InputMouse class provides flash target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

@@ -38,7 +38,7 @@ import flash.text.TextField;
 import haxe.io.Bytes;
 
 /**
- * This Factory class provides Flash target overrides.
+ * This Factory class provides flash target overrides.
  * @author	Robert Fell
  */
 class Factory extends AFactory

@@ -28,58 +28,31 @@
  */
 
 package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
-import js.Dom;
-import js.Lib;
+import js.Cookie;
 
 /**
- * This InputKeyboard class provides js target overrides.
+ * This Session class provides js target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class Session extends ASession
 {
-	private var _document:Document;
 	
-	override private function _nativeInit():Void 
+	override private function _nativeLoad():Void
 	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
-		untyped _document.addEventListener( "blur", _reset );
-	}
-	
-	override private function _updater( timeInterval = 0 ):Void 
-	{
-		_stage.focus();
-		super._updater( timeInterval );
-	}
-	
-	override private function _disposer():Void 
-	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
-		untyped _document.removeEventListener( "blur", _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:Dynamic ):Void
-	{
-		if ( !isActive )
+		_savedData = {};		
+		if ( Cookie.exists( _kernel.factory.id ) )
 		{
-			return;
+			_savedData = _tools.unserialize( Cookie.get( _kernel.factory.id ) );
 		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
-		return;
 	}
 	
-	private function _onKeyUp( event:Dynamic ):Void
+	override private function _nativeReset():Void
 	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
-		return;
-	}	
+		Cookie.remove( _kernel.factory.id );
+	}
+	
+	override private function _nativeSave():Void
+	{
+		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ) ) ;
+	}
 }
-

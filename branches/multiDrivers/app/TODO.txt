@@ -9,12 +9,4 @@
 
 THINGS TO DO ASAP:
 	
-better component test (movable, drawable, swarms?)
-flashdevelop template
-
-ReBuild RC 0.4:
-api regen
-SWC
-haxelib
-zip
-tag
+move any target specific code to drivers package

@@ -49,11 +49,11 @@ import flash.display.Stage;
 import flash.display.StageDisplayState;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
+import flash.events.ContextMenuEvent;
 import flash.events.Event;
+import flash.events.FullScreenEvent;
 import flash.geom.Rectangle;
 import flash.Lib;
-import flash.events.ContextMenuEvent;
-import flash.events.FullScreenEvent;
 import flash.net.URLRequest;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
@@ -138,7 +138,7 @@ class Kernel extends Process, implements IKernel
 		_addProcess( _messageManager );
 		factory.onInitComplete( this );
 		_nativeInit();
-		session = factory.createSession( ASession.DEBUG_ID );
+		session = factory.createSession();
 		session.reset();
 		_preloader = factory.createPreloader();
 		_addProcess( _preloader );
@@ -340,6 +340,7 @@ class Kernel extends Process, implements IKernel
 			return;
 		}
 		session.deleteAllSessions();
+		session = factory.createSession();
 		scenes.setScene( factory.startingSceneType );
 	}
 	
