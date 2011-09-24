@@ -40,7 +40,6 @@ import haxe.io.Bytes;
 
 /**
  * This InputMouse class provides Flash target overrides.
- * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
@@ -48,7 +47,7 @@ class InputMouse extends AInputMouse
 	private var _stage:Stage;
 	private var _mouseClicks:Loader;
 	
-	override private function _init():Void 
+	override private function _nativeInit():Void 
 	{
 		_stage = Lib.current.stage;
 		_stage.addEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );
@@ -62,7 +61,6 @@ class InputMouse extends AInputMouse
 		_mouseClicks = new Loader();
 		_mouseClicks.loadBytes( cast( _tools.unserialize( l_data ), Bytes ).getData() );
 		#end
-		super._init();
 	}
 	
 	override private function _disposer():Void 

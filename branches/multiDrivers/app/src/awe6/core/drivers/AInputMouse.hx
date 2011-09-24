@@ -36,6 +36,7 @@ import haxe.io.Bytes;
 
 /**
  * The InputMouse class provides a minimalist implementation of the IInputMouse interface.
+ * <p>It is intended as an abstract class to be extended by target specific drivers.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
@@ -68,6 +69,7 @@ class AInputMouse extends Process, implements IInputMouse
 	override private function _init():Void 
 	{
 		super._init();
+		_nativeInit();
 		x = y = _xPrev = _yPrev = _deltaX = _deltaY = scroll = _deltaScroll = 0;
 		relativeX = relativeY = relativeCentralisedX = relativeCentralisedY = 0;
 		isMoving = false;		
@@ -80,6 +82,11 @@ class AInputMouse extends Process, implements IInputMouse
 		_stillDuration = 0;
 		_reset();
 	}
+	
+	private function _nativeInit():Void
+	{
+		//override me
+	}	
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{

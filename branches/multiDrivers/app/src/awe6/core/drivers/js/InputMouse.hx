@@ -34,7 +34,6 @@ import js.Lib;
 
 /**
  * This InputMouse class provides JS target overrides.
- * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
@@ -42,7 +41,7 @@ class InputMouse extends AInputMouse
 	private var _document:Document;
 	private var _isWithinBounds:Bool;
 	
-	override private function _init():Void 
+	override private function _nativeInit():Void 
 	{
 		_document = Lib.document;
 		untyped _document.addEventListener( "mousedown", _onMouseDown );
@@ -50,7 +49,6 @@ class InputMouse extends AInputMouse
 		untyped _document.addEventListener( "mousemove", _onMouseMove );
 		untyped _document.addEventListener( "blur", _reset );
 		_isWithinBounds = false;
-		super._init();
 	}
 	
 	override private function _disposer():Void 

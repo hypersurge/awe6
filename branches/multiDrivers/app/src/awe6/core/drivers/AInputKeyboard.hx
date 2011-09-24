@@ -35,6 +35,7 @@ import awe6.interfaces.IKernel;
 
 /**
  * The InputKeyboard class provides a minimalist implementation of the IInputKeyboard interface.
+ * <p>It is intended as an abstract class to be extended by target specific drivers.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
@@ -46,7 +47,13 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	override private function _init():Void 
 	{
 		super._init();
+		_nativeInit();
 		_reset();
+	}
+	
+	private function _nativeInit():Void
+	{
+		//override me
 	}
 	
 	override private function _updater( timeInterval = 0 ):Void 

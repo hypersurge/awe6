@@ -28,6 +28,13 @@
  */
 
 package awe6.core;
+
+/**
+ * The InputKeyboard class provides a minimalist implementation of the IInputKeyboard interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>InputKeyboard includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell
+ */
 #if cpp
 typedef InputKeyboard = awe6.core.drivers.cpp.InputKeyboard;
 #elseif flash

@@ -32,7 +32,6 @@ import awe6.core.drivers.AInputMouse;
 
 /**
  * This InputMouse class provides CPP target overrides.
- * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

@@ -29,8 +29,6 @@
 
 package awe6.core;
 import awe6.interfaces.IAssetManagerProcess;
-import awe6.interfaces.IKernel;
-import flash.display.BitmapData;
 
 /**
  * The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
@@ -64,14 +62,7 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 		}
 		if ( args == null )
 		{
-			if ( Type.getSuperClass( l_assetClass ) == BitmapData )
-			{
-				args = [0, 0];
-			}
-			else
-			{
-				args = [];
-			}
+			args = [];
 		}
 		return Type.createInstance( l_assetClass, args );
 	}

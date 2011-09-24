@@ -28,6 +28,14 @@
  */
 
 package awe6.core;
+
+/**
+ * The InputMouse class provides a minimalist implementation of the IInputMouse interface.
+ * <p>It is intended as an abstract class to be extended by target specific drivers.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>InputMouse includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell
+ */
 #if cpp
 typedef InputMouse = awe6.core.drivers.cpp.InputMouse;
 #elseif flash

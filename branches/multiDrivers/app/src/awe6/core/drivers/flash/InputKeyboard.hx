@@ -36,20 +36,18 @@ import flash.Lib;
 
 /**
  * This InputKeyboard class provides Flash target overrides.
- * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard
 {
 	private var _stage:Stage;
 	
-	override private function _init():Void 
+	override private function _nativeInit():Void 
 	{
 		_stage = Lib.current.stage;
 		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
 		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
 		_stage.addEventListener( Event.DEACTIVATE, _reset );
-		super._init();
 	}
 	
 	override private function _updater( timeInterval = 0 ):Void 

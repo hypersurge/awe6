@@ -34,20 +34,18 @@ import js.Lib;
 
 /**
  * This InputKeyboard class provides JS target overrides.
- * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard
 {
 	private var _document:Document;
 	
-	override private function _init():Void 
+	override private function _nativeInit():Void 
 	{
 		_document = Lib.document;
 		untyped _document.addEventListener( "keydown", _onKeyDown );
 		untyped _document.addEventListener( "keyup", _onKeyUp );
 		untyped _document.addEventListener( "blur", _reset );
-		super._init();
 	}
 	
 	override private function _updater( timeInterval = 0 ):Void 
