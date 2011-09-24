@@ -220,7 +220,10 @@ class AFactory implements IFactory, implements IDisposable
 			}
 			return;
 		}
-		if ( _countConfigsLoaded == _countConfigsToLoad ) _launchKernel();
+		if ( _countConfigsLoaded == _countConfigsToLoad )
+		{
+			_launchKernel();
+		}
 	}
 	
 	private function _launchKernel():Void
