@@ -42,5 +42,5 @@ typedef Kernel = awe6.core.drivers.flash.Kernel;
 #elseif js
 typedef Kernel = awe6.core.drivers.js.Kernel;
 #else
-typedef Kernel = awe6.core.drivers.AInputMouse;
+typedef Kernel = awe6.core.drivers.AKernel;
 #end

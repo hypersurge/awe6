@@ -27,20 +27,53 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers.flash;
+import awe6.core.drivers.AView;
+import awe6.interfaces.IKernel;
+import flash.display.Sprite;
 
 /**
- * The View class provides a minimalist implementation of the IView interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>Kernel includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This View class provides flash target overrides.
  * @author	Robert Fell
  */
-#if cpp
-typedef View = awe6.core.drivers.cpp.View;
-#elseif flash
-typedef View = awe6.core.drivers.flash.View;
-#elseif js
-typedef View = awe6.core.drivers.js.View;
-#else
-typedef View = awe6.core.drivers.AView;
-#end
+class View extends AView
+{
+	public var sprite( default, null ):Sprite;
+
+	private var _container:Sprite;
+	
+	public function new( kernel:IKernel, ?sprite:Sprite, ?priority:Int = 0, ?owner:Dynamic ) 
+	{
+		this.sprite = ( sprite != null ) ? sprite : new Sprite();
+		super( kernel, priority, owner );		
+	}
+	
+	override private function _nativeDisposer():Void 
+	{
+		if ( sprite.parent != null )
+		{
+			sprite.parent.removeChild( sprite );
+		}
+	}
+	
+	override private function _nativeDraw():Void
+	{
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
+		_container = new Sprite();
+		_container.mouseEnabled = false;
+		sprite.addChild( _container );
+		var l_children:Array<View> = cast _children;
+		for ( i in l_children )
+		{
+			if ( i.isVisible )
+			{
+				_container.addChild( i.sprite );
+			}
+		}
+	}
+	
+}
+

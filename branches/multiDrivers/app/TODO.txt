@@ -7,6 +7,20 @@
     awe6 is game, inverted
  
 
-THINGS TO DO ASAP:
+THINGS TO DO:
 	
-move any target specific code to drivers package
+move any target specific code to drivers package:
+
+*** BasicButton, redo to consider View injection (allows for animated states) and add cursor control (EMouseCursor and isVisible) to InputMouse to prevent need for drivers
+* Entity constructor driver (should it be View injection?)
+* InputAll review overrides and make native templates instead
+** Overlay flash driver
+** Profiler flash driver
+** SceneTransition flash driver
+* Tools - remove invSqrt flash memory?
+*** adopt p_ hungarian?
+
+key:
+* <10 mins
+** ~30 mins
+*** > hour

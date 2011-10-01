@@ -35,8 +35,6 @@ import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneManager;
 import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.IView;
-import flash.display.Sprite;
-import flash.Lib;
 
 /**
  * The SceneManager class provides a minimalist implementation of the ISceneManager interface.
@@ -58,11 +56,7 @@ class SceneManager extends Process, implements ISceneManager
 	override private function _init():Void 
 	{
 		super._init();
-		var l_sprite:Sprite = new Sprite();
-		l_sprite.graphics.beginFill( _kernel.factory.bgColor );
-		l_sprite.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		l_sprite.graphics.endFill();
-		view = new View( _kernel, l_sprite );
+		view = new View( _kernel );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
@@ -112,7 +106,6 @@ class SceneManager extends Process, implements ISceneManager
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();
-		Lib.current.stage.focus = Lib.current.stage;
 		scene = _kernel.factory.createScene( type );
 		_kernel.overlay.showButton( EOverlayButton.BACK, _kernel.factory.getBackSceneType( scene.type ) != null );
 		_kernel.overlay.showButton( EOverlayButton.MUTE, scene.isMuteable && !_kernel.audio.isMute );
