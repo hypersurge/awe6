@@ -339,6 +339,7 @@ class Kernel extends Process, implements IKernel
 		{
 			return;
 		}
+		scenes.scene.dispose();
 		session.deleteAllSessions();
 		session = factory.createSession();
 		scenes.setScene( factory.startingSceneType );
