@@ -17,7 +17,6 @@ move any target specific code to drivers package:
 ** Overlay flash driver
 ** Profiler flash driver
 ** SceneTransition flash driver
-* Tools - remove invSqrt flash memory?
 *** adopt p_ hungarian?
 
 key:

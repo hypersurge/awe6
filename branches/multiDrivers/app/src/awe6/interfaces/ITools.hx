@@ -158,13 +158,6 @@ interface ITools implements IEncrypter
 	 */
 	function sgn( value:Float ):Int;
 	/**
-	 * An optimized routine to calculate inverse square roots equivalent to: 1 / Math.sqrt( value )
-	 * @param	value	The value to find the inverse square root of.
-	 * @param	isAccurate	If false favours performance over accuracy.  Default is false.
-	 * @return	The inverse square root.
-	 */
-	function invSqrt( value:Float, ?isAccurate:Bool = false ):Float;
-	/**
 	 * Determine whether a value is true.
 	 * <p>Results vary based on the context of checked value.  Usually safer to do your own Bool checks.</p>
 	 * @param	value	The value to check.

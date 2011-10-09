@@ -48,18 +48,12 @@ class Tools implements ITools
 	
 	private var _kernel:IKernel;
 	private var _encrypter:IEncrypter;
-	private var _invSqrtMemory:BytesData;
 	
 	public function new( kernel:IKernel )
 	{
 		_kernel = kernel;
 		BIG_NUMBER = 9999998;
 		_encrypter = _kernel.factory.createEncrypter();
-		#if flash10
-		_invSqrtMemory = new BytesData();
-		_invSqrtMemory.length = 1024;
-		flash.Memory.select( _invSqrtMemory );
-		#end
 	}
 
 	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
@@ -298,31 +292,7 @@ class Tools implements ITools
 			return -1;
 		}
 	}
-	
-	public inline function invSqrt( value:Float, ?isAccurate:Bool = false  ):Float
-	{
-		if ( isAccurate )
-		{
-			return 1 / Math.sqrt( value );
-		}
-		else
-		{
-			#if flash10
-			// http://ncannasse.fr/blog/fast_inverse_square_root, remember this needs to be inlined (i.e. not used as interface) else Math is faster
-			var l_half:Float = 0.5 * value;
-			flash.Memory.setFloat( 0, value );
-			var l_i:Int = flash.Memory.getI32( 0 );
-			l_i = 0x5f3759df - ( l_i >> 1 );
-			flash.Memory.setI32( 0, l_i );
-			value = flash.Memory.getFloat( 0 );
-			value = value * ( 1.5 - l_half * value * value );
-			return value;
-			#else
-			return 1 / Math.sqrt( value );
-			#end
-		}
-	}	
-	
+		
 	public inline function isBool( value:Dynamic ):Bool
 	{
 		return ( value != 0 && value != null && value != false );		
