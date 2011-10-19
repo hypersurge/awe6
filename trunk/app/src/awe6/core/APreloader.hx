@@ -274,7 +274,7 @@ private class _HelperSwfParser
 		}
 		for ( i in classes )
 		{
-			if ( Std.is( Type.createEmptyInstance( i ), Font ) )
+			if ( Type.getSuperClass( i ) == Font )
 			{
 				try
 				{
