@@ -146,7 +146,7 @@ class AFactory implements IFactory, implements IDisposable
 		isResetSessionsOptionEnabled = true;
 		width = 600;
 		height = 400;
-		bgColor = 0xFF0000;
+		bgColor = 0xFF000000;
 		secret = "YouMustOverrideThis";
 		targetFramerate = 25;
 		isFixedUpdates = true;

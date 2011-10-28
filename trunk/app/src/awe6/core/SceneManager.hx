@@ -59,7 +59,10 @@ class SceneManager extends Process, implements ISceneManager
 	{
 		super._init();
 		var l_sprite:Sprite = new Sprite();
-		l_sprite.graphics.beginFill( _kernel.factory.bgColor );
+		var l_color:Int = _kernel.factory.bgColor;
+		var l_alpha:Float = ( ( l_color >> 24 ) & 0xFF ) / 256;
+		l_color = l_color & 0x00FFFFFF;
+		l_sprite.graphics.beginFill( l_color, l_alpha );
 		l_sprite.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		l_sprite.graphics.endFill();
 		view = new View( _kernel, l_sprite );
