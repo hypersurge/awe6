@@ -50,7 +50,7 @@ class Factory extends AFactory
 		isDecached = true;
 		width = 600;
 		height = 400;
-		bgColor = 0xFFFFFF;
+		bgColor = 0xFFFFFFFF;
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;
