@@ -20,3 +20,14 @@ A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.lego.com
 [http://www.grid1.tv/game https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/MobilTrackChallenge.jpg]
 
 A 3D racing game produced by [http://www.4T2.co.uk 4T2] for [http://www.grid1.tv Exxon Mobil].
+
+== LEGO® _Star Wars™_: "Ace Assault II" (2011) ==
+
+[http://starwars.lego.com/en-us/Games/AceAssaultII/Default.aspx https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/LEGOStarWars2.jpg]
+
+Pure gameplay sequel to the popular "Ace Assault" (a 3D space duelling game) by [http://www.4T2.co.uk 4T2] for [http://www.lego.com LEGO].
+
+== More games coming soon ... ==
+
+We know of several other games being built using awe6 - if you have produced a game using awe6 and wish to have it featured on this page please send us a link and screenshot.
+
