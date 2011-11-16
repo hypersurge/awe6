@@ -58,15 +58,6 @@ class Kernel extends AKernel
 	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
 	private var _fullScreenDisableContextMenuItem:ContextMenuItem;
 
-	public function new( factory:IFactory, sprite:Sprite )
-	{
-		this.factory = factory;
-		tools = _tools = new Tools( this );
-		_view = new View( this, sprite, 0, this );
-		_stage = sprite.stage;
-		super( this.factory );
-	}
-	
 	override private function _nativeGetIsLocal():Bool
 	{
 		return Security.sandboxType != Security.REMOTE;		
@@ -74,6 +65,7 @@ class Kernel extends AKernel
 	
 	override private function _nativeInit():Void
 	{
+		_stage = _context.stage;		
 		var l_instance:Kernel = this;
 		Lib.current.focusRect = false;
 		_stage.frameRate = factory.targetFramerate;
@@ -84,8 +76,8 @@ class Kernel extends AKernel
 		l_mask.graphics.beginFill( 0xFFFFFF );
 		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_mask.graphics.endFill();
-		_view.sprite.addChild( l_mask );
-		_view.sprite.mask = l_mask;
+		_context.addChild( l_mask );
+		_context.mask = l_mask;
 		
 		_contextMenu = new ContextMenu();
 		#if !air

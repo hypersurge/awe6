@@ -298,7 +298,7 @@ class Overlay extends Entity, implements IOverlayProcess
 		_pauseSnapshot.fillRect( _pauseSnapshot.rect, 0x00 );
 		try
 		{
-			_pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).sprite );
+			_pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).context );
 		}
 		catch ( error:Dynamic ) {}
 	}

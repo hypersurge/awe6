@@ -62,7 +62,7 @@ class SceneTransition extends Entity, implements ISceneTransition
 		try
 		{
 			var l_view:View = cast _kernel.scenes.scene.view;
-			l_bitmapData.draw( l_view.sprite );
+			l_bitmapData.draw( l_view.context );
 		}
 		catch ( error:Dynamic )
 		{

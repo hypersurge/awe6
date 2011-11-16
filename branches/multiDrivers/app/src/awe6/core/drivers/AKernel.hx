@@ -30,6 +30,7 @@
 package awe6.core.drivers;
 import awe6.core.AAssetManager;
 import awe6.core.AudioManager;
+import awe6.core.Context;
 import awe6.core.InputManager;
 import awe6.core.MessageManager;
 import awe6.core.Process;
@@ -82,6 +83,7 @@ class AKernel extends Process, implements IKernel
 	public var messenger( default, null ):IMessageManager;
 	public var session( __get_session, __set_session ):ISession;	
 	
+	private var _context:Context;
 	private var _view:View;
 	private var _assetManagerProcess:IAssetManagerProcess;
 	private var _audioManager:AudioManager;
@@ -96,19 +98,20 @@ class AKernel extends Process, implements IKernel
 	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
 
-	public function new( factory:IFactory )
+	public function new( factory:IFactory, context:Context )
 	{
 		if ( this.factory == null )
 		{
 			this.factory = factory;
 		}
+		_context = context;
 		if ( tools == null )
 		{
 			tools = _tools = new Tools( this );
 		}
 		if ( _view == null )
 		{
-			_view = new View( this, null, 0, this );
+			_view = new View( this, _context, 0, this );
 		}
 		super( this );
 	}

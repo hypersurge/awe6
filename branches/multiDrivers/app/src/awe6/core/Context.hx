@@ -27,53 +27,15 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.flash;
-import awe6.core.Context;
-import awe6.core.drivers.AView;
+package awe6.core;
 
 /**
- * This View class provides flash target overrides.
+ * The Context class is a target specific class that defines a native element - typically a view.
+ * It is intended to be the only publicly exposed target specific parameter / member.
+ * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-class View extends AView
-{
-	private var _container:Context;
-	
-	override private function _init():Void 
-	{
-		if ( context == null )
-		{
-			context = new Context(); 
-		}
-		super._init();
-	}
-	
-	override private function _nativeDisposer():Void 
-	{
-		if ( context.parent != null )
-		{
-			context.parent.removeChild( context );
-		}
-	}
-	
-	override private function _nativeDraw():Void
-	{
-		if ( _container != null && _container.parent != null )
-		{
-			_container.parent.removeChild( _container );
-		}
-		_container = new Context();
-		_container.mouseEnabled = false;
-		context.addChild( _container );
-		var l_children:Array<View> = cast _children;
-		for ( i in l_children )
-		{
-			if ( i.isVisible )
-			{
-				_container.addChild( i.context );
-			}
-		}
-	}
-	
-}
-
+#if flash
+typedef Context = flash.display.Sprite;
+#elseif js
+#end

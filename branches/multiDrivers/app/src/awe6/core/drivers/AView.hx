@@ -28,6 +28,7 @@
  */
 
 package awe6.core.drivers;
+import awe6.core.Context;
 import awe6.core.Process;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
@@ -40,17 +41,19 @@ import awe6.interfaces.IView;
  */
 class AView extends Process, implements IView
 {
-	public var parent( __get_parent, null ):IView;
+	public var context( default, null ):Context;
 	public var priority( __get_priority, __set_priority ):Int;
 	public var owner( default, null ):Dynamic;
+	public var parent( __get_parent, null ):IView;
 	public var isVisible( default, __set_isVisible ):Bool;	
 	public var isInViewStack( __get_isInViewStack, null ):Bool;	
 	
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;
 	
-	public function new( kernel:IKernel, ?priority:Int = 0, ?owner:Dynamic ) 
+	public function new( kernel:IKernel, ?context:Context, ?priority:Int = 0, ?owner:Dynamic ) 
 	{
+		this.context = context;
 		this.priority = priority;
 		this.owner = owner;
 		super( kernel );		
