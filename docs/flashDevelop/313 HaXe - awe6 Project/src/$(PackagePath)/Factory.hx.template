@@ -1,0 +1,113 @@
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)* 
+$(CBI)*/
+
+package $(PackageName);
+import $(PackageDot)scenes.Game;
+import $(PackageDot)scenes.Intro;
+import awe6.core.AFactory;
+import awe6.core.TextStyle;
+import awe6.interfaces.EScene;
+import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IAssetManagerProcess;
+import awe6.interfaces.IOverlayProcess;
+import awe6.interfaces.IPreloader;
+import awe6.interfaces.IScene;
+import awe6.interfaces.ISession;
+import awe6.interfaces.ITextStyle;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Factory extends AFactory $(CSLB){
+	private var _assetManager:AssetManager;
+	
+	override private function _init():Void $(CSLB){		
+		super._init();
+		id = "$(ProjectID)";
+		version = "0.0.1";
+		author = "$(DefaultUser)";
+		isDecached = true;
+		width = 600;
+		height = 400;
+		bgColor = 0xFFFFFFFF;
+		startingSceneType = INTRO;
+		targetFramerate = 20;
+		isFixedUpdates = true;
+	}
+	
+	override public function createAssetManager():IAssetManagerProcess $(CSLB){
+		if ( _assetManager == null ) $(CSLB){
+			_assetManager = new AssetManager( _kernel );
+		}
+		return _assetManager;
+	}
+	
+	/* example:
+	override public function createOverlay():IOverlayProcess $(CSLB){
+		var l_overlay:Overlay = new Overlay( _kernel, l_overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver ); // example
+		return l_overlay;
+	}	
+	*/
+	
+	override public function createPreloader():IPreloader $(CSLB){
+		return new Preloader( _kernel, _getAssetUrls(), isDecached );
+	}
+	
+	override public function createScene( p_type:EScene ):IScene $(CSLB){
+		switch ( p_type ) $(CSLB){
+			case GAME : return new Game( _kernel, p_type );
+			case INTRO : return new Intro( _kernel, p_type );
+			default :
+		}
+		return super.createScene( p_type );
+	}
+	
+	override public function createSession( ?p_id:String ):ISession $(CSLB){
+		return new Session( _kernel, p_id );
+	}
+	
+	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle $(CSLB){
+		if ( p_type == null ) $(CSLB){
+			p_type = BODY;
+		}
+		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0x808080 );
+		l_result.size = switch ( p_type ) $(CSLB){
+			case HEADLINE : 24;
+			case OVERSIZED : 72;
+			case SUBHEAD : 18;
+			case BUTTON : 10;
+			case SMALLPRINT : 6;
+			default : 12;
+		}
+		return l_result;
+	}
+	
+	override public function getBackSceneType( p_type:EScene ):EScene $(CSLB){
+		switch ( p_type ) $(CSLB){
+			case GAME : return INTRO;
+			case INTRO : return null;
+			default :
+		}
+		return super.getBackSceneType( p_type );
+	}	
+	
+	override public function getNextSceneType( type:EScene ):EScene $(CSLB){
+		switch ( type ) $(CSLB){
+			case GAME : return RESULTS;
+			case INTRO : return GAME;
+			default :
+		}
+		return super.getNextSceneType( type );
+	}	
+	
+}
