@@ -1,0 +1,30 @@
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)* 
+$(CBI)*/
+
+package $(PackageName);
+import awe6.core.AAssetManager;
+// import flash.display.BitmapData; // example
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class AssetManager extends AAssetManager $(CSLB){	
+	// public var logoBitmapData( default, null ):BitmapData; // example
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		
+		// logoBitmapData = new LogoBitmapData(); // example
+	}
+	
+}
+
