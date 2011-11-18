@@ -1,0 +1,31 @@
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)* 
+$(CBI)*/
+
+package $(PackageDot)scenes;
+import awe6.core.Scene;
+import $(PackageDot)AssetManager;
+import $(PackageDot)Session;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class AScene extends Scene $(CSLB){
+	private var _assetManager:AssetManager;
+	private var _session:Session;
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		_assetManager = cast( _kernel.assets, AssetManager );
+		_session = cast( _kernel.session, Session );
+	}
+	
+}

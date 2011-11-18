@@ -1,0 +1,44 @@
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)* 
+$(CBI)*/
+
+package $(Package);
+import awe6.core.Entity;
+import awe6.interfaces.IKernel;
+import flash.display.Sprite;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+	
+class $(FileName) extends Entity $(CSLB){	
+	private var _sprite:Sprite;
+	
+	public function new( p_kernel:IKernel ) $(CSLB){
+		_sprite = new Sprite();
+		super( p_kernel, _sprite );
+	}
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		// extend here
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+		super._updater( p_deltaTime );
+		// extend here
+	}
+	
+	override private function _disposer():Void $(CSLB){
+		// extend here
+		super._disposer();		
+	}
+	
+}
