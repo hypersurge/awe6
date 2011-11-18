@@ -9,8 +9,10 @@ $(CBI)*
 $(CBI)*/
 
 package $(PackageName);
+import $(PackageDot)gui.Overlay;
 import $(PackageDot)scenes.Game;
 import $(PackageDot)scenes.Intro;
+import $(PackageDot)scenes.SceneTransition;
 import awe6.core.AFactory;
 import awe6.core.TextStyle;
 import awe6.interfaces.EScene;
@@ -19,6 +21,7 @@ import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
+import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
 
@@ -51,12 +54,10 @@ class Factory extends AFactory $(CSLB){
 		return _assetManager;
 	}
 	
-	/* example:
 	override public function createOverlay():IOverlayProcess $(CSLB){
-		var l_overlay:Overlay = new Overlay( _kernel, l_overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver ); // example
+		var l_overlay:Overlay = new Overlay( _kernel );
 		return l_overlay;
-	}	
-	*/
+	}
 	
 	override public function createPreloader():IPreloader $(CSLB){
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
@@ -69,6 +70,11 @@ class Factory extends AFactory $(CSLB){
 			default :
 		}
 		return super.createScene( p_type );
+	}
+	
+	override public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition $(CSLB){
+		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
+		return l_sceneTransition;
 	}
 	
 	override public function createSession( ?p_id:String ):ISession $(CSLB){
