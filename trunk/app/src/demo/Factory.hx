@@ -45,7 +45,7 @@ class Factory extends AFactory
 	{		
 		super._init();
 		id = "awe6Demo";
-		version = "0.4.200"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+		version = "0.5.255"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
 		width = 600;

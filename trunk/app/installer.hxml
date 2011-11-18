@@ -1,0 +1,7 @@
+-cp src
+-neko scripts/haxelib/run.n
+-main Installer
+
+--next
+-cmd neko scripts/haxelib/run.n
+-cmd pause
