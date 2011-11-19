@@ -16,23 +16,23 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class SceneTransition extends awe6.core.SceneTransition $(CSLB){
-	public function new( p_kernel:IKernel ) $(CSLB){
+class SceneTransition extends awe6.core.SceneTransition$(CSLB){
+	public function new( p_kernel:IKernel )$(CSLB){
 		var l_duration:Int = 200;
 		super( p_kernel, l_duration );
 	}
 	
-	override private function _init():Void $(CSLB){
+	override private function _init():Void$(CSLB){
 		super._init();
 		// extend
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void$(CSLB){
 		super._updater( p_deltaTime );
 		//extend
 	}
 	
-	override private function _disposer():Void $(CSLB){
+	override private function _disposer():Void$(CSLB){
 		//extend
 		super._disposer();
 	}

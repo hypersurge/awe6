@@ -17,10 +17,10 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class Preloader extends APreloader $(CSLB){
+class Preloader extends APreloader$(CSLB){
 	// private var _preloaderMovieClip:PreloaderMovieClip; // example
 
-	override private function _init():Void $(CSLB){
+	override private function _init():Void$(CSLB){
 		super._init();
 		
 		/* example:
@@ -30,11 +30,11 @@ class Preloader extends APreloader $(CSLB){
 		*/
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void$(CSLB){
 		super._updater( p_deltaTime );
 		
 		/* example:
-		if ( _preloaderMovieClip != null ) $(CSLB){
+		if ( _preloaderMovieClip != null )$(CSLB){
 			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
 		}
 		*/

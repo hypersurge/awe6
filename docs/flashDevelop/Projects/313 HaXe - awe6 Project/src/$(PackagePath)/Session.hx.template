@@ -16,19 +16,19 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class Session extends ASession $(CSLB){
+class Session extends ASession$(CSLB){
 	/* example:
 	public var name:String;
 	public var highScore:Int;
 	public var isWin:Bool; // temporary
 	*/
 	
-	override private function _init() $(CSLB){
+	override private function _init()$(CSLB){
 		_version = 1; // incremement this every time you make a structural change to the session (it will force a reset on all users' systems)
 		super._init();
 	}
 	
-	override private function _getter():Void $(CSLB){
+	override private function _getter():Void$(CSLB){
 		super._getter();
 		/* example:
 		name = _data.name;
@@ -36,7 +36,7 @@ class Session extends ASession $(CSLB){
 		*/
 	}
 	
-	override private function _setter():Void $(CSLB){
+	override private function _setter():Void$(CSLB){
 		super._setter();
 		/* example:
 		_data.name = name;
@@ -44,7 +44,7 @@ class Session extends ASession $(CSLB){
 		*/
 	}
 	
-	override private function _resetter():Void $(CSLB){
+	override private function _resetter():Void$(CSLB){
 		super._resetter();
 		/* example:
 		name = "???";
@@ -52,7 +52,7 @@ class Session extends ASession $(CSLB){
 		*/
 	}
 	
-	override public function getPercentageComplete():Float $(CSLB){
+	override public function getPercentageComplete():Float$(CSLB){
 		return 0;
 	}	
 	
