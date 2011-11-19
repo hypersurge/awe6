@@ -27,12 +27,14 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers.flash;
+import awe6.core.drivers.AOverlay;
 
 /**
- * The Overlay class provides a minimalist implementation of the IOverlay interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>Overlay includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This Overlay class provides flash target overrides.
  * @author	Robert Fell
  */
-typedef Overlay = awe6.core.drivers.AOverlay;
+class Overlay extends AOverlay
+{
+}
+
