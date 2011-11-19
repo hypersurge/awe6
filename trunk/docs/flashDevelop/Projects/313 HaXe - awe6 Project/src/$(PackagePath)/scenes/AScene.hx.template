@@ -18,11 +18,11 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class AScene extends Scene $(CSLB){
+class AScene extends Scene$(CSLB){
 	private var _assetManager:AssetManager;
 	private var _session:Session;
 	
-	override private function _init():Void $(CSLB){
+	override private function _init():Void$(CSLB){
 		super._init();
 		_assetManager = cast( _kernel.assets, AssetManager );
 		_session = cast( _kernel.session, Session );
