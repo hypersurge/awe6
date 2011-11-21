@@ -47,12 +47,3 @@ class Session extends ASession $(CSLB){
 	}	
 	
 }
-
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)*/

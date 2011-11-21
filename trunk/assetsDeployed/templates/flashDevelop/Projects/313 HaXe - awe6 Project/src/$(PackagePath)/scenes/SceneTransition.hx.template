@@ -27,12 +27,3 @@ class SceneTransition extends awe6.core.SceneTransition $(CSLB){
 		super._disposer();
 	}
 }
-
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)*/

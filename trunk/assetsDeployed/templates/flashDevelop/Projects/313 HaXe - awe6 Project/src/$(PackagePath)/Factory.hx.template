@@ -31,7 +31,7 @@ class Factory extends AFactory $(CSLB){
 		isDecached = true;
 		width = 600;
 		height = 400;
-		bgColor = 0xCCCCFF;
+		bgColor = 0x999999;
 		startingSceneType = INTRO;
 		targetFramerate = 20;
 		isFixedUpdates = true;
@@ -107,12 +107,3 @@ class Factory extends AFactory $(CSLB){
 	}	
 	
 }
-
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)*/
