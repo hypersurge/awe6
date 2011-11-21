@@ -1,0 +1,38 @@
+package $(PackageName);
+import awe6.core.AAssetManager;
+import flash.display.BitmapData;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class AssetManager extends AAssetManager $(CSLB){	
+	public var overlayBackground( default, null ):BitmapData;
+	public var overlayBackOver( default, null ):BitmapData;
+	public var overlayBackUp( default, null ):BitmapData;
+	public var overlayMuteOver( default, null ):BitmapData;
+	public var overlayMuteUp( default, null ):BitmapData;
+	public var overlayPauseOver( default, null ):BitmapData;
+	public var overlayPauseUp( default, null ):BitmapData;
+	public var overlayUnmuteOver( default, null ):BitmapData;
+	public var overlayUnmuteUp( default, null ):BitmapData;
+	public var overlayUnpauseOver( default, null ):BitmapData;
+	public var overlayUnpauseUp( default, null ):BitmapData;
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		overlayBackground = new assets.overlay.Background( 0, 0 );
+		overlayBackOver = new assets.overlay.BackOver( 0, 0 );
+		overlayBackUp = new assets.overlay.BackUp( 0, 0 );
+		overlayMuteOver = new assets.overlay.MuteOver( 0, 0 );
+		overlayMuteUp = new assets.overlay.MuteUp( 0, 0 );
+		overlayPauseOver = new assets.overlay.PauseOver( 0, 0 );
+		overlayPauseUp = new assets.overlay.PauseUp( 0, 0 );
+		overlayUnmuteOver = new assets.overlay.UnmuteOver( 0, 0 );
+		overlayUnmuteUp = new assets.overlay.UnmuteUp( 0, 0 );
+		overlayUnpauseOver = new assets.overlay.UnpauseOver( 0, 0 );
+		overlayUnpauseUp = new assets.overlay.UnpauseUp( 0, 0 );
+	}
+	
+}

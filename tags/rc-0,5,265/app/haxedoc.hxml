@@ -1,0 +1,5 @@
+-cp src
+-swf bin/awe6.swf
+-xml scripts/haxelib/haxedoc.xml
+--no-output awe6.Types
+

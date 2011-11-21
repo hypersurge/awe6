@@ -1,0 +1,21 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="PreloaderMovieClip" itemID="4d2e5279-000000ac" linkageExportForAS="true" linkageClassName="assets.PreloaderMovieClip" sourceLibraryItemHRef="Symbol 1" lastModified="1321902719" lastUniqueIdentifier="7">
+  <timeline>
+    <DOMTimeline name="PreloaderMovieClip">
+      <layers>
+        <DOMLayer name="progress" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="progresser/progress" name="progress" centerPoint3DX="100" centerPoint3DY="25">
+                  <transformationPoint>
+                    <Point x="100" y="4.35"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

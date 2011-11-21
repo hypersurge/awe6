@@ -1,0 +1,55 @@
+package $(PackageDot)gui;
+import awe6.core.BasicButton;
+import awe6.extras.gui.BitmapDataScale9;
+import awe6.interfaces.EOverlayButton;
+import awe6.interfaces.IKernel;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Overlay extends awe6.core.Overlay $(CSLB){
+	public function new( p_kernel:IKernel ) $(CSLB){
+		var l_assetManager:AssetManager = cast( p_kernel.assets, AssetManager );
+		var l_overlayBackground:BitmapDataScale9 = new BitmapDataScale9( l_assetManager.overlayBackground, 20, 20, 580, 380, p_kernel.factory.width, p_kernel.factory.height, true );
+		super( p_kernel, l_overlayBackground, l_assetManager.overlayBackUp, l_assetManager.overlayBackOver, l_assetManager.overlayMuteUp, l_assetManager.overlayMuteOver, l_assetManager.overlayUnmuteUp, l_assetManager.overlayUnmuteOver, l_assetManager.overlayPauseUp, l_assetManager.overlayPauseOver, l_assetManager.overlayUnpauseUp, l_assetManager.overlayUnpauseOver );
+	}
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		var l_width:Int = 30;
+		var l_x:Int = _kernel.factory.width - 10 - ( 3 * l_width );
+		var l_y:Int = _kernel.factory.height - 30;
+		positionButton( BACK, l_x, l_y );
+		positionButton( PAUSE, l_x += l_width, l_y );
+		positionButton( UNPAUSE, l_x, l_y );
+		positionButton( MUTE, l_x += l_width, l_y );
+		positionButton( UNMUTE, l_x, l_y );
+		// extend
+	}
+	
+	override private function _getButton( p_type:EOverlayButton ):BasicButton $(CSLB){
+		return switch( p_type ) $(CSLB){
+			case SUB_TYPE( value ) : 
+				switch( value ) $(CSLB){
+				}
+			default : super._getButton( p_type );
+		}
+	}
+	
+	override public function hideButtons():Void $(CSLB){
+		super.hideButtons();
+		// extend
+	}
+	
+	override public function activateButton( p_type:EOverlayButton ):Void $(CSLB){
+		switch( p_type ) $(CSLB){
+			case SUB_TYPE( value ) : 
+				switch( value ) $(CSLB){
+				}
+			default : 
+		}
+		super.activateButton( p_type );
+	}
+}

@@ -1,0 +1,34 @@
+package $(Package);
+import awe6.core.Scene;
+import awe6.interfaces.EScene;
+import awe6.interfaces.IKernel;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+	
+class $(FileName) extends Scene $(CSLB){	
+	public function new( p_kernel:IKernel, p_type:EScene ) $(CSLB){
+		var l_isPauseable:Bool = false;
+		var l_isMuteable:Bool = true;
+		var l_isSessionSavedOnNext:Bool = false;
+		super( p_kernel, p_type, l_isPauseable, l_isMuteable, l_isSessionSavedOnNext );
+	}
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		// extend here
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+		super._updater( p_deltaTime );
+		// extend here
+	}
+	
+	override private function _disposer():Void $(CSLB){
+		// extend here
+		super._disposer();		
+	}
+	
+}
