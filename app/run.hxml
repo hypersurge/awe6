@@ -1,6 +1,6 @@
 -cp src
 -neko scripts/haxelib/run.n
--main Installer
+-main awe6.extras.Run
 
 --next
 -cmd neko scripts/haxelib/run.n

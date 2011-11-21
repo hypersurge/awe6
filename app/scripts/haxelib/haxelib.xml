@@ -3,5 +3,5 @@
 	<tag v="flash"/>
 	<tag v="game"/>
 	<description>Pronounced "awesome"; awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.</description>
-	<version name="0.5.255">Added AIR conditionals, FlashDevelop templates, loader bugfixes</version>
+	<version name="0.5.265">Added AIR conditionals, FlashDevelop templates, loader bugfixes</version>
 </project>

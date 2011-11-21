@@ -12,7 +12,7 @@ $(CBI)*/
 class Overlay extends awe6.core.Overlay $(CSLB){
 	public function new( p_kernel:IKernel ) $(CSLB){
 		var l_assetManager:AssetManager = cast( p_kernel.assets, AssetManager );
-		var l_overlayBackground:BitmapDataScale9 = new BitmapDataScale9( l_assetManager.overlayBackground, 110, 20, 550, 350, p_kernel.factory.width, p_kernel.factory.height, true );
+		var l_overlayBackground:BitmapDataScale9 = new BitmapDataScale9( l_assetManager.overlayBackground, 20, 20, 580, 380, p_kernel.factory.width, p_kernel.factory.height, true );
 		super( p_kernel, l_overlayBackground, l_assetManager.overlayBackUp, l_assetManager.overlayBackOver, l_assetManager.overlayMuteUp, l_assetManager.overlayMuteOver, l_assetManager.overlayUnmuteUp, l_assetManager.overlayUnmuteOver, l_assetManager.overlayPauseUp, l_assetManager.overlayPauseOver, l_assetManager.overlayUnpauseUp, l_assetManager.overlayUnpauseOver );
 	}
 	

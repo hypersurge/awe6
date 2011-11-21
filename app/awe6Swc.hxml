@@ -4,6 +4,6 @@
 -D compileSwc
 -cp src
 -swf-version 10
--swf bin/awe6-0,4,199.swc
+-swf bin/awe6-0,5,265.swc
 -swf-header 600:400:25:000000
 awe6.Types
