@@ -4,6 +4,6 @@
 		<assets>
 			<packages default="assets" audio="assets.audio" />
 		</assets>
-		<font name="Arial" />
+		<font name="Orbitron" />
 	</settings>
 </data>

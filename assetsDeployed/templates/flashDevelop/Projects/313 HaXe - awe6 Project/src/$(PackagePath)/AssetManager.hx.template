@@ -17,7 +17,7 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class AssetManager extends AAssetManager$(CSLB){	
+class AssetManager extends AAssetManager $(CSLB){	
 	public var overlayBackground( default, null ):BitmapData;
 	public var overlayBackOver( default, null ):BitmapData;
 	public var overlayBackUp( default, null ):BitmapData;
@@ -30,32 +30,28 @@ class AssetManager extends AAssetManager$(CSLB){
 	public var overlayUnpauseOver( default, null ):BitmapData;
 	public var overlayUnpauseUp( default, null ):BitmapData;
 	
-	override private function _init():Void$(CSLB){
+	override private function _init():Void $(CSLB){
 		super._init();
-		overlayBackground = new _OverlayBackground( 0, 0 );
-		overlayBackOver = new _OverlayBackOver( 0, 0 );
-		overlayBackUp = new _OverlayBackUp( 0, 0 );
-		overlayMuteOver = new _OverlayMuteOver( 0, 0 );
-		overlayMuteUp = new _OverlayMuteUp( 0, 0 );
-		overlayPauseOver = new _OverlayPauseOver( 0, 0 );
-		overlayPauseUp = new _OverlayPauseUp( 0, 0 );
-		overlayUnmuteOver = new _OverlayUnmuteOver( 0, 0 );
-		overlayUnmuteUp = new _OverlayUnmuteUp( 0, 0 );
-		overlayUnpauseOver = new _OverlayUnpauseOver( 0, 0 );
-		overlayUnpauseUp = new _OverlayUnpauseUp( 0, 0 );
+		overlayBackground = new assets.overlay.Background( 0, 0 );
+		overlayBackOver = new assets.overlay.BackOver( 0, 0 );
+		overlayBackUp = new assets.overlay.BackUp( 0, 0 );
+		overlayMuteOver = new assets.overlay.MuteOver( 0, 0 );
+		overlayMuteUp = new assets.overlay.MuteUp( 0, 0 );
+		overlayPauseOver = new assets.overlay.PauseOver( 0, 0 );
+		overlayPauseUp = new assets.overlay.PauseUp( 0, 0 );
+		overlayUnmuteOver = new assets.overlay.UnmuteOver( 0, 0 );
+		overlayUnmuteUp = new assets.overlay.UnmuteUp( 0, 0 );
+		overlayUnpauseOver = new assets.overlay.UnpauseOver( 0, 0 );
+		overlayUnpauseUp = new assets.overlay.UnpauseUp( 0, 0 );
 	}
 	
 }
 
-// example only - you should ideally use asset loading via separate swfs
-@:bitmap( "assets/bitmaps/OverlayBackground.png" ) private class _OverlayBackground extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayBackOver.png" ) private class _OverlayBackOver extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayBackUp.png" ) private class _OverlayBackUp extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayMuteOver.png" ) private class _OverlayMuteOver extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayMuteUp.png" ) private class _OverlayMuteUp extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayPauseOver.png" ) private class _OverlayPauseOver extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayPauseUp.png" ) private class _OverlayPauseUp extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayUnmuteOver.png" ) private class _OverlayUnmuteOver extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayUnmuteUp.png" ) private class _OverlayUnmuteUp extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayUnpauseOver.png" ) private class _OverlayUnpauseOver extends BitmapData {} 
-@:bitmap( "assets/bitmaps/OverlayUnpauseUp.png" ) private class _OverlayUnpauseUp extends BitmapData {} 
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)*/

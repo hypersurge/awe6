@@ -1,13 +1,3 @@
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)* 
-$(CBI)*/
-
 package $(PackageDot)scenes;
 
 /**
@@ -15,12 +5,21 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class Game extends AScene$(CSLB){
-	override private function _init():Void$(CSLB){
+class Game extends AScene $(CSLB){
+	override private function _init():Void $(CSLB){
 		super._init();
 		isPauseable = true;
-		// add entities
-		trace( "Hello awe6 ... GAME" );
+		// extend / addentities
+		_title.text = "GAME";
 	}
 	
 }
+
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)*/

@@ -1,13 +1,3 @@
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)* 
-$(CBI)*/
-
 package $(PackageName);
 import $(PackageDot)gui.Overlay;
 import $(PackageDot)scenes.Game;
@@ -30,10 +20,10 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class Factory extends AFactory$(CSLB){
+class Factory extends AFactory $(CSLB){
 	private var _assetManager:AssetManager;
 	
-	override private function _init():Void$(CSLB){		
+	override private function _init():Void $(CSLB){
 		super._init();
 		id = "$(ProjectID)";
 		version = "0.0.1";
@@ -47,24 +37,24 @@ class Factory extends AFactory$(CSLB){
 		isFixedUpdates = true;
 	}
 	
-	override public function createAssetManager():IAssetManagerProcess$(CSLB){
-		if ( _assetManager == null )$(CSLB){
+	override public function createAssetManager():IAssetManagerProcess $(CSLB){
+		if ( _assetManager == null ) $(CSLB){
 			_assetManager = new AssetManager( _kernel );
 		}
 		return _assetManager;
 	}
 	
-	override public function createOverlay():IOverlayProcess$(CSLB){
+	override public function createOverlay():IOverlayProcess $(CSLB){
 		var l_overlay:Overlay = new Overlay( _kernel );
 		return l_overlay;
 	}
 	
-	override public function createPreloader():IPreloader$(CSLB){
+	override public function createPreloader():IPreloader $(CSLB){
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
 	}
 	
-	override public function createScene( p_type:EScene ):IScene$(CSLB){
-		switch ( p_type )$(CSLB){
+	override public function createScene( p_type:EScene ):IScene $(CSLB){
+		switch ( p_type ) $(CSLB){
 			case GAME : return new Game( _kernel, p_type );
 			case INTRO : return new Intro( _kernel, p_type );
 			default :
@@ -72,22 +62,22 @@ class Factory extends AFactory$(CSLB){
 		return super.createScene( p_type );
 	}
 	
-	override public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition$(CSLB){
+	override public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition $(CSLB){
 		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
 		return l_sceneTransition;
 	}
 	
-	override public function createSession( ?p_id:String ):ISession$(CSLB){
+	override public function createSession( ?p_id:String ):ISession $(CSLB){
 		return new Session( _kernel, p_id );
 	}
 	
-	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle$(CSLB){
-		if ( p_type == null )$(CSLB){
+	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle $(CSLB){
+		if ( p_type == null ) $(CSLB){
 			p_type = BODY;
 		}
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0x808080 );
-		l_result.size = switch ( p_type )$(CSLB){
+		l_result.size = switch ( p_type ) $(CSLB){
 			case HEADLINE : 24;
 			case OVERSIZED : 72;
 			case SUBHEAD : 18;
@@ -98,8 +88,8 @@ class Factory extends AFactory$(CSLB){
 		return l_result;
 	}
 	
-	override public function getBackSceneType( p_type:EScene ):EScene$(CSLB){
-		switch ( p_type )$(CSLB){
+	override public function getBackSceneType( p_type:EScene ):EScene $(CSLB){
+		switch ( p_type ) $(CSLB){
 			case GAME : return INTRO;
 			case INTRO : return null;
 			default :
@@ -107,8 +97,8 @@ class Factory extends AFactory$(CSLB){
 		return super.getBackSceneType( p_type );
 	}	
 	
-	override public function getNextSceneType( type:EScene ):EScene$(CSLB){
-		switch ( type )$(CSLB){
+	override public function getNextSceneType( type:EScene ):EScene $(CSLB){
+		switch ( type ) $(CSLB){
 			case GAME : return RESULTS;
 			case INTRO : return GAME;
 			default :
@@ -117,3 +107,12 @@ class Factory extends AFactory$(CSLB){
 	}	
 	
 }
+
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)*/

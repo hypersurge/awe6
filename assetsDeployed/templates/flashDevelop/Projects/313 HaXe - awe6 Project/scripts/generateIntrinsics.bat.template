@@ -4,7 +4,7 @@
 cd ..\assets\
 if exist hxclasses rmdir hxclasses /s /q
 
-:: haxe 2.07 version:
+:: haxe 2.07+ version:
 :: haxe -swf test.swf -swf-lib asset.swf --gen-hx-classes --no-output
 
 if not exist hxclasses exit
