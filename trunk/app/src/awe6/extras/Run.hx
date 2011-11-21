@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package ;
+package awe6.extras;
 #if neko
 import haxe.Resource;
 import neko.FileSystem;
@@ -42,14 +42,14 @@ import neko.zip.Reader;
  * @author	Robert Fell
  */
 
-class Installer 
+class Run 
 {
 	private static inline var _COMMAND_INSTALL = "install";
 	private static inline var _OS = Sys.systemName();
 
 	static function main() 
 	{
-		new Installer();
+		new Run();
 	}
 	
 	public function new()
