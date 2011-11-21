@@ -1,20 +1,25 @@
-#summary Learn how to extend the demo provided.
+#summary Getting started, fast!
 #labels Featured
 
-= Introduction =
+= Prerequisites =
 
-awe6 provides a collection of interfaces which describe interaction between related concepts.  The interface does not imply a specific way of joining those concepts.  For ease of use the awe6 library includes core functionality (a basic implementation of the interface) which in turn can be configured using the supplied demo.
+  * Install [http://haxe.org/download haXe].
+  * Install [http://www.flashdevelop.org/wikidocs/index.php?title=Installation FlashDevelop].
 
-The demo is a ready to build game (very basic!).  It demonstrates the core functionality of the awe6 feature set: factory methods, asset management, audio, inputs, gui, overlay, scenes, entities.  It doesn't demonstrate the proper way of using these (Inversion of Control is a more advanced topic to be covered later).
+= Installing awe6 & FlashDevelop Project Files & Templates =
 
+{{{
+haxelib install awe6
+haxelib run awe6 install
+}}}
 
-= Details =
+= Using awe6 =
 
-Basic tutorial:
+  * Open !FlashDevelop.
+  * Project > New Project > !HaXe > awe6 Project
+  * Hit F5 to compile & run.
+  * Extend / modify as required.
+   * Add new Scenes with Project > Right Click > Add > awe6 > New Scene
+   * Add new Scenes with Project > Right Click > Add > awe6 > New Entity
 
-  * Install [http://www.flashdevelop.org FlashDevelop] and [http://www.haxe.org haXe].
-  * Check out /trunk/app.
-  * Build project.
-  * Edit files in package "demo" to suit your requirements.
-
-More info to follow ...
+For a more detailed demo check out trunk/app/.
