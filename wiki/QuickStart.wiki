@@ -6,14 +6,14 @@
   * Install [http://haxe.org/download haXe].
   * Install [http://www.flashdevelop.org/wikidocs/index.php?title=Installation FlashDevelop].
 
-= Installing awe6 & FlashDevelop Project Files & Templates =
+= Installing awe6 & !FlashDevelop Project Files & Templates =
 
 {{{
 haxelib install awe6
 haxelib run awe6 install
 }}}
 
-= Using awe6 =
+= Starting a new project with awe6 =
 
   * Open !FlashDevelop.
   * Project > New Project > !HaXe > awe6 Project
