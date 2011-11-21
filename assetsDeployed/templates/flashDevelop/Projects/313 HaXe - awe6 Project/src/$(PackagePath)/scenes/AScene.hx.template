@@ -19,17 +19,8 @@ class AScene extends Scene $(CSLB){
 		super._init();
 		_assetManager = cast( _kernel.assets, AssetManager );
 		_session = cast( _kernel.session, Session );
-		addEntity( _title = new Text( _kernel, _kernel.factory.width, 50, "", _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) ), true );
-		_title.y = _kernel.factory.height - _title.height;
+		addEntity( _title = new Text( _kernel, _kernel.factory.width - 10, 35, "", _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) ), true );
+		_title.setPosition( 10, _kernel.factory.height - _title.height );
 	}
 	
 }
-
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)*/

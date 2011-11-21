@@ -53,12 +53,3 @@ class Overlay extends awe6.core.Overlay $(CSLB){
 		super.activateButton( p_type );
 	}
 }
-
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)*/
