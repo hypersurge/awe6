@@ -1,3 +1,32 @@
+package $(PackageName);
+import awe6.core.APreloader;
+import assets.PreloaderMovieClip;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Preloader extends APreloader $(CSLB){
+	private var _preloaderMovieClip:PreloaderMovieClip;
+
+	override private function _init():Void $(CSLB){
+		super._init();
+		_preloaderMovieClip = new PreloaderMovieClip();
+		_preloaderMovieClip.progress.stop();
+		_preloaderMovieClip.x = ( _kernel.factory.width - _preloaderMovieClip.width ) / 2;
+		_preloaderMovieClip.y = ( _kernel.factory.height - _preloaderMovieClip.height ) / 2;
+		_sprite.addChild( _preloaderMovieClip );
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+		super._updater( p_deltaTime );
+		if ( _preloaderMovieClip != null ) $(CSLB){
+			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
+		}
+	}	
+}
+
 /*
 $(CBI)*                        _____ 
 $(CBI)*     _____      _____  / ___/
@@ -5,39 +34,4 @@ $(CBI)*    /__   | /| /   _ \/ __ \
 $(CBI)*   / _  / |/ |/ /  __  /_/ / 
 $(CBI)*   \___/|__/|__/\___/\____/  
 $(CBI)*    awe6 is game, inverted
-$(CBI)* 
 $(CBI)*/
-
-package $(PackageName);
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip; // example
-
-/**
-$(CBI)* ...
-$(CBI)* @author $(DefaultUser)
-$(CBI)*/
-
-class Preloader extends APreloader$(CSLB){
-	// private var _preloaderMovieClip:PreloaderMovieClip; // example
-
-	override private function _init():Void$(CSLB){
-		super._init();
-		
-		/* example:
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
-		*/
-	}
-	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void$(CSLB){
-		super._updater( p_deltaTime );
-		
-		/* example:
-		if ( _preloaderMovieClip != null )$(CSLB){
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		}
-		*/
-	}	
-}
-

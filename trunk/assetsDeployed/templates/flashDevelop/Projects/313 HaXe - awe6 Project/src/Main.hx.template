@@ -1,13 +1,3 @@
-/*
-$(CBI)*                        _____ 
-$(CBI)*     _____      _____  / ___/
-$(CBI)*    /__   | /| /   _ \/ __ \ 
-$(CBI)*   / _  / |/ |/ /  __  /_/ / 
-$(CBI)*   \___/|__/|__/\___/\____/  
-$(CBI)*    awe6 is game, inverted
-$(CBI)* 
-$(CBI)*/
-
 import $(PackageDot)Factory;
 import flash.Lib;
 import haxe.Log;
@@ -19,19 +9,28 @@ $(CBI)* ...
 $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
-class Main$(CSLB){	
-	static function main()$(CSLB){
+class Main $(CSLB){	
+	static function main() $(CSLB){
 		#if debug
 		var l_isDebug:Bool = true;
 		#else
 		var l_isDebug:Bool = false;
 		#end
-		if ( l_isDebug )$(CSLB){
+		if ( l_isDebug ) $(CSLB){
 			FlashConnect.redirect();
 		}
-		else$(CSLB){
+		else $(CSLB){
 			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
 		}
 		var l_factory = new Factory( Lib.current, l_isDebug );
 	}	
 }
+
+/*
+$(CBI)*                        _____ 
+$(CBI)*     _____      _____  / ___/
+$(CBI)*    /__   | /| /   _ \/ __ \ 
+$(CBI)*   / _  / |/ |/ /  __  /_/ / 
+$(CBI)*   \___/|__/|__/\___/\____/  
+$(CBI)*    awe6 is game, inverted
+$(CBI)*/
