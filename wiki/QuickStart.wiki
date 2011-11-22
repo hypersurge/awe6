@@ -24,6 +24,6 @@ haxelib run awe6 install
   * Hit F5 to compile & run.
   * Extend / modify as required.
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
-   * Add new Scenes with _Project > Right Click > Add > awe6 > New Entity_
+   * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
 
 For a more detailed demo check out [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/].
