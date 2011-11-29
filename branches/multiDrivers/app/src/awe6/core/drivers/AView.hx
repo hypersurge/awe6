@@ -69,11 +69,7 @@ class AView extends Process, implements IView
 	
 	public function addChild( child:IView, ?priority:Int ):Void
 	{
-		if ( isDisposed )
-		{
-			return;
-		}
-		if ( child == null )
+		if ( isDisposed || ( child == null ) )
 		{
 			return;
 		}
@@ -93,7 +89,7 @@ class AView extends Process, implements IView
 	
 	public function removeChild( child:IView ):Void
 	{
-		if ( isDisposed )
+		if ( isDisposed || ( child == null ) )
 		{
 			return;
 		}

@@ -40,56 +40,64 @@ import assets.UnmuteOver;
 import assets.UnmuteUp;
 import assets.UnpauseOver;
 import assets.UnpauseUp;
+import awe6.core.AAssetManager;
 import awe6.core.View;
 import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.IView;
-import awe6.Types;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 
 class AssetManager extends AAssetManager
 {
-	public var overlayBackground( default, null ):BitmapData;
-	public var backUp( default, null ):BitmapData;
-	public var backOver( default, null ):BitmapData;
-	public var muteUp( default, null ):BitmapData;
-	public var muteOver( default, null ):BitmapData;
-	public var unmuteUp( default, null ):BitmapData;
-	public var unmuteOver( default, null ):BitmapData;
-	public var pauseUp( default, null ):BitmapData;
-	public var pauseOver( default, null ):BitmapData;
-	public var unpauseUp( default, null ):BitmapData;
-	public var unpauseOver( default, null ):BitmapData;
+	public var overlayBackground( default, null ):IView;
+	public var backUp( default, null ):IView;
+	public var backOver( default, null ):IView;
+	public var muteUp( default, null ):IView;
+	public var muteOver( default, null ):IView;
+	public var unmuteUp( default, null ):IView;
+	public var unmuteOver( default, null ):IView;
+	public var pauseUp( default, null ):IView;
+	public var pauseOver( default, null ):IView;
+	public var unpauseUp( default, null ):IView;
+	public var unpauseOver( default, null ):IView;
 	public var sphere( default, null ):BitmapData;
 	
 	override private function _init():Void
 	{
 		super._init();
-		overlayBackground = new OverlayBackground();
-		backUp = new BackUp();
-		backOver = new BackOver();
-		muteUp = new MuteUp();
-		muteOver = new MuteOver();
-		unmuteUp = new UnmuteUp();
-		unmuteOver = new UnmuteOver();
-		pauseUp = new PauseUp();
-		pauseOver = new PauseOver();
-		unpauseUp = new UnpauseUp();
-		unpauseOver = new UnpauseOver();
+		overlayBackground = _createView( OVERLAY_BACKGROUND );
+		backUp = _createView( OVERLAY_BACK_UP );
+		backOver = _createView( OVERLAY_BACK_OVER );
+		muteUp = _createView( OVERLAY_MUTE_UP );
+		muteOver = _createView( OVERLAY_MUTE_OVER );
+		unmuteUp = _createView( OVERLAY_UNMUTE_UP );
+		unmuteOver = _createView( OVERLAY_UNMUTE_OVER );
+		pauseUp = _createView( OVERLAY_PAUSE_UP );
+		pauseOver = _createView( OVERLAY_PAUSE_OVER );
+		unpauseUp = _createView( OVERLAY_UNPAUSE_UP );
+		unpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		sphere = new Sphere();
 	}
 	
-	public function createView( type:EAsset ):IView
+	private function _createView( type:EAsset ):IView
 	{
 		var l_sprite:Sprite = new Sprite();
 		var l_bitmap:Bitmap = new Bitmap();
 		l_sprite.addChild( l_bitmap );
 		switch( type )
 		{
-			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( overlayBackground, 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
-			case OVERLAY_BACK_UP : l_bitmap.bitmapData = backUp;
-			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = backOver;
+			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( new OverlayBackground(), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+			case OVERLAY_BACK_UP : l_bitmap.bitmapData = new BackUp();
+			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = new BackOver();
+			case OVERLAY_MUTE_UP : l_bitmap.bitmapData = new MuteUp();
+			case OVERLAY_MUTE_OVER : l_bitmap.bitmapData = new MuteOver();
+			case OVERLAY_UNMUTE_UP : l_bitmap.bitmapData = new UnmuteUp();
+			case OVERLAY_UNMUTE_OVER : l_bitmap.bitmapData = new UnmuteOver();
+			case OVERLAY_PAUSE_UP : l_bitmap.bitmapData = new PauseUp();
+			case OVERLAY_PAUSE_OVER : l_bitmap.bitmapData = new PauseOver();
+			case OVERLAY_UNPAUSE_UP : l_bitmap.bitmapData = new UnpauseUp();
+			case OVERLAY_UNPAUSE_OVER : l_bitmap.bitmapData = new UnpauseOver();
 		}
 		return new View( _kernel, l_sprite );
 	}
@@ -101,6 +109,13 @@ enum EAsset
 	OVERLAY_BACKGROUND;
 	OVERLAY_BACK_UP;
 	OVERLAY_BACK_OVER;
-	
+	OVERLAY_MUTE_UP;
+	OVERLAY_MUTE_OVER;
+	OVERLAY_UNMUTE_UP;
+	OVERLAY_UNMUTE_OVER;
+	OVERLAY_PAUSE_UP;
+	OVERLAY_PAUSE_OVER;
+	OVERLAY_UNPAUSE_UP;
+	OVERLAY_UNPAUSE_OVER;
 }
 

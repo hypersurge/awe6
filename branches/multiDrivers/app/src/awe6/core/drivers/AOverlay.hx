@@ -75,11 +75,11 @@ class AOverlay extends Entity, implements IOverlayProcess
 	public function new( kernel:IKernel, ?background:IView, ?backUp:IView, ?backOver:IView, ?muteUp:IView, ?muteOver:IView, ?unmuteUp:IView, ?unmuteOver:IView, ?pauseUp:IView, ?pauseOver:IView, ?unpauseUp:IView, ?unpauseOver:IView, ?pauseBlur:Float = 8, ?pauseColor:Int = 0x000000, ?pauseAlpha:Float = .35  )
 	{
 		_background = background;
-		_buttonBack = new BasicButton( kernel, backUp, backOver );
-		_buttonMute = new BasicButton( kernel, muteUp, muteOver );
-		_buttonUnmute = new BasicButton( kernel, unmuteUp, unmuteOver );
-		_buttonPause = new BasicButton( kernel, pauseUp, pauseOver );
-		_buttonUnpause = new BasicButton( kernel, unpauseUp, unpauseOver );
+		_buttonBack = new BasicButton( kernel, backUp, backOver, 30, 30 );
+		_buttonMute = new BasicButton( kernel, muteUp, muteOver, 30, 30 );
+		_buttonUnmute = new BasicButton( kernel, unmuteUp, unmuteOver, 30, 30 );
+		_buttonPause = new BasicButton( kernel, pauseUp, pauseOver, 30, 30 );
+		_buttonUnpause = new BasicButton( kernel, unpauseUp, unpauseOver, 30, 30 );
 		_pauseBlur = pauseBlur;
 		_pauseColor = pauseColor;
 		_pauseAlpha = pauseAlpha;

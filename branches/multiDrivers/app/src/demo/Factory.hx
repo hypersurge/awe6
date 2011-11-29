@@ -76,8 +76,7 @@ class Factory extends AFactory
 	
 	override public function createOverlay():IOverlayProcess
 	{
-		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.createView( OVERLAY_BACKGROUND ), _assetManager.createView( OVERLAY_BACK_UP ), _assetManager.createView( OVERLAY_BACK_OVER ) );
-//		, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
+		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
 		var l_width:Int = 30;
 		var l_x:Int = width - 10 - ( 3 * l_width );
 		var l_y:Int = height - 30;
