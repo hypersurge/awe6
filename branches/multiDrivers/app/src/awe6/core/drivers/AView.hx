@@ -73,6 +73,10 @@ class AView extends Process, implements IView
 		{
 			return;
 		}
+		if ( child == null )
+		{
+			return;
+		}
 		var l_child:AView = cast child;
 		if ( l_child.parent != this )
 		{

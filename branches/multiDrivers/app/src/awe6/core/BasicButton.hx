@@ -32,10 +32,6 @@ import awe6.interfaces.EAgenda;
 import awe6.interfaces.EKey;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.display.IBitmapDrawable;
 import flash.display.Sprite;
 
 class BasicButton extends Entity
@@ -57,14 +53,14 @@ class BasicButton extends Entity
 	private var _keyType:EKey;
 	private var _sprite:Sprite;
 	
-	public function new( kernel:IKernel, up:IBitmapDrawable, over:IBitmapDrawable, ?x:Float = 0, ?y:Float = 0, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void )
+	public function new( kernel:IKernel, up:IView, over:IView, ?width:Int = 100, ?height:Int = 20, ?x:Float = 0, ?y:Float = 0, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void )
 	{
 		_stateUp = new _HelperState( kernel, up );
 		_stateOver = new _HelperState( kernel, over );
 		Reflect.setField( this, "x", x );
 		Reflect.setField( this, "y", y );
-		width = _stateUp.width;
-		height = _stateUp.height;
+		this.width = width;
+		this.height = height;
 		_keyType = key;
 		this.onClickCallback = onClickCallback;
 		this.onRollOverCallback = onRollOverCallback;
@@ -203,23 +199,10 @@ class BasicButton extends Entity
 
 private class _HelperState extends Entity
 {
-	public var width:Float;
-	public var height:Float;
-	
-	public function new( kernel:IKernel, bitmapDrawable:IBitmapDrawable )
+	public function new( kernel:IKernel, view:IView )
 	{
-		var l_sprite:Sprite = new Sprite();
-		var l_displayObject:DisplayObject = cast Std.is( bitmapDrawable, BitmapData ) ? new Bitmap( cast bitmapDrawable ) : bitmapDrawable;
-		if ( bitmapDrawable == null )
-		{
-			l_displayObject = new Sprite();
-		}
-		l_sprite.addChild( l_displayObject );
-		l_sprite.useHandCursor = true;
-		l_sprite.buttonMode = true;
-		width = l_sprite.width;
-		height = l_sprite.height;
-		super( kernel, l_sprite );
+		super( kernel );
+		this.view = view;
 	}
 }
 

@@ -40,8 +40,13 @@ import assets.UnmuteOver;
 import assets.UnmuteUp;
 import assets.UnpauseOver;
 import assets.UnpauseUp;
+import awe6.core.View;
+import awe6.extras.gui.BitmapDataScale9;
+import awe6.interfaces.IView;
 import awe6.Types;
+import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.Sprite;
 
 class AssetManager extends AAssetManager
 {
@@ -74,6 +79,28 @@ class AssetManager extends AAssetManager
 		unpauseOver = new UnpauseOver();
 		sphere = new Sphere();
 	}
+	
+	public function createView( type:EAsset ):IView
+	{
+		var l_sprite:Sprite = new Sprite();
+		var l_bitmap:Bitmap = new Bitmap();
+		l_sprite.addChild( l_bitmap );
+		switch( type )
+		{
+			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( overlayBackground, 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+			case OVERLAY_BACK_UP : l_bitmap.bitmapData = backUp;
+			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = backOver;
+		}
+		return new View( _kernel, l_sprite );
+	}
+	
+}
+
+enum EAsset
+{
+	OVERLAY_BACKGROUND;
+	OVERLAY_BACK_UP;
+	OVERLAY_BACK_OVER;
 	
 }
 

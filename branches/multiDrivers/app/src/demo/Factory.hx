@@ -28,6 +28,7 @@
  */
 
 package demo;
+import awe6.core.drivers.flash.View;
 import awe6.Types;
 import demo.scenes.Game;
 import demo.scenes.Intro;
@@ -75,8 +76,8 @@ class Factory extends AFactory
 	
 	override public function createOverlay():IOverlayProcess
 	{
-		var l_overlayBackground:BitmapData = new awe6.extras.gui.BitmapDataScale9( _assetManager.overlayBackground, 110, 20, 550, 350, width, height, true );
-		var l_overlay:Overlay = new Overlay( _kernel, l_overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
+		var l_overlay:Overlay = new Overlay( _kernel, _assetManager.createView( OVERLAY_BACKGROUND ), _assetManager.createView( OVERLAY_BACK_UP ), _assetManager.createView( OVERLAY_BACK_OVER ) );
+//		, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
 		var l_width:Int = 30;
 		var l_x:Int = width - 10 - ( 3 * l_width );
 		var l_y:Int = height - 30;

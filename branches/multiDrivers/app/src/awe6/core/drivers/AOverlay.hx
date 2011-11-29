@@ -28,10 +28,13 @@
  */
 
 package awe6.core.drivers;
+import awe6.core.Entity;
+import awe6.core.View;
 import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
+import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
@@ -47,8 +50,8 @@ class AOverlay extends Entity, implements IOverlayProcess
 {
 	public var pauseEntity( __get_pauseEntity, __set_pauseEntity ):IEntity;
 	
+	private var _background:IView;
 	private var _sprite:Sprite;
-	private var _background:Bitmap;
 	private var _progressSprite:Sprite;
 	private var _pauseSprite:Sprite;
 	private var _pauseView:View;
@@ -69,9 +72,9 @@ class AOverlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( kernel:IKernel, ?background:BitmapData, ?backUp:BitmapData, ?backOver:BitmapData, ?muteUp:BitmapData, ?muteOver:BitmapData, ?unmuteUp:BitmapData, ?unmuteOver:BitmapData, ?pauseUp:BitmapData, ?pauseOver:BitmapData, ?unpauseUp:BitmapData, ?unpauseOver:BitmapData, ?pauseBlur:Float = 8, ?pauseColor:Int = 0x000000, ?pauseAlpha:Float = .35  )
+	public function new( kernel:IKernel, ?background:IView, ?backUp:IView, ?backOver:IView, ?muteUp:IView, ?muteOver:IView, ?unmuteUp:IView, ?unmuteOver:IView, ?pauseUp:IView, ?pauseOver:IView, ?unpauseUp:IView, ?unpauseOver:IView, ?pauseBlur:Float = 8, ?pauseColor:Int = 0x000000, ?pauseAlpha:Float = .35  )
 	{
-		_background = new Bitmap( background );
+		_background = background;
 		_buttonBack = new BasicButton( kernel, backUp, backOver );
 		_buttonMute = new BasicButton( kernel, muteUp, muteOver );
 		_buttonUnmute = new BasicButton( kernel, unmuteUp, unmuteOver );
@@ -87,6 +90,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 	override private function _init():Void 
 	{
 		super._init();
+		view.addChild( _background );
 		_wasMute = _kernel.audio.isMute;
 		
 		_progressSprite = new Sprite();
@@ -122,7 +126,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		_sprite.addChild( _flashSprite );
 		_sprite.addChild( _pauseSprite );
 		_sprite.addChild( _progressSprite );
-		_sprite.addChild( _background );
+//		_sprite.addChild( _background );
 		addEntity( _buttonBack, true, 21 );
 		addEntity( _buttonUnmute, true, 22 );
 		addEntity( _buttonMute, true, 23 );
