@@ -52,9 +52,8 @@ interface IOverlay
 	 * @param	type	The overlay button.
 	 * @param	x	The horizontal position.
 	 * @param	y	The vertical position.
-	 * @param	?alpha	The transparency of the button.  Range: 0...1.
 	 */
-	function positionButton( type:EOverlayButton, x:Float, y:Float, ?alpha:Float ):Void;
+	function positionButton( type:EOverlayButton, x:Float, y:Float ):Void;
 	/**
 	 * Triggers an overlay button (as if it was clicked on).
 	 * @param	type	The overlay button.

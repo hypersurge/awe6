@@ -46,7 +46,11 @@ class AView extends Process, implements IView
 	public var owner( default, null ):Dynamic;
 	public var parent( __get_parent, null ):IView;
 	public var isVisible( default, __set_isVisible ):Bool;	
-	public var isInViewStack( __get_isInViewStack, null ):Bool;	
+	public var isInViewStack( __get_isInViewStack, null ):Bool;
+	public var x( default, __set_x ):Float;
+	public var y( default, __set_y ):Float;
+	public var globalX( default, null ):Float;
+	public var globalY( default, null ):Float;
 	
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;
@@ -65,6 +69,7 @@ class AView extends Process, implements IView
 		isVisible = true;
 		_isDirty = true;
 		_children = new Array<AView>();
+		x = y = globalX = globalY = 0;
 	}
 	
 	public function addChild( child:IView, ?priority:Int ):Void
@@ -218,5 +223,26 @@ class AView extends Process, implements IView
 		}
 		return parent.isInViewStack;
 	}
+	
+	private function __set_x( value:Float ):Float
+	{
+		x = value;
+		globalX = x + ( ( parent != null ) ? parent.globalX : 0 );
+		return x;
+	}
+	
+	private function __set_y( value:Float ):Float
+	{
+		y = value;
+		globalY = y + ( ( parent != null ) ? parent.globalY : 0 );
+		return y;
+	}
+	
+	public function setPosition( x:Float, y:Float ):Void
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
 }
 

@@ -27,65 +27,26 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.flash;
-import awe6.core.Context;
-import awe6.core.drivers.AView;
+package awe6.interfaces;
 
 /**
- * This View class provides flash target overrides.
+ * The IPosition interface should be implemented by objects intended to have 2D spatial position.
  * @author	Robert Fell
  */
-class View extends AView
+interface IPosition
 {
-	private var _container:Context;
-	
-	override private function _init():Void 
-	{
-		if ( context == null )
-		{
-			context = new Context(); 
-		}
-		super._init();
-	}
-	
-	override private function _nativeDisposer():Void 
-	{
-		if ( context.parent != null )
-		{
-			context.parent.removeChild( context );
-		}
-	}
-	
-	override private function _nativeDraw():Void
-	{
-		if ( _container != null && _container.parent != null )
-		{
-			_container.parent.removeChild( _container );
-		}
-		_container = new Context();
-		_container.mouseEnabled = false;
-		context.addChild( _container );
-		var l_children:Array<View> = cast _children;
-		for ( i in l_children )
-		{
-			if ( i.isVisible )
-			{
-				_container.addChild( i.context );
-			}
-		}
-	}
-	
-	override private function __set_x( value:Float ):Float
-	{
-		context.x = value;
-		return super.__set_x( value );
-	}
-	
-	override private function __set_y( value:Float ):Float
-	{
-		context.y = value;
-		return super.__set_y( value );
-	}
-	
+	/**
+	 * The horizontal position.
+	 */
+	var x( default, __set_x ):Float;
+	/**
+	 * The vertical position.
+	 */
+	var y( default, __set_y ):Float;
+	/**
+	 * Sets both the horizontal and vertical position;
+	 * @param	x	The horizontal position.
+	 * @param	y	The vertical position.
+	 */
+	function setPosition( x:Float, y:Float ):Void;
 }
-

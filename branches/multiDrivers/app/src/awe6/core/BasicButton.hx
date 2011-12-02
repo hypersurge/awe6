@@ -31,27 +31,23 @@ package awe6.core;
 import awe6.interfaces.EAgenda;
 import awe6.interfaces.EKey;
 import awe6.interfaces.IKernel;
+import awe6.interfaces.IPosition;
 import awe6.interfaces.IView;
-import flash.display.Sprite;
 
-class BasicButton extends Entity
+class BasicButton extends Entity, implements IPosition
 {
 	public var x( default, __set_x ):Float;
 	public var y( default, __set_y ):Float;
 	public var width( default, __set_width ):Float;
 	public var height( default, __set_height ):Float;
-	public var alpha( default, __set_alpha ):Float;
 	public var isOver( default, null ):Bool;
 	public var onClickCallback:Void->Void;
 	public var onRollOverCallback:Void->Void;
 	public var onRollOutCallback:Void->Void;
-	public var displaceX:Float;
-	public var displaceY:Float;
 	
 	private var _stateUp:_HelperState;
 	private var _stateOver:_HelperState;
 	private var _keyType:EKey;
-	private var _sprite:Sprite;
 	
 	public function new( kernel:IKernel, up:IView, over:IView, ?width:Int = 100, ?height:Int = 20, ?x:Float = 0, ?y:Float = 0, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void )
 	{
@@ -65,18 +61,15 @@ class BasicButton extends Entity
 		this.onClickCallback = onClickCallback;
 		this.onRollOverCallback = onRollOverCallback;
 		this.onRollOutCallback = onRollOutCallback;
-		_sprite = new Sprite();
-		_sprite.x = this.x;
-		_sprite.y = this.y;
-		super( kernel, _sprite );
+		super( kernel );
 	}
 	
 	override private function _init():Void
 	{
 		super._init();
-		alpha = 1;
+		view.x = x;
+		view.y = y;
 		isOver = false;
-		displaceX = displaceY = 0;
 		addEntity( _stateUp, EAgenda.SUB_TYPE( _HelperEState.UP ), true );
 		addEntity( _stateOver, EAgenda.SUB_TYPE( _HelperEState.OVER ), true );
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
@@ -85,7 +78,7 @@ class BasicButton extends Entity
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x, _kernel.inputs.mouse.y, x, y, width, height );
+		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x + view.x - view.globalX, _kernel.inputs.mouse.y + view.y - view.globalY, x, y, width, height );
 		if ( l_isOver && !isOver )
 		{
 			onRollOver();
@@ -107,8 +100,6 @@ class BasicButton extends Entity
 	
 	private function _isPointInsideRectangle( pointX:Float, pointY:Float, rectX:Float, rectY:Float, rectWidth:Float, rectHeight:Float ):Bool
 	{
-		pointX -= displaceX;
-		pointY -= displaceY;
 		if ( pointX < rectX )
 		{
 			return false;
@@ -166,14 +157,14 @@ class BasicButton extends Entity
 	private function __set_x( value:Float ):Float
 	{
 		x = value;
-		_sprite.x = x;
+		view.x = x;
 		return x;
 	}
 	
 	private function __set_y( value:Float ):Float
 	{
 		y = value;
-		_sprite.y = y;
+		view.y = y;
 		return y;
 	}
 	
@@ -187,13 +178,6 @@ class BasicButton extends Entity
 	{
 		height = value;
 		return height;
-	}
-	
-	private function __set_alpha( value:Float ):Float
-	{
-		alpha = value;
-		_sprite.alpha = alpha;
-		return alpha;
 	}
 }
 

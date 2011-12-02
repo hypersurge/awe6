@@ -33,7 +33,7 @@ package awe6.interfaces;
  * The IView interface should be implemented by all objects in the view broad phase traversal stack.
  * @author	Robert Fell
  */
-interface IView implements IPriority, implements IDisposable, implements IUpdateable
+interface IView implements IPriority, implements IPosition, implements IDisposable, implements IUpdateable
 {
 	/**
 	 * Optional: the object who this view represents.
@@ -53,7 +53,15 @@ interface IView implements IPriority, implements IDisposable, implements IUpdate
 	 * Determined by whether this view is visible and included in a visible branch of the view stack (i.e. actually has the potential to be drawn within the overlay).
 	 * <p>If true the view is potentially visible, if false the view is impossible to be seen.</p>
 	 */
-	var isInViewStack( __get_isInViewStack, null ):Bool;	
+	var isInViewStack( __get_isInViewStack, null ):Bool;
+	/**
+	 * The horizontal position considering all parent's positions / scene graph.
+	 */
+	var globalX( default, null ):Float;
+	/**
+	 * The vertical position considering all parent's positions / scene graph.
+	 */
+	var globalY( default, null ):Float;
 	/**
 	 * Adds a new view child to this view. 
 	 * <p>A view can have multiple children, and when you add a child to a view, it is automatically connected to the parent node through its parent property.</p>

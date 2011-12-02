@@ -209,15 +209,11 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 	}
 	
-	public function positionButton( type:EOverlayButton, x:Float, y:Float, ?alpha:Float ):Void
+	public function positionButton( type:EOverlayButton, x:Float, y:Float ):Void
 	{
 		var l_button:BasicButton = _getButton( type );
 		l_button.x = x;
 		l_button.y = y;
-		if ( alpha != null )
-		{
-			l_button.alpha = alpha;		
-		}
 	}
 	
 	public function showProgress( progress:Float, ?message:String ):Void
