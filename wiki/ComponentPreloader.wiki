@@ -13,4 +13,4 @@ All runtime loaded assets must be loaded (at runtime!), the Preloader does this,
   
 == Did you know? ==
 
-  * The default Preloader registers Fonts with names corresponding to [https://awe6.googlecode.com/svn/tags/api/types/awe6/interfaces/ETextStyle.html ETextStyle] automatically.
+  * The default Flash Preloader registers Fonts automatically.
