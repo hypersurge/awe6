@@ -33,7 +33,6 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IEntityCollection;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-import flash.display.Sprite;
 import haxe.FastList;
 
 /**
@@ -52,9 +51,9 @@ class Entity extends Process, implements IEntity
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
-	public function new( kernel:IKernel, ?id:String, ?sprite:Sprite ) 
+	public function new( kernel:IKernel, ?id:String, ?context:Context ) 
 	{
-		view = new View( kernel, sprite, 0, this );
+		this.view = new View( kernel, context, 0, this );
 		this.id = ( id == null ) ? kernel.tools.createGuid() : id;
 		super( kernel );
 	}

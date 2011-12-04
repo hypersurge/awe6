@@ -60,7 +60,7 @@ class AView extends Process, implements IView
 		this.context = context;
 		this.priority = priority;
 		this.owner = owner;
-		super( kernel );		
+		super( kernel );
 	}
 	
 	override private function _init():Void 
