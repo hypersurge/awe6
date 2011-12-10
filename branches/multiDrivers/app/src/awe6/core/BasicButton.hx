@@ -30,6 +30,8 @@
 package awe6.core;
 import awe6.interfaces.EAgenda;
 import awe6.interfaces.EKey;
+import awe6.interfaces.EMouseCursor;
+import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPosition;
 import awe6.interfaces.IView;
@@ -78,17 +80,20 @@ class BasicButton extends Entity, implements IPosition
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		var l_isOver:Bool = _isPointInsideRectangle( _kernel.inputs.mouse.x + view.x - view.globalX, _kernel.inputs.mouse.y + view.y - view.globalY, x, y, width, height );
+		var l_inputMouse:IInputMouse = _kernel.inputs.mouse;
+		var l_isOver:Bool = _isPointInsideRectangle( l_inputMouse.x + view.x - view.globalX, l_inputMouse.y + view.y - view.globalY, x, y, width, height );
+		if ( l_isOver ) l_inputMouse.cursorType = EMouseCursor.BUTTON;
 		if ( l_isOver && !isOver )
 		{
 			onRollOver();
 		}
 		if ( !l_isOver && isOver )
 		{
+			l_inputMouse.cursorType = EMouseCursor.ARROW;
 			onRollOut();
 		}
 		isOver = l_isOver;
-		if ( isOver && _kernel.inputs.mouse.getIsButtonRelease() )
+		if ( isOver && l_inputMouse.getIsButtonRelease() )
 		{
 			onClick();
 		}

@@ -69,9 +69,18 @@ interface IInputMouse
 	 */
 	var isMoving( default, null ):Bool;
 	/**
+	 * Specify the visibility of the mouse cursor.
+	 * <p>If true the cursor will be displayed, if false the cursor is hidden.</p>
+	 */
+	var isVisible( default, __set_isVisible ):Bool;
+	/**
 	 * The current scroll position.  Starts at 0.  Range -infinity...infinity.
 	 */
 	var scroll( default, null ):Int;
+	/**
+	 * The current cursor type.
+	 */
+	var cursorType( default, __set_cursorType ):EMouseCursor;
 	/**
 	 * The horizontal velocity of the mouse position.
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.

@@ -30,6 +30,7 @@
 package awe6.core.drivers;
 import awe6.core.Process;
 import awe6.interfaces.EMouseButton;
+import awe6.interfaces.EMouseCursor;
 import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IKernel;
 import haxe.io.Bytes;
@@ -49,8 +50,10 @@ class AInputMouse extends Process, implements IInputMouse
 	public var relativeCentralisedX( default, null ):Float;
 	public var relativeCentralisedY( default, null ):Float;
 	public var isWithinBounds( default, null ):Bool;
-	public var isMoving( default, null ):Bool;	
+	public var isMoving( default, null ):Bool;
+	public var isVisible( default, __set_isVisible ):Bool;
 	public var scroll( default, null ):Int;
+	public var cursorType( default, __set_cursorType ):EMouseCursor;
 	
 	private var _buffer:Array<Bool>;
 	private var _xPrev:Int;
@@ -76,7 +79,9 @@ class AInputMouse extends Process, implements IInputMouse
 		_buffer = [];
 		_getPosition();
 		isMoving = false;
+		isVisible = true;
 		scroll = 0;
+		cursorType = EMouseCursor.ARROW;
 		_scrollPrev = 0;
 		_stillUpdates = 0;
 		_stillDuration = 0;
@@ -316,6 +321,18 @@ class AInputMouse extends Process, implements IInputMouse
 	{
 		var l_button:_HelperButton = _getButton( type );
 		return l_button.clickY;
+	}
+	
+	private function __set_isVisible( value:Bool ):Bool
+	{
+		isVisible = value;
+		return isVisible;
+	}
+	
+	private function __set_cursorType( value:EMouseCursor ):EMouseCursor
+	{
+		cursorType = value;
+		return cursorType;
 	}
 	
 }

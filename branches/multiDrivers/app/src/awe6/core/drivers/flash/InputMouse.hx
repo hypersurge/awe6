@@ -29,11 +29,14 @@
 
 package awe6.core.drivers.flash;
 import awe6.core.drivers.AInputMouse;
+import awe6.interfaces.EMouseCursor;
 import flash.display.Loader;
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.Lib;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 import flash.ui.Multitouch;
 import flash.ui.MultitouchInputMode;
 import haxe.io.Bytes;
@@ -128,5 +131,25 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		scroll += event.delta;
-	}	
+	}
+	
+	override private function __set_isVisible( value:Bool ):Bool
+	{
+		value ? Mouse.show() : Mouse.hide();
+		return super.__set_isVisible( value );
+	}
+	
+	override private function __set_cursorType( value:EMouseCursor ):EMouseCursor
+	{
+		switch( value )
+		{
+			case ARROW : Mouse.cursor = MouseCursor.ARROW;
+			case BUTTON : Mouse.cursor = MouseCursor.BUTTON;
+			case HAND : Mouse.cursor = MouseCursor.HAND;
+			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
+			case SUB_TYPE( value ) : // Have a register cursor approach here;
+		}
+		return super.__set_cursorType( value );
+	}
+
 }
