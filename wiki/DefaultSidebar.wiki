@@ -21,5 +21,6 @@
       * [ComponentSession Session]
   * Using awe6
     * [QuickStart Quick Start Tutorial]
+    * [http://awe6.googlecode.com/svn/tags/api/index.html API]
     * [AirForMobile Mobile Device Deployment]	
     * [GameGenres Game Genre Examples]
