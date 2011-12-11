@@ -51,4 +51,6 @@
     <option showHiddenPaths="False" />
     <option testMovie="Default" />
   </options>
+  <!-- Plugin storage -->
+  <storage />
 </project>

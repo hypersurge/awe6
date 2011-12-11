@@ -27,20 +27,49 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers.flash;
+import awe6.core.drivers.ASceneTransition;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.filters.BlurFilter;
 
 /**
- * The SceneTransition class provides a minimalist implementation of the ISceneTransition interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>APreloader includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This SceneTransition class provides flash target overrides.
  * @author	Robert Fell
  */
-#if cpp
-typedef SceneTransition = awe6.core.drivers.cpp.SceneTransition;
-#elseif flash
-typedef SceneTransition = awe6.core.drivers.flash.SceneTransition;
-#elseif js
-typedef SceneTransition = awe6.core.drivers.js.SceneTransition;
-#else
-typedef SceneTransition = awe6.core.drivers.ASceneTransition;
-#end
+class SceneTransition extends ASceneTransition
+{
+	private var _blurFilter:BlurFilter;
+
+	override private function _init():Void 
+	{
+		super._init();
+		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
+		try
+		{
+			var l_view:View = cast _kernel.scenes.scene.view;
+			l_bitmapData.draw( l_view.context );
+		}
+		catch ( error:Dynamic )
+		{
+			trace( error );
+		}
+		_blurFilter = new BlurFilter( 0, 0, 1 );
+		_context.filters = [ _blurFilter ];
+		_context.mouseEnabled = false;
+		_context.addChild( new Bitmap( l_bitmapData ) );
+	}
+	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		if ( !isDisposed )
+		{
+			_context.alpha = 1 - progress;
+			_blurFilter.blurX = _blurFilter.blurY = progress * 32;
+			_context.filters = [ _blurFilter ];
+		}
+	}
+	
+}
+

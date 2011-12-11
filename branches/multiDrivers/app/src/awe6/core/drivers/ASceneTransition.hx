@@ -27,20 +27,54 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers;
+import awe6.core.Context;
+import awe6.core.Entity;
+import awe6.interfaces.IKernel;
+import awe6.interfaces.ISceneTransition;
 
 /**
- * The SceneTransition class provides a minimalist implementation of the ISceneTransition interface.
+ * The ASceneTransition class provides a minimalist implementation of the ISceneTransition interface.
+ * <p>It is intended as an abstract class to be extended by target specific drivers.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>APreloader includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if cpp
-typedef SceneTransition = awe6.core.drivers.cpp.SceneTransition;
-#elseif flash
-typedef SceneTransition = awe6.core.drivers.flash.SceneTransition;
-#elseif js
-typedef SceneTransition = awe6.core.drivers.js.SceneTransition;
-#else
-typedef SceneTransition = awe6.core.drivers.ASceneTransition;
-#end
+class ASceneTransition extends Entity, implements ISceneTransition
+{
+	public var progress( __get_progress, null ):Float;
+	
+	private var _duration:Int;
+	private var _context:Context;
+
+	public function new( kernel:IKernel, ?duration:Int = 500 ) 
+	{
+		_duration = duration;
+		_context = new Context();
+		super( kernel, "SCENE_TRANSITION", _context );
+	}
+	
+	override private function _init():Void 
+	{
+		super._init();
+	}
+	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		if ( _age > _duration )
+		{
+			dispose();
+		}
+	}
+	
+	public function getDuration( ?asTime:Bool = true ):Float
+	{
+		return asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
+	}
+	
+	private function __get_progress():Float
+	{
+		return _tools.limit( _age / _duration, 0, 1 );
+	}
+}
+
