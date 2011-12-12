@@ -28,103 +28,18 @@
  */
 
 package awe6.core;
-import awe6.interfaces.IKernel;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Sprite;
-import flash.geom.Rectangle;
-import flash.system.System;
-import flash.text.TextField;
-import flash.text.TextFormat;
-	
+
 /**
  * The Profiler class provides debug information.  Based on net.hires.utils.Stats by Mr.doob & Theo v1.3
- * @author	Werner Avenant
- * @author	Mr.doob
- * @author	Theo
+ * <p>Profiler includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-class Profiler extends Entity
-{
-	private static inline var _MARGIN_HEIGHT = 25;
-	private static inline var _MARGIN_COLOR = 0x000080;
-	private static inline var _BACKGROUND_COLOR = 0x80000080;
-	private static inline var _FPS_COLOR = 0xFFFFFF;
-	private static inline var _MEMORY_COLOR = 0xFF8000;
-	private static inline var _FPS_LABEL = "FPS";
-	private static inline var _MEMORY_LABEL = "MBs";
-	private static inline var _WIDTH = 60;
-	private static inline var _HEIGHT = 50;
-	
-	private var _sprite:Sprite;
-	private var _bitmapData:BitmapData;
-	private var _textFormat:TextFormat;
-	private var _fpsTextField:TextField;
-	private var _memoryTextField:TextField;
-	private var _agePrev:Int;
-		
-	public function new( kernel:IKernel )
-	{
-		_sprite = new Sprite();
-		super( kernel, _sprite );
-	}
-	
-	override private function _init():Void
-	{
-		super._init();
-		_agePrev = 0;
-		
-		_bitmapData = new BitmapData( _WIDTH, _HEIGHT, true, _BACKGROUND_COLOR );
-		var l_bitmap:Bitmap = new Bitmap( _bitmapData );
-		l_bitmap.y = _MARGIN_HEIGHT;
-		_sprite.addChild( l_bitmap );
-
-		_textFormat = new TextFormat( "_sans", 9 );
-
-		_sprite.graphics.beginFill( _MARGIN_COLOR );
-		_sprite.graphics.drawRect(0, 0, _WIDTH, _MARGIN_HEIGHT );
-		_sprite.graphics.endFill();
-
-		_fpsTextField = new TextField();
-		_memoryTextField = new TextField();
-
-		_fpsTextField.defaultTextFormat = _memoryTextField.defaultTextFormat = _textFormat;
-		_fpsTextField.width = _memoryTextField.width = _WIDTH;
-		_fpsTextField.selectable = _memoryTextField.selectable = false;
-
-		_fpsTextField.textColor = _FPS_COLOR;
-		_fpsTextField.text = _FPS_LABEL + ": ";
-		_sprite.addChild( _fpsTextField );
-
-		_memoryTextField.y = 10;
-		_memoryTextField.textColor = _MEMORY_COLOR;
-		_memoryTextField.text = _MEMORY_LABEL + ": ";
-		_sprite.addChild( _memoryTextField );
-		
-		_sprite.x = _sprite.y = 2;
-	}
-		
-	override private function _updater( ?deltaTime:Int = 0 ):Void
-	{
-		super._updater( deltaTime );
-		if ( _age < _agePrev + 250 )
-		{
-			return;
-		}
-		
-		_agePrev = _age;
-		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );
-		var l_memory:Int = Std.int( System.totalMemory / 1048576 );
-
-		var l_fpsValue:Int = Std.int( Math.min( _HEIGHT, _HEIGHT / _kernel.factory.targetFramerate * l_fps ) );
-		var l_memoryNode:Int = Std.int( Math.min( _HEIGHT, Math.sqrt( Math.sqrt( l_memory * 10 * _HEIGHT ) ) ) ) - 2;
-
-		_bitmapData.scroll( 1, 0 );
-		_bitmapData.fillRect( new Rectangle( 0, 0, 1, _bitmapData.height ), _BACKGROUND_COLOR );
-		_bitmapData.setPixel( 0, _bitmapData.height - l_fpsValue, _FPS_COLOR );
-		_bitmapData.setPixel( 0, _bitmapData.height - l_memoryNode, _MEMORY_COLOR );
-
-		_fpsTextField.text = _FPS_LABEL + ": " + l_fps + " / " + _kernel.factory.targetFramerate;
-		_memoryTextField.text = _MEMORY_LABEL + ": " + l_memory;
-	}
-}
+#if cpp
+typedef Profiler = awe6.core.drivers.cpp.Profiler;
+#elseif flash
+typedef Profiler = awe6.core.drivers.flash.Profiler;
+#elseif js
+typedef Profiler = awe6.core.drivers.js.Profiler;
+#else
+typedef Profiler = awe6.core.drivers.AProfiler;
+#end
