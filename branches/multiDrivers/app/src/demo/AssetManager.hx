@@ -28,6 +28,7 @@
  */
 
 package demo;
+import assets.Background;
 import assets.BackOver;
 import assets.BackUp;
 import assets.MuteOver;
@@ -61,6 +62,7 @@ class AssetManager extends AAssetManager
 	public var pauseOver( default, null ):IView;
 	public var unpauseUp( default, null ):IView;
 	public var unpauseOver( default, null ):IView;
+	public var background( default, null ):IView;
 	public var sphere( default, null ):BitmapData;
 	
 	override private function _init():Void
@@ -77,6 +79,7 @@ class AssetManager extends AAssetManager
 		pauseOver = _createView( OVERLAY_PAUSE_OVER );
 		unpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		unpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
+		background = _createView( BACKGROUND );
 		sphere = new Sphere();
 	}
 	
@@ -98,6 +101,7 @@ class AssetManager extends AAssetManager
 			case OVERLAY_PAUSE_OVER : l_bitmap.bitmapData = new PauseOver();
 			case OVERLAY_UNPAUSE_UP : l_bitmap.bitmapData = new UnpauseUp();
 			case OVERLAY_UNPAUSE_OVER : l_bitmap.bitmapData = new UnpauseOver();
+			case BACKGROUND : l_bitmap.bitmapData = new Background();
 		}
 		return new View( _kernel, l_sprite );
 	}
@@ -117,5 +121,6 @@ enum EAsset
 	OVERLAY_PAUSE_OVER;
 	OVERLAY_UNPAUSE_UP;
 	OVERLAY_UNPAUSE_OVER;
+	BACKGROUND;	
 }
 

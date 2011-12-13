@@ -28,16 +28,19 @@
  */
 
 package demo.scenes;
-import assets.Background;
-import awe6.extras.gui.Image;
+import awe6.core.Scene;
 import awe6.extras.gui.Text;
-import awe6.Types;
+import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EScene;
+import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IKernel;
+import demo.AssetManager;
 import demo.Session;
-import flash.display.BitmapData;
 
 class AScene extends Scene
 {
 	private var _session:Session;
+	private var _assetManager:AssetManager;
 	private var _title:String;
 	private var _titleText:Text;
 	private var _isMusic:Bool;
@@ -45,6 +48,7 @@ class AScene extends Scene
 	public function new( kernel:IKernel, type:EScene, ?isPauseable:Bool = false, ?isMutable:Bool = true, ?isSessionSavedOnNext:Bool = false ) 
 	{
 		_session = cast kernel.session;
+		_assetManager = cast kernel.assets;
 		_title = "?";
 		super( kernel, type, isPauseable, isMutable, isSessionSavedOnNext );
 	}
@@ -52,10 +56,8 @@ class AScene extends Scene
 	override private function _init():Void 
 	{
 		super._init();
+		view.addChild( _assetManager.background, 0 );
 		
-		var l_background:BitmapData;
-		l_background = new Background();
-		addEntity( new Image( _kernel, l_background ), true, 0 );
 		var l_sceneType:String = _tools.toCamelCase( Std.string( type ) );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
 		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );

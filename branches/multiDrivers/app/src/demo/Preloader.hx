@@ -28,11 +28,12 @@
  */
 
 package demo;
-import assets.PreloaderMovieClip;
+// import assets.PreloaderMovieClip;
 import awe6.Types;
 
 class Preloader extends APreloader
 {
+/*	
 	private var _preloaderMovieClip:PreloaderMovieClip;
 
 	override private function _init():Void
@@ -51,5 +52,6 @@ class Preloader extends APreloader
 		}
 		super._updater( deltaTime );
 	}	
+	*/
 }
 

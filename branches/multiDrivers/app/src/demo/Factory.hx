@@ -28,14 +28,22 @@
  */
 
 package demo;
-import awe6.core.drivers.flash.View;
-import awe6.Types;
+import awe6.core.AFactory;
+import awe6.core.Overlay;
+import awe6.core.TextStyle;
+import awe6.interfaces.EOverlayButton;
+import awe6.interfaces.EScene;
+import awe6.interfaces.ETextAlign;
+import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IAssetManagerProcess;
+import awe6.interfaces.IOverlayProcess;
+import awe6.interfaces.IPreloader;
+import awe6.interfaces.IScene;
+import awe6.interfaces.ISession;
+import awe6.interfaces.ITextStyle;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
-import flash.display.BitmapData;
-import flash.display.Sprite;
-import flash.filters.GlowFilter;
 import haxe.Resource;
 
 class Factory extends AFactory
@@ -117,7 +125,11 @@ class Factory extends AFactory
 			type = ETextStyle.BODY;
 		}
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
-		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
+		#if flash
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
+		#else
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ ] );
+		#end
 		l_result.size = switch ( type )
 		{
 			case ETextStyle.HEADLINE : 24;

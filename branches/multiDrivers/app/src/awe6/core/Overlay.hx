@@ -35,4 +35,12 @@ package awe6.core;
  * <p>Overlay includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
+#if cpp
+typedef Overlay = awe6.core.drivers.cpp.Overlay;
+#elseif flash
+typedef Overlay = awe6.core.drivers.flash.Overlay;
+#elseif js
+typedef Overlay = awe6.core.drivers.js.Overlay;
+#else
 typedef Overlay = awe6.core.drivers.AOverlay;
+#end
