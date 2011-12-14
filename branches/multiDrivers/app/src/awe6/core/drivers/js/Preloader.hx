@@ -28,58 +28,12 @@
  */
 
 package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
-import js.Dom;
-import js.Lib;
 
 /**
- * This InputKeyboard class provides js target overrides.
+ * This Preloader class provides js target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class Preloader extends awe6.core.drivers.APreloader
 {
-	private var _document:Document;
-	
-	override private function _nativeInit():Void 
-	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
-		untyped _document.addEventListener( "blur", _reset );
-	}
-	
-	override private function _updater( timeInterval = 0 ):Void 
-	{
-//		_stage.focus();
-		super._updater( timeInterval );
-	}
-	
-	override private function _disposer():Void 
-	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
-		untyped _document.removeEventListener( "blur", _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:Dynamic ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
-		return;
-	}
-	
-	private function _onKeyUp( event:Dynamic ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
-		return;
-	}	
-}
 
+}

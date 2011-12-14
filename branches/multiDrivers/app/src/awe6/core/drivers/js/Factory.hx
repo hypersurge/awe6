@@ -28,58 +28,54 @@
  */
 
 package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
-import js.Dom;
-import js.Lib;
+import awe6.core.Context;
+import awe6.core.drivers.AFactory;
 
 /**
- * This InputKeyboard class provides js target overrides.
+ * This Factory class provides js target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class Factory extends AFactory
 {
-	private var _document:Document;
+	private var _sprite:Context;
 	
-	override private function _nativeInit():Void 
+	public function new( sprite:Context, isDebug:Bool = true, ?config:String )
 	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
-		untyped _document.addEventListener( "blur", _reset );
+		_sprite = new Context();
+		sprite.addChild( _sprite );
+		super( isDebug, config );
 	}
 	
-	override private function _updater( timeInterval = 0 ):Void 
+	override private function _nativeInit():Void
 	{
-//		_stage.focus();
-		super._updater( timeInterval );
-	}
-	
-	override private function _disposer():Void 
-	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
-		untyped _document.removeEventListener( "blur", _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:Dynamic ):Void
-	{
-		if ( !isActive )
+		_init();
+		if ( _isConfigRequired )
 		{
-			return;
+			_parseXml( _configUrl );
 		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
-		return;
-	}
-	
-	private function _onKeyUp( event:Dynamic ):Void
-	{
-		if ( !isActive )
+		else
 		{
-			return;
+			_launchKernel();		
 		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
-		return;
 	}	
+	
+	private function _parseXml( data:String ):Void
+	{
+		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_launchKernel();
+	}	
+	
+	override private function _nativeLaunchKernel():Kernel
+	{
+		return new Kernel( this, _sprite );
+	}
+	
+	override private function _nativeDisposer():Void
+	{
+		if ( _sprite.parent != null )
+		{
+			_sprite.parent.removeChild( _sprite );
+		}
+	}
+	
 }
-

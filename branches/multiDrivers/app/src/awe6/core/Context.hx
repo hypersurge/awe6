@@ -38,4 +38,5 @@ package awe6.core;
 #if flash
 typedef Context = flash.display.Sprite;
 #elseif js
+typedef Context = flash.display.Sprite;
 #end

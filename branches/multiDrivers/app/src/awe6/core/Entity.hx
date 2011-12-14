@@ -110,6 +110,10 @@ class Entity extends Process, implements IEntity
 		{
 			return;
 		}
+		if ( entity == null )
+		{
+			return;
+		}
 		if ( agenda == null )
 		{
 			agenda = EAgenda.ALWAYS;

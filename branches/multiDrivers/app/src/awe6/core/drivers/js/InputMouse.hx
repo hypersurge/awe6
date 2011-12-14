@@ -39,7 +39,7 @@ import js.Lib;
 class InputMouse extends AInputMouse
 {
 	private var _document:Document;
-	private var _isWithinBounds:Bool;
+	private var __isWithinBounds:Bool;
 	
 	override private function _nativeInit():Void 
 	{
@@ -48,7 +48,7 @@ class InputMouse extends AInputMouse
 		untyped _document.addEventListener( "mouseup", _onMouseUp );
 		untyped _document.addEventListener( "mousemove", _onMouseMove );
 		untyped _document.addEventListener( "blur", _reset );
-		_isWithinBounds = false;
+		__isWithinBounds = false;
 	}
 	
 	override private function _disposer():Void 
@@ -62,13 +62,13 @@ class InputMouse extends AInputMouse
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
-		_document.focus();
+//		_document.focus();
 		super._updater( deltaTime );
 	}
 	
 	override private function _isWithinBounds():Bool
 	{
-		return _isWithinBounds;
+		return __isWithinBounds;
 	}
 	
 	override private function _getPosition():Void
@@ -105,7 +105,7 @@ class InputMouse extends AInputMouse
 		}
 		x = event.clientX;
 		y = event.clientY;
-		_isWithinBounds = ( x >= 0 ) && ( x <= _kernel.factory.width ) && ( y >= 0 ) && ( y <= _kernel.factory.height );
+		__isWithinBounds = ( x >= 0 ) && ( x <= _kernel.factory.width ) && ( y >= 0 ) && ( y <= _kernel.factory.height );
 		_getPosition();
 	}
 }

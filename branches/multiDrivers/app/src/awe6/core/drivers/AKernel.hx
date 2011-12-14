@@ -51,6 +51,7 @@ import awe6.interfaces.IProcess;
 import awe6.interfaces.ISceneManager;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITools;
+import haxe.Timer;
 
 /**
  * The AKernel class provides a minimalist implementation of the IKernel interface.
@@ -178,7 +179,7 @@ class AKernel extends Process, implements IKernel
 		}
 		overlay = _overlayProcess = factory.createOverlay();
 		_addProcess( _overlayProcess, false );
-		_view.addChild( _overlayProcess.view );
+		_view.addChild( _overlayProcess.view, _tools.BIG_NUMBER - 1 );
 		if ( isDebug )
 		{
 			_addProcess( _profiler = new Profiler( this ) );
@@ -353,12 +354,10 @@ private class _HelperFramerate
 	public var framerate( default, null ):Float;
 	public var timeInterval( default, null ):Int;
 	private var _timeAtLastUpdate:Int;
-	private var _timer:Void->Int;
 	
 	public function new( framerate:Float )
 	{
 		this.framerate = framerate;
-		_timer = flash.Lib.getTimer;
 		_timeAtLastUpdate = _timer();
 	}
 	
@@ -367,5 +366,10 @@ private class _HelperFramerate
 		timeInterval = _timer() - _timeAtLastUpdate;
 		framerate = 1000 / timeInterval;
 		_timeAtLastUpdate = _timer();
-	}	
+	}
+	
+	private inline function _timer():Int
+	{
+		return Std.int( Timer.stamp() * 1000 );
+	}
 }

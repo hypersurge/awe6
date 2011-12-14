@@ -28,58 +28,64 @@
  */
 
 package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
-import js.Dom;
-import js.Lib;
+import awe6.core.Context;
+import awe6.core.drivers.AView;
 
 /**
- * This InputKeyboard class provides js target overrides.
+ * This View class provides js target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class View extends AView
 {
-	private var _document:Document;
+	private var _container:Context;
 	
-	override private function _nativeInit():Void 
+	override private function _init():Void 
 	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
-		untyped _document.addEventListener( "blur", _reset );
-	}
-	
-	override private function _updater( timeInterval = 0 ):Void 
-	{
-//		_stage.focus();
-		super._updater( timeInterval );
-	}
-	
-	override private function _disposer():Void 
-	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
-		untyped _document.removeEventListener( "blur", _reset );
-		super._disposer();
-	}
-	
-	private function _onKeyDown( event:Dynamic ):Void
-	{
-		if ( !isActive )
+		if ( context == null )
 		{
-			return;
+			context = new Context(); 
 		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
-		return;
+		super._init();
 	}
 	
-	private function _onKeyUp( event:Dynamic ):Void
+	override private function _nativeDisposer():Void 
 	{
-		if ( !isActive )
+		if ( context.parent != null )
 		{
-			return;
+			context.parent.removeChild( context );
 		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
-		return;
-	}	
+	}
+	
+	override private function _nativeDraw():Void
+	{
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
+		_container = new Context();
+		_container.mouseEnabled = false;
+		context.addChild( _container );
+		var l_children:Array<View> = cast _children;
+		for ( i in l_children )
+		{
+			if ( i.isVisible )
+			{
+				_container.addChild( i.context );
+			}
+		}
+	}
+	
+	override private function __set_x( value:Float ):Float
+	{
+		context.x = value;
+		return super.__set_x( value );
+	}
+	
+	override private function __set_y( value:Float ):Float
+	{
+		context.y = value;
+		return super.__set_y( value );
+	}
+	
 }
 
