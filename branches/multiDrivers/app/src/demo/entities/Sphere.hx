@@ -61,7 +61,7 @@ class Sphere extends Entity
 		_width2 = _width / 2;
 		_height2 = _height / 2;
 		addEntity( _bouncer = new Bouncer( _kernel, _width, _height ) );
-		var l_source:BitmapData = _assetManager.sphere.clone();
+		var l_source:BitmapData = _assetManager.sphere;
 		var l_bitmapData:BitmapData = new BitmapData( Std.int( _width ), Std.int( _height * 1.5 ), true, 0x00 );
 		var l_matrix:Matrix = new Matrix();
 		l_matrix.scale( l_scale, l_scale );

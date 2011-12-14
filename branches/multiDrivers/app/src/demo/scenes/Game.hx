@@ -31,6 +31,7 @@ package demo.scenes;
 import awe6.extras.gui.Image;
 import awe6.extras.gui.Text;
 import awe6.Types;
+import demo.AssetManager;
 import demo.entities.Bouncer;
 import demo.Session;
 import demo.entities.Sphere;
@@ -39,6 +40,7 @@ class Game extends Scene
 {
 	public static inline var TIME_LIMIT = 30;
 	private var _session:Session;
+	private var _assetManager:AssetManager;
 	private var _timer:Text;
 	private var _score:Int;
 	
@@ -47,14 +49,15 @@ class Game extends Scene
 	public function new( kernel:IKernel, type:EScene ) 
 	{
 		_session = cast kernel.session;
+		_assetManager = cast kernel.assets;
 		super( kernel, type, true, true, true );
 	}
 	
 	override private function _init():Void 
 	{
 		super._init();
+		view.addChild( _assetManager.background, 0 );
 		_session.isWin = false;
-		addEntity( new Image( _kernel, _kernel.assets.getAsset( "Background" ) ), true, 0 );
 		_timer = new Text( _kernel, _kernel.factory.width, 50, "", _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		_timer.y = 70;
 		addEntity( _timer, true, 1000 );

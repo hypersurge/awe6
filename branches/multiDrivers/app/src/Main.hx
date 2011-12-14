@@ -32,17 +32,21 @@ import demo.Factory;
 import flash.Lib;
 import haxe.Log;
 import haxe.PosInfos;
+import haxe.Resource;
+#if flash
 import org.flashdevelop.utils.FlashConnect;
+#end
 
 class Main
 {
-	static function main() 
+	public static function main() 
 	{
 		#if debug
 		var l_isDebug:Bool = true;
 		#else
 		var l_isDebug:Bool = false;
 		#end
+		#if flash
 		if ( l_isDebug )
 		{
 			FlashConnect.redirect();
@@ -51,6 +55,7 @@ class Main
 		{
 			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
 		}
-		var l_factory = new Factory( Lib.current, l_isDebug );
+		#end
+		var l_factory = new Factory( Lib.current, l_isDebug, Resource.getString( "config" ) );
 	}	
 }

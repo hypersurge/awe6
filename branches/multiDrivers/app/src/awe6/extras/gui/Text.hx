@@ -98,8 +98,8 @@ class Text extends GuiEntity
 			_textFormat.color = textStyle.color;
 			_textFormat.font = textStyle.font;
 			_textFormat.size = textStyle.size;
-			_textFormat.letterSpacing = textStyle.spacingHorizontal;
-			_textFormat.leading = textStyle.spacingVertical;
+			_textFormat.letterSpacing = Std.int( textStyle.spacingHorizontal );
+			_textFormat.leading = Std.int( textStyle.spacingVertical );
 			_textFormat.italic = textStyle.isItalic;
 			_textFormat.bold = textStyle.isBold;
 			
@@ -107,7 +107,7 @@ class Text extends GuiEntity
 			_textField.width = width;
 			_textField.height = height;
 			_textField.selectable = _isInput;
-			_textField.thickness = textStyle.thickness * 200;
+//			_textField.thickness = textStyle.thickness * 200;
 			_textField.antiAliasType = AntiAliasType.ADVANCED;
 			_textField.embedFonts = false;
 			for ( i in Font.enumerateFonts() )
