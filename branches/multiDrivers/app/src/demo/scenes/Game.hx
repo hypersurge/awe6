@@ -58,7 +58,7 @@ class Game extends Scene
 		super._init();
 		view.addChild( _assetManager.background, 0 );
 		_session.isWin = false;
-		_timer = new Text( _kernel, _kernel.factory.width, 50, "", _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
+		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		_timer.y = 70;
 		addEntity( _timer, true, 1000 );
 		

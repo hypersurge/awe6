@@ -125,11 +125,7 @@ class Factory extends AFactory
 			type = ETextStyle.BODY;
 		}
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
-		#if flash
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
-		#else
-		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ ] );
-		#end
 		l_result.size = switch ( type )
 		{
 			case ETextStyle.HEADLINE : 24;

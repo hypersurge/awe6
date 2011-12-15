@@ -63,12 +63,18 @@ class Text extends GuiEntity
 	{
 		super._init();
 		_textField = new TextField();
+		_textField.multiline = _isMultiline;
+		_textField.wordWrap = _isMultiline;
+		#if js
+		_textField.wordWrap = true;
+		#end
+		_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
 		_textFormat = new TextFormat();
+		_draw();
 		_sprite.addChild( _textField );
 		_sprite.cacheAsBitmap = true;
 		_sprite.mouseEnabled = _isInput;
 		_sprite.mouseChildren = _isInput;
-		_draw();
 		_isDirty = false;
 		_prevTextStyle = textStyle.toString();
 	}
@@ -86,6 +92,8 @@ class Text extends GuiEntity
 		
 	private function _draw():Void
 	{
+		_textField.width = width;
+		_textField.height = height;
 		if ( _prevTextStyle != textStyle.toString() )
 		{
 			_textFormat.align = switch ( textStyle.align )
@@ -94,7 +102,7 @@ class Text extends GuiEntity
 				case CENTER : TextFormatAlign.CENTER;
 				case RIGHT : TextFormatAlign.RIGHT;
 				case JUSTIFY : TextFormatAlign.JUSTIFY;
-			}		
+			}
 			_textFormat.color = textStyle.color;
 			_textFormat.font = textStyle.font;
 			_textFormat.size = textStyle.size;
@@ -103,11 +111,10 @@ class Text extends GuiEntity
 			_textFormat.italic = textStyle.isItalic;
 			_textFormat.bold = textStyle.isBold;
 			
-			_textField.defaultTextFormat = _textFormat;
-			_textField.width = width;
-			_textField.height = height;
 			_textField.selectable = _isInput;
-//			_textField.thickness = textStyle.thickness * 200;
+			#if flash
+			_textField.thickness = textStyle.thickness * 200;
+			#end
 			_textField.antiAliasType = AntiAliasType.ADVANCED;
 			_textField.embedFonts = false;
 			for ( i in Font.enumerateFonts() )
@@ -117,13 +124,12 @@ class Text extends GuiEntity
 					_textField.embedFonts = true;					
 					break;
 				}				
-			}			
+			}
 			_textField.filters = textStyle.filters;
-			_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
-			_textField.multiline = _isMultiline;
-			_textField.wordWrap = _isMultiline;		
+			_textField.defaultTextFormat = _textFormat;
 			_textField.setTextFormat( _textFormat );
 		}
+//		view.x = view.x;
 		_isDirty = false;
 	}
 	

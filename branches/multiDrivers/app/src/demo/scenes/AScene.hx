@@ -60,8 +60,8 @@ class AScene extends Scene
 		
 		var l_sceneType:String = _tools.toCamelCase( Std.string( type ) );
 		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
-/*		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
-		_titleText.y = 40;*/
+		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
+		_titleText.y = 40;
 		addEntity( _titleText, true, 100 );
 		
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
