@@ -48,4 +48,12 @@ class Intro extends AScene
 		addEntity( l_button, true, 1 );*/
 	}
 	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		if ( _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) )
+		{
+			_kernel.scenes.next();
+		}
+	}
 }

@@ -89,7 +89,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 	override private function _init():Void 
 	{
 		super._init();
-		view.addChild( _borderView );
+		view.addChild( _borderView, 4 );
 		_wasMute = _kernel.audio.isMute;
 		
 		_nativeInit();

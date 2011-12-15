@@ -130,7 +130,7 @@ class AKernel extends Process, implements IKernel
 		inputs = _inputManager = new InputManager( _kernel );
 		scenes = _sceneManager = new SceneManager( _kernel );
 		messenger = _messageManager = new MessageManager( _kernel );
-		_view.addChild( _sceneManager.view );
+		_view.addChild( _sceneManager.view, 1 );
 		_addProcess( _assetManagerProcess );
 		_addProcess( _audioManager );
 		_addProcess( _inputManager );
@@ -144,7 +144,7 @@ class AKernel extends Process, implements IKernel
 		session.reset();
 		_preloader = factory.createPreloader();
 		_addProcess( _preloader );
-		_view.addChild( _preloader.view );
+		_view.addChild( _preloader.view, 2 );
 		_addProcess( _view );
 	}
 
@@ -179,7 +179,7 @@ class AKernel extends Process, implements IKernel
 		}
 		overlay = _overlayProcess = factory.createOverlay();
 		_addProcess( _overlayProcess, false );
-		_view.addChild( _overlayProcess.view, _tools.BIG_NUMBER - 1 );
+		_view.addChild( _overlayProcess.view, 3 );
 		if ( isDebug )
 		{
 			_addProcess( _profiler = new Profiler( this ) );

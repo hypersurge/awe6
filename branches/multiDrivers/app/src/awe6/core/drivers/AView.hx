@@ -152,6 +152,10 @@ class AView extends Process, implements IView
 	
 	private function _draw():Void
 	{
+		if ( isDisposed )
+		{
+			return;
+		}
 		_children.sort( _tools.sortByPriority );
 		_nativeDraw();
 		_isDirty = false;

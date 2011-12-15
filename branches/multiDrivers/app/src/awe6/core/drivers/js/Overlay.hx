@@ -53,7 +53,7 @@ class Overlay extends AOverlay
 		_pauseContext.mouseEnabled = false;
 		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
 		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
-		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
+//		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
 		_pauseContext.addChild( l_bitmap );
 		var l_color:Sprite = new Sprite();
 		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
@@ -90,11 +90,11 @@ class Overlay extends AOverlay
 			return;
 		}
 		_pauseSnapshot.fillRect( _pauseSnapshot.rect, 0x00 );
-		try
+/*		try
 		{
 			_pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).context );
 		}
-		catch ( error:Dynamic ) {}
+		catch ( error:Dynamic ) {}*/
 	}
 	
 }

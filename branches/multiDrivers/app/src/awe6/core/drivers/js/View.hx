@@ -78,12 +78,14 @@ class View extends AView
 	override private function __set_x( value:Float ):Float
 	{
 		context.x = value;
+		_isDirty = true;
 		return super.__set_x( value );
 	}
 	
 	override private function __set_y( value:Float ):Float
 	{
 		context.y = value;
+		_isDirty = true;
 		return super.__set_y( value );
 	}
 	

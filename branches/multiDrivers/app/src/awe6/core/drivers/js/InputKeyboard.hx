@@ -29,8 +29,10 @@
 
 package awe6.core.drivers.js;
 import awe6.core.drivers.AInputKeyboard;
-import js.Dom;
-import js.Lib;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.KeyboardEvent;
+import flash.Lib;
 
 /**
  * This InputKeyboard class provides js target overrides.
@@ -38,48 +40,49 @@ import js.Lib;
  */
 class InputKeyboard extends AInputKeyboard
 {
-	private var _document:Document;
+	private var _stage:Stage;
 	
 	override private function _nativeInit():Void 
 	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "keydown", _onKeyDown );
-		untyped _document.addEventListener( "keyup", _onKeyUp );
-		untyped _document.addEventListener( "blur", _reset );
+		_stage = Lib.current.stage;
+		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.addEventListener( Event.DEACTIVATE, _reset );
 	}
 	
 	override private function _updater( timeInterval = 0 ):Void 
 	{
-//		_stage.focus();
+		_stage.focus = _stage;
 		super._updater( timeInterval );
 	}
 	
 	override private function _disposer():Void 
 	{
-		untyped _document.removeEventListener( "keydown", _onKeyDown );
-		untyped _document.removeEventListener( "keyup", _onKeyUp );
-		untyped _document.removeEventListener( "blur", _reset );
+		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.removeEventListener( Event.DEACTIVATE, _reset );
 		super._disposer();
 	}
 	
-	private function _onKeyDown( event:Dynamic ):Void
+	private function _onKeyDown( event:KeyboardEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		_addEvent( event.keyCode, true ); // "keyCode" is JS syntax
+		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
 		return;
 	}
 	
-	private function _onKeyUp( event:Dynamic ):Void
+	private function _onKeyUp( event:KeyboardEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		_addEvent( event.keyCode, false ); // "keyCode" is JS syntax
+		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
 		return;
-	}	
+	}
+	
+	
 }
-

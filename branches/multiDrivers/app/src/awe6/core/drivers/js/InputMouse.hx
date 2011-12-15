@@ -44,19 +44,19 @@ class InputMouse extends AInputMouse
 	override private function _nativeInit():Void 
 	{
 		_document = Lib.document;
-		untyped _document.addEventListener( "mousedown", _onMouseDown );
-		untyped _document.addEventListener( "mouseup", _onMouseUp );
-		untyped _document.addEventListener( "mousemove", _onMouseMove );
-		untyped _document.addEventListener( "blur", _reset );
+		untyped _document.addEventListener( "mousedown", _onMouseDown, true );
+		untyped _document.addEventListener( "mouseup", _onMouseUp, true );
+		untyped _document.addEventListener( "mousemove", _onMouseMove, true );
+		untyped _document.addEventListener( "blur", _reset, true );
 		__isWithinBounds = false;
 	}
 	
 	override private function _disposer():Void 
 	{
-		untyped _document.removeEventListener( "mousedown", _onMouseDown );
-		untyped _document.removeEventListener( "mouseup", _onMouseUp );
-		untyped _document.removeEventListener( "mousemove", _onMouseMove );
-		untyped _document.removeEventListener( "blur", _reset );
+		untyped _document.removeEventListener( "mousedown", _onMouseDown, true );
+		untyped _document.removeEventListener( "mouseup", _onMouseUp, true );
+		untyped _document.removeEventListener( "mousemove", _onMouseMove, true );
+		untyped _document.removeEventListener( "blur", _reset, true );
 		super._disposer();		
 	}	
 	
