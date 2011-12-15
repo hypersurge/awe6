@@ -58,6 +58,10 @@ class View extends AView
 	
 	override private function _nativeDraw():Void
 	{
+		if ( parent != null )
+		{
+			parent.x = parent.x;
+		}
 		if ( _container != null && _container.parent != null )
 		{
 			_container.parent.removeChild( _container );

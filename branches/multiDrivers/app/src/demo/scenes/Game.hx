@@ -56,7 +56,7 @@ class Game extends Scene
 	override private function _init():Void 
 	{
 		super._init();
-//		view.addChild( _assetManager.background, 0 );
+		view.addChild( _assetManager.background, 0 );
 		_session.isWin = false;
 		_timer = new Text( _kernel, _kernel.factory.width, 50, "", _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		_timer.y = 70;
