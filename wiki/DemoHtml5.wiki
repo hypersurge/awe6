@@ -1,0 +1,3 @@
+#summary Multi Device Online Demo: HTML5
+
+<p align="center"><wiki:gadget url="https://awe6.googlecode.com/svn/trunk/docs/awe6DemoHtml5Gadget.xml" border="0" width="600" height="400" /></p>

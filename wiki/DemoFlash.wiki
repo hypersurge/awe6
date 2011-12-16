@@ -1,0 +1,3 @@
+#summary Multi Device Online Demo: Flash
+
+<p align="center"><wiki:gadget url="https://awe6.googlecode.com/svn/trunk/docs/awe6DemoFlashGadget.xml" border="0" width="600" height="400" /></p>
