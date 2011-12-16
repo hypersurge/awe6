@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+	<ModulePrefs title="awe6DemoHtml5" /> 
+	<Content type="html">
+		<![CDATA[
+			<div id="haxe:trace" style="position: absolute; z-index: 2147483647; display: none;"></div>
+			<div id="haxe:jeash" style="background-color: #ffffff; width: 600px; height: 400px" data-framerate="30"></div>
+			<script type="text/javascript" src="https://awe6.googlecode.com/svn/trunk/docs/demos/html5/awe6.js"></script>
+		]]>
+	</Content> 
+</Module>
