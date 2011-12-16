@@ -36,6 +36,7 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import nme.Assets;
+import nme.text.Font;
 
 class AssetManager extends AAssetManager
 {
@@ -51,7 +52,10 @@ class AssetManager extends AAssetManager
 	public var unpauseUp( default, null ):IView;
 	public var unpauseOver( default, null ):IView;
 	public var background( default, null ):IView;
+	public var buttonUp( default, null ):BitmapData;
+	public var buttonOver( default, null ):BitmapData;
 	public var sphere( default, null ):BitmapData;
+	public var font( default, null ):Font;
 	
 	override private function _init():Void
 	{
@@ -68,7 +72,10 @@ class AssetManager extends AAssetManager
 		unpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		unpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		background = _createView( BACKGROUND );
+		buttonUp = Assets.getBitmapData( "assets/ButtonUp.png" );
+		buttonOver = Assets.getBitmapData( "assets/ButtonOver.png" );
 		sphere = Assets.getBitmapData( "assets/Sphere.png" );
+		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 	}
 	
 	private function _createView( type:EAsset ):IView
@@ -110,6 +117,6 @@ enum EAsset
 	OVERLAY_PAUSE_OVER;
 	OVERLAY_UNPAUSE_UP;
 	OVERLAY_UNPAUSE_OVER;
-	BACKGROUND;	
+	BACKGROUND;
 }
 

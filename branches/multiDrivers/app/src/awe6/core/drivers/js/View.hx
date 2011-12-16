@@ -50,9 +50,13 @@ class View extends AView
 	
 	override private function _nativeDisposer():Void 
 	{
-		if ( context.parent != null )
+		if ( ( context != null ) && ( context.parent != null ) )
 		{
-			context.parent.removeChild( context );
+			try
+			{
+				context.parent.removeChild( context );
+			}
+			catch ( error:Dynamic ) {}
 		}
 	}
 	

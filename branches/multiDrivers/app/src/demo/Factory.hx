@@ -103,7 +103,7 @@ class Factory extends AFactory
 	
 	override public function createSession( ?id:String ):ISession
 	{		
-		return new Session( _kernel );
+		return new Session( _kernel, id );
 	}
 	
 	override public function createScene( type:EScene ):IScene
@@ -124,14 +124,15 @@ class Factory extends AFactory
 		{
 			type = ETextStyle.BODY;
 		}
-		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
+//		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
+		var l_fontName:String = _assetManager.font.fontName;
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( type )
 		{
 			case ETextStyle.HEADLINE : 24;
 			case ETextStyle.OVERSIZED : 72;
 			case ETextStyle.SUBHEAD : 18;
-			case ETextStyle.BUTTON : 10;
+			case ETextStyle.BUTTON : 12;
 			case ETextStyle.SMALLPRINT : 6;
 			default : 12;
 		}

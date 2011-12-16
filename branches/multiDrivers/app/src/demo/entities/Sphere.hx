@@ -66,7 +66,6 @@ class Sphere extends Entity
 		var l_matrix:Matrix = new Matrix();
 		l_matrix.scale( l_scale, l_scale );
 		l_bitmapData.draw( l_source, l_matrix, true );
-		l_source.dispose();
 		var l_sphere:Bitmap = new Bitmap( l_bitmapData );
 		l_sphere.smoothing = true;
 		l_sphere.x = -_width2;

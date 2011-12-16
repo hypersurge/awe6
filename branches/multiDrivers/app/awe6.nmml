@@ -12,7 +12,7 @@
 	
 	<haxelib name="nme" />
 	
-	<assets path="assets\managed" rename="assets" include="*" exclude="_exclude" />
+	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude" />
 	
 	<ndll name="std" />
 	<ndll name="regexp" />

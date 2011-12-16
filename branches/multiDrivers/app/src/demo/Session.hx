@@ -28,7 +28,7 @@
  */
 
 package demo;
-import awe6.Types;
+import awe6.core.ASession;
 
 class Session extends ASession
 {

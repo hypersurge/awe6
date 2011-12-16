@@ -28,57 +28,68 @@
  */
 
 package demo.gui;
-import awe6.extras.gui.GuiEntity;
-import awe6.extras.gui.Shine;
+import awe6.core.BasicButton;
+import awe6.core.Context;
+import awe6.core.View;
 import awe6.extras.gui.Text;
-import awe6.Types;
+import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EKey;
+import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IKernel;
+import awe6.interfaces.IView;
+import demo.AssetManager;
 import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Sprite;
 
-class Button extends awe6.extras.gui.Button
+class Button extends BasicButton
 {
-	private var _shine:Shine;
-	private var _isShineEnabled:Bool;
+	public var label:String;
+	private var _assetManager:AssetManager;
+	private var _marginWidth:Int;
+	private var _marginHeight:Int;
+	private var _upView:IView;
+	private var _overView:IView;
+	private var _upContext:Context;
+	private var _overContext:Context;
 
-	public function new( kernel:IKernel, ?key:EKey, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void, ?label:String, ?isShineEnabled:Bool = false )
+	public function new( kernel:IKernel, ?key:EKey, ?x:Float = 0, ?y:Float = 0, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void, ?label:String )
 	{
-		_isShineEnabled = isShineEnabled;
-		super( kernel, key, onClick, onRollOver, onRollOut, label, 160, 40, 20, 12 );
+		_assetManager = cast kernel.assets;
+		this.label = label;
+		_upContext = new Context();
+		_overContext = new Context();
+		_upView = new View( kernel, _upContext );
+		_overView = new View( kernel, _overContext );
+		super( kernel, _upView, _overView, 160, 40, x, y, key, onClick, onRollOver, onRollOut );
 	}
 	
 	override private function _init():Void
 	{
 		super._init();
-		if ( _isShineEnabled )
-		{
-			_shine = new Shine( _kernel, width, height, _kernel.assets.getAsset( "ButtonShine" ) );
-			addEntity( _shine, true, 1 );
-		}
+		_marginWidth = 10;
+		_marginHeight = 12;
+		_upContext.addChild( _createButtonState( false ) );
+		_overContext.addChild( _createButtonState( true ) );
 	}
 	
-	override private function _createButtonState( ?isOver:Bool = false ):Sprite
+	private function _createButtonState( ?isOver:Bool = false ):Context
 	{
-		var l_result:Sprite = new Sprite();
-		var l_bitmapData:BitmapData;
-		l_bitmapData = isOver ? cast _kernel.assets.getAsset( "ButtonOver" ) : cast _kernel.assets.getAsset( "ButtonUp" );
-		l_result.addChild( new Bitmap( l_bitmapData ) );		
+		var l_result:Context = new Context();
+		l_result.addChild( new Bitmap( isOver ? _assetManager.buttonOver : _assetManager.buttonUp ) );		
 		var l_text:Text = new Text( _kernel, width - ( 2 * _marginWidth ), height - ( 2 * _marginHeight ), label, _kernel.factory.createTextStyle( ETextStyle.BUTTON ) );
 		l_text.setPosition( _marginWidth, _marginHeight );
-		l_result.addChild( cast( l_text, GuiEntity)._sprite ); // safe ancestry cast
+		l_result.addChild( untyped l_text._sprite ); // safe ancestry cast
 		return l_result;
 	}
 	
 	override public function onClick():Void
 	{
-		super.onClick();
 		_kernel.audio.start( "ButtonDown", EAudioChannel.INTERFACE );
+		super.onClick();
 	}
 	
 	override public function onRollOver():Void
 	{
-		super.onRollOver();
 		_kernel.audio.start( "ButtonOver", EAudioChannel.INTERFACE );
+		super.onRollOver();
 	}
-	
 }

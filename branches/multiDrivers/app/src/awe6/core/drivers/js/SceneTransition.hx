@@ -28,12 +28,19 @@
  */
 
 package awe6.core.drivers.js;
+import awe6.core.drivers.ASceneTransition;
 
 /**
  * This SceneTransition class provides js target overrides.
  * @author	Robert Fell
  */
-class SceneTransition extends awe6.core.drivers.ASceneTransition
+class SceneTransition extends ASceneTransition
 {
+	override private function _init():Void 
+	{
+		super._init();
+		_kernel.overlay.flash( _duration, true );
+	}
+	
 }
 

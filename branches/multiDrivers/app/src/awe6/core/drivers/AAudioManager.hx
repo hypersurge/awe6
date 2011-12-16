@@ -60,6 +60,7 @@ class AAudioManager extends Process, implements IAudioManager
 		{
 			_packageId = _PACKAGE_ID;	
 		}
+		isMute = false;
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void

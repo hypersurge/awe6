@@ -30,30 +30,27 @@
 package demo.scenes;
 import awe6.extras.gui.Text;
 import awe6.Types;
-//import demo.gui.Button;
+import demo.gui.Button;
 
 class Intro extends AScene
 {
 	
 	override private function _init():Void 
 	{
-		super._init();	
+		super._init();
+		_kernel.session = _kernel.factory.createSession( "Basic" );
 		
 		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, _kernel.getConfig( "gui.scenes.intro.instructions" ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		l_result.y = 70;
 		addEntity( l_result, true, 2 );
 		
-/*		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
+		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
-		addEntity( l_button, true, 1 );*/
+		addEntity( l_button, true, 1 );
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
 		super._updater( deltaTime );
-		if ( _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) )
-		{
-			_kernel.scenes.next();
-		}
 	}
 }
