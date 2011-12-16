@@ -28,12 +28,115 @@
  */
 
 package awe6.core.drivers.js;
+import awe6.core.drivers.AAudioManager;
+import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.IKernel;
+import flash.events.Event;
+import flash.media.Sound;
+import flash.media.SoundChannel;
+import nme.Assets;
+//import flash.media.SoundMixer;
+import flash.media.SoundTransform;
 
 /**
  * This AudioManager class provides js target overrides.
  * @author	Robert Fell
  */
-class AudioManager extends awe6.core.drivers.AAudioManager
+class AudioManager extends AAudioManager
 {
+
+	override private function _nativeSoundFactory( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void ):_AHelperSound
+	{
+		return new _HelperSound( _kernel, id, _packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
+	}
+
+	override private function _nativeSetIsMute( ?isMute:Bool ):Void
+	{
+		for ( i in _sounds )
+		{
+			if ( untyped i._soundChannel == null )
+			{
+				continue;
+			}
+			if ( untyped i._soundChannel.jeashAudio == null )
+			{
+				continue;
+			}
+			untyped i._soundChannel.jeashAudio.muted = isMute;
+		}
+	}	
+	
 }
 
+class _HelperSound extends _AHelperSound
+{
+	private var _sound:Sound;
+	private var _soundChannel:SoundChannel;
+	
+	public function new( kernel:IKernel, id:String, packageId:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
+	{
+		// needed else some float signatures misinterpreted as ints ... should replicate and report to mailing list
+		super( kernel, id, packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );	
+	}
+	
+	override private function _nativeInit():Void
+	{
+		_sound = Assets.getSound( "assets/audio/" + id + ".wav" );
+		if ( _sound == null )
+		{
+			return dispose();
+		}
+		_soundChannel = _sound.play( _startTime, _loops );
+		if ( _soundChannel == null )
+		{
+			return dispose(); // perhaps sounds are flooded?
+		}
+		untyped _soundChannel.jeashAudio.muted = _kernel.audio.isMute;
+		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
+		_nativeTransform();
+		return;
+	}
+	
+	override private function _nativeTransform( ?asRelative:Bool = false ):Void
+	{
+		if ( _soundChannel == null )
+		{
+			return;
+		}
+		if ( asRelative )
+		{
+			_volume *= _soundChannel.soundTransform.volume;
+			_pan *= _soundChannel.soundTransform.pan;
+		}
+		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
+		_soundChannel.soundTransform = soundTransform;
+		untyped _soundChannel.jeashAudio.volume = _volume;
+	}
+
+	override private function _nativeStop():Void
+	{
+		if ( _soundChannel == null )
+		{
+			return;
+		}
+		_soundChannel.stop();
+	}
+	
+	private function _onSoundComplete( event:Event ):Void
+	{
+		if ( _onCompleteCallback != null )
+		{
+			Reflect.callMethod( this, _onCompleteCallback, [] );
+		}
+		dispose();
+	}
+	
+	override private function _nativeDisposer():Void
+	{
+		if ( _soundChannel != null )
+		{
+			stop();
+			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
+		}
+	}
+}

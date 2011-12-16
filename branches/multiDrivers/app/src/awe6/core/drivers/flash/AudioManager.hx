@@ -38,8 +38,7 @@ import flash.media.SoundMixer;
 import flash.media.SoundTransform;
 
 /**
- * The AudioManager class provides a minimalist implementation of the IAudioManager interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
+ * This AudioManager class provides js target overrides.
  * @author	Robert Fell
  */
 class AudioManager extends AAudioManager
