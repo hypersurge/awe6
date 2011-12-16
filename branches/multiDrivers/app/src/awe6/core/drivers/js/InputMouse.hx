@@ -29,8 +29,13 @@
 
 package awe6.core.drivers.js;
 import awe6.core.drivers.AInputMouse;
-import js.Dom;
-import js.Lib;
+import awe6.interfaces.EMouseCursor;
+import flash.display.Loader;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
+import flash.ui.Mouse;
 
 /**
  * This InputMouse class provides js target overrides.
@@ -38,48 +43,47 @@ import js.Lib;
  */
 class InputMouse extends AInputMouse
 {
-	private var _document:Document;
-	private var __isWithinBounds:Bool;
+	private var _stage:Stage;
+	private var _mouseClicks:Loader;
 	
 	override private function _nativeInit():Void 
 	{
-		_document = Lib.document;
-		untyped _document.addEventListener( "mousedown", _onMouseDown, true );
-		untyped _document.addEventListener( "mouseup", _onMouseUp, true );
-		untyped _document.addEventListener( "mousemove", _onMouseMove, true );
-		untyped _document.addEventListener( "blur", _reset, true );
-		__isWithinBounds = false;
+		_stage = Lib.current.stage;
+		_stage.addEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );
+		_stage.addEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
+		_stage.addEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
+		_stage.addEventListener( Event.DEACTIVATE, _reset );
 	}
 	
 	override private function _disposer():Void 
 	{
-		untyped _document.removeEventListener( "mousedown", _onMouseDown, true );
-		untyped _document.removeEventListener( "mouseup", _onMouseUp, true );
-		untyped _document.removeEventListener( "mousemove", _onMouseMove, true );
-		untyped _document.removeEventListener( "blur", _reset, true );
+		_stage.removeEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );
+		_stage.removeEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
+		_stage.removeEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
+		_stage.removeEventListener( Event.DEACTIVATE, _reset );
 		super._disposer();		
 	}	
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
-//		_document.focus();
+		_stage.focus = _stage;
 		super._updater( deltaTime );
 	}
 	
 	override private function _isWithinBounds():Bool
 	{
-		return __isWithinBounds;
+		return ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
 	}
 	
 	override private function _getPosition():Void
 	{
-		var l_x:Int = Std.int( _tools.limit( x, 0, _kernel.factory.width ) );
-		var l_y:Int = Std.int( _tools.limit( y, 0, _kernel.factory.height ) );
+		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
+		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
 		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
 		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
 	}
 	
-	private function _onMouseDown( ?event:Dynamic ):Void
+	private function _onMouseDown( event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
@@ -88,7 +92,7 @@ class InputMouse extends AInputMouse
 		_buffer.push( true );
 	}
 	
-	private function _onMouseUp( ?event:Dynamic ):Void
+	private function _onMouseUp( event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
@@ -97,15 +101,34 @@ class InputMouse extends AInputMouse
 		_buffer.push( false );
 	}
 	
-	private function _onMouseMove( ?event:Dynamic ):Void
+	private function _onMouseWheel( event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		x = event.clientX;
-		y = event.clientY;
-		__isWithinBounds = ( x >= 0 ) && ( x <= _kernel.factory.width ) && ( y >= 0 ) && ( y <= _kernel.factory.height );
-		_getPosition();
+		scroll += event.delta;
+		trace( scroll );
 	}
+	
+	override private function __set_isVisible( value:Bool ):Bool
+	{
+		// doesn't work in js
+		value ? Mouse.show() : Mouse.hide();
+		return super.__set_isVisible( value );
+	}
+	
+	override private function __set_cursorType( value:EMouseCursor ):EMouseCursor
+	{
+		switch( value )
+		{
+			case ARROW : untyped jeash.Lib.jeashSetCursor( false );
+			case BUTTON : untyped jeash.Lib.jeashSetCursor( true );
+			case HAND : untyped jeash.Lib.jeashSetCursor( true );
+			case IBEAM : untyped jeash.Lib.jeashSetCursor( false );
+			case SUB_TYPE( value ) : // Have a register cursor approach here;
+		}
+		return super.__set_cursorType( value );
+	}
+
 }

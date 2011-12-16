@@ -48,7 +48,8 @@ class AudioManager extends AAudioManager
 	override private function _init():Void
 	{
 		super._init();
-		_extension = untyped jeash.media.Sound.jeashCanPlayType( "aac" ) ? ".aac" : ".ogg";
+//		_extension = untyped jeash.media.Sound.jeashCanPlayType( "aac" ) ? ".aac" : ".ogg"; // aac not working in IE9?
+		_extension = untyped jeash.media.Sound.jeashCanPlayType( "mp3" ) ? ".mp3" : ".ogg";
 		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
 	}
 
