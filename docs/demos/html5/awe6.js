@@ -1193,6 +1193,15 @@ jeash.display.InterpolationMethod.RGB.__enum__ = jeash.display.InterpolationMeth
 jeash.display.InterpolationMethod.LINEAR_RGB = ["LINEAR_RGB",1];
 jeash.display.InterpolationMethod.LINEAR_RGB.toString = $estr;
 jeash.display.InterpolationMethod.LINEAR_RGB.__enum__ = jeash.display.InterpolationMethod;
+if(!jeash.ui) jeash.ui = {}
+jeash.ui.Mouse = function(p) {
+}
+jeash.ui.Mouse.__name__ = ["jeash","ui","Mouse"];
+jeash.ui.Mouse.hide = function() {
+}
+jeash.ui.Mouse.show = function() {
+}
+jeash.ui.Mouse.prototype.__class__ = jeash.ui.Mouse;
 if(typeof js=='undefined') js = {}
 js.Cookie = function() { }
 js.Cookie.__name__ = ["js","Cookie"];
@@ -3032,27 +3041,59 @@ nme.installer.Assets.getFont = function(id) {
 }
 nme.installer.Assets.getSound = function(id) {
 	switch(id) {
-	case "assets/audio/ButtonDown.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonDown.wav"));
-	case "assets/audio/ButtonOver.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonOver.wav"));
-	case "assets/audio/MusicGame.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicGame.wav"));
-	case "assets/audio/MusicMenu.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicMenu.wav"));
-	case "assets/audio/Sfx1.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx1.wav"));
-	case "assets/audio/Sfx2.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx2.wav"));
-	case "assets/audio/Sfx3.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx3.wav"));
-	case "assets/audio/Sfx4.wav":
-		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx4.wav"));
+	case "assets/audio/ButtonDown.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonDown.mp3"));
+	case "assets/audio/ButtonDown.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonDown.ogg"));
+	case "assets/audio/ButtonOver.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonOver.mp3"));
+	case "assets/audio/ButtonOver.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/ButtonOver.ogg"));
+	case "assets/audio/MusicGame.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicGame.mp3"));
+	case "assets/audio/MusicGame.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicGame.ogg"));
+	case "assets/audio/MusicMenu.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicMenu.mp3"));
+	case "assets/audio/MusicMenu.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/MusicMenu.ogg"));
+	case "assets/audio/Sfx1.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx1.mp3"));
+	case "assets/audio/Sfx1.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx1.ogg"));
+	case "assets/audio/Sfx2.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx2.mp3"));
+	case "assets/audio/Sfx2.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx2.ogg"));
+	case "assets/audio/Sfx3.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx3.mp3"));
+	case "assets/audio/Sfx3.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx3.ogg"));
+	case "assets/audio/Sfx4.mp3":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx4.mp3"));
+	case "assets/audio/Sfx4.ogg":
+		return new jeash.media.Sound(new jeash.net.URLRequest("assets/audio/Sfx4.ogg"));
 	}
 	return null;
 }
 nme.installer.Assets.getText = function(id) {
 	switch(id) {
+	case "assets/audio/ButtonDown.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/ButtonDown.aac").data;
+	case "assets/audio/ButtonOver.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/ButtonOver.aac").data;
+	case "assets/audio/MusicGame.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/MusicGame.aac").data;
+	case "assets/audio/MusicMenu.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/MusicMenu.aac").data;
+	case "assets/audio/Sfx1.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/Sfx1.aac").data;
+	case "assets/audio/Sfx2.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/Sfx2.aac").data;
+	case "assets/audio/Sfx3.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/Sfx3.aac").data;
+	case "assets/audio/Sfx4.aac":
+		return ApplicationMain.urlLoaders.get("assets/audio/Sfx4.aac").data;
 	case "assets/fonts/orbitron.ttf.hash":
 		return ApplicationMain.urlLoaders.get("assets/fonts/orbitron.ttf.hash").data;
 	}
@@ -4798,10 +4839,7 @@ awe6.core.drivers.js.View.prototype._nativeDraw = function() {
 	while(_g < l_children.length) {
 		var i = l_children[_g];
 		++_g;
-		if(i.isVisible) {
-			this._container.addChild(i.context);
-			i.context.jeashSetX(i.context.jeashGetX());
-		}
+		if(i.isVisible) this._container.addChild(i.context);
 	}
 }
 awe6.core.drivers.js.View.prototype.__set_x = function(value) {
@@ -6801,6 +6839,9 @@ jeash.Lib.jeashSetSurfaceTransform = function(surface,matrix) {
 	surface.style.setProperty("-webkit-transform-origin","0 0","");
 	surface.style.setProperty("-o-transform","matrix(" + matrix.a.toFixed(4) + ", " + matrix.b.toFixed(4) + ", " + matrix.c.toFixed(4) + ", " + matrix.d.toFixed(4) + ", " + matrix.tx.toFixed(4) + ", " + matrix.ty.toFixed(4) + ")","");
 	surface.style.setProperty("-o-transform-origin","0 0","");
+	surface.style.setProperty("-ms-transform","matrix(" + matrix.a.toFixed(4) + ", " + matrix.b.toFixed(4) + ", " + matrix.c.toFixed(4) + ", " + matrix.d.toFixed(4) + ", " + matrix.tx.toFixed(4) + ", " + matrix.ty.toFixed(4) + ")","");
+	surface.style.setProperty("-ms-transform-origin","0 0","");
+	surface.style.setProperty("-webkit-tap-highlight-color","rgba(0,0,0,0)","");
 }
 jeash.Lib.jeashSetSurfaceOpacity = function(surface,alpha) {
 	surface.style.setProperty("opacity",Std.string(alpha),"");
@@ -8182,7 +8223,6 @@ awe6.interfaces.ISceneManager.prototype.back = null;
 awe6.interfaces.ISceneManager.prototype.next = null;
 awe6.interfaces.ISceneManager.prototype.restart = null;
 awe6.interfaces.ISceneManager.prototype.__class__ = awe6.interfaces.ISceneManager;
-if(!jeash.ui) jeash.ui = {}
 jeash.ui.Keyboard = function() { }
 jeash.ui.Keyboard.__name__ = ["jeash","ui","Keyboard"];
 jeash.ui.Keyboard.jeashConvertWebkitCode = function(code) {
@@ -9185,14 +9225,38 @@ ApplicationMain.main = function() {
 	ApplicationMain.loaders = new Hash();
 	ApplicationMain.urlLoaders = new Hash();
 	ApplicationMain.total = 0;
+	var urlLoader = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/ButtonDown.aac",urlLoader);
+	ApplicationMain.total++;
+	var urlLoader1 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/ButtonOver.aac",urlLoader1);
+	ApplicationMain.total++;
+	var urlLoader2 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/MusicGame.aac",urlLoader2);
+	ApplicationMain.total++;
+	var urlLoader3 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/MusicMenu.aac",urlLoader3);
+	ApplicationMain.total++;
+	var urlLoader4 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/Sfx1.aac",urlLoader4);
+	ApplicationMain.total++;
+	var urlLoader5 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/Sfx2.aac",urlLoader5);
+	ApplicationMain.total++;
+	var urlLoader6 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/Sfx3.aac",urlLoader6);
+	ApplicationMain.total++;
+	var urlLoader7 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/audio/Sfx4.aac",urlLoader7);
+	ApplicationMain.total++;
 	var loader = new jeash.display.Loader();
 	ApplicationMain.loaders.set("assets/ButtonOver.png",loader);
 	ApplicationMain.total++;
 	var loader1 = new jeash.display.Loader();
 	ApplicationMain.loaders.set("assets/ButtonUp.png",loader1);
 	ApplicationMain.total++;
-	var urlLoader = new jeash.net.URLLoader();
-	ApplicationMain.urlLoaders.set("assets/fonts/orbitron.ttf.hash",urlLoader);
+	var urlLoader8 = new jeash.net.URLLoader();
+	ApplicationMain.urlLoaders.set("assets/fonts/orbitron.ttf.hash",urlLoader8);
 	ApplicationMain.total++;
 	var loader2 = new jeash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/BackOver.png",loader2);
@@ -9250,9 +9314,9 @@ ApplicationMain.main = function() {
 		var $it1 = ApplicationMain.urlLoaders.keys();
 		while( $it1.hasNext() ) {
 			var path = $it1.next();
-			var urlLoader1 = ApplicationMain.urlLoaders.get(path);
-			urlLoader1.addEventListener("complete",ApplicationMain.loader_onComplete);
-			urlLoader1.load(new jeash.net.URLRequest(path));
+			var urlLoader9 = ApplicationMain.urlLoaders.get(path);
+			urlLoader9.addEventListener("complete",ApplicationMain.loader_onComplete);
+			urlLoader9.load(new jeash.net.URLRequest(path));
 		}
 	}
 }
@@ -9260,14 +9324,30 @@ ApplicationMain.begin = function() {
 	Main.main();
 }
 ApplicationMain.getAsset = function(inName) {
-	if(inName == "assets/audio/ButtonDown.wav") return nme.installer.Assets.getSound("assets/audio/ButtonDown.wav");
-	if(inName == "assets/audio/ButtonOver.wav") return nme.installer.Assets.getSound("assets/audio/ButtonOver.wav");
-	if(inName == "assets/audio/MusicGame.wav") return nme.installer.Assets.getSound("assets/audio/MusicGame.wav");
-	if(inName == "assets/audio/MusicMenu.wav") return nme.installer.Assets.getSound("assets/audio/MusicMenu.wav");
-	if(inName == "assets/audio/Sfx1.wav") return nme.installer.Assets.getSound("assets/audio/Sfx1.wav");
-	if(inName == "assets/audio/Sfx2.wav") return nme.installer.Assets.getSound("assets/audio/Sfx2.wav");
-	if(inName == "assets/audio/Sfx3.wav") return nme.installer.Assets.getSound("assets/audio/Sfx3.wav");
-	if(inName == "assets/audio/Sfx4.wav") return nme.installer.Assets.getSound("assets/audio/Sfx4.wav");
+	if(inName == "assets/audio/ButtonDown.aac") return nme.installer.Assets.getBytes("assets/audio/ButtonDown.aac");
+	if(inName == "assets/audio/ButtonDown.mp3") return nme.installer.Assets.getSound("assets/audio/ButtonDown.mp3");
+	if(inName == "assets/audio/ButtonDown.ogg") return nme.installer.Assets.getSound("assets/audio/ButtonDown.ogg");
+	if(inName == "assets/audio/ButtonOver.aac") return nme.installer.Assets.getBytes("assets/audio/ButtonOver.aac");
+	if(inName == "assets/audio/ButtonOver.mp3") return nme.installer.Assets.getSound("assets/audio/ButtonOver.mp3");
+	if(inName == "assets/audio/ButtonOver.ogg") return nme.installer.Assets.getSound("assets/audio/ButtonOver.ogg");
+	if(inName == "assets/audio/MusicGame.aac") return nme.installer.Assets.getBytes("assets/audio/MusicGame.aac");
+	if(inName == "assets/audio/MusicGame.mp3") return nme.installer.Assets.getSound("assets/audio/MusicGame.mp3");
+	if(inName == "assets/audio/MusicGame.ogg") return nme.installer.Assets.getSound("assets/audio/MusicGame.ogg");
+	if(inName == "assets/audio/MusicMenu.aac") return nme.installer.Assets.getBytes("assets/audio/MusicMenu.aac");
+	if(inName == "assets/audio/MusicMenu.mp3") return nme.installer.Assets.getSound("assets/audio/MusicMenu.mp3");
+	if(inName == "assets/audio/MusicMenu.ogg") return nme.installer.Assets.getSound("assets/audio/MusicMenu.ogg");
+	if(inName == "assets/audio/Sfx1.aac") return nme.installer.Assets.getBytes("assets/audio/Sfx1.aac");
+	if(inName == "assets/audio/Sfx1.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx1.mp3");
+	if(inName == "assets/audio/Sfx1.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx1.ogg");
+	if(inName == "assets/audio/Sfx2.aac") return nme.installer.Assets.getBytes("assets/audio/Sfx2.aac");
+	if(inName == "assets/audio/Sfx2.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx2.mp3");
+	if(inName == "assets/audio/Sfx2.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx2.ogg");
+	if(inName == "assets/audio/Sfx3.aac") return nme.installer.Assets.getBytes("assets/audio/Sfx3.aac");
+	if(inName == "assets/audio/Sfx3.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx3.mp3");
+	if(inName == "assets/audio/Sfx3.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx3.ogg");
+	if(inName == "assets/audio/Sfx4.aac") return nme.installer.Assets.getBytes("assets/audio/Sfx4.aac");
+	if(inName == "assets/audio/Sfx4.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx4.mp3");
+	if(inName == "assets/audio/Sfx4.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx4.ogg");
 	if(inName == "assets/ButtonOver.png") return nme.installer.Assets.getBitmapData("assets/ButtonOver.png");
 	if(inName == "assets/ButtonUp.png") return nme.installer.Assets.getBitmapData("assets/ButtonUp.png");
 	if(inName == "assets/fonts/orbitron.ttf") return nme.installer.Assets.getFont("assets/fonts/orbitron.ttf");
@@ -9698,33 +9778,33 @@ awe6.core.drivers.js.InputMouse = function(kernel) {
 awe6.core.drivers.js.InputMouse.__name__ = ["awe6","core","drivers","js","InputMouse"];
 awe6.core.drivers.js.InputMouse.__super__ = awe6.core.drivers.AInputMouse;
 for(var k in awe6.core.drivers.AInputMouse.prototype ) awe6.core.drivers.js.InputMouse.prototype[k] = awe6.core.drivers.AInputMouse.prototype[k];
-awe6.core.drivers.js.InputMouse.prototype._document = null;
-awe6.core.drivers.js.InputMouse.prototype.__isWithinBounds = null;
+awe6.core.drivers.js.InputMouse.prototype._stage = null;
+awe6.core.drivers.js.InputMouse.prototype._mouseClicks = null;
 awe6.core.drivers.js.InputMouse.prototype._nativeInit = function() {
-	this._document = js.Lib.document;
-	this._document.addEventListener("mousedown",$closure(this,"_onMouseDown"),true);
-	this._document.addEventListener("mouseup",$closure(this,"_onMouseUp"),true);
-	this._document.addEventListener("mousemove",$closure(this,"_onMouseMove"),true);
-	this._document.addEventListener("blur",$closure(this,"_reset"),true);
-	this.__isWithinBounds = false;
+	this._stage = jeash.Lib.jeashGetCurrent().GetStage();
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
+	this._stage.addEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
 }
 awe6.core.drivers.js.InputMouse.prototype._disposer = function() {
-	this._document.removeEventListener("mousedown",$closure(this,"_onMouseDown"),true);
-	this._document.removeEventListener("mouseup",$closure(this,"_onMouseUp"),true);
-	this._document.removeEventListener("mousemove",$closure(this,"_onMouseMove"),true);
-	this._document.removeEventListener("blur",$closure(this,"_reset"),true);
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
+	this._stage.removeEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
 	awe6.core.drivers.AInputMouse.prototype._disposer.call(this);
 }
 awe6.core.drivers.js.InputMouse.prototype._updater = function(deltaTime) {
 	if(deltaTime == null) deltaTime = 0;
+	this._stage.SetFocus(this._stage);
 	awe6.core.drivers.AInputMouse.prototype._updater.call(this,deltaTime);
 }
 awe6.core.drivers.js.InputMouse.prototype._isWithinBounds = function() {
-	return this.__isWithinBounds;
+	return this._stage.jeashGetMouseX() >= 0 && this._stage.jeashGetMouseX() <= this._kernel.factory.width && this._stage.jeashGetMouseY() >= 0 && this._stage.jeashGetMouseY() <= this._kernel.factory.height;
 }
 awe6.core.drivers.js.InputMouse.prototype._getPosition = function() {
-	var l_x = Std["int"](this._tools.limit(this.x,0,this._kernel.factory.width));
-	var l_y = Std["int"](this._tools.limit(this.y,0,this._kernel.factory.height));
+	var l_x = Std["int"](this._tools.limit(this._stage.jeashGetMouseX(),0,this._kernel.factory.width));
+	var l_y = Std["int"](this._tools.limit(this._stage.jeashGetMouseY(),0,this._kernel.factory.height));
 	this.x = l_x == this._kernel.factory.width?this._xPrev:l_x;
 	this.y = l_y == this._kernel.factory.height?this._yPrev:l_y;
 }
@@ -9736,12 +9816,35 @@ awe6.core.drivers.js.InputMouse.prototype._onMouseUp = function(event) {
 	if(!this.isActive) return;
 	this._buffer.push(false);
 }
-awe6.core.drivers.js.InputMouse.prototype._onMouseMove = function(event) {
+awe6.core.drivers.js.InputMouse.prototype._onMouseWheel = function(event) {
 	if(!this.isActive) return;
-	this.x = event.clientX;
-	this.y = event.clientY;
-	this.__isWithinBounds = this.x >= 0 && this.x <= this._kernel.factory.width && this.y >= 0 && this.y <= this._kernel.factory.height;
-	this._getPosition();
+	this.scroll += event.delta;
+	haxe.Log.trace(this.scroll,{ fileName : "InputMouse.hx", lineNumber : 111, className : "awe6.core.drivers.js.InputMouse", methodName : "_onMouseWheel"});
+}
+awe6.core.drivers.js.InputMouse.prototype.__set_isVisible = function(value) {
+	if(value) jeash.ui.Mouse.show(); else jeash.ui.Mouse.hide();
+	return awe6.core.drivers.AInputMouse.prototype.__set_isVisible.call(this,value);
+}
+awe6.core.drivers.js.InputMouse.prototype.__set_cursorType = function(value) {
+	var $e = (value);
+	switch( $e[1] ) {
+	case 0:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
+		break;
+	case 1:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
+		break;
+	case 2:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
+		break;
+	case 3:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
+		break;
+	case 4:
+		var value1 = $e[2];
+		break;
+	}
+	return awe6.core.drivers.AInputMouse.prototype.__set_cursorType.call(this,value);
 }
 awe6.core.drivers.js.InputMouse.prototype.__class__ = awe6.core.drivers.js.InputMouse;
 jeash.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
@@ -12328,7 +12431,7 @@ jeash.display.Stage.prototype.jeashProcessStageEvent = function(evt) {
 	}
 }
 jeash.display.Stage.prototype.jeashOnMouse = function(event,type) {
-	var point = new jeash.geom.Point(event.clientX - jeash.Lib.mMe.__scr.offsetLeft + window.scrollX,event.clientY - jeash.Lib.mMe.__scr.offsetTop + window.scrollY);
+	var point = new jeash.geom.Point(event.clientX - jeash.Lib.mMe.__scr.offsetLeft + window.pageXOffset,event.clientY - jeash.Lib.mMe.__scr.offsetTop + window.pageYOffset);
 	if(this.jeashDragObject != null) this.jeashDrag(point);
 	var obj = this.jeashGetObjectUnderPoint(point);
 	this.jeashSetMouseX(point.x);
@@ -13057,12 +13160,18 @@ awe6.core.drivers.js.AudioManager = function(kernel) {
 awe6.core.drivers.js.AudioManager.__name__ = ["awe6","core","drivers","js","AudioManager"];
 awe6.core.drivers.js.AudioManager.__super__ = awe6.core.drivers.AAudioManager;
 for(var k in awe6.core.drivers.AAudioManager.prototype ) awe6.core.drivers.js.AudioManager.prototype[k] = awe6.core.drivers.AAudioManager.prototype[k];
+awe6.core.drivers.js.AudioManager.prototype._extension = null;
+awe6.core.drivers.js.AudioManager.prototype._init = function() {
+	awe6.core.drivers.AAudioManager.prototype._init.call(this);
+	this._extension = jeash.media.Sound.jeashCanPlayType("mp3")?".mp3":".ogg";
+	this._packageId = StringTools.replace(this._packageId + ".",".","/");
+}
 awe6.core.drivers.js.AudioManager.prototype._nativeSoundFactory = function(id,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
 	if(pan == null) pan = 0;
 	if(volume == null) volume = 1;
 	if(startTime == null) startTime = 0;
 	if(loops == null) loops = 1;
-	return new awe6.core.drivers.js._HelperSound(this._kernel,id,this._packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
+	return new awe6.core.drivers.js._HelperSound(this._kernel,id,this._packageId,this._extension,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
 }
 awe6.core.drivers.js.AudioManager.prototype._nativeSetIsMute = function(isMute) {
 	var _g = 0, _g1 = this._sounds;
@@ -13075,21 +13184,23 @@ awe6.core.drivers.js.AudioManager.prototype._nativeSetIsMute = function(isMute) 
 	}
 }
 awe6.core.drivers.js.AudioManager.prototype.__class__ = awe6.core.drivers.js.AudioManager;
-awe6.core.drivers.js._HelperSound = function(kernel,id,packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
+awe6.core.drivers.js._HelperSound = function(kernel,id,packageId,extension,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
 	if( kernel === $_ ) return;
 	if(pan == null) pan = 0;
 	if(volume == null) volume = 1;
 	if(startTime == null) startTime = 0;
 	if(loops == null) loops = 1;
+	this._extension = extension;
 	awe6.core.drivers._AHelperSound.call(this,kernel,id,packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
 }
 awe6.core.drivers.js._HelperSound.__name__ = ["awe6","core","drivers","js","_HelperSound"];
 awe6.core.drivers.js._HelperSound.__super__ = awe6.core.drivers._AHelperSound;
 for(var k in awe6.core.drivers._AHelperSound.prototype ) awe6.core.drivers.js._HelperSound.prototype[k] = awe6.core.drivers._AHelperSound.prototype[k];
+awe6.core.drivers.js._HelperSound.prototype._extension = null;
 awe6.core.drivers.js._HelperSound.prototype._sound = null;
 awe6.core.drivers.js._HelperSound.prototype._soundChannel = null;
 awe6.core.drivers.js._HelperSound.prototype._nativeInit = function() {
-	this._sound = nme.installer.Assets.getSound("assets/audio/" + this.id + ".wav");
+	this._sound = nme.installer.Assets.getSound(this._packageId + this.id + this._extension);
 	if(this._sound == null) return this.dispose();
 	this._soundChannel = this._sound.play(this._startTime,this._loops);
 	if(this._soundChannel == null) return this.dispose();
