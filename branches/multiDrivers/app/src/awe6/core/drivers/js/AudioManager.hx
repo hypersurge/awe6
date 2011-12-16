@@ -35,7 +35,6 @@ import flash.events.Event;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import nme.Assets;
-//import flash.media.SoundMixer;
 import flash.media.SoundTransform;
 
 /**
@@ -44,10 +43,18 @@ import flash.media.SoundTransform;
  */
 class AudioManager extends AAudioManager
 {
+	private var _extension:String;
+	
+	override private function _init():Void
+	{
+		super._init();
+		_extension = untyped jeash.media.Sound.jeashCanPlayType( "aac" ) ? ".aac" : ".ogg";
+		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
+	}
 
 	override private function _nativeSoundFactory( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void ):_AHelperSound
 	{
-		return new _HelperSound( _kernel, id, _packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
+		return new _HelperSound( _kernel, id, _packageId, _extension, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
 	}
 
 	override private function _nativeSetIsMute( ?isMute:Bool ):Void
@@ -70,18 +77,20 @@ class AudioManager extends AAudioManager
 
 class _HelperSound extends _AHelperSound
 {
+	private var _extension:String;
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
 	
-	public function new( kernel:IKernel, id:String, packageId:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
+	public function new( kernel:IKernel, id:String, packageId:String, extension:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
 	{
 		// needed else some float signatures misinterpreted as ints ... should replicate and report to mailing list
+		_extension = extension;
 		super( kernel, id, packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );	
 	}
 	
 	override private function _nativeInit():Void
 	{
-		_sound = Assets.getSound( "assets/audio/" + id + ".wav" );
+		_sound = Assets.getSound( _packageId + id + _extension );
 		if ( _sound == null )
 		{
 			return dispose();
