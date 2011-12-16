@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
 	<ModulePrefs title="awe6DemoFlash" /> 
-	<Content type="html">
-		<![CDATA[
-			<embed src="https://awe6.googlecode.com/svn/trunk/docs/demos/flash/game.swf" width="600" height="400" allowFullScreen="true" />	
-		]]>
-	</Content> 
+	<Content type="url" href="https://awe6.googlecode.com/svn/trunk/docs/demos/flash/index.html" />
 </Module>
