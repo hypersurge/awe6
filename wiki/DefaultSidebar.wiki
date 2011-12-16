@@ -24,3 +24,6 @@
     * [http://awe6.googlecode.com/svn/tags/api/index.html API]
     * [AirForMobile Mobile Device Deployment]	
     * [GameGenres Game Genre Examples]
+  * Multi Device Online Demos
+    * [http://awe6.googlecode.com/svn/trunk/docs/demos/flash/index.html Flash]
+    * [http://awe6.googlecode.com/svn/trunk/docs/demos/html5/index.html HTML5]
