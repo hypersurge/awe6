@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
-	<ModulePrefs title="awe6DemoHtml5" scrolling="false" /> 
+	<ModulePrefs title="awe6DemoHtml5" /> 
 	<Content type="url" href="https://awe6.googlecode.com/svn/trunk/docs/demos/html5/index.html" />
 </Module>
