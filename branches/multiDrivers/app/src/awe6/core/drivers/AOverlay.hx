@@ -276,7 +276,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 				_drawPause( false );
 				activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
 			}
-			case SUB_TYPE( value ) :
+			case SUB_TYPE( value ) : null;
 		}
 	}
 	

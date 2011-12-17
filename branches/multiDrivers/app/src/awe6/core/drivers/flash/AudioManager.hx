@@ -36,6 +36,7 @@ import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundMixer;
 import flash.media.SoundTransform;
+import nme.Assets;
 
 /**
  * This AudioManager class provides js target overrides.
@@ -44,6 +45,12 @@ import flash.media.SoundTransform;
 class AudioManager extends AAudioManager
 {
 
+	override private function _init():Void
+	{
+		super._init();
+		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
+	}
+	
 	override private function _nativeSoundFactory( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		return new _HelperSound( _kernel, id, _packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
@@ -69,7 +76,8 @@ class _HelperSound extends _AHelperSound
 	
 	override private function _nativeInit():Void
 	{
-		_sound = cast( _kernel.assets.getAsset( this.id, _packageId ), Sound );
+//		_sound = cast( _kernel.assets.getAsset( this.id, _packageId ), Sound );
+		_sound = Assets.getSound( _packageId + id + ".mp3" );
 		if ( _sound == null )
 		{
 			return dispose();

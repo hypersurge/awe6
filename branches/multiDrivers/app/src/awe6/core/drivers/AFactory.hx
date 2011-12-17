@@ -69,7 +69,7 @@ class AFactory implements IFactory, implements IDisposable
 	private var _kernel:IKernel;
 	private var _tools:ITools;
 	private var _isConfigRequired:Bool;
-	private var __kernel:Kernel;
+	private var _concreteKernel:Kernel;
 	
 	public var isDisposed( default, null ):Bool;
 	public var id( default, null ):String;
@@ -168,11 +168,11 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _launchKernel():Void
 	{
-		if ( __kernel != null )
+		if ( _concreteKernel != null )
 		{
 			return;
 		}
-		__kernel = _nativeLaunchKernel();
+		_concreteKernel = _nativeLaunchKernel();
 	}
 	
 	private function _nativeLaunchKernel():Kernel
@@ -278,14 +278,14 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function dispose():Void
 	{
-		if ( isDisposed || ( __kernel == null ) )
+		if ( isDisposed || ( _concreteKernel == null ) )
 		{
 			return;
 		}
 		isDisposed = true;
 		_nativeDisposer();
-		__kernel.dispose();
-		__kernel = null;
+		_concreteKernel.dispose();
+		_concreteKernel = null;
 		_kernel = null;
 		config = null;
 	}
