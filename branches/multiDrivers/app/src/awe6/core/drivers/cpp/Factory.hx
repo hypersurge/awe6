@@ -27,31 +27,55 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
+import awe6.core.Context;
+import awe6.core.drivers.AFactory;
 
-class Preloader extends APreloader
+/**
+ * This Factory class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+class Factory extends AFactory
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
-
-	override private function _init():Void
+	private var _sprite:Context;
+	
+	public function new( sprite:Context, isDebug:Bool = true, ?config:String )
 	{
-		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
+		_sprite = new Context();
+		sprite.addChild( _sprite );
+		super( isDebug, config );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _nativeInit():Void
 	{
-		if ( _preloaderMovieClip != null )
+		_init();
+		if ( _isConfigRequired )
 		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
+			_parseXml( _configUrl );
 		}
-		super._updater( deltaTime );
+		else
+		{
+			_launchKernel();		
+		}
 	}	
-	*/
+	
+	private function _parseXml( data:String ):Void
+	{
+		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_launchKernel();
+	}	
+	
+	override private function _nativeLaunchKernel():Kernel
+	{
+		return new Kernel( this, _sprite );
+	}
+	
+	override private function _nativeDisposer():Void
+	{
+		if ( _sprite.parent != null )
+		{
+			_sprite.parent.removeChild( _sprite );
+		}
+	}
+	
 }
-

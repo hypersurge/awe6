@@ -104,7 +104,7 @@ class Entity extends Process, implements IEntity
 		super._disposer();
 	}
 
-	public function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int ):Void
+	public function addEntity( entity:IEntity, ?agenda:EAgenda = null, ?isAddedToView:Bool = false, ?viewPriority:Int = 0 ):Void
 	{
 		if ( isDisposed )
 		{

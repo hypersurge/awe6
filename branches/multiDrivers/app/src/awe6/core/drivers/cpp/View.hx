@@ -27,31 +27,73 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
+import awe6.core.Context;
+import awe6.core.drivers.AView;
 
-class Preloader extends APreloader
+/**
+ * This View class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+class View extends AView
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
-
-	override private function _init():Void
+	private var _container:Context;
+	
+	override private function _init():Void 
 	{
+		if ( context == null )
+		{
+			context = new Context(); 
+		}
 		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _nativeDisposer():Void 
 	{
-		if ( _preloaderMovieClip != null )
+		if ( ( context != null ) && ( context.parent != null ) )
 		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
+			try
+			{
+				context.parent.removeChild( context );
+			}
+			catch ( error:Dynamic ) {}
 		}
-		super._updater( deltaTime );
-	}	
-	*/
+	}
+	
+	override private function _nativeDraw():Void
+	{
+		if ( parent != null )
+		{
+			parent.x = parent.x;
+		}
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
+		_container = new Context();
+		_container.mouseEnabled = false;
+		context.addChild( _container );
+		var l_children:Array<View> = cast _children;
+		for ( i in l_children )
+		{
+			if ( i.isVisible )
+			{
+				_container.addChild( i.context );
+			}
+		}
+	}
+	
+	override private function __set_x( value:Float ):Float
+	{
+		context.x = value;
+		return super.__set_x( value );
+	}
+	
+	override private function __set_y( value:Float ):Float
+	{
+		context.y = value;
+		return super.__set_y( value );
+	}
+	
 }
 

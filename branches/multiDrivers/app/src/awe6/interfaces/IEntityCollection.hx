@@ -42,7 +42,7 @@ interface IEntityCollection
 	 * @param	?isAddedToView	If true will add the child entity's view to this object's view.
 	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack).
 	 */
-	function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int ):Void;
+	function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int = 0 ):Void;
 	/**
 	 * Removes an entity from this object's children.
 	 * @param	entity	The entity to remove.

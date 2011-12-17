@@ -27,31 +27,20 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
+import awe6.core.drivers.ASceneTransition;
 
-class Preloader extends APreloader
+/**
+ * This SceneTransition class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+class SceneTransition extends ASceneTransition
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
-
-	override private function _init():Void
+	override private function _init():Void 
 	{
 		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
+		_kernel.overlay.flash( _duration, true );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
-	{
-		if ( _preloaderMovieClip != null )
-		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		}
-		super._updater( deltaTime );
-	}	
-	*/
 }
 

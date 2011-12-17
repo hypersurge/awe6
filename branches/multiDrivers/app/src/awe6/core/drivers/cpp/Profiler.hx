@@ -27,31 +27,13 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
 
-class Preloader extends APreloader
+/**
+ * This Profiler class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+class Profiler extends awe6.core.drivers.AProfiler
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
 
-	override private function _init():Void
-	{
-		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
-	}
-	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
-	{
-		if ( _preloaderMovieClip != null )
-		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		}
-		super._updater( deltaTime );
-	}	
-	*/
 }
-

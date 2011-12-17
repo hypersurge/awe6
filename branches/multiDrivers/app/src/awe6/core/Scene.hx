@@ -82,9 +82,9 @@ class Scene extends Process, implements IScene
 		super._disposer();		
 	}
 	
-	public function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int ):Void
+	public function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int = 0 ):Void
 	{
-		return _entity.addEntity( entity, agenda, isAddedToView, viewPriority );
+		_entity.addEntity( entity, agenda, isAddedToView, viewPriority );
 	}
 	
 	public function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void

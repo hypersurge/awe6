@@ -69,7 +69,11 @@ class Encrypter implements IEncrypter
 		var l_secretIndex:Int = 0;
 		for ( i in 0...value.length )
 		{
+			#if !cpp
 			l_result[i] = value[i] ^ secret.charCodeAt( l_secretIndex );
+			#else
+			l_result[i] = value[i];
+			#end
 			l_secretIndex++;
 			if ( l_secretIndex >= secret.length )
 			{

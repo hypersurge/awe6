@@ -27,31 +27,47 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
+import awe6.core.drivers.AOverlay;
+import awe6.core.View;
+import flash.display.Sprite;
 
-class Preloader extends APreloader
+/**
+ * This Overlay class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+
+class Overlay extends AOverlay
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
-
-	override private function _init():Void
+	
+	override private function _nativeInit():Void
 	{
-		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
+		_context.mouseEnabled = false;
+		
+		_pauseContext = new Sprite();
+		_pauseContext.mouseEnabled = false;
+		_pauseContext.graphics.beginFill( _pauseColor, _pauseAlpha );
+		_pauseContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
+		
+		_flashContext = new Sprite();
+		_flashContext.mouseEnabled = false;
 	}
 	
 	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
-		if ( _preloaderMovieClip != null )
-		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		}
 		super._updater( deltaTime );
-	}	
-	*/
+		_flashContext.alpha = _flashAlpha;
+	}
+	
+	override public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void
+	{
+		_flashContext.graphics.clear();
+		_flashContext.graphics.beginFill( color );
+		_flashContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
+		_flashDuration = _flashStartingDuration = duration;
+		_flashAsTime = asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
+	}
+	
 }
-

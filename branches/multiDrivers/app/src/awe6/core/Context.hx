@@ -35,7 +35,9 @@ package awe6.core;
  * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if flash
+#if cpp
+typedef Context = flash.display.Sprite;
+#elseif flash
 typedef Context = flash.display.Sprite;
 #elseif js
 typedef Context = flash.display.Sprite;

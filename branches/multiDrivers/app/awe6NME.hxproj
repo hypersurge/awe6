@@ -49,7 +49,7 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Custom" />
-    <option testMovieCommand="html5" />
+    <option testMovieCommand="android" />
   </options>
   <!-- Plugin storage -->
   <storage />

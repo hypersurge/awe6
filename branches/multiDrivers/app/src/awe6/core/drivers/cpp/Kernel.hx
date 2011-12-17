@@ -28,61 +28,67 @@
  */
 
 package awe6.core.drivers.cpp;
-import awe6.core.drivers.AInputKeyboard;
+import awe6.core.drivers.AKernel;
+import awe6.interfaces.IFactory;
+import flash.display.Sprite;
 import flash.display.Stage;
+import flash.display.StageQuality;
+import flash.display.StageScaleMode;
 import flash.events.Event;
-import flash.events.KeyboardEvent;
+import flash.geom.Rectangle;
 import flash.Lib;
+import flash.net.URLRequest;
 
 /**
- * This InputKeyboard class provides cpp target overrides.
+ * This Kernel class provides cpp target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+class Kernel extends AKernel
 {
 	private var _stage:Stage;
-	
-	override private function _nativeInit():Void 
+
+	override private function _nativeGetIsLocal():Bool
 	{
-		_stage = Lib.current.stage;
-		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.addEventListener( Event.DEACTIVATE, _reset );
+		return true;
 	}
 	
-	override private function _updater( timeInterval = 0 ):Void 
+	override private function _nativeInit():Void
 	{
-		_stage.focus = _stage;
-		super._updater( timeInterval );
+		_stage = _context.stage;		
+		var l_instance:Kernel = this;
+		_stage.frameRate = factory.targetFramerate;
+		_stage.scaleMode = StageScaleMode.NO_SCALE;
+		_stage.quality = StageQuality.LOW;
+
+		var l_mask:Sprite = new Sprite();
+		l_mask.graphics.beginFill( 0xFFFFFF );
+		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
+		l_mask.graphics.endFill();
+		_context.addChild( l_mask );
+		_context.mask = l_mask;
+		
+		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
+		
+		isEyeCandy = true;
+		isFullScreen = false;
+	}
+
+	override private function _nativeDisposer():Void
+	{
 	}
 	
-	override private function _disposer():Void 
+	private function _onEnterFrame( event:Event ):Void
 	{
-		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.removeEventListener( Event.DEACTIVATE, _reset );
-		super._disposer();
+		_updater( 0 ); // avoid isActive
 	}
 	
-	private function _onKeyDown( event:KeyboardEvent ):Void
+	override private function _nativeSetIsEyeCandy( value:Bool ):Void
 	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
-		return;
 	}
 	
-	private function _onKeyUp( event:KeyboardEvent ):Void
+	override private function _nativeSetIsFullScreen( value:Bool ):Void
 	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
-		return;
 	}
-	
 	
 }
+

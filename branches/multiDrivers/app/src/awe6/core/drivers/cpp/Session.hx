@@ -27,31 +27,30 @@
  * THE SOFTWARE.
  */
 
-package demo;
-import awe6.core.APreloader;
-// import assets.PreloaderMovieClip;
+package awe6.core.drivers.cpp;
+import flash.net.SharedObject;
 
-class Preloader extends APreloader
+/**
+ * This Session class provides cpp target overrides.
+ * @author	Robert Fell
+ */
+class Session extends ASession
 {
-/*	
-	private var _preloaderMovieClip:PreloaderMovieClip;
-
-	override private function _init():Void
+	private var _so:SharedObject;
+	
+	override private function _nativeLoad():Void
 	{
-		super._init();
-		_preloaderMovieClip = new PreloaderMovieClip();
-		_preloaderMovieClip.progress.stop();
-		_sprite.addChild( _preloaderMovieClip );
+		_so = SharedObject.getLocal( _kernel.factory.id );
+		_savedData = _so.data;		
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _nativeReset():Void
 	{
-		if ( _preloaderMovieClip != null )
-		{
-			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );
-		}
-		super._updater( deltaTime );
-	}	
-	*/
+		_so.clear();		
+	}
+	
+	override private function _nativeSave():Void
+	{
+		_so.flush();
+	}
 }
-

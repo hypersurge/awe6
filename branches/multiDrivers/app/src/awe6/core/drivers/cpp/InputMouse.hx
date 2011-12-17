@@ -29,6 +29,13 @@
 
 package awe6.core.drivers.cpp;
 import awe6.core.drivers.AInputMouse;
+import awe6.interfaces.EMouseCursor;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
+import flash.ui.Mouse;
+import haxe.io.Bytes;
 
 /**
  * This InputMouse class provides cpp target overrides.
@@ -36,4 +43,99 @@ import awe6.core.drivers.AInputMouse;
  */
 class InputMouse extends AInputMouse
 {
+	private var _stage:Stage;
+	
+	override private function _nativeInit():Void 
+	{
+		_stage = Lib.current.stage;
+		_stage.addEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );
+		_stage.addEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
+		_stage.addEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
+		_stage.addEventListener( Event.DEACTIVATE, _reset );
+	}
+	
+	override private function _disposer():Void 
+	{
+		_stage.removeEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );
+		_stage.removeEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
+		_stage.removeEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
+		_stage.removeEventListener( Event.DEACTIVATE, _reset );
+		super._disposer();		
+	}	
+	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		_stage.focus = _stage;
+		super._updater( deltaTime );
+	}
+	
+	override private function _isMiddleDown():Bool
+	{
+		return false;
+	}
+	
+	override private function _isRightDown():Bool
+	{
+		return false;
+	}
+	
+	override private function _isWithinBounds():Bool
+	{
+		return ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
+	}
+	
+	override private function _getPosition():Void
+	{
+		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
+		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
+		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
+	}
+	
+	private function _onMouseDown( event:MouseEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_buffer.push( true );
+	}
+	
+	private function _onMouseUp( event:MouseEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_buffer.push( false );
+	}
+	
+	private function _onMouseWheel( event:MouseEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		scroll += event.delta;
+	}
+	
+	override private function __set_isVisible( value:Bool ):Bool
+	{
+		value ? Mouse.show() : Mouse.hide();
+		return super.__set_isVisible( value );
+	}
+	
+	override private function __set_cursorType( value:EMouseCursor ):EMouseCursor
+	{
+/*		switch( value )
+		{
+			case ARROW : Mouse.cursor = MouseCursor.ARROW;
+			case BUTTON : Mouse.cursor = MouseCursor.BUTTON;
+			case HAND : Mouse.cursor = MouseCursor.HAND;
+			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
+			case SUB_TYPE( value ) : // Have a register cursor approach here;
+		}*/
+		return super.__set_cursorType( value );
+	}
+
 }
