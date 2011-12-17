@@ -48,7 +48,7 @@ class AudioManager extends AAudioManager
 	override private function _init():Void
 	{
 		super._init();
-		_extension = ".mp3";
+		_extension = ".ogg";
 		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
 	}
 
@@ -100,7 +100,6 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose(); // perhaps sounds are flooded?
 		}
-		untyped _soundChannel.jeashAudio.muted = _kernel.audio.isMute;
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		_nativeTransform();
 		return;
@@ -119,7 +118,6 @@ class _HelperSound extends _AHelperSound
 		}
 		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
 		_soundChannel.soundTransform = soundTransform;
-		untyped _soundChannel.jeashAudio.volume = _volume;
 	}
 
 	override private function _nativeStop():Void

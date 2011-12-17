@@ -122,7 +122,11 @@ class Process implements IProcess
 		{
 			return isActive;
 		}
+		#if cpp
+		isActive = value;
+		#else
 		value ? resume() : pause();
+		#end
 		return isActive;
 	}
 	

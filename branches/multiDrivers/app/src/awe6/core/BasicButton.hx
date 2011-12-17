@@ -162,14 +162,20 @@ class BasicButton extends Entity, implements IPosition
 	private function __set_x( value:Float ):Float
 	{
 		x = value;
-		view.x = x;
+		if ( view != null )
+		{
+			view.x = x;
+		}
 		return x;
 	}
 	
 	private function __set_y( value:Float ):Float
 	{
 		y = value;
-		view.y = y;
+		if ( view != null )
+		{
+			view.y = y;
+		}
 		return y;
 	}
 	
