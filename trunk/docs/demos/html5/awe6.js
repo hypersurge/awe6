@@ -14797,4 +14797,5 @@ jeash.display.Graphics.BLEND_SHADER = 14;
 jeash.display.Graphics.JEASH_SIZING_WARM_UP = 10;
 jeash.display.Graphics.JEASH_MAX_DIMENSION = 5000;
 window.addEventListener( "load", ApplicationMain.main, false );
-alert( typeof gadgets.util.registerOnLoadHandler );
+alert( 'test" );
+gadgets.util.registerOnLoadHandler( Application.main );
