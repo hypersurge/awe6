@@ -1,8 +1,8 @@
 #summary Multi Device Online Demo: Flash
 
-<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6DemoFlashGadget.xml" border="0" width="600" height="400" />
+<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6DemoFlashGadget.xml" border="0" width="620" height="420" />
 
-This demo shows the awe6 demo compiled to Flash / SWF.  Flash Player 10+ is required to view it.
+This demo shows the awe6 demo compiled to Flash / SWF.  Flash Player 10+ is required to view it.  Flash Player is available to install from [http://get.adobe.com/flashplayer/ Adobe's website].
 
 The demo suite is designed to provide a minimalist tangible example of most game building requirements (rather than "wow"):
 	
@@ -18,4 +18,4 @@ The demo suite is designed to provide a minimalist tangible example of most game
   * Entity behavior is demonstrated by the Bouncer movement of the Invaders.
   * Cross target compilation is demonstrated by having online demos of both Flash and HTML5 that use the same code and assets.
   
- Compare with the [DemoHtml5 HTML5 demo].
+Compare with the [DemoHtml5 HTML5 demo].

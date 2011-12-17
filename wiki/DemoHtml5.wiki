@@ -1,6 +1,6 @@
 #summary Multi Device Online Demo: HTML5
 
-<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6DemoHtml5Gadget.xml" border="0" width="600" height="400" />
+<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6DemoHtml5Gadget.xml" border="0" width="620" height="420" />
 
 This demo shows the awe6 demo compiled to JavaScript / HTML5.  A HTML5 compatible browser is required to view it (latest major browser versions are generally ok).
 
@@ -18,4 +18,4 @@ The demo suite is designed to provide a minimalist tangible example of most game
   * Entity behavior is demonstrated by the Bouncer movement of the Invaders.
   * Cross target compilation is demonstrated by having online demos of both Flash and HTML5 that use the same code and assets.
   
- Compare with the [DemoFlash Flash demo].
+Compare with the [DemoFlash Flash demo].
