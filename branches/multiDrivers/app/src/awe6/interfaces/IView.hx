@@ -68,7 +68,7 @@ interface IView implements IPriority, implements IPosition, implements IDisposab
 	 * @param	child	The child view to add.
 	 * @param	?priority	The sorting priority of the child view to add.  Higher numbers will appear towards the top of the view stack.  Default value is 0.
 	 */
-	function addChild( child:IView, ?priority:Int ):Void;
+	function addChild( child:IView, ?priority:Int = 0 ):Void;
 	/**
 	 * Remove the specified view.
 	 * <p>The removed view will no longer be included in the view traversal stack so will no longer be visible.</p>

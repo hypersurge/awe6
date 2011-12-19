@@ -72,7 +72,7 @@ class AView extends Process, implements IView
 		x = y = globalX = globalY = 0;
 	}
 	
-	public function addChild( child:IView, ?priority:Int ):Void
+	public function addChild( child:IView, ?priority:Int = 0 ):Void
 	{
 		if ( isDisposed || ( child == null ) )
 		{
@@ -85,7 +85,7 @@ class AView extends Process, implements IView
 			_children.push( l_child );
 			l_child._setParent( this );
 		}
-		if ( priority != null )
+		if ( priority != 0 )
 		{
 			child.priority = priority;
 		}
