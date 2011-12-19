@@ -30,7 +30,10 @@
 package awe6.core.drivers.cpp;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.display.Sprite;
+import flash.filters.BlurFilter;
 
 /**
  * This Overlay class provides cpp target overrides.
@@ -39,6 +42,7 @@ import flash.display.Sprite;
 
 class Overlay extends AOverlay
 {
+	private var _pauseSnapshot:BitmapData;
 	
 	override private function _nativeInit():Void
 	{
@@ -46,8 +50,14 @@ class Overlay extends AOverlay
 		
 		_pauseContext = new Sprite();
 		_pauseContext.mouseEnabled = false;
-		_pauseContext.graphics.beginFill( _pauseColor, _pauseAlpha );
-		_pauseContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
+		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
+		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
+		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
+		_pauseContext.addChild( l_bitmap );
+		var l_color:Sprite = new Sprite();
+		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
+		l_color.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
+		_pauseContext.addChild( l_color );
 		
 		_flashContext = new Sprite();
 		_flashContext.mouseEnabled = false;
@@ -68,6 +78,21 @@ class Overlay extends AOverlay
 		_flashDuration = _flashStartingDuration = duration;
 		_flashAsTime = asTime;
 		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
+	}
+	
+	override private function _drawPause( ?isVisible:Bool = true ):Void
+	{
+		super._drawPause( isVisible );
+		if ( !isVisible )
+		{
+			return;
+		}
+		_pauseSnapshot.fillRect( _pauseSnapshot.rect, 0x00 );
+		try
+		{
+			_pauseSnapshot.draw( cast( _kernel.scenes.scene.view, View ).context );
+		}
+		catch ( error:Dynamic ) {}
 	}
 	
 }

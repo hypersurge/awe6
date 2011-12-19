@@ -61,15 +61,7 @@ class AudioManager extends AAudioManager
 	{
 		for ( i in _sounds )
 		{
-			if ( untyped i._soundChannel == null )
-			{
-				continue;
-			}
-			if ( untyped i._soundChannel.jeashAudio == null )
-			{
-				continue;
-			}
-			untyped i._soundChannel.jeashAudio.muted = isMute;
+			untyped i.setIsMute( isMute );
 		}
 	}	
 	
@@ -80,6 +72,7 @@ class _HelperSound extends _AHelperSound
 	private var _extension:String;
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
+	private var _prevVolume:Float;
 	
 	public function new( kernel:IKernel, id:String, packageId:String, extension:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
 	{
@@ -144,6 +137,19 @@ class _HelperSound extends _AHelperSound
 		{
 			stop();
 			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
+		}
+	}
+	
+	public function setIsMute( value:Bool ):Void
+	{
+		if ( value )
+		{
+			_prevVolume = _volume;
+			transform( 0 );
+		}
+		else
+		{
+			transform( _prevVolume );
 		}
 	}
 }

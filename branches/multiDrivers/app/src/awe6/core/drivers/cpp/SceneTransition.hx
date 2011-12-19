@@ -29,6 +29,9 @@
 
 package awe6.core.drivers.cpp;
 import awe6.core.drivers.ASceneTransition;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.filters.BlurFilter;
 
 /**
  * This SceneTransition class provides cpp target overrides.
@@ -36,10 +39,36 @@ import awe6.core.drivers.ASceneTransition;
  */
 class SceneTransition extends ASceneTransition
 {
+	private var _blurFilter:BlurFilter;
+
 	override private function _init():Void 
 	{
 		super._init();
-		_kernel.overlay.flash( _duration, true );
+		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
+		try
+		{
+			var l_view:View = cast _kernel.scenes.scene.view;
+			l_bitmapData.draw( l_view.context );
+		}
+		catch ( error:Dynamic )
+		{
+			trace( error );
+		}
+		_blurFilter = new BlurFilter( 0, 0, 1 );
+		_context.filters = [ _blurFilter ];
+		_context.mouseEnabled = false;
+		_context.addChild( new Bitmap( l_bitmapData ) );
+	}
+	
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	{
+		super._updater( deltaTime );
+		if ( !isDisposed )
+		{
+			_context.alpha = 1 - progress;
+			_blurFilter = new BlurFilter( progress * 32, progress * 32, 1 );
+			_context.filters = [ _blurFilter ];
+		}
 	}
 	
 }

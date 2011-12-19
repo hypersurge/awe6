@@ -131,7 +131,6 @@ class Text extends GuiEntity
 			_textField.defaultTextFormat = _textFormat;
 			_textField.setTextFormat( _textFormat );
 		}
-//		view.x = view.x;
 		_isDirty = false;
 	}
 	
