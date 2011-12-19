@@ -49,6 +49,7 @@ class Process implements IProcess
 	private var _age:Int;	
 	private var _updates:Int;
 	private var _isEntity:Bool;
+	private var _isSetterBypassed:Bool;
 
 	public function new( kernel:IKernel ) 
 	{
@@ -60,7 +61,9 @@ class Process implements IProcess
 	
 	private function _init():Void
 	{
-		Reflect.setField( this, "isActive", true ); // avoids the setter
+		_isSetterBypassed = true;
+		isActive = true;
+//		Reflect.setField( this, "isActive", true ); // avoids the setter
 		isDisposed = false;
 		_age = 0;
 		_updates = 0;
@@ -122,11 +125,15 @@ class Process implements IProcess
 		{
 			return isActive;
 		}
-		#if cpp
-		isActive = value;
-		#else
-		value ? resume() : pause();
-		#end
+		if ( _isSetterBypassed )
+		{
+			isActive = value;
+		}
+		else
+		{
+			value ? resume() : pause();			
+		}
+		_isSetterBypassed = false;
 		return isActive;
 	}
 	
@@ -138,7 +145,9 @@ class Process implements IProcess
 		}
 		else
 		{
-			Reflect.setField( this, "isActive", false ); // avoids the setter
+//			Reflect.setField( this, "isActive", false ); // avoids the setter
+			_isSetterBypassed = true;
+			isActive = false;
 			_pauser();
 			if ( _isEntity && !isDisposed )
 			{
@@ -161,7 +170,9 @@ class Process implements IProcess
 		}
 		else
 		{
-			Reflect.setField( this, "isActive", true ); // avoids the setter
+//			Reflect.setField( this, "isActive", true ); // avoids the setter
+			_isSetterBypassed = true;
+			isActive = true;
 			_resumer();
 			if ( _isEntity && !isDisposed )
 			{
