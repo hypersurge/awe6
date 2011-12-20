@@ -19,6 +19,6 @@
 	<ndll name="zlib" />
 	<ndll name="nme" haxelib="nme" />
 	
-	<compilerflag name="-resource assets\managed\_exclude\config.xml@config" />
+	<compilerflag name="-resource assets/managed/_exclude/config.xml@config" />
 	
 </project>
