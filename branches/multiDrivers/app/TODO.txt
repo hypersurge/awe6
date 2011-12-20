@@ -11,8 +11,9 @@ THINGS TO DO:
 	
 move any target specific code to drivers package:
 
-* InputAll review overrides and make native templates instead
 *** adopt p_ hungarian?
+*** test on targets
+* drivers for profilers
 
 key:
 * <10 mins

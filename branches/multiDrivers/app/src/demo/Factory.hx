@@ -64,13 +64,6 @@ class Factory extends AFactory
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 20;
 		isFixedUpdates = false;
-		#if air
-		width = 480;
-		height = 320;
-		var l_config:String = haxe.Resource.getString( "config" );
-		_configUrl = l_config.split( "<assets>" )[0] + l_config.split( "</assets>" )[1];
-		isDebug = true;
-		#end
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess
@@ -124,7 +117,6 @@ class Factory extends AFactory
 		{
 			type = ETextStyle.BODY;
 		}
-//		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_fontName:String = _assetManager.font.fontName;
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( type )

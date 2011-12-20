@@ -28,12 +28,67 @@
  */
 
 package awe6.core.drivers.js;
-
+import awe6.core.drivers.AProfiler;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.geom.Matrix;
+import flash.geom.Point;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import flash.geom.Rectangle;
+import flash.system.System;
+import flash.text.TextField;
+import flash.text.TextFormat;
+	
 /**
  * This Profiler class provides js target overrides.
+ * <p>Based on net.hires.utils.Stats by Mr.doob & Theo v1.3</p>
+ * @author	Werner Avenant
+ * @author	Mr.doob
+ * @author	Theo
  * @author	Robert Fell
  */
-class Profiler extends awe6.core.drivers.AProfiler
+class Profiler extends AProfiler
 {
+	private var _bitmapData:BitmapData;
+	private var _textFormat:TextFormat;
+	private var _fpsTextField:TextField;
+	private var _memoryTextField:TextField;
+		
+	override private function _init():Void
+	{
+		super._init();
+		
+		_width = 70;
+		_height = 0;
+		_marginHeight = 12;
+		
+		_bitmapData = new BitmapData( _width, _height, true, _backgroundColor );
+		var l_bitmap:Bitmap = new Bitmap( _bitmapData );
+		l_bitmap.y = _marginHeight;
+		_context.addChild( l_bitmap );
 
+		_textFormat = new TextFormat( "_sans", 10 );
+
+		_context.graphics.beginFill( _marginColor );
+		_context.graphics.drawRect( 0, 0, _width, _marginHeight );
+		_context.graphics.endFill();
+
+		_fpsTextField = new TextField();
+
+		_fpsTextField.defaultTextFormat = _textFormat;
+		_fpsTextField.width = _width;
+		_fpsTextField.selectable = false;
+
+		_fpsTextField.textColor = _fpsColor;
+		_fpsTextField.text = _fpsLabel + ": 99 / 99";
+		_context.addChild( _fpsTextField );
+	}
+		
+	override private function _nativeUpdate():Void
+	{
+		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );
+		var l_fpsValue:Int = Std.int( Math.min( _height, _height / _kernel.factory.targetFramerate * l_fps ) );
+		_fpsTextField.text = _fpsLabel + ": " + l_fps + " / " + _kernel.factory.targetFramerate;
+	}
 }
