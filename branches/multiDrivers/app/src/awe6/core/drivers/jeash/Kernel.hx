@@ -27,55 +27,70 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.jeash;
 import awe6.core.Context;
-import awe6.core.drivers.AFactory;
+import awe6.core.drivers.AKernel;
+import awe6.interfaces.IFactory;
+import jeash.display.Stage;
+import jeash.display.StageQuality;
+import jeash.display.StageScaleMode;
+import jeash.events.Event;
+import jeash.geom.Rectangle;
+import jeash.Lib;
+import jeash.net.URLRequest;
+import jeash.system.Security;
 
 /**
- * This Factory class provides js target overrides.
+ * This Kernel class provides jeash target overrides.
  * @author	Robert Fell
  */
-class Factory extends AFactory
+class Kernel extends AKernel
 {
-	private var _sprite:Context;
-	
-	public function new( sprite:Context, isDebug:Bool = true, ?config:String )
+	private var _stage:Stage;
+
+	override private function _nativeGetIsLocal():Bool
 	{
-		_sprite = new Context();
-		sprite.addChild( _sprite );
-		super( isDebug, config );
+		return Security.sandboxType != Security.REMOTE;		
 	}
 	
 	override private function _nativeInit():Void
 	{
-		_init();
-		if ( _isConfigRequired )
-		{
-			_parseXml( _configUrl );
-		}
-		else
-		{
-			_launchKernel();		
-		}
-	}	
-	
-	private function _parseXml( data:String ):Void
-	{
-		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
-		_launchKernel();
-	}	
-	
-	override private function _nativeLaunchKernel():Kernel
-	{
-		return new Kernel( this, _sprite );
+		_stage = _context.stage;		
+		var l_instance:Kernel = this;
+		Lib.current.focusRect = false;
+		_stage.frameRate = factory.targetFramerate;
+		_stage.scaleMode = StageScaleMode.NO_SCALE;
+		_stage.quality = StageQuality.LOW;
+
+		var l_mask:Context = new Context();
+		l_mask.graphics.beginFill( 0xFFFFFF );
+		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
+		l_mask.graphics.endFill();
+		_context.addChild( l_mask );
+		_context.mask = l_mask;
+		
+		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
+		
+		isEyeCandy = true;
+		isFullScreen = false;
 	}
-	
+
 	override private function _nativeDisposer():Void
 	{
-		if ( _sprite.parent != null )
-		{
-			_sprite.parent.removeChild( _sprite );
-		}
+	}
+	
+	private function _onEnterFrame( event:Event ):Void
+	{
+		_updater( 0 ); // avoid isActive
+	}
+	
+	override private function _nativeSetIsEyeCandy( value:Bool ):Void
+	{
+	}
+	
+	override private function _nativeSetIsFullScreen( value:Bool ):Void
+	{
 	}
 	
 }
+

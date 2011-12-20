@@ -36,11 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef InputKeyboard = awe6.core.drivers.cpp.InputKeyboard;
+typedef InputKeyboard = awe6.core.drivers.nme.InputKeyboard;
 #elseif flash
 typedef InputKeyboard = awe6.core.drivers.flash.InputKeyboard;
 #elseif js
-typedef InputKeyboard = awe6.core.drivers.js.InputKeyboard;
+typedef InputKeyboard = awe6.core.drivers.jeash.InputKeyboard;
 #else
 typedef InputKeyboard = awe6.core.drivers.AInputKeyboard;
 #end

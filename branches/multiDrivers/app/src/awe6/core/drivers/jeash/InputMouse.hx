@@ -27,18 +27,18 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.jeash;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import flash.display.Loader;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.Lib;
-import flash.ui.Mouse;
+import jeash.display.Loader;
+import jeash.display.Stage;
+import jeash.events.Event;
+import jeash.events.MouseEvent;
+import jeash.Lib;
+import jeash.ui.Mouse;
 
 /**
- * This InputMouse class provides js target overrides.
+ * This InputMouse class provides jeash target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
@@ -122,10 +122,10 @@ class InputMouse extends AInputMouse
 	{
 		switch( value )
 		{
-			case ARROW : untyped jeash.Lib.jeashSetCursor( false );
-			case BUTTON : untyped jeash.Lib.jeashSetCursor( true );
-			case HAND : untyped jeash.Lib.jeashSetCursor( true );
-			case IBEAM : untyped jeash.Lib.jeashSetCursor( false );
+			case ARROW : Lib.jeashSetCursor( false );
+			case BUTTON : Lib.jeashSetCursor( true );
+			case HAND : Lib.jeashSetCursor( true );
+			case IBEAM : Lib.jeashSetCursor( false );
 			case SUB_TYPE( value ) : // Have a register cursor approach here;
 		}
 		return super.__set_cursorType( value );

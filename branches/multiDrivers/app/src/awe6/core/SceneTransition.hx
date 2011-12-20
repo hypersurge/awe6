@@ -36,11 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef SceneTransition = awe6.core.drivers.cpp.SceneTransition;
+typedef SceneTransition = awe6.core.drivers.nme.SceneTransition;
 #elseif flash
 typedef SceneTransition = awe6.core.drivers.flash.SceneTransition;
 #elseif js
-typedef SceneTransition = awe6.core.drivers.js.SceneTransition;
+typedef SceneTransition = awe6.core.drivers.jeash.SceneTransition;
 #else
 typedef SceneTransition = awe6.core.drivers.ASceneTransition;
 #end

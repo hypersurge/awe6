@@ -38,7 +38,13 @@ import awe6.interfaces.IAssetManagerProcess;
  */
 class AAssetManager extends Process, implements IAssetManagerProcess
 {
-	private static inline var _PACKAGE_ID = "assets";	
+	private var _PACKAGE_ID:String;	
+	
+	override private function _init():Void
+	{
+		super._init();
+		_PACKAGE_ID = "assets";
+	}
 
 	public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
 	{

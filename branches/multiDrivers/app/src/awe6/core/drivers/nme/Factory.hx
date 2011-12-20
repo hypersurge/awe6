@@ -27,20 +27,55 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
-import awe6.core.drivers.ASceneTransition;
+package awe6.core.drivers.nme;
+import awe6.core.Context;
+import awe6.core.drivers.AFactory;
 
 /**
- * This SceneTransition class provides js target overrides.
+ * This Factory class provides nme target overrides.
  * @author	Robert Fell
  */
-class SceneTransition extends ASceneTransition
+class Factory extends AFactory
 {
-	override private function _init():Void 
+	private var _context:Context;
+	
+	public function new( context:Context, isDebug:Bool = true, ?config:String )
 	{
-		super._init();
-		_kernel.overlay.flash( _duration, true );
+		_context = new Context();
+		context.addChild( _context );
+		super( isDebug, config );
+	}
+	
+	override private function _nativeInit():Void
+	{
+		_init();
+		if ( _isConfigRequired )
+		{
+			_parseXml( _configUrl );
+		}
+		else
+		{
+			_launchKernel();		
+		}
+	}	
+	
+	private function _parseXml( data:String ):Void
+	{
+		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_launchKernel();
+	}	
+	
+	override private function _nativeLaunchKernel():Kernel
+	{
+		return new Kernel( this, _context );
+	}
+	
+	override private function _nativeDisposer():Void
+	{
+		if ( _context.parent != null )
+		{
+			_context.parent.removeChild( _context );
+		}
 	}
 	
 }
-

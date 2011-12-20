@@ -27,10 +27,10 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.jeash;
 
 /**
- * This Preloader class provides js target overrides.
+ * This Preloader class provides jeash target overrides.
  * @author	Robert Fell
  */
 class Preloader extends awe6.core.drivers.APreloader

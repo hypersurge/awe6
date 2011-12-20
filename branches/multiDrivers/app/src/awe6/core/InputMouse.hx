@@ -37,11 +37,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef InputMouse = awe6.core.drivers.cpp.InputMouse;
+typedef InputMouse = awe6.core.drivers.nme.InputMouse;
 #elseif flash
 typedef InputMouse = awe6.core.drivers.flash.InputMouse;
 #elseif js
-typedef InputMouse = awe6.core.drivers.js.InputMouse;
+typedef InputMouse = awe6.core.drivers.jeash.InputMouse;
 #else
 typedef InputMouse = awe6.core.drivers.AInputMouse;
 #end

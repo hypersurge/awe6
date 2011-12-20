@@ -78,6 +78,45 @@ class AssetManager extends AAssetManager
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 	}
 	
+	override public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
+	{
+		if ( packageId == null )
+		{
+			packageId = _kernel.getConfig( "settings.assets.packages.default" );
+		}
+		if ( packageId == null )
+		{
+			packageId = _PACKAGE_ID;
+		}		
+		var l_assetName:String = StringTools.replace( packageId, ".", "/" ) + id;
+		var l_result:Dynamic = Assets.getSound( l_assetName );
+		if ( l_result != null )
+		{
+			return l_result;
+		}
+		var l_result:Dynamic = Assets.getBitmapData( l_assetName );
+		if ( l_result != null )
+		{
+			return l_result;
+		}
+		var l_result:Dynamic = Assets.getFont( l_assetName );
+		if ( l_result != null )
+		{
+			return l_result;
+		}
+		var l_result:Dynamic = Assets.getText( l_assetName );
+		if ( l_result != null )
+		{
+			return l_result;
+		}
+		var l_result:Dynamic = Assets.getBytes( l_assetName );
+		if ( l_result != null )
+		{
+			return l_result;
+		}
+		return super.getAsset( id, packageId, args );
+	}	
+	
 	private function _createView( type:EAsset ):IView
 	{
 		var l_sprite:Sprite = new Sprite();

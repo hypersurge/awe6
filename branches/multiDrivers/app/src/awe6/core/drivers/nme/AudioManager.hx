@@ -27,18 +27,17 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.nme;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
-import flash.events.Event;
-import flash.media.Sound;
-import flash.media.SoundChannel;
-import nme.Assets;
-import flash.media.SoundTransform;
+import nme.events.Event;
+import nme.media.Sound;
+import nme.media.SoundChannel;
+import nme.media.SoundTransform;
 
 /**
- * This AudioManager class provides js target overrides.
+ * This AudioManager class provides nme target overrides.
  * @author	Robert Fell
  */
 class AudioManager extends AAudioManager
@@ -48,8 +47,7 @@ class AudioManager extends AAudioManager
 	override private function _init():Void
 	{
 		super._init();
-//		_extension = untyped jeash.media.Sound.jeashCanPlayType( "aac" ) ? ".aac" : ".ogg"; // aac not working in IE9?
-		_extension = untyped jeash.media.Sound.jeashCanPlayType( "mp3" ) ? ".mp3" : ".ogg";
+		_extension = ".ogg";
 		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
 	}
 
@@ -62,15 +60,7 @@ class AudioManager extends AAudioManager
 	{
 		for ( i in _sounds )
 		{
-			if ( untyped i._soundChannel == null )
-			{
-				continue;
-			}
-			if ( untyped i._soundChannel.jeashAudio == null )
-			{
-				continue;
-			}
-			untyped i._soundChannel.jeashAudio.muted = isMute;
+			untyped i.setIsMute( isMute );
 		}
 	}	
 	
@@ -81,6 +71,7 @@ class _HelperSound extends _AHelperSound
 	private var _extension:String;
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
+	private var _prevVolume:Float;
 	
 	public function new( kernel:IKernel, id:String, packageId:String, extension:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
 	{
@@ -91,7 +82,7 @@ class _HelperSound extends _AHelperSound
 	
 	override private function _nativeInit():Void
 	{
-		_sound = Assets.getSound( _packageId + id + _extension );
+		_sound = _kernel.assets.getAsset( id + _extension, _packageId );
 		if ( _sound == null )
 		{
 			return dispose();
@@ -101,7 +92,6 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose(); // perhaps sounds are flooded?
 		}
-		untyped _soundChannel.jeashAudio.muted = _kernel.audio.isMute;
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		_nativeTransform();
 		return;
@@ -120,7 +110,6 @@ class _HelperSound extends _AHelperSound
 		}
 		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
 		_soundChannel.soundTransform = soundTransform;
-		untyped _soundChannel.jeashAudio.volume = _volume;
 	}
 
 	override private function _nativeStop():Void
@@ -147,6 +136,19 @@ class _HelperSound extends _AHelperSound
 		{
 			stop();
 			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
+		}
+	}
+	
+	public function setIsMute( value:Bool ):Void
+	{
+		if ( value )
+		{
+			_prevVolume = _volume;
+			transform( 0 );
+		}
+		else
+		{
+			transform( _prevVolume );
 		}
 	}
 }

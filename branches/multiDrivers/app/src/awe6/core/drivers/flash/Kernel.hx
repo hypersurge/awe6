@@ -28,9 +28,9 @@
  */
 
 package awe6.core.drivers.flash;
+import awe6.core.Context;
 import awe6.core.drivers.AKernel;
 import awe6.interfaces.IFactory;
-import flash.display.Sprite;
 import flash.display.Stage;
 import flash.display.StageDisplayState;
 import flash.display.StageQuality;
@@ -72,7 +72,7 @@ class Kernel extends AKernel
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
 
-		var l_mask:Sprite = new Sprite();
+		var l_mask:Context = new Context();
 		l_mask.graphics.beginFill( 0xFFFFFF );
 		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_mask.graphics.endFill();

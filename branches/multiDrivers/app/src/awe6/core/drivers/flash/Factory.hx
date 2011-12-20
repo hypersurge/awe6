@@ -28,8 +28,8 @@
  */
 
 package awe6.core.drivers.flash;
+import awe6.core.Context;
 import awe6.core.drivers.AFactory;
-import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
@@ -46,14 +46,14 @@ class Factory extends AFactory
 	private static inline var _CONFIG_URL = "config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	
-	private var _sprite:Sprite;
+	private var _context:Context;
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;	
 	
-	public function new( sprite:Sprite, isDebug:Bool = true, ?configUrl:String )
+	public function new( context:Context, isDebug:Bool = true, ?configUrl:String )
 	{
-		_sprite = new Sprite();
-		sprite.addChild( _sprite );
+		_context = new Context();
+		context.addChild( _context );
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;		
 		super( isDebug, configUrl );
@@ -61,26 +61,26 @@ class Factory extends AFactory
 	
 	override private function _nativeInit():Void
 	{
-		if ( _sprite.stage != null )
+		if ( _context.stage != null )
 		{
 			_hasStage();
 		}
 		else
 		{
-			_sprite.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
+			_context.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		}		
 	}
 	
 	private function _hasStage( ?event:Event ):Void
 	{
-		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		_init();
 		if ( _isConfigRequired )
 		{
 			var l_url:String = ( _configUrl != null ) ? _configUrl : _CONFIG_URL;
-			if ( ( _sprite.loaderInfo != null ) && untyped _sprite.loaderInfo.parameters.configUrl != null )
+			if ( ( _context.loaderInfo != null ) && untyped _context.loaderInfo.parameters.configUrl != null )
 			{
-				l_url = untyped _sprite.loaderInfo.parameters.configUrl;
+				l_url = untyped _context.loaderInfo.parameters.configUrl;
 			}
 			_loadConfig( l_url );
 		}
@@ -142,7 +142,7 @@ class Factory extends AFactory
 		l_textField.x = ( width - l_textField.width ) / 2;
 		l_textField.y = ( height - l_textField.height ) / 2;
 		l_textField.text += event.text + "\n\n";
-		_sprite.addChild( l_textField );
+		_context.addChild( l_textField );
 	}	
 	
 	private function _onComplete( event:Event ):Void
@@ -158,15 +158,15 @@ class Factory extends AFactory
 	
 	override private function _nativeLaunchKernel():Kernel
 	{
-		return new Kernel( this, _sprite );
+		return new Kernel( this, _context );
 	}
 	
 	override private function _nativeDisposer():Void
 	{
-		_sprite.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		if ( _sprite.parent != null )
+		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
+		if ( _context.parent != null )
 		{
-			_sprite.parent.removeChild( _sprite );
+			_context.parent.removeChild( _context );
 		}
 	}
 	

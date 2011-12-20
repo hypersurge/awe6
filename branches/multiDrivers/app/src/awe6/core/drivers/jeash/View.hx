@@ -27,12 +27,12 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.jeash;
 import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides js target overrides.
+ * This View class provides jeash target overrides.
  * @author	Robert Fell
  */
 class View extends AView

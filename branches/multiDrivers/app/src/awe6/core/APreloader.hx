@@ -37,11 +37,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef APreloader = awe6.core.drivers.cpp.Preloader;
+typedef APreloader = awe6.core.drivers.nme.Preloader;
 #elseif flash
 typedef APreloader = awe6.core.drivers.flash.Preloader;
 #elseif js
-typedef APreloader = awe6.core.drivers.js.Preloader;
+typedef APreloader = awe6.core.drivers.jeash.Preloader;
 #else
 typedef APreloader = awe6.core.drivers.APreloader;
 #end

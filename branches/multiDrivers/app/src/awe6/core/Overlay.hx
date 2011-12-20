@@ -36,11 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef Overlay = awe6.core.drivers.cpp.Overlay;
+typedef Overlay = awe6.core.drivers.nme.Overlay;
 #elseif flash
 typedef Overlay = awe6.core.drivers.flash.Overlay;
 #elseif js
-typedef Overlay = awe6.core.drivers.js.Overlay;
+typedef Overlay = awe6.core.drivers.jeash.Overlay;
 #else
 typedef Overlay = awe6.core.drivers.AOverlay;
 #end

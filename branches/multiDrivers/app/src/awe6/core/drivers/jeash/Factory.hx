@@ -27,13 +27,55 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
+package awe6.core.drivers.jeash;
+import awe6.core.Context;
+import awe6.core.drivers.AFactory;
 
 /**
- * This Preloader class provides cpp target overrides.
+ * This Factory class provides jeash target overrides.
  * @author	Robert Fell
  */
-class Preloader extends awe6.core.drivers.APreloader
+class Factory extends AFactory
 {
-
+	private var _context:Context;
+	
+	public function new( context:Context, isDebug:Bool = true, ?config:String )
+	{
+		_context = new Context();
+		context.addChild( _context );
+		super( isDebug, config );
+	}
+	
+	override private function _nativeInit():Void
+	{
+		_init();
+		if ( _isConfigRequired )
+		{
+			_parseXml( _configUrl );
+		}
+		else
+		{
+			_launchKernel();		
+		}
+	}	
+	
+	private function _parseXml( data:String ):Void
+	{
+		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_launchKernel();
+	}	
+	
+	override private function _nativeLaunchKernel():Kernel
+	{
+		return new Kernel( this, _context );
+	}
+	
+	override private function _nativeDisposer():Void
+	{
+		if ( _context.parent != null )
+		{
+			_context.parent.removeChild( _context );
+		}
+	}
+	
 }

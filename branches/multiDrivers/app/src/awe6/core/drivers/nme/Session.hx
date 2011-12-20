@@ -27,49 +27,30 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
-import awe6.core.drivers.ASceneTransition;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.filters.BlurFilter;
+package awe6.core.drivers.nme;
+import nme.net.SharedObject;
 
 /**
- * This SceneTransition class provides cpp target overrides.
+ * This Session class provides nme target overrides.
  * @author	Robert Fell
  */
-class SceneTransition extends ASceneTransition
+class Session extends ASession
 {
-	private var _blurFilter:BlurFilter;
-
-	override private function _init():Void 
+	private var _so:SharedObject;
+	
+	override private function _nativeLoad():Void
 	{
-		super._init();
-		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
-		try
-		{
-			var l_view:View = cast _kernel.scenes.scene.view;
-			l_bitmapData.draw( l_view.context );
-		}
-		catch ( error:Dynamic )
-		{
-			trace( error );
-		}
-		_blurFilter = new BlurFilter( 0, 0, 1 );
-		_context.filters = [ _blurFilter ];
-		_context.mouseEnabled = false;
-		_context.addChild( new Bitmap( l_bitmapData ) );
+		_so = SharedObject.getLocal( _kernel.factory.id );
+		_savedData = _so.data;		
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _nativeReset():Void
 	{
-		super._updater( deltaTime );
-		if ( !isDisposed )
-		{
-			_context.alpha = 1 - progress;
-			_blurFilter = new BlurFilter( progress * 32, progress * 32, 1 );
-			_context.filters = [ _blurFilter ];
-		}
+		_so.clear();		
 	}
 	
+	override private function _nativeSave():Void
+	{
+		_so.flush();
+	}
 }
-

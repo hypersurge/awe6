@@ -27,18 +27,18 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
+package awe6.core.drivers.nme;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.Lib;
-import flash.ui.Mouse;
+import nme.display.Stage;
+import nme.events.Event;
+import nme.events.MouseEvent;
+import nme.Lib;
+import nme.ui.Mouse;
 import haxe.io.Bytes;
 
 /**
- * This InputMouse class provides cpp target overrides.
+ * This InputMouse class provides nme target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

@@ -28,12 +28,12 @@
  */
 
 package awe6.core.drivers.flash;
+import awe6.core.Context;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
-import flash.display.Sprite;
 import flash.filters.BlurFilter;
 
 /**
@@ -49,18 +49,18 @@ class Overlay extends AOverlay
 	{
 		_context.mouseEnabled = false;
 		
-		_pauseContext = new Sprite();
+		_pauseContext = new Context();
 		_pauseContext.mouseEnabled = false;
 		_pauseSnapshot = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, 0x00 );
 		var l_bitmap:Bitmap = new Bitmap( _pauseSnapshot );
 		l_bitmap.filters = [ new BlurFilter( _pauseBlur, _pauseBlur, 3 ) ];
 		_pauseContext.addChild( l_bitmap );
-		var l_color:Sprite = new Sprite();
+		var l_color:Context = new Context();
 		l_color.graphics.beginFill( _pauseColor, _pauseAlpha );
 		l_color.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
 		_pauseContext.addChild( l_color );
 		
-		_flashContext = new Sprite();
+		_flashContext = new Context();
 		_flashContext.mouseEnabled = false;
 		_flashContext.blendMode = BlendMode.ADD;
 	}

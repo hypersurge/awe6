@@ -27,62 +27,47 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
-import awe6.core.drivers.AInputKeyboard;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.Lib;
+package awe6.core.drivers.jeash;
+import awe6.core.Context;
+import awe6.core.drivers.AOverlay;
+import awe6.core.View;
 
 /**
- * This InputKeyboard class provides js target overrides.
+ * This Overlay class provides js target overrides.
  * @author	Robert Fell
  */
-class InputKeyboard extends AInputKeyboard
+
+class Overlay extends AOverlay
 {
-	private var _stage:Stage;
 	
-	override private function _nativeInit():Void 
+	override private function _nativeInit():Void
 	{
-		_stage = Lib.current.stage;
-		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.addEventListener( Event.DEACTIVATE, _reset );
+		_context.mouseEnabled = false;
+		
+		_pauseContext = new Context();
+		_pauseContext.mouseEnabled = false;
+		_pauseContext.graphics.beginFill( _pauseColor, _pauseAlpha );
+		_pauseContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );		
+		
+		_flashContext = new Context();
+		_flashContext.mouseEnabled = false;
 	}
 	
-	override private function _updater( timeInterval = 0 ):Void 
+	override private function _updater( ?deltaTime:Int = 0 ):Void 
 	{
-		_stage.focus = _stage;
-		super._updater( timeInterval );
+		super._updater( deltaTime );
+		_flashContext.alpha = _flashAlpha;
 	}
 	
-	override private function _disposer():Void 
+	override public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void
 	{
-		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
-		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
-		_stage.removeEventListener( Event.DEACTIVATE, _reset );
-		super._disposer();
+		_flashContext.graphics.clear();
+		_flashContext.graphics.beginFill( color );
+		_flashContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
+		_flashDuration = _flashStartingDuration = duration;
+		_flashAsTime = asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
 	}
-	
-	private function _onKeyDown( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
-		return;
-	}
-	
-	private function _onKeyUp( event:KeyboardEvent ):Void
-	{
-		if ( !isActive )
-		{
-			return;
-		}
-		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
-		return;
-	}
-	
 	
 }

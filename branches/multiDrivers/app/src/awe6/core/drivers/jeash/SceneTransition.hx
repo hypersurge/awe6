@@ -27,55 +27,20 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
-import awe6.core.Context;
-import awe6.core.drivers.AFactory;
+package awe6.core.drivers.jeash;
+import awe6.core.drivers.ASceneTransition;
 
 /**
- * This Factory class provides cpp target overrides.
+ * This SceneTransition class provides jeash target overrides.
  * @author	Robert Fell
  */
-class Factory extends AFactory
+class SceneTransition extends ASceneTransition
 {
-	private var _sprite:Context;
-	
-	public function new( sprite:Context, isDebug:Bool = true, ?config:String )
+	override private function _init():Void 
 	{
-		_sprite = new Context();
-		sprite.addChild( _sprite );
-		super( isDebug, config );
-	}
-	
-	override private function _nativeInit():Void
-	{
-		_init();
-		if ( _isConfigRequired )
-		{
-			_parseXml( _configUrl );
-		}
-		else
-		{
-			_launchKernel();		
-		}
-	}	
-	
-	private function _parseXml( data:String ):Void
-	{
-		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
-		_launchKernel();
-	}	
-	
-	override private function _nativeLaunchKernel():Kernel
-	{
-		return new Kernel( this, _sprite );
-	}
-	
-	override private function _nativeDisposer():Void
-	{
-		if ( _sprite.parent != null )
-		{
-			_sprite.parent.removeChild( _sprite );
-		}
+		super._init();
+		_kernel.overlay.flash( _duration, true );
 	}
 	
 }
+

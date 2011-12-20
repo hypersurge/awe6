@@ -36,11 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef Kernel = awe6.core.drivers.cpp.Kernel;
+typedef Kernel = awe6.core.drivers.nme.Kernel;
 #elseif flash
 typedef Kernel = awe6.core.drivers.flash.Kernel;
 #elseif js
-typedef Kernel = awe6.core.drivers.js.Kernel;
+typedef Kernel = awe6.core.drivers.jeash.Kernel;
 #else
 typedef Kernel = awe6.core.drivers.AKernel;
 #end

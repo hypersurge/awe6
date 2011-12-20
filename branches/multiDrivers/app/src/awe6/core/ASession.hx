@@ -37,11 +37,11 @@
  * @author	Robert Fell
  **/
 #if cpp
-typedef ASession = awe6.core.drivers.cpp.Session;
+typedef ASession = awe6.core.drivers.nme.Session;
 #elseif flash
 typedef ASession = awe6.core.drivers.flash.Session;
 #elseif js
-typedef ASession = awe6.core.drivers.js.Session;
+typedef ASession = awe6.core.drivers.jeash.Session;
 #else
 typedef ASession = awe6.core.drivers.ASession;
 #end

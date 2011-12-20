@@ -27,20 +27,13 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers.nme;
 
 /**
- * The View class provides a minimalist implementation of the IView interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>Kernel includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This Preloader class provides nme target overrides.
  * @author	Robert Fell
  */
-#if cpp
-typedef View = awe6.core.drivers.nme.View;
-#elseif flash
-typedef View = awe6.core.drivers.flash.View;
-#elseif js
-typedef View = awe6.core.drivers.jeash.View;
-#else
-typedef View = awe6.core.drivers.AView;
-#end
+class Preloader extends awe6.core.drivers.APreloader
+{
+
+}

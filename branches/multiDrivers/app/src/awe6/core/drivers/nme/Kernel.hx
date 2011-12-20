@@ -27,21 +27,20 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.nme;
 import awe6.core.drivers.AKernel;
 import awe6.interfaces.IFactory;
-import flash.display.Sprite;
-import flash.display.Stage;
-import flash.display.StageQuality;
-import flash.display.StageScaleMode;
-import flash.events.Event;
-import flash.geom.Rectangle;
-import flash.Lib;
-import flash.net.URLRequest;
-import flash.system.Security;
+import nme.display.Sprite;
+import nme.display.Stage;
+import nme.display.StageQuality;
+import nme.display.StageScaleMode;
+import nme.events.Event;
+import nme.geom.Rectangle;
+import nme.Lib;
+import nme.net.URLRequest;
 
 /**
- * This Kernel class provides js target overrides.
+ * This Kernel class provides nme target overrides.
  * @author	Robert Fell
  */
 class Kernel extends AKernel
@@ -50,14 +49,13 @@ class Kernel extends AKernel
 
 	override private function _nativeGetIsLocal():Bool
 	{
-		return Security.sandboxType != Security.REMOTE;		
+		return true;
 	}
 	
 	override private function _nativeInit():Void
 	{
 		_stage = _context.stage;		
 		var l_instance:Kernel = this;
-		Lib.current.focusRect = false;
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;

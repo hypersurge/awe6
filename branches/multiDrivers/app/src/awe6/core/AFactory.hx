@@ -37,11 +37,11 @@ package awe6.core;
  * @author	Robert Fell
  **/
 #if cpp
-typedef AFactory = awe6.core.drivers.cpp.Factory;
+typedef AFactory = awe6.core.drivers.nme.Factory;
 #elseif flash
 typedef AFactory = awe6.core.drivers.flash.Factory;
 #elseif js
-typedef AFactory = awe6.core.drivers.js.Factory;
+typedef AFactory = awe6.core.drivers.jeash.Factory;
 #else
 typedef AFactory = awe6.core.drivers.AFactory;
 #end

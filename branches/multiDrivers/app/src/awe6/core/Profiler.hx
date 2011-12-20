@@ -35,11 +35,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef Profiler = awe6.core.drivers.cpp.Profiler;
+typedef Profiler = awe6.core.drivers.nme.Profiler;
 #elseif flash
 typedef Profiler = awe6.core.drivers.flash.Profiler;
 #elseif js
-typedef Profiler = awe6.core.drivers.js.Profiler;
+typedef Profiler = awe6.core.drivers.jeash.Profiler;
 #else
 typedef Profiler = awe6.core.drivers.AProfiler;
 #end

@@ -28,9 +28,9 @@
  */
 
 package awe6.core.drivers.flash;
+import awe6.core.Context;
 import awe6.core.drivers.APreloader;
 import flash.display.Loader;
-import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
@@ -51,7 +51,7 @@ import haxe.io.BytesInput;
  */
 class Preloader extends APreloader
 {
-	private var _sprite:Sprite;
+	private var _context:Context;
 	private var _loader:Loader;
 	private var _urlLoader:URLLoader;
 	private var _loaderContext:LoaderContext;
@@ -60,8 +60,8 @@ class Preloader extends APreloader
 	
 	override private function _init():Void
 	{
-		_sprite = new Sprite();
-		view = new View( _kernel, _sprite );
+		_context = new Context();
+		view = new View( _kernel, _context );
 		_loaderContext = new LoaderContext();
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
 		#if air
@@ -115,7 +115,7 @@ class Preloader extends APreloader
 			_textField.height = _kernel.factory.height - 100;
 			_textField.x = ( _kernel.factory.width - _textField.width ) / 2;
 			_textField.y = ( _kernel.factory.height - _textField.height ) / 2;
-			_sprite.addChild( _textField );
+			_context.addChild( _textField );
 		}
 		_textField.text += event.text + "\n\n";
 		view.clear();

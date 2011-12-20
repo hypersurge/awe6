@@ -27,16 +27,16 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
+package awe6.core.drivers.nme;
 import awe6.core.drivers.AInputKeyboard;
 import awe6.interfaces.EKey;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.Lib;
+import nme.display.Stage;
+import nme.events.Event;
+import nme.events.KeyboardEvent;
+import nme.Lib;
 
 /**
- * This InputKeyboard class provides cpp target overrides.
+ * This InputKeyboard class provides nme target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

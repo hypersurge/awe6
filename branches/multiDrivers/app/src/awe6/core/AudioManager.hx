@@ -36,11 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef AudioManager = awe6.core.drivers.cpp.AudioManager;
+typedef AudioManager = awe6.core.drivers.nme.AudioManager;
 #elseif flash
 typedef AudioManager = awe6.core.drivers.flash.AudioManager;
 #elseif js
-typedef AudioManager = awe6.core.drivers.js.AudioManager;
+typedef AudioManager = awe6.core.drivers.jeash.AudioManager;
 #else
 typedef AudioManager = awe6.core.drivers.AAudioManager;
 #end

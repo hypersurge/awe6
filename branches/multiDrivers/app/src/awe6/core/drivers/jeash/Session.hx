@@ -27,11 +27,11 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.js;
+package awe6.core.drivers.jeash;
 import js.Cookie;
 
 /**
- * This Session class provides js target overrides.
+ * This Session class provides jeash target overrides.
  * @author	Robert Fell
  */
 class Session extends ASession

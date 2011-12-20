@@ -36,9 +36,9 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if cpp
-typedef Context = flash.display.Sprite;
+typedef Context = nme.display.Sprite;
 #elseif flash
 typedef Context = flash.display.Sprite;
 #elseif js
-typedef Context = flash.display.Sprite;
+typedef Context = jeash.display.Sprite;
 #end

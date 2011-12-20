@@ -27,30 +27,62 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
-import flash.net.SharedObject;
+package awe6.core.drivers.jeash;
+import awe6.core.drivers.AInputKeyboard;
+import jeash.display.Stage;
+import jeash.events.Event;
+import jeash.events.KeyboardEvent;
+import jeash.Lib;
 
 /**
- * This Session class provides cpp target overrides.
+ * This InputKeyboard class provides jeash target overrides.
  * @author	Robert Fell
  */
-class Session extends ASession
+class InputKeyboard extends AInputKeyboard
 {
-	private var _so:SharedObject;
+	private var _stage:Stage;
 	
-	override private function _nativeLoad():Void
+	override private function _nativeInit():Void 
 	{
-		_so = SharedObject.getLocal( _kernel.factory.id );
-		_savedData = _so.data;		
+		_stage = Lib.current.stage;
+		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.addEventListener( Event.DEACTIVATE, _reset );
 	}
 	
-	override private function _nativeReset():Void
+	override private function _updater( timeInterval = 0 ):Void 
 	{
-		_so.clear();		
+		_stage.focus = _stage;
+		super._updater( timeInterval );
 	}
 	
-	override private function _nativeSave():Void
+	override private function _disposer():Void 
 	{
-		_so.flush();
+		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.removeEventListener( Event.DEACTIVATE, _reset );
+		super._disposer();
 	}
+	
+	private function _onKeyDown( event:KeyboardEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
+		return;
+	}
+	
+	private function _onKeyUp( event:KeyboardEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
+		return;
+	}
+	
+	
 }

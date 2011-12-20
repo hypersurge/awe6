@@ -27,12 +27,12 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.cpp;
+package awe6.core.drivers.nme;
 import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides cpp target overrides.
+ * This View class provides nme target overrides.
  * @author	Robert Fell
  */
 class View extends AView
