@@ -1,0 +1,21 @@
+
+                        _____ 
+     _____      _____  / ___/
+    /__   | /| /   _ \/ __ \ 
+   / _  / |/ |/ /  __  /_/ / 
+   \___/|__/|__/\___/\____/  
+    awe6 is game, inverted
+ 
+
+THINGS TO DO:
+	
+move any target specific code to drivers package:
+
+*** adopt p_ hungarian?
+*** test on targets
+* drivers for profilers
+
+key:
+* <10 mins
+** ~30 mins
+*** > hour
