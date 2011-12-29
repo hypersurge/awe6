@@ -58,11 +58,11 @@ class InputManager extends Process, implements IInputManager
 		mouse = _inputMouse = new InputMouse( _kernel );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
-		_inputKeyboard.update( deltaTime );
-		_inputMouse.update( deltaTime );
+		super._updater( p_deltaTime );
+		_inputKeyboard.update( p_deltaTime );
+		_inputMouse.update( p_deltaTime );
 	}
 	
 	override private function _disposer():Void 
@@ -72,9 +72,9 @@ class InputManager extends Process, implements IInputManager
 		super._disposer();		
 	}
 	
-	public function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IInputJoypad
+	public function createJoypad( ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey ):IInputJoypad
 	{
-		return new InputJoypad( _kernel, up, right, down, left, primary, secondary, upAlt, rightAlt, downAlt, leftAlt, primaryAlt, secondaryAlt );
+		return new InputJoypad( _kernel, p_up, p_right, p_down, p_left, p_primary, p_secondary, p_upAlt, p_rightAlt, p_downAlt, p_leftAlt, p_primaryAlt, p_secondaryAlt );
 	}
 	
 }

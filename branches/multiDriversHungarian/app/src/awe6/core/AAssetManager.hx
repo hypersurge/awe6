@@ -42,34 +42,34 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 	
 	override private function _init():Void
 	{
-		super._init();
 		_PACKAGE_ID = "assets";
+		super._init();
 	}
 
-	public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
+	public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
 	{
-		if ( packageId == null )
+		if ( p_packageId == null )
 		{
-			packageId = _kernel.getConfig( "settings.assets.packages.default" );
+			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
 		}
-		if ( packageId == null )
+		if ( p_packageId == null )
 		{
-			packageId = _PACKAGE_ID;
+			p_packageId = _PACKAGE_ID;
 		}		
-		var l_assetName:String = id;
-		if ( packageId.length > 0 )
+		var l_assetName:String = p_id;
+		if ( p_packageId.length > 0 )
 		{
-			l_assetName = packageId + "." + id;
+			l_assetName = p_packageId + "." + p_id;
 		}
 		var l_assetClass:Class<Dynamic> = Type.resolveClass( l_assetName );
 		if ( l_assetClass == null )
 		{
 			return null;			
 		}
-		if ( args == null )
+		if ( p_args == null )
 		{
-			args = [];
+			p_args = [];
 		}
-		return Type.createInstance( l_assetClass, args );
+		return Type.createInstance( l_assetClass, p_args );
 	}
 }
