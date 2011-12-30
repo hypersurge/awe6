@@ -55,12 +55,12 @@ class AView extends Process, implements IView
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;
 	
-	public function new( kernel:IKernel, ?context:Context, ?priority:Int = 0, ?owner:Dynamic ) 
+	public function new( p_kernel:IKernel, ?p_context:Context, ?p_priority:Int = 0, ?p_owner:Dynamic ) 
 	{
-		this.context = context;
-		this.priority = priority;
-		this.owner = owner;
-		super( kernel );
+		context = p_context;
+		priority = p_priority;
+		owner = p_owner;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void 
@@ -72,33 +72,33 @@ class AView extends Process, implements IView
 		x = y = globalX = globalY = 0;
 	}
 	
-	public function addChild( child:IView, ?priority:Int = 0 ):Void
+	public function addChild( p_child:IView, ?p_priority:Int = 0 ):Void
 	{
-		if ( isDisposed || ( child == null ) )
+		if ( isDisposed || ( p_child == null ) )
 		{
 			return;
 		}
-		var l_child:AView = cast child;
+		var l_child:AView = cast p_child;
 		if ( l_child.parent != this )
 		{
-			child.remove();
+			p_child.remove();
 			_children.push( l_child );
 			l_child._setParent( this );
 		}
-		if ( priority != 0 )
+		if ( p_priority != 0 )
 		{
-			child.priority = priority;
+			p_child.priority = p_priority;
 		}
 		_isDirty = true;
 	}
 	
-	public function removeChild( child:IView ):Void
+	public function removeChild( p_child:IView ):Void
 	{
-		if ( isDisposed || ( child == null ) )
+		if ( isDisposed || ( p_child == null ) )
 		{
 			return;
 		}
-		var l_child:AView = cast child;
+		var l_child:AView = cast p_child;
 		if ( l_child.parent != this )
 		{
 			return;
@@ -124,12 +124,12 @@ class AView extends Process, implements IView
 		}
 	}
 		
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		for ( i in _children )
 		{
-			i.update( deltaTime );
+			i.update( p_deltaTime );
 		}
 		if ( _isDirty )
 		{
@@ -166,9 +166,9 @@ class AView extends Process, implements IView
 		//override me
 	}
 	
-	private function _setParent( parent:IView ):Void
+	private function _setParent( p_parent:IView ):Void
 	{
-		this.parent = parent;
+		parent = p_parent;
 	}
 	
 	private function __get_priority():Int
@@ -176,13 +176,13 @@ class AView extends Process, implements IView
 		return priority;
 	}
 	
-	private function __set_priority( value:Int ):Int
+	private function __set_priority( p_value:Int ):Int
 	{
-		if ( value == priority )
+		if ( p_value == priority )
 		{
 			return priority;
 		}
-		priority = value;
+		priority = p_value;
 		var l_parent:AView = cast parent;
 		if ( l_parent != null )
 		{
@@ -191,13 +191,13 @@ class AView extends Process, implements IView
 		return priority;
 	}
 	
-	private function __set_isVisible( value:Bool ):Bool
+	private function __set_isVisible( p_value:Bool ):Bool
 	{
-		if ( value == isVisible )
+		if ( p_value == isVisible )
 		{
 			return isVisible;
 		}
-		isVisible = value;
+		isVisible = p_value;
 		var l_parent:AView = cast parent;
 		if ( l_parent != null )
 		{
@@ -228,24 +228,24 @@ class AView extends Process, implements IView
 		return parent.isInViewStack;
 	}
 	
-	private function __set_x( value:Float ):Float
+	private function __set_x( p_value:Float ):Float
 	{
-		x = value;
+		x = p_value;
 		globalX = x + ( ( parent != null ) ? parent.globalX : 0 );
 		return x;
 	}
 	
-	private function __set_y( value:Float ):Float
+	private function __set_y( p_value:Float ):Float
 	{
-		y = value;
+		y = p_value;
 		globalY = y + ( ( parent != null ) ? parent.globalY : 0 );
 		return y;
 	}
 	
-	public function setPosition( x:Float, y:Float ):Void
+	public function setPosition( p_x:Float, p_y:Float ):Void
 	{
-		this.x = x;
-		this.y = y;
+		this.x = p_x;
+		this.y = p_y;
 	}
 	
 }

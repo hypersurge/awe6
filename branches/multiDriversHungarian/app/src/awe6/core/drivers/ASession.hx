@@ -55,14 +55,14 @@ class ASession implements ISession
 	public var saveCount:Int;
 	//extend me
 	
-	public function new( kernel:IKernel, ?id:String = "" )
+	public function new( p_kernel:IKernel, ?p_id:String = "" )
 	{
-		_kernel = kernel;
-		if ( id == "" )
+		_kernel = p_kernel;
+		if ( p_id == "" )
 		{
-			id = DEBUG_ID;
+			p_id = DEBUG_ID;
 		}
-		this.id = id;
+		id = p_id;
 		_tools = _kernel.tools;
 		_version = 1;
 		_init();
@@ -128,19 +128,19 @@ class ASession implements ISession
 		// extend me
 	}
 	
-	public inline function clone( newId:String ):ISession
+	public inline function clone( p_newId:String ):ISession
 	{
 		_setter();
-		Reflect.setField( _savedData, newId, _data );
-		return Type.createInstance( Type.getClass( this ), [ _kernel, newId ] );
+		Reflect.setField( _savedData, p_newId, _data );
+		return Type.createInstance( Type.getClass( this ), [ _kernel, p_newId ] );
 	}
 	
-	public inline function reset( ?isSaved:Bool = false ):Void
+	public inline function reset( ?p_isSaved:Bool = false ):Void
 	{
 		_data = { };
 		_resetter();
 		_setter();
-		if ( isSaved )
+		if ( p_isSaved )
 		{
 			save();
 		}
@@ -166,30 +166,30 @@ class ASession implements ISession
 		return 0;
 	}
 	
-	public function getSessionIds( ?suggestions:Array<String> = null ):Array<String>
+	public function getSessionIds( ?p_suggestions:Array<String> = null ):Array<String>
 	{
 		var l_result:Array<String> = Reflect.fields( _savedData );
 		l_result.remove( _VERSION_ID );
 		l_result.remove( DEBUG_ID );
-		if ( suggestions != null )
+		if ( p_suggestions != null )
 		{
-			var l_desiredLength:Int = suggestions.length;
+			var l_desiredLength:Int = p_suggestions.length;
 			for ( i in l_result )
 			{
-				suggestions.remove( i );
+				p_suggestions.remove( i );
 			}
 			while ( l_result.length < l_desiredLength )
 			{
-				l_result.push( suggestions.shift() );
+				l_result.push( p_suggestions.shift() );
 			}
 		}
 		l_result.sort( _tools.sortByString );
 		return l_result;
 	}
 	
-	public function getSessions( ?suggestions:Array<String> = null ):Array<ISession>
+	public function getSessions( ?p_suggestions:Array<String> = null ):Array<ISession>
 	{
-		var l_ids:Array<String> = getSessionIds( suggestions );
+		var l_ids:Array<String> = getSessionIds( p_suggestions );
 		var l_result:Array<ISession> = new Array<ISession>();
 		for ( i in l_ids )
 		{

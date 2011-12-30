@@ -56,9 +56,9 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		//override me
 	}
 	
-	override private function _updater( timeInterval = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( timeInterval );
+		super._updater( p_deltaTime );
 		var l_encounteredKeyCodes:Hash<Bool> = new Hash<Bool>();
 		var l_nextBuffer:Array<_HelperKeyEvent> = [];
 		for ( i in _buffer )
@@ -90,7 +90,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		for ( i in _keys )
 		{
 			i.isDown ? i.updatesDown++ : i.updatesUp++;
-			i.isDown ? i.timeDown += timeInterval : i.timeUp += timeInterval;
+			i.isDown ? i.timeDown += p_deltaTime : i.timeUp += p_deltaTime;
 		}
 	}
 	
@@ -100,14 +100,14 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		super._disposer();
 	}
 	
-	private function _addEvent( keyCodeValue:Int, isDown:Bool ):Void
+	private function _addEvent( p_keyCodeValue:Int, p_isDown:Bool ):Void
 	{
-		_buffer.push( new _HelperKeyEvent( keyCodeValue, isDown ) );
+		_buffer.push( new _HelperKeyEvent( p_keyCodeValue, p_isDown ) );
 	}
 	
-	private function _onDown( keyCode ):Void
+	private function _onDown( p_keyCode ):Void
 	{
-		var l_current:_HelperKey = _keys[keyCode];
+		var l_current:_HelperKey = _keys[p_keyCode];
 		l_current.isUsed = true;
 		l_current.isDown = true;
 		l_current.timeUpPrevious = l_current.timeUp;
@@ -116,9 +116,9 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeUp = 0;
 	}
 	
-	private function _onUp( keyCode:Int ):Void
+	private function _onUp( p_keyCode:Int ):Void
 	{
-		var l_current:_HelperKey = _keys[keyCode];
+		var l_current:_HelperKey = _keys[p_keyCode];
 		l_current.isDown = false;
 		l_current.timeDownPrevious = l_current.timeDown;
 		l_current.updatesDownPrevious = l_current.updatesDown;
@@ -126,7 +126,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeDown = 0;
 	}
 		
-	private function _reset( ?event:Dynamic = null ):Void
+	private function _reset( ?p_event:Dynamic = null ):Void
 	{
 		_buffer = [];
 		_keys = [];
@@ -136,67 +136,67 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		}
 	}	
 
-	public function getIsKeyDown( type:EKey ):Bool
+	public function getIsKeyDown( p_type:EKey ):Bool
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
 			return false;
 		}
-		var l_keyCode:Int = getKeyCode( type );
+		var l_keyCode:Int = getKeyCode( p_type );
 		return _keys[l_keyCode].isDown;
 	}
 	
-	public function getIsKeyPress( type:EKey ):Bool
+	public function getIsKeyPress( p_type:EKey ):Bool
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
 			return false;
 		}
-		var l_keyCode:Int = getKeyCode( type );
+		var l_keyCode:Int = getKeyCode( p_type );
 		return ( _keys[l_keyCode].updatesDown == 1 );
 	}
 	
-	public function getIsKeyRelease( type:EKey ):Bool
+	public function getIsKeyRelease( p_type:EKey ):Bool
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
 			return false;
 		}
-		var l_keyCode:Int = getKeyCode( type );
+		var l_keyCode:Int = getKeyCode( p_type );
 		return ( _keys[l_keyCode].isUsed && ( _keys[l_keyCode].updatesUp == 1 ) );
 	}	
 	
-	public function getKeyDownDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
+	public function getKeyDownDuration( p_type:EKey, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false ):Float
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
 			return 0;
 		}
-		var l_keyCode:Int = getKeyCode( type );
-		if ( isPrevious )
+		var l_keyCode:Int = getKeyCode( p_type );
+		if ( p_isPrevious )
 		{
-			return asTime ? _keys[l_keyCode].timeDownPrevious : _keys[l_keyCode].updatesDownPrevious;
+			return p_asTime ? _keys[l_keyCode].timeDownPrevious : _keys[l_keyCode].updatesDownPrevious;
 		}
-		return asTime ? _keys[l_keyCode].timeDown : _keys[l_keyCode].updatesDown;
+		return p_asTime ? _keys[l_keyCode].timeDown : _keys[l_keyCode].updatesDown;
 	}
 	
-	public function getKeyUpDuration( type:EKey, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float
+	public function getKeyUpDuration( p_type:EKey, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false  ):Float
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
 			return _tools.BIG_NUMBER;
 		}
-		var l_keyCode:Int = getKeyCode( type );
-		if ( isPrevious )
+		var l_keyCode:Int = getKeyCode( p_type );
+		if ( p_isPrevious )
 		{
-			return asTime ? _keys[l_keyCode].timeUpPrevious : _keys[l_keyCode].updatesUpPrevious;
+			return p_asTime ? _keys[l_keyCode].timeUpPrevious : _keys[l_keyCode].updatesUpPrevious;
 		}
-		return asTime ? _keys[l_keyCode].timeUp : _keys[l_keyCode].updatesUp;
+		return p_asTime ? _keys[l_keyCode].timeUp : _keys[l_keyCode].updatesUp;
 	}
 	
-	public function getKeyCode( type:EKey ):Int
+	public function getKeyCode( p_type:EKey ):Int
 	{
-		return switch ( type )
+		return switch ( p_type )
 		{
 			case NUM_LOCK: 144; 
 			case CLEAR: 12; 
@@ -301,19 +301,19 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		}
 	}
 	
-	public function getKey( keyCode:Int ):EKey
+	public function getKey( p_keyCode:Int ):EKey
 	{
 		var l_constructors:Array<String> = Type.getEnumConstructs( EKey );
 		l_constructors.pop();
 		for ( i in l_constructors )
 		{
 			var l_key:EKey = Type.createEnum( EKey, i );
-			if ( getKeyCode( l_key ) == keyCode )
+			if ( getKeyCode( l_key ) == p_keyCode )
 			{
 				return l_key;
 			}
 		}
-		return EKey.SUB_TYPE( keyCode );
+		return EKey.SUB_TYPE( p_keyCode );
 	}	
 }
 
@@ -330,17 +330,17 @@ private class _HelperKey
 	public var timeDownPrevious:Int;
 	public var timeUpPrevious:Int;
 	
-	public function new( kernel:IKernel )
+	public function new( p_kernel:IKernel )
 	{
 		isDown = false;
 		updatesDown = 0;
-		updatesUp = kernel.tools.BIG_NUMBER;
+		updatesUp = p_kernel.tools.BIG_NUMBER;
 		timeDown = 0;
-		timeUp = kernel.tools.BIG_NUMBER;
+		timeUp = p_kernel.tools.BIG_NUMBER;
 		updatesDownPrevious = 0;
-		updatesUpPrevious = kernel.tools.BIG_NUMBER;
+		updatesUpPrevious = p_kernel.tools.BIG_NUMBER;
 		timeDownPrevious = 0;
-		timeUpPrevious = kernel.tools.BIG_NUMBER;
+		timeUpPrevious = p_kernel.tools.BIG_NUMBER;
 	}
 }
 
@@ -349,9 +349,9 @@ private class _HelperKeyEvent
 	public var keyCode:Int;
 	public var isDown:Bool;
 	
-	public function new( keyCode:Int, isDown:Bool )
+	public function new( p_keyCode:Int, p_isDown:Bool )
 	{
-		this.keyCode = keyCode;
-		this.isDown = isDown;
+		keyCode = p_keyCode;
+		isDown = p_isDown;
 	}
 }

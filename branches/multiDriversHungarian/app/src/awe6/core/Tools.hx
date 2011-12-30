@@ -49,16 +49,16 @@ class Tools implements ITools
 	private var _kernel:IKernel;
 	private var _encrypter:IEncrypter;
 	
-	public function new( kernel:IKernel )
+	public function new( p_kernel:IKernel )
 	{
-		_kernel = kernel;
+		_kernel = p_kernel;
 		BIG_NUMBER = 9999998;
 		_encrypter = _kernel.factory.createEncrypter();
 	}
 
-	public function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String
+	public function createGuid( ?p_isSmall:Bool = false, ?p_prefix:String = "" ):String
 	{
-		return isSmall ? prefix + ( _randomCharacter() + _randomCharacter() + _randomCharacter() ).substr( 0, 10 ) : prefix + ( _randomCharacter() + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + _randomCharacter() + _randomCharacter() );
+		return p_isSmall ? p_prefix + ( _randomCharacter() + _randomCharacter() + _randomCharacter() ).substr( 0, 10 ) : p_prefix + ( _randomCharacter() + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + _randomCharacter() + _randomCharacter() );
 	}
 	
 	private function _randomCharacter():String
@@ -66,25 +66,25 @@ class Tools implements ITools
 		return StringTools.hex( Std.int( ( 1 + Math.random() ) * 0x10000 ) | 0, 1 ).substr( 1 );
 	}
 	
-	public inline function ease( originalValue:Float, newValue:Float, ease:Float ):Float
+	public inline function ease( p_originalValue:Float, p_newValue:Float, p_ease:Float ):Float
 	{
-		return ( originalValue * ( 1 - ease ) ) + ( newValue * ease );
+		return ( p_originalValue * ( 1 - p_ease ) ) + ( p_newValue * p_ease );
 	}
 	
-	public inline function sortByString( a:String, b:String ):Int
+	public inline function sortByString( p_a:String, p_b:String ):Int
 	{
-		return Reflect.compare( a.toLowerCase(), b.toLowerCase() );
+		return Reflect.compare( p_a.toLowerCase(), p_b.toLowerCase() );
 	}	
 	
-	public inline function sortByInt( a:Int, b:Int ):Int
+	public inline function sortByInt( p_a:Int, p_b:Int ):Int
 	{
-		return Reflect.compare( a, b );
+		return Reflect.compare( p_a, p_b );
 	}	
 	
-	public inline function sortByPriority( a:IPriority, b:IPriority ):Int
+	public inline function sortByPriority( p_a:IPriority, p_b:IPriority ):Int
 	{
-		var l_ap:Int = a.priority;
-		var l_bp:Int = b.priority;
+		var l_ap:Int = p_a.priority;
+		var l_bp:Int = p_b.priority;
 		if ( l_ap < l_bp )
 		{
 			return -1;
@@ -96,79 +96,79 @@ class Tools implements ITools
         return 0;
 	}	
 	
-	public inline function toUpperCaseFirst( value:String ):String
+	public inline function toUpperCaseFirst( p_value:String ):String
 	{
-		return value.charAt( 0 ).toUpperCase() + value.substr( 1 ).toLowerCase();
+		return p_value.charAt( 0 ).toUpperCase() + p_value.substr( 1 ).toLowerCase();
 	}
 	
-	private function _isCamelCase( value:String ):Bool
+	private function _isCamelCase( p_value:String ):Bool
 	{
-		if ( value.toUpperCase() == value )
+		if ( p_value.toUpperCase() == p_value )
 		{
 			return false;
 		}
-		if ( value.indexOf( " " ) > -1 )
+		if ( p_value.indexOf( " " ) > -1 )
 		{
 			return false;
 		}
-		if ( value.indexOf( "_" ) > -1 )
+		if ( p_value.indexOf( "_" ) > -1 )
 		{
 			return false;
 		}
 		return true;
 	}
 	
-	private function _isConstCase( value:String ):Bool
+	private function _isConstCase( p_value:String ):Bool
 	{
-		if ( value.toUpperCase() != value )
+		if ( p_value.toUpperCase() != p_value )
 		{
 			return false;
 		}
-		if ( value.indexOf( " " ) > -1 )
+		if ( p_value.indexOf( " " ) > -1 )
 		{
 			return false;
 		}
 		return true;
 	}
 	
-	public function toCamelCase( value:String, ?isUpper:Bool = false ):String
+	public function toCamelCase( p_value:String, ?p_isUpper:Bool = false ):String
 	{
-		if ( ( value == null ) || ( value == "" ) )
+		if ( ( p_value == null ) || ( p_value == "" ) )
 		{
 			return "";
 		}
-		if ( _isCamelCase( value ) )
+		if ( _isCamelCase( p_value ) )
 		{
-			return value;
+			return p_value;
 		}
-		if ( _isConstCase( value ) )
+		if ( _isConstCase( p_value ) )
 		{
-			value = fromConstCase( value );		
+			p_value = fromConstCase( p_value );		
 		}
 		var l_result:String = "";
-		value = StringTools.replace( value, "     ", " " );
-		value = StringTools.replace( value, "    ", " " );
-		value = StringTools.replace( value, "   ", " " );
-		value = StringTools.replace( value, "  ", " " );
-		value = StringTools.replace( value, " ", "_" );
+		p_value = StringTools.replace( p_value, "     ", " " );
+		p_value = StringTools.replace( p_value, "    ", " " );
+		p_value = StringTools.replace( p_value, "   ", " " );
+		p_value = StringTools.replace( p_value, "  ", " " );
+		p_value = StringTools.replace( p_value, " ", "_" );
 		var l_del:String = "_";
-		var l_words:Array<String> = value.split( l_del );
+		var l_words:Array<String> = p_value.split( l_del );
 		for ( i in l_words )
 		{
-			l_result += isUpper ? toUpperCaseFirst( i ) : i.toLowerCase();
-			isUpper = true;
+			l_result += p_isUpper ? toUpperCaseFirst( i ) : i.toLowerCase();
+			p_isUpper = true;
 		}
 		return l_result;
 	}
 	
-	public function fromCamelCase( value:String ):String
+	public function fromCamelCase( p_value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) )
+		if ( ( p_value == null ) || ( p_value == "" ) )
 		{
 			return "";
 		}
 		var l_result:String = "";
-		var l_chars:Array<String> = value.split( "" );
+		var l_chars:Array<String> = p_value.split( "" );
 		var l_space:String = "";
 		for ( i in l_chars )
 		{
@@ -182,38 +182,38 @@ class Tools implements ITools
 		return l_result;
 	}
 	
-	public function toConstCase( value:String ):String
+	public function toConstCase( p_value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) )
+		if ( ( p_value == null ) || ( p_value == "" ) )
 		{
 			return "";
 		}
-		if ( _isConstCase( value ) )
+		if ( _isConstCase( p_value ) )
 		{
-			return value;
+			return p_value;
 		}
-		if ( _isCamelCase( value ) )
+		if ( _isCamelCase( p_value ) )
 		{
-			value = fromCamelCase( value );		
+			p_value = fromCamelCase( p_value );		
 		}
 		var l_result:String = "";
-		value = StringTools.replace( value, "     ", " " );
-		value = StringTools.replace( value, "    ", " " );
-		value = StringTools.replace( value, "   ", " " );
-		value = StringTools.replace( value, "  ", " " );
-		value = StringTools.replace( value, " ", "_" );
-		l_result = value.toUpperCase();
+		p_value = StringTools.replace( p_value, "     ", " " );
+		p_value = StringTools.replace( p_value, "    ", " " );
+		p_value = StringTools.replace( p_value, "   ", " " );
+		p_value = StringTools.replace( p_value, "  ", " " );
+		p_value = StringTools.replace( p_value, " ", "_" );
+		l_result = p_value.toUpperCase();
 		return l_result;
 	}
 	
-	public function fromConstCase( value:String ):String
+	public function fromConstCase( p_value:String ):String
 	{
-		if ( ( value == null ) || ( value == "" ) )
+		if ( ( p_value == null ) || ( p_value == "" ) )
 		{
 			return "";
 		}
 		var l_result:String = "";
-		var l_words:Array<String> = value.split( "_" );
+		var l_words:Array<String> = p_value.split( "_" );
 		var l_space:String = "";
 		for ( i in l_words )
 		{
@@ -223,67 +223,67 @@ class Tools implements ITools
 		return l_result;
 	}
 	
-	public function toWords( value:String ):String
+	public function toWords( p_value:String ):String
 	{
-		if ( _isCamelCase( value ) )
+		if ( _isCamelCase( p_value ) )
 		{
-			return fromCamelCase( value );
+			return fromCamelCase( p_value );
 		}
-		if ( _isConstCase( value ) )
+		if ( _isConstCase( p_value ) )
 		{
-			return fromConstCase( value );
+			return fromConstCase( p_value );
 		}
-		return value;
+		return p_value;
 	}
 	
-	public inline function limit( value:Float, min:Float, max:Float ):Float
+	public inline function limit( p_value:Float, p_min:Float, p_max:Float ):Float
 	{
-		return ( value > max ) ? max : ( value < min ) ? min : value;
+		return ( p_value > p_max ) ? p_max : ( p_value < p_min ) ? p_min : p_value;
 	}
 	
-	public inline function range( value:Float, min:Float, max:Float ):Float
+	public inline function range( p_value:Float, p_min:Float, p_max:Float ):Float
 	{
-		var l_d:Float = max - min;
+		var l_d:Float = p_max - p_min;
 		if ( l_d == 0 )
 		{
-			return value;
+			return p_value;
 		}
 		else
 		{
-			var l_o:Float = value - min;
-			return ( l_o - ( Math.floor( l_o / l_d ) * l_d ) ) + min;
+			var l_o:Float = p_value - p_min;
+			return ( l_o - ( Math.floor( l_o / l_d ) * l_d ) ) + p_min;
 		}
 	}
 	
-	public inline function swap<T>( a:T, b:T ):Void
+	public inline function swap<T>( p_a:T, p_b:T ):Void
 	{
-		var l_temp:T = a;
-		a = b;
-		b = l_temp;
+		var l_temp:T = p_a;
+		p_a = p_b;
+		p_b = l_temp;
 	}
 	
-	public function getRandomType<T>( e:Enum<T> ):T
+	public function getRandomType<T>( p_enum:Enum<T> ):T
 	{
-		return Type.createEnumIndex( e, Std.random( Type.getEnumConstructs( e ).length ) );		
+		return Type.createEnumIndex( p_enum, Std.random( Type.getEnumConstructs( p_enum ).length ) );		
 	}	
 	
-	public inline function isOdd( value:Int ):Bool
+	public inline function isOdd( p_value:Int ):Bool
 	{
-		return ( value%2 != 0 );
+		return ( p_value % 2 != 0 );
 	}
 
-	public inline function isEven( value:Int ):Bool
+	public inline function isEven( p_value:Int ):Bool
 	{
-		return ( value%2 == 0 );
+		return ( p_value % 2 == 0 );
 	}
 
-	public inline function sgn( value:Float ):Int
+	public inline function sgn( p_value:Float ):Int
 	{
-		if ( value > 0 )
+		if ( p_value > 0 )
 		{
 			return 1;
 		}
-		else if ( value == 0 )
+		else if ( p_value == 0 )
 		{
 			return 0;
 		}
@@ -293,27 +293,27 @@ class Tools implements ITools
 		}
 	}
 		
-	public inline function isBool( value:Dynamic ):Bool
+	public inline function isBool( p_value:Dynamic ):Bool
 	{
-		return ( value != 0 && value != null && value != false );		
+		return ( p_value != 0 && p_value != null && p_value != false );
 	}
 	
-	public inline function nearestSquare( value:Float ):Int
+	public inline function nearestSquare( p_value:Float ):Int
 	{
-		if ( value == 0 )
+		if ( p_value == 0 )
 		{
 			return 0;
 		}
 		else
 		{
-			var l_sqrt:Int = Math.round( Math.sqrt( Math.abs( value ) ) );
-			return l_sqrt * l_sqrt * sgn( value );
+			var l_sqrt:Int = Math.round( Math.sqrt( Math.abs( p_value ) ) );
+			return l_sqrt * l_sqrt * sgn( p_value );
 		}
 	}
 	
-	public function shuffle<T>( array:Array<T> ):Array<T>
+	public function shuffle<T>( p_array:Array<T> ):Array<T>
 	{
-		var l_result:Array<T> = array.copy();
+		var l_result:Array<T> = p_array.copy();
 		var l_n:Int = l_result.length;
 		while ( l_n > 1 )
 		{
@@ -326,23 +326,23 @@ class Tools implements ITools
 		return l_result;
 	}
 	
-	public function convertUpdatesToFormattedTime( frames:Int, ?delimiter:String ):String
+	public function convertUpdatesToFormattedTime( p_updates:Int, ?p_delimiter:String ):String
 	{
-		var l_age:Int = Math.round( 1000 * frames / _kernel.factory.targetFramerate );
-		return convertAgeToFormattedTime( l_age, delimiter );
+		var l_age:Int = Math.round( 1000 * p_updates / _kernel.factory.targetFramerate );
+		return convertAgeToFormattedTime( l_age, p_delimiter );
 	}	
 	
-	public function convertAgeToFormattedTime( age:Int, ?delimiter:String ):String
+	public function convertAgeToFormattedTime( p_age:Int, ?p_delimiter:String ):String
 	{
-		if ( delimiter == null )
+		if ( p_delimiter == null )
 		{
-			delimiter = "'";
+			p_delimiter = "'";
 		}
-		if ( age < 0 )
+		if ( p_age < 0 )
 		{
-			return "99" + delimiter + "99" + delimiter + "99";
+			return "99" + p_delimiter + "99" + p_delimiter + "99";
 		}
-		var l_age:Float = age / 1000;
+		var l_age:Float = p_age / 1000;
 		var l_seconds:Int = Math.floor( l_age );
 		var l_remainder:String = Std.string( Math.round( ( l_age - l_seconds ) * 100 ) );
 		var l_minutes:Int = 0;
@@ -377,33 +377,33 @@ class Tools implements ITools
 		{
 			l_mins = "00";
 		}
-		return Std.string( l_mins + delimiter + l_secs + delimiter + l_remainder );
+		return Std.string( l_mins + p_delimiter + l_secs + p_delimiter + l_remainder );
 	}
 	
-	public inline function intToHex( value:Int ):String
+	public inline function intToHex( p_value:Int ):String
 	{
-		value &= 0xFF;
+		p_value &= 0xFF;
 		var l_hex:String = "0123456789abcdef";
-		return l_hex.charAt( value >> 4 ) + l_hex.charAt( value & 0xF );
+		return l_hex.charAt( p_value >> 4 ) + l_hex.charAt( p_value & 0xF );
 	}
 	
-	public inline function serialize( value:Dynamic ):String
+	public inline function serialize( p_value:Dynamic ):String
 	{
-		return Serializer.run( value );
+		return Serializer.run( p_value );
 	}
 	
-	public inline function unserialize( value:String ):Dynamic
+	public inline function unserialize( p_value:String ):Dynamic
 	{
-		return Unserializer.run( value );
+		return Unserializer.run( p_value );
 	}
 	
-	public function encrypt( value:Bytes, ?secret:String = "" ):Bytes
+	public function encrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
 	{
-		return _encrypter.encrypt( value, secret );
+		return _encrypter.encrypt( p_value, p_secret );
 	}
 	
-	public function decrypt( value:Bytes, ?secret:String = "" ):Bytes
+	public function decrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
 	{
-		return _encrypter.decrypt( value, secret );
+		return _encrypter.decrypt( p_value, p_secret );
 	}
 }

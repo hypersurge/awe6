@@ -54,11 +54,11 @@ class APreloader extends Process, implements IPreloader
 	private var _currentAsset:Int;
 	private var _isComplete:Bool;
 	
-	public function new( kernel:IKernel, assets:Array<String>, ?isDecached:Bool = false ) 
+	public function new( p_kernel:IKernel, p_assets:Array<String>, ?p_isDecached:Bool = false ) 
 	{
-		_assets = assets;
-		_isDecached = isDecached;
-		super( kernel );
+		_assets = p_assets;
+		_isDecached = p_isDecached;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void
@@ -98,14 +98,14 @@ class APreloader extends Process, implements IPreloader
 		_currentProgress = 0;
 	}
 	
-	private function _nativeLoad( url:String ):Void
+	private function _nativeLoad( p_url:String ):Void
 	{
 		//override me
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _assets.length == 0 )
 		{
 			dispose(); // needed to be done this way because preloader must be added and removed from kernel
