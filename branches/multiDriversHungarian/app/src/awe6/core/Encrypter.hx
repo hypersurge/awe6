@@ -67,7 +67,7 @@ class Encrypter implements IEncrypter
 	{
 		var l_result:BytesData = new BytesData();
 		var l_secretIndex:Int = 0;
-		for ( i in 0...value.length )
+		for ( i in 0...p_value.length )
 		{
 			l_result[i] = untyped p_value[i] ^ p_secret.charCodeAt( l_secretIndex );
 			l_secretIndex++;

@@ -51,12 +51,12 @@ class AudioManager extends AAudioManager
 		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
 	}
 
-	override private function _nativeSoundFactory( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void ):_AHelperSound
+	override private function _nativeSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
-		return new _HelperSound( _kernel, id, _packageId, _extension, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );
+		return new _HelperSound( _kernel, p_id, _packageId, _extension, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
 
-	override private function _nativeSetIsMute( ?isMute:Bool ):Void
+	override private function _nativeSetIsMute( ?p_value:Bool ):Void
 	{
 		for ( i in _sounds )
 		{
@@ -68,7 +68,7 @@ class AudioManager extends AAudioManager
 			{
 				continue;
 			}
-			untyped i._soundChannel.jeashAudio.muted = isMute;
+			untyped i._soundChannel.jeashAudio.muted = p_value;
 		}
 	}	
 	
@@ -80,11 +80,11 @@ class _HelperSound extends _AHelperSound
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
 	
-	public function new( kernel:IKernel, id:String, packageId:String, extension:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, p_extension:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
 		// needed else some float signatures misinterpreted as ints ... should replicate and report to mailing list
-		_extension = extension;
-		super( kernel, id, packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );	
+		_extension = p_extension;
+		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
 	}
 	
 	override private function _nativeInit():Void
@@ -105,13 +105,13 @@ class _HelperSound extends _AHelperSound
 		return;
 	}
 	
-	override private function _nativeTransform( ?asRelative:Bool = false ):Void
+	override private function _nativeTransform( ?p_asRelative:Bool = false ):Void
 	{
 		if ( _soundChannel == null )
 		{
 			return;
 		}
-		if ( asRelative )
+		if ( p_asRelative )
 		{
 			_volume *= _soundChannel.soundTransform.volume;
 			_pan *= _soundChannel.soundTransform.pan;
@@ -130,7 +130,7 @@ class _HelperSound extends _AHelperSound
 		_soundChannel.stop();
 	}
 	
-	private function _onSoundComplete( event:Event ):Void
+	private function _onSoundComplete( p_event:Event ):Void
 	{
 		if ( _onCompleteCallback != null )
 		{

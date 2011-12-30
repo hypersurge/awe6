@@ -136,24 +136,24 @@ class Kernel extends AKernel
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 	}
 	
-	private function _onFullScreen( ?event:FullScreenEvent ):Void
+	private function _onFullScreen( ?p_event:FullScreenEvent ):Void
 	{
-		isFullScreen = event.fullScreen;
+		isFullScreen = p_event.fullScreen;
 	}
 	
-	private function _onEnterFrame( event:Event ):Void
+	private function _onEnterFrame( p_event:Event ):Void
 	{
 		_updater( 0 ); // avoid isActive
 	}
 	
-	override private function _nativeSetIsEyeCandy( value:Bool ):Void
+	override private function _nativeSetIsEyeCandy( p_value:Bool ):Void
 	{
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
 	}
 	
-	override private function _nativeSetIsFullScreen( value:Bool ):Void
+	override private function _nativeSetIsFullScreen( p_value:Bool ):Void
 	{
 		if ( _getFlashVersion() < 10.1 ) // FullScreen proved unreliable for all Flash Players in all browsers < 10.1
 		{

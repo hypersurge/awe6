@@ -244,8 +244,8 @@ class AView extends Process, implements IView
 	
 	public function setPosition( p_x:Float, p_y:Float ):Void
 	{
-		this.x = p_x;
-		this.y = p_y;
+		x = p_x;
+		y = p_y;
 	}
 	
 }

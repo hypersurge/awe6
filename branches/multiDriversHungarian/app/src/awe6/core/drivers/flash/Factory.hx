@@ -50,13 +50,13 @@ class Factory extends AFactory
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;	
 	
-	public function new( context:Context, isDebug:Bool = true, ?configUrl:String )
+	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
 	{
 		_context = new Context();
-		context.addChild( _context );
+		p_context.addChild( _context );
 		_countConfigsLoaded = 0;
 		_countConfigsToLoad = 0;		
-		super( isDebug, configUrl );
+		super( p_isDebug, p_config );
 	}
 	
 	override private function _nativeInit():Void
@@ -71,13 +71,13 @@ class Factory extends AFactory
 		}		
 	}
 	
-	private function _hasStage( ?event:Event ):Void
+	private function _hasStage( ?p_event:Event ):Void
 	{
 		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		_init();
 		if ( _isConfigRequired )
 		{
-			var l_url:String = ( _configUrl != null ) ? _configUrl : _CONFIG_URL;
+			var l_url:String = ( _config != null ) ? _config : _CONFIG_URL;
 			if ( ( _context.loaderInfo != null ) && untyped _context.loaderInfo.parameters.configUrl != null )
 			{
 				l_url = untyped _context.loaderInfo.parameters.configUrl;
@@ -90,29 +90,29 @@ class Factory extends AFactory
 		}
 	}	
 	
-	private function _loadConfig( url:String ):Void
+	private function _loadConfig( p_url:String ):Void
 	{
-		if ( url.substr( 0, 5 ) == "<?xml" )
+		if ( p_url.substr( 0, 5 ) == "<?xml" )
 		{
-			_parseXml( url );
+			_parseXml( p_url );
 		}
 		else
 		{
 			if ( isDecached )
 			{
-				url += "?dc=" + Std.random( 99999 );
+				p_url += "?dc=" + Std.random( 99999 );
 			}
 			// trace( "Loading Config: \"" + url + "\"" );		
-			var l_loader:URLLoader = new URLLoader( new URLRequest( url ) );
+			var l_loader:URLLoader = new URLLoader( new URLRequest( p_url ) );
 			l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
 			l_loader.addEventListener( Event.COMPLETE, _onComplete );
 			_countConfigsToLoad++;
 		}
 	}
 	
-	private function _parseXml( data:String ):Void
+	private function _parseXml( p_data:String ):Void
 	{
-		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
 		if ( config.exists( _CONFIG_JOIN_NODE ) && ( _countConfigsLoaded < 100 ) )
 		{
 			var l_url:String = config.get( _CONFIG_JOIN_NODE );
@@ -130,7 +130,7 @@ class Factory extends AFactory
 		}
 	}	
 	
-	private function _onIOError( event:IOErrorEvent ):Void
+	private function _onIOError( p_event:IOErrorEvent ):Void
 	{
 		var l_textField:TextField = new TextField();
 		l_textField.text = "IO Errors Occurred During Config Loading:\n\n".toUpperCase();
@@ -141,14 +141,14 @@ class Factory extends AFactory
 		l_textField.height = height - 100;
 		l_textField.x = ( width - l_textField.width ) / 2;
 		l_textField.y = ( height - l_textField.height ) / 2;
-		l_textField.text += event.text + "\n\n";
+		l_textField.text += p_event.text + "\n\n";
 		_context.addChild( l_textField );
 	}	
 	
-	private function _onComplete( event:Event ):Void
+	private function _onComplete( p_event:Event ):Void
 	{
 		_countConfigsLoaded++;
-		var l_string:String = event.target.data;
+		var l_string:String = p_event.target.data;
 		if ( l_string.substr( 0, 5 ) != "<?xml" )
 		{
 			l_string = createEncrypter().decrypt( Bytes.ofString( l_string ) ).toString();

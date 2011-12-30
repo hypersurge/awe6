@@ -51,10 +51,10 @@ class InputKeyboard extends AInputKeyboard
 		_stage.addEventListener( Event.DEACTIVATE, _reset );
 	}
 	
-	override private function _updater( timeInterval = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
 		_stage.focus = _stage;
-		super._updater( timeInterval );
+		super._updater( p_deltaTime );
 	}
 	
 	override private function _disposer():Void 
@@ -65,29 +65,29 @@ class InputKeyboard extends AInputKeyboard
 		super._disposer();
 	}
 	
-	private function _onKeyDown( event:KeyboardEvent ):Void
+	private function _onKeyDown( p_event:KeyboardEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		_addEvent( event.keyCode, true ); // "keyCode" is Flash syntax
+		_addEvent( p_event.keyCode, true ); // "keyCode" is Flash syntax
 		return;
 	}
 	
-	private function _onKeyUp( event:KeyboardEvent ):Void
+	private function _onKeyUp( p_event:KeyboardEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		_addEvent( event.keyCode, false ); // "keyCode" is Flash syntax
+		_addEvent( p_event.keyCode, false ); // "keyCode" is Flash syntax
 		return;
 	}
 	
-	override public function getKeyCode( type:EKey ):Int
+	override public function getKeyCode( p_type:EKey ):Int
 	{
-		return switch ( type )
+		return switch ( p_type )
 		{
 			case NUM_LOCK: 300; 
 			case CLEAR: 12; // ?
@@ -188,7 +188,7 @@ class InputKeyboard extends AInputKeyboard
 			case BACKSLASH: 60; 
 			case APOSTROPHE: 222; 
 			case TOPLEFT: 192;
-			case SUB_TYPE( value ): Std.int( value );
+			case SUB_TYPE( l_value ): Std.int( l_value );
 		}
 	}
 	

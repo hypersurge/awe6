@@ -65,7 +65,7 @@ class AFactory implements IFactory, implements IDisposable
 {
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
-	private var _configUrl:String;
+	private var _config:String;
 	private var _kernel:IKernel;
 	private var _tools:ITools;
 	private var _isConfigRequired:Bool;
@@ -94,10 +94,10 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 
-	public function new( p_isDebug:Bool = true, ?p_configUrl:String )
+	public function new( p_isDebug:Bool = true, ?p_config:String )
 	{
 		isDebug = p_isDebug;
-		_configUrl = p_configUrl;
+		_config = p_config;
 		_nativeInit();
 	}
 	
@@ -105,9 +105,9 @@ class AFactory implements IFactory, implements IDisposable
 	{
 		// override me
 		_init();
-		if ( ( _configUrl != null ) && ( _configUrl.substr( 0, 5 ) == "<?xml" ) )
+		if ( ( _config != null ) && ( _config.substr( 0, 5 ) == "<?xml" ) )
 		{
-			_traverseElements( Xml.parse( _configUrl ).firstElement().elements(), "" );
+			_traverseElements( Xml.parse( _config ).firstElement().elements(), "" );
 		}
 		_launchKernel();		
 	}	

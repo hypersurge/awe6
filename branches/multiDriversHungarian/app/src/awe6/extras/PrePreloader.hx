@@ -127,7 +127,7 @@ class PrePreloader extends Sprite
 		addChild( _progressBar );
 	}
 	
-	private function _onError( event:IOErrorEvent ):Void
+	private function _onError( p_event:IOErrorEvent ):Void
 	{
 		if ( _textField == null )
 		{
@@ -142,10 +142,10 @@ class PrePreloader extends Sprite
 			_textField.y = ( _stage.stageHeight - _textField.height ) / 2;
 			addChild( _textField );
 		}
-		_textField.text += event.text + "\n\n";
+		_textField.text += p_event.text + "\n\n";
 	}
 	
-	private function _onComplete( event:Event ):Void
+	private function _onComplete( p_event:Event ):Void
 	{
 		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
@@ -157,9 +157,9 @@ class PrePreloader extends Sprite
 		removeChild( _progressBar );
 	}
 	
-	private function _onProgress( ?event:ProgressEvent ):Void
+	private function _onProgress( ?p_event:ProgressEvent ):Void
 	{
-		var l_perc:Float = event.bytesLoaded / event.bytesTotal;
+		var l_perc:Float = p_event.bytesLoaded / p_event.bytesTotal;
 		_progressBarLine.scaleX = l_perc;
 	}
 	

@@ -297,7 +297,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 			case BACKSLASH: 220; 
 			case APOSTROPHE: 192; 
 			case TOPLEFT: 223;
-			case SUB_TYPE( value ): Std.int( value );
+			case SUB_TYPE( l_value ): Std.int( l_value );
 		}
 	}
 	

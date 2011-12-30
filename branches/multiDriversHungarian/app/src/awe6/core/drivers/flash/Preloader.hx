@@ -70,9 +70,9 @@ class Preloader extends APreloader
 		super._init();
 	}
 	
-	override private function _nativeLoad( url:String ):Void
+	override private function _nativeLoad( p_url:String ):Void
 	{
-		var l_url:String = url;
+		var l_url:String = p_url;
 		if ( _isDecached )
 		{
 			l_url += "?dc=" + Std.random( 99999 );
@@ -102,7 +102,7 @@ class Preloader extends APreloader
 		}
 	}
 	
-	private function _onError( event:IOErrorEvent ):Void
+	private function _onError( p_event:IOErrorEvent ):Void
 	{
 		if ( _textField == null )
 		{
@@ -117,11 +117,11 @@ class Preloader extends APreloader
 			_textField.y = ( _kernel.factory.height - _textField.height ) / 2;
 			_context.addChild( _textField );
 		}
-		_textField.text += event.text + "\n\n";
+		_textField.text += p_event.text + "\n\n";
 		view.clear();
 	}
 	
-	private function _onComplete( ?event:Event ):Void
+	private function _onComplete( ?p_event:Event ):Void
 	{
 		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
@@ -137,15 +137,15 @@ class Preloader extends APreloader
 		_next();
 	}
 	
-	private function _onLoaderComplete( event:Event ):Void
+	private function _onLoaderComplete( p_event:Event ):Void
 	{
 		_loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, _onLoaderComplete );
 		new _HelperSwfParser( _swfData );
 	}
 	
-	private function _onProgress( ?event:ProgressEvent ):Void
+	private function _onProgress( ?p_event:ProgressEvent ):Void
 	{
-		_currentProgress = event.bytesLoaded / event.bytesTotal;
+		_currentProgress = p_event.bytesLoaded / p_event.bytesTotal;
 		progress = _tools.limit( ( _currentAsset - 1 + _currentProgress ) / _assets.length , 0, 1 );
 	}
 	
@@ -165,9 +165,9 @@ private class _HelperSwfParser
 	private var _data:BytesData;
 	
 	//swf parsing routines by Denis V. Chumakov: http://flashpanoramas.com/blog/
-	public function new( data:BytesData )
+	public function new( p_data:BytesData )
 	{
-		_data = data;
+		_data = p_data;
 		_data.endian = flash.utils.Endian.LITTLE_ENDIAN;
 		_data.position = 0;
 		var l_headerFormat:String = _data.readUTFBytes( 3 );
@@ -206,7 +206,7 @@ private class _HelperSwfParser
 				{
 					Font.registerFont( i );
 				}
-				catch ( error:Dynamic ) {}
+				catch ( l_error:Dynamic ) {}
 			}
 		}
 	}

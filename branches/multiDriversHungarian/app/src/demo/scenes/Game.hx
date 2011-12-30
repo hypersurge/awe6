@@ -46,11 +46,11 @@ class Game extends Scene
 	
 	private var _temp:IEntity;
 	
-	public function new( kernel:IKernel, type:EScene ) 
+	public function new( p_kernel:IKernel, p_type:EScene ) 
 	{
-		_session = cast kernel.session;
-		_assetManager = cast kernel.assets;
-		super( kernel, type, true, true, true );
+		_session = cast p_kernel.session;
+		_assetManager = cast p_kernel.assets;
+		super( p_kernel, p_type, true, true, true );
 	}
 	
 	override private function _init():Void 
@@ -75,9 +75,9 @@ class Game extends Scene
 		_temp = l_sphere;
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		
 		_score = Std.int( _tools.limit( ( 1000 * TIME_LIMIT ) - _age, 0, _tools.BIG_NUMBER ) );
 		if ( _score == 0 )

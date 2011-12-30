@@ -42,11 +42,11 @@ class Bouncer extends Entity
 	private var _width2:Float;
 	private var _height2:Float;
 	
-	public function new( kernel:IKernel, width:Float, height:Float ) 
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float ) 
 	{
-		_width = width;
-		_height = height;
-		super( kernel );
+		_width = p_width;
+		_height = p_height;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void 
@@ -62,11 +62,11 @@ class Bouncer extends Entity
 		y = _kernel.factory.height * Math.random();
 	}	
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
-		x += vx * ( deltaTime / 1000 );
-		y += vy * ( deltaTime / 1000 );
+		super._updater( p_deltaTime );
+		x += vx * ( p_deltaTime / 1000 );
+		y += vy * ( p_deltaTime / 1000 );
 		if ( x > ( _kernel.factory.width - _width2 ) )
 		{
 			vx *= -1;

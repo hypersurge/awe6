@@ -51,15 +51,15 @@ class Button extends BasicButton
 	private var _upContext:Context;
 	private var _overContext:Context;
 
-	public function new( kernel:IKernel, ?key:EKey, ?x:Float = 0, ?y:Float = 0, ?onClick:Void->Void, ?onRollOver:Void->Void, ?onRollOut:Void->Void, ?label:String )
+	public function new( p_kernel:IKernel, ?p_key:EKey, ?p_x:Float = 0, ?p_y:Float = 0, ?p_onClick:Void->Void, ?p_onRollOver:Void->Void, ?p_onRollOut:Void->Void, ?p_label:String )
 	{
-		_assetManager = cast kernel.assets;
-		this.label = label;
+		_assetManager = cast p_kernel.assets;
+		label = p_label;
 		_upContext = new Context();
 		_overContext = new Context();
-		_upView = new View( kernel, _upContext );
-		_overView = new View( kernel, _overContext );
-		super( kernel, _upView, _overView, 160, 40, x, y, key, onClick, onRollOver, onRollOut );
+		_upView = new View( p_kernel, _upContext );
+		_overView = new View( p_kernel, _overContext );
+		super( p_kernel, _upView, _overView, 160, 40, p_x, p_y, p_key, p_onClick, p_onRollOver, p_onRollOut );
 	}
 	
 	override private function _init():Void
@@ -71,10 +71,10 @@ class Button extends BasicButton
 		_overContext.addChild( _createButtonState( true ) );
 	}
 	
-	private function _createButtonState( ?isOver:Bool = false ):Context
+	private function _createButtonState( ?p_isOver:Bool = false ):Context
 	{
 		var l_result:Context = new Context();
-		l_result.addChild( new Bitmap( isOver ? _assetManager.buttonOver : _assetManager.buttonUp ) );		
+		l_result.addChild( new Bitmap( p_isOver ? _assetManager.buttonOver : _assetManager.buttonUp ) );		
 		var l_text:Text = new Text( _kernel, width - ( 2 * _marginWidth ), height - ( 2 * _marginHeight ), label, _kernel.factory.createTextStyle( ETextStyle.BUTTON ) );
 		l_text.setPosition( _marginWidth, _marginHeight );
 		l_result.addChild( untyped l_text._sprite ); // safe ancestry cast
