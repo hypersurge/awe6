@@ -96,6 +96,7 @@ typedef IPreloader = awe6.interfaces.IPreloader;
 typedef IPriority = awe6.interfaces.IPriority;
 typedef IProcess = awe6.interfaces.IProcess;
 typedef IProgress = awe6.interfaces.IProgress;
+typedef IResettable = awe6.interfaces.IResettable;
 typedef IScene = awe6.interfaces.IScene;
 typedef ISceneManager = awe6.interfaces.ISceneManager;
 typedef ISceneTransition = awe6.interfaces.ISceneTransition;

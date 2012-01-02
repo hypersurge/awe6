@@ -30,21 +30,14 @@
 package awe6.interfaces;
 
 /**
- * The IPauseable interface should be implemented by objects intended to be temporarily disabled from the broad phase update traversal.
+ * The IResettable interface should be implemented by objects intended to be reset (returned to initial state).
  * @author	Robert Fell
  */
-interface IPauseable
+interface IResettable 
 {
 	/**
-	 * Determines if the object is updating or not.
+	 * Call method to return object to it's initial state.
+	 * @return	True if reset was successful, false otherwise.
 	 */
-	var isActive( default, __set_isActive ):Bool;
-	/**
-	 * Sets isActive to false.
-	 */
-	function pause():Void;
-	/**
-	 * Sets isActive to true.
-	 */
-	function resume():Void;	
+	function reset():Bool;
 }

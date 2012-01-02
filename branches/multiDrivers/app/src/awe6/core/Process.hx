@@ -113,12 +113,6 @@ class Process implements IProcess
 		// override me
 	}
 	
-	public inline function reset():Void
-	{
-		dispose();
-		_init();
-	}
-	
 	private function __set_isActive( p_value:Bool ):Bool
 	{
 		if ( p_value == isActive )

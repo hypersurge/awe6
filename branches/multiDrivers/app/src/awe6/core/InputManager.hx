@@ -77,4 +77,10 @@ class InputManager extends Process, implements IInputManager
 		return new InputJoypad( _kernel, p_up, p_right, p_down, p_left, p_primary, p_secondary, p_upAlt, p_rightAlt, p_downAlt, p_leftAlt, p_primaryAlt, p_secondaryAlt );
 	}
 	
+	public function reset():Bool
+	{
+		dispose();
+		_init();
+		return true;
+	}
 }

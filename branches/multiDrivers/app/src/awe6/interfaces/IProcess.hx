@@ -36,5 +36,4 @@ package awe6.interfaces;
  */
 interface IProcess implements IUpdateable, implements IDisposable, implements IPauseable
 {
-	// function reset():Void; // not properly tested
 }

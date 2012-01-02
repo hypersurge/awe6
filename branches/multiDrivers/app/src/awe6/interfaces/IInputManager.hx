@@ -35,7 +35,7 @@ package awe6.interfaces;
  * <p>State based input is useful for many types of game mechanics, including: momentum, instant replays and special move combos.</p>
  * @author	Robert Fell
  */
-interface IInputManager 
+interface IInputManager implements IResettable
 {
 	/**
 	 * The default virtual joypad user input: simple 4 directional controller with 2 fire buttons.  Listens to cursor keys and WASD keys.
@@ -66,8 +66,4 @@ interface IInputManager
 	 * @return	A virtual joypad with custom key controls.
 	 */
 	function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IInputJoypad;
-	/**
-	 * Resets the state of all virtual input devices (e.g. keys down duration, mouse velocities etc).
-	 */
-	function reset():Void;
 }
