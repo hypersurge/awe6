@@ -36,16 +36,16 @@ class ProxyEntity extends Entity
 	private var _proxyUpdate:Int->Void;
 	private var _proxyDispose:Void->Void;
 
-	public function new( kernel:IKernel, updateFunction:Int->Void, disposeFunction:Void->Void ) 
+	public function new( p_kernel:IKernel, p_updateFunction:Int->Void, p_disposeFunction:Void->Void ) 
 	{
-		super( kernel );
-		_proxyUpdate = updateFunction;
-		_proxyDispose = disposeFunction;		
+		super( p_kernel );
+		_proxyUpdate = p_updateFunction;
+		_proxyDispose = p_disposeFunction;		
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _proxyUpdate != null )
 		{
 			Reflect.callMethod( this, _proxyUpdate, [] );

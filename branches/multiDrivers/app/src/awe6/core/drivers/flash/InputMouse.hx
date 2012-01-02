@@ -75,10 +75,10 @@ class InputMouse extends AInputMouse
 		super._disposer();		
 	}	
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
 		_stage.focus = _stage;
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 	}
 	
 	override private function _isMiddleDown():Bool
@@ -106,7 +106,7 @@ class InputMouse extends AInputMouse
 		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
 	}
 	
-	private function _onMouseDown( event:MouseEvent ):Void
+	private function _onMouseDown( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
@@ -115,7 +115,7 @@ class InputMouse extends AInputMouse
 		_buffer.push( true );
 	}
 	
-	private function _onMouseUp( event:MouseEvent ):Void
+	private function _onMouseUp( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
@@ -124,32 +124,32 @@ class InputMouse extends AInputMouse
 		_buffer.push( false );
 	}
 	
-	private function _onMouseWheel( event:MouseEvent ):Void
+	private function _onMouseWheel( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
 		{
 			return;
 		}
-		scroll += event.delta;
+		scroll += p_event.delta;
 	}
 	
-	override private function __set_isVisible( value:Bool ):Bool
+	override private function __set_isVisible( p_value:Bool ):Bool
 	{
-		value ? Mouse.show() : Mouse.hide();
-		return super.__set_isVisible( value );
+		p_value ? Mouse.show() : Mouse.hide();
+		return super.__set_isVisible( p_value );
 	}
 	
-	override private function __set_cursorType( value:EMouseCursor ):EMouseCursor
+	override private function __set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		switch( value )
+		switch( p_value )
 		{
 			case ARROW : Mouse.cursor = MouseCursor.ARROW;
 			case BUTTON : Mouse.cursor = MouseCursor.BUTTON;
 			case HAND : Mouse.cursor = MouseCursor.HAND;
 			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
-			case SUB_TYPE( value ) : // Have a register cursor approach here;
+			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
 		}
-		return super.__set_cursorType( value );
+		return super.__set_cursorType( p_value );
 	}
 
 }

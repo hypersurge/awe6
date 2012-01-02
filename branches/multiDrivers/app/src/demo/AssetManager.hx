@@ -78,17 +78,17 @@ class AssetManager extends AAssetManager
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 	}
 	
-	override public function getAsset( id:String, ?packageId:String, ?args:Array<Dynamic> ):Dynamic
+	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
 	{
-		if ( packageId == null )
+		if ( p_packageId == null )
 		{
-			packageId = _kernel.getConfig( "settings.assets.packages.default" );
+			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
 		}
-		if ( packageId == null )
+		if ( p_packageId == null )
 		{
-			packageId = _PACKAGE_ID;
+			p_packageId = _PACKAGE_ID;
 		}		
-		var l_assetName:String = StringTools.replace( packageId, ".", "/" ) + id;
+		var l_assetName:String = StringTools.replace( p_packageId, ".", "/" ) + p_id;
 		var l_result:Dynamic = Assets.getSound( l_assetName );
 		if ( l_result != null )
 		{
@@ -114,15 +114,15 @@ class AssetManager extends AAssetManager
 		{
 			return l_result;
 		}
-		return super.getAsset( id, packageId, args );
+		return super.getAsset( p_id, p_packageId, p_args );
 	}	
 	
-	private function _createView( type:EAsset ):IView
+	private function _createView( p_type:EAsset ):IView
 	{
 		var l_sprite:Sprite = new Sprite();
 		var l_bitmap:Bitmap = new Bitmap();
 		l_sprite.addChild( l_bitmap );
-		switch( type )
+		switch( p_type )
 		{
 //			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );

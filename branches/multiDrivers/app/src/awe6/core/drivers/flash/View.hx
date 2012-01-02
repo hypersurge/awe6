@@ -75,16 +75,16 @@ class View extends AView
 		}
 	}
 	
-	override private function __set_x( value:Float ):Float
+	override private function __set_x( p_value:Float ):Float
 	{
-		context.x = value;
-		return super.__set_x( value );
+		context.x = p_value;
+		return super.__set_x( p_value );
 	}
 	
-	override private function __set_y( value:Float ):Float
+	override private function __set_y( p_value:Float ):Float
 	{
-		context.y = value;
-		return super.__set_y( value );
+		context.y = p_value;
+		return super.__set_y( p_value );
 	}
 	
 }

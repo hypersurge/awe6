@@ -45,11 +45,11 @@ class Sphere extends Entity
 	private var _height2:Float;
 	private var _bouncer:Bouncer;
 	
-	public function new( kernel:IKernel ) 
+	public function new( p_kernel:IKernel ) 
 	{
 		_sprite = new Sprite();
-		_assetManager = cast kernel.assets;
-		super( kernel, _sprite );
+		_assetManager = cast p_kernel.assets;
+		super( p_kernel, _sprite );
 	}
 	
 	override private function _init():Void 
@@ -73,9 +73,9 @@ class Sphere extends Entity
 		_sprite.addChild( l_sphere );
 	}	
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		_sprite.x = _bouncer.x;
 		_sprite.y = _bouncer.y;
 		_sprite.scaleX = _bouncer.vx > 1 ? 1 : -1;

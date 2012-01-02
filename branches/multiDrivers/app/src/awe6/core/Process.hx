@@ -51,9 +51,9 @@ class Process implements IProcess
 	private var _isEntity:Bool;
 	private var _isSetterBypassed:Bool;
 
-	public function new( kernel:IKernel ) 
+	public function new( p_kernel:IKernel ) 
 	{
-		_kernel = kernel;
+		_kernel = p_kernel;
 		_tools = cast _kernel.tools;
 		_init();
 		_isEntity = Std.is( this, IEntity );
@@ -93,7 +93,7 @@ class Process implements IProcess
 		// override me
 	}
 	
-	public inline function update( ?deltaTime:Int = 0 ):Void
+	public inline function update( ?p_deltaTime:Int = 0 ):Void
 	{
 		if ( !isActive )
 		{
@@ -101,14 +101,14 @@ class Process implements IProcess
 		}
 		else
 		{
-			_age += deltaTime;
+			_age += p_deltaTime;
 			_updates++;
-			_updater( deltaTime );
+			_updater( p_deltaTime );
 			return;
 		}
 	}
 	
-	private function _updater( ?deltaTime:Int = 0 ):Void
+	private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
 		// override me
 	}
@@ -119,19 +119,19 @@ class Process implements IProcess
 		_init();
 	}
 	
-	private function __set_isActive( value:Bool ):Bool
+	private function __set_isActive( p_value:Bool ):Bool
 	{
-		if ( value == isActive )
+		if ( p_value == isActive )
 		{
 			return isActive;
 		}
 		if ( _isSetterBypassed )
 		{
-			isActive = value;
+			isActive = p_value;
 		}
 		else
 		{
-			value ? resume() : pause();			
+			p_value ? resume() : pause();			
 		}
 		_isSetterBypassed = false;
 		return isActive;

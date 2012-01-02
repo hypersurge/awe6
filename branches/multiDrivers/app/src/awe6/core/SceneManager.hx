@@ -48,9 +48,9 @@ class SceneManager extends Process, implements ISceneManager
 	
 	private var _sceneTransition:ISceneTransition;
 
-	public function new( kernel:IKernel ) 
+	public function new( p_kernel:IKernel ) 
 	{
-		super( kernel );
+		super( p_kernel );
 	}
 	
 	override private function _init():Void 
@@ -59,16 +59,16 @@ class SceneManager extends Process, implements ISceneManager
 		view = new View( _kernel );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( scene != null )
 		{
-			scene.update( deltaTime );
+			scene.update( p_deltaTime );
 		}
 		if ( _sceneTransition != null )
 		{
-			_sceneTransition.update( deltaTime );
+			_sceneTransition.update( p_deltaTime );
 		}
 	}
 	
@@ -86,13 +86,13 @@ class SceneManager extends Process, implements ISceneManager
 		super._disposer();
 	}
 	
-	public function setScene( type:EScene ):Void
+	public function setScene( p_type:EScene ):Void
 	{
 		var l_previousType:EScene = null;
 		if ( scene != null )
 		{
 			l_previousType = scene.type;
-			var l_newSceneTransition:ISceneTransition = _kernel.factory.createSceneTransition( type, l_previousType );
+			var l_newSceneTransition:ISceneTransition = _kernel.factory.createSceneTransition( p_type, l_previousType );
 			if ( _sceneTransition != null )
 			{
 				_sceneTransition.dispose();
@@ -106,7 +106,7 @@ class SceneManager extends Process, implements ISceneManager
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
 		_kernel.overlay.hideButtons();
-		scene = _kernel.factory.createScene( type );
+		scene = _kernel.factory.createScene( p_type );
 		_kernel.overlay.showButton( EOverlayButton.BACK, _kernel.factory.getBackSceneType( scene.type ) != null );
 		_kernel.overlay.showButton( EOverlayButton.MUTE, scene.isMuteable && !_kernel.audio.isMute );
 		_kernel.overlay.showButton( EOverlayButton.UNMUTE, scene.isMuteable && _kernel.audio.isMute );

@@ -45,10 +45,10 @@ class Shine extends GuiEntity
 	private var _mask:BitmapData;
 	private var _matrix:Matrix;
 	
-	public function new( kernel:IKernel, width:Float, height:Float, mask:BitmapData )
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, p_mask:BitmapData )
 	{
-		_mask = mask;
-		super( kernel, width, height, false );
+		_mask = p_mask;
+		super( p_kernel, p_width, p_height, false );
 	}
 	
 	override private function _init():Void 
@@ -67,9 +67,9 @@ class Shine extends GuiEntity
 		_sprite.mouseChildren = false;
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		_canvas.lock();
 		_matrix.tx += 5;
 		_matrix.rotate( Math.sin( _updates / 25 ) * .01 );

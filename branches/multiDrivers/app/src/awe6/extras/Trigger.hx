@@ -40,12 +40,12 @@ class Trigger extends Entity
 	private var _callbackFunction:Void->Void;
 	private var _previousValue:String;
 	
-	public function new( kernel:IKernel, entity:IEntity, field:String, callbackFunction:Void->Dynamic ) 
+	public function new( p_kernel:IKernel, p_entity:IEntity, p_field:String, p_callbackFunction:Void->Dynamic ) 
 	{
-		_entity = entity;
-		_field = field;
-		_callbackFunction = callbackFunction;
-		super( kernel );
+		_entity = p_entity;
+		_field = p_field;
+		_callbackFunction = p_callbackFunction;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void
@@ -54,9 +54,9 @@ class Trigger extends Entity
 		_previousValue = _getValue();
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		var l_value:String = _getValue();
 		if ( l_value != _previousValue )
 		{
@@ -73,7 +73,7 @@ class Trigger extends Entity
 		return Serializer.run( Reflect.field( _entity, _field ) );
 	}
 	
-	public function activate( ?isActivated:Bool = true ):Void
+	public function activate( ?p_isActivated:Bool = true ):Void
 	{
 		Reflect.callMethod( this, _callbackFunction, [] );
 		dispose();

@@ -99,13 +99,13 @@ class AKernel extends Process, implements IKernel
 	private var _processes:List<IProcess>;
 	private var _helperFramerate:_HelperFramerate;
 
-	public function new( factory:IFactory, context:Context )
+	public function new( p_factory:IFactory, p_context:Context )
 	{
-		if ( this.factory == null )
+		if ( factory == null )
 		{
-			this.factory = factory;
+			factory = p_factory;
 		}
-		_context = context;
+		_context = p_context;
 		if ( tools == null )
 		{
 			tools = _tools = new Tools( this );
@@ -164,7 +164,7 @@ class AKernel extends Process, implements IKernel
 		//override me
 	}
 	
-	public function onPreloaderComplete( preloader:IPreloader ):Void
+	public function onPreloaderComplete( p_preloader:IPreloader ):Void
 	{
 		_isPreloaded = true;
 		_removeProcess( _preloader );
@@ -188,7 +188,7 @@ class AKernel extends Process, implements IKernel
 		scenes.setScene( factory.startingSceneType );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
 		_helperFramerate.update();
 		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
@@ -226,52 +226,52 @@ class AKernel extends Process, implements IKernel
 		super._disposer();
 	}
 	
-	public function getConfig( id:String ):Dynamic
+	public function getConfig( p_id:String ):Dynamic
 	{
-		return factory.config.exists( id ) ? factory.config.get( id ) : null;
+		return factory.config.exists( p_id ) ? factory.config.get( p_id ) : null;
 	}
 	
-	public function log( value:Dynamic ):Void
+	public function log( p_value:Dynamic ):Void
 	{
 		if ( _logger != null )
 		{
-			_logger.log( value );
+			_logger.log( p_value );
 		}
 		else if ( isDebug )
 		{
-			trace( "LOG: " + value );
+			trace( "LOG: " + p_value );
 		}
 	}	
 	
-	public function getFramerate( ?asActual:Bool = true ):Float
+	public function getFramerate( ?p_asActual:Bool = true ):Float
 	{
-		return asActual ? _helperFramerate.framerate : factory.targetFramerate;
+		return p_asActual ? _helperFramerate.framerate : factory.targetFramerate;
 	}
 	
-	private function _addProcess( process:IProcess, ?isLast:Bool = true ):Void
+	private function _addProcess( p_process:IProcess, ?p_isLast:Bool = true ):Void
 	{
-		if ( process == null )
+		if ( p_process == null )
 		{
 			return;
 		}
-		if ( isLast )
+		if ( p_isLast )
 		{
-			_processes.add( process );
+			_processes.add( p_process );
 		}
 		else
 		{
-			_processes.push( process );
+			_processes.push( p_process );
 		}
 	}
 	
-	private function _removeProcess( process:IProcess ):Bool
+	private function _removeProcess( p_process:IProcess ):Bool
 	{
-		if ( process == null )
+		if ( p_process == null )
 		{
 			return false;
 		}
-		process.dispose();
-		return _processes.remove( process );
+		p_process.dispose();
+		return _processes.remove( p_process );
 	}
 	
 	private function _totalReset():Void
@@ -285,36 +285,36 @@ class AKernel extends Process, implements IKernel
 		scenes.setScene( factory.startingSceneType );
 	}
 	
-	private function __set_isEyeCandy( value:Bool ):Bool
+	private function __set_isEyeCandy( p_value:Bool ):Bool
 	{
 		if ( !factory.isEyeCandyOptionEnabled )
 		{
 			isEyeCandy = true;
 			return isEyeCandy;
 		}
-		isEyeCandy = value;
-		_nativeSetIsEyeCandy( value );
+		isEyeCandy = p_value;
+		_nativeSetIsEyeCandy( p_value );
 		return isEyeCandy;
 	}
 	
-	private function _nativeSetIsEyeCandy( value:Bool ):Void
+	private function _nativeSetIsEyeCandy( p_value:Bool ):Void
 	{
 		//override me
 	}
 	
-	private function __set_isFullScreen( value:Bool ):Bool
+	private function __set_isFullScreen( p_value:Bool ):Bool
 	{
 		if ( !factory.isFullScreenOptionEnabled )
 		{
 			isFullScreen = false;
 			return isFullScreen;
 		}
-		isFullScreen = value;
-		_nativeSetIsFullScreen( value );
+		isFullScreen = p_value;
+		_nativeSetIsFullScreen( p_value );
 		return isFullScreen;
 	}
 	
-	private function _nativeSetIsFullScreen( value:Bool ):Void
+	private function _nativeSetIsFullScreen( p_value:Bool ):Void
 	{
 		//override me
 	}
@@ -342,9 +342,9 @@ class AKernel extends Process, implements IKernel
 		return session;
 	}
 	
-	private function __set_session( value:ISession ):ISession
+	private function __set_session( p_value:ISession ):ISession
 	{
-		session = value;
+		session = p_value;
 		return session;
 	}
 }
@@ -355,9 +355,9 @@ private class _HelperFramerate
 	public var timeInterval( default, null ):Int;
 	private var _timeAtLastUpdate:Int;
 	
-	public function new( framerate:Float )
+	public function new( p_framerate:Float )
 	{
-		this.framerate = framerate;
+		framerate = p_framerate;
 		_timeAtLastUpdate = _timer();
 	}
 	

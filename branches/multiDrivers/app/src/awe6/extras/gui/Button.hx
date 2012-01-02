@@ -50,17 +50,17 @@ class Button extends GuiEntity
 	private var _marginHeight:Float;
 	private var _isBlank:Bool;
 
-	public function new( kernel:IKernel, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void, ?label:String = DEFAULT_LABEL, ?width:Float = 100, ?height:Float = 25, ?marginWidth:Float = 10, ?marginHeight:Float = 10, ?isBlank:Bool = false )
+	public function new( p_kernel:IKernel, ?p_key:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void, ?p_label:String = DEFAULT_LABEL, ?p_width:Float = 100, ?p_height:Float = 25, ?p_marginWidth:Float = 10, ?p_marginHeight:Float = 10, ?p_isBlank:Bool = false )
 	{
-		_key = key;
-		_onClickCallback = onClickCallback;
-		_onRollOverCallback = onRollOverCallback;
-		_onRollOutCallback = onRollOutCallback;
-		_marginWidth = marginWidth;
-		_marginHeight = marginHeight;
-		_isBlank = isBlank;
-		super( kernel, width, height );
-		this.label = label;
+		_key = p_key;
+		_onClickCallback = p_onClickCallback;
+		_onRollOverCallback = p_onRollOverCallback;
+		_onRollOutCallback = p_onRollOutCallback;
+		_marginWidth = p_marginWidth;
+		_marginHeight = p_marginHeight;
+		_isBlank = p_isBlank;
+		super( p_kernel, p_width, p_height );
+		label = p_label;
 	}
 	
 	override private function _init():Void
@@ -77,22 +77,22 @@ class Button extends GuiEntity
 		_sprite.addChild( _simpleButton );
 	}
 	
-	private function _onClick( event:MouseEvent ):Void
+	private function _onClick( p_event:MouseEvent ):Void
 	{
 		onClick();
-		event.stopImmediatePropagation();
+		p_event.stopImmediatePropagation();
 	}
 	
-	private function _onRollOver( event:MouseEvent ):Void
+	private function _onRollOver( p_event:MouseEvent ):Void
 	{
 		onRollOver();
-		event.stopImmediatePropagation();
+		p_event.stopImmediatePropagation();
 	}
 	
-	private function _onRollOut( event:MouseEvent ):Void
+	private function _onRollOut( p_event:MouseEvent ):Void
 	{
 		onRollOut();
-		event.stopImmediatePropagation();
+		p_event.stopImmediatePropagation();
 	}
 	
 	private function _draw():Void
@@ -101,11 +101,11 @@ class Button extends GuiEntity
 		_simpleButton.overState = _simpleButton.hitTestState = _createButtonState( true );
 	}
 	
-	private function _createButtonState( ?isOver:Bool = false ):Sprite
+	private function _createButtonState( ?p_isOver:Bool = false ):Sprite
 	{
 		// override me
 		var l_result:Sprite = new Sprite();
-		l_result.graphics.beginFill( isOver ? 0xFF0000 : 0x0000FF, _isBlank ? 0 : 1 );
+		l_result.graphics.beginFill( p_isOver ? 0xFF0000 : 0x0000FF, _isBlank ? 0 : 1 );
 		l_result.graphics.drawRect( 0, 0, width, height );
 		l_result.graphics.endFill;
 		if ( !_isBlank ) 
@@ -117,9 +117,9 @@ class Button extends GuiEntity
 		return l_result;
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) )
 		{
 			onClick();
@@ -161,13 +161,13 @@ class Button extends GuiEntity
 		Reflect.callMethod( this, _onRollOutCallback, [] );		
 	}
 	
-	private function __set_label( value:String ):String
+	private function __set_label( p_value:String ):String
 	{
-		if ( value == label )
+		if ( p_value == label )
 		{
 			return label;
 		}
-		label = value;
+		label = p_value;
 		_draw();
 		return label;
 	}

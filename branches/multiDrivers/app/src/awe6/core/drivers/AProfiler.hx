@@ -52,10 +52,10 @@ class AProfiler extends Entity
 	private var _width:Int;
 	private var _height:Int;
 		
-	public function new( kernel:IKernel )
+	public function new( p_kernel:IKernel )
 	{
 		_context = new Context();
-		super( kernel, _context );
+		super( p_kernel, _context );
 	}
 	
 	override private function _init():Void
@@ -74,9 +74,9 @@ class AProfiler extends Entity
 		_context.x = _context.y = 2;
 	}
 		
-	override private function _updater( ?deltaTime:Int = 0 ):Void
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _age < _agePrev + 250 )
 		{
 			return;

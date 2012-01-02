@@ -39,11 +39,11 @@ class Factory extends AFactory
 {
 	private var _context:Context;
 	
-	public function new( context:Context, isDebug:Bool = true, ?config:String )
+	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
 	{
 		_context = new Context();
-		context.addChild( _context );
-		super( isDebug, config );
+		p_context.addChild( _context );
+		super( p_isDebug, p_config );
 	}
 	
 	override private function _nativeInit():Void
@@ -51,7 +51,7 @@ class Factory extends AFactory
 		_init();
 		if ( _isConfigRequired )
 		{
-			_parseXml( _configUrl );
+			_parseXml( _config );
 		}
 		else
 		{
@@ -59,9 +59,9 @@ class Factory extends AFactory
 		}
 	}	
 	
-	private function _parseXml( data:String ):Void
+	private function _parseXml( p_data:String ):Void
 	{
-		_traverseElements( Xml.parse( data ).firstElement().elements(), "" );
+		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
 		_launchKernel();
 	}	
 	

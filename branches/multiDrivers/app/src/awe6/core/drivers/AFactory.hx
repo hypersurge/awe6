@@ -65,7 +65,7 @@ class AFactory implements IFactory, implements IDisposable
 {
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
-	private var _configUrl:String;
+	private var _config:String;
 	private var _kernel:IKernel;
 	private var _tools:ITools;
 	private var _isConfigRequired:Bool;
@@ -94,10 +94,10 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 
-	public function new( isDebug:Bool = true, ?configUrl:String )
+	public function new( p_isDebug:Bool = true, ?p_config:String )
 	{
-		this.isDebug = isDebug;
-		_configUrl = configUrl;
+		isDebug = p_isDebug;
+		_config = p_config;
 		_nativeInit();
 	}
 	
@@ -105,9 +105,9 @@ class AFactory implements IFactory, implements IDisposable
 	{
 		// override me
 		_init();
-		if ( ( _configUrl != null ) && ( _configUrl.substr( 0, 5 ) == "<?xml" ) )
+		if ( ( _config != null ) && ( _config.substr( 0, 5 ) == "<?xml" ) )
 		{
-			_traverseElements( Xml.parse( _configUrl ).firstElement().elements(), "" );
+			_traverseElements( Xml.parse( _config ).firstElement().elements(), "" );
 		}
 		_launchKernel();		
 	}	
@@ -138,15 +138,15 @@ class AFactory implements IFactory, implements IDisposable
 		_isConfigRequired = true;
 	}
 	
-	private function _traverseElements( elements:Iterator<Xml>, prefix:String ):Void
+	private function _traverseElements( p_elements:Iterator<Xml>, p_prefix:String ):Void
 	{
-		if ( prefix.length != 0 )
+		if ( p_prefix.length != 0 )
 		{
-			prefix += ".";
+			p_prefix += ".";
 		}
-		for ( i in elements )
+		for ( i in p_elements )
 		{
-			var l_name:String = prefix + i.nodeName;
+			var l_name:String = p_prefix + i.nodeName;
 			if ( i.elements().hasNext() )
 			{
 				_traverseElements( i.elements(), l_name );
@@ -194,13 +194,13 @@ class AFactory implements IFactory, implements IDisposable
 		return l_result;
 	}
 	
-	public inline function onInitComplete( kernel:IKernel ):Void
+	public inline function onInitComplete( p_kernel:IKernel ):Void
 	{
 		if ( _kernel != null )
 		{
 			return;
 		}
-		_kernel = kernel;
+		_kernel = p_kernel;
 		_tools = _kernel.tools;
 		id = ( _tools.toConstCase( StringTools.trim( id ) ) ).substr( 0, 16 );
 		version = StringTools.trim( version ).substr( 0, 10 );
@@ -217,9 +217,9 @@ class AFactory implements IFactory, implements IDisposable
 		return new Encrypter( secret );
 	}
 	
-	public function createEntity( ?id:String ):IEntity
+	public function createEntity( ?p_id:String ):IEntity
 	{
-		var l_entity:Entity = new Entity( _kernel, id );
+		var l_entity:Entity = new Entity( _kernel, p_id );
 		return l_entity;
 	}
 	
@@ -239,39 +239,39 @@ class AFactory implements IFactory, implements IDisposable
 		return new APreloader( _kernel, _getAssetUrls(), isDecached );
 	}	
 	
-	public function createScene( type:EScene ):IScene
+	public function createScene( p_type:EScene ):IScene
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
-			type = startingSceneType;
+			p_type = startingSceneType;
 		}
-		var l_scene:Scene = new Scene( _kernel, type );
+		var l_scene:Scene = new Scene( _kernel, p_type );
 		return l_scene;
 	}
 	
-	public function createSceneTransition( ?typeIncoming:EScene, ?typeOutgoing:EScene ):ISceneTransition
+	public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition
 	{
 		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
 		return l_sceneTransition;
 	}
 
-	public function createSession( ?id:String ):ISession
+	public function createSession( ?p_id:String ):ISession
 	{
-		return new ASession( _kernel, id );
+		return new ASession( _kernel, p_id );
 	}	
 	
-	public function createTextStyle( ?type:ETextStyle ):ITextStyle
+	public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
 	{
 		var l_textStyle:TextStyle = new TextStyle();
 		return l_textStyle;
 	}	
 	
-	public function getBackSceneType( type:EScene ):EScene
+	public function getBackSceneType( p_type:EScene ):EScene
 	{
 		return null;
 	}	
 	
-	public function getNextSceneType( type:EScene ):EScene
+	public function getNextSceneType( p_type:EScene ):EScene
 	{
 		return null;
 	}

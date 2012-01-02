@@ -52,13 +52,13 @@ class Text extends GuiEntity
 	private var _isDirty:Bool;
 	private var _prevTextStyle:String;
 	
-	public function new( kernel:IKernel, width:Float, height:Float, ?text:String = "", ?textStyle:ITextStyle, ?isMultiline:Bool = false, ?isInput:Bool = false )
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, ?p_text:String = "", ?p_textStyle:ITextStyle, ?p_isMultiline:Bool = false, ?p_isInput:Bool = false )
 	{
-		this.textStyle = ( textStyle != null ) ? textStyle : new TextStyle();
-		_isMultiline = isMultiline;
-		_isInput = isInput;
-		super( kernel, width, height, false );
-		this.text = text;
+		textStyle = ( p_textStyle != null ) ? p_textStyle : new TextStyle();
+		_isMultiline = p_isMultiline;
+		_isInput = p_isInput;
+		super( p_kernel, p_width, p_height, false );
+		text = p_text;
 	}
 	
 	override private function _init():Void 
@@ -81,9 +81,9 @@ class Text extends GuiEntity
 		_prevTextStyle = textStyle.toString();
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		_isDirty = _isDirty || ( _prevTextStyle != textStyle.toString() );
 		if ( _isDirty )
 		{
@@ -134,13 +134,13 @@ class Text extends GuiEntity
 		_isDirty = false;
 	}
 	
-	private function __set_text( value:String ):String
+	private function __set_text( p_value:String ):String
 	{
-		if ( text == value )
+		if ( text == p_value )
 		{
 			return text;
 		}
-		text = value;
+		text = p_value;
 		_textField.htmlText = text;
 		_isDirty = true;
 		return text;

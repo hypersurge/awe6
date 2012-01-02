@@ -30,9 +30,10 @@
 package awe6.extras.gui;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
+import awe6.interfaces.IPosition;
 import flash.display.Sprite;
 
-class GuiEntity extends Entity
+class GuiEntity extends Entity, implements IPosition
 {
 	public var x( default, __set_x ):Float;
 	public var y( default, __set_y ):Float;
@@ -43,51 +44,51 @@ class GuiEntity extends Entity
 	
 	private var _sprite:Sprite;
 	
-	public function new( kernel:IKernel, ?width:Float = 100, ?height:Float = 100, ?isMasked:Bool = true )
+	public function new( p_kernel:IKernel, ?p_width:Float = 100, ?p_height:Float = 100, ?p_isMasked:Bool = true )
 	{
 		Reflect.setField( this, "isFlippedX", false );
 		Reflect.setField( this, "isFlippedY", false );
-		this.width = width;
-		this.height = height;
+		width = p_width;
+		height = p_height;
 		_sprite = new Sprite();
-		if ( isMasked )
+		if ( p_isMasked )
 		{
 			var l_mask:Sprite = new Sprite();
 			l_mask.graphics.beginFill( 0xFF0000 );
-			l_mask.graphics.drawRect( 0, 0, width, height );
+			l_mask.graphics.drawRect( 0, 0, p_width, p_height );
 			_sprite.addChild( l_mask );
 			_sprite.mask = l_mask;
 		}
-		super( kernel, _sprite );
+		super( p_kernel, _sprite );
 	}
 	
-	public function setPosition( x:Float, y:Float ):Void
+	public function setPosition( p_x:Float, p_y:Float ):Void
 	{
-		this.x = x;
-		this.y = y;
+		x = p_x;
+		y = p_y;
 	}
 	
-	private function __set_x( value:Float ):Float
+	private function __set_x( p_value:Float ):Float
 	{
-		x = value;
+		x = p_value;
 		_sprite.x = x;
 		return x;
 	}
 	
-	private function __set_y( value:Float ):Float
+	private function __set_y( p_value:Float ):Float
 	{
-		y = value;
+		y = p_value;
 		_sprite.y = y;
 		return y;
 	}
 	
-	private function __set_isFlippedX( value:Bool ):Bool
+	private function __set_isFlippedX( p_value:Bool ):Bool
 	{
-		if ( value == isFlippedX )
+		if ( p_value == isFlippedX )
 		{
 			return isFlippedX;
 		}
-		isFlippedX = value;
+		isFlippedX = p_value;
 		_sprite.scaleX *= -1;
 		if ( isFlippedX )
 		{
@@ -100,13 +101,13 @@ class GuiEntity extends Entity
 		return isFlippedX;
 	}
 
-	private function __set_isFlippedY( value:Bool ):Bool
+	private function __set_isFlippedY( p_value:Bool ):Bool
 	{
-		if ( value == isFlippedY )
+		if ( p_value == isFlippedY )
 		{
 			return isFlippedY;
 		}
-		isFlippedY = value;
+		isFlippedY = p_value;
 		_sprite.scaleY *= -1;
 		if ( isFlippedY )
 		{

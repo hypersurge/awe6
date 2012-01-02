@@ -45,12 +45,12 @@ class AScene extends Scene
 	private var _titleText:Text;
 	private var _isMusic:Bool;
 	
-	public function new( kernel:IKernel, type:EScene, ?isPauseable:Bool = false, ?isMutable:Bool = true, ?isSessionSavedOnNext:Bool = false ) 
+	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMutable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) 
 	{
-		_session = cast kernel.session;
-		_assetManager = cast kernel.assets;
+		_session = cast p_kernel.session;
+		_assetManager = cast p_kernel.assets;
 		_title = "?";
-		super( kernel, type, isPauseable, isMutable, isSessionSavedOnNext );
+		super( p_kernel, p_type, p_isPauseable, p_isMutable, p_isSessionSavedOnNext );
 	}
 	
 	override private function _init():Void 

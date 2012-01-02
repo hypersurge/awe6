@@ -49,18 +49,18 @@ class TextStyle implements ITextStyle
 	public var thickness:Float;
 	public var filters:Array<Dynamic>;
 
-	public function new( ?font:String, ?size:Float, ?color:Int, ?isBold:Bool = false, ?isItalic = false, ?align:ETextAlign, ?spacingHorizontal:Float, ?spacingVertical:Float, ?thickness:Float = 0, ?filters:Array<Dynamic> ) 
+	public function new( ?p_font:String, ?p_size:Float, ?p_color:Int, ?p_isBold:Bool = false, ?p_isItalic:Bool = false, ?p_align:ETextAlign, ?p_spacingHorizontal:Float, ?p_spacingVertical:Float, ?p_thickness:Float = 0, ?p_filters:Array<Dynamic> ) 
 	{
-		this.font = ( font != null ) ? font : "_sans";
-		this.size = ( size != null ) ? size : 12;
-		this.color = ( color != null ) ? color : 0x000000;
-		this.isBold = isBold;
-		this.isItalic = isItalic;
-		this.align = ( align != null ) ? align : ETextAlign.LEFT;
-		this.spacingHorizontal = ( spacingHorizontal != null ) ? spacingHorizontal : 0;
-		this.spacingVertical = ( spacingVertical != null ) ? spacingVertical : 0;
-		this.thickness = thickness;
-		this.filters = filters;
+		font = ( p_font != null ) ? p_font : "_sans";
+		size = ( p_size != null ) ? p_size : 12;
+		color = ( p_color != null ) ? p_color : 0x000000;
+		isBold = p_isBold;
+		isItalic = p_isItalic;
+		align = ( p_align != null ) ? p_align : ETextAlign.LEFT;
+		spacingHorizontal = ( p_spacingHorizontal != null ) ? p_spacingHorizontal : 0;
+		spacingVertical = ( p_spacingVertical != null ) ? p_spacingVertical : 0;
+		thickness = p_thickness;
+		filters = p_filters;
 	}
 	
 	public function toString():String

@@ -50,19 +50,16 @@ class SceneTransition extends ASceneTransition
 			var l_view:View = cast _kernel.scenes.scene.view;
 			l_bitmapData.draw( l_view.context );
 		}
-		catch ( error:Dynamic )
-		{
-			trace( error );
-		}
+		catch ( l_error:Dynamic ) {}
 		_blurFilter = new BlurFilter( 0, 0, 1 );
 		_context.filters = [ _blurFilter ];
 		_context.mouseEnabled = false;
 		_context.addChild( new Bitmap( l_bitmapData ) );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( !isDisposed )
 		{
 			_context.alpha = 1 - progress;

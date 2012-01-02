@@ -51,11 +51,11 @@ class Entity extends Process, implements IEntity
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
-	public function new( kernel:IKernel, ?id:String, ?context:Context ) 
+	public function new( p_kernel:IKernel, ?p_id:String, ?p_context:Context ) 
 	{
-		this.view = new View( kernel, context, 0, this );
-		this.id = ( id == null ) ? kernel.tools.createGuid() : id;
-		super( kernel );
+		view = new View( p_kernel, p_context, 0, this );
+		id = ( p_id == null ) ? p_kernel.tools.createGuid() : p_id;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void 
@@ -67,9 +67,9 @@ class Entity extends Process, implements IEntity
 		_cachedEntities = [];
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _isAgendaDirty )
 		{
 			_cachedEntities = _getEntities( agenda );
@@ -81,7 +81,7 @@ class Entity extends Process, implements IEntity
 		}
 		for ( i in _cachedEntities )
 		{
-			i.update( deltaTime );
+			i.update( p_deltaTime );
 		}
 	}
 	
@@ -104,41 +104,41 @@ class Entity extends Process, implements IEntity
 		super._disposer();
 	}
 
-	public function addEntity( entity:IEntity, ?agenda:EAgenda = null, ?isAddedToView:Bool = false, ?viewPriority:Int = 0 ):Void
+	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda = null, ?p_isAddedToView:Bool = false, ?p_viewPriority:Int = 0 ):Void
 	{
 		if ( isDisposed )
 		{
 			return;
 		}
-		if ( entity == null )
+		if ( p_entity == null )
 		{
 			return;
 		}
-		if ( agenda == null )
+		if ( p_agenda == null )
 		{
-			agenda = EAgenda.ALWAYS;
+			p_agenda = EAgenda.ALWAYS;
 		}
 		for ( i in _entityAgendaPairs )
 		{
-			if ( ( i.entity == entity ) && ( Type.enumEq( i.agenda, agenda ) ) )
+			if ( ( i.entity == p_entity ) && ( Type.enumEq( i.agenda, p_agenda ) ) )
 			{
 				return; // already exists
 			}
 		}
 		_isAgendaDirty = true;
-		var l_child:Entity = cast entity;
-		var l_helperEntityAgendaPair:_HelperEntityAgendaPair = new _HelperEntityAgendaPair( entity, agenda );
+		var l_child:Entity = cast p_entity;
+		var l_helperEntityAgendaPair:_HelperEntityAgendaPair = new _HelperEntityAgendaPair( p_entity, p_agenda );
 		if ( l_child.parent != this )
 		{
-			l_child.remove( isAddedToView );
+			l_child.remove( p_isAddedToView );
 			l_child._setParent( this );
 		}
 		_entityAgendaPairs.add( l_helperEntityAgendaPair );
-		if ( isAddedToView )
+		if ( p_isAddedToView )
 		{
-			if ( Type.enumEq( agenda, this.agenda ) )
+			if ( Type.enumEq( p_agenda, agenda ) )
 			{
-				view.addChild( entity.view, viewPriority );
+				view.addChild( p_entity.view, p_viewPriority );
 			}
 			else
 			{
@@ -147,17 +147,17 @@ class Entity extends Process, implements IEntity
 		}
 	}
 	
-	public function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void
+	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, ?p_isRemovedFromView:Bool = false ):Void
 	{
 		if ( isDisposed )
 		{
 			return;
 		}
-		var l_child:Entity = cast entity;
+		var l_child:Entity = cast p_entity;
 		var l_isRemoved:Bool = false;
 		for ( i in _entityAgendaPairs )
 		{
-			if ( ( i.entity == entity ) && ( ( agenda == null ) || ( Type.enumEq( i.agenda, agenda ) ) ) )
+			if ( ( i.entity == p_entity ) && ( ( p_agenda == null ) || ( Type.enumEq( i.agenda, p_agenda ) ) ) )
 			{
 				_entityAgendaPairs.remove( i );
 				l_isRemoved = true;
@@ -167,32 +167,32 @@ class Entity extends Process, implements IEntity
 		{
 			_isAgendaDirty = true;
 			l_child._setParent( null );
-			if ( isRemovedFromView )
+			if ( p_isRemovedFromView )
 			{
-				entity.view.remove();
+				p_entity.view.remove();
 			}
 		}
 	}
 	
-	public function remove( ?isRemovedFromView:Bool = false ):Void
+	public function remove( ?p_isRemovedFromView:Bool = false ):Void
 	{
 		if ( parent != null )
 		{
-			parent.removeEntity( this, isRemovedFromView );
+			parent.removeEntity( this, p_isRemovedFromView );
 		}
 	}	
 	
-	public function getEntities( ?agenda:EAgenda ):Array<IEntity>
+	public function getEntities( ?p_agenda:EAgenda ):Array<IEntity>
 	{
-		return _getEntities( agenda );
+		return _getEntities( p_agenda );
 	}
 	
-	private function _getEntities( ?agenda:EAgenda ):Array<IEntity>
+	private function _getEntities( ?p_agenda:EAgenda ):Array<IEntity>
 	{
 		var l_result:Array<IEntity> = new Array<IEntity>();
 		for ( i in _entityAgendaPairs )
 		{
-			if ( ( agenda == null ) || Type.enumEq( agenda, i.agenda ) )
+			if ( ( p_agenda == null ) || Type.enumEq( p_agenda, i.agenda ) )
 			{
 				l_result.push( i.entity );
 			}
@@ -201,73 +201,73 @@ class Entity extends Process, implements IEntity
 		return l_result;
 	}
 	
-	public function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Array<T>
+	public function getEntitiesByClass<T>( p_classType:Class<T>, ?p_agenda:EAgenda, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Array<T>
 	{
-		if ( isBubbleEverywhere && ( _kernel.scenes.scene != null ) )
+		if ( p_isBubbleEverywhere && ( _kernel.scenes.scene != null ) )
 		{
-			return _kernel.scenes.scene.getEntitiesByClass( classType, agenda, true );
+			return _kernel.scenes.scene.getEntitiesByClass( p_classType, p_agenda, true );
 		}
 		var l_result:Array<T> = new Array<T>();
-		var l_entities:Array<IEntity> = _getEntities( agenda );
+		var l_entities:Array<IEntity> = _getEntities( p_agenda );
 		for ( i in l_entities )
 		{
-			if ( Std.is( i, classType ) )
+			if ( Std.is( i, p_classType ) )
 			{
 				l_result.push( cast i );
 			}
-			if ( isBubbleDown )
+			if ( p_isBubbleDown )
 			{
-				l_result.concat( i.getEntitiesByClass( classType, agenda, true ) );
+				l_result.concat( i.getEntitiesByClass( p_classType, p_agenda, true ) );
 			}
 		}
-		if ( isBubbleUp && ( parent != null ) )
+		if ( p_isBubbleUp && ( parent != null ) )
 		{
-			l_result.concat( parent.getEntitiesByClass( classType, agenda, false, true ) );
+			l_result.concat( parent.getEntitiesByClass( p_classType, p_agenda, false, true ) );
 		}
 		return l_result;
 	}
 	
-	public function getEntityById( id:String, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):IEntity
+	public function getEntityById( p_id:String, ?p_agenda:EAgenda, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):IEntity
 	{
-		if ( this.id == id )
+		if ( id == p_id )
 		{
 			return this;
 		}
-		if ( isBubbleEverywhere && ( _kernel.scenes.scene != null ) )
+		if ( p_isBubbleEverywhere && ( _kernel.scenes.scene != null ) )
 		{
-			return _kernel.scenes.scene.getEntityById( id, agenda, true );
+			return _kernel.scenes.scene.getEntityById( p_id, p_agenda, true );
 		}
 		var l_result:IEntity = null;
-		var l_entities:Array<IEntity> = _getEntities( agenda );
+		var l_entities:Array<IEntity> = _getEntities( p_agenda );
 		for ( i in l_entities )
 		{
-			if ( i.id == id )
+			if ( i.id == p_id )
 			{
 				return i;
 			}
-			if ( isBubbleDown )
+			if ( p_isBubbleDown )
 			{
-				l_result = i.getEntityById( id, agenda, true );
+				l_result = i.getEntityById( p_id, p_agenda, true );
 			}
 			if ( l_result != null )
 			{
 				return l_result;
 			}
 		}
-		if ( isBubbleUp && ( parent != null ) )
+		if ( p_isBubbleUp && ( parent != null ) )
 		{
-			l_result = parent.getEntityById( id, agenda, false, true );
+			l_result = parent.getEntityById( p_id, p_agenda, false, true );
 		}
 		return l_result;
 	}
 	
-	public function setAgenda( type:EAgenda ):Bool
+	public function setAgenda( p_type:EAgenda ):Bool
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
-			type = EAgenda.ALWAYS;
+			p_type = EAgenda.ALWAYS;
 		}
-		if ( Type.enumEq( agenda, type ) )
+		if ( Type.enumEq( agenda, p_type ) )
 		{
 			return false;
 		}
@@ -281,7 +281,7 @@ class Entity extends Process, implements IEntity
 			}
 			i.isAddedToView = i.isAddedToView || l_isAddedToView;			
 		}
-		agenda = type;
+		agenda = p_type;
 		for ( i in _entityAgendaPairs )
 		{
 			if ( i.isAddedToView && ( Type.enumEq( EAgenda.ALWAYS, i.agenda ) || Type.enumEq( agenda, i.agenda ) ) )
@@ -292,14 +292,14 @@ class Entity extends Process, implements IEntity
 		return true;
 	}
 	
-	private function _setParent( parent:IEntityCollection ):Void
+	private function _setParent( p_parent:IEntityCollection ):Void
 	{
-		this.parent = parent;
+		parent = p_parent;
 	}
 	
-	private function __set_id( value:String ):String
+	private function __set_id( p_value:String ):String
 	{
-		id = value;
+		id = p_value;
 		return id;
 	}
 	
@@ -325,10 +325,10 @@ private class _HelperEntityAgendaPair
 	public var agenda( default, null ):EAgenda;
 	public var isAddedToView:Bool;
 	
-	public function new( entity:IEntity, ?agenda:EAgenda )
+	public function new( p_entity:IEntity, ?p_agenda:EAgenda )
 	{
-		this.entity = entity;
-		this.agenda = agenda;
-		this.isAddedToView = false;
+		entity = p_entity;
+		agenda = p_agenda;
+		isAddedToView = false;
 	}
 }

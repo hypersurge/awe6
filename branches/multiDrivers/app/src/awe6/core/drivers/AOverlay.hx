@@ -71,19 +71,19 @@ class AOverlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( kernel:IKernel, ?border:IView, ?backUp:IView, ?backOver:IView, ?muteUp:IView, ?muteOver:IView, ?unmuteUp:IView, ?unmuteOver:IView, ?pauseUp:IView, ?pauseOver:IView, ?unpauseUp:IView, ?unpauseOver:IView, ?pauseBlur:Float = 8, ?pauseColor:Int = 0x000000, ?pauseAlpha:Float = .35  )
+	public function new( p_kernel:IKernel, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
 	{
-		_borderView = border;
-		_buttonBack = new BasicButton( kernel, backUp, backOver, 30, 30 );
-		_buttonMute = new BasicButton( kernel, muteUp, muteOver, 30, 30 );
-		_buttonUnmute = new BasicButton( kernel, unmuteUp, unmuteOver, 30, 30 );
-		_buttonPause = new BasicButton( kernel, pauseUp, pauseOver, 30, 30 );
-		_buttonUnpause = new BasicButton( kernel, unpauseUp, unpauseOver, 30, 30 );
-		_pauseBlur = pauseBlur;
-		_pauseColor = pauseColor;
-		_pauseAlpha = pauseAlpha;
+		_borderView = p_border;
+		_buttonBack = new BasicButton( p_kernel, p_backUp, p_backOver, 30, 30 );
+		_buttonMute = new BasicButton( p_kernel, p_muteUp, p_muteOver, 30, 30 );
+		_buttonUnmute = new BasicButton( p_kernel, p_unmuteUp, p_unmuteOver, 30, 30 );
+		_buttonPause = new BasicButton( p_kernel, p_pauseUp, p_pauseOver, 30, 30 );
+		_buttonUnpause = new BasicButton( p_kernel, p_unpauseUp, p_unpauseOver, 30, 30 );
+		_pauseBlur = p_pauseBlur;
+		_pauseColor = p_pauseColor;
+		_pauseAlpha = p_pauseAlpha;
 		_context = new Context();
-		super( kernel, _context );
+		super( p_kernel, _context );
 	}
 	
 	override private function _init():Void 
@@ -140,12 +140,12 @@ class AOverlay extends Entity, implements IOverlayProcess
 		// override me
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _flashDuration > 0 )
 		{
-			_flashDuration -= _flashAsTime ? deltaTime : 1;
+			_flashDuration -= _flashAsTime ? p_deltaTime : 1;
 			_flashAlpha = _tools.limit( _flashStartingAlpha * ( _flashDuration / _flashStartingDuration ), 0, 1 );
 		}
 		_flashView.isVisible = _flashAlpha > 0;
@@ -163,8 +163,8 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 		if ( ( pauseEntity != null ) && !_kernel.isActive )
 		{
-			pauseEntity.update( deltaTime );
-			_pauseView.update( deltaTime );
+			pauseEntity.update( p_deltaTime );
+			_pauseView.update( p_deltaTime );
 		}
 	}
 	
@@ -178,23 +178,23 @@ class AOverlay extends Entity, implements IOverlayProcess
 		super._disposer();		
 	}
 	
-	private function _getButton( type:EOverlayButton ):BasicButton
+	private function _getButton( p_type:EOverlayButton ):BasicButton
 	{
-		return switch( type )
+		return switch( p_type )
 		{
 			case BACK : _buttonBack;
 			case MUTE : _buttonMute;
 			case UNMUTE : _buttonUnmute;
 			case PAUSE : _buttonPause;
 			case UNPAUSE : _buttonUnpause;
-			case SUB_TYPE( value ) : null;
+			case SUB_TYPE( l_value ) : null;
 		}		
 	}
 	
-	public function showButton( type:EOverlayButton, ?isVisible:Bool = true ):Void
+	public function showButton( p_type:EOverlayButton, ?p_isVisible:Bool = true ):Void
 	{
-		var l_button:BasicButton = _getButton( type );
-		if ( isVisible )
+		var l_button:BasicButton = _getButton( p_type );
+		if ( p_isVisible )
 		{
 			addEntity( l_button, true );
 		}
@@ -204,16 +204,16 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 	}
 	
-	public function positionButton( type:EOverlayButton, x:Float, y:Float ):Void
+	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float ):Void
 	{
-		var l_button:BasicButton = _getButton( type );
-		l_button.x = x;
-		l_button.y = y;
+		var l_button:BasicButton = _getButton( p_type );
+		l_button.x = p_x;
+		l_button.y = p_y;
 	}
 	
-	public function showProgress( progress:Float, ?message:String ):Void
+	public function showProgress( p_progress:Float, ?p_message:String ):Void
 	{
-		_progressView.isVisible = progress < 1;		
+		_progressView.isVisible = p_progress < 1;		
 	}
 	
 	public function hideButtons():Void
@@ -225,17 +225,17 @@ class AOverlay extends Entity, implements IOverlayProcess
 		showButton( EOverlayButton.UNPAUSE, false );
 	}
 	
-	public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void
+	public function flash( ?p_duration:Float, ?p_asTime:Bool = true, ?p_startingAlpha:Float = 1, ?p_color:Int = 0xFFFFFF ):Void
 	{
-		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
-		_flashDuration = _flashStartingDuration = duration;
-		_flashAsTime = asTime;
-		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
+		p_duration = ( p_duration != null ) ? p_duration : p_asTime ? 500 : _kernel.factory.targetFramerate * .5;
+		_flashDuration = _flashStartingDuration = p_duration;
+		_flashAsTime = p_asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( p_startingAlpha, 0, 1 );
 	}
 	
-	public function activateButton( type:EOverlayButton ):Void
+	public function activateButton( p_type:EOverlayButton ):Void
 	{
-		switch( type )
+		switch( p_type )
 		{
 			case BACK : if ( _buttonBack.view.isInViewStack )
 			{
@@ -276,13 +276,13 @@ class AOverlay extends Entity, implements IOverlayProcess
 				_drawPause( false );
 				activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
 			}
-			case SUB_TYPE( value ) : null;
+			case SUB_TYPE( l_value ) : null;
 		}
 	}
 	
-	private function _drawPause( ?isVisible:Bool = true ):Void
+	private function _drawPause( ?p_isVisible:Bool = true ):Void
 	{
-		_pauseView.isVisible = isVisible;
+		_pauseView.isVisible = p_isVisible;
 	}
 	
 	private function __get_pauseEntity():IEntity
@@ -290,13 +290,13 @@ class AOverlay extends Entity, implements IOverlayProcess
 		return pauseEntity;
 	}
 	
-	private function __set_pauseEntity( value:IEntity ):IEntity
+	private function __set_pauseEntity( p_value:IEntity ):IEntity
 	{
 		if ( pauseEntity != null )
 		{
 			pauseEntity.view.remove();
 		}
-		pauseEntity = value;
+		pauseEntity = p_value;
 		_pauseView.addChild( pauseEntity.view );
 		return pauseEntity;
 	}	

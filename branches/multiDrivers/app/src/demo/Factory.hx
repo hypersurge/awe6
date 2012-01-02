@@ -94,32 +94,32 @@ class Factory extends AFactory
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
 	}
 	
-	override public function createSession( ?id:String ):ISession
+	override public function createSession( ?p_id:String ):ISession
 	{		
-		return new Session( _kernel, id );
+		return new Session( _kernel, p_id );
 	}
 	
-	override public function createScene( type:EScene ):IScene
+	override public function createScene( p_type:EScene ):IScene
 	{
-		switch ( type )
+		switch ( p_type )
 		{
-			case INTRO : return new Intro( _kernel, type );
-			case GAME : return new Game( _kernel, type );
-			case RESULTS : return new Results( _kernel, type );
-			default :
+			case INTRO : return new Intro( _kernel, p_type );
+			case GAME : return new Game( _kernel, p_type );
+			case RESULTS : return new Results( _kernel, p_type );
+			default : null;
 		}
-		return super.createScene( type );
+		return super.createScene( p_type );
 	}	
 	
-	override public function createTextStyle( ?type:ETextStyle ):ITextStyle
+	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
 	{
-		if ( type == null )
+		if ( p_type == null )
 		{
-			type = ETextStyle.BODY;
+			p_type = ETextStyle.BODY;
 		}
 		var l_fontName:String = _assetManager.font.fontName;
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
-		l_result.size = switch ( type )
+		l_result.size = switch ( p_type )
 		{
 			case ETextStyle.HEADLINE : 24;
 			case ETextStyle.OVERSIZED : 72;
@@ -131,28 +131,28 @@ class Factory extends AFactory
 		return l_result;
 	}
 	
-	override public function getBackSceneType( type:EScene ):EScene
+	override public function getBackSceneType( p_type:EScene ):EScene
 	{
-		switch ( type )
+		switch ( p_type )
 		{
 			case INTRO : return null;
 			case GAME : return EScene.INTRO;
 			case RESULTS : return EScene.INTRO;
-			default :
+			default : null;
 		}
-		return super.getBackSceneType( type );
+		return super.getBackSceneType( p_type );
 	}	
 	
-	override public function getNextSceneType( type:EScene ):EScene
+	override public function getNextSceneType( p_type:EScene ):EScene
 	{
-		switch ( type )
+		switch ( p_type )
 		{
 			case INTRO : return EScene.GAME;
 			case GAME : return EScene.RESULTS;
 			case RESULTS : return EScene.INTRO;
-			default :
+			default : null;
 		}
-		return super.getNextSceneType( type );
+		return super.getNextSceneType( p_type );
 	}	
 	
 }

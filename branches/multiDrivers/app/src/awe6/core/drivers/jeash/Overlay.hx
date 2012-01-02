@@ -53,21 +53,21 @@ class Overlay extends AOverlay
 		_flashContext.mouseEnabled = false;
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		_flashContext.alpha = _flashAlpha;
 	}
 	
-	override public function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void
+	override public function flash( ?p_duration:Float, ?p_asTime:Bool = true, ?p_startingAlpha:Float = 1, ?p_color:Int = 0xFFFFFF ):Void
 	{
 		_flashContext.graphics.clear();
-		_flashContext.graphics.beginFill( color );
+		_flashContext.graphics.beginFill( p_color );
 		_flashContext.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
-		duration = ( duration != null ) ? duration : asTime ? 500 : _kernel.factory.targetFramerate * .5;
-		_flashDuration = _flashStartingDuration = duration;
-		_flashAsTime = asTime;
-		_flashAlpha = _flashStartingAlpha = _tools.limit( startingAlpha, 0, 1 );
+		p_duration = ( p_duration != null ) ? p_duration : p_asTime ? 500 : _kernel.factory.targetFramerate * .5;
+		_flashDuration = _flashStartingDuration = p_duration;
+		_flashAsTime = p_asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( p_startingAlpha, 0, 1 );
 	}
 	
 }

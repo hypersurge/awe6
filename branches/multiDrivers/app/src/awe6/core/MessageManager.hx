@@ -50,16 +50,16 @@ class MessageManager extends Process, implements IMessageManager
 		_subscriptions = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 	}
 	
-	public function addSubscriber<M,T>( subscriber:IEntity, message:M, handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false ):Void
+	public function addSubscriber<M,T>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T>, ?p_isRemovedAfterFirstSend:Bool = false ):Void
 	{
-		var l_subscription:_HelperSubscription<M,T> = new _HelperSubscription( subscriber, message, handler, sender, senderClassType, isRemovedAfterFirstSend );
+		var l_subscription:_HelperSubscription<M,T> = new _HelperSubscription( p_subscriber, p_message, p_handler, p_sender, p_senderClassType, p_isRemovedAfterFirstSend );
 		_subscriptions.add( l_subscription );
 	}
 	
-	public function getSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):Array<IEntity>
+	public function getSubscribers<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):Array<IEntity>
 	{
 		var l_result:Array<IEntity> = [];
-		var l_subscriptions = _getSubscriptions( subscriber, message, handler, sender, senderClassType );
+		var l_subscriptions = _getSubscriptions( p_subscriber, p_message, p_handler, p_sender, p_senderClassType );
 		for ( i in l_subscriptions )
 		{
 			l_result.push( i.subscriber );
@@ -67,9 +67,9 @@ class MessageManager extends Process, implements IMessageManager
 		return l_result;
 	}
 	
-	public function removeSubscribers<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):Void
+	public function removeSubscribers<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):Void
 	{
-		var l_subscriptions = _getSubscriptions( subscriber, message, handler, sender, senderClassType );
+		var l_subscriptions = _getSubscriptions( p_subscriber, p_message, p_handler, p_sender, p_senderClassType );
 		for ( i in l_subscriptions )
 		{
 			_subscriptions.remove( i );
@@ -80,90 +80,85 @@ class MessageManager extends Process, implements IMessageManager
 		}		
 	}
 	
-	public function sendMessage<M>( message:M, sender:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void
+	public function sendMessage<M>( p_message:M, p_sender:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Void
 	{
-		_sendMessage( message, sender, sender, isBubbleDown, isBubbleUp, isBubbleEverywhere );
+		_sendMessage( p_message, p_sender, p_sender, p_isBubbleDown, p_isBubbleUp, p_isBubbleEverywhere );
 	}
 	
-	private function _sendMessage<M>( message:M, sender:IEntity, target:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void
+	private function _sendMessage<M>( p_message:M, p_sender:IEntity, p_target:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Void
 	{
 		if ( _isVerbose )
 		{
-			trace( "Sending message: " + Std.string( message ) + " from " + sender.id );
+			trace( "Sending message: " + Std.string( p_message ) + " from " + p_sender.id );
 		}
-		if ( isBubbleEverywhere )
+		if ( p_isBubbleEverywhere )
 		{
-			return _sendMessage( message, sender, _kernel.scenes.scene.getEntities()[0], true );		
+			return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0], true );		
 		}
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( null, message, null, target );
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( null, p_message, null, p_target );
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
-			l_isContinue = _send( i, message, sender );
+			l_isContinue = _send( i, p_message, p_sender );
 			if ( !l_isContinue )
 			{
 				return;
 			}
 		}
-		if ( isBubbleDown )
+		if ( p_isBubbleDown )
 		{
-			var l_children:Array<IEntity> = target.getEntities();
+			var l_children:Array<IEntity> = p_target.getEntities();
 			for ( j in l_children )
 			{
-				_sendMessage( message, sender, j, true );
+				_sendMessage( p_message, p_sender, j, true );
 			}
 		}
-		if ( isBubbleUp && ( target.parent != null ) && ( Std.is( target.parent, IEntity ) ) )
+		if ( p_isBubbleUp && ( p_target.parent != null ) && ( Std.is( p_target.parent, IEntity ) ) )
 		{
-			_sendMessage( message, sender, cast target.parent, false, true );
+			_sendMessage( p_message, p_sender, cast p_target.parent, false, true );
 		}
 		return;
 	}
 	
-	private function _send<M>( subscription:_HelperSubscription<Dynamic,Dynamic>, message:M, sender:IEntity ):Bool
+	private function _send<M>( p_subscription:_HelperSubscription<Dynamic,Dynamic>, p_message:M, p_sender:IEntity ):Bool
 	{
-		var l_isContinue:Bool = Reflect.callMethod( subscription.subscriber, subscription.handler, [message, sender] );		
-		if ( subscription.isRemovedAfterFirstSend )
+		var l_isContinue:Bool = Reflect.callMethod( p_subscription.subscriber, p_subscription.handler, [p_message, p_sender] );
+		if ( p_subscription.isRemovedAfterFirstSend )
 		{
-			_subscriptions.remove( subscription );
+			_subscriptions.remove( p_subscription );
 		}
 		return l_isContinue;
 	}
 	
-	private function _getSubscriptions<M,T>( ?subscriber:IEntity, ?message:M, ?handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Dynamic>>
+	private function _getSubscriptions<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Dynamic>>
 	{
 		var l_result:FastList<_HelperSubscription<Dynamic,Dynamic>> = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
 		for ( i in _subscriptions )
 		{
-			if ( ( subscriber != null ) && ( i.subscriber != subscriber ) )
+			if ( ( p_subscriber != null ) && ( i.subscriber != p_subscriber ) )
 			{
 				continue;
 			}
-//			if ( _isVerbose ) trace( 1 );
-			if ( ( message != null ) && !Std.is( message, i.messageClass ) )
+			if ( ( p_message != null ) && !Std.is( p_message, i.messageClass ) )
 			{
-				switch ( Type.typeof( message ) )
+				switch ( Type.typeof( p_message ) )
 				{
-					case ValueType.TEnum( e ) : if ( !Type.enumEq( message, i.message ) ) continue;
-					default : if ( message != i.message ) continue;
+					case ValueType.TEnum( e ) : if ( !Type.enumEq( p_message, i.message ) ) continue;
+					default : if ( p_message != i.message ) continue;
 				}
 			}
-//			if ( _isVerbose ) trace( 2 );
-			if ( ( handler != null ) && ( !Reflect.compareMethods( i.handler, handler ) ) )
+			if ( ( p_handler != null ) && ( !Reflect.compareMethods( i.handler, p_handler ) ) )
 			{
 				continue;
 			}
-//			if ( _isVerbose ) trace( 3 );
-			if ( ( sender != null ) && ( i.sender != null ) && ( i.sender != sender ) )
+			if ( ( p_sender != null ) && ( i.sender != null ) && ( i.sender != p_sender ) )
 			{
 				continue;
 			}
-//			if ( _isVerbose ) trace( 4 );
-			if ( ( i.senderClassType != null ) && ( !Std.is( sender, i.senderClassType ) ) )
+			if ( ( i.senderClassType != null ) && ( !Std.is( p_sender, i.senderClassType ) ) )
 			{
 				continue;
 			}
-//			if ( _isVerbose ) trace( 5 );
 			l_result.add( i );
 		}
 		return l_result;
@@ -180,15 +175,14 @@ private class _HelperSubscription<M,T>
 	public var senderClassType( default, null ):Class<T>;
 	public var isRemovedAfterFirstSend( default, null ):Bool;
 	
-	public function new( subscriber:IEntity, message:M, handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<T>, ?isRemovedAfterFirstSend:Bool = false )
+	public function new( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T>, ?p_isRemovedAfterFirstSend:Bool = false )
 	{
-		this.subscriber = subscriber;
-		this.message = message;
-		this.handler = handler;
-		this.sender = sender;
-		this.senderClassType = senderClassType;
-		this.isRemovedAfterFirstSend = isRemovedAfterFirstSend;
-//		trace( message + ":" + messageClass + ":" + Type.typeof( message ) );
-		this.messageClass = Type.getClass( message );
+		subscriber = p_subscriber;
+		message = p_message;
+		handler = p_handler;
+		sender = p_sender;
+		senderClassType = p_senderClassType;
+		isRemovedAfterFirstSend = p_isRemovedAfterFirstSend;
+		messageClass = Type.getClass( p_message );
 	}
 }

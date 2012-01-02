@@ -37,10 +37,10 @@ class Image extends GuiEntity
 	private var _bitmapData:BitmapData;
 	private var _bitmap:Bitmap;
 	
-	public function new( kernel:IKernel, bitmapData:BitmapData )
+	public function new( p_kernel:IKernel, p_bitmapData:BitmapData )
 	{
-		_bitmapData = bitmapData;
-		super( kernel, bitmapData.width, bitmapData.height );
+		_bitmapData = p_bitmapData;
+		super( p_kernel, p_bitmapData.width, p_bitmapData.height );
 	}
 	
 	override private function _init():Void 
@@ -51,9 +51,9 @@ class Image extends GuiEntity
 		_sprite.addChild( _bitmap );
 	}
 	
-	public function configure( bitmapData:BitmapData ):Void
+	public function configure( p_bitmapData:BitmapData ):Void
 	{
-		_bitmapData = bitmapData;
+		_bitmapData = p_bitmapData;
 		_bitmap.bitmapData = _bitmapData;
 	}
 	

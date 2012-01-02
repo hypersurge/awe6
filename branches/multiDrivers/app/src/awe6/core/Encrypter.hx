@@ -41,21 +41,21 @@ class Encrypter implements IEncrypter
 {
 	private var _defaultSecret:String;
 	
-	public function new( defaultSecret:String )
+	public function new( p_defaultSecret:String )
 	{
-		_defaultSecret = defaultSecret;
+		_defaultSecret = p_defaultSecret;
 	}
 	
-	public function encrypt( value:Bytes, ?secret:String = "" ):Bytes
+	public function encrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
 	{
-		var l_secret:String = secret != "" ? secret : _defaultSecret;
-		return Bytes.ofData( _xor( value.getData(), l_secret ) );
+		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
+		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );
 	}
 	
-	public function decrypt( value:Bytes, ?secret:String = "" ):Bytes
+	public function decrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
 	{
-		var l_secret:String = secret != "" ? secret : _defaultSecret;
-		return Bytes.ofData( _xor( value.getData(), l_secret ) );
+		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
+		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );
 	}
 	
 	/**
@@ -63,15 +63,15 @@ class Encrypter implements IEncrypter
 	 * <p>XOR is the default encryption routine used in awe6 because (due to the ease of client side application decompiling) the obfuscation routine is secondary to the secret key concealment.</p>
 	 * <p>Tip: haXe offers some interesting approaches towards concealing the key from plainsite.</p>
 	 */
-	private function _xor( value:BytesData, secret:String ):BytesData
+	private function _xor( p_value:BytesData, p_secret:String ):BytesData
 	{
 		var l_result:BytesData = new BytesData();
 		var l_secretIndex:Int = 0;
-		for ( i in 0...value.length )
+		for ( i in 0...p_value.length )
 		{
-			l_result[i] = untyped value[i] ^ secret.charCodeAt( l_secretIndex );
+			l_result[i] = untyped p_value[i] ^ p_secret.charCodeAt( l_secretIndex );
 			l_secretIndex++;
-			if ( l_secretIndex >= secret.length )
+			if ( l_secretIndex >= p_secret.length )
 			{
 				l_secretIndex = 0;
 			}

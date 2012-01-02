@@ -63,9 +63,9 @@ class AAudioManager extends Process, implements IAudioManager
 		isMute = false;
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		for ( i in _sounds )
 		{
 			if ( i.isDisposed )
@@ -85,85 +85,85 @@ class AAudioManager extends Process, implements IAudioManager
 		super._disposer();
 	}
 	
-	public function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false, ?onCompleteCallback:Void->Void ):Void
+	public function start( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_isIgnoredIfPlaying:Bool = false, ?p_onCompleteCallback:Void->Void ):Void
 	{
-		if ( audioChannelType == null )
+		if ( p_audioChannelType == null )
 		{
-			audioChannelType = EAudioChannel.DEFAULT;
+			p_audioChannelType = EAudioChannel.DEFAULT;
 		}
-		if ( isIgnoredIfPlaying )
+		if ( p_isIgnoredIfPlaying )
 		{
-			var l_existingSound:Array<_AHelperSound> = _getSounds( id, audioChannelType );
+			var l_existingSound:Array<_AHelperSound> = _getSounds( p_id, p_audioChannelType );
 			if ( l_existingSound.length != 0 )
 			{
 				return;
 			}
 		}
-		_sounds.push( _nativeSoundFactory( id, audioChannelType, loops, startTime, volume, pan, onCompleteCallback ) );
+		_sounds.push( _nativeSoundFactory( p_id, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback ) );
 	}
 	
-	private function _nativeSoundFactory( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void ):_AHelperSound
+	private function _nativeSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		//override me
-		return new _AHelperSound( _kernel, id, _packageId, audioChannelType, loops, startTime, volume, pan, onCompleteCallback );		
+		return new _AHelperSound( _kernel, p_id, _packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
 	
-	public function stop( ?id:String, ?audioChannelType:EAudioChannel ):Void
+	public function stop( ?p_id:String, ?p_audioChannelType:EAudioChannel ):Void
 	{
-		var l_sounds:Array<_AHelperSound> = _getSounds( id, audioChannelType );
+		var l_sounds:Array<_AHelperSound> = _getSounds( p_id, p_audioChannelType );
 		for ( i in l_sounds )
 		{
 			i.stop();
 		}
 	}
 	
-	public function transform( ?id:String, ?audioChannelType:EAudioChannel, ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
+	public function transform( ?p_id:String, ?p_audioChannelType:EAudioChannel, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_asRelative:Bool = false ):Void
 	{
-		var l_sounds:Array<_AHelperSound> = _getSounds( id, audioChannelType );
+		var l_sounds:Array<_AHelperSound> = _getSounds( p_id, p_audioChannelType );
 		for ( i in l_sounds )
 		{
-			i.transform( volume, pan, asRelative );
+			i.transform( p_volume, p_pan, p_asRelative );
 		}
 	}
 	
-	private function __set_isMute( ?isMute:Bool ):Bool
+	private function __set_isMute( ?p_value:Bool ):Bool
 	{
-		if ( isMute == null )
+		if ( p_value == null )
 		{
-			isMute = !this.isMute;
+			p_value = !isMute;
 		}
-		this.isMute = isMute;
-		_nativeSetIsMute( isMute );
-		return this.isMute;
+		isMute = p_value;
+		_nativeSetIsMute( p_value );
+		return isMute;
 	}
 	
-	private function _nativeSetIsMute( ?isMute:Bool ):Void
+	private function _nativeSetIsMute( ?p_value:Bool ):Void
 	{
 		//override me
 	}
 	
-	private function _getSounds( ?id:String, ?audioChannelType:EAudioChannel ):Array<_AHelperSound>
+	private function _getSounds( ?p_id:String, ?p_audioChannelType:EAudioChannel ):Array<_AHelperSound>
 	{
 		var l_result:Array<_AHelperSound> = [];
-		if ( ( id == null ) && ( audioChannelType == null ) )
+		if ( ( p_id == null ) && ( p_audioChannelType == null ) )
 		{
 			l_result = _sounds.copy();
 		}
-		else if ( audioChannelType == null )
+		else if ( p_audioChannelType == null )
 		{
 			for ( i in _sounds )
 			{
-				if ( i.id == id )
+				if ( i.id == p_id )
 				{
 					l_result.push( i );			
 				}
 			}
 		}
-		else if ( id == null )
+		else if ( p_id == null )
 		{
 			for ( i in _sounds )
 			{
-				if ( Type.enumEq( i.audioChannelType, audioChannelType ) )
+				if ( Type.enumEq( i.audioChannelType, p_audioChannelType ) )
 				{
 					l_result.push( i );
 				}
@@ -173,7 +173,7 @@ class AAudioManager extends Process, implements IAudioManager
 		{
 			for ( i in _sounds )
 			{
-				if ( ( i.id == id ) && Type.enumEq( i.audioChannelType, audioChannelType ) )
+				if ( ( i.id == p_id ) && Type.enumEq( i.audioChannelType, p_audioChannelType ) )
 				{
 					l_result.push( i );						
 				}
@@ -182,9 +182,9 @@ class AAudioManager extends Process, implements IAudioManager
 		return l_result;
 	}
 	
-	public function isPlaying( ?id:String, ?audioChannelType:EAudioChannel ):Bool
+	public function isPlaying( ?p_id:String, ?p_audioChannelType:EAudioChannel ):Bool
 	{
-		var l_result:Array<_AHelperSound> = _getSounds( id, audioChannelType );
+		var l_result:Array<_AHelperSound> = _getSounds( p_id, p_audioChannelType );
 		return ( l_result.length != 0 );
 	}
 }
@@ -205,22 +205,22 @@ class _AHelperSound implements IDisposable
 	
 	private var _kernel:IKernel;
 	
-	public function new( kernel:IKernel, id:String, packageId:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?onCompleteCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
-		_kernel = kernel;
+		_kernel = p_kernel;
 		isDisposed = false;
-		this.id = id;
-		_packageId = packageId;
-		this.audioChannelType = ( audioChannelType != null ) ? audioChannelType : EAudioChannel.DEFAULT;
-		if ( loops == -1 )
+		id = p_id;
+		_packageId = p_packageId;
+		audioChannelType = ( p_audioChannelType != null ) ? p_audioChannelType : EAudioChannel.DEFAULT;
+		if ( p_loops == -1 )
 		{
-			loops = _kernel.tools.BIG_NUMBER;
+			p_loops = _kernel.tools.BIG_NUMBER;
 		}
-		_loops = loops;
-		_startTime = startTime;
-		_volume = volume;
-		_pan = pan;
-		_onCompleteCallback = onCompleteCallback;
+		_loops = p_loops;
+		_startTime = p_startTime;
+		_volume = p_volume;
+		_pan = p_pan;
+		_onCompleteCallback = p_onCompleteCallback;
 		_init();
 	}
 	
@@ -234,18 +234,18 @@ class _AHelperSound implements IDisposable
 		//override me
 	}
 	
-	public function transform( ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false ):Void
+	public function transform( ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_asRelative:Bool = false ):Void
 	{
 		if ( isDisposed )
 		{
 			return;
 		}
-		_volume = _kernel.tools.limit( volume, 0, 1 );
-		_pan = _kernel.tools.limit( pan, -1, 1 );
-		_nativeTransform( asRelative );
+		_volume = _kernel.tools.limit( p_volume, 0, 1 );
+		_pan = _kernel.tools.limit( p_pan, -1, 1 );
+		_nativeTransform( p_asRelative );
 	}
 	
-	private function _nativeTransform( ?asRelative:Bool = false ):Void
+	private function _nativeTransform( ?p_asRelative:Bool = false ):Void
 	{
 		//override me
 	}

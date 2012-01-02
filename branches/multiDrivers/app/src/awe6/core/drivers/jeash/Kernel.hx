@@ -79,16 +79,16 @@ class Kernel extends AKernel
 	{
 	}
 	
-	private function _onEnterFrame( event:Event ):Void
+	private function _onEnterFrame( p_event:Event ):Void
 	{
 		_updater( 0 ); // avoid isActive
 	}
 	
-	override private function _nativeSetIsEyeCandy( value:Bool ):Void
+	override private function _nativeSetIsEyeCandy( p_value:Bool ):Void
 	{
 	}
 	
-	override private function _nativeSetIsFullScreen( value:Bool ):Void
+	override private function _nativeSetIsFullScreen( p_value:Bool ):Void
 	{
 	}
 	

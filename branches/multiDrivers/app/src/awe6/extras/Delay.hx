@@ -36,17 +36,17 @@ class Delay extends Entity
 	private var _callbackFunction:Void->Void;
 	private var _duration:Int;
 	
-	public function new( kernel:IKernel, callbackFunction:Void->Void, ?duration:Int = 1000 ) 
+	public function new( p_kernel:IKernel, p_callbackFunction:Void->Void, ?p_duration:Int = 1000 ) 
 	{
-		_callbackFunction = callbackFunction;
-		_duration = duration;
-		super( kernel );
+		_callbackFunction = p_callbackFunction;
+		_duration = p_duration;
+		super( p_kernel );
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
-		_duration -= deltaTime;
+		super._updater( p_deltaTime );
+		_duration -= p_deltaTime;
 		if ( _duration <= 0 )
 		{
 			Reflect.callMethod( this, _callbackFunction, [] );

@@ -46,11 +46,11 @@ class ASceneTransition extends Entity, implements ISceneTransition
 	private var _duration:Int;
 	private var _context:Context;
 
-	public function new( kernel:IKernel, ?duration:Int = 500 ) 
+	public function new( p_kernel:IKernel, ?p_duration:Int = 500 ) 
 	{
-		_duration = duration;
+		_duration = p_duration;
 		_context = new Context();
-		super( kernel, "SCENE_TRANSITION", _context );
+		super( p_kernel, "SCENE_TRANSITION", _context );
 	}
 	
 	override private function _init():Void 
@@ -58,18 +58,18 @@ class ASceneTransition extends Entity, implements ISceneTransition
 		super._init();
 	}
 	
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		if ( _age > _duration )
 		{
 			dispose();
 		}
 	}
 	
-	public function getDuration( ?asTime:Bool = true ):Float
+	public function getDuration( ?p_asTime:Bool = true ):Float
 	{
-		return asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
+		return p_asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
 	}
 	
 	private function __get_progress():Float

@@ -54,79 +54,79 @@ class InputJoypad implements IInputJoypad
 	private var _keyPrimaryAlt:EKey;
 	private var _keySecondaryAlt:EKey;
 	
-	public function new( kernel:IKernel, up:EKey, right:EKey, down:EKey, left:EKey, primary:EKey, secondary:EKey, upAlt:EKey, rightAlt:EKey, downAlt:EKey, leftAlt:EKey, primaryAlt:EKey, secondaryAlt:EKey )
+	public function new( p_kernel:IKernel, p_up:EKey, p_right:EKey, p_down:EKey, p_left:EKey, p_primary:EKey, p_secondary:EKey, p_upAlt:EKey, p_rightAlt:EKey, p_downAlt:EKey, p_leftAlt:EKey, p_primaryAlt:EKey, p_secondaryAlt:EKey )
 	{
-		_kernel = kernel;
-		_keyUp = ( up != null ) ? up : EKey.UP;
-		_keyRight = ( right != null ) ? right : EKey.RIGHT;
-		_keyDown = ( down != null ) ? down : EKey.DOWN;
-		_keyLeft = ( left != null ) ? left : EKey.LEFT;
-		_keyPrimary = ( primary != null ) ? primary : EKey.SPACE;
-		_keySecondary = ( secondary != null ) ? secondary : EKey.Z;
-		_keyUpAlt = ( upAlt != null ) ? upAlt : EKey.W;
-		_keyRightAlt = ( rightAlt != null ) ? rightAlt : EKey.D;
-		_keyDownAlt = ( downAlt != null ) ? downAlt : EKey.S;
-		_keyLeftAlt = ( leftAlt != null ) ? leftAlt : EKey.A;
-		_keyPrimaryAlt = ( primaryAlt != null ) ? primaryAlt : EKey.Q;
-		_keySecondaryAlt = ( secondaryAlt != null ) ? secondaryAlt : EKey.E;
+		_kernel = p_kernel;
+		_keyUp = ( p_up != null ) ? p_up : EKey.UP;
+		_keyRight = ( p_right != null ) ? p_right : EKey.RIGHT;
+		_keyDown = ( p_down != null ) ? p_down : EKey.DOWN;
+		_keyLeft = ( p_left != null ) ? p_left : EKey.LEFT;
+		_keyPrimary = ( p_primary != null ) ? p_primary : EKey.SPACE;
+		_keySecondary = ( p_secondary != null ) ? p_secondary : EKey.Z;
+		_keyUpAlt = ( p_upAlt != null ) ? p_upAlt : EKey.W;
+		_keyRightAlt = ( p_rightAlt != null ) ? p_rightAlt : EKey.D;
+		_keyDownAlt = ( p_downAlt != null ) ? p_downAlt : EKey.S;
+		_keyLeftAlt = ( p_leftAlt != null ) ? p_leftAlt : EKey.A;
+		_keyPrimaryAlt = ( p_primaryAlt != null ) ? p_primaryAlt : EKey.Q;
+		_keySecondaryAlt = ( p_secondaryAlt != null ) ? p_secondaryAlt : EKey.E;
 	}
 	
-	private function _check( type:EJoypadButton, f:EKey->Bool ):Bool
+	private function _check( p_type:EJoypadButton, p_function:EKey->Bool ):Bool
 	{
-		switch ( type )
+		switch ( p_type )
 		{
-			case FIRE : return ( _check( EJoypadButton.PRIMARY, f ) || _check( EJoypadButton.SECONDARY, f ) );
-			case UP : return f( _keyUp ) || f( _keyUpAlt );
-			case RIGHT : return f( _keyRight ) || f( _keyRightAlt );
-			case DOWN : return f( _keyDown ) || f( _keyDownAlt );
-			case LEFT : return f( _keyLeft ) || f( _keyLeftAlt );
-			case PRIMARY : return f( _keyPrimary ) || f( _keyPrimaryAlt );
-			case SECONDARY : return f( _keySecondary ) || f( _keySecondaryAlt );
+			case FIRE : return ( _check( EJoypadButton.PRIMARY, p_function ) || _check( EJoypadButton.SECONDARY, p_function ) );
+			case UP : return p_function( _keyUp ) || p_function( _keyUpAlt );
+			case RIGHT : return p_function( _keyRight ) || p_function( _keyRightAlt );
+			case DOWN : return p_function( _keyDown ) || p_function( _keyDownAlt );
+			case LEFT : return p_function( _keyLeft ) || p_function( _keyLeftAlt );
+			case PRIMARY : return p_function( _keyPrimary ) || p_function( _keyPrimaryAlt );
+			case SECONDARY : return p_function( _keySecondary ) || p_function( _keySecondaryAlt );
 		}
 	}
 	
-	public function getIsButtonDown( type:EJoypadButton ):Bool
+	public function getIsButtonDown( p_type:EJoypadButton ):Bool
 	{
-		return _check( type, _kernel.inputs.keyboard.getIsKeyDown );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyDown );
 	}
 	
-	public function getIsButtonPress( type:EJoypadButton ):Bool
+	public function getIsButtonPress( p_type:EJoypadButton ):Bool
 	{
-		return _check( type, _kernel.inputs.keyboard.getIsKeyPress );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyPress );
 	}
 	
-	public function getIsButtonRelease( type:EJoypadButton ):Bool
+	public function getIsButtonRelease( p_type:EJoypadButton ):Bool
 	{
-		return _check( type, _kernel.inputs.keyboard.getIsKeyRelease );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyRelease );
 	}
 	
-	public function getButtonDownDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
+	public function getButtonDownDuration( p_type:EJoypadButton, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false ):Float
 	{
-		var l_f:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyDownDuration;
-		switch ( type )
+		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyDownDuration;
+		switch ( p_type )
 		{
-			case FIRE : return Std.int( Math.max( Math.max( l_f( _keyPrimary, asTime, isPrevious ), l_f( _keyPrimaryAlt, asTime, isPrevious ) ), Math.max( l_f( _keySecondary, asTime, isPrevious ), l_f( _keySecondaryAlt, asTime, isPrevious ) ) ) );
-			case UP : return Std.int( Math.max( l_f( _keyUp, asTime, isPrevious ), l_f( _keyUpAlt, asTime, isPrevious ) ) );
-			case RIGHT : return Std.int( Math.max( l_f( _keyRight, asTime, isPrevious ), l_f( _keyRightAlt, asTime, isPrevious ) ) );
-			case DOWN : return Std.int( Math.max( l_f( _keyDown, asTime, isPrevious ), l_f( _keyDownAlt, asTime, isPrevious ) ) );
-			case LEFT : return Std.int( Math.max( l_f( _keyLeft, asTime, isPrevious ), l_f( _keyLeftAlt, asTime, isPrevious ) ) );
-			case PRIMARY : return Std.int( Math.max( l_f( _keyPrimary, asTime, isPrevious ), l_f( _keyPrimaryAlt, asTime, isPrevious ) ) );
-			case SECONDARY : return Std.int( Math.max( l_f( _keySecondary, asTime, isPrevious ), l_f( _keySecondaryAlt, asTime, isPrevious ) ) );
+			case FIRE : return Std.int( Math.max( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
+			case UP : return Std.int( Math.max( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
+			case RIGHT : return Std.int( Math.max( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
+			case DOWN : return Std.int( Math.max( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
+			case LEFT : return Std.int( Math.max( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
+			case PRIMARY : return Std.int( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
+			case SECONDARY : return Std.int( Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
 	
-	public function getButtonUpDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float
+	public function getButtonUpDuration( p_type:EJoypadButton, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false ):Float
 	{
-		var l_f:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyUpDuration;
-		switch ( type )
+		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyUpDuration;
+		switch ( p_type )
 		{
-			case FIRE : return Std.int( Math.min( Math.min( l_f( _keyPrimary, asTime, isPrevious ), l_f( _keyPrimaryAlt, asTime, isPrevious ) ), Math.min( l_f( _keySecondary, asTime, isPrevious ), l_f( _keySecondaryAlt, asTime, isPrevious ) ) ) );
-			case UP : return Std.int( Math.min( l_f( _keyUp, asTime, isPrevious ), l_f( _keyUpAlt, asTime, isPrevious ) ) );
-			case RIGHT : return Std.int( Math.min( l_f( _keyRight, asTime, isPrevious ), l_f( _keyRightAlt, asTime, isPrevious ) ) );
-			case DOWN : return Std.int( Math.min( l_f( _keyDown, asTime, isPrevious ), l_f( _keyDownAlt, asTime, isPrevious ) ) );
-			case LEFT : return Std.int( Math.min( l_f( _keyLeft, asTime, isPrevious ), l_f( _keyLeftAlt, asTime, isPrevious ) ) );
-			case PRIMARY : return Std.int( Math.min( l_f( _keyPrimary, asTime, isPrevious ), l_f( _keyPrimaryAlt, asTime, isPrevious ) ) );
-			case SECONDARY : return Std.int( Math.min( l_f( _keySecondary, asTime, isPrevious ), l_f( _keySecondaryAlt, asTime, isPrevious ) ) );
+			case FIRE : return Std.int( Math.min( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
+			case UP : return Std.int( Math.min( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
+			case RIGHT : return Std.int( Math.min( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
+			case DOWN : return Std.int( Math.min( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
+			case LEFT : return Std.int( Math.min( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
+			case PRIMARY : return Std.int( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
+			case SECONDARY : return Std.int( Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
 	

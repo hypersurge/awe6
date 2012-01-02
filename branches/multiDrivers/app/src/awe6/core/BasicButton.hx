@@ -51,19 +51,19 @@ class BasicButton extends Entity, implements IPosition
 	private var _stateOver:_HelperState;
 	private var _keyType:EKey;
 	
-	public function new( kernel:IKernel, up:IView, over:IView, ?width:Int = 100, ?height:Int = 20, ?x:Float = 0, ?y:Float = 0, ?key:EKey, ?onClickCallback:Void->Void, ?onRollOverCallback:Void->Void, ?onRollOutCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_up:IView, p_over:IView, ?p_width:Int = 100, ?p_height:Int = 20, ?p_x:Float = 0, ?p_y:Float = 0, ?p_keyType:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void )
 	{
-		_stateUp = new _HelperState( kernel, up );
-		_stateOver = new _HelperState( kernel, over );
-		Reflect.setField( this, "x", x );
-		Reflect.setField( this, "y", y );
-		this.width = width;
-		this.height = height;
-		_keyType = key;
-		this.onClickCallback = onClickCallback;
-		this.onRollOverCallback = onRollOverCallback;
-		this.onRollOutCallback = onRollOutCallback;
-		super( kernel );
+		_stateUp = new _HelperState( p_kernel, p_up );
+		_stateOver = new _HelperState( p_kernel, p_over );
+		Reflect.setField( this, "x", p_x );
+		Reflect.setField( this, "y", p_y );
+		width = p_width;
+		height = p_height;
+		_keyType = p_keyType;
+		onClickCallback = p_onClickCallback;
+		onRollOverCallback = p_onRollOverCallback;
+		onRollOutCallback = p_onRollOutCallback;
+		super( p_kernel );
 	}
 	
 	override private function _init():Void
@@ -77,9 +77,9 @@ class BasicButton extends Entity, implements IPosition
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
 	}
 		
-	override private function _updater( ?deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		super._updater( deltaTime );
+		super._updater( p_deltaTime );
 		var l_inputMouse:IInputMouse = _kernel.inputs.mouse;
 		var l_isOver:Bool = _isPointInsideRectangle( l_inputMouse.x + view.x - view.globalX, l_inputMouse.y + view.y - view.globalY, x, y, width, height );
 		if ( l_isOver ) l_inputMouse.cursorType = EMouseCursor.BUTTON;
@@ -103,21 +103,21 @@ class BasicButton extends Entity, implements IPosition
 		}
 	}
 	
-	private function _isPointInsideRectangle( pointX:Float, pointY:Float, rectX:Float, rectY:Float, rectWidth:Float, rectHeight:Float ):Bool
+	private function _isPointInsideRectangle( p_pointX:Float, p_pointY:Float, p_rectX:Float, p_rectY:Float, p_rectWidth:Float, p_rectHeight:Float ):Bool
 	{
-		if ( pointX < rectX )
+		if ( p_pointX < p_rectX )
 		{
 			return false;
 		}
-		if ( pointY < rectY )
+		if ( p_pointY < p_rectY )
 		{
 			return false;
 		}
-		if ( pointX > ( rectX + rectWidth ) )
+		if ( p_pointX > ( p_rectX + p_rectWidth ) )
 		{
 			return false;
 		}
-		if ( pointY > ( rectY + rectHeight ) )
+		if ( p_pointY > ( p_rectY + p_rectHeight ) )
 		{
 			return false;
 		}
@@ -153,15 +153,15 @@ class BasicButton extends Entity, implements IPosition
 		Reflect.callMethod( this, onRollOutCallback, [] );		
 	}
 	
-	public function setPosition( x:Float, y:Float ):Void
+	public function setPosition( p_x:Float, p_y:Float ):Void
 	{
-		this.x = x;
-		this.y = y;
+		x = p_x;
+		y = p_y;
 	}
 	
-	private function __set_x( value:Float ):Float
+	private function __set_x( p_value:Float ):Float
 	{
-		x = value;
+		x = p_value;
 		if ( view != null )
 		{
 			view.x = x;
@@ -169,9 +169,9 @@ class BasicButton extends Entity, implements IPosition
 		return x;
 	}
 	
-	private function __set_y( value:Float ):Float
+	private function __set_y( p_value:Float ):Float
 	{
-		y = value;
+		y = p_value;
 		if ( view != null )
 		{
 			view.y = y;
@@ -179,25 +179,25 @@ class BasicButton extends Entity, implements IPosition
 		return y;
 	}
 	
-	private function __set_width( value:Float ):Float
+	private function __set_width( p_value:Float ):Float
 	{
-		width = value;
+		width = p_value;
 		return width;
 	}
 	
-	private function __set_height( value:Float ):Float
+	private function __set_height( p_value:Float ):Float
 	{
-		height = value;
+		height = p_value;
 		return height;
 	}
 }
 
 private class _HelperState extends Entity
 {
-	public function new( kernel:IKernel, view:IView )
+	public function new( p_kernel:IKernel, p_view:IView )
 	{
-		super( kernel );
-		this.view = view;
+		super( p_kernel );
+		view = p_view;
 	}
 }
 
