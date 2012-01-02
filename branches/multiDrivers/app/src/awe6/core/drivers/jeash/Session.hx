@@ -49,6 +49,7 @@ class Session extends ASession
 	override private function _nativeReset():Void
 	{
 		Cookie.remove( _kernel.factory.id );
+		_savedData = {};
 	}
 	
 	override private function _nativeSave():Void

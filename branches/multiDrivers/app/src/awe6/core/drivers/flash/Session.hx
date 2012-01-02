@@ -40,13 +40,14 @@ class Session extends ASession
 	
 	override private function _nativeLoad():Void
 	{
-		_so = SharedObject.getLocal( _kernel.factory.id );
-		_savedData = _so.data;		
+		_so = SharedObject.getLocal( _kernel.factory.id, "/" );
+		_savedData = _so.data;
 	}
 	
 	override private function _nativeReset():Void
 	{
-		_so.clear();		
+		_so.clear();
+		_savedData = _so.data;
 	}
 	
 	override private function _nativeSave():Void

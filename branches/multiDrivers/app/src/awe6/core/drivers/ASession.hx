@@ -203,6 +203,11 @@ class ASession implements ISession
 		_nativeReset();
 	}
 	
+	public function toString():String
+	{
+		return id + ": " + Std.string( _data );
+	}
+	
 	private function __get_isTester():Bool
 	{
 		return ( _kernel.isDebug || ( id == DEBUG_ID ) );
