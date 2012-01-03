@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,26 +44,26 @@ class Process implements IProcess
 	public var isActive( default, __set_isActive ):Bool;
 	public var isDisposed( default, null ):Bool;
 	
-	private var _kernel:IKernel;	
+	private var _kernel:IKernel;
 	private var _tools:Tools; // direct reference for inline performance gains (approx 100% faster for methods like range and limit)
-	private var _age:Int;	
+	private var _age:Int;
 	private var _updates:Int;
 	private var _isEntity:Bool;
 	private var _isSetterBypassed:Bool;
 
-	public function new( p_kernel:IKernel ) 
+	public function new( p_kernel:IKernel )
 	{
 		_kernel = p_kernel;
 		_tools = cast _kernel.tools;
-		_init();
 		_isEntity = Std.is( this, IEntity );
+		_init();
 	}
 	
 	private function _init():Void
 	{
+//		Reflect.setField( this, "isActive", true ); // avoids the setter
 		_isSetterBypassed = true;
 		isActive = true;
-//		Reflect.setField( this, "isActive", true ); // avoids the setter
 		isDisposed = false;
 		_age = 0;
 		_updates = 0;
@@ -75,16 +75,12 @@ class Process implements IProcess
 		{
 			return;
 		}
-		else
+		isActive = false;
+		_disposer();
+		isDisposed = true;
+		if ( _isEntity )
 		{
-			isDisposed = true;
-			isActive = false;
-			if ( _isEntity )
-			{
-				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
-			}
-			_disposer();
-			return;
+			_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
 		}
 	}
 	
@@ -115,21 +111,20 @@ class Process implements IProcess
 	
 	private function __set_isActive( p_value:Bool ):Bool
 	{
-		if ( p_value == isActive )
-		{
-			return isActive;
-		}
 		if ( isDisposed )
 		{
 			return false;
 		}
-		if ( _isSetterBypassed )
+		if ( p_value != isActive )
 		{
-			isActive = p_value;
-		}
-		else
-		{
-			p_value ? resume() : pause();			
+			if ( _isSetterBypassed )
+			{
+				isActive = p_value;
+			}
+			else
+			{
+				p_value ? resume() : pause();
+			}
 		}
 		_isSetterBypassed = false;
 		return isActive;
@@ -141,23 +136,19 @@ class Process implements IProcess
 		{
 			return;
 		}
-		else
+		_pauser();
+//		Reflect.setField( this, "isActive", false ); // avoids the setter
+		_isSetterBypassed = true;
+		isActive = false;
+		if ( _isEntity )
 		{
-//			Reflect.setField( this, "isActive", false ); // avoids the setter
-			_isSetterBypassed = true;
-			isActive = false;
-			_pauser();
-			if ( _isEntity && !isDisposed )
-			{
-				_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
-			}
-			return;
+			_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
 		}
 	}
 	
 	private function _pauser():Void
 	{
-		// override me		
+		// override me
 	}
 	
 	public inline function resume():Void
@@ -166,23 +157,19 @@ class Process implements IProcess
 		{
 			return;
 		}
-		else
+		_resumer();
+//		Reflect.setField( this, "isActive", true ); // avoids the setter
+		_isSetterBypassed = true;
+		isActive = true;
+		if ( _isEntity && !isDisposed )
 		{
-//			Reflect.setField( this, "isActive", true ); // avoids the setter
-			_isSetterBypassed = true;
-			isActive = true;
-			_resumer();
-			if ( _isEntity && !isDisposed )
-			{
-				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
-			}
-			return;
+			_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
 		}
 	}
 	
 	private function _resumer():Void
 	{
-		// override me		
+		// override me
 	}
 	
 }
