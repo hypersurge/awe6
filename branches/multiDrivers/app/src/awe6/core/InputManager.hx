@@ -79,7 +79,6 @@ class InputManager extends Process, implements IInputManager
 	
 	public function reset():Bool
 	{
-		dispose();
 		_init();
 		return true;
 	}

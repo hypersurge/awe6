@@ -186,6 +186,7 @@ class AKernel extends Process, implements IKernel
 			_view.addChild( _profiler.view, _tools.BIG_NUMBER );
 		}
 		scenes.setScene( factory.startingSceneType );
+		overlay.flash();
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 

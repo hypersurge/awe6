@@ -108,7 +108,7 @@ class APreloader extends Process, implements IPreloader
 		super._updater( p_deltaTime );
 		if ( _assets.length == 0 )
 		{
-			dispose(); // needed to be done this way because preloader must be added and removed from kernel
+			_kernel.onPreloaderComplete( this );
 		}
 		view.isVisible = _age > 500;
 	}
@@ -118,8 +118,6 @@ class APreloader extends Process, implements IPreloader
 		view.dispose();
 		_nativeDisposer();
 		super._disposer();
-		_kernel.onPreloaderComplete( this );
-		_kernel.overlay.flash();
 	}
 	
 	private function _nativeDisposer():Void

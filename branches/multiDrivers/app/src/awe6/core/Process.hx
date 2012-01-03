@@ -50,6 +50,7 @@ class Process implements IProcess
 	private var _updates:Int;
 	private var _isEntity:Bool;
 	private var _isSetterBypassed:Bool;
+	private var _isBeingDisposed:Bool;
 
 	public function new( p_kernel:IKernel )
 	{
@@ -63,6 +64,7 @@ class Process implements IProcess
 	{
 //		Reflect.setField( this, "isActive", true ); // avoids the setter
 		_isSetterBypassed = true;
+		_isBeingDisposed = false;
 		isActive = true;
 		isDisposed = false;
 		_age = 0;
@@ -71,12 +73,13 @@ class Process implements IProcess
 	
 	public inline function dispose():Void
 	{
-		if ( isDisposed )
+		if ( isDisposed || _isBeingDisposed )
 		{
 			return;
 		}
 		else
 		{
+			_isBeingDisposed = true;
 			isActive = false;
 			_disposer();
 			isDisposed = true;
