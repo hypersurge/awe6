@@ -119,6 +119,10 @@ class Process implements IProcess
 		{
 			return isActive;
 		}
+		if ( isDisposed )
+		{
+			return false;
+		}
 		if ( _isSetterBypassed )
 		{
 			isActive = p_value;
