@@ -16,4 +16,4 @@ Note: deployment to iOS requires a valid membership of the Adobe Developer iOS p
 
 Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling in your Entities and blitting / copyPixels in your Views.
 
-An alternative approach to using Adobe AIR is to use other haXe libraries to target multiple platforms ([http://blog.krozalski.com/?p=1 Krzysztof Różalski] reported that performance might be better via these routes).  Therefore the "multiTarget" branch of awe6 is experimenting with both [https://launchpad.net/jeash Jeash] (JS) and [http://code.google.com/p/nekonme/ NME] (CPP).  If you can help, we welcome contribution to this project.
+An alternative approach to using Adobe AIR is to use the awe6 "!multiDrivers" branch which can target CPP and HTML5 via [http://haxenme.org NME].  This branch is completing beta stage.
