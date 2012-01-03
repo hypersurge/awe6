@@ -86,7 +86,7 @@ class APreloader extends Process, implements IPreloader
 		{
 			if ( !_isComplete )
 			{
-				Timer.delay( dispose, 100 ); // delayed because some assets aren't available instantly (?)
+				Timer.delay( callback( _kernel.onPreloaderComplete, this ), 100 ); // delayed because some assets aren't available instantly (?)
 				_isComplete = true;
 			}
 			return;
