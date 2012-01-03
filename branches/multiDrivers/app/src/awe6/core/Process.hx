@@ -75,12 +75,16 @@ class Process implements IProcess
 		{
 			return;
 		}
-		isActive = false;
-		_disposer();
-		isDisposed = true;
-		if ( _isEntity )
+		else
 		{
-			_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
+			isActive = false;
+			_disposer();
+			isDisposed = true;
+			if ( _isEntity )
+			{
+				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
+			}
+			return;
 		}
 	}
 	
@@ -136,13 +140,16 @@ class Process implements IProcess
 		{
 			return;
 		}
-		_pauser();
-//		Reflect.setField( this, "isActive", false ); // avoids the setter
-		_isSetterBypassed = true;
-		isActive = false;
-		if ( _isEntity )
+		else
 		{
-			_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
+			_pauser();
+	//		Reflect.setField( this, "isActive", false ); // avoids the setter
+			_isSetterBypassed = true;
+			isActive = false;
+			if ( _isEntity )
+			{
+				_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
+			}
 		}
 	}
 	
@@ -157,13 +164,17 @@ class Process implements IProcess
 		{
 			return;
 		}
-		_resumer();
-//		Reflect.setField( this, "isActive", true ); // avoids the setter
-		_isSetterBypassed = true;
-		isActive = true;
-		if ( _isEntity && !isDisposed )
+		else
 		{
-			_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
+			_resumer();
+	//		Reflect.setField( this, "isActive", true ); // avoids the setter
+			_isSetterBypassed = true;
+			isActive = true;
+			if ( _isEntity && !isDisposed )
+			{
+				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
+			}
+			return;
 		}
 	}
 	
