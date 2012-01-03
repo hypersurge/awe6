@@ -10,12 +10,15 @@ No convention should be considered definitive - many of these choices may not be
   * Americanized spelling.
   * Interfaces housed in the `awe6.interfaces` package.
   * Implementation classes housed in the `awe6.core` package.
+  * Abstract driver classes housed in the `awe6.core.drivers` package.
+  * Platform specific driver packages housed in the `awe6.core.drivers` package.
   * Non-framework essential, but routinely useful, extensions housed in the `awe6.extras` package.
   * Interfaces prefixed by `I`.
   * Abstract classes prefixed by `A`.
   * Enumerators prefixed by `E`.
   * Private scope members prefixed with `_`.
   * Local scope members prefixed with `l_`.
+  * Parameter scope members prefixed with `p_`.
   * Reserved members prefixed with `__`.
   * Enumerated constructors represented as `CONST_CASE`.
   * Some enumerators extensible via `SUB_TYPE( value:Dynamic )`.
