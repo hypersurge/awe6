@@ -4,15 +4,19 @@
 
 Please help towards achieving the following tasks:
 
-  * Multi-target:
-    * Implementation of BasicButton for JEASH & NME tests
-    * Any R&D into injecting native UI callbacks for mobile devices
-    * Any R&D into Unity3D
-    * SWC testing (from AS3 target)
-  * Architecture
-    * Type safe asset demo (e.g. extending AAssetManager)
+  * MultiDrivers Branch:
+    * Any R&D into Unity3D driver
+    * SWC testing
+    * AS3 testing
+    * Improved asset loading via NME
+    * Merge to trunk
+    * Revised FlashDevelop templates (as NME?)
+    * Release to haxelib
   * Tutorials:
-    * Make the demo look good (and easy)
-    * OOP approach
-    * Data driven approach
-    * Adapter approach
+    * Complete [GameGenres genre examples]
+    * OOP approach (i.e. classes and packages)
+    * Data driven approach (i.e. from config files)
+  * Spread the Word:
+    * Organize game jams?
+    * Present at Haxe WWX 2012?
+    * Present at Casual Connect Seattle 2012?
