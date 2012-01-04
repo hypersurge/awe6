@@ -123,8 +123,6 @@ class AKernel extends Process, implements IKernel
 	override private function _init():Void
 	{
 		super._init();
-		isDebug = factory.isDebug;
-		isLocal = _nativeGetIsLocal();
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -133,8 +131,6 @@ class AKernel extends Process, implements IKernel
 		inputs = _inputManager = new InputManager( _kernel );
 		scenes = _sceneManager = new SceneManager( _kernel );
 		messenger = _messageManager = new MessageManager( _kernel );
-		isEyeCandy = true;
-		isFullScreen = false;
 		_view.addChild( _sceneManager.view, 1 );
 		_addProcess( _assetManagerProcess );
 		_addProcess( _audioManager );
@@ -142,6 +138,10 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
 		_nativeInit();
+		isDebug = factory.isDebug;
+		isLocal = _nativeGetIsLocal();
+		isEyeCandy = true;
+		isFullScreen = false;
 		// M. Ivanchev -- this seems to be right place for signaling complete
 		// initialization to the factory.
 		//

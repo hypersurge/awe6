@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -46,17 +46,17 @@ class Factory extends AFactory
 	private static inline var _CONFIG_URL = "config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	
-	private var _context:Context;
+	// private var _context:Context;
 	private var _countConfigsLoaded:Int;
-	private var _countConfigsToLoad:Int;	
+	private var _countConfigsToLoad:Int;
 	
 	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
 	{
-		_context = new Context();
-		p_context.addChild( _context );
+		var l_context = new Context();
+		p_context.addChild( l_context );
 		_countConfigsLoaded = 0;
-		_countConfigsToLoad = 0;		
-		super( p_isDebug, p_config );
+		_countConfigsToLoad = 0;
+		super( l_context, p_isDebug, p_config );
 	}
 	
 	override private function _nativeInit():Void
@@ -68,13 +68,12 @@ class Factory extends AFactory
 		else
 		{
 			_context.addEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		}		
+		}
 	}
 	
 	private function _hasStage( ?p_event:Event ):Void
 	{
 		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		_init();
 		if ( _isConfigRequired )
 		{
 			var l_url:String = ( _config != null ) ? _config : _CONFIG_URL;
@@ -86,9 +85,10 @@ class Factory extends AFactory
 		}
 		else
 		{
-			_launchKernel();		
+			_configure();
+			_launchKernel();
 		}
-	}	
+	}
 	
 	private function _loadConfig( p_url:String ):Void
 	{
@@ -102,7 +102,7 @@ class Factory extends AFactory
 			{
 				p_url += "?dc=" + Std.random( 99999 );
 			}
-			// trace( "Loading Config: \"" + url + "\"" );		
+			// trace( "Loading Config: \"" + url + "\"" );
 			var l_loader:URLLoader = new URLLoader( new URLRequest( p_url ) );
 			l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
 			l_loader.addEventListener( Event.COMPLETE, _onComplete );
@@ -126,9 +126,10 @@ class Factory extends AFactory
 		}
 		if ( _countConfigsLoaded == _countConfigsToLoad )
 		{
+			_configure();
 			_launchKernel();
 		}
-	}	
+	}
 	
 	private function _onIOError( p_event:IOErrorEvent ):Void
 	{
@@ -143,7 +144,7 @@ class Factory extends AFactory
 		l_textField.y = ( height - l_textField.height ) / 2;
 		l_textField.text += p_event.text + "\n\n";
 		_context.addChild( l_textField );
-	}	
+	}
 	
 	private function _onComplete( p_event:Event ):Void
 	{
@@ -154,11 +155,6 @@ class Factory extends AFactory
 			l_string = createEncrypter().decrypt( Bytes.ofString( l_string ) ).toString();
 		}
 		_parseXml( l_string );
-	}
-	
-	override private function _nativeLaunchKernel():Kernel
-	{
-		return new Kernel( this, _context );
 	}
 	
 	override private function _nativeDisposer():Void
