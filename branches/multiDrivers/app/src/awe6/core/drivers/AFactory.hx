@@ -30,6 +30,7 @@
 package awe6.core.drivers;
 import awe6.core.AAssetManager;
 import awe6.core.APreloader;
+import awe6.core.Context;
 import awe6.core.Encrypter;
 import awe6.core.Entity;
 import awe6.core.Kernel;
@@ -66,11 +67,12 @@ class AFactory implements IFactory, implements IDisposable
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
 	private var _config:String;
-	private var _kernel:IKernel;
-	private var _tools:ITools;
 	private var _isConfigRequired:Bool;
+	private var _context:Context;
+	private var _kernel:IKernel;
 	private var _concreteKernel:Kernel;
-	
+	private var _tools:ITools;
+		
 	public var isDisposed( default, null ):Bool;
 	public var id( default, null ):String;
 	public var version( default, null ):String;
@@ -94,50 +96,35 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 
-	public function new( p_isDebug:Bool = true, ?p_config:String )
+	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
 	{
+		_context = p_context;
 		isDebug = p_isDebug;
 		_config = p_config;
+		_init();
+	}
+
+	private function _init():Void
+	{
+		// override me
+		config = new Hash<Dynamic>();
+		_isConfigRequired = ( _config != null );
+		// Proceed with platform-specific initializations.
+		//
 		_nativeInit();
 	}
-	
+
 	private function _nativeInit():Void
 	{
 		// override me
-		_init();
 		if ( ( _config != null ) && ( _config.substr( 0, 5 ) == "<?xml" ) )
 		{
 			_traverseElements( Xml.parse( _config ).firstElement().elements(), "" );
 		}
+		_configure();
 		_launchKernel();
 	}
-	
-	private function _init():Void
-	{
-		// override me
-		id = "awe6";
-		version = "0.0.1";
-		author = "unknown";
-		isDecached = false;
-		isEyeCandyOptionEnabled = true;
-		isFullScreenOptionEnabled = true;
-		isResetSessionsOptionEnabled = true;
-		width = 600;
-		height = 400;
-		bgColor = 0xFF0000;
-		secret = "YouMustOverrideThis";
-		targetFramerate = 25;
-		isFixedUpdates = true;
-		config = new Hash<Dynamic>();
-		startingSceneType = EScene.GAME;
-		keyPause = EKey.P;
-		keyMute = EKey.M;
-		keyNext = EKey.SPACE;
-		keyBack = EKey.ESCAPE;
-		keySpecial = EKey.CONTROL;
-		_isConfigRequired = true;
-	}
-	
+
 	private function _traverseElements( p_elements:Iterator<Xml>, p_prefix:String ):Void
 	{
 		if ( p_prefix.length != 0 )
@@ -169,6 +156,29 @@ class AFactory implements IFactory, implements IDisposable
 			}
 		}
 	}
+
+	private function _configure():Void
+	{
+		id = "awe6";
+		version = "0.0.1";
+		author = "unknown";
+		isDecached = false;
+		isEyeCandyOptionEnabled = true;
+		isFullScreenOptionEnabled = true;
+		isResetSessionsOptionEnabled = true;
+		width = 600;
+		height = 400;
+		bgColor = 0xFF0000;
+		secret = "YouMustOverrideThis";
+		targetFramerate = 25;
+		isFixedUpdates = true;
+		startingSceneType = EScene.GAME;
+		keyPause = EKey.P;
+		keyMute = EKey.M;
+		keyNext = EKey.SPACE;
+		keyBack = EKey.ESCAPE;
+		keySpecial = EKey.CONTROL;
+	}
 	
 	private function _launchKernel():Void
 	{
@@ -181,7 +191,7 @@ class AFactory implements IFactory, implements IDisposable
 	
 	private function _nativeLaunchKernel():Kernel
 	{
-		return new Kernel( this, null );
+		return new Kernel( this, _context );
 	}
 	
 	private function _getAssetUrls():Array<String>
