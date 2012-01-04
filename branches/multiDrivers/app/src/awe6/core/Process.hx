@@ -34,6 +34,9 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IProcess;
 import awe6.interfaces.ITools;
 
+// TODO: (M. Ivanchev) remove _isBeingDisposed once stability is guranteed.
+//
+
 /**
  * The Process class provides a minimalist implementation of the IProcess interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
@@ -50,7 +53,7 @@ class Process implements IProcess
 	private var _updates:Int;
 	private var _isEntity:Bool;
 	private var _isSetterBypassed:Bool;
-	private var _isBeingDisposed:Bool;
+//	private var _isBeingDisposed:Bool; // M. Ivanchev: commented out to spot bugs
 
 	public function new( p_kernel:IKernel )
 	{
@@ -64,7 +67,7 @@ class Process implements IProcess
 	{
 //		Reflect.setField( this, "isActive", true ); // avoids the setter
 		_isSetterBypassed = true;
-		_isBeingDisposed = false;
+//		_isBeingDisposed = false;
 		isActive = true;
 		isDisposed = false;
 		_age = 0;
@@ -73,13 +76,13 @@ class Process implements IProcess
 	
 	public inline function dispose():Void
 	{
-		if ( isDisposed || _isBeingDisposed )
+		if ( isDisposed ) // || _isBeingDisposed )
 		{
 			return;
 		}
 		else
 		{
-			_isBeingDisposed = true;
+			//_isBeingDisposed = true;
 			isActive = false;
 			_disposer();
 			isDisposed = true;

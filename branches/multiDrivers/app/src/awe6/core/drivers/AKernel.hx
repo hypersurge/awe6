@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -82,7 +82,7 @@ class AKernel extends Process, implements IKernel
 	public var inputs( default, null ):IInputManager;
 	public var scenes( default, null ):ISceneManager;
 	public var messenger( default, null ):IMessageManager;
-	public var session( __get_session, __set_session ):ISession;	
+	public var session( __get_session, __set_session ):ISession;
 	
 	private var _context:Context;
 	private var _view:View;
@@ -101,6 +101,9 @@ class AKernel extends Process, implements IKernel
 
 	public function new( p_factory:IFactory, p_context:Context )
 	{
+		// FIXME: (M. Ivanchev) factory, tools and _view will always be null
+		// at this point?
+		//
 		if ( factory == null )
 		{
 			factory = p_factory;
@@ -136,6 +139,8 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
+		// FIXME: onInitComplete should perhaps be called after everything is setup.
+		//
 		factory.onInitComplete( this );
 		_nativeInit();
 		isEyeCandy = true;
@@ -189,10 +194,18 @@ class AKernel extends Process, implements IKernel
 		overlay.flash();
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
 		_helperFramerate.update();
-		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
+		var l_deltaTime:Int =
+			if ( factory.isFixedUpdates )
+			{
+				Std.int( 1000 / factory.targetFramerate );
+			}
+			else
+			{
+				_helperFramerate.timeInterval;
+			}
 		super._updater( l_deltaTime );
 		for ( i in _processes )
 		{
@@ -242,7 +255,7 @@ class AKernel extends Process, implements IKernel
 		{
 			trace( "LOG: " + p_value );
 		}
-	}	
+	}
 	
 	public function getFramerate( ?p_asActual:Bool = true ):Float
 	{
@@ -371,6 +384,8 @@ private class _HelperFramerate
 	
 	private inline function _timer():Int
 	{
+		// FIXME: Timer.stamp() is already in seconds, is this still correct?
+		//
 		return Std.int( Timer.stamp() * 1000 );
 	}
 }
