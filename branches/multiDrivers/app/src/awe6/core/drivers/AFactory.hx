@@ -231,8 +231,7 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createEntity( ?p_id:String ):IEntity
 	{
-		var l_entity:Entity = new Entity( _kernel, p_id );
-		return l_entity;
+		return new Entity( _kernel, p_id );
 	}
 	
 	public function createLogger():ILogger
@@ -242,8 +241,7 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createOverlay():IOverlayProcess
 	{
-		var l_overlay:Overlay = new Overlay( _kernel );
-		return l_overlay;
+		return new Overlay( _kernel );
 	}
 	
 	public function createPreloader():IPreloader
@@ -257,14 +255,12 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			p_type = startingSceneType;
 		}
-		var l_scene:Scene = new Scene( _kernel, p_type );
-		return l_scene;
+		return new Scene( _kernel, p_type );
 	}
 	
 	public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition
 	{
-		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
-		return l_sceneTransition;
+		return new SceneTransition( _kernel );
 	}
 
 	public function createSession( ?p_id:String ):ISession
@@ -274,8 +270,7 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
 	{
-		var l_textStyle:TextStyle = new TextStyle();
-		return l_textStyle;
+		return new TextStyle();
 	}
 	
 	public function getBackSceneType( p_type:EScene ):EScene
@@ -294,12 +289,14 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			return;
 		}
-		isDisposed = true;
 		_nativeDisposer();
 		_concreteKernel.dispose();
 		_concreteKernel = null;
 		_kernel = null;
 		config = null;
+		// M.Ivanchev -- this is now set after the object is fully disposed of.
+		//
+		isDisposed = true;
 	}
 	
 	private function _nativeDisposer():Void

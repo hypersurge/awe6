@@ -101,8 +101,8 @@ class AKernel extends Process, implements IKernel
 
 	public function new( p_factory:IFactory, p_context:Context )
 	{
-		// FIXME: (M. Ivanchev) factory, tools and _view will always be null
-		// at this point?
+		// FIXME: (M. Ivanchev) generally factory, tools and _view will always
+		// be null at this point, except if a subclass sets them first?
 		//
 		if ( factory == null )
 		{
@@ -133,18 +133,19 @@ class AKernel extends Process, implements IKernel
 		inputs = _inputManager = new InputManager( _kernel );
 		scenes = _sceneManager = new SceneManager( _kernel );
 		messenger = _messageManager = new MessageManager( _kernel );
+		isEyeCandy = true;
+		isFullScreen = false;
 		_view.addChild( _sceneManager.view, 1 );
 		_addProcess( _assetManagerProcess );
 		_addProcess( _audioManager );
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
-		// FIXME: onInitComplete should perhaps be called after everything is setup.
+		_nativeInit();
+		// M. Ivanchev -- this seems to be right place for signaling complete
+		// initialization to the factory.
 		//
 		factory.onInitComplete( this );
-		_nativeInit();
-		isEyeCandy = true;
-		isFullScreen = false;
 		session = factory.createSession();
 		session.reset();
 		_preloader = factory.createPreloader();
@@ -223,6 +224,7 @@ class AKernel extends Process, implements IKernel
 		{
 			cast( factory, IDisposable ).dispose();
 		}
+		factory = null;
 		_view.dispose();
 		_view = null;
 		_nativeDisposer();
@@ -232,10 +234,10 @@ class AKernel extends Process, implements IKernel
 		scenes = _sceneManager = null;
 		messenger = _messageManager = null;
 		overlay = _overlayProcess = null;
-		factory = null;
 		tools = _tools = null;
 		_logger = null;
 		_preloader = null;
+		// FIXME: session.deleteAllSessions();
 		session = null;
 		super._disposer();
 	}
