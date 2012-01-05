@@ -207,9 +207,9 @@ class AFactory implements IFactory, implements IDisposable
 		return l_result;
 	}
 	
-	public inline function onInitComplete( p_kernel:IKernel ):Void
+	public function onInitComplete( p_kernel:IKernel ):Void
 	{
-		if ( _kernel != null )
+		if ( ( _kernel != null ) || ( p_kernel == null ) )
 		{
 			return;
 		}
