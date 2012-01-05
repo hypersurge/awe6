@@ -1,23 +1,23 @@
 /*
- *                        _____
+ *                        _____ 
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \
- *   / _  / |/ |/ /  __  /_/ /
- *   \___/|__/|__/\___/\____/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
  *    awe6 is game, inverted
- *
+ * 
  * Copyright (c) 2010, Robert Fell, awe6.org
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -66,9 +66,8 @@ class AFactory implements IFactory, implements IDisposable
 {
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
-	private var _config:String;
-	private var _isConfigRequired:Bool;
 	private var _context:Context;
+	private var _config:String;
 	private var _kernel:IKernel;
 	private var _concreteKernel:Kernel;
 	private var _tools:ITools;
@@ -95,8 +94,8 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyBack( default, null ):EKey;
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
-
-	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
+	
+	public function new( p_context:Context, ?p_isDebug:Bool = false, ?p_config:String )
 	{
 		_context = p_context;
 		isDebug = p_isDebug;
@@ -104,11 +103,10 @@ class AFactory implements IFactory, implements IDisposable
 		_init();
 	}
 
-	private function _init():Void
+	inline private function _init():Void
 	{
-		// override me
+		// R.Fell -- "don't" override me, use configurer and onInitComplete (for actions that require Kernel)
 		config = new Hash<Dynamic>();
-		_isConfigRequired = ( _config != null );
 		// Proceed with platform-specific initializations.
 		//
 		_nativeInit();
@@ -157,7 +155,7 @@ class AFactory implements IFactory, implements IDisposable
 		}
 	}
 
-	private function _configure():Void
+	inline private function _configure():Void
 	{
 		id = "awe6";
 		version = "0.0.1";
@@ -178,6 +176,12 @@ class AFactory implements IFactory, implements IDisposable
 		keyNext = EKey.SPACE;
 		keyBack = EKey.ESCAPE;
 		keySpecial = EKey.CONTROL;
+		_configurer();
+	}
+	
+	private function _configurer():Void
+	{
+		// override me
 	}
 	
 	private function _launchKernel():Void
@@ -186,12 +190,7 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			return;
 		}
-		_concreteKernel = _nativeLaunchKernel();
-	}
-	
-	private function _nativeLaunchKernel():Kernel
-	{
-		return new Kernel( this, _context );
+		_concreteKernel = new Kernel( this, _context );
 	}
 	
 	private function _getAssetUrls():Array<String>
@@ -223,15 +222,14 @@ class AFactory implements IFactory, implements IDisposable
 	
 	public function createAssetManager():IAssetManagerProcess
 	{
-		return
-			if ( Std.is( _kernel.assets, IAssetManagerProcess ) )
-			{
-				cast( _kernel.assets, IAssetManagerProcess );
-			}
-			else
-			{
-				new AAssetManager( _kernel ); // safe downcast
-			}
+		if ( Std.is( _kernel.assets, IAssetManagerProcess ) )
+		{
+			return cast( _kernel.assets, IAssetManagerProcess );
+		}
+		else
+		{
+			return new AAssetManager( _kernel ); // safe downcast
+		}
 	}
 	
 	public function createEncrypter():IEncrypter
@@ -305,7 +303,7 @@ class AFactory implements IFactory, implements IDisposable
 		_kernel = null;
 		config = null;
 		// M.Ivanchev -- this is now set after the object is fully disposed of.
-		//
+		// R.Fell -- if so then we need a _isBeingDisposed as per Process to prevent potential recursive call
 		isDisposed = true;
 	}
 	

@@ -1,23 +1,23 @@
 /*
- *                        _____
+ *                        _____ 
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \
- *   / _  / |/ |/ /  __  /_/ /
- *   \___/|__/|__/\___/\____/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
  *    awe6 is game, inverted
- *
+ * 
  * Copyright (c) 2010, Robert Fell, awe6.org
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,28 +37,24 @@ import awe6.core.drivers.AFactory;
  */
 class Factory extends AFactory
 {
-	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
-	{
-		var l_context = new Context();
-		p_context.addChild( l_context );
-		super( l_context, p_isDebug, p_config );
-	}
-	
 	override private function _nativeInit():Void
 	{
-		if ( _isConfigRequired )
+		var l_context = new Context();
+		_context.addChild( l_context );
+		_context = l_context;
+		if ( _config != "" )
 		{
 			_parseXml( _config );
 		}
 		_configure();
 		_launchKernel();
 	}
-	
+
 	private function _parseXml( p_data:String ):Void
 	{
 		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
 	}
-	
+
 	override private function _nativeDisposer():Void
 	{
 		if ( _context.parent != null )
@@ -66,4 +62,5 @@ class Factory extends AFactory
 			_context.parent.removeChild( _context );
 		}
 	}
+	
 }

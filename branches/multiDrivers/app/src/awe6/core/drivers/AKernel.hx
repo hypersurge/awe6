@@ -1,23 +1,23 @@
 /*
- *                        _____
+ *                        _____ 
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \
- *   / _  / |/ |/ /  __  /_/ /
- *   \___/|__/|__/\___/\____/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
  *    awe6 is game, inverted
- *
+ * 
  * Copyright (c) 2010, Robert Fell, awe6.org
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -103,7 +103,7 @@ class AKernel extends Process, implements IKernel
 	{
 		// FIXME: (M. Ivanchev) generally factory, tools and _view will always
 		// be null at this point, except if a subclass sets them first?
-		//
+		// R. Fell -- yes, these null checks are to allow easier subclassing, probably overkill?
 		if ( factory == null )
 		{
 			factory = p_factory;
@@ -123,6 +123,9 @@ class AKernel extends Process, implements IKernel
 	override private function _init():Void
 	{
 		super._init();
+		// R. Fell -- these 2 bools should be set here because they can influence construction of Managers.
+		isDebug = factory.isDebug;
+		isLocal = _nativeGetIsLocal();
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -138,13 +141,10 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
 		_nativeInit();
-		isDebug = factory.isDebug;
-		isLocal = _nativeGetIsLocal();
 		isEyeCandy = true;
 		isFullScreen = false;
 		// M. Ivanchev -- this seems to be right place for signaling complete
 		// initialization to the factory.
-		//
 		factory.onInitComplete( this );
 		session = factory.createSession();
 		session.reset();
@@ -198,15 +198,8 @@ class AKernel extends Process, implements IKernel
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
 		_helperFramerate.update();
-		var l_deltaTime:Int =
-			if ( factory.isFixedUpdates )
-			{
-				Std.int( 1000 / factory.targetFramerate );
-			}
-			else
-			{
-				_helperFramerate.timeInterval;
-			}
+		// R. Fell -- if ever there was a good example of a ternary it would be here ;)
+		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
 		super._updater( l_deltaTime );
 		for ( i in _processes )
 		{
@@ -387,7 +380,7 @@ private class _HelperFramerate
 	private inline function _timer():Int
 	{
 		// FIXME: Timer.stamp() is already in seconds, is this still correct?
-		//
+		// R. Fell - yes, we want milliseconds for timeInterval / update( deltaTime )
 		return Std.int( Timer.stamp() * 1000 );
 	}
 }

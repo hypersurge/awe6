@@ -1,23 +1,23 @@
 /*
- *                        _____
+ *                        _____ 
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \
- *   / _  / |/ |/ /  __  /_/ /
- *   \___/|__/|__/\___/\____/
+ *    /__   | /| /   _ \/ __ \ 
+ *   / _  / |/ |/ /  __  /_/ / 
+ *   \___/|__/|__/\___/\____/  
  *    awe6 is game, inverted
- *
+ * 
  * Copyright (c) 2010, Robert Fell, awe6.org
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,8 +27,8 @@
  * THE SOFTWARE.
  */
 
+
 package awe6.core.drivers.flash;
-import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
@@ -46,21 +46,16 @@ class Factory extends AFactory
 	private static inline var _CONFIG_URL = "config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	
-	// private var _context:Context;
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
 	
-	public function new( p_context:Context, p_isDebug:Bool = true, ?p_config:String )
-	{
-		var l_context = new Context();
-		p_context.addChild( l_context );
-		_countConfigsLoaded = 0;
-		_countConfigsToLoad = 0;
-		super( l_context, p_isDebug, p_config );
-	}
-	
 	override private function _nativeInit():Void
 	{
+		var l_context = new Context();
+		_context.addChild( l_context );
+		_context = l_context;
+		_countConfigsLoaded = 0;
+		_countConfigsToLoad = 0;
 		if ( _context.stage != null )
 		{
 			_hasStage();
@@ -74,14 +69,14 @@ class Factory extends AFactory
 	private function _hasStage( ?p_event:Event ):Void
 	{
 		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
-		if ( _isConfigRequired )
+		if ( _config != "" )
 		{
-			var l_url:String = ( _config != null ) ? _config : _CONFIG_URL;
+			var l_config:String = ( _config != null ) ? _config : _CONFIG_URL;
 			if ( ( _context.loaderInfo != null ) && untyped _context.loaderInfo.parameters.configUrl != null )
 			{
-				l_url = untyped _context.loaderInfo.parameters.configUrl;
+				l_config = untyped _context.loaderInfo.parameters.configUrl;
 			}
-			_loadConfig( l_url );
+			_loadConfig( l_config );
 		}
 		else
 		{
@@ -90,20 +85,20 @@ class Factory extends AFactory
 		}
 	}
 	
-	private function _loadConfig( p_url:String ):Void
+	private function _loadConfig( p_config:String ):Void
 	{
-		if ( p_url.substr( 0, 5 ) == "<?xml" )
+		if ( p_config.substr( 0, 5 ) == "<?xml" )
 		{
-			_parseXml( p_url );
+			_parseXml( p_config );
 		}
 		else
 		{
 			if ( isDecached )
 			{
-				p_url += "?dc=" + Std.random( 99999 );
+				p_config += "?dc=" + Std.random( 99999 );
 			}
 			// trace( "Loading Config: \"" + url + "\"" );
-			var l_loader:URLLoader = new URLLoader( new URLRequest( p_url ) );
+			var l_loader:URLLoader = new URLLoader( new URLRequest( p_config ) );
 			l_loader.addEventListener( IOErrorEvent.IO_ERROR, _onIOError );
 			l_loader.addEventListener( Event.COMPLETE, _onComplete );
 			_countConfigsToLoad++;
@@ -122,7 +117,6 @@ class Factory extends AFactory
 			{
 				_loadConfig( i );
 			}
-			return;
 		}
 		if ( _countConfigsLoaded == _countConfigsToLoad )
 		{
