@@ -124,8 +124,11 @@ class AssetManager extends AAssetManager
 		l_sprite.addChild( l_bitmap );
 		switch( p_type )
 		{
-//			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+			#if !js
+			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+			#else
 			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
+			#end
 			case OVERLAY_BACK_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackUp.png" );
 			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackOver.png" );
 			case OVERLAY_MUTE_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteUp.png" );

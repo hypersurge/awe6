@@ -58,6 +58,9 @@ class Factory extends AFactory
 		isDecached = true;
 		width = 600;
 		height = 400;
+		// R.Fell -- a quick experiment in fluid layout
+		width = _context.stage.stageWidth;
+		height = _context.stage.stageHeight;
 		bgColor = 0xFFFFFF;
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
