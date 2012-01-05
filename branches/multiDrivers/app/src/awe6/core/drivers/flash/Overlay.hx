@@ -45,7 +45,7 @@ class Overlay extends AOverlay
 {
 	private var _pauseSnapshot:BitmapData;
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		_context.mouseEnabled = false;
 		

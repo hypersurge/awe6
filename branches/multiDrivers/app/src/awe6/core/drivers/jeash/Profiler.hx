@@ -85,7 +85,7 @@ class Profiler extends AProfiler
 		_context.addChild( _fpsTextField );
 	}
 		
-	override private function _nativeUpdate():Void
+	override private function _driverUpdate():Void
 	{
 		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );
 		var l_fpsValue:Int = Std.int( Math.min( _height, _height / _kernel.factory.targetFramerate * l_fps ) );

@@ -82,10 +82,10 @@ class AProfiler extends Entity
 			return;
 		}
 		_agePrev = _age;
-		_nativeUpdate();
+		_driverUpdate();
 	}
 	
-	private function _nativeUpdate():Void
+	private function _driverUpdate():Void
 	{
 		// override me
 	}

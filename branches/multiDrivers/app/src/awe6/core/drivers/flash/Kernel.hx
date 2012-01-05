@@ -58,12 +58,12 @@ class Kernel extends AKernel
 	private var _fullScreenEnableContextMenuItem:ContextMenuItem;
 	private var _fullScreenDisableContextMenuItem:ContextMenuItem;
 
-	override private function _nativeGetIsLocal():Bool
+	override private function _driverGetIsLocal():Bool
 	{
 		return Security.sandboxType != Security.REMOTE;		
 	}
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		_stage = _context.stage;		
 		var l_instance:Kernel = this;
@@ -130,7 +130,7 @@ class Kernel extends AKernel
 		isFullScreen = false;
 	}
 
-	override private function _nativeDisposer():Void
+	override private function _driverDisposer():Void
 	{
 		_stage.removeEventListener( FullScreenEvent.FULL_SCREEN, _onFullScreen );
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
@@ -146,14 +146,14 @@ class Kernel extends AKernel
 		_updater( 0 ); // avoid isActive
 	}
 	
-	override private function _nativeSetIsEyeCandy( p_value:Bool ):Void
+	override private function _driverSetIsEyeCandy( p_value:Bool ):Void
 	{
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
 	}
 	
-	override private function _nativeSetIsFullScreen( p_value:Bool ):Void
+	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
 		if ( _getFlashVersion() < 10.1 ) // FullScreen proved unreliable for all Flash Players in all browsers < 10.1
 		{

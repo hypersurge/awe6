@@ -93,12 +93,12 @@ class APreloader extends Process, implements IPreloader
 		}
 		else
 		{
-			_nativeLoad( _assets[_currentAsset - 1] );
+			_driverLoad( _assets[_currentAsset - 1] );
 		}
 		_currentProgress = 0;
 	}
 	
-	private function _nativeLoad( p_url:String ):Void
+	private function _driverLoad( p_url:String ):Void
 	{
 		//override me
 	}
@@ -116,11 +116,11 @@ class APreloader extends Process, implements IPreloader
 	override private function _disposer():Void 
 	{
 		view.dispose();
-		_nativeDisposer();
+		_driverDisposer();
 		super._disposer();
 	}
 	
-	private function _nativeDisposer():Void
+	private function _driverDisposer():Void
 	{
 		//overrride me
 	}

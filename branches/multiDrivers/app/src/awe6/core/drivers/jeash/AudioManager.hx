@@ -51,12 +51,12 @@ class AudioManager extends AAudioManager
 		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
 	}
 
-	override private function _nativeSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
+	override private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		return new _HelperSound( _kernel, p_id, _packageId, _extension, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
 
-	override private function _nativeSetIsMute( ?p_value:Bool ):Void
+	override private function _driverSetIsMute( ?p_value:Bool ):Void
 	{
 		for ( i in _sounds )
 		{
@@ -87,7 +87,7 @@ class _HelperSound extends _AHelperSound
 		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
 	}
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		_sound = _kernel.assets.getAsset( id + _extension, _packageId );
 		if ( _sound == null )
@@ -101,11 +101,11 @@ class _HelperSound extends _AHelperSound
 		}
 		untyped _soundChannel.jeashAudio.muted = _kernel.audio.isMute;
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
-		_nativeTransform();
+		_driverTransform();
 		return;
 	}
 	
-	override private function _nativeTransform( ?p_asRelative:Bool = false ):Void
+	override private function _driverTransform( ?p_asRelative:Bool = false ):Void
 	{
 		if ( _soundChannel == null )
 		{
@@ -121,7 +121,7 @@ class _HelperSound extends _AHelperSound
 		untyped _soundChannel.jeashAudio.volume = _volume;
 	}
 
-	override private function _nativeStop():Void
+	override private function _driverStop():Void
 	{
 		if ( _soundChannel == null )
 		{
@@ -139,7 +139,7 @@ class _HelperSound extends _AHelperSound
 		dispose();
 	}
 	
-	override private function _nativeDisposer():Void
+	override private function _driverDisposer():Void
 	{
 		if ( _soundChannel != null )
 		{

@@ -83,7 +83,7 @@ class Profiler extends AProfiler
 		_context.addChild( _memoryTextField );
 	}
 		
-	override private function _nativeUpdate():Void
+	override private function _driverUpdate():Void
 	{
 		var l_fps:Int = Std.int( _kernel.getFramerate( true ) );
 		var l_memory:Int = Std.int( System.totalMemory / 1048576 );

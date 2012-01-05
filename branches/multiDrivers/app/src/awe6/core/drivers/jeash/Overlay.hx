@@ -40,7 +40,7 @@ import awe6.core.View;
 class Overlay extends AOverlay
 {
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		_context.mouseEnabled = false;
 		

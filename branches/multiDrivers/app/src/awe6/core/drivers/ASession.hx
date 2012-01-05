@@ -70,11 +70,11 @@ class ASession implements ISession
 	
 	private function _init()
 	{
-		_nativeLoad();
+		_driverLoad();
 		var l_version:Int = Reflect.field( _savedData, _VERSION_ID );
 		if ( l_version != _version )
 		{
-			_nativeReset();
+			_driverReset();
 		}
 		var l_isExistingSession:Bool = Reflect.field( _savedData, id ) != null;
 		reset();
@@ -86,19 +86,19 @@ class ASession implements ISession
 		}
 	}
 	
-	private function _nativeLoad():Void
+	private function _driverLoad():Void
 	{
 		// override me
 		_savedData = {}; // load an objective (or unserialize it) from somewhere - e.g. cookie or sharedObject
 	}
 	
-	private function _nativeSave():Void
+	private function _driverSave():Void
 	{
 		// override me
 		// save
 	}	
 	
-	private function _nativeReset():Void
+	private function _driverReset():Void
 	{
 		// override me
 		_savedData = {}; // clear (and save)
@@ -157,7 +157,7 @@ class ASession implements ISession
 		_setter();
 		Reflect.setField( _savedData, _VERSION_ID, _version );
 		Reflect.setField( _savedData, id, _data );
-		_nativeSave();
+		_driverSave();
 	}
 		
 	public function getPercentageComplete():Float
@@ -200,7 +200,7 @@ class ASession implements ISession
 	
 	public function deleteAllSessions():Void
 	{
-		_nativeReset();
+		_driverReset();
 	}
 	
 	public function toString():String

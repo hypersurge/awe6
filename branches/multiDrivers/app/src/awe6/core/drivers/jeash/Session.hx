@@ -37,7 +37,7 @@ import js.Cookie;
 class Session extends ASession
 {
 	
-	override private function _nativeLoad():Void
+	override private function _driverLoad():Void
 	{
 		_savedData = {};		
 		if ( Cookie.exists( _kernel.factory.id ) )
@@ -46,13 +46,13 @@ class Session extends ASession
 		}
 	}
 	
-	override private function _nativeReset():Void
+	override private function _driverReset():Void
 	{
 		Cookie.remove( _kernel.factory.id );
 		_savedData = {};
 	}
 	
-	override private function _nativeSave():Void
+	override private function _driverSave():Void
 	{
 		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ) ) ;
 	}

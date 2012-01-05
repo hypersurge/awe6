@@ -140,12 +140,12 @@ class AView extends Process, implements IView
 	override private function _disposer():Void 
 	{
 		remove();
-		_nativeDisposer();
+		_driverDisposer();
 		clear();
 		super._disposer();	
 	}
 	
-	private function _nativeDisposer():Void
+	private function _driverDisposer():Void
 	{
 		//override me
 	}
@@ -157,11 +157,11 @@ class AView extends Process, implements IView
 			return;
 		}
 		_children.sort( _tools.sortByPriority );
-		_nativeDraw();
+		_driverDraw();
 		_isDirty = false;
 	}
 	
-	private function _nativeDraw():Void
+	private function _driverDraw():Void
 	{
 		//override me
 	}

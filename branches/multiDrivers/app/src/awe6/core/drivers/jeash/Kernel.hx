@@ -48,12 +48,12 @@ class Kernel extends AKernel
 {
 	private var _stage:Stage;
 
-	override private function _nativeGetIsLocal():Bool
+	override private function _driverGetIsLocal():Bool
 	{
 		return Security.sandboxType != Security.REMOTE;		
 	}
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		_stage = _context.stage;		
 		var l_instance:Kernel = this;
@@ -75,7 +75,7 @@ class Kernel extends AKernel
 		isFullScreen = false;
 	}
 
-	override private function _nativeDisposer():Void
+	override private function _driverDisposer():Void
 	{
 	}
 	
@@ -84,11 +84,11 @@ class Kernel extends AKernel
 		_updater( 0 ); // avoid isActive
 	}
 	
-	override private function _nativeSetIsEyeCandy( p_value:Bool ):Void
+	override private function _driverSetIsEyeCandy( p_value:Bool ):Void
 	{
 	}
 	
-	override private function _nativeSetIsFullScreen( p_value:Bool ):Void
+	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
 	}
 	

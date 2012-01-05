@@ -72,7 +72,7 @@ class AInputMouse extends Process, implements IInputMouse
 	override private function _init():Void 
 	{
 		super._init();
-		_nativeInit();
+		_driverInit();
 		x = y = _xPrev = _yPrev = _deltaX = _deltaY = scroll = _deltaScroll = 0;
 		relativeX = relativeY = relativeCentralisedX = relativeCentralisedY = 0;
 		isMoving = false;		
@@ -88,7 +88,7 @@ class AInputMouse extends Process, implements IInputMouse
 		_reset();
 	}
 	
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		//override me
 	}	

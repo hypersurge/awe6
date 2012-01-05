@@ -70,7 +70,7 @@ class Preloader extends APreloader
 		super._init();
 	}
 	
-	override private function _nativeLoad( p_url:String ):Void
+	override private function _driverLoad( p_url:String ):Void
 	{
 		var l_url:String = p_url;
 		if ( _isDecached )
@@ -86,7 +86,7 @@ class Preloader extends APreloader
 		_urlLoader.addEventListener( Event.COMPLETE, _onComplete );
 	}
 	
-	override private function _nativeDisposer():Void 
+	override private function _driverDisposer():Void 
 	{
 		if ( _loader != null )
 		{

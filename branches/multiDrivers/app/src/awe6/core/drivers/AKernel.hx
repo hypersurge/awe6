@@ -125,7 +125,7 @@ class AKernel extends Process, implements IKernel
 		super._init();
 		// R. Fell -- these 2 bools should be set here because they can influence construction of Managers.
 		isDebug = factory.isDebug;
-		isLocal = _nativeGetIsLocal();
+		isLocal = _driverGetIsLocal();
 		_isPreloaded = false;
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -140,7 +140,7 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
-		_nativeInit();
+		_driverInit();
 		isEyeCandy = true;
 		isFullScreen = false;
 		// M. Ivanchev -- this seems to be right place for signaling complete
@@ -154,18 +154,18 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _view );
 	}
 
-	private function _nativeGetIsLocal():Bool
+	private function _driverGetIsLocal():Bool
 	{
 		//override me
 		return false;
 	}
 
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		//override me
 	}
 	
-	private function _nativeDisposer():Void
+	private function _driverDisposer():Void
 	{
 		//override me
 	}
@@ -220,7 +220,7 @@ class AKernel extends Process, implements IKernel
 		factory = null;
 		_view.dispose();
 		_view = null;
-		_nativeDisposer();
+		_driverDisposer();
 		assets = _assetManagerProcess = null;
 		audio =	_audioManager = null;
 		inputs = _inputManager = null;
@@ -302,11 +302,11 @@ class AKernel extends Process, implements IKernel
 			return isEyeCandy;
 		}
 		isEyeCandy = p_value;
-		_nativeSetIsEyeCandy( p_value );
+		_driverSetIsEyeCandy( p_value );
 		return isEyeCandy;
 	}
 	
-	private function _nativeSetIsEyeCandy( p_value:Bool ):Void
+	private function _driverSetIsEyeCandy( p_value:Bool ):Void
 	{
 		//override me
 	}
@@ -319,11 +319,11 @@ class AKernel extends Process, implements IKernel
 			return isFullScreen;
 		}
 		isFullScreen = p_value;
-		_nativeSetIsFullScreen( p_value );
+		_driverSetIsFullScreen( p_value );
 		return isFullScreen;
 	}
 	
-	private function _nativeSetIsFullScreen( p_value:Bool ):Void
+	private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
 		//override me
 	}

@@ -5,6 +5,7 @@
 
 	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="target_flash" />
 	<window width="320" height="240" fps="20" orientation="landscape" resizable="true" unless="target_flash" />
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="target_html5" />
  	
 	<set name="BUILD_DIR" value="export" />
 	

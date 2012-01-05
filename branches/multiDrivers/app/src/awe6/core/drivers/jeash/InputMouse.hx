@@ -46,7 +46,7 @@ class InputMouse extends AInputMouse
 	private var _stage:Stage;
 	private var _mouseClicks:Loader;
 	
-	override private function _nativeInit():Void 
+	override private function _driverInit():Void 
 	{
 		_stage = Lib.current.stage;
 		_stage.addEventListener( MouseEvent.MOUSE_DOWN, _onMouseDown );

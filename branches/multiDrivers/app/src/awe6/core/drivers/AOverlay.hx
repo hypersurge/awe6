@@ -92,7 +92,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		view.addChild( _borderView, 4 );
 		_wasMute = _kernel.audio.isMute;
 		
-		_nativeInit();
+		_driverInit();
 		
 		_progressView = new View( _kernel, _progressContext );
 		_progressView.isVisible = false;
@@ -132,7 +132,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		positionButton( EOverlayButton.UNPAUSE, l_x, l_y );
 	}
 	
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		_progressContext = new Context();
 		_pauseContext = new Context();

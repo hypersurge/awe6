@@ -48,7 +48,7 @@ class View extends AView
 		super._init();
 	}
 	
-	override private function _nativeDisposer():Void 
+	override private function _driverDisposer():Void 
 	{
 		if ( ( context != null ) && ( context.parent != null ) )
 		{
@@ -60,7 +60,7 @@ class View extends AView
 		}
 	}
 	
-	override private function _nativeDraw():Void
+	override private function _driverDraw():Void
 	{
 		if ( parent != null )
 		{

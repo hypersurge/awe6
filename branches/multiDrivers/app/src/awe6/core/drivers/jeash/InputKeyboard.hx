@@ -42,7 +42,7 @@ class InputKeyboard extends AInputKeyboard
 {
 	private var _stage:Stage;
 	
-	override private function _nativeInit():Void 
+	override private function _driverInit():Void 
 	{
 		_stage = Lib.current.stage;
 		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );

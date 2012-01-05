@@ -47,11 +47,11 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	override private function _init():Void 
 	{
 		super._init();
-		_nativeInit();
+		_driverInit();
 		_reset();
 	}
 	
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		//override me
 	}

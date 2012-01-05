@@ -99,10 +99,10 @@ class AAudioManager extends Process, implements IAudioManager
 				return;
 			}
 		}
-		_sounds.push( _nativeSoundFactory( p_id, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback ) );
+		_sounds.push( _driverSoundFactory( p_id, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback ) );
 	}
 	
-	private function _nativeSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
+	private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		//override me
 		return new _AHelperSound( _kernel, p_id, _packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
@@ -133,11 +133,11 @@ class AAudioManager extends Process, implements IAudioManager
 			p_value = !isMute;
 		}
 		isMute = p_value;
-		_nativeSetIsMute( p_value );
+		_driverSetIsMute( p_value );
 		return isMute;
 	}
 	
-	private function _nativeSetIsMute( ?p_value:Bool ):Void
+	private function _driverSetIsMute( ?p_value:Bool ):Void
 	{
 		//override me
 	}
@@ -226,10 +226,10 @@ class _AHelperSound implements IDisposable
 	
 	private function _init():Void
 	{
-		_nativeInit();
+		_driverInit();
 	}
 	
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		//override me
 	}
@@ -242,21 +242,21 @@ class _AHelperSound implements IDisposable
 		}
 		_volume = _kernel.tools.limit( p_volume, 0, 1 );
 		_pan = _kernel.tools.limit( p_pan, -1, 1 );
-		_nativeTransform( p_asRelative );
+		_driverTransform( p_asRelative );
 	}
 	
-	private function _nativeTransform( ?p_asRelative:Bool = false ):Void
+	private function _driverTransform( ?p_asRelative:Bool = false ):Void
 	{
 		//override me
 	}
 	
 	public function stop():Void
 	{
-		_nativeStop();
+		_driverStop();
 		dispose();
 	}
 	
-	private function _nativeStop():Void
+	private function _driverStop():Void
 	{
 		//override me
 	}
@@ -268,10 +268,10 @@ class _AHelperSound implements IDisposable
 			return;
 		}
 		isDisposed = true;
-		_nativeStop();
+		_driverStop();
 	}
 	
-	private function _nativeDisposer():Void
+	private function _driverDisposer():Void
 	{
 		//override me
 	}

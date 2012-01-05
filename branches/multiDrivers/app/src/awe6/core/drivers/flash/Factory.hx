@@ -49,7 +49,7 @@ class Factory extends AFactory
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
 	
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		var l_context = new Context();
 		_context.addChild( l_context );
@@ -151,7 +151,7 @@ class Factory extends AFactory
 		_parseXml( l_string );
 	}
 	
-	override private function _nativeDisposer():Void
+	override private function _driverDisposer():Void
 	{
 		_context.removeEventListener( Event.ADDED_TO_STAGE, _hasStage );
 		if ( _context.parent != null )

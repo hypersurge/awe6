@@ -38,19 +38,19 @@ class Session extends ASession
 {
 	private var _so:SharedObject;
 	
-	override private function _nativeLoad():Void
+	override private function _driverLoad():Void
 	{
 		_so = SharedObject.getLocal( _kernel.factory.id, "/" );
 		_savedData = _so.data;
 	}
 	
-	override private function _nativeReset():Void
+	override private function _driverReset():Void
 	{
 		_so.clear();
 		_savedData = _so.data;
 	}
 	
-	override private function _nativeSave():Void
+	override private function _driverSave():Void
 	{
 		_so.flush();
 	}

@@ -37,7 +37,7 @@ import awe6.core.drivers.AFactory;
  */
 class Factory extends AFactory
 {
-	override private function _nativeInit():Void
+	override private function _driverInit():Void
 	{
 		var l_context = new Context();
 		_context.addChild( l_context );
@@ -55,7 +55,7 @@ class Factory extends AFactory
 		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
 	}
 
-	override private function _nativeDisposer():Void
+	override private function _driverDisposer():Void
 	{
 		if ( _context.parent != null )
 		{

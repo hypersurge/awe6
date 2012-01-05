@@ -109,10 +109,10 @@ class AFactory implements IFactory, implements IDisposable
 		config = new Hash<Dynamic>();
 		// Proceed with platform-specific initializations.
 		//
-		_nativeInit();
+		_driverInit();
 	}
 
-	private function _nativeInit():Void
+	private function _driverInit():Void
 	{
 		// override me
 		if ( ( _config != null ) && ( _config.substr( 0, 5 ) == "<?xml" ) )
@@ -297,7 +297,7 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			return;
 		}
-		_nativeDisposer();
+		_driverDisposer();
 		_concreteKernel.dispose();
 		_concreteKernel = null;
 		_kernel = null;
@@ -307,7 +307,7 @@ class AFactory implements IFactory, implements IDisposable
 		isDisposed = true;
 	}
 	
-	private function _nativeDisposer():Void
+	private function _driverDisposer():Void
 	{
 		// override me
 	}
