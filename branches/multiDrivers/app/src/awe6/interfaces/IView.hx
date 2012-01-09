@@ -33,7 +33,7 @@ package awe6.interfaces;
  * The IView interface should be implemented by all objects in the view broad phase traversal stack.
  * @author	Robert Fell
  */
-interface IView implements IPriority, implements IPosition, implements IDisposable, implements IUpdateable
+interface IView implements IPriority, implements IPositionable, implements IDisposable, implements IUpdateable
 {
 	/**
 	 * Optional: the object who this view represents.

@@ -33,10 +33,10 @@ import awe6.interfaces.EKey;
 import awe6.interfaces.EMouseCursor;
 import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IKernel;
-import awe6.interfaces.IPosition;
+import awe6.interfaces.IPositionable;
 import awe6.interfaces.IView;
 
-class BasicButton extends Entity, implements IPosition
+class BasicButton extends Entity, implements IPositionable
 {
 	public var x( default, __set_x ):Float;
 	public var y( default, __set_y ):Float;

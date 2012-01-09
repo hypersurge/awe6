@@ -30,10 +30,10 @@
 package awe6.interfaces;
 
 /**
- * The IPosition interface should be implemented by objects intended to have 2D spatial position.
+ * The IPositionable interface should be implemented by objects intended to have 2D spatial position.
  * @author	Robert Fell
  */
-interface IPosition
+interface IPositionable
 {
 	/**
 	 * The horizontal position.
