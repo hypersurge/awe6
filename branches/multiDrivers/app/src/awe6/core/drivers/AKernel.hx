@@ -58,6 +58,7 @@ import haxe.Timer;
  * <p>It is intended as an abstract class to be extended by target specific drivers.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
+ * @author	Mihail Ivanchev
  */
 class AKernel extends Process, implements IKernel
 {
@@ -101,29 +102,15 @@ class AKernel extends Process, implements IKernel
 
 	public function new( p_factory:IFactory, p_context:Context )
 	{
-		// FIXME: (M. Ivanchev) generally factory, tools and _view will always
-		// be null at this point, except if a subclass sets them first?
-		// R. Fell -- yes, these null checks are to allow easier subclassing, probably overkill?
-		// M. Ivanchev -- OK, definetely not needed because:
-		//
-		// * A subclass can simply pass the custom factory and context through p_factory, p_context
-		// * There are not much other options for Tools to be honest and this is a fully internal mechanism.
-		// * There are not much other options for the initialization of the main view.
-		//
-		// And besides all that: since the philosophy of a constructor is to just assign the injected values,
-		// I am moving the tools and the _view to _init.
-		//
-		// If you agree on that, I'll remove the FIXME.
-		//
 		factory = p_factory;
 		_context = p_context;
+		tools = _tools = new Tools( this ); // created before super constructor because super.tools binds to it
 		super( this );
 	}
 
 	override private function _init():Void
 	{
 		super._init();
-		tools = _tools = new Tools( this );
 		_view = new View( this, _context, 0, this );
 		_processes = new List<IProcess>();
 		_helperFramerate = new _HelperFramerate( factory.targetFramerate );
@@ -132,11 +119,9 @@ class AKernel extends Process, implements IKernel
 		// Perform driver specific initializations.
 		//
 
-		_driverInit();
 		isDebug = factory.isDebug;
 		isLocal = _driverGetIsLocal();
-		isEyeCandy = true;
-		isFullScreen = false;
+		_driverInit();
 
 		// Initialize managers.
 		//
@@ -152,6 +137,12 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
+		
+		// Set defaults for visual switches.
+		//
+		
+		isEyeCandy = true;
+		isFullScreen = false;
 
 		// Signal completion to the factory and initialize factory-dependent components.
 		//
@@ -210,7 +201,6 @@ class AKernel extends Process, implements IKernel
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
 		_helperFramerate.update();
-		// R. Fell -- if ever there was a good example of a ternary it would be here ;)
 		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
 		super._updater( l_deltaTime );
 		for ( i in _processes )
@@ -242,7 +232,6 @@ class AKernel extends Process, implements IKernel
 		tools = _tools = null;
 		_logger = null;
 		_preloader = null;
-		// FIXME: session.deleteAllSessions();
 		session = null;
 		super._disposer();
 	}
@@ -391,8 +380,6 @@ private class _HelperFramerate
 	
 	private inline function _timer():Int
 	{
-		// FIXME: Timer.stamp() is already in seconds, is this still correct?
-		// R. Fell - yes, we want milliseconds for timeInterval / update( deltaTime )
 		return Std.int( Timer.stamp() * 1000 );
 	}
 }

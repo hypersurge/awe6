@@ -70,9 +70,6 @@ class Kernel extends AKernel
 		_context.mask = l_mask;
 		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
-		
-		isEyeCandy = true;
-		isFullScreen = false;
 	}
 
 	override private function _driverDisposer():Void

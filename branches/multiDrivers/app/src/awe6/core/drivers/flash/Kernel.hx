@@ -125,9 +125,6 @@ class Kernel extends AKernel
 		Lib.current.contextMenu = _contextMenu;
 		#end
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
-		
-		isEyeCandy = true;
-		isFullScreen = false;
 	}
 
 	override private function _driverDisposer():Void
