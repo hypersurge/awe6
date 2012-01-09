@@ -130,7 +130,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	{
 		_buffer = [];
 		_keys = [];
-		for ( i in 0...256 )
+		for ( i in 0...512 )
 		{
 			_keys[i] = new _HelperKey( _kernel );
 		}
