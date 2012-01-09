@@ -38,7 +38,7 @@ package awe6.interfaces;
 interface IDisposable
 {
 	/**
-	 * Returns true if the object has been disposed.
+	 * Returns true if the object has been disposed (or is being disposed).
 	 */
 	var isDisposed( default, null ):Bool;
 	/**

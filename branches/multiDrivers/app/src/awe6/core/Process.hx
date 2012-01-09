@@ -52,8 +52,7 @@ class Process implements IProcess
 	private var _age:Int;
 	private var _updates:Int;
 	private var _isEntity:Bool;
-	private var _isSetterBypassed:Bool;
-//	private var _isBeingDisposed:Bool; // M. Ivanchev: commented out to spot bugs
+	private var _isSetterBypassed:Bool; // needed because for cpp target Reflect sets do call setters
 
 	public function new( p_kernel:IKernel )
 	{
@@ -67,7 +66,6 @@ class Process implements IProcess
 	{
 //		Reflect.setField( this, "isActive", true ); // avoids the setter
 		_isSetterBypassed = true;
-//		_isBeingDisposed = false;
 		isActive = true;
 		isDisposed = false;
 		_age = 0;
@@ -76,16 +74,15 @@ class Process implements IProcess
 	
 	public inline function dispose():Void
 	{
-		if ( isDisposed ) // || _isBeingDisposed )
+		if ( isDisposed )
 		{
 			return;
 		}
 		else
 		{
-			//_isBeingDisposed = true;
+			isDisposed = true;
 			isActive = false;
 			_disposer();
-			isDisposed = true;
 			if ( _isEntity )
 			{
 				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
@@ -101,7 +98,7 @@ class Process implements IProcess
 	
 	public inline function update( ?p_deltaTime:Int = 0 ):Void
 	{
-		if ( !isActive )
+		if ( !isActive || isDisposed )
 		{
 			return;
 		}
@@ -123,6 +120,7 @@ class Process implements IProcess
 	{
 		if ( isDisposed )
 		{
+			isActive = false;
 			return false;
 		}
 		if ( p_value != isActive )
@@ -142,7 +140,7 @@ class Process implements IProcess
 	
 	public inline function pause():Void
 	{
-		if ( !isActive )
+		if ( !isActive || isDisposed )
 		{
 			return;
 		}
@@ -166,7 +164,7 @@ class Process implements IProcess
 	
 	public inline function resume():Void
 	{
-		if ( isActive )
+		if ( isActive || isDisposed )
 		{
 			return;
 		}
@@ -176,7 +174,7 @@ class Process implements IProcess
 	//		Reflect.setField( this, "isActive", true ); // avoids the setter
 			_isSetterBypassed = true;
 			isActive = true;
-			if ( _isEntity && !isDisposed )
+			if ( _isEntity )
 			{
 				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
 			}
