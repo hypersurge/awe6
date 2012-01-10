@@ -78,12 +78,15 @@ class AView extends Process, implements IView
 		{
 			return;
 		}
-		var l_child:AView = cast p_child;
-		if ( l_child.parent != this )
+		if ( p_child.parent != this )
 		{
 			p_child.remove();
-			_children.push( l_child );
-			l_child._setParent( this );
+			if ( Std.is( p_child, AView ) )
+			{
+				var l_child:AView = cast p_child;
+				_children.push( l_child );
+				l_child._setParent( this );
+			}
 		}
 		if ( p_priority != 0 )
 		{
@@ -98,13 +101,16 @@ class AView extends Process, implements IView
 		{
 			return;
 		}
-		var l_child:AView = cast p_child;
-		if ( l_child.parent != this )
+		if ( Std.is( p_child, AView ) )
 		{
-			return;
+			var l_child:AView = cast p_child;
+			if ( l_child.parent != this )
+			{
+				return;
+			}
+			_children.remove( l_child );
+			l_child._setParent( null );
 		}
-		_children.remove( l_child );
-		l_child._setParent( null );
 		_isDirty = true;
 	}
 	
@@ -183,10 +189,13 @@ class AView extends Process, implements IView
 			return priority;
 		}
 		priority = p_value;
-		var l_parent:AView = cast parent;
-		if ( l_parent != null )
+		if ( Std.is( parent, AView ) )
 		{
-			l_parent._isDirty = true;
+			var l_parent:AView = cast parent;
+			if ( l_parent != null )
+			{
+				l_parent._isDirty = true;
+			}
 		}
 		return priority;
 	}
@@ -198,10 +207,13 @@ class AView extends Process, implements IView
 			return isVisible;
 		}
 		isVisible = p_value;
-		var l_parent:AView = cast parent;
-		if ( l_parent != null )
+		if ( Std.is( parent, AView ) )
 		{
-			l_parent._draw();
+			var l_parent:AView = cast parent;
+			if ( l_parent != null )
+			{
+				l_parent._draw();
+			}
 		}
 		return isVisible;
 	}
