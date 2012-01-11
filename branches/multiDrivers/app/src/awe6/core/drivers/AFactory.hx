@@ -38,6 +38,7 @@ import awe6.core.Overlay;
 import awe6.core.Scene;
 import awe6.core.SceneTransition;
 import awe6.core.TextStyle;
+import awe6.interfaces.EFullScreen;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
@@ -84,6 +85,7 @@ class AFactory implements IFactory, implements IDisposable
 	public var width( default, null ):Int;
 	public var height( default, null ):Int;
 	public var bgColor( default, null ):Int;
+	public var fullScreenType( default, null ):EFullScreen;
 	public var secret( default, null ):String;
 	public var targetFramerate( default, null ):Int;
 	public var isFixedUpdates( default, null ):Bool;
@@ -167,6 +169,7 @@ class AFactory implements IFactory, implements IDisposable
 		width = 600;
 		height = 400;
 		bgColor = 0xFF0000;
+		fullScreenType = EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
 		secret = "YouMustOverrideThis";
 		targetFramerate = 25;
 		isFixedUpdates = true;

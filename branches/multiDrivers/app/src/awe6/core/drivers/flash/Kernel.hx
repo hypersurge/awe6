@@ -30,6 +30,7 @@
 package awe6.core.drivers.flash;
 import awe6.core.Context;
 import awe6.core.drivers.AKernel;
+import awe6.interfaces.EFullScreen;
 import awe6.interfaces.IFactory;
 import flash.display.Stage;
 import flash.display.StageDisplayState;
@@ -41,6 +42,7 @@ import flash.events.FullScreenEvent;
 import flash.geom.Rectangle;
 import flash.Lib;
 import flash.net.URLRequest;
+import flash.system.Capabilities;
 import flash.system.Security;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
@@ -160,9 +162,30 @@ class Kernel extends AKernel
 		_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
-		_stage.fullScreenSourceRect = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		_stage.fullScreenSourceRect = null;
 		if ( isFullScreen )
 		{
+			switch( factory.fullScreenType )
+			{
+				case DISABLED :
+					null;
+				case NO_SCALE : 
+					var l_marginX:Int = Std.int( Capabilities.screenResolutionX - factory.width );
+					var l_marginY:Int = Std.int( Capabilities.screenResolutionY - factory.height );
+					_stage.fullScreenSourceRect = new Rectangle( Std.int( - l_marginX / 2 ), Std.int( - l_marginY / 2 ), factory.width + l_marginX, factory.height + l_marginY );
+				case SCALE_ASPECT_RATIO_IGNORE :
+					// not possible with Flash hardware scaling?
+					_stage.fullScreenSourceRect = new Rectangle( 0, 0, factory.width, factory.height );	
+				case SCALE_ASPECT_RATIO_PRESERVE :
+					_stage.fullScreenSourceRect = new Rectangle( 0, 0, factory.width, factory.height );	
+				case SCALE_NEAREST_MULTIPLE :
+					var l_nearestMultiple:Int = Math.floor( Math.min( Capabilities.screenResolutionX / factory.width, Capabilities.screenResolutionY / factory.height ) );
+					var l_marginX:Int = Std.int( ( Capabilities.screenResolutionX - ( factory.width * l_nearestMultiple ) ) / l_nearestMultiple );
+					var l_marginY:Int = Std.int( ( Capabilities.screenResolutionY - ( factory.height * l_nearestMultiple ) ) / l_nearestMultiple );
+					_stage.fullScreenSourceRect = new Rectangle( Std.int( - l_marginX / 2 ), Std.int( - l_marginY / 2 ), factory.width + l_marginX, factory.height + l_marginY );	
+				case SUB_TYPE( l_value ) :
+					null;
+			}
 			_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 		}
 		else

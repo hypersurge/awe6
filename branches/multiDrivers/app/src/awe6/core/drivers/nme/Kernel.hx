@@ -32,11 +32,11 @@ import awe6.core.drivers.AKernel;
 import awe6.interfaces.IFactory;
 import nme.display.Sprite;
 import nme.display.Stage;
+import nme.display.StageDisplayState;
 import nme.display.StageQuality;
 import nme.display.StageScaleMode;
 import nme.events.Event;
 import nme.geom.Rectangle;
-import nme.Lib;
 import nme.net.URLRequest;
 
 /**
@@ -46,6 +46,7 @@ import nme.net.URLRequest;
 class Kernel extends AKernel
 {
 	private var _stage:Stage;
+	private var _prevStageScaleMode:StageScaleMode;
 
 	override private function _driverGetIsLocal():Bool
 	{
@@ -57,7 +58,7 @@ class Kernel extends AKernel
 		_stage = _context.stage;		
 		var l_instance:Kernel = this;
 		_stage.frameRate = factory.targetFramerate;
-		_stage.scaleMode = StageScaleMode.NO_SCALE;
+		_stage.scaleMode = _prevStageScaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
 
 		var l_mask:Sprite = new Sprite();
@@ -85,6 +86,24 @@ class Kernel extends AKernel
 	
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
+		if ( p_value )
+		{
+			_prevStageScaleMode = _stage.scaleMode;
+			_stage.scaleMode = switch( factory.fullScreenType )
+			{
+				case NO_SCALE : StageScaleMode.NO_SCALE;
+				case SCALE_ASPECT_RATIO_IGNORE : StageScaleMode.EXACT_FIT; // so ugly
+				case SCALE_ASPECT_RATIO_PRESERVE : StageScaleMode.SHOW_ALL;
+				case SCALE_NEAREST_MULTIPLE : StageScaleMode.NO_SCALE; // needs work
+				default : StageScaleMode.NO_SCALE;
+			}
+			_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+		}
+		else
+		{
+			_stage.scaleMode = _prevStageScaleMode;
+			_stage.displayState = StageDisplayState.NORMAL;
+		}
 	}
 	
 }

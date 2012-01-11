@@ -81,6 +81,10 @@ interface IFactory
 	 */
 	var bgColor( default, null ):Int;
 	/**
+	 * The default scaling used for fullScreen mode.
+	 */
+	var fullScreenType( default, null ):EFullScreen;
+	/**
 	 * The default secret key used to encrypt data.  Set it to something specific for your project, and conceal it's value.
 	 */
 	var secret( default, null ):String;

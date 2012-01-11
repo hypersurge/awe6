@@ -35,6 +35,7 @@ import awe6.core.InputManager;
 import awe6.core.MessageManager;
 import awe6.core.Process;
 import awe6.core.SceneManager;
+import awe6.interfaces.EFullScreen;
 import awe6.interfaces.IAssetManager;
 import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IAudioManager;
@@ -314,7 +315,7 @@ class AKernel extends Process, implements IKernel
 	
 	private function __set_isFullScreen( p_value:Bool ):Bool
 	{
-		if ( !factory.isFullScreenOptionEnabled )
+		if ( !factory.isFullScreenOptionEnabled || Type.enumEq( factory.fullScreenType, EFullScreen.DISABLED ) )
 		{
 			isFullScreen = false;
 			return isFullScreen;
