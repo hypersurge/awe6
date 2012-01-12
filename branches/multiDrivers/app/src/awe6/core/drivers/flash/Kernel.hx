@@ -78,6 +78,7 @@ class Kernel extends AKernel
 		l_mask.graphics.beginFill( 0xFFFFFF );
 		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_mask.graphics.endFill();
+		l_mask.cacheAsBitmap = true;
 		_context.addChild( l_mask );
 		_context.mask = l_mask;
 		

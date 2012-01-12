@@ -64,7 +64,7 @@ class Factory extends AFactory
 		bgColor = 0xFFFFFF;
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
-		targetFramerate = 20;
+		targetFramerate = 60;
 		isFixedUpdates = false;
 	}
 	

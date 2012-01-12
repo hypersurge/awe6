@@ -28,16 +28,12 @@
  */
 
 package awe6.core.drivers.jeash;
-import awe6.core.Context;
 import awe6.core.drivers.AKernel;
-import awe6.interfaces.IFactory;
 import jeash.display.Stage;
 import jeash.display.StageQuality;
 import jeash.display.StageScaleMode;
 import jeash.events.Event;
-import jeash.geom.Rectangle;
 import jeash.Lib;
-import jeash.net.URLRequest;
 import jeash.system.Security;
 
 /**
@@ -56,19 +52,10 @@ class Kernel extends AKernel
 	override private function _driverInit():Void
 	{
 		_stage = _context.stage;		
-		var l_instance:Kernel = this;
 		Lib.current.focusRect = false;
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
-
-		var l_mask:Context = new Context();
-		l_mask.graphics.beginFill( 0xFFFFFF );
-		l_mask.graphics.drawRect( 0, 0, factory.width, factory.height );
-		l_mask.graphics.endFill();
-		_context.addChild( l_mask );
-		_context.mask = l_mask;
-		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 	}
 
