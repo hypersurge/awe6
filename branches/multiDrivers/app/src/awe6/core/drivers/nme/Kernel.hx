@@ -42,7 +42,6 @@ import nme.events.Event;
 class Kernel extends AKernel
 {
 	private var _stage:Stage;
-	private var _prevStageScaleMode:StageScaleMode;
 
 	override private function _driverGetIsLocal():Bool
 	{
@@ -53,7 +52,7 @@ class Kernel extends AKernel
 	{
 		_stage = _context.stage;
 		_stage.frameRate = factory.targetFramerate;
-		_stage.scaleMode = _prevStageScaleMode = StageScaleMode.NO_SCALE;
+		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		_stage.addEventListener( Event.RESIZE, _onResize );
@@ -66,55 +65,8 @@ class Kernel extends AKernel
 	
 	private function _onResize( ?p_event:Event ):Void
 	{
-		if ( !isFullScreen )
-		{
-			//_context.scaleX = _stage.stageWidth / factory.width;
-			//_context.scaleY = _stage.stageHeight / factory.height;
-			_view.x = _stage.stageWidth / 2 - _context.width / 2;
-			_view.y = _stage.stageHeight / 2 - _context.height / 2;
-		}
-
-		var l_center:Bool = true;
-
-		switch ( factory.fullScreenType )
-		{
-		case SCALE_ASPECT_RATIO_IGNORE:
-			_context.scaleX = _stage.stageWidth / factory.width;
-			_context.scaleY = _stage.stageHeight / factory.height;
-		case SCALE_ASPECT_RATIO_PRESERVE:
-			var l_ratio:Float = factory.width / factory.height;
-
-			// Resize to the longer side; if neccessary correct.
-			//
-
-			if ( factory.width > factory.height )
-			{
-				_context.scaleX = _stage.stageWidth / factory.width;
-				_context.scaleY = _context.scaleX;
-				if ( _context.height > factory.height )
-				{
-					_context.scaleY = _stage.stageHeight / factory.height;
-					_context.scaleX = _context.scaleX;
-				}
-			}
-			else
-			{
-				_context.scaleY = _stage.stageHeight / factory.height;
-				_context.scaleX = _context.scaleY;
-				if ( _context.width > factory.width )
-				{
-					_context.scaleX = _stage.stageWidth / factory.width;
-					_context.scaleY = _context.scaleX;
-				}
-			}
-//		case SCALE_NEAREST_MULTIPLE:
-		default: { };
-		}
-
-		if ( l_center )
-		{
-			_view.x = _stage.stageWidth / 2 - _context.width / 2;
-			_view.y = _stage.stageHeight / 2 - _context.height / 2;
+		_view.x = _stage.stageWidth / 2 - factory.width / 2;
+		_view.y = _stage.stageHeight / 2 - factory.height / 2;
 		}
 	}
 
