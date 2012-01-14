@@ -38,10 +38,10 @@ import awe6.interfaces.IView;
 
 class BasicButton extends Entity, implements IPositionable
 {
-	public var x( default, __set_x ):Float;
-	public var y( default, __set_y ):Float;
-	public var width( default, __set_width ):Float;
-	public var height( default, __set_height ):Float;
+	public var x( default, _set_x ):Float;
+	public var y( default, _set_y ):Float;
+	public var width( default, _set_width ):Float;
+	public var height( default, _set_height ):Float;
 	public var isOver( default, null ):Bool;
 	public var onClickCallback:Void->Void;
 	public var onRollOverCallback:Void->Void;
@@ -159,7 +159,7 @@ class BasicButton extends Entity, implements IPositionable
 		y = p_y;
 	}
 	
-	private function __set_x( p_value:Float ):Float
+	private function _set_x( p_value:Float ):Float
 	{
 		x = p_value;
 		if ( view != null )
@@ -169,7 +169,7 @@ class BasicButton extends Entity, implements IPositionable
 		return x;
 	}
 	
-	private function __set_y( p_value:Float ):Float
+	private function _set_y( p_value:Float ):Float
 	{
 		y = p_value;
 		if ( view != null )
@@ -179,13 +179,13 @@ class BasicButton extends Entity, implements IPositionable
 		return y;
 	}
 	
-	private function __set_width( p_value:Float ):Float
+	private function _set_width( p_value:Float ):Float
 	{
 		width = p_value;
 		return width;
 	}
 	
-	private function __set_height( p_value:Float ):Float
+	private function _set_height( p_value:Float ):Float
 	{
 		height = p_value;
 		return height;

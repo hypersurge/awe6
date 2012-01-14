@@ -43,7 +43,7 @@ import awe6.interfaces.IView;
  */
 class SceneManager extends Process, implements ISceneManager
 {
-	public var scene( __get_scene, null ):IScene;
+	public var scene( _get_scene, null ):IScene;
 	public var view( default, null ):IView;
 	
 	private var _sceneTransition:ISceneTransition;
@@ -143,7 +143,7 @@ class SceneManager extends Process, implements ISceneManager
 		else setScene( scene.type );
 	}
 	
-	private function __get_scene():IScene
+	private function _get_scene():IScene
 	{
 		return scene;
 	}

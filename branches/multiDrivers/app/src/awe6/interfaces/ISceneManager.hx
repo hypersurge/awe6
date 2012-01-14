@@ -40,7 +40,7 @@ interface ISceneManager
 	 * The currently active scene.
 	 * <p>Use as a runtime property and not as an initialization property.</p>
 	 */
-	var scene( __get_scene, null ):IScene;
+	var scene( _get_scene, null ):IScene;
 	/**
 	 * Sets the current scene to a new scene.
 	 * @param	type	The new scene.

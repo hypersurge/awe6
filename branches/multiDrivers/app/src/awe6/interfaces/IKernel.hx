@@ -47,11 +47,11 @@ interface IKernel implements IPauseable, implements ILogger
 	/**
 	 * Toggleable by the user, intended to be used as a switch to disable intensive, but non essential, content (performance vs wow).
 	 */
-	var isEyeCandy( default, __set_isEyeCandy ):Bool;
+	var isEyeCandy( default, _set_isEyeCandy ):Bool;
 	/**
 	 * Toggleable by the user, enables or disables full screen mode.
 	 */
-	var isFullScreen( default, __set_isFullScreen ):Bool;
+	var isFullScreen( default, _set_isFullScreen ):Bool;
 	/**
 	 * The topmost visual element, used for chrome & global controls.
 	 */
@@ -87,7 +87,7 @@ interface IKernel implements IPauseable, implements ILogger
 	/**
 	 * Read and write globally accessible variables.
 	 */
-	var session( __get_session, __set_session ):ISession;
+	var session( _get_session, _set_session ):ISession;
 	/**
 	 * Used for read only application settings and localisation text.
 	 * @param	ID	Unique identifier for the config setting (e.g. XML node name).

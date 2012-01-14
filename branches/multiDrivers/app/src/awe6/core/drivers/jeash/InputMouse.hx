@@ -111,14 +111,14 @@ class InputMouse extends AInputMouse
 		trace( scroll );
 	}
 	
-	override private function __set_isVisible( p_value:Bool ):Bool
+	override private function _set_isVisible( p_value:Bool ):Bool
 	{
 		// doesn't work in js
 		p_value ? Mouse.show() : Mouse.hide();
-		return super.__set_isVisible( p_value );
+		return super._set_isVisible( p_value );
 	}
 	
-	override private function __set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 		switch( p_value )
 		{
@@ -128,7 +128,7 @@ class InputMouse extends AInputMouse
 			case IBEAM : Lib.jeashSetCursor( false );
 			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
 		}
-		return super.__set_cursorType( p_value );
+		return super._set_cursorType( p_value );
 	}
 
 }

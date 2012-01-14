@@ -51,9 +51,9 @@ class AInputMouse extends Process, implements IInputMouse
 	public var relativeCentralisedY( default, null ):Float;
 	public var isWithinBounds( default, null ):Bool;
 	public var isMoving( default, null ):Bool;
-	public var isVisible( default, __set_isVisible ):Bool;
+	public var isVisible( default, _set_isVisible ):Bool;
 	public var scroll( default, null ):Int;
-	public var cursorType( default, __set_cursorType ):EMouseCursor;
+	public var cursorType( default, _set_cursorType ):EMouseCursor;
 	
 	private var _buffer:Array<Bool>;
 	private var _xPrev:Int;
@@ -323,13 +323,13 @@ class AInputMouse extends Process, implements IInputMouse
 		return l_button.clickY;
 	}
 	
-	private function __set_isVisible( p_value:Bool ):Bool
+	private function _set_isVisible( p_value:Bool ):Bool
 	{
 		isVisible = p_value;
 		return isVisible;
 	}
 	
-	private function __set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 		cursorType = p_value;
 		return cursorType;

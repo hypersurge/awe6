@@ -38,7 +38,7 @@ interface IPauseable
 	/**
 	 * Determines if the object is updating or not.
 	 */
-	var isActive( default, __set_isActive ):Bool;
+	var isActive( default, _set_isActive ):Bool;
 	/**
 	 * Sets isActive to false.
 	 */

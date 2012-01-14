@@ -65,9 +65,8 @@ class Kernel extends AKernel
 	
 	private function _onResize( ?p_event:Event ):Void
 	{
-		_view.x = _stage.stageWidth / 2 - factory.width / 2;
-		_view.y = _stage.stageHeight / 2 - factory.height / 2;
-		}
+		_view.x = Std.int( ( _stage.stageWidth - factory.width ) / 2 );
+		_view.y = Std.int( ( _stage.stageHeight - factory.height ) / 2 );
 	}
 
 	private function _onEnterFrame( p_event:Event ):Void

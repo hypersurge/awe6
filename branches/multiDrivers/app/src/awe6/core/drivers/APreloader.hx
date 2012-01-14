@@ -44,8 +44,8 @@ import haxe.Timer;
  */
 class APreloader extends Process, implements IPreloader
 {
-	public var view( __get_view, null ):IView;
-	public var progress( __get_progress, null ):Float;
+	public var view( _get_view, null ):IView;
+	public var progress( _get_progress, null ):Float;
 	
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
@@ -125,12 +125,12 @@ class APreloader extends Process, implements IPreloader
 		//overrride me
 	}
 	
-	private function __get_view():IView
+	private function _get_view():IView
 	{
 		return view;
 	}
 	
-	private function __get_progress():Float
+	private function _get_progress():Float
 	{
 		return progress;
 	}

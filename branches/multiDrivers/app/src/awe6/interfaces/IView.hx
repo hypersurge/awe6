@@ -43,17 +43,17 @@ interface IView implements IPriority, implements IPositionable, implements IDisp
 	 * The parent view of this view.
 	 * <p>The reference is null if this view has no parent (for exemple a view not in the view traversal stack).</p>
 	 */
-	var parent( __get_parent, null ):IView;
+	var parent( _get_parent, null ):IView;
 	/**
 	 * Specify the visibility of this view.
 	 * <p>If true the view will be displayed, if false the view is hidden.</p>
 	 */
-	var isVisible( default, __set_isVisible ):Bool;
+	var isVisible( default, _set_isVisible ):Bool;
 	/**
 	 * Determined by whether this view is visible and included in a visible branch of the view stack (i.e. actually has the potential to be drawn within the overlay).
 	 * <p>If true the view is potentially visible, if false the view is impossible to be seen.</p>
 	 */
-	var isInViewStack( __get_isInViewStack, null ):Bool;
+	var isInViewStack( _get_isInViewStack, null ):Bool;
 	/**
 	 * The horizontal position considering all parent's positions / scene graph.
 	 */

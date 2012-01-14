@@ -42,13 +42,13 @@ import awe6.interfaces.IView;
 class AView extends Process, implements IView
 {
 	public var context( default, null ):Context;
-	public var priority( __get_priority, __set_priority ):Int;
+	public var priority( _get_priority, _set_priority ):Int;
 	public var owner( default, null ):Dynamic;
-	public var parent( __get_parent, null ):IView;
-	public var isVisible( default, __set_isVisible ):Bool;	
-	public var isInViewStack( __get_isInViewStack, null ):Bool;
-	public var x( default, __set_x ):Float;
-	public var y( default, __set_y ):Float;
+	public var parent( _get_parent, null ):IView;
+	public var isVisible( default, _set_isVisible ):Bool;	
+	public var isInViewStack( _get_isInViewStack, null ):Bool;
+	public var x( default, _set_x ):Float;
+	public var y( default, _set_y ):Float;
 	public var globalX( default, null ):Float;
 	public var globalY( default, null ):Float;
 	
@@ -177,12 +177,12 @@ class AView extends Process, implements IView
 		parent = p_parent;
 	}
 	
-	private function __get_priority():Int
+	private function _get_priority():Int
 	{
 		return priority;
 	}
 	
-	private function __set_priority( p_value:Int ):Int
+	private function _set_priority( p_value:Int ):Int
 	{
 		if ( p_value == priority )
 		{
@@ -200,7 +200,7 @@ class AView extends Process, implements IView
 		return priority;
 	}
 	
-	private function __set_isVisible( p_value:Bool ):Bool
+	private function _set_isVisible( p_value:Bool ):Bool
 	{
 		if ( p_value == isVisible )
 		{
@@ -218,12 +218,12 @@ class AView extends Process, implements IView
 		return isVisible;
 	}
 	
-	private function __get_parent():IView
+	private function _get_parent():IView
 	{
 		return parent;
 	}
 	
-	private function __get_isInViewStack():Bool
+	private function _get_isInViewStack():Bool
 	{
 		if ( !isVisible )
 		{
@@ -240,14 +240,14 @@ class AView extends Process, implements IView
 		return parent.isInViewStack;
 	}
 	
-	private function __set_x( p_value:Float ):Float
+	private function _set_x( p_value:Float ):Float
 	{
 		x = p_value;
 		globalX = x + ( ( parent != null ) ? parent.globalX : 0 );
 		return x;
 	}
 	
-	private function __set_y( p_value:Float ):Float
+	private function _set_y( p_value:Float ):Float
 	{
 		y = p_value;
 		globalY = y + ( ( parent != null ) ? parent.globalY : 0 );

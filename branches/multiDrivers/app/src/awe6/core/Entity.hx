@@ -42,10 +42,10 @@ import haxe.FastList;
  */
 class Entity extends Process, implements IEntity
 {
-	public var id( default, __set_id ):String;
-	public var agenda( __get_agenda, null ):EAgenda;
-	public var parent( __get_parent, null ):IEntityCollection;
-	public var view( __get_view, null ):IView;
+	public var id( default, _set_id ):String;
+	public var agenda( _get_agenda, null ):EAgenda;
+	public var parent( _get_parent, null ):IEntityCollection;
+	public var view( _get_view, null ):IView;
 	
 	private var _entityAgendaPairs:FastList<_HelperEntityAgendaPair>;
 	private var _isAgendaDirty:Bool;
@@ -297,23 +297,23 @@ class Entity extends Process, implements IEntity
 		parent = p_parent;
 	}
 	
-	private function __set_id( p_value:String ):String
+	private function _set_id( p_value:String ):String
 	{
 		id = p_value;
 		return id;
 	}
 	
-	private function __get_agenda():EAgenda
+	private function _get_agenda():EAgenda
 	{
 		return agenda;
 	}
 	
-	private function __get_parent():IEntityCollection
+	private function _get_parent():IEntityCollection
 	{
 		return parent;
 	}
 	
-	private function __get_view():IView
+	private function _get_view():IView
 	{
 		return view;
 	}	

@@ -119,13 +119,13 @@ class InputMouse extends AInputMouse
 		scroll += p_event.delta;
 	}
 	
-	override private function __set_isVisible( p_value:Bool ):Bool
+	override private function _set_isVisible( p_value:Bool ):Bool
 	{
 		p_value ? Mouse.show() : Mouse.hide();
-		return super.__set_isVisible( p_value );
+		return super._set_isVisible( p_value );
 	}
 	
-	override private function __set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 /*		switch( p_value )
 		{
@@ -135,7 +135,7 @@ class InputMouse extends AInputMouse
 			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
 			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
 		}*/
-		return super.__set_cursorType( p_value );
+		return super._set_cursorType( p_value );
 	}
 
 }

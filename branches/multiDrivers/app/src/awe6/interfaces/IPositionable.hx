@@ -38,11 +38,11 @@ interface IPositionable
 	/**
 	 * The horizontal position.
 	 */
-	var x( default, __set_x ):Float;
+	var x( default, _set_x ):Float;
 	/**
 	 * The vertical position.
 	 */
-	var y( default, __set_y ):Float;
+	var y( default, _set_y ):Float;
 	/**
 	 * Sets both the horizontal and vertical position;
 	 * @param	x	The horizontal position.

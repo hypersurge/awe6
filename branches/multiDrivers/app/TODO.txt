@@ -9,11 +9,10 @@
 
 THINGS TO DO:
 	
-move any target specific code to drivers package:
+** add getters and setters to all public properties
+* test nme fullscreen
+** add all manager creators to AFactory
 
-*** adopt p_ hungarian?
-*** test on targets
-* drivers for profilers
 
 key:
 * <10 mins

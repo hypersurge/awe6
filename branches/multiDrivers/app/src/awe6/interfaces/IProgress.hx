@@ -38,5 +38,5 @@ interface IProgress
 	/**
 	 * Range: 0...1.  0 represents just starting, 1 represents complete.
 	 */
-	var progress( __get_progress, null ):Float;
+	var progress( _get_progress, null ):Float;
 }

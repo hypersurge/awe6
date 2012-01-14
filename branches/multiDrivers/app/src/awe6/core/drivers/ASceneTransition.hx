@@ -41,7 +41,7 @@ import awe6.interfaces.ISceneTransition;
  */
 class ASceneTransition extends Entity, implements ISceneTransition
 {
-	public var progress( __get_progress, null ):Float;
+	public var progress( _get_progress, null ):Float;
 	
 	private var _duration:Int;
 	private var _context:Context;
@@ -72,7 +72,7 @@ class ASceneTransition extends Entity, implements ISceneTransition
 		return p_asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
 	}
 	
-	private function __get_progress():Float
+	private function _get_progress():Float
 	{
 		return _tools.limit( _age / _duration, 0, 1 );
 	}

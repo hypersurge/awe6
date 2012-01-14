@@ -44,7 +44,7 @@ import awe6.interfaces.ITools;
  */
 class Process implements IProcess
 {
-	public var isActive( default, __set_isActive ):Bool;
+	public var isActive( default, _set_isActive ):Bool;
 	public var isDisposed( default, null ):Bool;
 	
 	private var _kernel:IKernel;
@@ -116,7 +116,7 @@ class Process implements IProcess
 		// override me
 	}
 	
-	private function __set_isActive( p_value:Bool ):Bool
+	private function _set_isActive( p_value:Bool ):Bool
 	{
 		if ( isDisposed )
 		{

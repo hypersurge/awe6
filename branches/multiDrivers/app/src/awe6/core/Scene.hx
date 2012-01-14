@@ -44,7 +44,7 @@ import awe6.interfaces.IView;
 class Scene extends Process, implements IScene
 {
 	public var type( default, null ):EScene;
-	public var view( __get_view, null ):IView;
+	public var view( _get_view, null ):IView;
 	public var isDisposable( default, null ):Bool;
 	public var isPauseable( default, null ):Bool;
 	public var isMuteable( default, null ):Bool;	
@@ -107,7 +107,7 @@ class Scene extends Process, implements IScene
 		return _entity.getEntityById( p_id, p_agenda, p_isBubbleDown, p_isBubbleUp, false );
 	}
 	
-	private function __get_view():IView
+	private function _get_view():IView
 	{
 		return view;
 	}

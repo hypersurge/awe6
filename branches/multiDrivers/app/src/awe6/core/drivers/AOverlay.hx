@@ -45,7 +45,7 @@ import awe6.interfaces.IView;
  */
 class AOverlay extends Entity, implements IOverlayProcess
 {
-	public var pauseEntity( __get_pauseEntity, __set_pauseEntity ):IEntity;
+	public var pauseEntity( _get_pauseEntity, _set_pauseEntity ):IEntity;
 	
 	private var _borderView:IView;
 	private var _progressContext:Context;
@@ -285,12 +285,12 @@ class AOverlay extends Entity, implements IOverlayProcess
 		_pauseView.isVisible = p_isVisible;
 	}
 	
-	private function __get_pauseEntity():IEntity
+	private function _get_pauseEntity():IEntity
 	{
 		return pauseEntity;
 	}
 	
-	private function __set_pauseEntity( p_value:IEntity ):IEntity
+	private function _set_pauseEntity( p_value:IEntity ):IEntity
 	{
 		if ( pauseEntity != null )
 		{

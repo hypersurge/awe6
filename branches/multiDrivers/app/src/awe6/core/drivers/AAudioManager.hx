@@ -42,7 +42,7 @@ import awe6.interfaces.IKernel;
 class AAudioManager extends Process, implements IAudioManager
 {
 	private static inline var _PACKAGE_ID = "assets.audio";
-	public var isMute( default, __set_isMute ):Bool;
+	public var isMute( default, _set_isMute ):Bool;
 	
 	private var _sounds:Array<_AHelperSound>;
 	private var _packageId:String;
@@ -126,7 +126,7 @@ class AAudioManager extends Process, implements IAudioManager
 		}
 	}
 	
-	private function __set_isMute( ?p_value:Bool ):Bool
+	private function _set_isMute( ?p_value:Bool ):Bool
 	{
 		if ( p_value == null )
 		{

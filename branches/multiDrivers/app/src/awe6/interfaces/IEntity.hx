@@ -41,13 +41,13 @@ interface IEntity implements IProcess, implements IViewable, implements IEntityC
 	 * The unique identifier of this entity.
 	 * <p>This value is very useful for retrieving a specific entity.</p> 
 	 */
-	var id( default, __set_id ):String;
+	var id( default, _set_id ):String;
 	/**
 	 * The parent of this entity
 	 * <p>The reference is null if this entity has no parent (for example an entity not in the entity traversal stack).</p>
 	 * <p>Consider this a runtime only property, rather than calling it during constructor or initialization phases.</p>
 	 */
-	var parent( __get_parent, null ):IEntityCollection;
+	var parent( _get_parent, null ):IEntityCollection;
 	/**
 	 * Used to easily remove this entity from its parent.
 	 * @param	?isRemovedFromView	Determines whether this object's view is removed from the view stack at the same time.
