@@ -55,7 +55,7 @@ import haxe.io.BytesData;
  */
 class PrePreloader extends Sprite
 {
-	public static var __isExisting:Bool;
+	public static var _isExisting:Bool;
 	private static var _SECRET:String;
 	private static inline var _IS_DECACHED = false;
 	private static inline var _GAME_URL = "game.swf";
@@ -77,7 +77,7 @@ class PrePreloader extends Sprite
 
 	public function new() 
 	{
-		__isExisting = true;
+		_isExisting = true;
 		// security tip #1: the secret must not be inlined, it must be referenced from data outside of the actionscript code.  I can't tell you how exactly else it wouldn't be as "secure".  Security through vagueness ;-)
 		_SECRET = "ThereAreWaysToConcealThis";
 		super();
