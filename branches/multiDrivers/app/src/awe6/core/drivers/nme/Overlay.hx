@@ -62,6 +62,16 @@ class Overlay extends AOverlay
 		
 		_flashContext = new Context();
 		_flashContext.mouseEnabled = false;
+		
+		var l_mask:Context = new Context();
+		var l_offset:Int = 1000;
+		l_mask.graphics.beginFill( _kernel.factory.bgColor );
+		l_mask.graphics.drawRect( -l_offset, -l_offset, _kernel.factory.width + ( 2 * l_offset ), l_offset );
+		l_mask.graphics.drawRect( -l_offset, _kernel.factory.height, _kernel.factory.width + ( 2 * l_offset ), l_offset );
+		l_mask.graphics.drawRect( -l_offset, 0, l_offset, _kernel.factory.height );
+		l_mask.graphics.drawRect( _kernel.factory.width, 0, l_offset, _kernel.factory.height );
+		l_mask.graphics.endFill();
+		_context.addChild( l_mask );
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 

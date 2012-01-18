@@ -54,6 +54,7 @@ class Kernel extends AKernel
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
 		_stage.quality = StageQuality.LOW;
+		
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 		_stage.addEventListener( Event.RESIZE, _onResize );
 		_onResize();
@@ -65,8 +66,9 @@ class Kernel extends AKernel
 	
 	private function _onResize( ?p_event:Event ):Void
 	{
-		_view.x = Std.int( ( _stage.stageWidth - factory.width ) / 2 );
-		_view.y = Std.int( ( _stage.stageHeight - factory.height ) / 2 );
+		// note this logic interferes with mouse inputs
+//		_view.x = Std.int( ( _stage.stageWidth - factory.width ) / 2 );
+//		_view.y = Std.int( ( _stage.stageHeight - factory.height ) / 2 );
 	}
 
 	private function _onEnterFrame( p_event:Event ):Void

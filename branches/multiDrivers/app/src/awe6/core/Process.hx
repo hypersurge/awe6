@@ -96,6 +96,11 @@ class Process implements IProcess
 		// override me
 	}
 	
+	public function getAge( ?p_asTime:Bool = true ):Int
+	{
+		return p_asTime ? _age : _updates;
+	}
+	
 	public inline function update( ?p_deltaTime:Int = 0 ):Void
 	{
 		if ( !isActive || isDisposed )

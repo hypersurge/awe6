@@ -89,7 +89,7 @@ class InputMouse extends AInputMouse
 		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
 		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
 		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
-		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
+		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;
 	}
 	
 	private function _onMouseDown( p_event:MouseEvent ):Void
