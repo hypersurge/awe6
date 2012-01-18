@@ -30,36 +30,33 @@
 package awe6.interfaces;
 
 /**
- * This interface should be implemented by objects that support a visual
- * representation.
+ * Encapsulates the different types of pauser keys which could be used to
+ * pause an object.
  *
- * This typically includes kernel processess as the kernel itself (the game's
- * main view), scenes, graphical entities, scene transitions, etc. But other but other
- * objects could implement this interface as well; as long as their view is
- * attached to the view of a kernel process, they will be visible.
+ * The documentation also defines the compatibility between the key types. The
+ * compatibility relation is not symmetric: X compatible to Y does not imply
+ * that Y is compatible to X.
  */
-interface IViewable
+enum EPauserKey
 {
 	/**
-	 * The view of this object.
-	 *
-	 * This property is <b>read-only</b>.
-	 * The view is created when the object is initialized and exists during
-	 * the object's lifetime. Thus, the view of an object should only be freed
-	 * by the object itself, although it can be modified externally.
+	 * No pauser key type is compatible to a pauser key of type NONE; thus, it's also not
+	 * compatible to itself.
 	 */
-	var view( null, null ):IView;
+	NONE,
+	/**
+	 * Any pauser key type is compatible to a pauser key of this ANY; it's also
+	 * compatible to itself.
+	 */
+	ANY,
+	/**
+	 * For some specific integer value 'value' only KEY( value ) is compatible to
+	 * KEY ( value ).
+	 */
+	KEY( value: Int ),
+	/**
+	 * Allows EPauserType to be extended, e.g. for using custom pauser keys with different
+	 * compatibility semantics.
+	 */
+	SUB_TYPE( value: Dynamic )
 }
-
-/**
- * The IVewable interface should be implemented by all objects that compose a view.
- * @author	Robert Fell
- */
-//interface IViewable
-//{
-//	/**
-//	 * The view bound to this object.
-//	 */
-//	var view( __get_view, null ):IView;
-//}
-*/
