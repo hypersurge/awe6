@@ -44,4 +44,3 @@ import awe6.core.drivers.AKernel;
 class Kernel extends AKernel
 {
 }
-

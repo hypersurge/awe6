@@ -44,4 +44,3 @@ import awe6.core.drivers.AView;
 class View extends AView
 {
 }
-

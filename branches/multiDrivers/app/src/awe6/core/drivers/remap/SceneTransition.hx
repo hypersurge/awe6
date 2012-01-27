@@ -44,4 +44,3 @@ import awe6.core.drivers.ASceneTransition;
 class SceneTransition extends ASceneTransition
 {
 }
-
