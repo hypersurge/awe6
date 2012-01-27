@@ -27,20 +27,47 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package demo.customdriver;
+import awe6.core.drivers.ASceneTransition;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.filters.BlurFilter;
 
 /**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This SceneTransition class provides flash target overrides.
  * @author	Robert Fell
  */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
-typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end
+class SceneTransition extends ASceneTransition
+{
+	private var _blurFilter:BlurFilter;
+
+	override private function _init():Void 
+	{
+		super._init();
+		trace( "custom transition" );
+		var l_bitmapData:BitmapData = new BitmapData( _kernel.factory.width, _kernel.factory.height, true, _kernel.factory.bgColor );
+		try
+		{
+			var l_view:View = cast _kernel.scenes.scene.view;
+			l_bitmapData.draw( l_view.context );
+		}
+		catch ( l_error:Dynamic ) {}
+		_blurFilter = new BlurFilter( 0, 0, 1 );
+		_context.filters = [ _blurFilter ];
+		_context.mouseEnabled = false;
+		_context.addChild( new Bitmap( l_bitmapData ) );
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		if ( !isDisposed )
+		{
+			_context.alpha = 1 - progress;
+			_blurFilter.blurX = _blurFilter.blurY = progress * 32;
+			_context.filters = [ _blurFilter ];
+		}
+	}
+	
+}
+

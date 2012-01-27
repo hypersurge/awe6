@@ -28,12 +28,12 @@
  */
 
 package awe6.core.drivers.nme;
+import awe6.core.drivers.APreloader;
 
 /**
  * This Preloader class provides nme target overrides.
  * @author	Robert Fell
  */
-class Preloader extends awe6.core.drivers.APreloader
+class Preloader extends APreloader
 {
-
 }

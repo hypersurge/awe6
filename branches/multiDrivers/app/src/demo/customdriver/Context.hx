@@ -27,20 +27,5 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
-
-/**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell
- */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
+package demo.customdriver;
 typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end

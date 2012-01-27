@@ -59,8 +59,8 @@ class Factory extends AFactory
 		width = 600;
 		height = 400;
 		// R.Fell -- a quick experiment in fluid layout
-		width = _context.stage.stageWidth;
-		height = _context.stage.stageHeight;
+//		width = _context.stage.stageWidth;
+//		height = _context.stage.stageHeight;
 		bgColor = 0xFFFFFF;
 		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;

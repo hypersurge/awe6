@@ -27,34 +27,62 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
-import awe6.core.drivers.ASession;
-import js.Cookie;
+package demo.customdriver;
+import awe6.core.drivers.AInputKeyboard;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.KeyboardEvent;
+import flash.Lib;
 
 /**
- * This Session class provides jeash target overrides.
+ * This InputKeyboard class provides flash target overrides.
  * @author	Robert Fell
  */
-class Session extends ASession
+class InputKeyboard extends AInputKeyboard
 {
+	private var _stage:Stage;
 	
-	override private function _driverLoad():Void
+	override private function _driverInit():Void 
 	{
-		_savedData = {};		
-		if ( Cookie.exists( _kernel.factory.id ) )
+		_stage = Lib.current.stage;
+		_stage.addEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.addEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.addEventListener( Event.DEACTIVATE, _reset );
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	{
+		_stage.focus = _stage;
+		super._updater( p_deltaTime );
+	}
+	
+	override private function _disposer():Void 
+	{
+		_stage.removeEventListener( KeyboardEvent.KEY_DOWN, _onKeyDown );
+		_stage.removeEventListener( KeyboardEvent.KEY_UP, _onKeyUp );
+		_stage.removeEventListener( Event.DEACTIVATE, _reset );
+		super._disposer();
+	}
+	
+	private function _onKeyDown( p_event:KeyboardEvent ):Void
+	{
+		if ( !isActive )
 		{
-			_savedData = _tools.unserialize( Cookie.get( _kernel.factory.id ) );
+			return;
 		}
+		_addEvent( p_event.keyCode, true ); // "keyCode" is Flash syntax
+		return;
 	}
 	
-	override private function _driverReset():Void
+	private function _onKeyUp( p_event:KeyboardEvent ):Void
 	{
-		Cookie.remove( _kernel.factory.id );
-		_savedData = {};
+		if ( !isActive )
+		{
+			return;
+		}
+		_addEvent( p_event.keyCode, false ); // "keyCode" is Flash syntax
+		return;
 	}
 	
-	override private function _driverSave():Void
-	{
-		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ) ) ;
-	}
+	
 }

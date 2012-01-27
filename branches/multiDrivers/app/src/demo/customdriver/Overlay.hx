@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.flash;
+package demo.customdriver;
 import awe6.core.Context;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;

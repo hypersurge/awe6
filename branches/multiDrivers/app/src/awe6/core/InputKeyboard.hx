@@ -35,7 +35,9 @@ package awe6.core;
  * <p>InputKeyboard includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if cpp
+#if awe6DriverRemap
+typedef InputKeyboard = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "InputKeyboard" ) )>;
+#elseif cpp
 typedef InputKeyboard = awe6.core.drivers.nme.InputKeyboard;
 #elseif flash
 typedef InputKeyboard = awe6.core.drivers.flash.InputKeyboard;

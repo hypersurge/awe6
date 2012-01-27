@@ -27,20 +27,65 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package demo.customdriver;
+import awe6.core.Context;
+import awe6.core.drivers.AView;
 
 /**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This View class provides flash target overrides.
  * @author	Robert Fell
  */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
-typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end
+class View extends AView
+{
+	private var _container:Context;
+	
+	override private function _init():Void 
+	{
+		if ( context == null )
+		{
+			context = new Context(); 
+		}
+		super._init();
+	}
+	
+	override private function _driverDisposer():Void 
+	{
+		if ( context.parent != null )
+		{
+			context.parent.removeChild( context );
+		}
+	}
+	
+	override private function _driverDraw():Void
+	{
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
+		_container = new Context();
+		_container.mouseEnabled = false;
+		context.addChild( _container );
+		var l_children:Array<View> = cast _children;
+		for ( i in l_children )
+		{
+			if ( i.isVisible )
+			{
+				_container.addChild( i.context );
+			}
+		}
+	}
+	
+	override private function _set_x( p_value:Float ):Float
+	{
+		context.x = p_value;
+		return super._set_x( p_value );
+	}
+	
+	override private function _set_y( p_value:Float ):Float
+	{
+		context.y = p_value;
+		return super._set_y( p_value );
+	}
+	
+}
+

@@ -40,7 +40,6 @@ import nme.filters.BlurFilter;
  * This Overlay class provides nme target overrides.
  * @author	Robert Fell
  */
-
 class Overlay extends AOverlay
 {
 	private var _pauseSnapshot:BitmapData;

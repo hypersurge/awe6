@@ -71,7 +71,6 @@ class AProfiler extends Entity
 		_width = 60;
 		_height = 50;		
 		_agePrev = 0;
-		_context.x = _context.y = 2;
 	}
 		
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void

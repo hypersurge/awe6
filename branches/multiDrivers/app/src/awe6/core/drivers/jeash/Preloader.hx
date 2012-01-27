@@ -28,12 +28,12 @@
  */
 
 package awe6.core.drivers.jeash;
+import awe6.core.drivers.APreloader;
 
 /**
  * This Preloader class provides jeash target overrides.
  * @author	Robert Fell
  */
-class Preloader extends awe6.core.drivers.APreloader
+class Preloader extends APreloader
 {
-
 }

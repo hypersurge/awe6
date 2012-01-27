@@ -36,7 +36,6 @@ import awe6.core.View;
  * This Overlay class provides js target overrides.
  * @author	Robert Fell
  */
-
 class Overlay extends AOverlay
 {
 	

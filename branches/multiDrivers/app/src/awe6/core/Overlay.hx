@@ -35,7 +35,9 @@ package awe6.core;
  * <p>Overlay includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if cpp
+#if awe6DriverRemap
+typedef Overlay = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Overlay" ) )>;
+#elseif cpp
 typedef Overlay = awe6.core.drivers.nme.Overlay;
 #elseif flash
 typedef Overlay = awe6.core.drivers.flash.Overlay;

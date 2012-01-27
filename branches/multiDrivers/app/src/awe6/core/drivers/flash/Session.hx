@@ -28,6 +28,7 @@
  */
 
 package awe6.core.drivers.flash;
+import awe6.core.drivers.ASession;
 import flash.net.SharedObject;
 
 /**

@@ -27,20 +27,32 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package demo.customdriver;
+import awe6.core.drivers.ASession;
+import flash.net.SharedObject;
 
 /**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This Session class provides flash target overrides.
  * @author	Robert Fell
  */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
-typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end
+class Session extends ASession
+{
+	private var _so:SharedObject;
+	
+	override private function _driverLoad():Void
+	{
+		_so = SharedObject.getLocal( _kernel.factory.id, "/" );
+		_savedData = _so.data;
+	}
+	
+	override private function _driverReset():Void
+	{
+		_so.clear();
+		_savedData = _so.data;
+	}
+	
+	override private function _driverSave():Void
+	{
+		_so.flush();
+	}
+}

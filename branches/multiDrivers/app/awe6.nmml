@@ -20,6 +20,11 @@
 	<ndll name="zlib" />
 	<ndll name="nme" haxelib="nme" />
 	
+	<!--
+	<compilerflag name="-D awe6DriverRemap" />
+	<compilerflag name="--macro awe6.core.Macros.setDriverRemap('demo.customdriver')" /> 
+	-->
+	
 	<compilerflag name="-resource assets/managed/_exclude/config.xml@config" />
 	
 </project>

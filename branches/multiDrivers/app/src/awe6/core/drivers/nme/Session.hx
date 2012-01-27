@@ -28,6 +28,7 @@
  */
 
 package awe6.core.drivers.nme;
+import awe6.core.drivers.ASession;
 import nme.net.SharedObject;
 
 /**

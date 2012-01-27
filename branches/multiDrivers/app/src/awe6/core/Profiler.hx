@@ -34,7 +34,9 @@ package awe6.core;
  * <p>Profiler includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if cpp
+#if awe6DriverRemap
+typedef Profiler = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Profiler" ) )>;
+#elseif cpp
 typedef Profiler = awe6.core.drivers.nme.Profiler;
 #elseif flash
 typedef Profiler = awe6.core.drivers.flash.Profiler;

@@ -27,20 +27,20 @@
  * THE SOFTWARE.
  */
 
-package awe6.core;
+package awe6.core.drivers.remap;
+import awe6.core.drivers.AFactory;
 
 /**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * This class provides an easy driver package to remap from.
+ * <p>Usage of such a driver requires 4 steps:</p>
+ * <ul>
+ * <li>Copy this package to your own namespace (e.g. "your.customdriver.package").</li>
+ * <li>Extend / override / refactor as necessary - paying special attention to the "_driver" prefixed members.</li>
+ * <li>Add compiler conditional: -D awe6DriverRemap</li>
+ * <li>Add compiler macro: --macro awe6.core.Macros.setDriverRemap('your.customdriver.package')</li>
+ * </ul>
  * @author	Robert Fell
  */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
-typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end
+class Factory extends AFactory
+{
+}

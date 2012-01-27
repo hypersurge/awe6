@@ -35,7 +35,9 @@ package awe6.core;
  * <p>Kernel includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
  */
-#if cpp
+#if awe6DriverRemap
+typedef View = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "View" ) )>;
+#elseif cpp
 typedef View = awe6.core.drivers.nme.View;
 #elseif flash
 typedef View = awe6.core.drivers.flash.View;

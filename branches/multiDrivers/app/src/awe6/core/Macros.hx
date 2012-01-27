@@ -30,17 +30,40 @@
 package awe6.core;
 
 /**
- * The Context class is a target specific class that defines a native element - typically a view.
- * It is intended to be the only publicly exposed target specific parameter / member.
- * <p>Context includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell
+ * This class contains static Macros.  They provide some preprocessing tasks.
+ * <p>They are not intended to be called as part of regular awe6 usage.</p>
  */
-#if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Context" ) )>;
-#elseif cpp
-typedef Context = nme.display.Sprite;
-#elseif flash
-typedef Context = flash.display.Sprite;
-#elseif js
-typedef Context = jeash.display.Sprite;
-#end
+class Macros
+{
+	#if macro
+	
+	private static var _packageName:String;
+	
+	/**
+	 * If a custom driver is needed then call the following compiler flags:
+	 * <p>-D awe6DriverRemap</p>
+	 * <p>--macro awe6.core.Macros.setDriverRemap('your.customdriver.package')</p>
+	 * @param	p_packageName	The package name of your custom driver suite.
+	 */
+	public static function setDriverRemap( p_packageName:String ):Void
+	{
+		_packageName = p_packageName;
+	}
+	
+	/**
+	 * This macro is called from the driver typedefs, and will remap them to your specified driver suite.
+	 * <p>This should only be called from the core typedefs.</p>
+	 * @param	p_className	The class of the typedef.
+	 * @return	The remapped type.
+	 */
+	public static function driverRemap( p_className:String ):haxe.macro.Type
+	{
+		if ( _packageName == null )
+		{
+			_packageName = "awe6.core.drivers.remap"; // safe default
+		}
+		return haxe.macro.Context.getType( _packageName + "." + p_className );
+    }
+	
+	#end
+}
