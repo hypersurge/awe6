@@ -6,6 +6,639 @@ awe6.interfaces.IEncrypter.__name__ = ["awe6","interfaces","IEncrypter"];
 awe6.interfaces.IEncrypter.prototype.encrypt = null;
 awe6.interfaces.IEncrypter.prototype.decrypt = null;
 awe6.interfaces.IEncrypter.prototype.__class__ = awe6.interfaces.IEncrypter;
+awe6.interfaces.IPauseable = function() { }
+awe6.interfaces.IPauseable.__name__ = ["awe6","interfaces","IPauseable"];
+awe6.interfaces.IPauseable.prototype.isActive = null;
+awe6.interfaces.IPauseable.prototype.pause = null;
+awe6.interfaces.IPauseable.prototype.resume = null;
+awe6.interfaces.IPauseable.prototype.__class__ = awe6.interfaces.IPauseable;
+awe6.interfaces.IDisposable = function() { }
+awe6.interfaces.IDisposable.__name__ = ["awe6","interfaces","IDisposable"];
+awe6.interfaces.IDisposable.prototype.isDisposed = null;
+awe6.interfaces.IDisposable.prototype.dispose = null;
+awe6.interfaces.IDisposable.prototype.__class__ = awe6.interfaces.IDisposable;
+awe6.interfaces.IUpdateable = function() { }
+awe6.interfaces.IUpdateable.__name__ = ["awe6","interfaces","IUpdateable"];
+awe6.interfaces.IUpdateable.prototype.getAge = null;
+awe6.interfaces.IUpdateable.prototype.update = null;
+awe6.interfaces.IUpdateable.prototype.__class__ = awe6.interfaces.IUpdateable;
+awe6.interfaces.IProcess = function() { }
+awe6.interfaces.IProcess.__name__ = ["awe6","interfaces","IProcess"];
+awe6.interfaces.IProcess.prototype.__class__ = awe6.interfaces.IProcess;
+awe6.interfaces.IProcess.__interfaces__ = [awe6.interfaces.IPauseable,awe6.interfaces.IDisposable,awe6.interfaces.IUpdateable];
+if(!awe6.core) awe6.core = {}
+awe6.core.Process = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	this._kernel = p_kernel;
+	this._tools = this._kernel.tools;
+	this._isEntity = Std["is"](this,awe6.interfaces.IEntity);
+	this._init();
+}
+awe6.core.Process.__name__ = ["awe6","core","Process"];
+awe6.core.Process.prototype.isActive = null;
+awe6.core.Process.prototype.isDisposed = null;
+awe6.core.Process.prototype._kernel = null;
+awe6.core.Process.prototype._tools = null;
+awe6.core.Process.prototype._age = null;
+awe6.core.Process.prototype._updates = null;
+awe6.core.Process.prototype._isEntity = null;
+awe6.core.Process.prototype._isIsActiveSetterBypassed = null;
+awe6.core.Process.prototype._init = function() {
+	this._isIsActiveSetterBypassed = true;
+	this._set_isActive(true);
+	this.isDisposed = false;
+	this._age = 0;
+	this._updates = 0;
+}
+awe6.core.Process.prototype.dispose = function() {
+	if(this.isDisposed) return; else {
+		this.isDisposed = true;
+		this._set_isActive(false);
+		this._disposer();
+		if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
+		return;
+	}
+}
+awe6.core.Process.prototype._disposer = function() {
+}
+awe6.core.Process.prototype.getAge = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
+	return p_asTime?this._age:this._updates;
+}
+awe6.core.Process.prototype.update = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	if(!this.isActive || this.isDisposed) return; else {
+		this._age += p_deltaTime;
+		this._updates++;
+		this._updater(p_deltaTime);
+		return;
+	}
+}
+awe6.core.Process.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+}
+awe6.core.Process.prototype._set_isActive = function(p_value) {
+	if(this.isDisposed) {
+		this.isActive = false;
+		return false;
+	}
+	if(p_value != this.isActive) {
+		if(this._isIsActiveSetterBypassed) this.isActive = p_value; else if(p_value) {
+			if(this.isActive || this.isDisposed) null; else {
+				this._resumer();
+				this._isIsActiveSetterBypassed = true;
+				this._set_isActive(true);
+				if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true);
+				null;
+			}
+		} else if(!this.isActive || this.isDisposed) null; else {
+			this._pauser();
+			this._isIsActiveSetterBypassed = true;
+			this._set_isActive(false);
+			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true);
+		}
+	}
+	this._isIsActiveSetterBypassed = false;
+	return this.isActive;
+}
+awe6.core.Process.prototype.pause = function() {
+	if(!this.isActive || this.isDisposed) return; else {
+		this._pauser();
+		this._isIsActiveSetterBypassed = true;
+		this._set_isActive(false);
+		if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true);
+	}
+}
+awe6.core.Process.prototype._pauser = function() {
+}
+awe6.core.Process.prototype.resume = function() {
+	if(this.isActive || this.isDisposed) return; else {
+		this._resumer();
+		this._isIsActiveSetterBypassed = true;
+		this._set_isActive(true);
+		if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true);
+		return;
+	}
+}
+awe6.core.Process.prototype._resumer = function() {
+}
+awe6.core.Process.prototype.__class__ = awe6.core.Process;
+awe6.core.Process.__interfaces__ = [awe6.interfaces.IProcess];
+awe6.interfaces.IAgendaManager = function() { }
+awe6.interfaces.IAgendaManager.__name__ = ["awe6","interfaces","IAgendaManager"];
+awe6.interfaces.IAgendaManager.prototype.agenda = null;
+awe6.interfaces.IAgendaManager.prototype.setAgenda = null;
+awe6.interfaces.IAgendaManager.prototype.__class__ = awe6.interfaces.IAgendaManager;
+awe6.interfaces.IEntityCollection = function() { }
+awe6.interfaces.IEntityCollection.__name__ = ["awe6","interfaces","IEntityCollection"];
+awe6.interfaces.IEntityCollection.prototype.addEntity = null;
+awe6.interfaces.IEntityCollection.prototype.removeEntity = null;
+awe6.interfaces.IEntityCollection.prototype.getEntities = null;
+awe6.interfaces.IEntityCollection.prototype.getEntitiesByClass = null;
+awe6.interfaces.IEntityCollection.prototype.getEntityById = null;
+awe6.interfaces.IEntityCollection.prototype.__class__ = awe6.interfaces.IEntityCollection;
+awe6.interfaces.IViewable = function() { }
+awe6.interfaces.IViewable.__name__ = ["awe6","interfaces","IViewable"];
+awe6.interfaces.IViewable.prototype.view = null;
+awe6.interfaces.IViewable.prototype.__class__ = awe6.interfaces.IViewable;
+awe6.interfaces.IEntity = function() { }
+awe6.interfaces.IEntity.__name__ = ["awe6","interfaces","IEntity"];
+awe6.interfaces.IEntity.prototype.id = null;
+awe6.interfaces.IEntity.prototype.parent = null;
+awe6.interfaces.IEntity.prototype.remove = null;
+awe6.interfaces.IEntity.prototype.__class__ = awe6.interfaces.IEntity;
+awe6.interfaces.IEntity.__interfaces__ = [awe6.interfaces.IAgendaManager,awe6.interfaces.IEntityCollection,awe6.interfaces.IViewable,awe6.interfaces.IProcess];
+awe6.core.Entity = function(p_kernel,p_id,p_context) {
+	if( p_kernel === $_ ) return;
+	this.view = new awe6.core.drivers.jeash.View(p_kernel,p_context,0,this);
+	this._set_id(p_id == null?p_kernel.tools.createGuid():p_id);
+	awe6.core.Process.call(this,p_kernel);
+}
+awe6.core.Entity.__name__ = ["awe6","core","Entity"];
+awe6.core.Entity.__super__ = awe6.core.Process;
+for(var k in awe6.core.Process.prototype ) awe6.core.Entity.prototype[k] = awe6.core.Process.prototype[k];
+awe6.core.Entity.prototype.id = null;
+awe6.core.Entity.prototype.agenda = null;
+awe6.core.Entity.prototype.parent = null;
+awe6.core.Entity.prototype.view = null;
+awe6.core.Entity.prototype._entityAgendaPairs = null;
+awe6.core.Entity.prototype._isAgendaDirty = null;
+awe6.core.Entity.prototype._cachedEntities = null;
+awe6.core.Entity.prototype._init = function() {
+	awe6.core.Process.prototype._init.call(this);
+	this.agenda = awe6.interfaces.EAgenda.ALWAYS;
+	this._entityAgendaPairs = new haxe.FastList();
+	this._isAgendaDirty = true;
+	this._cachedEntities = [];
+}
+awe6.core.Entity.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	if(this._isAgendaDirty) {
+		this._cachedEntities = this._getEntities(this._get_agenda());
+		if(!Type.enumEq(this._get_agenda(),awe6.interfaces.EAgenda.ALWAYS)) this._cachedEntities = this._cachedEntities.concat(this._getEntities(awe6.interfaces.EAgenda.ALWAYS));
+		this._isAgendaDirty = false;
+	}
+	var _g = 0, _g1 = this._cachedEntities;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
+		++_g;
+		i.update(p_deltaTime);
+	}
+}
+awe6.core.Entity.prototype._disposer = function() {
+	this.remove();
+	this._kernel.messenger.removeSubscribers(this);
+	this._kernel.messenger.removeSubscribers(null,null,null,this);
+	var l_entities = this._getEntities();
+	l_entities.reverse();
+	var _g = 0;
+	while(_g < l_entities.length) {
+		var i = l_entities[_g];
+		++_g;
+		i.dispose();
+	}
+	var $it0 = this._entityAgendaPairs.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		this._entityAgendaPairs.remove(i);
+	}
+	this._get_view().dispose();
+	awe6.core.Process.prototype._disposer.call(this);
+}
+awe6.core.Entity.prototype.addEntity = function(p_entity,p_agenda,p_isAddedToView,p_viewPriority) {
+	if(p_viewPriority == null) p_viewPriority = 0;
+	if(p_isAddedToView == null) p_isAddedToView = false;
+	if(this.isDisposed) return;
+	if(p_entity == null) return;
+	if(p_agenda == null) p_agenda = awe6.interfaces.EAgenda.ALWAYS;
+	var $it0 = this._entityAgendaPairs.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		if(i.entity == p_entity && Type.enumEq(i.agenda,p_agenda)) return;
+	}
+	this._isAgendaDirty = true;
+	var l_child = p_entity;
+	var l_helperEntityAgendaPair = new awe6.core._Entity._HelperEntityAgendaPair(p_entity,p_agenda);
+	if(l_child._get_parent() != this) {
+		l_child.remove(p_isAddedToView);
+		l_child._setParent(this);
+	}
+	this._entityAgendaPairs.add(l_helperEntityAgendaPair);
+	if(p_isAddedToView) {
+		if(Type.enumEq(p_agenda,this._get_agenda())) this._get_view().addChild(p_entity._get_view(),p_viewPriority); else l_helperEntityAgendaPair.isAddedToView = true;
+	}
+}
+awe6.core.Entity.prototype.removeEntity = function(p_entity,p_agenda,p_isRemovedFromView) {
+	if(p_isRemovedFromView == null) p_isRemovedFromView = false;
+	if(this.isDisposed) return;
+	var l_child = p_entity;
+	var l_isRemoved = false;
+	var $it0 = this._entityAgendaPairs.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		if(i.entity == p_entity && (p_agenda == null || Type.enumEq(i.agenda,p_agenda))) {
+			this._entityAgendaPairs.remove(i);
+			l_isRemoved = true;
+		}
+	}
+	if(l_isRemoved) {
+		this._isAgendaDirty = true;
+		l_child._setParent(null);
+		if(p_isRemovedFromView) p_entity._get_view().remove();
+	}
+}
+awe6.core.Entity.prototype.remove = function(p_isRemovedFromView) {
+	if(p_isRemovedFromView == null) p_isRemovedFromView = false;
+	if(this._get_parent() != null) this._get_parent().removeEntity(this,null,p_isRemovedFromView);
+}
+awe6.core.Entity.prototype.getEntities = function(p_agenda) {
+	return this._getEntities(p_agenda);
+}
+awe6.core.Entity.prototype._getEntities = function(p_agenda) {
+	var l_result = new Array();
+	var $it0 = this._entityAgendaPairs.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		if(p_agenda == null || Type.enumEq(p_agenda,i.agenda)) l_result.push(i.entity);
+	}
+	l_result.reverse();
+	return l_result;
+}
+awe6.core.Entity.prototype.getEntitiesByClass = function(p_classType,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	if(p_isBubbleEverywhere && this._kernel.scenes._get_scene() != null) return this._kernel.scenes._get_scene().getEntitiesByClass(p_classType,p_agenda,true);
+	var l_result = new Array();
+	var l_entities = this._getEntities(p_agenda);
+	var _g = 0;
+	while(_g < l_entities.length) {
+		var i = l_entities[_g];
+		++_g;
+		if(Std["is"](i,p_classType)) l_result.push(i);
+		if(p_isBubbleDown) l_result.concat(i.getEntitiesByClass(p_classType,p_agenda,true));
+	}
+	if(p_isBubbleUp && this._get_parent() != null) l_result.concat(this._get_parent().getEntitiesByClass(p_classType,p_agenda,false,true));
+	return l_result;
+}
+awe6.core.Entity.prototype.getEntityById = function(p_id,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	if(this.id == p_id) return this;
+	if(p_isBubbleEverywhere && this._kernel.scenes._get_scene() != null) return this._kernel.scenes._get_scene().getEntityById(p_id,p_agenda,true);
+	var l_result = null;
+	var l_entities = this._getEntities(p_agenda);
+	var _g = 0;
+	while(_g < l_entities.length) {
+		var i = l_entities[_g];
+		++_g;
+		if(i.id == p_id) return i;
+		if(p_isBubbleDown) l_result = i.getEntityById(p_id,p_agenda,true);
+		if(l_result != null) return l_result;
+	}
+	if(p_isBubbleUp && this._get_parent() != null) l_result = this._get_parent().getEntityById(p_id,p_agenda,false,true);
+	return l_result;
+}
+awe6.core.Entity.prototype.setAgenda = function(p_type) {
+	if(p_type == null) p_type = awe6.interfaces.EAgenda.ALWAYS;
+	if(Type.enumEq(this._get_agenda(),p_type)) return false;
+	this._isAgendaDirty = true;
+	var $it0 = this._entityAgendaPairs.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		var l_isAddedToView = Type.enumEq(this._get_agenda(),i.agenda) && i.entity._get_view()._get_parent() == this._get_view();
+		if(l_isAddedToView) i.entity._get_view().remove();
+		i.isAddedToView = i.isAddedToView || l_isAddedToView;
+	}
+	this.agenda = p_type;
+	var $it1 = this._entityAgendaPairs.iterator();
+	while( $it1.hasNext() ) {
+		var i = $it1.next();
+		if(i.isAddedToView && (Type.enumEq(awe6.interfaces.EAgenda.ALWAYS,i.agenda) || Type.enumEq(this._get_agenda(),i.agenda))) this._get_view().addChild(i.entity._get_view());
+	}
+	return true;
+}
+awe6.core.Entity.prototype._setParent = function(p_parent) {
+	this.parent = p_parent;
+}
+awe6.core.Entity.prototype._set_id = function(p_value) {
+	this.id = p_value;
+	return this.id;
+}
+awe6.core.Entity.prototype._get_agenda = function() {
+	return this.agenda;
+}
+awe6.core.Entity.prototype._get_parent = function() {
+	return this.parent;
+}
+awe6.core.Entity.prototype._get_view = function() {
+	return this.view;
+}
+awe6.core.Entity.prototype.__class__ = awe6.core.Entity;
+awe6.core.Entity.__interfaces__ = [awe6.interfaces.IEntity];
+awe6.interfaces.IOverlay = function() { }
+awe6.interfaces.IOverlay.__name__ = ["awe6","interfaces","IOverlay"];
+awe6.interfaces.IOverlay.prototype.pauseEntity = null;
+awe6.interfaces.IOverlay.prototype.showButton = null;
+awe6.interfaces.IOverlay.prototype.positionButton = null;
+awe6.interfaces.IOverlay.prototype.activateButton = null;
+awe6.interfaces.IOverlay.prototype.showProgress = null;
+awe6.interfaces.IOverlay.prototype.hideButtons = null;
+awe6.interfaces.IOverlay.prototype.flash = null;
+awe6.interfaces.IOverlay.prototype.__class__ = awe6.interfaces.IOverlay;
+awe6.interfaces.IOverlayProcess = function() { }
+awe6.interfaces.IOverlayProcess.__name__ = ["awe6","interfaces","IOverlayProcess"];
+awe6.interfaces.IOverlayProcess.prototype.__class__ = awe6.interfaces.IOverlayProcess;
+awe6.interfaces.IOverlayProcess.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IProcess,awe6.interfaces.IOverlay];
+if(!awe6.core.drivers) awe6.core.drivers = {}
+awe6.core.drivers.AOverlay = function(p_kernel,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha) {
+	if( p_kernel === $_ ) return;
+	if(p_pauseAlpha == null) p_pauseAlpha = .35;
+	if(p_pauseColor == null) p_pauseColor = 0;
+	if(p_pauseBlur == null) p_pauseBlur = 8;
+	this._borderView = p_border;
+	this._buttonBack = new awe6.core.BasicButton(p_kernel,p_backUp,p_backOver,30,30);
+	this._buttonMute = new awe6.core.BasicButton(p_kernel,p_muteUp,p_muteOver,30,30);
+	this._buttonUnmute = new awe6.core.BasicButton(p_kernel,p_unmuteUp,p_unmuteOver,30,30);
+	this._buttonPause = new awe6.core.BasicButton(p_kernel,p_pauseUp,p_pauseOver,30,30);
+	this._buttonUnpause = new awe6.core.BasicButton(p_kernel,p_unpauseUp,p_unpauseOver,30,30);
+	this._pauseBlur = p_pauseBlur;
+	this._pauseColor = p_pauseColor;
+	this._pauseAlpha = p_pauseAlpha;
+	this._context = new jeash.display.Sprite();
+	awe6.core.Entity.call(this,p_kernel,null,this._context);
+}
+awe6.core.drivers.AOverlay.__name__ = ["awe6","core","drivers","AOverlay"];
+awe6.core.drivers.AOverlay.__super__ = awe6.core.Entity;
+for(var k in awe6.core.Entity.prototype ) awe6.core.drivers.AOverlay.prototype[k] = awe6.core.Entity.prototype[k];
+awe6.core.drivers.AOverlay.prototype.pauseEntity = null;
+awe6.core.drivers.AOverlay.prototype._borderView = null;
+awe6.core.drivers.AOverlay.prototype._progressContext = null;
+awe6.core.drivers.AOverlay.prototype._progressView = null;
+awe6.core.drivers.AOverlay.prototype._pauseContext = null;
+awe6.core.drivers.AOverlay.prototype._pauseView = null;
+awe6.core.drivers.AOverlay.prototype._flashContext = null;
+awe6.core.drivers.AOverlay.prototype._flashView = null;
+awe6.core.drivers.AOverlay.prototype._context = null;
+awe6.core.drivers.AOverlay.prototype._pauseColor = null;
+awe6.core.drivers.AOverlay.prototype._pauseAlpha = null;
+awe6.core.drivers.AOverlay.prototype._pauseBlur = null;
+awe6.core.drivers.AOverlay.prototype._flashDuration = null;
+awe6.core.drivers.AOverlay.prototype._flashAlpha = null;
+awe6.core.drivers.AOverlay.prototype._flashStartingAlpha = null;
+awe6.core.drivers.AOverlay.prototype._flashStartingDuration = null;
+awe6.core.drivers.AOverlay.prototype._flashAsTime = null;
+awe6.core.drivers.AOverlay.prototype._wasMute = null;
+awe6.core.drivers.AOverlay.prototype._buttonBack = null;
+awe6.core.drivers.AOverlay.prototype._buttonMute = null;
+awe6.core.drivers.AOverlay.prototype._buttonUnmute = null;
+awe6.core.drivers.AOverlay.prototype._buttonPause = null;
+awe6.core.drivers.AOverlay.prototype._buttonUnpause = null;
+awe6.core.drivers.AOverlay.prototype._init = function() {
+	awe6.core.Entity.prototype._init.call(this);
+	this._get_view().addChild(this._borderView,4);
+	this._wasMute = this._kernel.audio.isMute;
+	this._driverInit();
+	this._progressView = new awe6.core.drivers.jeash.View(this._kernel,this._progressContext);
+	this._progressView._set_isVisible(false);
+	this._pauseView = new awe6.core.drivers.jeash.View(this._kernel,this._pauseContext);
+	this._pauseView._set_isVisible(false);
+	this._flashView = new awe6.core.drivers.jeash.View(this._kernel,this._flashContext);
+	this._flashView._set_isVisible(false);
+	this._flashStartingAlpha = 1;
+	this._flashAsTime = true;
+	this._flashDuration = this._flashStartingDuration = 100;
+	this._buttonBack.onClickCallback = (function(f,a1) {
+		return function() {
+			return f(a1);
+		};
+	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.BACK);
+	this._buttonMute.onClickCallback = (function(f,a1) {
+		return function() {
+			return f(a1);
+		};
+	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.MUTE);
+	this._buttonPause.onClickCallback = (function(f,a1) {
+		return function() {
+			return f(a1);
+		};
+	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.PAUSE);
+	this._buttonUnmute.onClickCallback = (function(f,a1) {
+		return function() {
+			return f(a1);
+		};
+	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.UNMUTE);
+	this._buttonUnpause.onClickCallback = (function(f,a1) {
+		return function() {
+			return f(a1);
+		};
+	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.UNPAUSE);
+	this._get_view().addChild(this._flashView,1);
+	this._get_view().addChild(this._pauseView,2);
+	this._get_view().addChild(this._progressView,3);
+	this.addEntity(this._buttonBack,null,true,21);
+	this.addEntity(this._buttonUnmute,null,true,22);
+	this.addEntity(this._buttonMute,null,true,23);
+	this.addEntity(this._buttonUnpause,null,true,24);
+	this.addEntity(this._buttonPause,null,true,25);
+	var l_height = this._buttonBack.height;
+	var l_width = this._buttonBack.width;
+	var l_x = this._kernel.factory.width - l_width * 4;
+	var l_y = l_height;
+	this.positionButton(awe6.interfaces.EOverlayButton.BACK,l_x,l_y);
+	this.positionButton(awe6.interfaces.EOverlayButton.MUTE,l_x += l_width,l_y);
+	this.positionButton(awe6.interfaces.EOverlayButton.UNMUTE,l_x,l_y);
+	this.positionButton(awe6.interfaces.EOverlayButton.PAUSE,l_x += l_width,l_y);
+	this.positionButton(awe6.interfaces.EOverlayButton.UNPAUSE,l_x,l_y);
+}
+awe6.core.drivers.AOverlay.prototype._driverInit = function() {
+	this._progressContext = new jeash.display.Sprite();
+	this._pauseContext = new jeash.display.Sprite();
+	this._flashContext = new jeash.display.Sprite();
+}
+awe6.core.drivers.AOverlay.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
+	if(this._flashDuration > 0) {
+		this._flashDuration -= this._flashAsTime?p_deltaTime:1;
+		this._flashAlpha = this._tools.limit(this._flashStartingAlpha * (this._flashDuration / this._flashStartingDuration),0,1);
+	}
+	this._flashView._set_isVisible(this._flashAlpha > 0);
+	if(this._kernel.factory.keyBack != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyBack)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.BACK:awe6.interfaces.EOverlayButton.UNPAUSE);
+	if(this._kernel.factory.keyPause != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyPause)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.PAUSE:awe6.interfaces.EOverlayButton.UNPAUSE);
+	if(this._kernel.factory.keyMute != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyMute)) this.activateButton(this._kernel.audio.isMute?awe6.interfaces.EOverlayButton.UNMUTE:awe6.interfaces.EOverlayButton.MUTE);
+	if(this._get_pauseEntity() != null && !this._kernel.isActive) {
+		this._get_pauseEntity().update(p_deltaTime);
+		this._pauseView.update(p_deltaTime);
+	}
+}
+awe6.core.drivers.AOverlay.prototype._disposer = function() {
+	if(this._get_pauseEntity() != null) this._get_pauseEntity().dispose();
+	this._get_view().dispose();
+	awe6.core.Entity.prototype._disposer.call(this);
+}
+awe6.core.drivers.AOverlay.prototype._getButton = function(p_type) {
+	return (function($this) {
+		var $r;
+		var $e = (p_type);
+		switch( $e[1] ) {
+		case 0:
+			$r = $this._buttonBack;
+			break;
+		case 1:
+			$r = $this._buttonMute;
+			break;
+		case 2:
+			$r = $this._buttonUnmute;
+			break;
+		case 3:
+			$r = $this._buttonPause;
+			break;
+		case 4:
+			$r = $this._buttonUnpause;
+			break;
+		case 5:
+			var l_value = $e[2];
+			$r = null;
+			break;
+		}
+		return $r;
+	}(this));
+}
+awe6.core.drivers.AOverlay.prototype.showButton = function(p_type,p_isVisible) {
+	if(p_isVisible == null) p_isVisible = true;
+	var l_button = this._getButton(p_type);
+	if(p_isVisible) this.addEntity(l_button,null,true); else this.removeEntity(l_button,null,true);
+}
+awe6.core.drivers.AOverlay.prototype.positionButton = function(p_type,p_x,p_y) {
+	var l_button = this._getButton(p_type);
+	l_button._set_x(p_x);
+	l_button._set_y(p_y);
+}
+awe6.core.drivers.AOverlay.prototype.showProgress = function(p_progress,p_message) {
+	this._progressView._set_isVisible(p_progress < 1);
+}
+awe6.core.drivers.AOverlay.prototype.hideButtons = function() {
+	this.showButton(awe6.interfaces.EOverlayButton.BACK,false);
+	this.showButton(awe6.interfaces.EOverlayButton.MUTE,false);
+	this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,false);
+	this.showButton(awe6.interfaces.EOverlayButton.PAUSE,false);
+	this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
+}
+awe6.core.drivers.AOverlay.prototype.flash = function(p_duration,p_asTime,p_startingAlpha,p_color) {
+	if(p_color == null) p_color = 16777215;
+	if(p_startingAlpha == null) p_startingAlpha = 1;
+	if(p_asTime == null) p_asTime = true;
+	p_duration = p_duration != null?p_duration:p_asTime?500:this._kernel.factory.targetFramerate * .5;
+	this._flashDuration = this._flashStartingDuration = p_duration;
+	this._flashAsTime = p_asTime;
+	this._flashAlpha = this._flashStartingAlpha = p_startingAlpha > 1?1:p_startingAlpha < 0?0:p_startingAlpha;
+}
+awe6.core.drivers.AOverlay.prototype.activateButton = function(p_type) {
+	var $e = (p_type);
+	switch( $e[1] ) {
+	case 0:
+		if(this._buttonBack._get_view()._get_isInViewStack()) {
+			if(!this._kernel.isActive) this.activateButton(awe6.interfaces.EOverlayButton.UNPAUSE);
+			this._drawPause(false);
+			this._kernel.resume();
+			this._kernel.scenes.back();
+		}
+		break;
+	case 1:
+		if(this._buttonMute._get_view()._get_isInViewStack()) {
+			this.showButton(awe6.interfaces.EOverlayButton.MUTE,false);
+			this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,true);
+			this._kernel.audio._set_isMute(true);
+		}
+		break;
+	case 2:
+		if(this._buttonUnmute._get_view()._get_isInViewStack() && !this._buttonUnpause._get_view()._get_isInViewStack()) {
+			this.showButton(awe6.interfaces.EOverlayButton.MUTE,true);
+			this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,false);
+			this._kernel.audio._set_isMute(false);
+		}
+		break;
+	case 3:
+		if(this._buttonPause._get_view()._get_isInViewStack()) {
+			this._wasMute = this._kernel.audio.isMute;
+			this.showButton(awe6.interfaces.EOverlayButton.PAUSE,false);
+			this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,true);
+			this._kernel.pause();
+			this._drawPause(true);
+			this.activateButton(awe6.interfaces.EOverlayButton.MUTE);
+		}
+		break;
+	case 4:
+		if(this._buttonUnpause._get_view()._get_isInViewStack()) {
+			this.showButton(awe6.interfaces.EOverlayButton.PAUSE,true);
+			this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
+			this._kernel.resume();
+			this._drawPause(false);
+			this.activateButton(this._wasMute?awe6.interfaces.EOverlayButton.MUTE:awe6.interfaces.EOverlayButton.UNMUTE);
+		}
+		break;
+	case 5:
+		var l_value = $e[2];
+		null;
+		break;
+	}
+}
+awe6.core.drivers.AOverlay.prototype._drawPause = function(p_isVisible) {
+	if(p_isVisible == null) p_isVisible = true;
+	this._pauseView._set_isVisible(p_isVisible);
+}
+awe6.core.drivers.AOverlay.prototype._get_pauseEntity = function() {
+	return this.pauseEntity;
+}
+awe6.core.drivers.AOverlay.prototype._set_pauseEntity = function(p_value) {
+	if(this._get_pauseEntity() != null) this._get_pauseEntity()._get_view().remove();
+	this.pauseEntity = p_value;
+	this._pauseView.addChild(this._get_pauseEntity()._get_view());
+	return this._get_pauseEntity();
+}
+awe6.core.drivers.AOverlay.prototype.__class__ = awe6.core.drivers.AOverlay;
+awe6.core.drivers.AOverlay.__interfaces__ = [awe6.interfaces.IOverlayProcess];
+if(!awe6.core.drivers.jeash) awe6.core.drivers.jeash = {}
+awe6.core.drivers.jeash.Overlay = function(p_kernel,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha) {
+	if( p_kernel === $_ ) return;
+	if(p_pauseAlpha == null) p_pauseAlpha = .35;
+	if(p_pauseColor == null) p_pauseColor = 0;
+	if(p_pauseBlur == null) p_pauseBlur = 8;
+	awe6.core.drivers.AOverlay.call(this,p_kernel,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha);
+}
+awe6.core.drivers.jeash.Overlay.__name__ = ["awe6","core","drivers","jeash","Overlay"];
+awe6.core.drivers.jeash.Overlay.__super__ = awe6.core.drivers.AOverlay;
+for(var k in awe6.core.drivers.AOverlay.prototype ) awe6.core.drivers.jeash.Overlay.prototype[k] = awe6.core.drivers.AOverlay.prototype[k];
+awe6.core.drivers.jeash.Overlay.prototype._driverInit = function() {
+	this._context.mouseEnabled = false;
+	this._pauseContext = new jeash.display.Sprite();
+	this._pauseContext.mouseEnabled = false;
+	this._pauseContext.jeashGetGraphics().beginFill(this._pauseColor,this._pauseAlpha);
+	this._pauseContext.jeashGetGraphics().drawRect(0,0,this._kernel.factory.width,this._kernel.factory.height);
+	this._flashContext = new jeash.display.Sprite();
+	this._flashContext.mouseEnabled = false;
+}
+awe6.core.drivers.jeash.Overlay.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.drivers.AOverlay.prototype._updater.call(this,p_deltaTime);
+	this._flashContext.alpha = this._flashAlpha;
+}
+awe6.core.drivers.jeash.Overlay.prototype.flash = function(p_duration,p_asTime,p_startingAlpha,p_color) {
+	if(p_color == null) p_color = 16777215;
+	if(p_startingAlpha == null) p_startingAlpha = 1;
+	if(p_asTime == null) p_asTime = true;
+	this._flashContext.jeashGetGraphics().clear();
+	this._flashContext.jeashGetGraphics().beginFill(p_color);
+	this._flashContext.jeashGetGraphics().drawRect(0,0,this._kernel.factory.width,this._kernel.factory.height);
+	p_duration = p_duration != null?p_duration:p_asTime?500:this._kernel.factory.targetFramerate * .5;
+	this._flashDuration = this._flashStartingDuration = p_duration;
+	this._flashAsTime = p_asTime;
+	this._flashAlpha = this._flashStartingAlpha = p_startingAlpha > 1?1:p_startingAlpha < 0?0:p_startingAlpha;
+}
+awe6.core.drivers.jeash.Overlay.prototype.__class__ = awe6.core.drivers.jeash.Overlay;
 awe6.interfaces.EScene = { __ename__ : ["awe6","interfaces","EScene"], __constructs__ : ["INTRO","SELECT_SESSION","MENU","INSTRUCTIONS","SETTINGS","GAME","RESULTS","REWARDS","TEST","SUB_TYPE"] }
 awe6.interfaces.EScene.INTRO = ["INTRO",0];
 awe6.interfaces.EScene.INTRO.toString = $estr;
@@ -102,22 +735,21 @@ awe6.interfaces.ITextStyle.prototype.filters = null;
 awe6.interfaces.ITextStyle.prototype.toString = null;
 awe6.interfaces.ITextStyle.prototype.clone = null;
 awe6.interfaces.ITextStyle.prototype.__class__ = awe6.interfaces.ITextStyle;
-if(!awe6.core) awe6.core = {}
-awe6.core.TextStyle = function(font,size,color,isBold,isItalic,align,spacingHorizontal,spacingVertical,thickness,filters) {
-	if( font === $_ ) return;
-	if(thickness == null) thickness = 0;
-	if(isItalic == null) isItalic = false;
-	if(isBold == null) isBold = false;
-	this.font = font != null?font:"_sans";
-	this.size = size != null?size:12;
-	this.color = color != null?color:0;
-	this.isBold = isBold;
-	this.isItalic = isItalic;
-	this.align = align != null?align:awe6.interfaces.ETextAlign.LEFT;
-	this.spacingHorizontal = spacingHorizontal != null?spacingHorizontal:0;
-	this.spacingVertical = spacingVertical != null?spacingVertical:0;
-	this.thickness = thickness;
-	this.filters = filters;
+awe6.core.TextStyle = function(p_font,p_size,p_color,p_isBold,p_isItalic,p_align,p_spacingHorizontal,p_spacingVertical,p_thickness,p_filters) {
+	if( p_font === $_ ) return;
+	if(p_thickness == null) p_thickness = 0;
+	if(p_isItalic == null) p_isItalic = false;
+	if(p_isBold == null) p_isBold = false;
+	this.font = p_font != null?p_font:"_sans";
+	this.size = p_size != null?p_size:12;
+	this.color = p_color != null?p_color:0;
+	this.isBold = p_isBold;
+	this.isItalic = p_isItalic;
+	this.align = p_align != null?p_align:awe6.interfaces.ETextAlign.LEFT;
+	this.spacingHorizontal = p_spacingHorizontal != null?p_spacingHorizontal:0;
+	this.spacingVertical = p_spacingVertical != null?p_spacingVertical:0;
+	this.thickness = p_thickness;
+	this.filters = p_filters;
 }
 awe6.core.TextStyle.__name__ = ["awe6","core","TextStyle"];
 awe6.core.TextStyle.prototype.font = null;
@@ -138,14 +770,18 @@ awe6.core.TextStyle.prototype.clone = function() {
 }
 awe6.core.TextStyle.prototype.__class__ = awe6.core.TextStyle;
 awe6.core.TextStyle.__interfaces__ = [awe6.interfaces.ITextStyle];
+awe6.interfaces.IResettable = function() { }
+awe6.interfaces.IResettable.__name__ = ["awe6","interfaces","IResettable"];
+awe6.interfaces.IResettable.prototype.reset = null;
+awe6.interfaces.IResettable.prototype.__class__ = awe6.interfaces.IResettable;
 awe6.interfaces.IInputManager = function() { }
 awe6.interfaces.IInputManager.__name__ = ["awe6","interfaces","IInputManager"];
 awe6.interfaces.IInputManager.prototype.joypad = null;
 awe6.interfaces.IInputManager.prototype.keyboard = null;
 awe6.interfaces.IInputManager.prototype.mouse = null;
 awe6.interfaces.IInputManager.prototype.createJoypad = null;
-awe6.interfaces.IInputManager.prototype.reset = null;
 awe6.interfaces.IInputManager.prototype.__class__ = awe6.interfaces.IInputManager;
+awe6.interfaces.IInputManager.__interfaces__ = [awe6.interfaces.IResettable];
 awe6.interfaces.ISession = function() { }
 awe6.interfaces.ISession.__name__ = ["awe6","interfaces","ISession"];
 awe6.interfaces.ISession.prototype.id = null;
@@ -159,13 +795,12 @@ awe6.interfaces.ISession.prototype.getSessionIds = null;
 awe6.interfaces.ISession.prototype.getSessions = null;
 awe6.interfaces.ISession.prototype.deleteAllSessions = null;
 awe6.interfaces.ISession.prototype.__class__ = awe6.interfaces.ISession;
-if(!awe6.core.drivers) awe6.core.drivers = {}
-awe6.core.drivers.ASession = function(kernel,id) {
-	if( kernel === $_ ) return;
-	if(id == null) id = "";
-	this._kernel = kernel;
-	if(id == "") id = "DEBUG_AWE6";
-	this.id = id;
+awe6.core.drivers.ASession = function(p_kernel,p_id) {
+	if( p_kernel === $_ ) return;
+	if(p_id == null) p_id = "";
+	this._kernel = p_kernel;
+	if(p_id == "") p_id = "DEBUG_AWE6";
+	this.id = p_id;
 	this._tools = this._kernel.tools;
 	this._version = 1;
 	this._init();
@@ -181,9 +816,9 @@ awe6.core.drivers.ASession.prototype.isTester = null;
 awe6.core.drivers.ASession.prototype.loadCount = null;
 awe6.core.drivers.ASession.prototype.saveCount = null;
 awe6.core.drivers.ASession.prototype._init = function() {
-	this._nativeLoad();
+	this._driverLoad();
 	var l_version = Reflect.field(this._savedData,"_____VERSION");
-	if(l_version != this._version) this._nativeReset();
+	if(l_version != this._version) this._driverReset();
 	var l_isExistingSession = Reflect.field(this._savedData,this.id) != null;
 	{
 		this._data = { };
@@ -196,12 +831,12 @@ awe6.core.drivers.ASession.prototype._init = function() {
 		this.loadCount++;
 	}
 }
-awe6.core.drivers.ASession.prototype._nativeLoad = function() {
+awe6.core.drivers.ASession.prototype._driverLoad = function() {
 	this._savedData = { };
 }
-awe6.core.drivers.ASession.prototype._nativeSave = function() {
+awe6.core.drivers.ASession.prototype._driverSave = function() {
 }
-awe6.core.drivers.ASession.prototype._nativeReset = function() {
+awe6.core.drivers.ASession.prototype._driverReset = function() {
 	this._savedData = { };
 }
 awe6.core.drivers.ASession.prototype._getter = function() {
@@ -216,22 +851,22 @@ awe6.core.drivers.ASession.prototype._resetter = function() {
 	this.loadCount = 0;
 	this.saveCount = 0;
 }
-awe6.core.drivers.ASession.prototype.clone = function(newId) {
+awe6.core.drivers.ASession.prototype.clone = function(p_newId) {
 	this._setter();
-	Reflect.setField(this._savedData,newId,this._data);
-	return Type.createInstance(Type.getClass(this),[this._kernel,newId]);
+	Reflect.setField(this._savedData,p_newId,this._data);
+	return Type.createInstance(Type.getClass(this),[this._kernel,p_newId]);
 }
-awe6.core.drivers.ASession.prototype.reset = function(isSaved) {
-	if(isSaved == null) isSaved = false;
+awe6.core.drivers.ASession.prototype.reset = function(p_isSaved) {
+	if(p_isSaved == null) p_isSaved = false;
 	this._data = { };
 	this._resetter();
 	this._setter();
-	if(isSaved) {
+	if(p_isSaved) {
 		this.saveCount++;
 		this._setter();
 		Reflect.setField(this._savedData,"_____VERSION",this._version);
 		Reflect.setField(this._savedData,this.id,this._data);
-		this._nativeSave();
+		this._driverSave();
 	}
 }
 awe6.core.drivers.ASession.prototype["delete"] = function() {
@@ -242,30 +877,30 @@ awe6.core.drivers.ASession.prototype.save = function() {
 	this._setter();
 	Reflect.setField(this._savedData,"_____VERSION",this._version);
 	Reflect.setField(this._savedData,this.id,this._data);
-	this._nativeSave();
+	this._driverSave();
 }
 awe6.core.drivers.ASession.prototype.getPercentageComplete = function() {
 	return 0;
 }
-awe6.core.drivers.ASession.prototype.getSessionIds = function(suggestions) {
+awe6.core.drivers.ASession.prototype.getSessionIds = function(p_suggestions) {
 	var l_result = Reflect.fields(this._savedData);
 	l_result.remove("_____VERSION");
 	l_result.remove("DEBUG_AWE6");
-	if(suggestions != null) {
-		var l_desiredLength = suggestions.length;
+	if(p_suggestions != null) {
+		var l_desiredLength = p_suggestions.length;
 		var _g = 0;
 		while(_g < l_result.length) {
 			var i = l_result[_g];
 			++_g;
-			suggestions.remove(i);
+			p_suggestions.remove(i);
 		}
-		while(l_result.length < l_desiredLength) l_result.push(suggestions.shift());
+		while(l_result.length < l_desiredLength) l_result.push(p_suggestions.shift());
 	}
 	l_result.sort($closure(this._tools,"sortByString"));
 	return l_result;
 }
-awe6.core.drivers.ASession.prototype.getSessions = function(suggestions) {
-	var l_ids = this.getSessionIds(suggestions);
+awe6.core.drivers.ASession.prototype.getSessions = function(p_suggestions) {
+	var l_ids = this.getSessionIds(p_suggestions);
 	var l_result = new Array();
 	var _g = 0;
 	while(_g < l_ids.length) {
@@ -276,657 +911,250 @@ awe6.core.drivers.ASession.prototype.getSessions = function(suggestions) {
 	return l_result;
 }
 awe6.core.drivers.ASession.prototype.deleteAllSessions = function() {
-	this._nativeReset();
+	this._driverReset();
 }
-awe6.core.drivers.ASession.prototype.__get_isTester = function() {
+awe6.core.drivers.ASession.prototype.toString = function() {
+	return this.id + ": " + Std.string(this._data);
+}
+awe6.core.drivers.ASession.prototype._get_isTester = function() {
 	return this._kernel.isDebug || this.id == "DEBUG_AWE6";
 }
 awe6.core.drivers.ASession.prototype.__class__ = awe6.core.drivers.ASession;
 awe6.core.drivers.ASession.__interfaces__ = [awe6.interfaces.ISession];
-awe6.interfaces.IPauseable = function() { }
-awe6.interfaces.IPauseable.__name__ = ["awe6","interfaces","IPauseable"];
-awe6.interfaces.IPauseable.prototype.isActive = null;
-awe6.interfaces.IPauseable.prototype.pause = null;
-awe6.interfaces.IPauseable.prototype.resume = null;
-awe6.interfaces.IPauseable.prototype.__class__ = awe6.interfaces.IPauseable;
-awe6.interfaces.IDisposable = function() { }
-awe6.interfaces.IDisposable.__name__ = ["awe6","interfaces","IDisposable"];
-awe6.interfaces.IDisposable.prototype.isDisposed = null;
-awe6.interfaces.IDisposable.prototype.dispose = null;
-awe6.interfaces.IDisposable.prototype.__class__ = awe6.interfaces.IDisposable;
-awe6.interfaces.IUpdateable = function() { }
-awe6.interfaces.IUpdateable.__name__ = ["awe6","interfaces","IUpdateable"];
-awe6.interfaces.IUpdateable.prototype.update = null;
-awe6.interfaces.IUpdateable.prototype.__class__ = awe6.interfaces.IUpdateable;
-awe6.interfaces.IProcess = function() { }
-awe6.interfaces.IProcess.__name__ = ["awe6","interfaces","IProcess"];
-awe6.interfaces.IProcess.prototype.__class__ = awe6.interfaces.IProcess;
-awe6.interfaces.IProcess.__interfaces__ = [awe6.interfaces.IPauseable,awe6.interfaces.IDisposable,awe6.interfaces.IUpdateable];
-awe6.core.Process = function(kernel) {
-	if( kernel === $_ ) return;
-	this._kernel = kernel;
-	this._tools = this._kernel.tools;
-	this._init();
-	this._isEntity = Std["is"](this,awe6.interfaces.IEntity);
+awe6.interfaces.IPositionable = function() { }
+awe6.interfaces.IPositionable.__name__ = ["awe6","interfaces","IPositionable"];
+awe6.interfaces.IPositionable.prototype.x = null;
+awe6.interfaces.IPositionable.prototype.y = null;
+awe6.interfaces.IPositionable.prototype.setPosition = null;
+awe6.interfaces.IPositionable.prototype.__class__ = awe6.interfaces.IPositionable;
+awe6.interfaces.IPriority = function() { }
+awe6.interfaces.IPriority.__name__ = ["awe6","interfaces","IPriority"];
+awe6.interfaces.IPriority.prototype.priority = null;
+awe6.interfaces.IPriority.prototype.__class__ = awe6.interfaces.IPriority;
+awe6.interfaces.IView = function() { }
+awe6.interfaces.IView.__name__ = ["awe6","interfaces","IView"];
+awe6.interfaces.IView.prototype.owner = null;
+awe6.interfaces.IView.prototype.parent = null;
+awe6.interfaces.IView.prototype.isVisible = null;
+awe6.interfaces.IView.prototype.isInViewStack = null;
+awe6.interfaces.IView.prototype.globalX = null;
+awe6.interfaces.IView.prototype.globalY = null;
+awe6.interfaces.IView.prototype.addChild = null;
+awe6.interfaces.IView.prototype.removeChild = null;
+awe6.interfaces.IView.prototype.clear = null;
+awe6.interfaces.IView.prototype.remove = null;
+awe6.interfaces.IView.prototype.__class__ = awe6.interfaces.IView;
+awe6.interfaces.IView.__interfaces__ = [awe6.interfaces.IUpdateable,awe6.interfaces.IDisposable,awe6.interfaces.IPositionable,awe6.interfaces.IPriority];
+awe6.core.drivers.AView = function(p_kernel,p_context,p_priority,p_owner) {
+	if( p_kernel === $_ ) return;
+	if(p_priority == null) p_priority = 0;
+	this.context = p_context;
+	this._set_priority(p_priority);
+	this.owner = p_owner;
+	awe6.core.Process.call(this,p_kernel);
 }
-awe6.core.Process.__name__ = ["awe6","core","Process"];
-awe6.core.Process.prototype.isActive = null;
-awe6.core.Process.prototype.isDisposed = null;
-awe6.core.Process.prototype._kernel = null;
-awe6.core.Process.prototype._tools = null;
-awe6.core.Process.prototype._age = null;
-awe6.core.Process.prototype._updates = null;
-awe6.core.Process.prototype._isEntity = null;
-awe6.core.Process.prototype._init = function() {
-	Reflect.setField(this,"isActive",true);
-	this.isDisposed = false;
-	this._age = 0;
-	this._updates = 0;
-}
-awe6.core.Process.prototype.dispose = function() {
-	if(this.isDisposed) return; else {
-		this.isDisposed = true;
-		this.__set_isActive(false);
-		if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
-		this._disposer();
-		return;
-	}
-}
-awe6.core.Process.prototype._disposer = function() {
-}
-awe6.core.Process.prototype.update = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	if(!this.isActive) return; else {
-		this._age += deltaTime;
-		this._updates++;
-		this._updater(deltaTime);
-		return;
-	}
-}
-awe6.core.Process.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-}
-awe6.core.Process.prototype.reset = function() {
-	if(this.isDisposed) null; else {
-		this.isDisposed = true;
-		this.__set_isActive(false);
-		if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
-		this._disposer();
-		null;
-	}
-	this._init();
-}
-awe6.core.Process.prototype.__set_isActive = function(value) {
-	if(value == this.isActive) return this.isActive;
-	if(value) {
-		if(this.isActive) null; else {
-			Reflect.setField(this,"isActive",true);
-			this._resumer();
-			if(this._isEntity && !this.isDisposed) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true);
-			null;
-		}
-	} else if(!this.isActive) null; else {
-		Reflect.setField(this,"isActive",false);
-		this._pauser();
-		if(this._isEntity && !this.isDisposed) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true);
-		null;
-	}
-	return this.isActive;
-}
-awe6.core.Process.prototype.pause = function() {
-	if(!this.isActive) return; else {
-		Reflect.setField(this,"isActive",false);
-		this._pauser();
-		if(this._isEntity && !this.isDisposed) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true);
-		return;
-	}
-}
-awe6.core.Process.prototype._pauser = function() {
-}
-awe6.core.Process.prototype.resume = function() {
-	if(this.isActive) return; else {
-		Reflect.setField(this,"isActive",true);
-		this._resumer();
-		if(this._isEntity && !this.isDisposed) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true);
-		return;
-	}
-}
-awe6.core.Process.prototype._resumer = function() {
-}
-awe6.core.Process.prototype.__class__ = awe6.core.Process;
-awe6.core.Process.__interfaces__ = [awe6.interfaces.IProcess];
-awe6.interfaces.IAgendaManager = function() { }
-awe6.interfaces.IAgendaManager.__name__ = ["awe6","interfaces","IAgendaManager"];
-awe6.interfaces.IAgendaManager.prototype.agenda = null;
-awe6.interfaces.IAgendaManager.prototype.setAgenda = null;
-awe6.interfaces.IAgendaManager.prototype.__class__ = awe6.interfaces.IAgendaManager;
-awe6.interfaces.IEntityCollection = function() { }
-awe6.interfaces.IEntityCollection.__name__ = ["awe6","interfaces","IEntityCollection"];
-awe6.interfaces.IEntityCollection.prototype.addEntity = null;
-awe6.interfaces.IEntityCollection.prototype.removeEntity = null;
-awe6.interfaces.IEntityCollection.prototype.getEntities = null;
-awe6.interfaces.IEntityCollection.prototype.getEntitiesByClass = null;
-awe6.interfaces.IEntityCollection.prototype.getEntityById = null;
-awe6.interfaces.IEntityCollection.prototype.__class__ = awe6.interfaces.IEntityCollection;
-awe6.interfaces.IViewable = function() { }
-awe6.interfaces.IViewable.__name__ = ["awe6","interfaces","IViewable"];
-awe6.interfaces.IViewable.prototype.view = null;
-awe6.interfaces.IViewable.prototype.__class__ = awe6.interfaces.IViewable;
-awe6.interfaces.IEntity = function() { }
-awe6.interfaces.IEntity.__name__ = ["awe6","interfaces","IEntity"];
-awe6.interfaces.IEntity.prototype.id = null;
-awe6.interfaces.IEntity.prototype.parent = null;
-awe6.interfaces.IEntity.prototype.remove = null;
-awe6.interfaces.IEntity.prototype.__class__ = awe6.interfaces.IEntity;
-awe6.interfaces.IEntity.__interfaces__ = [awe6.interfaces.IAgendaManager,awe6.interfaces.IEntityCollection,awe6.interfaces.IViewable,awe6.interfaces.IProcess];
-awe6.core.Entity = function(kernel,id,context) {
-	if( kernel === $_ ) return;
-	this.view = new awe6.core.drivers.js.View(kernel,context,0,this);
-	this.__set_id(id == null?kernel.tools.createGuid():id);
-	awe6.core.Process.call(this,kernel);
-}
-awe6.core.Entity.__name__ = ["awe6","core","Entity"];
-awe6.core.Entity.__super__ = awe6.core.Process;
-for(var k in awe6.core.Process.prototype ) awe6.core.Entity.prototype[k] = awe6.core.Process.prototype[k];
-awe6.core.Entity.prototype.id = null;
-awe6.core.Entity.prototype.agenda = null;
-awe6.core.Entity.prototype.parent = null;
-awe6.core.Entity.prototype.view = null;
-awe6.core.Entity.prototype._entityAgendaPairs = null;
-awe6.core.Entity.prototype._isAgendaDirty = null;
-awe6.core.Entity.prototype._cachedEntities = null;
-awe6.core.Entity.prototype._init = function() {
+awe6.core.drivers.AView.__name__ = ["awe6","core","drivers","AView"];
+awe6.core.drivers.AView.__super__ = awe6.core.Process;
+for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AView.prototype[k] = awe6.core.Process.prototype[k];
+awe6.core.drivers.AView.prototype.context = null;
+awe6.core.drivers.AView.prototype.priority = null;
+awe6.core.drivers.AView.prototype.owner = null;
+awe6.core.drivers.AView.prototype.parent = null;
+awe6.core.drivers.AView.prototype.isVisible = null;
+awe6.core.drivers.AView.prototype.isInViewStack = null;
+awe6.core.drivers.AView.prototype.x = null;
+awe6.core.drivers.AView.prototype.y = null;
+awe6.core.drivers.AView.prototype.globalX = null;
+awe6.core.drivers.AView.prototype.globalY = null;
+awe6.core.drivers.AView.prototype._isDirty = null;
+awe6.core.drivers.AView.prototype._children = null;
+awe6.core.drivers.AView.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
-	this.agenda = awe6.interfaces.EAgenda.ALWAYS;
-	this._entityAgendaPairs = new haxe.FastList();
-	this._isAgendaDirty = true;
-	this._cachedEntities = [];
+	this._set_isVisible(true);
+	this._isDirty = true;
+	this._children = new Array();
+	this._set_x(this._set_y(this.globalX = this.globalY = 0));
 }
-awe6.core.Entity.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	if(this._isAgendaDirty) {
-		this._cachedEntities = this._getEntities(this.__get_agenda());
-		if(!Type.enumEq(this.__get_agenda(),awe6.interfaces.EAgenda.ALWAYS)) this._cachedEntities = this._cachedEntities.concat(this._getEntities(awe6.interfaces.EAgenda.ALWAYS));
-		this._isAgendaDirty = false;
+awe6.core.drivers.AView.prototype.addChild = function(p_child,p_priority) {
+	if(p_priority == null) p_priority = 0;
+	if(this.isDisposed || p_child == null) return;
+	if(p_child._get_parent() != this) {
+		p_child.remove();
+		if(Std["is"](p_child,awe6.core.drivers.AView)) {
+			var l_child = p_child;
+			this._children.push(l_child);
+			l_child._setParent(this);
+		}
 	}
-	var _g = 0, _g1 = this._cachedEntities;
+	if(p_priority != 0) p_child._set_priority(p_priority);
+	this._isDirty = true;
+}
+awe6.core.drivers.AView.prototype.removeChild = function(p_child) {
+	if(this.isDisposed || p_child == null) return;
+	if(Std["is"](p_child,awe6.core.drivers.AView)) {
+		var l_child = p_child;
+		if(l_child._get_parent() != this) return;
+		this._children.remove(l_child);
+		l_child._setParent(null);
+	}
+	this._isDirty = true;
+}
+awe6.core.drivers.AView.prototype.remove = function() {
+	if(this._get_parent() != null) this._get_parent().removeChild(this);
+}
+awe6.core.drivers.AView.prototype.clear = function() {
+	var _g = 0, _g1 = this._children;
 	while(_g < _g1.length) {
 		var i = _g1[_g];
 		++_g;
-		i.update(deltaTime);
+		this.removeChild(i);
 	}
 }
-awe6.core.Entity.prototype._disposer = function() {
-	this.remove();
-	this._kernel.messenger.removeSubscribers(this);
-	this._kernel.messenger.removeSubscribers(null,null,null,this);
-	var l_entities = this._getEntities();
-	l_entities.reverse();
-	var _g = 0;
-	while(_g < l_entities.length) {
-		var i = l_entities[_g];
+awe6.core.drivers.AView.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	var _g = 0, _g1 = this._children;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
 		++_g;
-		i.dispose();
+		if(!i.isActive || i.isDisposed) null; else {
+			i._age += p_deltaTime;
+			i._updates++;
+			i._updater(p_deltaTime);
+			null;
+		}
 	}
-	var $it0 = this._entityAgendaPairs.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		this._entityAgendaPairs.remove(i);
-	}
-	this.__get_view().dispose();
+	if(this._isDirty) this._draw();
+}
+awe6.core.drivers.AView.prototype._disposer = function() {
+	this.remove();
+	this._driverDisposer();
+	this.clear();
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.Entity.prototype.addEntity = function(entity,agenda,isAddedToView,viewPriority) {
-	if(isAddedToView == null) isAddedToView = false;
+awe6.core.drivers.AView.prototype._driverDisposer = function() {
+}
+awe6.core.drivers.AView.prototype._draw = function() {
 	if(this.isDisposed) return;
-	if(entity == null) return;
-	if(agenda == null) agenda = awe6.interfaces.EAgenda.ALWAYS;
-	var $it0 = this._entityAgendaPairs.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		if(i.entity == entity && Type.enumEq(i.agenda,agenda)) return;
+	this._children.sort($closure(this._tools,"sortByPriority"));
+	this._driverDraw();
+	this._isDirty = false;
+}
+awe6.core.drivers.AView.prototype._driverDraw = function() {
+}
+awe6.core.drivers.AView.prototype._setParent = function(p_parent) {
+	this.parent = p_parent;
+}
+awe6.core.drivers.AView.prototype._get_priority = function() {
+	return this.priority;
+}
+awe6.core.drivers.AView.prototype._set_priority = function(p_value) {
+	if(p_value == this._get_priority()) return this._get_priority();
+	this.priority = p_value;
+	if(Std["is"](this._get_parent(),awe6.core.drivers.AView)) {
+		var l_parent = this._get_parent();
+		if(l_parent != null) l_parent._isDirty = true;
 	}
-	this._isAgendaDirty = true;
-	var l_child = entity;
-	var l_helperEntityAgendaPair = new awe6.core._Entity._HelperEntityAgendaPair(entity,agenda);
-	if(l_child.__get_parent() != this) {
-		l_child.remove(isAddedToView);
-		l_child._setParent(this);
+	return this._get_priority();
+}
+awe6.core.drivers.AView.prototype._set_isVisible = function(p_value) {
+	if(p_value == this.isVisible) return this.isVisible;
+	this.isVisible = p_value;
+	if(Std["is"](this._get_parent(),awe6.core.drivers.AView)) {
+		var l_parent = this._get_parent();
+		if(l_parent != null) l_parent._draw();
 	}
-	this._entityAgendaPairs.add(l_helperEntityAgendaPair);
-	if(isAddedToView) {
-		if(Type.enumEq(agenda,this.__get_agenda())) this.__get_view().addChild(entity.__get_view(),viewPriority); else l_helperEntityAgendaPair.isAddedToView = true;
-	}
+	return this.isVisible;
 }
-awe6.core.Entity.prototype.removeEntity = function(entity,agenda,isRemovedFromView) {
-	if(isRemovedFromView == null) isRemovedFromView = false;
-	if(this.isDisposed) return;
-	var l_child = entity;
-	var l_isRemoved = false;
-	var $it0 = this._entityAgendaPairs.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		if(i.entity == entity && (agenda == null || Type.enumEq(i.agenda,agenda))) {
-			this._entityAgendaPairs.remove(i);
-			l_isRemoved = true;
-		}
-	}
-	if(l_isRemoved) {
-		this._isAgendaDirty = true;
-		l_child._setParent(null);
-		if(isRemovedFromView) entity.__get_view().remove();
-	}
-}
-awe6.core.Entity.prototype.remove = function(isRemovedFromView) {
-	if(isRemovedFromView == null) isRemovedFromView = false;
-	if(this.__get_parent() != null) this.__get_parent().removeEntity(this,null,isRemovedFromView);
-}
-awe6.core.Entity.prototype.getEntities = function(agenda) {
-	return this._getEntities(agenda);
-}
-awe6.core.Entity.prototype._getEntities = function(agenda) {
-	var l_result = new Array();
-	var $it0 = this._entityAgendaPairs.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		if(agenda == null || Type.enumEq(agenda,i.agenda)) l_result.push(i.entity);
-	}
-	l_result.reverse();
-	return l_result;
-}
-awe6.core.Entity.prototype.getEntitiesByClass = function(classType,agenda,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	if(isBubbleEverywhere && this._kernel.scenes.__get_scene() != null) return this._kernel.scenes.__get_scene().getEntitiesByClass(classType,agenda,true);
-	var l_result = new Array();
-	var l_entities = this._getEntities(agenda);
-	var _g = 0;
-	while(_g < l_entities.length) {
-		var i = l_entities[_g];
-		++_g;
-		if(Std["is"](i,classType)) l_result.push(i);
-		if(isBubbleDown) l_result.concat(i.getEntitiesByClass(classType,agenda,true));
-	}
-	if(isBubbleUp && this.__get_parent() != null) l_result.concat(this.__get_parent().getEntitiesByClass(classType,agenda,false,true));
-	return l_result;
-}
-awe6.core.Entity.prototype.getEntityById = function(id,agenda,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	if(this.id == id) return this;
-	if(isBubbleEverywhere && this._kernel.scenes.__get_scene() != null) return this._kernel.scenes.__get_scene().getEntityById(id,agenda,true);
-	var l_result = null;
-	var l_entities = this._getEntities(agenda);
-	var _g = 0;
-	while(_g < l_entities.length) {
-		var i = l_entities[_g];
-		++_g;
-		if(i.id == id) return i;
-		if(isBubbleDown) l_result = i.getEntityById(id,agenda,true);
-		if(l_result != null) return l_result;
-	}
-	if(isBubbleUp && this.__get_parent() != null) l_result = this.__get_parent().getEntityById(id,agenda,false,true);
-	return l_result;
-}
-awe6.core.Entity.prototype.setAgenda = function(type) {
-	if(type == null) type = awe6.interfaces.EAgenda.ALWAYS;
-	if(Type.enumEq(this.__get_agenda(),type)) return false;
-	this._isAgendaDirty = true;
-	var $it0 = this._entityAgendaPairs.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		var l_isAddedToView = Type.enumEq(this.__get_agenda(),i.agenda) && i.entity.__get_view().__get_parent() == this.__get_view();
-		if(l_isAddedToView) i.entity.__get_view().remove();
-		i.isAddedToView = i.isAddedToView || l_isAddedToView;
-	}
-	this.agenda = type;
-	var $it1 = this._entityAgendaPairs.iterator();
-	while( $it1.hasNext() ) {
-		var i = $it1.next();
-		if(i.isAddedToView && (Type.enumEq(awe6.interfaces.EAgenda.ALWAYS,i.agenda) || Type.enumEq(this.__get_agenda(),i.agenda))) this.__get_view().addChild(i.entity.__get_view());
-	}
-	return true;
-}
-awe6.core.Entity.prototype._setParent = function(parent) {
-	this.parent = parent;
-}
-awe6.core.Entity.prototype.__set_id = function(value) {
-	this.id = value;
-	return this.id;
-}
-awe6.core.Entity.prototype.__get_agenda = function() {
-	return this.agenda;
-}
-awe6.core.Entity.prototype.__get_parent = function() {
+awe6.core.drivers.AView.prototype._get_parent = function() {
 	return this.parent;
 }
-awe6.core.Entity.prototype.__get_view = function() {
-	return this.view;
+awe6.core.drivers.AView.prototype._get_isInViewStack = function() {
+	if(!this.isVisible) return false;
+	if(this.owner == this._kernel) return true;
+	if(this._get_parent() == null) return false;
+	return this._get_parent()._get_isInViewStack();
 }
-awe6.core.Entity.prototype.__class__ = awe6.core.Entity;
-awe6.core.Entity.__interfaces__ = [awe6.interfaces.IEntity];
-awe6.interfaces.IOverlay = function() { }
-awe6.interfaces.IOverlay.__name__ = ["awe6","interfaces","IOverlay"];
-awe6.interfaces.IOverlay.prototype.pauseEntity = null;
-awe6.interfaces.IOverlay.prototype.showButton = null;
-awe6.interfaces.IOverlay.prototype.positionButton = null;
-awe6.interfaces.IOverlay.prototype.activateButton = null;
-awe6.interfaces.IOverlay.prototype.showProgress = null;
-awe6.interfaces.IOverlay.prototype.hideButtons = null;
-awe6.interfaces.IOverlay.prototype.flash = null;
-awe6.interfaces.IOverlay.prototype.__class__ = awe6.interfaces.IOverlay;
-awe6.interfaces.IOverlayProcess = function() { }
-awe6.interfaces.IOverlayProcess.__name__ = ["awe6","interfaces","IOverlayProcess"];
-awe6.interfaces.IOverlayProcess.prototype.__class__ = awe6.interfaces.IOverlayProcess;
-awe6.interfaces.IOverlayProcess.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IProcess,awe6.interfaces.IOverlay];
-awe6.core.drivers.AOverlay = function(kernel,border,backUp,backOver,muteUp,muteOver,unmuteUp,unmuteOver,pauseUp,pauseOver,unpauseUp,unpauseOver,pauseBlur,pauseColor,pauseAlpha) {
-	if( kernel === $_ ) return;
-	if(pauseAlpha == null) pauseAlpha = .35;
-	if(pauseColor == null) pauseColor = 0;
-	if(pauseBlur == null) pauseBlur = 8;
-	this._borderView = border;
-	this._buttonBack = new awe6.core.BasicButton(kernel,backUp,backOver,30,30);
-	this._buttonMute = new awe6.core.BasicButton(kernel,muteUp,muteOver,30,30);
-	this._buttonUnmute = new awe6.core.BasicButton(kernel,unmuteUp,unmuteOver,30,30);
-	this._buttonPause = new awe6.core.BasicButton(kernel,pauseUp,pauseOver,30,30);
-	this._buttonUnpause = new awe6.core.BasicButton(kernel,unpauseUp,unpauseOver,30,30);
-	this._pauseBlur = pauseBlur;
-	this._pauseColor = pauseColor;
-	this._pauseAlpha = pauseAlpha;
-	this._context = new jeash.display.Sprite();
-	awe6.core.Entity.call(this,kernel,null,this._context);
+awe6.core.drivers.AView.prototype._set_x = function(p_value) {
+	this.x = p_value;
+	this.globalX = this.x + (this._get_parent() != null?this._get_parent().globalX:0);
+	return this.x;
 }
-awe6.core.drivers.AOverlay.__name__ = ["awe6","core","drivers","AOverlay"];
-awe6.core.drivers.AOverlay.__super__ = awe6.core.Entity;
-for(var k in awe6.core.Entity.prototype ) awe6.core.drivers.AOverlay.prototype[k] = awe6.core.Entity.prototype[k];
-awe6.core.drivers.AOverlay.prototype.pauseEntity = null;
-awe6.core.drivers.AOverlay.prototype._borderView = null;
-awe6.core.drivers.AOverlay.prototype._progressContext = null;
-awe6.core.drivers.AOverlay.prototype._progressView = null;
-awe6.core.drivers.AOverlay.prototype._pauseContext = null;
-awe6.core.drivers.AOverlay.prototype._pauseView = null;
-awe6.core.drivers.AOverlay.prototype._flashContext = null;
-awe6.core.drivers.AOverlay.prototype._flashView = null;
-awe6.core.drivers.AOverlay.prototype._context = null;
-awe6.core.drivers.AOverlay.prototype._pauseColor = null;
-awe6.core.drivers.AOverlay.prototype._pauseAlpha = null;
-awe6.core.drivers.AOverlay.prototype._pauseBlur = null;
-awe6.core.drivers.AOverlay.prototype._flashDuration = null;
-awe6.core.drivers.AOverlay.prototype._flashAlpha = null;
-awe6.core.drivers.AOverlay.prototype._flashStartingAlpha = null;
-awe6.core.drivers.AOverlay.prototype._flashStartingDuration = null;
-awe6.core.drivers.AOverlay.prototype._flashAsTime = null;
-awe6.core.drivers.AOverlay.prototype._wasMute = null;
-awe6.core.drivers.AOverlay.prototype._buttonBack = null;
-awe6.core.drivers.AOverlay.prototype._buttonMute = null;
-awe6.core.drivers.AOverlay.prototype._buttonUnmute = null;
-awe6.core.drivers.AOverlay.prototype._buttonPause = null;
-awe6.core.drivers.AOverlay.prototype._buttonUnpause = null;
-awe6.core.drivers.AOverlay.prototype._init = function() {
-	awe6.core.Entity.prototype._init.call(this);
-	this.__get_view().addChild(this._borderView,4);
-	this._wasMute = this._kernel.audio.isMute;
-	this._nativeInit();
-	this._progressView = new awe6.core.drivers.js.View(this._kernel,this._progressContext);
-	this._progressView.__set_isVisible(false);
-	this._pauseView = new awe6.core.drivers.js.View(this._kernel,this._pauseContext);
-	this._pauseView.__set_isVisible(false);
-	this._flashView = new awe6.core.drivers.js.View(this._kernel,this._flashContext);
-	this._flashView.__set_isVisible(false);
-	this._flashStartingAlpha = 1;
-	this._flashAsTime = true;
-	this._flashDuration = this._flashStartingDuration = 100;
-	this._buttonBack.onClickCallback = (function(f,a1) {
-		return function() {
-			return f(a1);
-		};
-	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.BACK);
-	this._buttonMute.onClickCallback = (function(f,a1) {
-		return function() {
-			return f(a1);
-		};
-	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.MUTE);
-	this._buttonPause.onClickCallback = (function(f,a1) {
-		return function() {
-			return f(a1);
-		};
-	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.PAUSE);
-	this._buttonUnmute.onClickCallback = (function(f,a1) {
-		return function() {
-			return f(a1);
-		};
-	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.UNMUTE);
-	this._buttonUnpause.onClickCallback = (function(f,a1) {
-		return function() {
-			return f(a1);
-		};
-	})($closure(this,"activateButton"),awe6.interfaces.EOverlayButton.UNPAUSE);
-	this.__get_view().addChild(this._flashView,1);
-	this.__get_view().addChild(this._pauseView,2);
-	this.__get_view().addChild(this._progressView,3);
-	this.addEntity(this._buttonBack,null,true,21);
-	this.addEntity(this._buttonUnmute,null,true,22);
-	this.addEntity(this._buttonMute,null,true,23);
-	this.addEntity(this._buttonUnpause,null,true,24);
-	this.addEntity(this._buttonPause,null,true,25);
-	var l_height = this._buttonBack.height;
-	var l_width = this._buttonBack.width;
-	var l_x = this._kernel.factory.width - l_width * 4;
-	var l_y = l_height;
-	this.positionButton(awe6.interfaces.EOverlayButton.BACK,l_x,l_y);
-	this.positionButton(awe6.interfaces.EOverlayButton.MUTE,l_x += l_width,l_y);
-	this.positionButton(awe6.interfaces.EOverlayButton.UNMUTE,l_x,l_y);
-	this.positionButton(awe6.interfaces.EOverlayButton.PAUSE,l_x += l_width,l_y);
-	this.positionButton(awe6.interfaces.EOverlayButton.UNPAUSE,l_x,l_y);
+awe6.core.drivers.AView.prototype._set_y = function(p_value) {
+	this.y = p_value;
+	this.globalY = this.y + (this._get_parent() != null?this._get_parent().globalY:0);
+	return this.y;
 }
-awe6.core.drivers.AOverlay.prototype._nativeInit = function() {
-	this._progressContext = new jeash.display.Sprite();
-	this._pauseContext = new jeash.display.Sprite();
-	this._flashContext = new jeash.display.Sprite();
+awe6.core.drivers.AView.prototype.setPosition = function(p_x,p_y) {
+	this._set_x(p_x);
+	this._set_y(p_y);
 }
-awe6.core.drivers.AOverlay.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
-	if(this._flashDuration > 0) {
-		this._flashDuration -= this._flashAsTime?deltaTime:1;
-		this._flashAlpha = this._tools.limit(this._flashStartingAlpha * (this._flashDuration / this._flashStartingDuration),0,1);
-	}
-	this._flashView.__set_isVisible(this._flashAlpha > 0);
-	if(this._kernel.factory.keyBack != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyBack)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.BACK:awe6.interfaces.EOverlayButton.UNPAUSE);
-	if(this._kernel.factory.keyPause != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyPause)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.PAUSE:awe6.interfaces.EOverlayButton.UNPAUSE);
-	if(this._kernel.factory.keyMute != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyMute)) this.activateButton(this._kernel.audio.isMute?awe6.interfaces.EOverlayButton.UNMUTE:awe6.interfaces.EOverlayButton.MUTE);
-	if(this.__get_pauseEntity() != null && !this._kernel.isActive) {
-		this.__get_pauseEntity().update(deltaTime);
-		this._pauseView.update(deltaTime);
+awe6.core.drivers.AView.prototype.__class__ = awe6.core.drivers.AView;
+awe6.core.drivers.AView.__interfaces__ = [awe6.interfaces.IView];
+awe6.core.drivers.jeash.View = function(p_kernel,p_context,p_priority,p_owner) {
+	if( p_kernel === $_ ) return;
+	if(p_priority == null) p_priority = 0;
+	awe6.core.drivers.AView.call(this,p_kernel,p_context,p_priority,p_owner);
+}
+awe6.core.drivers.jeash.View.__name__ = ["awe6","core","drivers","jeash","View"];
+awe6.core.drivers.jeash.View.__super__ = awe6.core.drivers.AView;
+for(var k in awe6.core.drivers.AView.prototype ) awe6.core.drivers.jeash.View.prototype[k] = awe6.core.drivers.AView.prototype[k];
+awe6.core.drivers.jeash.View.prototype._container = null;
+awe6.core.drivers.jeash.View.prototype._init = function() {
+	if(this.context == null) this.context = new jeash.display.Sprite();
+	awe6.core.drivers.AView.prototype._init.call(this);
+}
+awe6.core.drivers.jeash.View.prototype._driverDisposer = function() {
+	if(this.context != null && this.context.parent != null) try {
+		this.context.parent.removeChild(this.context);
+	} catch( l_error ) {
 	}
 }
-awe6.core.drivers.AOverlay.prototype._disposer = function() {
-	if(this.__get_pauseEntity() != null) this.__get_pauseEntity().dispose();
-	this.__get_view().dispose();
-	awe6.core.Entity.prototype._disposer.call(this);
-}
-awe6.core.drivers.AOverlay.prototype._getButton = function(type) {
-	return (function($this) {
-		var $r;
-		var $e = (type);
-		switch( $e[1] ) {
-		case 0:
-			$r = $this._buttonBack;
-			break;
-		case 1:
-			$r = $this._buttonMute;
-			break;
-		case 2:
-			$r = $this._buttonUnmute;
-			break;
-		case 3:
-			$r = $this._buttonPause;
-			break;
-		case 4:
-			$r = $this._buttonUnpause;
-			break;
-		case 5:
-			var value = $e[2];
-			$r = null;
-			break;
-		}
-		return $r;
-	}(this));
-}
-awe6.core.drivers.AOverlay.prototype.showButton = function(type,isVisible) {
-	if(isVisible == null) isVisible = true;
-	var l_button = this._getButton(type);
-	if(isVisible) this.addEntity(l_button,null,true); else this.removeEntity(l_button,null,true);
-}
-awe6.core.drivers.AOverlay.prototype.positionButton = function(type,x,y) {
-	var l_button = this._getButton(type);
-	l_button.__set_x(x);
-	l_button.__set_y(y);
-}
-awe6.core.drivers.AOverlay.prototype.showProgress = function(progress,message) {
-	this._progressView.__set_isVisible(progress < 1);
-}
-awe6.core.drivers.AOverlay.prototype.hideButtons = function() {
-	this.showButton(awe6.interfaces.EOverlayButton.BACK,false);
-	this.showButton(awe6.interfaces.EOverlayButton.MUTE,false);
-	this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,false);
-	this.showButton(awe6.interfaces.EOverlayButton.PAUSE,false);
-	this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
-}
-awe6.core.drivers.AOverlay.prototype.flash = function(duration,asTime,startingAlpha,color) {
-	if(color == null) color = 16777215;
-	if(startingAlpha == null) startingAlpha = 1;
-	if(asTime == null) asTime = true;
-	duration = duration != null?duration:asTime?500:this._kernel.factory.targetFramerate * .5;
-	this._flashDuration = this._flashStartingDuration = duration;
-	this._flashAsTime = asTime;
-	this._flashAlpha = this._flashStartingAlpha = startingAlpha > 1?1:startingAlpha < 0?0:startingAlpha;
-}
-awe6.core.drivers.AOverlay.prototype.activateButton = function(type) {
-	var $e = (type);
-	switch( $e[1] ) {
-	case 0:
-		if(this._buttonBack.__get_view().__get_isInViewStack()) {
-			if(!this._kernel.isActive) this.activateButton(awe6.interfaces.EOverlayButton.UNPAUSE);
-			this._drawPause(false);
-			this._kernel.resume();
-			this._kernel.scenes.back();
-		}
-		break;
-	case 1:
-		if(this._buttonMute.__get_view().__get_isInViewStack()) {
-			this.showButton(awe6.interfaces.EOverlayButton.MUTE,false);
-			this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,true);
-			this._kernel.audio.__set_isMute(true);
-		}
-		break;
-	case 2:
-		if(this._buttonUnmute.__get_view().__get_isInViewStack() && !this._buttonUnpause.__get_view().__get_isInViewStack()) {
-			this.showButton(awe6.interfaces.EOverlayButton.MUTE,true);
-			this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,false);
-			this._kernel.audio.__set_isMute(false);
-		}
-		break;
-	case 3:
-		if(this._buttonPause.__get_view().__get_isInViewStack()) {
-			this._wasMute = this._kernel.audio.isMute;
-			this.showButton(awe6.interfaces.EOverlayButton.PAUSE,false);
-			this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,true);
-			this._kernel.pause();
-			this._drawPause(true);
-			this.activateButton(awe6.interfaces.EOverlayButton.MUTE);
-		}
-		break;
-	case 4:
-		if(this._buttonUnpause.__get_view().__get_isInViewStack()) {
-			this.showButton(awe6.interfaces.EOverlayButton.PAUSE,true);
-			this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
-			this._kernel.resume();
-			this._drawPause(false);
-			this.activateButton(this._wasMute?awe6.interfaces.EOverlayButton.MUTE:awe6.interfaces.EOverlayButton.UNMUTE);
-		}
-		break;
-	case 5:
-		var value = $e[2];
-		break;
+awe6.core.drivers.jeash.View.prototype._driverDraw = function() {
+	if(this._get_parent() != null) this._get_parent()._set_x(this._get_parent().x);
+	if(this._container != null && this._container.parent != null) this._container.parent.removeChild(this._container);
+	this._container = new jeash.display.Sprite();
+	this._container.mouseEnabled = false;
+	this.context.addChild(this._container);
+	var l_children = this._children;
+	var _g = 0;
+	while(_g < l_children.length) {
+		var i = l_children[_g];
+		++_g;
+		if(i.isVisible) this._container.addChild(i.context);
 	}
 }
-awe6.core.drivers.AOverlay.prototype._drawPause = function(isVisible) {
-	if(isVisible == null) isVisible = true;
-	this._pauseView.__set_isVisible(isVisible);
+awe6.core.drivers.jeash.View.prototype._set_x = function(p_value) {
+	this.context.jeashSetX(p_value);
+	this._isDirty = true;
+	return awe6.core.drivers.AView.prototype._set_x.call(this,p_value);
 }
-awe6.core.drivers.AOverlay.prototype.__get_pauseEntity = function() {
-	return this.pauseEntity;
+awe6.core.drivers.jeash.View.prototype._set_y = function(p_value) {
+	this.context.jeashSetY(p_value);
+	this._isDirty = true;
+	return awe6.core.drivers.AView.prototype._set_y.call(this,p_value);
 }
-awe6.core.drivers.AOverlay.prototype.__set_pauseEntity = function(value) {
-	if(this.__get_pauseEntity() != null) this.__get_pauseEntity().__get_view().remove();
-	this.pauseEntity = value;
-	this._pauseView.addChild(this.__get_pauseEntity().__get_view());
-	return this.__get_pauseEntity();
-}
-awe6.core.drivers.AOverlay.prototype.__class__ = awe6.core.drivers.AOverlay;
-awe6.core.drivers.AOverlay.__interfaces__ = [awe6.interfaces.IOverlayProcess];
-if(!awe6.core.drivers.js) awe6.core.drivers.js = {}
-awe6.core.drivers.js.Overlay = function(kernel,border,backUp,backOver,muteUp,muteOver,unmuteUp,unmuteOver,pauseUp,pauseOver,unpauseUp,unpauseOver,pauseBlur,pauseColor,pauseAlpha) {
-	if( kernel === $_ ) return;
-	if(pauseAlpha == null) pauseAlpha = .35;
-	if(pauseColor == null) pauseColor = 0;
-	if(pauseBlur == null) pauseBlur = 8;
-	awe6.core.drivers.AOverlay.call(this,kernel,border,backUp,backOver,muteUp,muteOver,unmuteUp,unmuteOver,pauseUp,pauseOver,unpauseUp,unpauseOver,pauseBlur,pauseColor,pauseAlpha);
-}
-awe6.core.drivers.js.Overlay.__name__ = ["awe6","core","drivers","js","Overlay"];
-awe6.core.drivers.js.Overlay.__super__ = awe6.core.drivers.AOverlay;
-for(var k in awe6.core.drivers.AOverlay.prototype ) awe6.core.drivers.js.Overlay.prototype[k] = awe6.core.drivers.AOverlay.prototype[k];
-awe6.core.drivers.js.Overlay.prototype._nativeInit = function() {
-	this._context.mouseEnabled = false;
-	this._pauseContext = new jeash.display.Sprite();
-	this._pauseContext.mouseEnabled = false;
-	this._pauseContext.jeashGetGraphics().beginFill(this._pauseColor,this._pauseAlpha);
-	this._pauseContext.jeashGetGraphics().drawRect(0,0,this._kernel.factory.width,this._kernel.factory.height);
-	this._flashContext = new jeash.display.Sprite();
-	this._flashContext.mouseEnabled = false;
-}
-awe6.core.drivers.js.Overlay.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.drivers.AOverlay.prototype._updater.call(this,deltaTime);
-	this._flashContext.alpha = this._flashAlpha;
-}
-awe6.core.drivers.js.Overlay.prototype.flash = function(duration,asTime,startingAlpha,color) {
-	if(color == null) color = 16777215;
-	if(startingAlpha == null) startingAlpha = 1;
-	if(asTime == null) asTime = true;
-	this._flashContext.jeashGetGraphics().clear();
-	this._flashContext.jeashGetGraphics().beginFill(color);
-	this._flashContext.jeashGetGraphics().drawRect(0,0,this._kernel.factory.width,this._kernel.factory.height);
-	duration = duration != null?duration:asTime?500:this._kernel.factory.targetFramerate * .5;
-	this._flashDuration = this._flashStartingDuration = duration;
-	this._flashAsTime = asTime;
-	this._flashAlpha = this._flashStartingAlpha = startingAlpha > 1?1:startingAlpha < 0?0:startingAlpha;
-}
-awe6.core.drivers.js.Overlay.prototype.__class__ = awe6.core.drivers.js.Overlay;
+awe6.core.drivers.jeash.View.prototype.__class__ = awe6.core.drivers.jeash.View;
 if(!awe6.extras) awe6.extras = {}
 if(!awe6.extras.gui) awe6.extras.gui = {}
-awe6.extras.gui.GuiEntity = function(kernel,width,height,isMasked) {
-	if( kernel === $_ ) return;
-	if(isMasked == null) isMasked = true;
-	if(height == null) height = 100;
-	if(width == null) width = 100;
+awe6.extras.gui.GuiEntity = function(p_kernel,p_width,p_height,p_isMasked) {
+	if( p_kernel === $_ ) return;
+	if(p_isMasked == null) p_isMasked = true;
+	if(p_height == null) p_height = 100;
+	if(p_width == null) p_width = 100;
 	Reflect.setField(this,"isFlippedX",false);
 	Reflect.setField(this,"isFlippedY",false);
-	this.width = width;
-	this.height = height;
+	this.width = p_width;
+	this.height = p_height;
 	this._sprite = new jeash.display.Sprite();
-	if(isMasked) {
+	if(p_isMasked) {
 		var l_mask = new jeash.display.Sprite();
 		l_mask.jeashGetGraphics().beginFill(16711680);
-		l_mask.jeashGetGraphics().drawRect(0,0,width,height);
+		l_mask.jeashGetGraphics().drawRect(0,0,p_width,p_height);
 		this._sprite.addChild(l_mask);
 		this._sprite.SetMask(l_mask);
 	}
-	awe6.core.Entity.call(this,kernel,null,this._sprite);
+	awe6.core.Entity.call(this,p_kernel,null,this._sprite);
 }
 awe6.extras.gui.GuiEntity.__name__ = ["awe6","extras","gui","GuiEntity"];
 awe6.extras.gui.GuiEntity.__super__ = awe6.core.Entity;
@@ -938,49 +1166,50 @@ awe6.extras.gui.GuiEntity.prototype.height = null;
 awe6.extras.gui.GuiEntity.prototype.isFlippedX = null;
 awe6.extras.gui.GuiEntity.prototype.isFlippedY = null;
 awe6.extras.gui.GuiEntity.prototype._sprite = null;
-awe6.extras.gui.GuiEntity.prototype.setPosition = function(x,y) {
-	this.__set_x(x);
-	this.__set_y(y);
+awe6.extras.gui.GuiEntity.prototype.setPosition = function(p_x,p_y) {
+	this._set_x(p_x);
+	this._set_y(p_y);
 }
-awe6.extras.gui.GuiEntity.prototype.__set_x = function(value) {
-	this.x = value;
+awe6.extras.gui.GuiEntity.prototype._set_x = function(p_value) {
+	this.x = p_value;
 	this._sprite.jeashSetX(this.x);
 	return this.x;
 }
-awe6.extras.gui.GuiEntity.prototype.__set_y = function(value) {
-	this.y = value;
+awe6.extras.gui.GuiEntity.prototype._set_y = function(p_value) {
+	this.y = p_value;
 	this._sprite.jeashSetY(this.y);
 	return this.y;
 }
-awe6.extras.gui.GuiEntity.prototype.__set_isFlippedX = function(value) {
-	if(value == this.isFlippedX) return this.isFlippedX;
-	this.isFlippedX = value;
+awe6.extras.gui.GuiEntity.prototype._set_isFlippedX = function(p_value) {
+	if(p_value == this.isFlippedX) return this.isFlippedX;
+	this.isFlippedX = p_value;
 	var _g = this._sprite;
 	_g.jeashSetScaleX(_g.jeashGetScaleX() * -1);
 	if(this.isFlippedX) {
 		var _g = this;
-		_g.__set_x(_g.x + this.width);
+		_g._set_x(_g.x + this.width);
 	} else {
 		var _g = this;
-		_g.__set_x(_g.x - this.width);
+		_g._set_x(_g.x - this.width);
 	}
 	return this.isFlippedX;
 }
-awe6.extras.gui.GuiEntity.prototype.__set_isFlippedY = function(value) {
-	if(value == this.isFlippedY) return this.isFlippedY;
-	this.isFlippedY = value;
+awe6.extras.gui.GuiEntity.prototype._set_isFlippedY = function(p_value) {
+	if(p_value == this.isFlippedY) return this.isFlippedY;
+	this.isFlippedY = p_value;
 	var _g = this._sprite;
 	_g.jeashSetScaleY(_g.jeashGetScaleY() * -1);
 	if(this.isFlippedY) {
 		var _g = this;
-		_g.__set_y(_g.y + this.height);
+		_g._set_y(_g.y + this.height);
 	} else {
 		var _g = this;
-		_g.__set_y(_g.y - this.height);
+		_g._set_y(_g.y - this.height);
 	}
 	return this.isFlippedY;
 }
 awe6.extras.gui.GuiEntity.prototype.__class__ = awe6.extras.gui.GuiEntity;
+awe6.extras.gui.GuiEntity.__interfaces__ = [awe6.interfaces.IPositionable];
 awe6.interfaces.IScene = function() { }
 awe6.interfaces.IScene.__name__ = ["awe6","interfaces","IScene"];
 awe6.interfaces.IScene.prototype.type = null;
@@ -990,16 +1219,16 @@ awe6.interfaces.IScene.prototype.isMuteable = null;
 awe6.interfaces.IScene.prototype.isSessionSavedOnNext = null;
 awe6.interfaces.IScene.prototype.__class__ = awe6.interfaces.IScene;
 awe6.interfaces.IScene.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IEntityCollection,awe6.interfaces.IProcess];
-awe6.core.Scene = function(kernel,type,isPauseable,isMutable,isSessionSavedOnNext) {
-	if( kernel === $_ ) return;
-	if(isSessionSavedOnNext == null) isSessionSavedOnNext = false;
-	if(isMutable == null) isMutable = true;
-	if(isPauseable == null) isPauseable = false;
-	this.type = type;
-	this.isPauseable = isPauseable;
-	this.isMuteable = isMutable;
-	this.isSessionSavedOnNext = isSessionSavedOnNext;
-	awe6.core.Process.call(this,kernel);
+awe6.core.Scene = function(p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext) {
+	if( p_kernel === $_ ) return;
+	if(p_isSessionSavedOnNext == null) p_isSessionSavedOnNext = false;
+	if(p_isMutable == null) p_isMutable = true;
+	if(p_isPauseable == null) p_isPauseable = false;
+	this.type = p_type;
+	this.isPauseable = p_isPauseable;
+	this.isMuteable = p_isMutable;
+	this.isSessionSavedOnNext = p_isSessionSavedOnNext;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.Scene.__name__ = ["awe6","core","Scene"];
 awe6.core.Scene.__super__ = awe6.core.Process;
@@ -1015,57 +1244,58 @@ awe6.core.Scene.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
 	this.isDisposable = true;
 	this._entity = new awe6.core.Entity(this._kernel);
-	this.view = this._entity.__get_view();
+	this.view = this._entity._get_view();
 }
-awe6.core.Scene.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	this._entity.update(deltaTime);
+awe6.core.Scene.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	this._entity.update(p_deltaTime);
 }
 awe6.core.Scene.prototype._disposer = function() {
 	this._entity.dispose();
-	this.__get_view().dispose();
+	this._get_view().dispose();
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.Scene.prototype.addEntity = function(entity,agenda,isAddedToView,viewPriority) {
-	if(isAddedToView == null) isAddedToView = false;
-	return this._entity.addEntity(entity,agenda,isAddedToView,viewPriority);
+awe6.core.Scene.prototype.addEntity = function(p_entity,p_agenda,p_isAddedToView,p_viewPriority) {
+	if(p_viewPriority == null) p_viewPriority = 0;
+	if(p_isAddedToView == null) p_isAddedToView = false;
+	this._entity.addEntity(p_entity,p_agenda,p_isAddedToView,p_viewPriority);
 }
-awe6.core.Scene.prototype.removeEntity = function(entity,agenda,isRemovedFromView) {
-	if(isRemovedFromView == null) isRemovedFromView = false;
-	this._entity.removeEntity(entity,agenda,isRemovedFromView);
+awe6.core.Scene.prototype.removeEntity = function(p_entity,p_agenda,p_isRemovedFromView) {
+	if(p_isRemovedFromView == null) p_isRemovedFromView = false;
+	this._entity.removeEntity(p_entity,p_agenda,p_isRemovedFromView);
 }
-awe6.core.Scene.prototype.getEntities = function(agenda) {
-	return this._entity.getEntities(agenda);
+awe6.core.Scene.prototype.getEntities = function(p_agenda) {
+	return this._entity.getEntities(p_agenda);
 }
-awe6.core.Scene.prototype.getEntitiesByClass = function(classType,agenda,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	return this._entity.getEntitiesByClass(classType,agenda,isBubbleDown,isBubbleUp,false);
+awe6.core.Scene.prototype.getEntitiesByClass = function(p_classType,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	return this._entity.getEntitiesByClass(p_classType,p_agenda,p_isBubbleDown,p_isBubbleUp,false);
 }
-awe6.core.Scene.prototype.getEntityById = function(id,agenda,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	return this._entity.getEntityById(id,agenda,isBubbleDown,isBubbleUp,false);
+awe6.core.Scene.prototype.getEntityById = function(p_id,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	return this._entity.getEntityById(p_id,p_agenda,p_isBubbleDown,p_isBubbleUp,false);
 }
-awe6.core.Scene.prototype.__get_view = function() {
+awe6.core.Scene.prototype._get_view = function() {
 	return this.view;
 }
 awe6.core.Scene.prototype.__class__ = awe6.core.Scene;
 awe6.core.Scene.__interfaces__ = [awe6.interfaces.IScene];
 if(typeof demo=='undefined') demo = {}
 if(!demo.scenes) demo.scenes = {}
-demo.scenes.AScene = function(kernel,type,isPauseable,isMutable,isSessionSavedOnNext) {
-	if( kernel === $_ ) return;
-	if(isSessionSavedOnNext == null) isSessionSavedOnNext = false;
-	if(isMutable == null) isMutable = true;
-	if(isPauseable == null) isPauseable = false;
-	this._session = kernel.__get_session();
-	this._assetManager = kernel.assets;
+demo.scenes.AScene = function(p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext) {
+	if( p_kernel === $_ ) return;
+	if(p_isSessionSavedOnNext == null) p_isSessionSavedOnNext = false;
+	if(p_isMutable == null) p_isMutable = true;
+	if(p_isPauseable == null) p_isPauseable = false;
+	this._session = p_kernel._get_session();
+	this._assetManager = p_kernel.assets;
 	this._title = "?";
-	awe6.core.Scene.call(this,kernel,type,isPauseable,isMutable,isSessionSavedOnNext);
+	awe6.core.Scene.call(this,p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext);
 }
 demo.scenes.AScene.__name__ = ["demo","scenes","AScene"];
 demo.scenes.AScene.__super__ = awe6.core.Scene;
@@ -1077,38 +1307,39 @@ demo.scenes.AScene.prototype._titleText = null;
 demo.scenes.AScene.prototype._isMusic = null;
 demo.scenes.AScene.prototype._init = function() {
 	awe6.core.Scene.prototype._init.call(this);
-	this.__get_view().addChild(this._assetManager.background,0);
+	this._get_view().addChild(this._assetManager.background,0);
 	var l_sceneType = this._tools.toCamelCase(Std.string(this.type));
 	this._title = Std.string(this._kernel.getConfig("gui.scenes." + l_sceneType + ".title"));
 	this._titleText = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,this._title,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.HEADLINE));
-	this._titleText.__set_y(40);
+	this._titleText._set_y(40);
 	this.addEntity(this._titleText,null,true,100);
 	this._kernel.audio.start("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.125,0,true);
 }
 demo.scenes.AScene.prototype.__class__ = demo.scenes.AScene;
-demo.scenes.Intro = function(kernel,type,isPauseable,isMutable,isSessionSavedOnNext) {
-	if( kernel === $_ ) return;
-	if(isSessionSavedOnNext == null) isSessionSavedOnNext = false;
-	if(isMutable == null) isMutable = true;
-	if(isPauseable == null) isPauseable = false;
-	demo.scenes.AScene.call(this,kernel,type,isPauseable,isMutable,isSessionSavedOnNext);
+demo.scenes.Intro = function(p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext) {
+	if( p_kernel === $_ ) return;
+	if(p_isSessionSavedOnNext == null) p_isSessionSavedOnNext = false;
+	if(p_isMutable == null) p_isMutable = true;
+	if(p_isPauseable == null) p_isPauseable = false;
+	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext);
 }
 demo.scenes.Intro.__name__ = ["demo","scenes","Intro"];
 demo.scenes.Intro.__super__ = demo.scenes.AScene;
 for(var k in demo.scenes.AScene.prototype ) demo.scenes.Intro.prototype[k] = demo.scenes.AScene.prototype[k];
 demo.scenes.Intro.prototype._init = function() {
 	demo.scenes.AScene.prototype._init.call(this);
-	this._kernel.__set_session(this._kernel.factory.createSession("Basic"));
+	this._kernel._set_session(this._kernel.factory.createSession("Basic"));
 	var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,this._kernel.getConfig("gui.scenes.intro.instructions"),this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
-	l_result.__set_y(70);
+	l_result._set_y(70);
 	this.addEntity(l_result,null,true,2);
 	var l_button = new demo.gui.Button(this._kernel,this._kernel.factory.keyNext,0,0,$closure(this._kernel.scenes,"next"),null,null,this._kernel.getConfig("gui.buttons.start"));
 	l_button.setPosition((this._kernel.factory.width - l_button.width) / 2,(this._kernel.factory.height - l_button.height) / 2);
 	this.addEntity(l_button,null,true,1);
 }
-demo.scenes.Intro.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	demo.scenes.AScene.prototype._updater.call(this,deltaTime);
+demo.scenes.Intro.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	demo.scenes.AScene.prototype._updater.call(this,p_deltaTime);
+	if(this._kernel.inputs.keyboard.getIsKeyRelease(awe6.interfaces.EKey.F)) this._kernel._set_isFullScreen(!this._kernel.isFullScreen);
 }
 demo.scenes.Intro.prototype.__class__ = demo.scenes.Intro;
 if(typeof jeash=='undefined') jeash = {}
@@ -1131,10 +1362,10 @@ jeash.errors.Error.prototype.toString = function() {
 	if(this.message != null) return this.message; else return "Error";
 }
 jeash.errors.Error.prototype.__class__ = jeash.errors.Error;
-awe6.core.drivers.AProfiler = function(kernel) {
-	if( kernel === $_ ) return;
+awe6.core.drivers.AProfiler = function(p_kernel) {
+	if( p_kernel === $_ ) return;
 	this._context = new jeash.display.Sprite();
-	awe6.core.Entity.call(this,kernel,null,this._context);
+	awe6.core.Entity.call(this,p_kernel,null,this._context);
 }
 awe6.core.drivers.AProfiler.__name__ = ["awe6","core","drivers","AProfiler"];
 awe6.core.drivers.AProfiler.__super__ = awe6.core.Entity;
@@ -1162,16 +1393,15 @@ awe6.core.drivers.AProfiler.prototype._init = function() {
 	this._width = 60;
 	this._height = 50;
 	this._agePrev = 0;
-	this._context.jeashSetX(this._context.jeashSetY(2));
 }
-awe6.core.drivers.AProfiler.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
+awe6.core.drivers.AProfiler.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
 	if(this._age < this._agePrev + 250) return;
 	this._agePrev = this._age;
-	this._nativeUpdate();
+	this._driverUpdate();
 }
-awe6.core.drivers.AProfiler.prototype._nativeUpdate = function() {
+awe6.core.drivers.AProfiler.prototype._driverUpdate = function() {
 }
 awe6.core.drivers.AProfiler.prototype.__class__ = awe6.core.drivers.AProfiler;
 awe6.interfaces.EMessage = { __ename__ : ["awe6","interfaces","EMessage"], __constructs__ : ["DISPOSE","PAUSE","RESUME","SUB_TYPE"] }
@@ -1854,6 +2084,7 @@ awe6.interfaces.IFactory.prototype.isResetSessionsOptionEnabled = null;
 awe6.interfaces.IFactory.prototype.width = null;
 awe6.interfaces.IFactory.prototype.height = null;
 awe6.interfaces.IFactory.prototype.bgColor = null;
+awe6.interfaces.IFactory.prototype.fullScreenType = null;
 awe6.interfaces.IFactory.prototype.secret = null;
 awe6.interfaces.IFactory.prototype.targetFramerate = null;
 awe6.interfaces.IFactory.prototype.isFixedUpdates = null;
@@ -1878,19 +2109,23 @@ awe6.interfaces.IFactory.prototype.createTextStyle = null;
 awe6.interfaces.IFactory.prototype.getBackSceneType = null;
 awe6.interfaces.IFactory.prototype.getNextSceneType = null;
 awe6.interfaces.IFactory.prototype.__class__ = awe6.interfaces.IFactory;
-awe6.core.drivers.AFactory = function(isDebug,configUrl) {
-	if( isDebug === $_ ) return;
-	if(isDebug == null) isDebug = true;
-	this.isDebug = isDebug;
-	this._configUrl = configUrl;
-	this._nativeInit();
+awe6.core.drivers.AFactory = function(p_context,p_isDebug,p_config) {
+	if( p_context === $_ ) return;
+	if(p_isDebug == null) p_isDebug = false;
+	this._context = p_context;
+	this.isDebug = p_isDebug;
+	this._config = p_config;
+	{
+		this.config = new Hash();
+		this._driverInit();
+	}
 }
 awe6.core.drivers.AFactory.__name__ = ["awe6","core","drivers","AFactory"];
-awe6.core.drivers.AFactory.prototype._configUrl = null;
+awe6.core.drivers.AFactory.prototype._context = null;
+awe6.core.drivers.AFactory.prototype._config = null;
 awe6.core.drivers.AFactory.prototype._kernel = null;
+awe6.core.drivers.AFactory.prototype._concreteKernel = null;
 awe6.core.drivers.AFactory.prototype._tools = null;
-awe6.core.drivers.AFactory.prototype._isConfigRequired = null;
-awe6.core.drivers.AFactory.prototype.__kernel = null;
 awe6.core.drivers.AFactory.prototype.isDisposed = null;
 awe6.core.drivers.AFactory.prototype.id = null;
 awe6.core.drivers.AFactory.prototype.version = null;
@@ -1903,6 +2138,7 @@ awe6.core.drivers.AFactory.prototype.isResetSessionsOptionEnabled = null;
 awe6.core.drivers.AFactory.prototype.width = null;
 awe6.core.drivers.AFactory.prototype.height = null;
 awe6.core.drivers.AFactory.prototype.bgColor = null;
+awe6.core.drivers.AFactory.prototype.fullScreenType = null;
 awe6.core.drivers.AFactory.prototype.secret = null;
 awe6.core.drivers.AFactory.prototype.targetFramerate = null;
 awe6.core.drivers.AFactory.prototype.isFixedUpdates = null;
@@ -1913,39 +2149,42 @@ awe6.core.drivers.AFactory.prototype.keyMute = null;
 awe6.core.drivers.AFactory.prototype.keyBack = null;
 awe6.core.drivers.AFactory.prototype.keyNext = null;
 awe6.core.drivers.AFactory.prototype.keySpecial = null;
-awe6.core.drivers.AFactory.prototype._nativeInit = function() {
-	this._init();
-	if(this._configUrl != null && this._configUrl.substr(0,5) == "<?xml") this._traverseElements(Xml.parse(this._configUrl).firstElement().elements(),"");
+awe6.core.drivers.AFactory.prototype._init = function() {
+	this.config = new Hash();
+	this._driverInit();
+}
+awe6.core.drivers.AFactory.prototype._driverInit = function() {
+	if(this._config != null && this._config.substr(0,5) == "<?xml") this._traverseElements(Xml.parse(this._config).firstElement().elements(),"");
+	{
+		this.id = "awe6";
+		this.version = "0.0.1";
+		this.author = "unknown";
+		this.isDecached = false;
+		this.isEyeCandyOptionEnabled = true;
+		this.isFullScreenOptionEnabled = true;
+		this.isResetSessionsOptionEnabled = true;
+		this.width = 600;
+		this.height = 400;
+		this.bgColor = 16711680;
+		this.fullScreenType = awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
+		this.secret = "YouMustOverrideThis";
+		this.targetFramerate = 25;
+		this.isFixedUpdates = true;
+		this.startingSceneType = awe6.interfaces.EScene.GAME;
+		this.keyPause = awe6.interfaces.EKey.P;
+		this.keyMute = awe6.interfaces.EKey.M;
+		this.keyNext = awe6.interfaces.EKey.SPACE;
+		this.keyBack = awe6.interfaces.EKey.ESCAPE;
+		this.keySpecial = awe6.interfaces.EKey.CONTROL;
+		this._configurer();
+	}
 	this._launchKernel();
 }
-awe6.core.drivers.AFactory.prototype._init = function() {
-	this.id = "awe6";
-	this.version = "0.0.1";
-	this.author = "unknown";
-	this.isDecached = false;
-	this.isEyeCandyOptionEnabled = true;
-	this.isFullScreenOptionEnabled = true;
-	this.isResetSessionsOptionEnabled = true;
-	this.width = 600;
-	this.height = 400;
-	this.bgColor = 16711680;
-	this.secret = "YouMustOverrideThis";
-	this.targetFramerate = 25;
-	this.isFixedUpdates = true;
-	this.config = new Hash();
-	this.startingSceneType = awe6.interfaces.EScene.GAME;
-	this.keyPause = awe6.interfaces.EKey.P;
-	this.keyMute = awe6.interfaces.EKey.M;
-	this.keyNext = awe6.interfaces.EKey.SPACE;
-	this.keyBack = awe6.interfaces.EKey.ESCAPE;
-	this.keySpecial = awe6.interfaces.EKey.CONTROL;
-	this._isConfigRequired = true;
-}
-awe6.core.drivers.AFactory.prototype._traverseElements = function(elements,prefix) {
-	if(prefix.length != 0) prefix += ".";
-	while( elements.hasNext() ) {
-		var i = elements.next();
-		var l_name = prefix + i.getNodeName();
+awe6.core.drivers.AFactory.prototype._traverseElements = function(p_elements,p_prefix) {
+	if(p_prefix.length != 0) p_prefix += ".";
+	while( p_elements.hasNext() ) {
+		var i = p_elements.next();
+		var l_name = p_prefix + i.getNodeName();
 		if(i.elements().hasNext()) this._traverseElements(i.elements(),l_name);
 		if(i.firstChild() != null && i.firstChild().toString().substr(0,9) == "<![CDATA[") i.firstChild().setNodeValue(i.firstChild().toString().split("<![CDATA[").join("").split("]]>").join(""));
 		this.config.set(l_name,i.firstChild() == null?"":i.firstChild().getNodeValue());
@@ -1957,12 +2196,34 @@ awe6.core.drivers.AFactory.prototype._traverseElements = function(elements,prefi
 		}
 	}
 }
-awe6.core.drivers.AFactory.prototype._launchKernel = function() {
-	if(this.__kernel != null) return;
-	this.__kernel = this._nativeLaunchKernel();
+awe6.core.drivers.AFactory.prototype._configure = function() {
+	this.id = "awe6";
+	this.version = "0.0.1";
+	this.author = "unknown";
+	this.isDecached = false;
+	this.isEyeCandyOptionEnabled = true;
+	this.isFullScreenOptionEnabled = true;
+	this.isResetSessionsOptionEnabled = true;
+	this.width = 600;
+	this.height = 400;
+	this.bgColor = 16711680;
+	this.fullScreenType = awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
+	this.secret = "YouMustOverrideThis";
+	this.targetFramerate = 25;
+	this.isFixedUpdates = true;
+	this.startingSceneType = awe6.interfaces.EScene.GAME;
+	this.keyPause = awe6.interfaces.EKey.P;
+	this.keyMute = awe6.interfaces.EKey.M;
+	this.keyNext = awe6.interfaces.EKey.SPACE;
+	this.keyBack = awe6.interfaces.EKey.ESCAPE;
+	this.keySpecial = awe6.interfaces.EKey.CONTROL;
+	this._configurer();
 }
-awe6.core.drivers.AFactory.prototype._nativeLaunchKernel = function() {
-	return new awe6.core.drivers.js.Kernel(this,null);
+awe6.core.drivers.AFactory.prototype._configurer = function() {
+}
+awe6.core.drivers.AFactory.prototype._launchKernel = function() {
+	if(this._concreteKernel != null) return;
+	this._concreteKernel = new awe6.core.drivers.jeash.Kernel(this,this._context);
 }
 awe6.core.drivers.AFactory.prototype._getAssetUrls = function() {
 	var l_result = [];
@@ -1974,114 +2235,127 @@ awe6.core.drivers.AFactory.prototype._getAssetUrls = function() {
 	}
 	return l_result;
 }
-awe6.core.drivers.AFactory.prototype.onInitComplete = function(kernel) {
-	if(this._kernel != null) return;
-	this._kernel = kernel;
+awe6.core.drivers.AFactory.prototype.onInitComplete = function(p_kernel) {
+	if(this._kernel != null || p_kernel == null) return;
+	this._kernel = p_kernel;
 	this._tools = this._kernel.tools;
 	this.id = this._tools.toConstCase(StringTools.trim(this.id)).substr(0,16);
 	this.version = StringTools.trim(this.version).substr(0,10);
 	this.author = StringTools.trim(this.author).substr(0,16);
 }
 awe6.core.drivers.AFactory.prototype.createAssetManager = function() {
-	return Std["is"](this._kernel.assets,awe6.interfaces.IAssetManagerProcess)?(function($this) {
+	if(Std["is"](this._kernel.assets,awe6.interfaces.IAssetManagerProcess)) return (function($this) {
 		var $r;
 		var $t = $this._kernel.assets;
 		if(Std["is"]($t,awe6.interfaces.IAssetManagerProcess)) $t; else throw "Class cast error";
 		$r = $t;
 		return $r;
-	}(this)):new awe6.core.AAssetManager(this._kernel);
+	}(this)); else return new awe6.core.AAssetManager(this._kernel);
 }
 awe6.core.drivers.AFactory.prototype.createEncrypter = function() {
 	return new awe6.core.Encrypter(this.secret);
 }
-awe6.core.drivers.AFactory.prototype.createEntity = function(id) {
-	var l_entity = new awe6.core.Entity(this._kernel,id);
-	return l_entity;
+awe6.core.drivers.AFactory.prototype.createEntity = function(p_id) {
+	return new awe6.core.Entity(this._kernel,p_id);
 }
 awe6.core.drivers.AFactory.prototype.createLogger = function() {
 	return null;
 }
 awe6.core.drivers.AFactory.prototype.createOverlay = function() {
-	var l_overlay = new awe6.core.drivers.js.Overlay(this._kernel);
-	return l_overlay;
+	return new awe6.core.drivers.jeash.Overlay(this._kernel);
 }
 awe6.core.drivers.AFactory.prototype.createPreloader = function() {
-	return new awe6.core.drivers.js.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
+	return new awe6.core.drivers.jeash.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
 }
-awe6.core.drivers.AFactory.prototype.createScene = function(type) {
-	if(type == null) type = this.startingSceneType;
-	var l_scene = new awe6.core.Scene(this._kernel,type);
-	return l_scene;
+awe6.core.drivers.AFactory.prototype.createScene = function(p_type) {
+	if(p_type == null) p_type = this.startingSceneType;
+	return new awe6.core.Scene(this._kernel,p_type);
 }
-awe6.core.drivers.AFactory.prototype.createSceneTransition = function(typeIncoming,typeOutgoing) {
-	var l_sceneTransition = new awe6.core.drivers.js.SceneTransition(this._kernel);
-	return l_sceneTransition;
+awe6.core.drivers.AFactory.prototype.createSceneTransition = function(p_typeIncoming,p_typeOutgoing) {
+	return new awe6.core.drivers.jeash.SceneTransition(this._kernel);
 }
-awe6.core.drivers.AFactory.prototype.createSession = function(id) {
-	return new awe6.core.drivers.ASession(this._kernel,id);
+awe6.core.drivers.AFactory.prototype.createSession = function(p_id) {
+	return new awe6.core.drivers.ASession(this._kernel,p_id);
 }
-awe6.core.drivers.AFactory.prototype.createTextStyle = function(type) {
-	var l_textStyle = new awe6.core.TextStyle();
-	return l_textStyle;
+awe6.core.drivers.AFactory.prototype.createTextStyle = function(p_type) {
+	return new awe6.core.TextStyle();
 }
-awe6.core.drivers.AFactory.prototype.getBackSceneType = function(type) {
+awe6.core.drivers.AFactory.prototype.getBackSceneType = function(p_type) {
 	return null;
 }
-awe6.core.drivers.AFactory.prototype.getNextSceneType = function(type) {
+awe6.core.drivers.AFactory.prototype.getNextSceneType = function(p_type) {
 	return null;
 }
 awe6.core.drivers.AFactory.prototype.dispose = function() {
-	if(this.isDisposed || this.__kernel == null) return;
+	if(this.isDisposed || this._concreteKernel == null) return;
 	this.isDisposed = true;
-	this._nativeDisposer();
-	this.__kernel.dispose();
-	this.__kernel = null;
+	this._driverDisposer();
+	this._concreteKernel.dispose();
+	this._concreteKernel = null;
 	this._kernel = null;
 	this.config = null;
 }
-awe6.core.drivers.AFactory.prototype._nativeDisposer = function() {
+awe6.core.drivers.AFactory.prototype._driverDisposer = function() {
 }
 awe6.core.drivers.AFactory.prototype.__class__ = awe6.core.drivers.AFactory;
 awe6.core.drivers.AFactory.__interfaces__ = [awe6.interfaces.IDisposable,awe6.interfaces.IFactory];
-awe6.core.drivers.js.Factory = function(sprite,isDebug,config) {
-	if( sprite === $_ ) return;
-	if(isDebug == null) isDebug = true;
-	this._sprite = new jeash.display.Sprite();
-	sprite.addChild(this._sprite);
-	awe6.core.drivers.AFactory.call(this,isDebug,config);
+awe6.core.drivers.jeash.Factory = function(p_context,p_isDebug,p_config) {
+	if( p_context === $_ ) return;
+	if(p_isDebug == null) p_isDebug = false;
+	awe6.core.drivers.AFactory.call(this,p_context,p_isDebug,p_config);
 }
-awe6.core.drivers.js.Factory.__name__ = ["awe6","core","drivers","js","Factory"];
-awe6.core.drivers.js.Factory.__super__ = awe6.core.drivers.AFactory;
-for(var k in awe6.core.drivers.AFactory.prototype ) awe6.core.drivers.js.Factory.prototype[k] = awe6.core.drivers.AFactory.prototype[k];
-awe6.core.drivers.js.Factory.prototype._sprite = null;
-awe6.core.drivers.js.Factory.prototype._nativeInit = function() {
-	this._init();
-	if(this._isConfigRequired) this._parseXml(this._configUrl); else this._launchKernel();
-}
-awe6.core.drivers.js.Factory.prototype._parseXml = function(data) {
-	this._traverseElements(Xml.parse(data).firstElement().elements(),"");
+awe6.core.drivers.jeash.Factory.__name__ = ["awe6","core","drivers","jeash","Factory"];
+awe6.core.drivers.jeash.Factory.__super__ = awe6.core.drivers.AFactory;
+for(var k in awe6.core.drivers.AFactory.prototype ) awe6.core.drivers.jeash.Factory.prototype[k] = awe6.core.drivers.AFactory.prototype[k];
+awe6.core.drivers.jeash.Factory.prototype._driverInit = function() {
+	var l_context = new jeash.display.Sprite();
+	this._context.addChild(l_context);
+	this._context = l_context;
+	if(this._config != "") this._parseXml(this._config);
+	{
+		this.id = "awe6";
+		this.version = "0.0.1";
+		this.author = "unknown";
+		this.isDecached = false;
+		this.isEyeCandyOptionEnabled = true;
+		this.isFullScreenOptionEnabled = true;
+		this.isResetSessionsOptionEnabled = true;
+		this.width = 600;
+		this.height = 400;
+		this.bgColor = 16711680;
+		this.fullScreenType = awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
+		this.secret = "YouMustOverrideThis";
+		this.targetFramerate = 25;
+		this.isFixedUpdates = true;
+		this.startingSceneType = awe6.interfaces.EScene.GAME;
+		this.keyPause = awe6.interfaces.EKey.P;
+		this.keyMute = awe6.interfaces.EKey.M;
+		this.keyNext = awe6.interfaces.EKey.SPACE;
+		this.keyBack = awe6.interfaces.EKey.ESCAPE;
+		this.keySpecial = awe6.interfaces.EKey.CONTROL;
+		this._configurer();
+	}
 	this._launchKernel();
 }
-awe6.core.drivers.js.Factory.prototype._nativeLaunchKernel = function() {
-	return new awe6.core.drivers.js.Kernel(this,this._sprite);
+awe6.core.drivers.jeash.Factory.prototype._parseXml = function(p_data) {
+	this._traverseElements(Xml.parse(p_data).firstElement().elements(),"");
 }
-awe6.core.drivers.js.Factory.prototype._nativeDisposer = function() {
-	if(this._sprite.parent != null) this._sprite.parent.removeChild(this._sprite);
+awe6.core.drivers.jeash.Factory.prototype._driverDisposer = function() {
+	if(this._context.parent != null) this._context.parent.removeChild(this._context);
 }
-awe6.core.drivers.js.Factory.prototype.__class__ = awe6.core.drivers.js.Factory;
-demo.Factory = function(sprite,isDebug,config) {
-	if( sprite === $_ ) return;
-	if(isDebug == null) isDebug = true;
-	awe6.core.drivers.js.Factory.call(this,sprite,isDebug,config);
+awe6.core.drivers.jeash.Factory.prototype.__class__ = awe6.core.drivers.jeash.Factory;
+demo.Factory = function(p_context,p_isDebug,p_config) {
+	if( p_context === $_ ) return;
+	if(p_isDebug == null) p_isDebug = false;
+	awe6.core.drivers.jeash.Factory.call(this,p_context,p_isDebug,p_config);
 }
 demo.Factory.__name__ = ["demo","Factory"];
-demo.Factory.__super__ = awe6.core.drivers.js.Factory;
-for(var k in awe6.core.drivers.js.Factory.prototype ) demo.Factory.prototype[k] = awe6.core.drivers.js.Factory.prototype[k];
+demo.Factory.__super__ = awe6.core.drivers.jeash.Factory;
+for(var k in awe6.core.drivers.jeash.Factory.prototype ) demo.Factory.prototype[k] = awe6.core.drivers.jeash.Factory.prototype[k];
 demo.Factory.prototype._assetManager = null;
-demo.Factory.prototype._init = function() {
-	awe6.core.drivers.js.Factory.prototype._init.call(this);
+demo.Factory.prototype._configurer = function() {
 	this.id = "awe6Demo";
-	this.version = "0.4.200";
+	this.version = "0.6.380";
 	this.author = "Robert Fell";
 	this.isDecached = true;
 	this.width = 600;
@@ -2089,7 +2363,7 @@ demo.Factory.prototype._init = function() {
 	this.bgColor = 16777215;
 	this.secret = "ThereAreWaysToConcealThis";
 	this.startingSceneType = awe6.interfaces.EScene.INTRO;
-	this.targetFramerate = 20;
+	this.targetFramerate = 60;
 	this.isFixedUpdates = false;
 }
 demo.Factory.prototype.createAssetManager = function() {
@@ -2097,7 +2371,7 @@ demo.Factory.prototype.createAssetManager = function() {
 	return this._assetManager;
 }
 demo.Factory.prototype.createOverlay = function() {
-	var l_overlay = new awe6.core.drivers.js.Overlay(this._kernel,this._assetManager.overlayBackground,this._assetManager.backUp,this._assetManager.backOver,this._assetManager.muteUp,this._assetManager.muteOver,this._assetManager.unmuteUp,this._assetManager.unmuteOver,this._assetManager.pauseUp,this._assetManager.pauseOver,this._assetManager.unpauseUp,this._assetManager.unpauseOver);
+	var l_overlay = new awe6.core.drivers.jeash.Overlay(this._kernel,this._assetManager.overlayBackground,this._assetManager.backUp,this._assetManager.backOver,this._assetManager.muteUp,this._assetManager.muteOver,this._assetManager.unmuteUp,this._assetManager.unmuteOver,this._assetManager.pauseUp,this._assetManager.pauseOver,this._assetManager.unpauseUp,this._assetManager.unpauseOver);
 	var l_width = 30;
 	var l_x = this.width - 10 - 3 * l_width;
 	var l_y = this.height - 30;
@@ -2111,28 +2385,29 @@ demo.Factory.prototype.createOverlay = function() {
 demo.Factory.prototype.createPreloader = function() {
 	return new demo.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
 }
-demo.Factory.prototype.createSession = function(id) {
-	return new demo.Session(this._kernel,id);
+demo.Factory.prototype.createSession = function(p_id) {
+	return new demo.Session(this._kernel,p_id);
 }
-demo.Factory.prototype.createScene = function(type) {
-	switch( (type)[1] ) {
+demo.Factory.prototype.createScene = function(p_type) {
+	switch( (p_type)[1] ) {
 	case 0:
-		return new demo.scenes.Intro(this._kernel,type);
+		return new demo.scenes.Intro(this._kernel,p_type);
 	case 5:
-		return new demo.scenes.Game(this._kernel,type);
+		return new demo.scenes.Game(this._kernel,p_type);
 	case 6:
-		return new demo.scenes.Results(this._kernel,type);
+		return new demo.scenes.Results(this._kernel,p_type);
 	default:
+		null;
 	}
-	return awe6.core.drivers.js.Factory.prototype.createScene.call(this,type);
+	return awe6.core.drivers.jeash.Factory.prototype.createScene.call(this,p_type);
 }
-demo.Factory.prototype.createTextStyle = function(type) {
-	if(type == null) type = awe6.interfaces.ETextStyle.BODY;
+demo.Factory.prototype.createTextStyle = function(p_type) {
+	if(p_type == null) p_type = awe6.interfaces.ETextStyle.BODY;
 	var l_fontName = this._assetManager.font.fontName;
 	var l_result = new awe6.core.TextStyle(l_fontName,12,16777215,false,false,awe6.interfaces.ETextAlign.CENTER,0,0,0,[new jeash.filters.GlowFilter(131970,1,4,4,5,2)]);
 	l_result.size = (function($this) {
 		var $r;
-		switch( (type)[1] ) {
+		switch( (p_type)[1] ) {
 		case 2:
 			$r = 24;
 			break;
@@ -2155,8 +2430,8 @@ demo.Factory.prototype.createTextStyle = function(type) {
 	}(this));
 	return l_result;
 }
-demo.Factory.prototype.getBackSceneType = function(type) {
-	switch( (type)[1] ) {
+demo.Factory.prototype.getBackSceneType = function(p_type) {
+	switch( (p_type)[1] ) {
 	case 0:
 		return null;
 	case 5:
@@ -2164,11 +2439,12 @@ demo.Factory.prototype.getBackSceneType = function(type) {
 	case 6:
 		return awe6.interfaces.EScene.INTRO;
 	default:
+		null;
 	}
-	return awe6.core.drivers.js.Factory.prototype.getBackSceneType.call(this,type);
+	return awe6.core.drivers.jeash.Factory.prototype.getBackSceneType.call(this,p_type);
 }
-demo.Factory.prototype.getNextSceneType = function(type) {
-	switch( (type)[1] ) {
+demo.Factory.prototype.getNextSceneType = function(p_type) {
+	switch( (p_type)[1] ) {
 	case 0:
 		return awe6.interfaces.EScene.GAME;
 	case 5:
@@ -2176,8 +2452,9 @@ demo.Factory.prototype.getNextSceneType = function(type) {
 	case 6:
 		return awe6.interfaces.EScene.INTRO;
 	default:
+		null;
 	}
-	return awe6.core.drivers.js.Factory.prototype.getNextSceneType.call(this,type);
+	return awe6.core.drivers.jeash.Factory.prototype.getNextSceneType.call(this,p_type);
 }
 demo.Factory.prototype.__class__ = demo.Factory;
 jeash.display.IBitmapDrawable = function() { }
@@ -2215,9 +2492,9 @@ awe6.interfaces.ITools.prototype.serialize = null;
 awe6.interfaces.ITools.prototype.unserialize = null;
 awe6.interfaces.ITools.prototype.__class__ = awe6.interfaces.ITools;
 awe6.interfaces.ITools.__interfaces__ = [awe6.interfaces.IEncrypter];
-awe6.core.Tools = function(kernel) {
-	if( kernel === $_ ) return;
-	this._kernel = kernel;
+awe6.core.Tools = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	this._kernel = p_kernel;
 	this.BIG_NUMBER = 9999998;
 	this._encrypter = this._kernel.factory.createEncrypter();
 }
@@ -2225,70 +2502,70 @@ awe6.core.Tools.__name__ = ["awe6","core","Tools"];
 awe6.core.Tools.prototype.BIG_NUMBER = null;
 awe6.core.Tools.prototype._kernel = null;
 awe6.core.Tools.prototype._encrypter = null;
-awe6.core.Tools.prototype.createGuid = function(isSmall,prefix) {
-	if(prefix == null) prefix = "";
-	if(isSmall == null) isSmall = false;
-	return isSmall?prefix + (this._randomCharacter() + this._randomCharacter() + this._randomCharacter()).substr(0,10):prefix + (this._randomCharacter() + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + this._randomCharacter() + this._randomCharacter());
+awe6.core.Tools.prototype.createGuid = function(p_isSmall,p_prefix) {
+	if(p_prefix == null) p_prefix = "";
+	if(p_isSmall == null) p_isSmall = false;
+	return p_isSmall?p_prefix + (this._randomCharacter() + this._randomCharacter() + this._randomCharacter()).substr(0,10):p_prefix + (this._randomCharacter() + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + this._randomCharacter() + this._randomCharacter());
 }
 awe6.core.Tools.prototype._randomCharacter = function() {
 	return StringTools.hex(Std["int"]((1 + Math.random()) * 65536) | 0,1).substr(1);
 }
-awe6.core.Tools.prototype.ease = function(originalValue,newValue,ease) {
-	return originalValue * (1 - ease) + newValue * ease;
+awe6.core.Tools.prototype.ease = function(p_originalValue,p_newValue,p_ease) {
+	return p_originalValue * (1 - p_ease) + p_newValue * p_ease;
 }
-awe6.core.Tools.prototype.sortByString = function(a,b) {
-	return Reflect.compare(a.toLowerCase(),b.toLowerCase());
+awe6.core.Tools.prototype.sortByString = function(p_a,p_b) {
+	return Reflect.compare(p_a.toLowerCase(),p_b.toLowerCase());
 }
-awe6.core.Tools.prototype.sortByInt = function(a,b) {
-	return Reflect.compare(a,b);
+awe6.core.Tools.prototype.sortByInt = function(p_a,p_b) {
+	return Reflect.compare(p_a,p_b);
 }
-awe6.core.Tools.prototype.sortByPriority = function(a,b) {
-	var l_ap = a.__get_priority();
-	var l_bp = b.__get_priority();
+awe6.core.Tools.prototype.sortByPriority = function(p_a,p_b) {
+	var l_ap = p_a._get_priority();
+	var l_bp = p_b._get_priority();
 	if(l_ap < l_bp) return -1;
 	if(l_ap > l_bp) return 1;
 	return 0;
 }
-awe6.core.Tools.prototype.toUpperCaseFirst = function(value) {
-	return value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
+awe6.core.Tools.prototype.toUpperCaseFirst = function(p_value) {
+	return p_value.charAt(0).toUpperCase() + p_value.substr(1).toLowerCase();
 }
-awe6.core.Tools.prototype._isCamelCase = function(value) {
-	if(value.toUpperCase() == value) return false;
-	if(value.indexOf(" ") > -1) return false;
-	if(value.indexOf("_") > -1) return false;
+awe6.core.Tools.prototype._isCamelCase = function(p_value) {
+	if(p_value.toUpperCase() == p_value) return false;
+	if(p_value.indexOf(" ") > -1) return false;
+	if(p_value.indexOf("_") > -1) return false;
 	return true;
 }
-awe6.core.Tools.prototype._isConstCase = function(value) {
-	if(value.toUpperCase() != value) return false;
-	if(value.indexOf(" ") > -1) return false;
+awe6.core.Tools.prototype._isConstCase = function(p_value) {
+	if(p_value.toUpperCase() != p_value) return false;
+	if(p_value.indexOf(" ") > -1) return false;
 	return true;
 }
-awe6.core.Tools.prototype.toCamelCase = function(value,isUpper) {
-	if(isUpper == null) isUpper = false;
-	if(value == null || value == "") return "";
-	if(this._isCamelCase(value)) return value;
-	if(this._isConstCase(value)) value = this.fromConstCase(value);
+awe6.core.Tools.prototype.toCamelCase = function(p_value,p_isUpper) {
+	if(p_isUpper == null) p_isUpper = false;
+	if(p_value == null || p_value == "") return "";
+	if(this._isCamelCase(p_value)) return p_value;
+	if(this._isConstCase(p_value)) p_value = this.fromConstCase(p_value);
 	var l_result = "";
-	value = StringTools.replace(value,"     "," ");
-	value = StringTools.replace(value,"    "," ");
-	value = StringTools.replace(value,"   "," ");
-	value = StringTools.replace(value,"  "," ");
-	value = StringTools.replace(value," ","_");
+	p_value = StringTools.replace(p_value,"     "," ");
+	p_value = StringTools.replace(p_value,"    "," ");
+	p_value = StringTools.replace(p_value,"   "," ");
+	p_value = StringTools.replace(p_value,"  "," ");
+	p_value = StringTools.replace(p_value," ","_");
 	var l_del = "_";
-	var l_words = value.split(l_del);
+	var l_words = p_value.split(l_del);
 	var _g = 0;
 	while(_g < l_words.length) {
 		var i = l_words[_g];
 		++_g;
-		l_result += isUpper?i.charAt(0).toUpperCase() + i.substr(1).toLowerCase():i.toLowerCase();
-		isUpper = true;
+		l_result += p_isUpper?i.charAt(0).toUpperCase() + i.substr(1).toLowerCase():i.toLowerCase();
+		p_isUpper = true;
 	}
 	return l_result;
 }
-awe6.core.Tools.prototype.fromCamelCase = function(value) {
-	if(value == null || value == "") return "";
+awe6.core.Tools.prototype.fromCamelCase = function(p_value) {
+	if(p_value == null || p_value == "") return "";
 	var l_result = "";
-	var l_chars = value.split("");
+	var l_chars = p_value.split("");
 	var l_space = "";
 	var _g = 0;
 	while(_g < l_chars.length) {
@@ -2300,23 +2577,23 @@ awe6.core.Tools.prototype.fromCamelCase = function(value) {
 	}
 	return l_result;
 }
-awe6.core.Tools.prototype.toConstCase = function(value) {
-	if(value == null || value == "") return "";
-	if(this._isConstCase(value)) return value;
-	if(this._isCamelCase(value)) value = this.fromCamelCase(value);
+awe6.core.Tools.prototype.toConstCase = function(p_value) {
+	if(p_value == null || p_value == "") return "";
+	if(this._isConstCase(p_value)) return p_value;
+	if(this._isCamelCase(p_value)) p_value = this.fromCamelCase(p_value);
 	var l_result = "";
-	value = StringTools.replace(value,"     "," ");
-	value = StringTools.replace(value,"    "," ");
-	value = StringTools.replace(value,"   "," ");
-	value = StringTools.replace(value,"  "," ");
-	value = StringTools.replace(value," ","_");
-	l_result = value.toUpperCase();
+	p_value = StringTools.replace(p_value,"     "," ");
+	p_value = StringTools.replace(p_value,"    "," ");
+	p_value = StringTools.replace(p_value,"   "," ");
+	p_value = StringTools.replace(p_value,"  "," ");
+	p_value = StringTools.replace(p_value," ","_");
+	l_result = p_value.toUpperCase();
 	return l_result;
 }
-awe6.core.Tools.prototype.fromConstCase = function(value) {
-	if(value == null || value == "") return "";
+awe6.core.Tools.prototype.fromConstCase = function(p_value) {
+	if(p_value == null || p_value == "") return "";
 	var l_result = "";
-	var l_words = value.split("_");
+	var l_words = p_value.split("_");
 	var l_space = "";
 	var _g = 0;
 	while(_g < l_words.length) {
@@ -2327,49 +2604,49 @@ awe6.core.Tools.prototype.fromConstCase = function(value) {
 	}
 	return l_result;
 }
-awe6.core.Tools.prototype.toWords = function(value) {
-	if(this._isCamelCase(value)) return this.fromCamelCase(value);
-	if(this._isConstCase(value)) return this.fromConstCase(value);
-	return value;
+awe6.core.Tools.prototype.toWords = function(p_value) {
+	if(this._isCamelCase(p_value)) return this.fromCamelCase(p_value);
+	if(this._isConstCase(p_value)) return this.fromConstCase(p_value);
+	return p_value;
 }
-awe6.core.Tools.prototype.limit = function(value,min,max) {
-	return value > max?max:value < min?min:value;
+awe6.core.Tools.prototype.limit = function(p_value,p_min,p_max) {
+	return p_value > p_max?p_max:p_value < p_min?p_min:p_value;
 }
-awe6.core.Tools.prototype.range = function(value,min,max) {
-	var l_d = max - min;
-	if(l_d == 0) return value; else {
-		var l_o = value - min;
-		return l_o - Math.floor(l_o / l_d) * l_d + min;
+awe6.core.Tools.prototype.range = function(p_value,p_min,p_max) {
+	var l_d = p_max - p_min;
+	if(l_d == 0) return p_value; else {
+		var l_o = p_value - p_min;
+		return l_o - Math.floor(l_o / l_d) * l_d + p_min;
 	}
 }
-awe6.core.Tools.prototype.swap = function(a,b) {
-	var l_temp = a;
-	a = b;
-	b = l_temp;
+awe6.core.Tools.prototype.swap = function(p_a,p_b) {
+	var l_temp = p_a;
+	p_a = p_b;
+	p_b = l_temp;
 }
-awe6.core.Tools.prototype.getRandomType = function(e) {
-	return Type.createEnumIndex(e,Std.random(Type.getEnumConstructs(e).length));
+awe6.core.Tools.prototype.getRandomType = function(p_enum) {
+	return Type.createEnumIndex(p_enum,Std.random(Type.getEnumConstructs(p_enum).length));
 }
-awe6.core.Tools.prototype.isOdd = function(value) {
-	return value % 2 != 0;
+awe6.core.Tools.prototype.isOdd = function(p_value) {
+	return p_value % 2 != 0;
 }
-awe6.core.Tools.prototype.isEven = function(value) {
-	return value % 2 == 0;
+awe6.core.Tools.prototype.isEven = function(p_value) {
+	return p_value % 2 == 0;
 }
-awe6.core.Tools.prototype.sgn = function(value) {
-	if(value > 0) return 1; else if(value == 0) return 0; else return -1;
+awe6.core.Tools.prototype.sgn = function(p_value) {
+	if(p_value > 0) return 1; else if(p_value == 0) return 0; else return -1;
 }
-awe6.core.Tools.prototype.isBool = function(value) {
-	return value != 0 && value != null && value != false;
+awe6.core.Tools.prototype.isBool = function(p_value) {
+	return p_value != 0 && p_value != null && p_value != false;
 }
-awe6.core.Tools.prototype.nearestSquare = function(value) {
-	if(value == 0) return 0; else {
-		var l_sqrt = Math.round(Math.sqrt(Math.abs(value)));
-		return l_sqrt * l_sqrt * (value > 0?1:value == 0?0:-1);
+awe6.core.Tools.prototype.nearestSquare = function(p_value) {
+	if(p_value == 0) return 0; else {
+		var l_sqrt = Math.round(Math.sqrt(Math.abs(p_value)));
+		return l_sqrt * l_sqrt * (p_value > 0?1:p_value == 0?0:-1);
 	}
 }
-awe6.core.Tools.prototype.shuffle = function(array) {
-	var l_result = array.copy();
+awe6.core.Tools.prototype.shuffle = function(p_array) {
+	var l_result = p_array.copy();
 	var l_n = l_result.length;
 	while(l_n > 1) {
 		var l_k = Std.random(l_n);
@@ -2380,14 +2657,14 @@ awe6.core.Tools.prototype.shuffle = function(array) {
 	}
 	return l_result;
 }
-awe6.core.Tools.prototype.convertUpdatesToFormattedTime = function(frames,delimiter) {
-	var l_age = Math.round(1000 * frames / this._kernel.factory.targetFramerate);
-	return this.convertAgeToFormattedTime(l_age,delimiter);
+awe6.core.Tools.prototype.convertUpdatesToFormattedTime = function(p_updates,p_delimiter) {
+	var l_age = Math.round(1000 * p_updates / this._kernel.factory.targetFramerate);
+	return this.convertAgeToFormattedTime(l_age,p_delimiter);
 }
-awe6.core.Tools.prototype.convertAgeToFormattedTime = function(age,delimiter) {
-	if(delimiter == null) delimiter = "'";
-	if(age < 0) return "99" + delimiter + "99" + delimiter + "99";
-	var l_age = age / 1000;
+awe6.core.Tools.prototype.convertAgeToFormattedTime = function(p_age,p_delimiter) {
+	if(p_delimiter == null) p_delimiter = "'";
+	if(p_age < 0) return "99" + p_delimiter + "99" + p_delimiter + "99";
+	var l_age = p_age / 1000;
 	var l_seconds = Math.floor(l_age);
 	var l_remainder = Std.string(Math.round((l_age - l_seconds) * 100));
 	var l_minutes = 0;
@@ -2403,26 +2680,26 @@ awe6.core.Tools.prototype.convertAgeToFormattedTime = function(age,delimiter) {
 	if(l_minutes < 10) l_mins = "0" + l_mins;
 	if(l_seconds == 0) l_secs = "00";
 	if(l_minutes == 0) l_mins = "00";
-	return Std.string(l_mins + delimiter + l_secs + delimiter + l_remainder);
+	return Std.string(l_mins + p_delimiter + l_secs + p_delimiter + l_remainder);
 }
-awe6.core.Tools.prototype.intToHex = function(value) {
-	value &= 255;
+awe6.core.Tools.prototype.intToHex = function(p_value) {
+	p_value &= 255;
 	var l_hex = "0123456789abcdef";
-	return l_hex.charAt(value >> 4) + l_hex.charAt(value & 15);
+	return l_hex.charAt(p_value >> 4) + l_hex.charAt(p_value & 15);
 }
-awe6.core.Tools.prototype.serialize = function(value) {
-	return haxe.Serializer.run(value);
+awe6.core.Tools.prototype.serialize = function(p_value) {
+	return haxe.Serializer.run(p_value);
 }
-awe6.core.Tools.prototype.unserialize = function(value) {
-	return haxe.Unserializer.run(value);
+awe6.core.Tools.prototype.unserialize = function(p_value) {
+	return haxe.Unserializer.run(p_value);
 }
-awe6.core.Tools.prototype.encrypt = function(value,secret) {
-	if(secret == null) secret = "";
-	return this._encrypter.encrypt(value,secret);
+awe6.core.Tools.prototype.encrypt = function(p_value,p_secret) {
+	if(p_secret == null) p_secret = "";
+	return this._encrypter.encrypt(p_value,p_secret);
 }
-awe6.core.Tools.prototype.decrypt = function(value,secret) {
-	if(secret == null) secret = "";
-	return this._encrypter.decrypt(value,secret);
+awe6.core.Tools.prototype.decrypt = function(p_value,p_secret) {
+	if(p_secret == null) p_secret = "";
+	return this._encrypter.decrypt(p_value,p_secret);
 }
 awe6.core.Tools.prototype.__class__ = awe6.core.Tools;
 awe6.core.Tools.__interfaces__ = [awe6.interfaces.ITools];
@@ -2574,157 +2851,6 @@ jeash.text.TextFormatAlign.JUSTIFY.__enum__ = jeash.text.TextFormatAlign;
 jeash.text.TextFormatAlign.CENTER = ["CENTER",3];
 jeash.text.TextFormatAlign.CENTER.toString = $estr;
 jeash.text.TextFormatAlign.CENTER.__enum__ = jeash.text.TextFormatAlign;
-awe6.interfaces.IAssetManager = function() { }
-awe6.interfaces.IAssetManager.__name__ = ["awe6","interfaces","IAssetManager"];
-awe6.interfaces.IAssetManager.prototype.getAsset = null;
-awe6.interfaces.IAssetManager.prototype.__class__ = awe6.interfaces.IAssetManager;
-awe6.interfaces.IAssetManagerProcess = function() { }
-awe6.interfaces.IAssetManagerProcess.__name__ = ["awe6","interfaces","IAssetManagerProcess"];
-awe6.interfaces.IAssetManagerProcess.prototype.__class__ = awe6.interfaces.IAssetManagerProcess;
-awe6.interfaces.IAssetManagerProcess.__interfaces__ = [awe6.interfaces.IProcess,awe6.interfaces.IAssetManager];
-awe6.core.AAssetManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
-}
-awe6.core.AAssetManager.__name__ = ["awe6","core","AAssetManager"];
-awe6.core.AAssetManager.__super__ = awe6.core.Process;
-for(var k in awe6.core.Process.prototype ) awe6.core.AAssetManager.prototype[k] = awe6.core.Process.prototype[k];
-awe6.core.AAssetManager.prototype.getAsset = function(id,packageId,args) {
-	if(packageId == null) packageId = this._kernel.getConfig("settings.assets.packages.default");
-	if(packageId == null) packageId = "assets";
-	var l_assetName = id;
-	if(packageId.length > 0) l_assetName = packageId + "." + id;
-	var l_assetClass = Type.resolveClass(l_assetName);
-	if(l_assetClass == null) return null;
-	if(args == null) args = [];
-	return Type.createInstance(l_assetClass,args);
-}
-awe6.core.AAssetManager.prototype.__class__ = awe6.core.AAssetManager;
-awe6.core.AAssetManager.__interfaces__ = [awe6.interfaces.IAssetManagerProcess];
-demo.AssetManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.AAssetManager.call(this,kernel);
-}
-demo.AssetManager.__name__ = ["demo","AssetManager"];
-demo.AssetManager.__super__ = awe6.core.AAssetManager;
-for(var k in awe6.core.AAssetManager.prototype ) demo.AssetManager.prototype[k] = awe6.core.AAssetManager.prototype[k];
-demo.AssetManager.prototype.overlayBackground = null;
-demo.AssetManager.prototype.backUp = null;
-demo.AssetManager.prototype.backOver = null;
-demo.AssetManager.prototype.muteUp = null;
-demo.AssetManager.prototype.muteOver = null;
-demo.AssetManager.prototype.unmuteUp = null;
-demo.AssetManager.prototype.unmuteOver = null;
-demo.AssetManager.prototype.pauseUp = null;
-demo.AssetManager.prototype.pauseOver = null;
-demo.AssetManager.prototype.unpauseUp = null;
-demo.AssetManager.prototype.unpauseOver = null;
-demo.AssetManager.prototype.background = null;
-demo.AssetManager.prototype.buttonUp = null;
-demo.AssetManager.prototype.buttonOver = null;
-demo.AssetManager.prototype.sphere = null;
-demo.AssetManager.prototype.font = null;
-demo.AssetManager.prototype._init = function() {
-	awe6.core.AAssetManager.prototype._init.call(this);
-	this.overlayBackground = this._createView(demo.EAsset.OVERLAY_BACKGROUND);
-	this.backUp = this._createView(demo.EAsset.OVERLAY_BACK_UP);
-	this.backOver = this._createView(demo.EAsset.OVERLAY_BACK_OVER);
-	this.muteUp = this._createView(demo.EAsset.OVERLAY_MUTE_UP);
-	this.muteOver = this._createView(demo.EAsset.OVERLAY_MUTE_OVER);
-	this.unmuteUp = this._createView(demo.EAsset.OVERLAY_UNMUTE_UP);
-	this.unmuteOver = this._createView(demo.EAsset.OVERLAY_UNMUTE_OVER);
-	this.pauseUp = this._createView(demo.EAsset.OVERLAY_PAUSE_UP);
-	this.pauseOver = this._createView(demo.EAsset.OVERLAY_PAUSE_OVER);
-	this.unpauseUp = this._createView(demo.EAsset.OVERLAY_UNPAUSE_UP);
-	this.unpauseOver = this._createView(demo.EAsset.OVERLAY_UNPAUSE_OVER);
-	this.background = this._createView(demo.EAsset.BACKGROUND);
-	this.buttonUp = nme.installer.Assets.getBitmapData("assets/ButtonUp.png");
-	this.buttonOver = nme.installer.Assets.getBitmapData("assets/ButtonOver.png");
-	this.sphere = nme.installer.Assets.getBitmapData("assets/Sphere.png");
-	this.font = nme.installer.Assets.getFont("assets/fonts/orbitron.ttf");
-}
-demo.AssetManager.prototype._createView = function(type) {
-	var l_sprite = new jeash.display.Sprite();
-	var l_bitmap = new jeash.display.Bitmap();
-	l_sprite.addChild(l_bitmap);
-	switch( (type)[1] ) {
-	case 0:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/OverlayBackground.png"));
-		break;
-	case 1:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackUp.png"));
-		break;
-	case 2:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackOver.png"));
-		break;
-	case 3:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png"));
-		break;
-	case 4:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png"));
-		break;
-	case 5:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteUp.png"));
-		break;
-	case 6:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteOver.png"));
-		break;
-	case 7:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseUp.png"));
-		break;
-	case 8:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png"));
-		break;
-	case 9:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseUp.png"));
-		break;
-	case 10:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseOver.png"));
-		break;
-	case 11:
-		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/scenes/Background.png"));
-		break;
-	}
-	return new awe6.core.drivers.js.View(this._kernel,l_sprite);
-}
-demo.AssetManager.prototype.__class__ = demo.AssetManager;
-demo.EAsset = { __ename__ : ["demo","EAsset"], __constructs__ : ["OVERLAY_BACKGROUND","OVERLAY_BACK_UP","OVERLAY_BACK_OVER","OVERLAY_MUTE_UP","OVERLAY_MUTE_OVER","OVERLAY_UNMUTE_UP","OVERLAY_UNMUTE_OVER","OVERLAY_PAUSE_UP","OVERLAY_PAUSE_OVER","OVERLAY_UNPAUSE_UP","OVERLAY_UNPAUSE_OVER","BACKGROUND"] }
-demo.EAsset.OVERLAY_BACKGROUND = ["OVERLAY_BACKGROUND",0];
-demo.EAsset.OVERLAY_BACKGROUND.toString = $estr;
-demo.EAsset.OVERLAY_BACKGROUND.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_BACK_UP = ["OVERLAY_BACK_UP",1];
-demo.EAsset.OVERLAY_BACK_UP.toString = $estr;
-demo.EAsset.OVERLAY_BACK_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_BACK_OVER = ["OVERLAY_BACK_OVER",2];
-demo.EAsset.OVERLAY_BACK_OVER.toString = $estr;
-demo.EAsset.OVERLAY_BACK_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_MUTE_UP = ["OVERLAY_MUTE_UP",3];
-demo.EAsset.OVERLAY_MUTE_UP.toString = $estr;
-demo.EAsset.OVERLAY_MUTE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_MUTE_OVER = ["OVERLAY_MUTE_OVER",4];
-demo.EAsset.OVERLAY_MUTE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_MUTE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNMUTE_UP = ["OVERLAY_UNMUTE_UP",5];
-demo.EAsset.OVERLAY_UNMUTE_UP.toString = $estr;
-demo.EAsset.OVERLAY_UNMUTE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNMUTE_OVER = ["OVERLAY_UNMUTE_OVER",6];
-demo.EAsset.OVERLAY_UNMUTE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_UNMUTE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_PAUSE_UP = ["OVERLAY_PAUSE_UP",7];
-demo.EAsset.OVERLAY_PAUSE_UP.toString = $estr;
-demo.EAsset.OVERLAY_PAUSE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_PAUSE_OVER = ["OVERLAY_PAUSE_OVER",8];
-demo.EAsset.OVERLAY_PAUSE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_PAUSE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNPAUSE_UP = ["OVERLAY_UNPAUSE_UP",9];
-demo.EAsset.OVERLAY_UNPAUSE_UP.toString = $estr;
-demo.EAsset.OVERLAY_UNPAUSE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNPAUSE_OVER = ["OVERLAY_UNPAUSE_OVER",10];
-demo.EAsset.OVERLAY_UNPAUSE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_UNPAUSE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.BACKGROUND = ["BACKGROUND",11];
-demo.EAsset.BACKGROUND.toString = $estr;
-demo.EAsset.BACKGROUND.__enum__ = demo.EAsset;
 if(!jeash.geom) jeash.geom = {}
 jeash.geom.Matrix = function(in_a,in_b,in_c,in_d,in_tx,in_ty) {
 	if( in_a === $_ ) return;
@@ -2849,6 +2975,178 @@ jeash.geom.Matrix.prototype.toString = function() {
 	return "matrix(" + this.a.toFixed(4) + ", " + this.b.toFixed(4) + ", " + this.c.toFixed(4) + ", " + this.d.toFixed(4) + ", " + this.tx.toFixed(4) + ", " + this.ty.toFixed(4) + ")";
 }
 jeash.geom.Matrix.prototype.__class__ = jeash.geom.Matrix;
+awe6.interfaces.IAssetManager = function() { }
+awe6.interfaces.IAssetManager.__name__ = ["awe6","interfaces","IAssetManager"];
+awe6.interfaces.IAssetManager.prototype.getAsset = null;
+awe6.interfaces.IAssetManager.prototype.__class__ = awe6.interfaces.IAssetManager;
+awe6.interfaces.IAssetManagerProcess = function() { }
+awe6.interfaces.IAssetManagerProcess.__name__ = ["awe6","interfaces","IAssetManagerProcess"];
+awe6.interfaces.IAssetManagerProcess.prototype.__class__ = awe6.interfaces.IAssetManagerProcess;
+awe6.interfaces.IAssetManagerProcess.__interfaces__ = [awe6.interfaces.IProcess,awe6.interfaces.IAssetManager];
+awe6.core.AAssetManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
+}
+awe6.core.AAssetManager.__name__ = ["awe6","core","AAssetManager"];
+awe6.core.AAssetManager.__super__ = awe6.core.Process;
+for(var k in awe6.core.Process.prototype ) awe6.core.AAssetManager.prototype[k] = awe6.core.Process.prototype[k];
+awe6.core.AAssetManager.prototype._PACKAGE_ID = null;
+awe6.core.AAssetManager.prototype._init = function() {
+	this._PACKAGE_ID = "assets";
+	awe6.core.Process.prototype._init.call(this);
+}
+awe6.core.AAssetManager.prototype.getAsset = function(p_id,p_packageId,p_args) {
+	if(p_packageId == null) p_packageId = this._kernel.getConfig("settings.assets.packages.default");
+	if(p_packageId == null) p_packageId = this._PACKAGE_ID;
+	var l_assetName = p_id;
+	if(p_packageId.length > 0) l_assetName = p_packageId + "." + p_id;
+	var l_assetClass = Type.resolveClass(l_assetName);
+	if(l_assetClass == null) return null;
+	if(p_args == null) p_args = [];
+	return Type.createInstance(l_assetClass,p_args);
+}
+awe6.core.AAssetManager.prototype.__class__ = awe6.core.AAssetManager;
+awe6.core.AAssetManager.__interfaces__ = [awe6.interfaces.IAssetManagerProcess];
+demo.AssetManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.AAssetManager.call(this,p_kernel);
+}
+demo.AssetManager.__name__ = ["demo","AssetManager"];
+demo.AssetManager.__super__ = awe6.core.AAssetManager;
+for(var k in awe6.core.AAssetManager.prototype ) demo.AssetManager.prototype[k] = awe6.core.AAssetManager.prototype[k];
+demo.AssetManager.prototype.overlayBackground = null;
+demo.AssetManager.prototype.backUp = null;
+demo.AssetManager.prototype.backOver = null;
+demo.AssetManager.prototype.muteUp = null;
+demo.AssetManager.prototype.muteOver = null;
+demo.AssetManager.prototype.unmuteUp = null;
+demo.AssetManager.prototype.unmuteOver = null;
+demo.AssetManager.prototype.pauseUp = null;
+demo.AssetManager.prototype.pauseOver = null;
+demo.AssetManager.prototype.unpauseUp = null;
+demo.AssetManager.prototype.unpauseOver = null;
+demo.AssetManager.prototype.background = null;
+demo.AssetManager.prototype.buttonUp = null;
+demo.AssetManager.prototype.buttonOver = null;
+demo.AssetManager.prototype.sphere = null;
+demo.AssetManager.prototype.font = null;
+demo.AssetManager.prototype._init = function() {
+	awe6.core.AAssetManager.prototype._init.call(this);
+	this.overlayBackground = this._createView(demo.EAsset.OVERLAY_BACKGROUND);
+	this.backUp = this._createView(demo.EAsset.OVERLAY_BACK_UP);
+	this.backOver = this._createView(demo.EAsset.OVERLAY_BACK_OVER);
+	this.muteUp = this._createView(demo.EAsset.OVERLAY_MUTE_UP);
+	this.muteOver = this._createView(demo.EAsset.OVERLAY_MUTE_OVER);
+	this.unmuteUp = this._createView(demo.EAsset.OVERLAY_UNMUTE_UP);
+	this.unmuteOver = this._createView(demo.EAsset.OVERLAY_UNMUTE_OVER);
+	this.pauseUp = this._createView(demo.EAsset.OVERLAY_PAUSE_UP);
+	this.pauseOver = this._createView(demo.EAsset.OVERLAY_PAUSE_OVER);
+	this.unpauseUp = this._createView(demo.EAsset.OVERLAY_UNPAUSE_UP);
+	this.unpauseOver = this._createView(demo.EAsset.OVERLAY_UNPAUSE_OVER);
+	this.background = this._createView(demo.EAsset.BACKGROUND);
+	this.buttonUp = nme.installer.Assets.getBitmapData("assets/ButtonUp.png");
+	this.buttonOver = nme.installer.Assets.getBitmapData("assets/ButtonOver.png");
+	this.sphere = nme.installer.Assets.getBitmapData("assets/Sphere.png");
+	this.font = nme.installer.Assets.getFont("assets/fonts/orbitron.ttf");
+}
+demo.AssetManager.prototype.getAsset = function(p_id,p_packageId,p_args) {
+	if(p_packageId == null) p_packageId = this._kernel.getConfig("settings.assets.packages.default");
+	if(p_packageId == null) p_packageId = this._PACKAGE_ID;
+	var l_assetName = StringTools.replace(p_packageId,".","/") + p_id;
+	var l_result = nme.installer.Assets.getSound(l_assetName);
+	if(l_result != null) return l_result;
+	var l_result1 = nme.installer.Assets.getBitmapData(l_assetName);
+	if(l_result1 != null) return l_result1;
+	var l_result2 = nme.installer.Assets.getFont(l_assetName);
+	if(l_result2 != null) return l_result2;
+	var l_result3 = nme.installer.Assets.getText(l_assetName);
+	if(l_result3 != null) return l_result3;
+	var l_result4 = nme.installer.Assets.getBytes(l_assetName);
+	if(l_result4 != null) return l_result4;
+	return awe6.core.AAssetManager.prototype.getAsset.call(this,p_id,p_packageId,p_args);
+}
+demo.AssetManager.prototype._createView = function(p_type) {
+	var l_sprite = new jeash.display.Sprite();
+	var l_bitmap = new jeash.display.Bitmap();
+	l_sprite.addChild(l_bitmap);
+	switch( (p_type)[1] ) {
+	case 0:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/OverlayBackground.png"));
+		break;
+	case 1:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackUp.png"));
+		break;
+	case 2:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackOver.png"));
+		break;
+	case 3:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png"));
+		break;
+	case 4:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png"));
+		break;
+	case 5:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteUp.png"));
+		break;
+	case 6:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteOver.png"));
+		break;
+	case 7:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseUp.png"));
+		break;
+	case 8:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png"));
+		break;
+	case 9:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseUp.png"));
+		break;
+	case 10:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseOver.png"));
+		break;
+	case 11:
+		l_bitmap.jeashSetBitmapData(nme.installer.Assets.getBitmapData("assets/scenes/Background.png"));
+		break;
+	}
+	return new awe6.core.drivers.jeash.View(this._kernel,l_sprite);
+}
+demo.AssetManager.prototype.__class__ = demo.AssetManager;
+demo.EAsset = { __ename__ : ["demo","EAsset"], __constructs__ : ["OVERLAY_BACKGROUND","OVERLAY_BACK_UP","OVERLAY_BACK_OVER","OVERLAY_MUTE_UP","OVERLAY_MUTE_OVER","OVERLAY_UNMUTE_UP","OVERLAY_UNMUTE_OVER","OVERLAY_PAUSE_UP","OVERLAY_PAUSE_OVER","OVERLAY_UNPAUSE_UP","OVERLAY_UNPAUSE_OVER","BACKGROUND"] }
+demo.EAsset.OVERLAY_BACKGROUND = ["OVERLAY_BACKGROUND",0];
+demo.EAsset.OVERLAY_BACKGROUND.toString = $estr;
+demo.EAsset.OVERLAY_BACKGROUND.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_BACK_UP = ["OVERLAY_BACK_UP",1];
+demo.EAsset.OVERLAY_BACK_UP.toString = $estr;
+demo.EAsset.OVERLAY_BACK_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_BACK_OVER = ["OVERLAY_BACK_OVER",2];
+demo.EAsset.OVERLAY_BACK_OVER.toString = $estr;
+demo.EAsset.OVERLAY_BACK_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_MUTE_UP = ["OVERLAY_MUTE_UP",3];
+demo.EAsset.OVERLAY_MUTE_UP.toString = $estr;
+demo.EAsset.OVERLAY_MUTE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_MUTE_OVER = ["OVERLAY_MUTE_OVER",4];
+demo.EAsset.OVERLAY_MUTE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_MUTE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNMUTE_UP = ["OVERLAY_UNMUTE_UP",5];
+demo.EAsset.OVERLAY_UNMUTE_UP.toString = $estr;
+demo.EAsset.OVERLAY_UNMUTE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNMUTE_OVER = ["OVERLAY_UNMUTE_OVER",6];
+demo.EAsset.OVERLAY_UNMUTE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_UNMUTE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_PAUSE_UP = ["OVERLAY_PAUSE_UP",7];
+demo.EAsset.OVERLAY_PAUSE_UP.toString = $estr;
+demo.EAsset.OVERLAY_PAUSE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_PAUSE_OVER = ["OVERLAY_PAUSE_OVER",8];
+demo.EAsset.OVERLAY_PAUSE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_PAUSE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNPAUSE_UP = ["OVERLAY_UNPAUSE_UP",9];
+demo.EAsset.OVERLAY_UNPAUSE_UP.toString = $estr;
+demo.EAsset.OVERLAY_UNPAUSE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNPAUSE_OVER = ["OVERLAY_UNPAUSE_OVER",10];
+demo.EAsset.OVERLAY_UNPAUSE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_UNPAUSE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.BACKGROUND = ["BACKGROUND",11];
+demo.EAsset.BACKGROUND.toString = $estr;
+demo.EAsset.BACKGROUND.__enum__ = demo.EAsset;
 Std = function() { }
 Std.__name__ = ["Std"];
 Std["is"] = function(v,t) {
@@ -2874,6 +3172,66 @@ Std.random = function(x) {
 	return Math.floor(Math.random() * x);
 }
 Std.prototype.__class__ = Std;
+awe6.interfaces.IProgress = function() { }
+awe6.interfaces.IProgress.__name__ = ["awe6","interfaces","IProgress"];
+awe6.interfaces.IProgress.prototype.progress = null;
+awe6.interfaces.IProgress.prototype.__class__ = awe6.interfaces.IProgress;
+awe6.interfaces.ISceneTransition = function() { }
+awe6.interfaces.ISceneTransition.__name__ = ["awe6","interfaces","ISceneTransition"];
+awe6.interfaces.ISceneTransition.prototype.getDuration = null;
+awe6.interfaces.ISceneTransition.prototype.__class__ = awe6.interfaces.ISceneTransition;
+awe6.interfaces.ISceneTransition.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IProgress,awe6.interfaces.IProcess];
+awe6.core.drivers.ASceneTransition = function(p_kernel,p_duration) {
+	if( p_kernel === $_ ) return;
+	if(p_duration == null) p_duration = 500;
+	this._duration = p_duration;
+	this._context = new jeash.display.Sprite();
+	awe6.core.Entity.call(this,p_kernel,null,this._context);
+}
+awe6.core.drivers.ASceneTransition.__name__ = ["awe6","core","drivers","ASceneTransition"];
+awe6.core.drivers.ASceneTransition.__super__ = awe6.core.Entity;
+for(var k in awe6.core.Entity.prototype ) awe6.core.drivers.ASceneTransition.prototype[k] = awe6.core.Entity.prototype[k];
+awe6.core.drivers.ASceneTransition.prototype.progress = null;
+awe6.core.drivers.ASceneTransition.prototype._duration = null;
+awe6.core.drivers.ASceneTransition.prototype._context = null;
+awe6.core.drivers.ASceneTransition.prototype._init = function() {
+	awe6.core.Entity.prototype._init.call(this);
+}
+awe6.core.drivers.ASceneTransition.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
+	if(this._age > this._duration) {
+		if(this.isDisposed) null; else {
+			this.isDisposed = true;
+			this._set_isActive(false);
+			this._disposer();
+			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
+			null;
+		}
+	}
+}
+awe6.core.drivers.ASceneTransition.prototype.getDuration = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
+	return p_asTime?this._duration:this._duration / (1000 / this._kernel.getFramerate());
+}
+awe6.core.drivers.ASceneTransition.prototype._get_progress = function() {
+	return this._tools.limit(this._age / this._duration,0,1);
+}
+awe6.core.drivers.ASceneTransition.prototype.__class__ = awe6.core.drivers.ASceneTransition;
+awe6.core.drivers.ASceneTransition.__interfaces__ = [awe6.interfaces.ISceneTransition];
+awe6.core.drivers.jeash.SceneTransition = function(p_kernel,p_duration) {
+	if( p_kernel === $_ ) return;
+	if(p_duration == null) p_duration = 500;
+	awe6.core.drivers.ASceneTransition.call(this,p_kernel,p_duration);
+}
+awe6.core.drivers.jeash.SceneTransition.__name__ = ["awe6","core","drivers","jeash","SceneTransition"];
+awe6.core.drivers.jeash.SceneTransition.__super__ = awe6.core.drivers.ASceneTransition;
+for(var k in awe6.core.drivers.ASceneTransition.prototype ) awe6.core.drivers.jeash.SceneTransition.prototype[k] = awe6.core.drivers.ASceneTransition.prototype[k];
+awe6.core.drivers.jeash.SceneTransition.prototype._init = function() {
+	awe6.core.drivers.ASceneTransition.prototype._init.call(this);
+	this._kernel.overlay.flash(this._duration,true);
+}
+awe6.core.drivers.jeash.SceneTransition.prototype.__class__ = awe6.core.drivers.jeash.SceneTransition;
 if(typeof nme=='undefined') nme = {}
 if(!nme.installer) nme.installer = {}
 nme.installer.Assets = function() { }
@@ -2908,22 +3266,6 @@ nme.installer.Assets.getBitmapData = function(id) {
 		return ((function($this) {
 			var $r;
 			var $t = ApplicationMain.loaders.get("assets/overlay/buttons/BackUp.png").contentLoaderInfo.content;
-			if(Std["is"]($t,jeash.display.Bitmap)) $t; else throw "Class cast error";
-			$r = $t;
-			return $r;
-		}(this))).bitmapData;
-	case "assets/overlay/buttons/ExitOver.png":
-		return ((function($this) {
-			var $r;
-			var $t = ApplicationMain.loaders.get("assets/overlay/buttons/ExitOver.png").contentLoaderInfo.content;
-			if(Std["is"]($t,jeash.display.Bitmap)) $t; else throw "Class cast error";
-			$r = $t;
-			return $r;
-		}(this))).bitmapData;
-	case "assets/overlay/buttons/ExitUp.png":
-		return ((function($this) {
-			var $r;
-			var $t = ApplicationMain.loaders.get("assets/overlay/buttons/ExitUp.png").contentLoaderInfo.content;
 			if(Std["is"]($t,jeash.display.Bitmap)) $t; else throw "Class cast error";
 			$r = $t;
 			return $r;
@@ -3100,25 +3442,259 @@ nme.installer.Assets.getText = function(id) {
 	return null;
 }
 nme.installer.Assets.prototype.__class__ = nme.installer.Assets;
-awe6.core.drivers.js.Session = function(kernel,id) {
-	if( kernel === $_ ) return;
-	if(id == null) id = "";
-	awe6.core.drivers.ASession.call(this,kernel,id);
+awe6.interfaces.ILogger = function() { }
+awe6.interfaces.ILogger.__name__ = ["awe6","interfaces","ILogger"];
+awe6.interfaces.ILogger.prototype.log = null;
+awe6.interfaces.ILogger.prototype.__class__ = awe6.interfaces.ILogger;
+awe6.interfaces.IKernel = function() { }
+awe6.interfaces.IKernel.__name__ = ["awe6","interfaces","IKernel"];
+awe6.interfaces.IKernel.prototype.isDebug = null;
+awe6.interfaces.IKernel.prototype.isLocal = null;
+awe6.interfaces.IKernel.prototype.isEyeCandy = null;
+awe6.interfaces.IKernel.prototype.isFullScreen = null;
+awe6.interfaces.IKernel.prototype.overlay = null;
+awe6.interfaces.IKernel.prototype.assets = null;
+awe6.interfaces.IKernel.prototype.audio = null;
+awe6.interfaces.IKernel.prototype.inputs = null;
+awe6.interfaces.IKernel.prototype.scenes = null;
+awe6.interfaces.IKernel.prototype.messenger = null;
+awe6.interfaces.IKernel.prototype.tools = null;
+awe6.interfaces.IKernel.prototype.factory = null;
+awe6.interfaces.IKernel.prototype.session = null;
+awe6.interfaces.IKernel.prototype.getConfig = null;
+awe6.interfaces.IKernel.prototype.getFramerate = null;
+awe6.interfaces.IKernel.prototype.onPreloaderComplete = null;
+awe6.interfaces.IKernel.prototype.__class__ = awe6.interfaces.IKernel;
+awe6.interfaces.IKernel.__interfaces__ = [awe6.interfaces.ILogger,awe6.interfaces.IPauseable];
+awe6.core.drivers.AKernel = function(p_factory,p_context) {
+	if( p_factory === $_ ) return;
+	this.factory = p_factory;
+	this._context = p_context;
+	this.tools = this._tools = new awe6.core.Tools(this);
+	awe6.core.Process.call(this,this);
 }
-awe6.core.drivers.js.Session.__name__ = ["awe6","core","drivers","js","Session"];
-awe6.core.drivers.js.Session.__super__ = awe6.core.drivers.ASession;
-for(var k in awe6.core.drivers.ASession.prototype ) awe6.core.drivers.js.Session.prototype[k] = awe6.core.drivers.ASession.prototype[k];
-awe6.core.drivers.js.Session.prototype._nativeLoad = function() {
-	this._savedData = { };
-	if(js.Cookie.exists(this._kernel.factory.id)) this._savedData = this._tools.unserialize(js.Cookie.get(this._kernel.factory.id));
+awe6.core.drivers.AKernel.__name__ = ["awe6","core","drivers","AKernel"];
+awe6.core.drivers.AKernel.__super__ = awe6.core.Process;
+for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AKernel.prototype[k] = awe6.core.Process.prototype[k];
+awe6.core.drivers.AKernel.prototype.overlay = null;
+awe6.core.drivers.AKernel.prototype.factory = null;
+awe6.core.drivers.AKernel.prototype.isDebug = null;
+awe6.core.drivers.AKernel.prototype.isLocal = null;
+awe6.core.drivers.AKernel.prototype.isEyeCandy = null;
+awe6.core.drivers.AKernel.prototype.isFullScreen = null;
+awe6.core.drivers.AKernel.prototype.tools = null;
+awe6.core.drivers.AKernel.prototype.assets = null;
+awe6.core.drivers.AKernel.prototype.audio = null;
+awe6.core.drivers.AKernel.prototype.inputs = null;
+awe6.core.drivers.AKernel.prototype.scenes = null;
+awe6.core.drivers.AKernel.prototype.messenger = null;
+awe6.core.drivers.AKernel.prototype.session = null;
+awe6.core.drivers.AKernel.prototype._context = null;
+awe6.core.drivers.AKernel.prototype._view = null;
+awe6.core.drivers.AKernel.prototype._assetManagerProcess = null;
+awe6.core.drivers.AKernel.prototype._audioManager = null;
+awe6.core.drivers.AKernel.prototype._inputManager = null;
+awe6.core.drivers.AKernel.prototype._sceneManager = null;
+awe6.core.drivers.AKernel.prototype._messageManager = null;
+awe6.core.drivers.AKernel.prototype._overlayProcess = null;
+awe6.core.drivers.AKernel.prototype._logger = null;
+awe6.core.drivers.AKernel.prototype._isPreloaded = null;
+awe6.core.drivers.AKernel.prototype._preloader = null;
+awe6.core.drivers.AKernel.prototype._profiler = null;
+awe6.core.drivers.AKernel.prototype._processes = null;
+awe6.core.drivers.AKernel.prototype._helperFramerate = null;
+awe6.core.drivers.AKernel.prototype._init = function() {
+	awe6.core.Process.prototype._init.call(this);
+	this._view = new awe6.core.drivers.jeash.View(this,this._context,0,this);
+	this._processes = new List();
+	this._helperFramerate = new awe6.core.drivers._AKernel._HelperFramerate(this.factory.targetFramerate);
+	this._isPreloaded = false;
+	this.isDebug = this.factory.isDebug;
+	this.isLocal = this._driverGetIsLocal();
+	this._driverInit();
+	this.assets = this._assetManagerProcess = new awe6.core.AAssetManager(this._kernel);
+	this.audio = this._audioManager = new awe6.core.drivers.jeash.AudioManager(this._kernel);
+	this.inputs = this._inputManager = new awe6.core.InputManager(this._kernel);
+	this.scenes = this._sceneManager = new awe6.core.SceneManager(this._kernel);
+	this.messenger = this._messageManager = new awe6.core.MessageManager(this._kernel);
+	this._view.addChild(this._sceneManager.view,1);
+	this._addProcess(this._assetManagerProcess);
+	this._addProcess(this._audioManager);
+	this._addProcess(this._inputManager);
+	this._addProcess(this._sceneManager);
+	this._addProcess(this._messageManager);
+	this._set_isEyeCandy(true);
+	this._set_isFullScreen(false);
+	this.factory.onInitComplete(this);
+	this._set_session(this.factory.createSession());
+	this._get_session().reset();
+	this._preloader = this.factory.createPreloader();
+	this._addProcess(this._preloader);
+	this._view.addChild(this._preloader._get_view(),2);
+	this._addProcess(this._view);
 }
-awe6.core.drivers.js.Session.prototype._nativeReset = function() {
-	js.Cookie.remove(this._kernel.factory.id);
+awe6.core.drivers.AKernel.prototype._driverGetIsLocal = function() {
+	return false;
 }
-awe6.core.drivers.js.Session.prototype._nativeSave = function() {
-	js.Cookie.set(this._kernel.factory.id,this._tools.serialize(this._savedData));
+awe6.core.drivers.AKernel.prototype._driverInit = function() {
 }
-awe6.core.drivers.js.Session.prototype.__class__ = awe6.core.drivers.js.Session;
+awe6.core.drivers.AKernel.prototype._driverDisposer = function() {
+}
+awe6.core.drivers.AKernel.prototype.onPreloaderComplete = function(p_preloader) {
+	this._isPreloaded = true;
+	this._removeProcess(this._preloader);
+	this._preloader = null;
+	this._logger = this.factory.createLogger();
+	var l_assetManagerProcess = this.factory.createAssetManager();
+	if(l_assetManagerProcess != this._assetManagerProcess) {
+		this._removeProcess(this._assetManagerProcess);
+		this.assets = this._assetManagerProcess = l_assetManagerProcess;
+		this._addProcess(this._assetManagerProcess);
+	}
+	this.overlay = this._overlayProcess = this.factory.createOverlay();
+	this._addProcess(this._overlayProcess,false);
+	this._view.addChild(this._overlayProcess._get_view(),3);
+	if(this.isDebug) {
+		this._addProcess(this._profiler = new awe6.core.drivers.jeash.Profiler(this));
+		this._view.addChild(this._profiler._get_view(),this._tools.BIG_NUMBER);
+	}
+	this.scenes.setScene(this.factory.startingSceneType);
+	this.overlay.flash();
+}
+awe6.core.drivers.AKernel.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	this._helperFramerate.update();
+	var l_deltaTime = this.factory.isFixedUpdates?Std["int"](1000 / this.factory.targetFramerate):this._helperFramerate.timeInterval;
+	awe6.core.Process.prototype._updater.call(this,l_deltaTime);
+	var $it0 = this._processes.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		i.update(l_deltaTime);
+	}
+}
+awe6.core.drivers.AKernel.prototype._disposer = function() {
+	var $it0 = this._processes.iterator();
+	while( $it0.hasNext() ) {
+		var i = $it0.next();
+		this._removeProcess(i);
+	}
+	if(Std["is"](this.factory,awe6.interfaces.IDisposable)) ((function($this) {
+		var $r;
+		var $t = $this.factory;
+		if(Std["is"]($t,awe6.interfaces.IDisposable)) $t; else throw "Class cast error";
+		$r = $t;
+		return $r;
+	}(this))).dispose();
+	this.factory = null;
+	this._view.dispose();
+	this._view = null;
+	this._driverDisposer();
+	this.assets = this._assetManagerProcess = null;
+	this.audio = this._audioManager = null;
+	this.inputs = this._inputManager = null;
+	this.scenes = this._sceneManager = null;
+	this.messenger = this._messageManager = null;
+	this.overlay = this._overlayProcess = null;
+	this.tools = this._tools = null;
+	this._logger = null;
+	this._preloader = null;
+	this._set_session(null);
+	awe6.core.Process.prototype._disposer.call(this);
+}
+awe6.core.drivers.AKernel.prototype.getConfig = function(p_id) {
+	return this.factory.config.exists(p_id)?this.factory.config.get(p_id):null;
+}
+awe6.core.drivers.AKernel.prototype.log = function(p_value) {
+	if(this._logger != null) this._logger.log(p_value); else if(this.isDebug) haxe.Log.trace("LOG: " + p_value,{ fileName : "AKernel.hx", lineNumber : 245, className : "awe6.core.drivers.AKernel", methodName : "log"});
+}
+awe6.core.drivers.AKernel.prototype.getFramerate = function(p_asActual) {
+	if(p_asActual == null) p_asActual = true;
+	return p_asActual?this._helperFramerate.framerate:this.factory.targetFramerate;
+}
+awe6.core.drivers.AKernel.prototype._addProcess = function(p_process,p_isLast) {
+	if(p_isLast == null) p_isLast = true;
+	if(p_process == null) return;
+	if(p_isLast) this._processes.add(p_process); else this._processes.push(p_process);
+}
+awe6.core.drivers.AKernel.prototype._removeProcess = function(p_process) {
+	if(p_process == null) return false;
+	p_process.dispose();
+	return this._processes.remove(p_process);
+}
+awe6.core.drivers.AKernel.prototype._totalReset = function() {
+	if(!this._isPreloaded) return;
+	this._get_session().deleteAllSessions();
+	this._set_session(this.factory.createSession());
+	this.scenes.setScene(this.factory.startingSceneType);
+}
+awe6.core.drivers.AKernel.prototype._set_isEyeCandy = function(p_value) {
+	if(!this.factory.isEyeCandyOptionEnabled) {
+		this.isEyeCandy = true;
+		return this.isEyeCandy;
+	}
+	this.isEyeCandy = p_value;
+	this._driverSetIsEyeCandy(p_value);
+	return this.isEyeCandy;
+}
+awe6.core.drivers.AKernel.prototype._driverSetIsEyeCandy = function(p_value) {
+}
+awe6.core.drivers.AKernel.prototype._set_isFullScreen = function(p_value) {
+	if(!this.factory.isFullScreenOptionEnabled || Type.enumEq(this.factory.fullScreenType,awe6.interfaces.EFullScreen.DISABLED)) {
+		this.isFullScreen = false;
+		return this.isFullScreen;
+	}
+	this.isFullScreen = p_value;
+	this._driverSetIsFullScreen(p_value);
+	return this.isFullScreen;
+}
+awe6.core.drivers.AKernel.prototype._driverSetIsFullScreen = function(p_value) {
+}
+awe6.core.drivers.AKernel.prototype._pauser = function() {
+	awe6.core.Process.prototype._pauser.call(this);
+	if(this.scenes._get_scene() != null) this.scenes._get_scene().pause();
+}
+awe6.core.drivers.AKernel.prototype._resumer = function() {
+	awe6.core.Process.prototype._resumer.call(this);
+	if(this.scenes._get_scene() != null) this.scenes._get_scene().resume();
+}
+awe6.core.drivers.AKernel.prototype._get_session = function() {
+	return this.session;
+}
+awe6.core.drivers.AKernel.prototype._set_session = function(p_value) {
+	this.session = p_value;
+	return this._get_session();
+}
+awe6.core.drivers.AKernel.prototype.__class__ = awe6.core.drivers.AKernel;
+awe6.core.drivers.AKernel.__interfaces__ = [awe6.interfaces.IKernel];
+awe6.core.drivers.jeash.Kernel = function(p_factory,p_context) {
+	if( p_factory === $_ ) return;
+	awe6.core.drivers.AKernel.call(this,p_factory,p_context);
+}
+awe6.core.drivers.jeash.Kernel.__name__ = ["awe6","core","drivers","jeash","Kernel"];
+awe6.core.drivers.jeash.Kernel.__super__ = awe6.core.drivers.AKernel;
+for(var k in awe6.core.drivers.AKernel.prototype ) awe6.core.drivers.jeash.Kernel.prototype[k] = awe6.core.drivers.AKernel.prototype[k];
+awe6.core.drivers.jeash.Kernel.prototype._stage = null;
+awe6.core.drivers.jeash.Kernel.prototype._driverGetIsLocal = function() {
+	return jeash.system.Security.sandboxType != jeash.system.Security.REMOTE;
+}
+awe6.core.drivers.jeash.Kernel.prototype._driverInit = function() {
+	this._stage = this._context.GetStage();
+	jeash.Lib.jeashGetCurrent().focusRect = false;
+	this._stage.jeashSetFrameRate(this.factory.targetFramerate);
+	this._stage.scaleMode = jeash.display.StageScaleMode.NO_SCALE;
+	this._stage.jeashSetQuality(jeash.display.StageQuality.LOW);
+	this._stage.addEventListener(jeash.events.Event.ENTER_FRAME,$closure(this,"_onEnterFrame"));
+}
+awe6.core.drivers.jeash.Kernel.prototype._driverDisposer = function() {
+}
+awe6.core.drivers.jeash.Kernel.prototype._onEnterFrame = function(p_event) {
+	this._updater(0);
+}
+awe6.core.drivers.jeash.Kernel.prototype._driverSetIsEyeCandy = function(p_value) {
+}
+awe6.core.drivers.jeash.Kernel.prototype._driverSetIsFullScreen = function(p_value) {
+}
+awe6.core.drivers.jeash.Kernel.prototype.__class__ = awe6.core.drivers.jeash.Kernel;
 jeash.display.IGraphicsFill = function() { }
 jeash.display.IGraphicsFill.__name__ = ["jeash","display","IGraphicsFill"];
 jeash.display.IGraphicsFill.prototype.jeashGraphicsFillType = null;
@@ -3187,21 +3763,21 @@ awe6.interfaces.IInputJoypad.prototype.getIsButtonRelease = null;
 awe6.interfaces.IInputJoypad.prototype.getButtonDownDuration = null;
 awe6.interfaces.IInputJoypad.prototype.getButtonUpDuration = null;
 awe6.interfaces.IInputJoypad.prototype.__class__ = awe6.interfaces.IInputJoypad;
-awe6.core.InputJoypad = function(kernel,up,right,down,left,primary,secondary,upAlt,rightAlt,downAlt,leftAlt,primaryAlt,secondaryAlt) {
-	if( kernel === $_ ) return;
-	this._kernel = kernel;
-	this._keyUp = up != null?up:awe6.interfaces.EKey.UP;
-	this._keyRight = right != null?right:awe6.interfaces.EKey.RIGHT;
-	this._keyDown = down != null?down:awe6.interfaces.EKey.DOWN;
-	this._keyLeft = left != null?left:awe6.interfaces.EKey.LEFT;
-	this._keyPrimary = primary != null?primary:awe6.interfaces.EKey.SPACE;
-	this._keySecondary = secondary != null?secondary:awe6.interfaces.EKey.Z;
-	this._keyUpAlt = upAlt != null?upAlt:awe6.interfaces.EKey.W;
-	this._keyRightAlt = rightAlt != null?rightAlt:awe6.interfaces.EKey.D;
-	this._keyDownAlt = downAlt != null?downAlt:awe6.interfaces.EKey.S;
-	this._keyLeftAlt = leftAlt != null?leftAlt:awe6.interfaces.EKey.A;
-	this._keyPrimaryAlt = primaryAlt != null?primaryAlt:awe6.interfaces.EKey.Q;
-	this._keySecondaryAlt = secondaryAlt != null?secondaryAlt:awe6.interfaces.EKey.E;
+awe6.core.InputJoypad = function(p_kernel,p_up,p_right,p_down,p_left,p_primary,p_secondary,p_upAlt,p_rightAlt,p_downAlt,p_leftAlt,p_primaryAlt,p_secondaryAlt) {
+	if( p_kernel === $_ ) return;
+	this._kernel = p_kernel;
+	this._keyUp = p_up != null?p_up:awe6.interfaces.EKey.UP;
+	this._keyRight = p_right != null?p_right:awe6.interfaces.EKey.RIGHT;
+	this._keyDown = p_down != null?p_down:awe6.interfaces.EKey.DOWN;
+	this._keyLeft = p_left != null?p_left:awe6.interfaces.EKey.LEFT;
+	this._keyPrimary = p_primary != null?p_primary:awe6.interfaces.EKey.SPACE;
+	this._keySecondary = p_secondary != null?p_secondary:awe6.interfaces.EKey.Z;
+	this._keyUpAlt = p_upAlt != null?p_upAlt:awe6.interfaces.EKey.W;
+	this._keyRightAlt = p_rightAlt != null?p_rightAlt:awe6.interfaces.EKey.D;
+	this._keyDownAlt = p_downAlt != null?p_downAlt:awe6.interfaces.EKey.S;
+	this._keyLeftAlt = p_leftAlt != null?p_leftAlt:awe6.interfaces.EKey.A;
+	this._keyPrimaryAlt = p_primaryAlt != null?p_primaryAlt:awe6.interfaces.EKey.Q;
+	this._keySecondaryAlt = p_secondaryAlt != null?p_secondaryAlt:awe6.interfaces.EKey.E;
 }
 awe6.core.InputJoypad.__name__ = ["awe6","core","InputJoypad"];
 awe6.core.InputJoypad.prototype._kernel = null;
@@ -3217,73 +3793,73 @@ awe6.core.InputJoypad.prototype._keyDownAlt = null;
 awe6.core.InputJoypad.prototype._keyLeftAlt = null;
 awe6.core.InputJoypad.prototype._keyPrimaryAlt = null;
 awe6.core.InputJoypad.prototype._keySecondaryAlt = null;
-awe6.core.InputJoypad.prototype._check = function(type,f) {
-	switch( (type)[1] ) {
+awe6.core.InputJoypad.prototype._check = function(p_type,p_function) {
+	switch( (p_type)[1] ) {
 	case 0:
-		return this._check(awe6.interfaces.EJoypadButton.PRIMARY,f) || this._check(awe6.interfaces.EJoypadButton.SECONDARY,f);
+		return this._check(awe6.interfaces.EJoypadButton.PRIMARY,p_function) || this._check(awe6.interfaces.EJoypadButton.SECONDARY,p_function);
 	case 1:
-		return f(this._keyUp) || f(this._keyUpAlt);
+		return p_function(this._keyUp) || p_function(this._keyUpAlt);
 	case 2:
-		return f(this._keyRight) || f(this._keyRightAlt);
+		return p_function(this._keyRight) || p_function(this._keyRightAlt);
 	case 3:
-		return f(this._keyDown) || f(this._keyDownAlt);
+		return p_function(this._keyDown) || p_function(this._keyDownAlt);
 	case 4:
-		return f(this._keyLeft) || f(this._keyLeftAlt);
+		return p_function(this._keyLeft) || p_function(this._keyLeftAlt);
 	case 5:
-		return f(this._keyPrimary) || f(this._keyPrimaryAlt);
+		return p_function(this._keyPrimary) || p_function(this._keyPrimaryAlt);
 	case 6:
-		return f(this._keySecondary) || f(this._keySecondaryAlt);
+		return p_function(this._keySecondary) || p_function(this._keySecondaryAlt);
 	}
 }
-awe6.core.InputJoypad.prototype.getIsButtonDown = function(type) {
-	return this._check(type,$closure(this._kernel.inputs.keyboard,"getIsKeyDown"));
+awe6.core.InputJoypad.prototype.getIsButtonDown = function(p_type) {
+	return this._check(p_type,$closure(this._kernel.inputs.keyboard,"getIsKeyDown"));
 }
-awe6.core.InputJoypad.prototype.getIsButtonPress = function(type) {
-	return this._check(type,$closure(this._kernel.inputs.keyboard,"getIsKeyPress"));
+awe6.core.InputJoypad.prototype.getIsButtonPress = function(p_type) {
+	return this._check(p_type,$closure(this._kernel.inputs.keyboard,"getIsKeyPress"));
 }
-awe6.core.InputJoypad.prototype.getIsButtonRelease = function(type) {
-	return this._check(type,$closure(this._kernel.inputs.keyboard,"getIsKeyRelease"));
+awe6.core.InputJoypad.prototype.getIsButtonRelease = function(p_type) {
+	return this._check(p_type,$closure(this._kernel.inputs.keyboard,"getIsKeyRelease"));
 }
-awe6.core.InputJoypad.prototype.getButtonDownDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	var l_f = $closure(this._kernel.inputs.keyboard,"getKeyDownDuration");
-	switch( (type)[1] ) {
+awe6.core.InputJoypad.prototype.getButtonDownDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	var l_function = $closure(this._kernel.inputs.keyboard,"getKeyDownDuration");
+	switch( (p_type)[1] ) {
 	case 0:
-		return Std["int"](Math.max(Math.max(l_f(this._keyPrimary,asTime,isPrevious),l_f(this._keyPrimaryAlt,asTime,isPrevious)),Math.max(l_f(this._keySecondary,asTime,isPrevious),l_f(this._keySecondaryAlt,asTime,isPrevious))));
+		return Std["int"](Math.max(Math.max(l_function(this._keyPrimary,p_asTime,p_isPrevious),l_function(this._keyPrimaryAlt,p_asTime,p_isPrevious)),Math.max(l_function(this._keySecondary,p_asTime,p_isPrevious),l_function(this._keySecondaryAlt,p_asTime,p_isPrevious))));
 	case 1:
-		return Std["int"](Math.max(l_f(this._keyUp,asTime,isPrevious),l_f(this._keyUpAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keyUp,p_asTime,p_isPrevious),l_function(this._keyUpAlt,p_asTime,p_isPrevious)));
 	case 2:
-		return Std["int"](Math.max(l_f(this._keyRight,asTime,isPrevious),l_f(this._keyRightAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keyRight,p_asTime,p_isPrevious),l_function(this._keyRightAlt,p_asTime,p_isPrevious)));
 	case 3:
-		return Std["int"](Math.max(l_f(this._keyDown,asTime,isPrevious),l_f(this._keyDownAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keyDown,p_asTime,p_isPrevious),l_function(this._keyDownAlt,p_asTime,p_isPrevious)));
 	case 4:
-		return Std["int"](Math.max(l_f(this._keyLeft,asTime,isPrevious),l_f(this._keyLeftAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keyLeft,p_asTime,p_isPrevious),l_function(this._keyLeftAlt,p_asTime,p_isPrevious)));
 	case 5:
-		return Std["int"](Math.max(l_f(this._keyPrimary,asTime,isPrevious),l_f(this._keyPrimaryAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keyPrimary,p_asTime,p_isPrevious),l_function(this._keyPrimaryAlt,p_asTime,p_isPrevious)));
 	case 6:
-		return Std["int"](Math.max(l_f(this._keySecondary,asTime,isPrevious),l_f(this._keySecondaryAlt,asTime,isPrevious)));
+		return Std["int"](Math.max(l_function(this._keySecondary,p_asTime,p_isPrevious),l_function(this._keySecondaryAlt,p_asTime,p_isPrevious)));
 	}
 }
-awe6.core.InputJoypad.prototype.getButtonUpDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	var l_f = $closure(this._kernel.inputs.keyboard,"getKeyUpDuration");
-	switch( (type)[1] ) {
+awe6.core.InputJoypad.prototype.getButtonUpDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	var l_function = $closure(this._kernel.inputs.keyboard,"getKeyUpDuration");
+	switch( (p_type)[1] ) {
 	case 0:
-		return Std["int"](Math.min(Math.min(l_f(this._keyPrimary,asTime,isPrevious),l_f(this._keyPrimaryAlt,asTime,isPrevious)),Math.min(l_f(this._keySecondary,asTime,isPrevious),l_f(this._keySecondaryAlt,asTime,isPrevious))));
+		return Std["int"](Math.min(Math.min(l_function(this._keyPrimary,p_asTime,p_isPrevious),l_function(this._keyPrimaryAlt,p_asTime,p_isPrevious)),Math.min(l_function(this._keySecondary,p_asTime,p_isPrevious),l_function(this._keySecondaryAlt,p_asTime,p_isPrevious))));
 	case 1:
-		return Std["int"](Math.min(l_f(this._keyUp,asTime,isPrevious),l_f(this._keyUpAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keyUp,p_asTime,p_isPrevious),l_function(this._keyUpAlt,p_asTime,p_isPrevious)));
 	case 2:
-		return Std["int"](Math.min(l_f(this._keyRight,asTime,isPrevious),l_f(this._keyRightAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keyRight,p_asTime,p_isPrevious),l_function(this._keyRightAlt,p_asTime,p_isPrevious)));
 	case 3:
-		return Std["int"](Math.min(l_f(this._keyDown,asTime,isPrevious),l_f(this._keyDownAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keyDown,p_asTime,p_isPrevious),l_function(this._keyDownAlt,p_asTime,p_isPrevious)));
 	case 4:
-		return Std["int"](Math.min(l_f(this._keyLeft,asTime,isPrevious),l_f(this._keyLeftAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keyLeft,p_asTime,p_isPrevious),l_function(this._keyLeftAlt,p_asTime,p_isPrevious)));
 	case 5:
-		return Std["int"](Math.min(l_f(this._keyPrimary,asTime,isPrevious),l_f(this._keyPrimaryAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keyPrimary,p_asTime,p_isPrevious),l_function(this._keyPrimaryAlt,p_asTime,p_isPrevious)));
 	case 6:
-		return Std["int"](Math.min(l_f(this._keySecondary,asTime,isPrevious),l_f(this._keySecondaryAlt,asTime,isPrevious)));
+		return Std["int"](Math.min(l_function(this._keySecondary,p_asTime,p_isPrevious),l_function(this._keySecondaryAlt,p_asTime,p_isPrevious)));
 	}
 }
 awe6.core.InputJoypad.prototype.__class__ = awe6.core.InputJoypad;
@@ -3651,6 +4227,277 @@ awe6.interfaces.EKey.TOPLEFT = ["TOPLEFT",98];
 awe6.interfaces.EKey.TOPLEFT.toString = $estr;
 awe6.interfaces.EKey.TOPLEFT.__enum__ = awe6.interfaces.EKey;
 awe6.interfaces.EKey.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",99,value]; $x.__enum__ = awe6.interfaces.EKey; $x.toString = $estr; return $x; }
+awe6.interfaces.IAudioManager = function() { }
+awe6.interfaces.IAudioManager.__name__ = ["awe6","interfaces","IAudioManager"];
+awe6.interfaces.IAudioManager.prototype.isMute = null;
+awe6.interfaces.IAudioManager.prototype.start = null;
+awe6.interfaces.IAudioManager.prototype.stop = null;
+awe6.interfaces.IAudioManager.prototype.transform = null;
+awe6.interfaces.IAudioManager.prototype.isPlaying = null;
+awe6.interfaces.IAudioManager.prototype.__class__ = awe6.interfaces.IAudioManager;
+awe6.core.drivers.AAudioManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
+}
+awe6.core.drivers.AAudioManager.__name__ = ["awe6","core","drivers","AAudioManager"];
+awe6.core.drivers.AAudioManager.__super__ = awe6.core.Process;
+for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AAudioManager.prototype[k] = awe6.core.Process.prototype[k];
+awe6.core.drivers.AAudioManager.prototype.isMute = null;
+awe6.core.drivers.AAudioManager.prototype._sounds = null;
+awe6.core.drivers.AAudioManager.prototype._packageId = null;
+awe6.core.drivers.AAudioManager.prototype._init = function() {
+	awe6.core.Process.prototype._init.call(this);
+	this._sounds = [];
+	this._packageId = this._kernel.getConfig("settings.assets.packages.audio");
+	if(this._packageId == null) this._packageId = this._kernel.getConfig("settings.assets.packages.default");
+	if(this._packageId == null) this._packageId = "assets.audio";
+	this._set_isMute(false);
+}
+awe6.core.drivers.AAudioManager.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	var _g = 0, _g1 = this._sounds;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
+		++_g;
+		if(i.isDisposed) this._sounds.remove(i);
+	}
+}
+awe6.core.drivers.AAudioManager.prototype._disposer = function() {
+	var _g = 0, _g1 = this._sounds;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
+		++_g;
+		i.dispose();
+	}
+	this._set_isMute(false);
+	awe6.core.Process.prototype._disposer.call(this);
+}
+awe6.core.drivers.AAudioManager.prototype.start = function(p_id,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_isIgnoredIfPlaying,p_onCompleteCallback) {
+	if(p_isIgnoredIfPlaying == null) p_isIgnoredIfPlaying = false;
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(p_startTime == null) p_startTime = 0;
+	if(p_loops == null) p_loops = 1;
+	if(p_audioChannelType == null) p_audioChannelType = awe6.interfaces.EAudioChannel.DEFAULT;
+	if(p_isIgnoredIfPlaying) {
+		var l_existingSound = this._getSounds(p_id,p_audioChannelType);
+		if(l_existingSound.length != 0) return;
+	}
+	this._sounds.push(this._driverSoundFactory(p_id,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback));
+}
+awe6.core.drivers.AAudioManager.prototype._driverSoundFactory = function(p_id,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(p_startTime == null) p_startTime = 0;
+	if(p_loops == null) p_loops = 1;
+	return new awe6.core.drivers._AHelperSound(this._kernel,p_id,this._packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
+}
+awe6.core.drivers.AAudioManager.prototype.stop = function(p_id,p_audioChannelType) {
+	var l_sounds = this._getSounds(p_id,p_audioChannelType);
+	var _g = 0;
+	while(_g < l_sounds.length) {
+		var i = l_sounds[_g];
+		++_g;
+		i.stop();
+	}
+}
+awe6.core.drivers.AAudioManager.prototype.transform = function(p_id,p_audioChannelType,p_volume,p_pan,p_asRelative) {
+	if(p_asRelative == null) p_asRelative = false;
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	var l_sounds = this._getSounds(p_id,p_audioChannelType);
+	var _g = 0;
+	while(_g < l_sounds.length) {
+		var i = l_sounds[_g];
+		++_g;
+		i.transform(p_volume,p_pan,p_asRelative);
+	}
+}
+awe6.core.drivers.AAudioManager.prototype._set_isMute = function(p_value) {
+	if(p_value == null) p_value = !this.isMute;
+	this.isMute = p_value;
+	this._driverSetIsMute(p_value);
+	return this.isMute;
+}
+awe6.core.drivers.AAudioManager.prototype._driverSetIsMute = function(p_value) {
+}
+awe6.core.drivers.AAudioManager.prototype._getSounds = function(p_id,p_audioChannelType) {
+	var l_result = [];
+	if(p_id == null && p_audioChannelType == null) l_result = this._sounds.copy(); else if(p_audioChannelType == null) {
+		var _g = 0, _g1 = this._sounds;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(i.id == p_id) l_result.push(i);
+		}
+	} else if(p_id == null) {
+		var _g = 0, _g1 = this._sounds;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(Type.enumEq(i.audioChannelType,p_audioChannelType)) l_result.push(i);
+		}
+	} else {
+		var _g = 0, _g1 = this._sounds;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(i.id == p_id && Type.enumEq(i.audioChannelType,p_audioChannelType)) l_result.push(i);
+		}
+	}
+	return l_result;
+}
+awe6.core.drivers.AAudioManager.prototype.isPlaying = function(p_id,p_audioChannelType) {
+	var l_result = this._getSounds(p_id,p_audioChannelType);
+	return l_result.length != 0;
+}
+awe6.core.drivers.AAudioManager.prototype.__class__ = awe6.core.drivers.AAudioManager;
+awe6.core.drivers.AAudioManager.__interfaces__ = [awe6.interfaces.IAudioManager];
+awe6.core.drivers.jeash.AudioManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.drivers.AAudioManager.call(this,p_kernel);
+}
+awe6.core.drivers.jeash.AudioManager.__name__ = ["awe6","core","drivers","jeash","AudioManager"];
+awe6.core.drivers.jeash.AudioManager.__super__ = awe6.core.drivers.AAudioManager;
+for(var k in awe6.core.drivers.AAudioManager.prototype ) awe6.core.drivers.jeash.AudioManager.prototype[k] = awe6.core.drivers.AAudioManager.prototype[k];
+awe6.core.drivers.jeash.AudioManager.prototype._extension = null;
+awe6.core.drivers.jeash.AudioManager.prototype._init = function() {
+	awe6.core.drivers.AAudioManager.prototype._init.call(this);
+	this._extension = jeash.media.Sound.jeashCanPlayType("mp3")?".mp3":".ogg";
+	this._packageId = StringTools.replace(this._packageId + ".",".","/");
+}
+awe6.core.drivers.jeash.AudioManager.prototype._driverSoundFactory = function(p_id,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(p_startTime == null) p_startTime = 0;
+	if(p_loops == null) p_loops = 1;
+	return new awe6.core.drivers.jeash._HelperSound(this._kernel,p_id,this._packageId,this._extension,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
+}
+awe6.core.drivers.jeash.AudioManager.prototype._driverSetIsMute = function(p_value) {
+	var _g = 0, _g1 = this._sounds;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
+		++_g;
+		if(i._soundChannel == null) continue;
+		if(i._soundChannel.jeashAudio == null) continue;
+		i._soundChannel.jeashAudio.muted = p_value;
+	}
+}
+awe6.core.drivers.jeash.AudioManager.prototype.__class__ = awe6.core.drivers.jeash.AudioManager;
+awe6.core.drivers._AHelperSound = function(p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
+	if( p_kernel === $_ ) return;
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(p_startTime == null) p_startTime = 0;
+	if(p_loops == null) p_loops = 1;
+	this._kernel = p_kernel;
+	this.isDisposed = false;
+	this.id = p_id;
+	this._packageId = p_packageId;
+	this.audioChannelType = p_audioChannelType != null?p_audioChannelType:awe6.interfaces.EAudioChannel.DEFAULT;
+	if(p_loops == -1) p_loops = this._kernel.tools.BIG_NUMBER;
+	this._loops = p_loops;
+	this._startTime = p_startTime;
+	this._volume = p_volume;
+	this._pan = p_pan;
+	this._onCompleteCallback = p_onCompleteCallback;
+	this._init();
+}
+awe6.core.drivers._AHelperSound.__name__ = ["awe6","core","drivers","_AHelperSound"];
+awe6.core.drivers._AHelperSound.prototype.isDisposed = null;
+awe6.core.drivers._AHelperSound.prototype.id = null;
+awe6.core.drivers._AHelperSound.prototype.audioChannelType = null;
+awe6.core.drivers._AHelperSound.prototype._packageId = null;
+awe6.core.drivers._AHelperSound.prototype._loops = null;
+awe6.core.drivers._AHelperSound.prototype._startTime = null;
+awe6.core.drivers._AHelperSound.prototype._volume = null;
+awe6.core.drivers._AHelperSound.prototype._pan = null;
+awe6.core.drivers._AHelperSound.prototype._onCompleteCallback = null;
+awe6.core.drivers._AHelperSound.prototype._kernel = null;
+awe6.core.drivers._AHelperSound.prototype._init = function() {
+	this._driverInit();
+}
+awe6.core.drivers._AHelperSound.prototype._driverInit = function() {
+}
+awe6.core.drivers._AHelperSound.prototype.transform = function(p_volume,p_pan,p_asRelative) {
+	if(p_asRelative == null) p_asRelative = false;
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(this.isDisposed) return;
+	this._volume = this._kernel.tools.limit(p_volume,0,1);
+	this._pan = this._kernel.tools.limit(p_pan,-1,1);
+	this._driverTransform(p_asRelative);
+}
+awe6.core.drivers._AHelperSound.prototype._driverTransform = function(p_asRelative) {
+	if(p_asRelative == null) p_asRelative = false;
+}
+awe6.core.drivers._AHelperSound.prototype.stop = function() {
+	this._driverStop();
+	this.dispose();
+}
+awe6.core.drivers._AHelperSound.prototype._driverStop = function() {
+}
+awe6.core.drivers._AHelperSound.prototype.dispose = function() {
+	if(this.isDisposed) return;
+	this.isDisposed = true;
+	this._driverStop();
+}
+awe6.core.drivers._AHelperSound.prototype._driverDisposer = function() {
+}
+awe6.core.drivers._AHelperSound.prototype.__class__ = awe6.core.drivers._AHelperSound;
+awe6.core.drivers._AHelperSound.__interfaces__ = [awe6.interfaces.IDisposable];
+awe6.core.drivers.jeash._HelperSound = function(p_kernel,p_id,p_packageId,p_extension,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
+	if( p_kernel === $_ ) return;
+	if(p_pan == null) p_pan = 0;
+	if(p_volume == null) p_volume = 1;
+	if(p_startTime == null) p_startTime = 0;
+	if(p_loops == null) p_loops = 1;
+	this._extension = p_extension;
+	awe6.core.drivers._AHelperSound.call(this,p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
+}
+awe6.core.drivers.jeash._HelperSound.__name__ = ["awe6","core","drivers","jeash","_HelperSound"];
+awe6.core.drivers.jeash._HelperSound.__super__ = awe6.core.drivers._AHelperSound;
+for(var k in awe6.core.drivers._AHelperSound.prototype ) awe6.core.drivers.jeash._HelperSound.prototype[k] = awe6.core.drivers._AHelperSound.prototype[k];
+awe6.core.drivers.jeash._HelperSound.prototype._extension = null;
+awe6.core.drivers.jeash._HelperSound.prototype._sound = null;
+awe6.core.drivers.jeash._HelperSound.prototype._soundChannel = null;
+awe6.core.drivers.jeash._HelperSound.prototype._driverInit = function() {
+	this._sound = this._kernel.assets.getAsset(this.id + this._extension,this._packageId);
+	if(this._sound == null) return this.dispose();
+	this._soundChannel = this._sound.play(this._startTime,this._loops);
+	if(this._soundChannel == null) return this.dispose();
+	this._soundChannel.jeashAudio.muted = this._kernel.audio.isMute;
+	this._soundChannel.addEventListener(jeash.events.Event.SOUND_COMPLETE,$closure(this,"_onSoundComplete"));
+	this._driverTransform();
+	return;
+}
+awe6.core.drivers.jeash._HelperSound.prototype._driverTransform = function(p_asRelative) {
+	if(p_asRelative == null) p_asRelative = false;
+	if(this._soundChannel == null) return;
+	if(p_asRelative) {
+		this._volume *= this._soundChannel.soundTransform.volume;
+		this._pan *= this._soundChannel.soundTransform.pan;
+	}
+	var soundTransform = new jeash.media.SoundTransform(this._volume,this._pan);
+	this._soundChannel.__setSoundTransform(soundTransform);
+	this._soundChannel.jeashAudio.volume = this._volume;
+}
+awe6.core.drivers.jeash._HelperSound.prototype._driverStop = function() {
+	if(this._soundChannel == null) return;
+	this._soundChannel.stop();
+}
+awe6.core.drivers.jeash._HelperSound.prototype._onSoundComplete = function(p_event) {
+	if(this._onCompleteCallback != null) this._onCompleteCallback.apply(this,[]);
+	this.dispose();
+}
+awe6.core.drivers.jeash._HelperSound.prototype._driverDisposer = function() {
+	if(this._soundChannel != null) {
+		this.stop();
+		this._soundChannel.removeEventListener(jeash.events.Event.SOUND_COMPLETE,$closure(this,"_onSoundComplete"));
+	}
+}
+awe6.core.drivers.jeash._HelperSound.prototype.__class__ = awe6.core.drivers.jeash._HelperSound;
 awe6.interfaces.IInputMouse = function() { }
 awe6.interfaces.IInputMouse.__name__ = ["awe6","interfaces","IInputMouse"];
 awe6.interfaces.IInputMouse.prototype.x = null;
@@ -3681,9 +4528,9 @@ awe6.interfaces.IInputMouse.prototype.getButtonDragHeight = null;
 awe6.interfaces.IInputMouse.prototype.getButtonLastClickedX = null;
 awe6.interfaces.IInputMouse.prototype.getButtonLastClickedY = null;
 awe6.interfaces.IInputMouse.prototype.__class__ = awe6.interfaces.IInputMouse;
-awe6.core.drivers.AInputMouse = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
+awe6.core.drivers.AInputMouse = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.drivers.AInputMouse.__name__ = ["awe6","core","drivers","AInputMouse"];
 awe6.core.drivers.AInputMouse.__super__ = awe6.core.Process;
@@ -3714,30 +4561,30 @@ awe6.core.drivers.AInputMouse.prototype._buttonMiddle = null;
 awe6.core.drivers.AInputMouse.prototype._buttonRight = null;
 awe6.core.drivers.AInputMouse.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
-	this._nativeInit();
+	this._driverInit();
 	this.x = this.y = this._xPrev = this._yPrev = this._deltaX = this._deltaY = this.scroll = this._deltaScroll = 0;
 	this.relativeX = this.relativeY = this.relativeCentralisedX = this.relativeCentralisedY = 0;
 	this.isMoving = false;
 	this._buffer = [];
 	this._getPosition();
 	this.isMoving = false;
-	this.__set_isVisible(true);
+	this._set_isVisible(true);
 	this.scroll = 0;
-	this.__set_cursorType(awe6.interfaces.EMouseCursor.ARROW);
+	this._set_cursorType(awe6.interfaces.EMouseCursor.ARROW);
 	this._scrollPrev = 0;
 	this._stillUpdates = 0;
 	this._stillDuration = 0;
 	this._reset();
 }
-awe6.core.drivers.AInputMouse.prototype._nativeInit = function() {
+awe6.core.drivers.AInputMouse.prototype._driverInit = function() {
 }
-awe6.core.drivers.AInputMouse.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	this._deltaTimePrev = deltaTime;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	this._handleButton(awe6.interfaces.EMouseButton.LEFT,this._buffer.length > 0?this._buffer.shift():this._buttonLeft.isDown,deltaTime);
-	this._handleButton(awe6.interfaces.EMouseButton.MIDDLE,this._isMiddleDown(),deltaTime);
-	this._handleButton(awe6.interfaces.EMouseButton.RIGHT,this._isRightDown(),deltaTime);
+awe6.core.drivers.AInputMouse.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	this._deltaTimePrev = p_deltaTime;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	this._handleButton(awe6.interfaces.EMouseButton.LEFT,this._buffer.length > 0?this._buffer.shift():this._buttonLeft.isDown,p_deltaTime);
+	this._handleButton(awe6.interfaces.EMouseButton.MIDDLE,this._isMiddleDown(),p_deltaTime);
+	this._handleButton(awe6.interfaces.EMouseButton.RIGHT,this._isRightDown(),p_deltaTime);
 	this._deltaScroll = this.scroll - this._scrollPrev;
 	this._scrollPrev = this.scroll;
 	this._xPrev = this.x;
@@ -3748,7 +4595,7 @@ awe6.core.drivers.AInputMouse.prototype._updater = function(deltaTime) {
 	this.isMoving = this.x != this._xPrev || this.y != this._yPrev;
 	if(this.isMoving) this._stillUpdates = this._stillDuration = 0; else {
 		this._stillUpdates++;
-		this._stillDuration += deltaTime;
+		this._stillDuration += p_deltaTime;
 	}
 	this.relativeX = this.x / this._kernel.factory.width;
 	this.relativeY = this.y / this._kernel.factory.height;
@@ -3769,10 +4616,10 @@ awe6.core.drivers.AInputMouse.prototype._getPosition = function() {
 	this.x = 0;
 	this.y = 0;
 }
-awe6.core.drivers.AInputMouse.prototype._handleButton = function(type,isDown,deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	var l_button = this._getButton(type);
-	if(isDown) {
+awe6.core.drivers.AInputMouse.prototype._handleButton = function(p_type,p_isDown,p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	var l_button = this._getButton(p_type);
+	if(p_isDown) {
 		if(!l_button.isDown) {
 			l_button.timeUpPrevious = l_button.timeUp;
 			l_button.updatesUpPrevious = l_button.updatesUp;
@@ -3780,7 +4627,7 @@ awe6.core.drivers.AInputMouse.prototype._handleButton = function(type,isDown,del
 			l_button.clickX = this.x;
 			l_button.clickY = this.y;
 		}
-		l_button.timeDown += deltaTime;
+		l_button.timeDown += p_deltaTime;
 		l_button.updatesDown++;
 		l_button.isDown = true;
 	} else {
@@ -3789,7 +4636,7 @@ awe6.core.drivers.AInputMouse.prototype._handleButton = function(type,isDown,del
 			l_button.updatesDownPrevious = l_button.updatesDown;
 			l_button.timeDown = l_button.updatesDown = 0;
 		}
-		l_button.timeUp += deltaTime;
+		l_button.timeUp += p_deltaTime;
 		l_button.updatesUp++;
 		l_button.isDown = false;
 	}
@@ -3797,17 +4644,17 @@ awe6.core.drivers.AInputMouse.prototype._handleButton = function(type,isDown,del
 awe6.core.drivers.AInputMouse.prototype._disposer = function() {
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.drivers.AInputMouse.prototype._reset = function(event) {
+awe6.core.drivers.AInputMouse.prototype._reset = function(p_event) {
 	this._buffer = [];
 	this._buttonLeft = new awe6.core.drivers._AInputMouse._HelperButton(this._kernel);
 	this._buttonMiddle = new awe6.core.drivers._AInputMouse._HelperButton(this._kernel);
 	this._buttonRight = new awe6.core.drivers._AInputMouse._HelperButton(this._kernel);
 }
-awe6.core.drivers.AInputMouse.prototype._getButton = function(type) {
-	if(type == null) type = awe6.interfaces.EMouseButton.LEFT;
+awe6.core.drivers.AInputMouse.prototype._getButton = function(p_type) {
+	if(p_type == null) p_type = awe6.interfaces.EMouseButton.LEFT;
 	return (function($this) {
 		var $r;
-		switch( (type)[1] ) {
+		switch( (p_type)[1] ) {
 		case 0:
 			$r = $this._buttonLeft;
 			break;
@@ -3821,109 +4668,109 @@ awe6.core.drivers.AInputMouse.prototype._getButton = function(type) {
 		return $r;
 	}(this));
 }
-awe6.core.drivers.AInputMouse.prototype.getDeltaX = function(asTime) {
-	if(asTime == null) asTime = true;
+awe6.core.drivers.AInputMouse.prototype.getDeltaX = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
 	var l_result = this._deltaX;
-	if(asTime) l_result *= 1000 / this._deltaTimePrev;
+	if(p_asTime) l_result *= 1000 / this._deltaTimePrev;
 	return Math.round(l_result);
 }
-awe6.core.drivers.AInputMouse.prototype.getDeltaY = function(asTime) {
-	if(asTime == null) asTime = true;
+awe6.core.drivers.AInputMouse.prototype.getDeltaY = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
 	var l_result = this._deltaY;
-	if(asTime) l_result *= 1000 / this._deltaTimePrev;
+	if(p_asTime) l_result *= 1000 / this._deltaTimePrev;
 	return Math.round(l_result);
 }
-awe6.core.drivers.AInputMouse.prototype.getSpeed = function(asTime) {
-	if(asTime == null) asTime = true;
-	var l_dx = this.getDeltaX(asTime);
-	var l_dy = this.getDeltaY(asTime);
+awe6.core.drivers.AInputMouse.prototype.getSpeed = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
+	var l_dx = this.getDeltaX(p_asTime);
+	var l_dy = this.getDeltaY(p_asTime);
 	var l_result = Math.sqrt(l_dx * l_dx + l_dy * l_dy);
 	return Math.round(l_result);
 }
-awe6.core.drivers.AInputMouse.prototype.getDeltaScroll = function(asTime) {
-	if(asTime == null) asTime = true;
+awe6.core.drivers.AInputMouse.prototype.getDeltaScroll = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
 	var l_result = this._deltaScroll;
-	if(asTime) l_result *= 1000 / this._deltaTimePrev;
+	if(p_asTime) l_result *= 1000 / this._deltaTimePrev;
 	return Math.round(l_result);
 }
-awe6.core.drivers.AInputMouse.prototype.getIsButtonDoubleClick = function(type,delay) {
-	if(delay == null) delay = 100;
-	var l_button = this._getButton(type);
-	return l_button.isDown?l_button.timeUpPrevious <= delay:false;
+awe6.core.drivers.AInputMouse.prototype.getIsButtonDoubleClick = function(p_type,p_delay) {
+	if(p_delay == null) p_delay = 100;
+	var l_button = this._getButton(p_type);
+	return l_button.isDown?l_button.timeUpPrevious <= p_delay:false;
 }
-awe6.core.drivers.AInputMouse.prototype.getIsButtonDrag = function(type,delay) {
-	if(delay == null) delay = 100;
-	var l_button = this._getButton(type);
-	return l_button.isDown?l_button.timeDown > delay:false;
+awe6.core.drivers.AInputMouse.prototype.getIsButtonDrag = function(p_type,p_delay) {
+	if(p_delay == null) p_delay = 100;
+	var l_button = this._getButton(p_type);
+	return l_button.isDown?l_button.timeDown > p_delay:false;
 }
-awe6.core.drivers.AInputMouse.prototype.getStillDuration = function(asTime) {
-	if(asTime == null) asTime = true;
-	return asTime?this._stillDuration:this._stillUpdates;
+awe6.core.drivers.AInputMouse.prototype.getStillDuration = function(p_asTime) {
+	if(p_asTime == null) p_asTime = true;
+	return p_asTime?this._stillDuration:this._stillUpdates;
 }
-awe6.core.drivers.AInputMouse.prototype.getIsButtonDown = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getIsButtonDown = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.isDown;
 }
-awe6.core.drivers.AInputMouse.prototype.getIsButtonPress = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getIsButtonPress = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.updatesDown == 1;
 }
-awe6.core.drivers.AInputMouse.prototype.getIsButtonRelease = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getIsButtonRelease = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.updatesUp == 1;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonDownDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	var l_button = this._getButton(type);
-	if(isPrevious) return asTime?l_button.timeDownPrevious:l_button.updatesDownPrevious;
-	return asTime?l_button.timeDown:l_button.updatesDown;
+awe6.core.drivers.AInputMouse.prototype.getButtonDownDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	var l_button = this._getButton(p_type);
+	if(p_isPrevious) return p_asTime?l_button.timeDownPrevious:l_button.updatesDownPrevious;
+	return p_asTime?l_button.timeDown:l_button.updatesDown;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonUpDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	var l_button = this._getButton(type);
-	if(isPrevious) return asTime?l_button.timeUpPrevious:l_button.updatesUpPrevious;
-	return asTime?l_button.timeUp:l_button.updatesUp;
+awe6.core.drivers.AInputMouse.prototype.getButtonUpDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	var l_button = this._getButton(p_type);
+	if(p_isPrevious) return p_asTime?l_button.timeUpPrevious:l_button.updatesUpPrevious;
+	return p_asTime?l_button.timeUp:l_button.updatesUp;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonDragWidth = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getButtonDragWidth = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.isDown?this.x - l_button.clickX:0;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonDragHeight = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getButtonDragHeight = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.isDown?this.y - l_button.clickY:0;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonLastClickedX = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getButtonLastClickedX = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.clickX;
 }
-awe6.core.drivers.AInputMouse.prototype.getButtonLastClickedY = function(type) {
-	var l_button = this._getButton(type);
+awe6.core.drivers.AInputMouse.prototype.getButtonLastClickedY = function(p_type) {
+	var l_button = this._getButton(p_type);
 	return l_button.clickY;
 }
-awe6.core.drivers.AInputMouse.prototype.__set_isVisible = function(value) {
-	this.isVisible = value;
+awe6.core.drivers.AInputMouse.prototype._set_isVisible = function(p_value) {
+	this.isVisible = p_value;
 	return this.isVisible;
 }
-awe6.core.drivers.AInputMouse.prototype.__set_cursorType = function(value) {
-	this.cursorType = value;
+awe6.core.drivers.AInputMouse.prototype._set_cursorType = function(p_value) {
+	this.cursorType = p_value;
 	return this.cursorType;
 }
 awe6.core.drivers.AInputMouse.prototype.__class__ = awe6.core.drivers.AInputMouse;
 awe6.core.drivers.AInputMouse.__interfaces__ = [awe6.interfaces.IInputMouse];
 if(!awe6.core.drivers._AInputMouse) awe6.core.drivers._AInputMouse = {}
-awe6.core.drivers._AInputMouse._HelperButton = function(kernel) {
-	if( kernel === $_ ) return;
+awe6.core.drivers._AInputMouse._HelperButton = function(p_kernel) {
+	if( p_kernel === $_ ) return;
 	this.isDown = false;
 	this.updatesDown = 0;
-	this.updatesUp = kernel.tools.BIG_NUMBER;
+	this.updatesUp = p_kernel.tools.BIG_NUMBER;
 	this.timeDown = 0;
-	this.timeUp = kernel.tools.BIG_NUMBER;
+	this.timeUp = p_kernel.tools.BIG_NUMBER;
 	this.updatesDownPrevious = 0;
-	this.updatesUpPrevious = kernel.tools.BIG_NUMBER;
+	this.updatesUpPrevious = p_kernel.tools.BIG_NUMBER;
 	this.timeDownPrevious = 0;
-	this.timeUpPrevious = kernel.tools.BIG_NUMBER;
+	this.timeUpPrevious = p_kernel.tools.BIG_NUMBER;
 }
 awe6.core.drivers._AInputMouse._HelperButton.__name__ = ["awe6","core","drivers","_AInputMouse","_HelperButton"];
 awe6.core.drivers._AInputMouse._HelperButton.prototype.isDown = null;
@@ -3996,10 +4843,6 @@ jeash.display.CapsStyle.ROUND.__enum__ = jeash.display.CapsStyle;
 jeash.display.CapsStyle.SQUARE = ["SQUARE",2];
 jeash.display.CapsStyle.SQUARE.toString = $estr;
 jeash.display.CapsStyle.SQUARE.__enum__ = jeash.display.CapsStyle;
-awe6.interfaces.ILogger = function() { }
-awe6.interfaces.ILogger.__name__ = ["awe6","interfaces","ILogger"];
-awe6.interfaces.ILogger.prototype.log = null;
-awe6.interfaces.ILogger.prototype.__class__ = awe6.interfaces.ILogger;
 awe6.interfaces.ETextAlign = { __ename__ : ["awe6","interfaces","ETextAlign"], __constructs__ : ["JUSTIFY","LEFT","CENTER","RIGHT"] }
 awe6.interfaces.ETextAlign.JUSTIFY = ["JUSTIFY",0];
 awe6.interfaces.ETextAlign.JUSTIFY.toString = $estr;
@@ -4648,211 +5491,6 @@ jeash.display.GraphicsDataType.GRADIENT.__enum__ = jeash.display.GraphicsDataTyp
 jeash.display.GraphicsDataType.PATH = ["PATH",3];
 jeash.display.GraphicsDataType.PATH.toString = $estr;
 jeash.display.GraphicsDataType.PATH.__enum__ = jeash.display.GraphicsDataType;
-awe6.interfaces.IPosition = function() { }
-awe6.interfaces.IPosition.__name__ = ["awe6","interfaces","IPosition"];
-awe6.interfaces.IPosition.prototype.x = null;
-awe6.interfaces.IPosition.prototype.y = null;
-awe6.interfaces.IPosition.prototype.setPosition = null;
-awe6.interfaces.IPosition.prototype.__class__ = awe6.interfaces.IPosition;
-awe6.interfaces.IPriority = function() { }
-awe6.interfaces.IPriority.__name__ = ["awe6","interfaces","IPriority"];
-awe6.interfaces.IPriority.prototype.priority = null;
-awe6.interfaces.IPriority.prototype.__class__ = awe6.interfaces.IPriority;
-awe6.interfaces.IView = function() { }
-awe6.interfaces.IView.__name__ = ["awe6","interfaces","IView"];
-awe6.interfaces.IView.prototype.owner = null;
-awe6.interfaces.IView.prototype.parent = null;
-awe6.interfaces.IView.prototype.isVisible = null;
-awe6.interfaces.IView.prototype.isInViewStack = null;
-awe6.interfaces.IView.prototype.globalX = null;
-awe6.interfaces.IView.prototype.globalY = null;
-awe6.interfaces.IView.prototype.addChild = null;
-awe6.interfaces.IView.prototype.removeChild = null;
-awe6.interfaces.IView.prototype.clear = null;
-awe6.interfaces.IView.prototype.remove = null;
-awe6.interfaces.IView.prototype.__class__ = awe6.interfaces.IView;
-awe6.interfaces.IView.__interfaces__ = [awe6.interfaces.IUpdateable,awe6.interfaces.IDisposable,awe6.interfaces.IPosition,awe6.interfaces.IPriority];
-awe6.core.drivers.AView = function(kernel,context,priority,owner) {
-	if( kernel === $_ ) return;
-	if(priority == null) priority = 0;
-	this.context = context;
-	this.__set_priority(priority);
-	this.owner = owner;
-	awe6.core.Process.call(this,kernel);
-}
-awe6.core.drivers.AView.__name__ = ["awe6","core","drivers","AView"];
-awe6.core.drivers.AView.__super__ = awe6.core.Process;
-for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AView.prototype[k] = awe6.core.Process.prototype[k];
-awe6.core.drivers.AView.prototype.context = null;
-awe6.core.drivers.AView.prototype.priority = null;
-awe6.core.drivers.AView.prototype.owner = null;
-awe6.core.drivers.AView.prototype.parent = null;
-awe6.core.drivers.AView.prototype.isVisible = null;
-awe6.core.drivers.AView.prototype.isInViewStack = null;
-awe6.core.drivers.AView.prototype.x = null;
-awe6.core.drivers.AView.prototype.y = null;
-awe6.core.drivers.AView.prototype.globalX = null;
-awe6.core.drivers.AView.prototype.globalY = null;
-awe6.core.drivers.AView.prototype._isDirty = null;
-awe6.core.drivers.AView.prototype._children = null;
-awe6.core.drivers.AView.prototype._init = function() {
-	awe6.core.Process.prototype._init.call(this);
-	this.__set_isVisible(true);
-	this._isDirty = true;
-	this._children = new Array();
-	this.__set_x(this.__set_y(this.globalX = this.globalY = 0));
-}
-awe6.core.drivers.AView.prototype.addChild = function(child,priority) {
-	if(this.isDisposed || child == null) return;
-	var l_child = child;
-	if(l_child.__get_parent() != this) {
-		child.remove();
-		this._children.push(l_child);
-		l_child._setParent(this);
-	}
-	if(priority != null) child.__set_priority(priority);
-	this._isDirty = true;
-}
-awe6.core.drivers.AView.prototype.removeChild = function(child) {
-	if(this.isDisposed || child == null) return;
-	var l_child = child;
-	if(l_child.__get_parent() != this) return;
-	this._children.remove(l_child);
-	l_child._setParent(null);
-	this._isDirty = true;
-}
-awe6.core.drivers.AView.prototype.remove = function() {
-	if(this.__get_parent() != null) this.__get_parent().removeChild(this);
-}
-awe6.core.drivers.AView.prototype.clear = function() {
-	var _g = 0, _g1 = this._children;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		this.removeChild(i);
-	}
-}
-awe6.core.drivers.AView.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	var _g = 0, _g1 = this._children;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		if(!i.isActive) null; else {
-			i._age += deltaTime;
-			i._updates++;
-			i._updater(deltaTime);
-			null;
-		}
-	}
-	if(this._isDirty) this._draw();
-}
-awe6.core.drivers.AView.prototype._disposer = function() {
-	this.remove();
-	this._nativeDisposer();
-	this.clear();
-	awe6.core.Process.prototype._disposer.call(this);
-}
-awe6.core.drivers.AView.prototype._nativeDisposer = function() {
-}
-awe6.core.drivers.AView.prototype._draw = function() {
-	if(this.isDisposed) return;
-	this._children.sort($closure(this._tools,"sortByPriority"));
-	this._nativeDraw();
-	this._isDirty = false;
-}
-awe6.core.drivers.AView.prototype._nativeDraw = function() {
-}
-awe6.core.drivers.AView.prototype._setParent = function(parent) {
-	this.parent = parent;
-}
-awe6.core.drivers.AView.prototype.__get_priority = function() {
-	return this.priority;
-}
-awe6.core.drivers.AView.prototype.__set_priority = function(value) {
-	if(value == this.__get_priority()) return this.__get_priority();
-	this.priority = value;
-	var l_parent = this.__get_parent();
-	if(l_parent != null) l_parent._isDirty = true;
-	return this.__get_priority();
-}
-awe6.core.drivers.AView.prototype.__set_isVisible = function(value) {
-	if(value == this.isVisible) return this.isVisible;
-	this.isVisible = value;
-	var l_parent = this.__get_parent();
-	if(l_parent != null) l_parent._draw();
-	return this.isVisible;
-}
-awe6.core.drivers.AView.prototype.__get_parent = function() {
-	return this.parent;
-}
-awe6.core.drivers.AView.prototype.__get_isInViewStack = function() {
-	if(!this.isVisible) return false;
-	if(this.owner == this._kernel) return true;
-	if(this.__get_parent() == null) return false;
-	return this.__get_parent().__get_isInViewStack();
-}
-awe6.core.drivers.AView.prototype.__set_x = function(value) {
-	this.x = value;
-	this.globalX = this.x + (this.__get_parent() != null?this.__get_parent().globalX:0);
-	return this.x;
-}
-awe6.core.drivers.AView.prototype.__set_y = function(value) {
-	this.y = value;
-	this.globalY = this.y + (this.__get_parent() != null?this.__get_parent().globalY:0);
-	return this.y;
-}
-awe6.core.drivers.AView.prototype.setPosition = function(x,y) {
-	this.__set_x(x);
-	this.__set_y(y);
-}
-awe6.core.drivers.AView.prototype.__class__ = awe6.core.drivers.AView;
-awe6.core.drivers.AView.__interfaces__ = [awe6.interfaces.IView];
-awe6.core.drivers.js.View = function(kernel,context,priority,owner) {
-	if( kernel === $_ ) return;
-	if(priority == null) priority = 0;
-	awe6.core.drivers.AView.call(this,kernel,context,priority,owner);
-}
-awe6.core.drivers.js.View.__name__ = ["awe6","core","drivers","js","View"];
-awe6.core.drivers.js.View.__super__ = awe6.core.drivers.AView;
-for(var k in awe6.core.drivers.AView.prototype ) awe6.core.drivers.js.View.prototype[k] = awe6.core.drivers.AView.prototype[k];
-awe6.core.drivers.js.View.prototype._container = null;
-awe6.core.drivers.js.View.prototype._init = function() {
-	if(this.context == null) this.context = new jeash.display.Sprite();
-	awe6.core.drivers.AView.prototype._init.call(this);
-}
-awe6.core.drivers.js.View.prototype._nativeDisposer = function() {
-	if(this.context != null && this.context.parent != null) try {
-		this.context.parent.removeChild(this.context);
-	} catch( error ) {
-	}
-}
-awe6.core.drivers.js.View.prototype._nativeDraw = function() {
-	if(this.__get_parent() != null) this.__get_parent().__set_x(this.__get_parent().x);
-	if(this._container != null && this._container.parent != null) this._container.parent.removeChild(this._container);
-	this._container = new jeash.display.Sprite();
-	this._container.mouseEnabled = false;
-	this.context.addChild(this._container);
-	var l_children = this._children;
-	var _g = 0;
-	while(_g < l_children.length) {
-		var i = l_children[_g];
-		++_g;
-		if(i.isVisible) this._container.addChild(i.context);
-	}
-}
-awe6.core.drivers.js.View.prototype.__set_x = function(value) {
-	this.context.jeashSetX(value);
-	this._isDirty = true;
-	return awe6.core.drivers.AView.prototype.__set_x.call(this,value);
-}
-awe6.core.drivers.js.View.prototype.__set_y = function(value) {
-	this.context.jeashSetY(value);
-	this._isDirty = true;
-	return awe6.core.drivers.AView.prototype.__set_y.call(this,value);
-}
-awe6.core.drivers.js.View.prototype.__class__ = awe6.core.drivers.js.View;
 if(!jeash.media) jeash.media = {}
 jeash.media.SoundChannel = function(p) {
 	if( p === $_ ) return;
@@ -4933,195 +5571,6 @@ jeash.media.SoundChannel.prototype.__onSoundChannelFinished = function(evt) {
 	}
 }
 jeash.media.SoundChannel.prototype.__class__ = jeash.media.SoundChannel;
-awe6.interfaces.IAudioManager = function() { }
-awe6.interfaces.IAudioManager.__name__ = ["awe6","interfaces","IAudioManager"];
-awe6.interfaces.IAudioManager.prototype.isMute = null;
-awe6.interfaces.IAudioManager.prototype.start = null;
-awe6.interfaces.IAudioManager.prototype.stop = null;
-awe6.interfaces.IAudioManager.prototype.transform = null;
-awe6.interfaces.IAudioManager.prototype.isPlaying = null;
-awe6.interfaces.IAudioManager.prototype.__class__ = awe6.interfaces.IAudioManager;
-awe6.core.drivers.AAudioManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
-}
-awe6.core.drivers.AAudioManager.__name__ = ["awe6","core","drivers","AAudioManager"];
-awe6.core.drivers.AAudioManager.__super__ = awe6.core.Process;
-for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AAudioManager.prototype[k] = awe6.core.Process.prototype[k];
-awe6.core.drivers.AAudioManager.prototype.isMute = null;
-awe6.core.drivers.AAudioManager.prototype._sounds = null;
-awe6.core.drivers.AAudioManager.prototype._packageId = null;
-awe6.core.drivers.AAudioManager.prototype._init = function() {
-	awe6.core.Process.prototype._init.call(this);
-	this._sounds = [];
-	this._packageId = this._kernel.getConfig("settings.assets.packages.audio");
-	if(this._packageId == null) this._packageId = this._kernel.getConfig("settings.assets.packages.default");
-	if(this._packageId == null) this._packageId = "assets.audio";
-	this.__set_isMute(false);
-}
-awe6.core.drivers.AAudioManager.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	var _g = 0, _g1 = this._sounds;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		if(i.isDisposed) this._sounds.remove(i);
-	}
-}
-awe6.core.drivers.AAudioManager.prototype._disposer = function() {
-	var _g = 0, _g1 = this._sounds;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		i.dispose();
-	}
-	this.__set_isMute(false);
-	awe6.core.Process.prototype._disposer.call(this);
-}
-awe6.core.drivers.AAudioManager.prototype.start = function(id,audioChannelType,loops,startTime,volume,pan,isIgnoredIfPlaying,onCompleteCallback) {
-	if(isIgnoredIfPlaying == null) isIgnoredIfPlaying = false;
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(startTime == null) startTime = 0;
-	if(loops == null) loops = 1;
-	if(audioChannelType == null) audioChannelType = awe6.interfaces.EAudioChannel.DEFAULT;
-	if(isIgnoredIfPlaying) {
-		var l_existingSound = this._getSounds(id,audioChannelType);
-		if(l_existingSound.length != 0) return;
-	}
-	this._sounds.push(this._nativeSoundFactory(id,audioChannelType,loops,startTime,volume,pan,onCompleteCallback));
-}
-awe6.core.drivers.AAudioManager.prototype._nativeSoundFactory = function(id,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(startTime == null) startTime = 0;
-	if(loops == null) loops = 1;
-	return new awe6.core.drivers._AHelperSound(this._kernel,id,this._packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
-}
-awe6.core.drivers.AAudioManager.prototype.stop = function(id,audioChannelType) {
-	var l_sounds = this._getSounds(id,audioChannelType);
-	var _g = 0;
-	while(_g < l_sounds.length) {
-		var i = l_sounds[_g];
-		++_g;
-		i.stop();
-	}
-}
-awe6.core.drivers.AAudioManager.prototype.transform = function(id,audioChannelType,volume,pan,asRelative) {
-	if(asRelative == null) asRelative = false;
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	var l_sounds = this._getSounds(id,audioChannelType);
-	var _g = 0;
-	while(_g < l_sounds.length) {
-		var i = l_sounds[_g];
-		++_g;
-		i.transform(volume,pan,asRelative);
-	}
-}
-awe6.core.drivers.AAudioManager.prototype.__set_isMute = function(isMute) {
-	if(isMute == null) isMute = !this.isMute;
-	this.isMute = isMute;
-	this._nativeSetIsMute(isMute);
-	return this.isMute;
-}
-awe6.core.drivers.AAudioManager.prototype._nativeSetIsMute = function(isMute) {
-}
-awe6.core.drivers.AAudioManager.prototype._getSounds = function(id,audioChannelType) {
-	var l_result = [];
-	if(id == null && audioChannelType == null) l_result = this._sounds.copy(); else if(audioChannelType == null) {
-		var _g = 0, _g1 = this._sounds;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(i.id == id) l_result.push(i);
-		}
-	} else if(id == null) {
-		var _g = 0, _g1 = this._sounds;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(Type.enumEq(i.audioChannelType,audioChannelType)) l_result.push(i);
-		}
-	} else {
-		var _g = 0, _g1 = this._sounds;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(i.id == id && Type.enumEq(i.audioChannelType,audioChannelType)) l_result.push(i);
-		}
-	}
-	return l_result;
-}
-awe6.core.drivers.AAudioManager.prototype.isPlaying = function(id,audioChannelType) {
-	var l_result = this._getSounds(id,audioChannelType);
-	return l_result.length != 0;
-}
-awe6.core.drivers.AAudioManager.prototype.__class__ = awe6.core.drivers.AAudioManager;
-awe6.core.drivers.AAudioManager.__interfaces__ = [awe6.interfaces.IAudioManager];
-awe6.core.drivers._AHelperSound = function(kernel,id,packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
-	if( kernel === $_ ) return;
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(startTime == null) startTime = 0;
-	if(loops == null) loops = 1;
-	this._kernel = kernel;
-	this.isDisposed = false;
-	this.id = id;
-	this._packageId = packageId;
-	this.audioChannelType = audioChannelType != null?audioChannelType:awe6.interfaces.EAudioChannel.DEFAULT;
-	if(loops == -1) loops = this._kernel.tools.BIG_NUMBER;
-	this._loops = loops;
-	this._startTime = startTime;
-	this._volume = volume;
-	this._pan = pan;
-	this._onCompleteCallback = onCompleteCallback;
-	this._init();
-}
-awe6.core.drivers._AHelperSound.__name__ = ["awe6","core","drivers","_AHelperSound"];
-awe6.core.drivers._AHelperSound.prototype.isDisposed = null;
-awe6.core.drivers._AHelperSound.prototype.id = null;
-awe6.core.drivers._AHelperSound.prototype.audioChannelType = null;
-awe6.core.drivers._AHelperSound.prototype._packageId = null;
-awe6.core.drivers._AHelperSound.prototype._loops = null;
-awe6.core.drivers._AHelperSound.prototype._startTime = null;
-awe6.core.drivers._AHelperSound.prototype._volume = null;
-awe6.core.drivers._AHelperSound.prototype._pan = null;
-awe6.core.drivers._AHelperSound.prototype._onCompleteCallback = null;
-awe6.core.drivers._AHelperSound.prototype._kernel = null;
-awe6.core.drivers._AHelperSound.prototype._init = function() {
-	this._nativeInit();
-}
-awe6.core.drivers._AHelperSound.prototype._nativeInit = function() {
-}
-awe6.core.drivers._AHelperSound.prototype.transform = function(volume,pan,asRelative) {
-	if(asRelative == null) asRelative = false;
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(this.isDisposed) return;
-	this._volume = this._kernel.tools.limit(volume,0,1);
-	this._pan = this._kernel.tools.limit(pan,-1,1);
-	this._nativeTransform(asRelative);
-}
-awe6.core.drivers._AHelperSound.prototype._nativeTransform = function(asRelative) {
-	if(asRelative == null) asRelative = false;
-}
-awe6.core.drivers._AHelperSound.prototype.stop = function() {
-	this._nativeStop();
-	this.dispose();
-}
-awe6.core.drivers._AHelperSound.prototype._nativeStop = function() {
-}
-awe6.core.drivers._AHelperSound.prototype.dispose = function() {
-	if(this.isDisposed) return;
-	this.isDisposed = true;
-	this._nativeStop();
-}
-awe6.core.drivers._AHelperSound.prototype._nativeDisposer = function() {
-}
-awe6.core.drivers._AHelperSound.prototype.__class__ = awe6.core.drivers._AHelperSound;
-awe6.core.drivers._AHelperSound.__interfaces__ = [awe6.interfaces.IDisposable];
 if(!haxe.io) haxe.io = {}
 haxe.io.Bytes = function(length,b) {
 	if( length === $_ ) return;
@@ -5252,14 +5701,6 @@ haxe.io.Bytes.prototype.getData = function() {
 	return this.b;
 }
 haxe.io.Bytes.prototype.__class__ = haxe.io.Bytes;
-awe6.core.drivers.js.Profiler = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.drivers.AProfiler.call(this,kernel);
-}
-awe6.core.drivers.js.Profiler.__name__ = ["awe6","core","drivers","js","Profiler"];
-awe6.core.drivers.js.Profiler.__super__ = awe6.core.drivers.AProfiler;
-for(var k in awe6.core.drivers.AProfiler.prototype ) awe6.core.drivers.js.Profiler.prototype[k] = awe6.core.drivers.AProfiler.prototype[k];
-awe6.core.drivers.js.Profiler.prototype.__class__ = awe6.core.drivers.js.Profiler;
 jeash.display.GradientType = { __ename__ : ["jeash","display","GradientType"], __constructs__ : ["RADIAL","LINEAR"] }
 jeash.display.GradientType.RADIAL = ["RADIAL",0];
 jeash.display.GradientType.RADIAL.toString = $estr;
@@ -5387,66 +5828,6 @@ awe6.interfaces.ETextStyle.OVERSIZED = ["OVERSIZED",5];
 awe6.interfaces.ETextStyle.OVERSIZED.toString = $estr;
 awe6.interfaces.ETextStyle.OVERSIZED.__enum__ = awe6.interfaces.ETextStyle;
 awe6.interfaces.ETextStyle.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",6,value]; $x.__enum__ = awe6.interfaces.ETextStyle; $x.toString = $estr; return $x; }
-awe6.interfaces.IProgress = function() { }
-awe6.interfaces.IProgress.__name__ = ["awe6","interfaces","IProgress"];
-awe6.interfaces.IProgress.prototype.progress = null;
-awe6.interfaces.IProgress.prototype.__class__ = awe6.interfaces.IProgress;
-awe6.interfaces.ISceneTransition = function() { }
-awe6.interfaces.ISceneTransition.__name__ = ["awe6","interfaces","ISceneTransition"];
-awe6.interfaces.ISceneTransition.prototype.getDuration = null;
-awe6.interfaces.ISceneTransition.prototype.__class__ = awe6.interfaces.ISceneTransition;
-awe6.interfaces.ISceneTransition.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IProgress,awe6.interfaces.IProcess];
-awe6.core.drivers.ASceneTransition = function(kernel,duration) {
-	if( kernel === $_ ) return;
-	if(duration == null) duration = 500;
-	this._duration = duration;
-	this._context = new jeash.display.Sprite();
-	awe6.core.Entity.call(this,kernel,"SCENE_TRANSITION",this._context);
-}
-awe6.core.drivers.ASceneTransition.__name__ = ["awe6","core","drivers","ASceneTransition"];
-awe6.core.drivers.ASceneTransition.__super__ = awe6.core.Entity;
-for(var k in awe6.core.Entity.prototype ) awe6.core.drivers.ASceneTransition.prototype[k] = awe6.core.Entity.prototype[k];
-awe6.core.drivers.ASceneTransition.prototype.progress = null;
-awe6.core.drivers.ASceneTransition.prototype._duration = null;
-awe6.core.drivers.ASceneTransition.prototype._context = null;
-awe6.core.drivers.ASceneTransition.prototype._init = function() {
-	awe6.core.Entity.prototype._init.call(this);
-}
-awe6.core.drivers.ASceneTransition.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
-	if(this._age > this._duration) {
-		if(this.isDisposed) null; else {
-			this.isDisposed = true;
-			this.__set_isActive(false);
-			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
-			this._disposer();
-			null;
-		}
-	}
-}
-awe6.core.drivers.ASceneTransition.prototype.getDuration = function(asTime) {
-	if(asTime == null) asTime = true;
-	return asTime?this._duration:this._duration / (1000 / this._kernel.getFramerate());
-}
-awe6.core.drivers.ASceneTransition.prototype.__get_progress = function() {
-	return this._tools.limit(this._age / this._duration,0,1);
-}
-awe6.core.drivers.ASceneTransition.prototype.__class__ = awe6.core.drivers.ASceneTransition;
-awe6.core.drivers.ASceneTransition.__interfaces__ = [awe6.interfaces.ISceneTransition];
-awe6.core.drivers.js.SceneTransition = function(kernel,duration) {
-	if( kernel === $_ ) return;
-	if(duration == null) duration = 500;
-	awe6.core.drivers.ASceneTransition.call(this,kernel,duration);
-}
-awe6.core.drivers.js.SceneTransition.__name__ = ["awe6","core","drivers","js","SceneTransition"];
-awe6.core.drivers.js.SceneTransition.__super__ = awe6.core.drivers.ASceneTransition;
-for(var k in awe6.core.drivers.ASceneTransition.prototype ) awe6.core.drivers.js.SceneTransition.prototype[k] = awe6.core.drivers.ASceneTransition.prototype[k];
-awe6.core.drivers.js.SceneTransition.prototype._init = function() {
-	awe6.core.drivers.ASceneTransition.prototype._init.call(this);
-	this._kernel.overlay.flash(this._duration,true);
-}
-awe6.core.drivers.js.SceneTransition.prototype.__class__ = awe6.core.drivers.js.SceneTransition;
 jeash.display.StageQuality = function() { }
 jeash.display.StageQuality.__name__ = ["jeash","display","StageQuality"];
 jeash.display.StageQuality.prototype.__class__ = jeash.display.StageQuality;
@@ -5460,9 +5841,9 @@ awe6.interfaces.IInputKeyboard.prototype.getKeyUpDuration = null;
 awe6.interfaces.IInputKeyboard.prototype.getKeyCode = null;
 awe6.interfaces.IInputKeyboard.prototype.getKey = null;
 awe6.interfaces.IInputKeyboard.prototype.__class__ = awe6.interfaces.IInputKeyboard;
-awe6.core.drivers.AInputKeyboard = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
+awe6.core.drivers.AInputKeyboard = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.drivers.AInputKeyboard.__name__ = ["awe6","core","drivers","AInputKeyboard"];
 awe6.core.drivers.AInputKeyboard.__super__ = awe6.core.Process;
@@ -5471,14 +5852,14 @@ awe6.core.drivers.AInputKeyboard.prototype._keys = null;
 awe6.core.drivers.AInputKeyboard.prototype._buffer = null;
 awe6.core.drivers.AInputKeyboard.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
-	this._nativeInit();
+	this._driverInit();
 	this._reset();
 }
-awe6.core.drivers.AInputKeyboard.prototype._nativeInit = function() {
+awe6.core.drivers.AInputKeyboard.prototype._driverInit = function() {
 }
-awe6.core.drivers.AInputKeyboard.prototype._updater = function(timeInterval) {
-	if(timeInterval == null) timeInterval = 0;
-	awe6.core.Process.prototype._updater.call(this,timeInterval);
+awe6.core.drivers.AInputKeyboard.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
 	var l_encounteredKeyCodes = new Hash();
 	var l_nextBuffer = [];
 	var _g = 0, _g1 = this._buffer;
@@ -5506,18 +5887,18 @@ awe6.core.drivers.AInputKeyboard.prototype._updater = function(timeInterval) {
 		var i = _g1[_g];
 		++_g;
 		if(i.isDown) i.updatesDown++; else i.updatesUp++;
-		if(i.isDown) i.timeDown += timeInterval; else i.timeUp += timeInterval;
+		if(i.isDown) i.timeDown += p_deltaTime; else i.timeUp += p_deltaTime;
 	}
 }
 awe6.core.drivers.AInputKeyboard.prototype._disposer = function() {
 	this._keys = null;
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.drivers.AInputKeyboard.prototype._addEvent = function(keyCodeValue,isDown) {
-	this._buffer.push(new awe6.core.drivers._AInputKeyboard._HelperKeyEvent(keyCodeValue,isDown));
+awe6.core.drivers.AInputKeyboard.prototype._addEvent = function(p_keyCodeValue,p_isDown) {
+	this._buffer.push(new awe6.core.drivers._AInputKeyboard._HelperKeyEvent(p_keyCodeValue,p_isDown));
 }
-awe6.core.drivers.AInputKeyboard.prototype._onDown = function(keyCode) {
-	var l_current = this._keys[keyCode];
+awe6.core.drivers.AInputKeyboard.prototype._onDown = function(p_keyCode) {
+	var l_current = this._keys[p_keyCode];
 	l_current.isUsed = true;
 	l_current.isDown = true;
 	l_current.timeUpPrevious = l_current.timeUp;
@@ -5525,58 +5906,58 @@ awe6.core.drivers.AInputKeyboard.prototype._onDown = function(keyCode) {
 	l_current.updatesUp = 0;
 	l_current.timeUp = 0;
 }
-awe6.core.drivers.AInputKeyboard.prototype._onUp = function(keyCode) {
-	var l_current = this._keys[keyCode];
+awe6.core.drivers.AInputKeyboard.prototype._onUp = function(p_keyCode) {
+	var l_current = this._keys[p_keyCode];
 	l_current.isDown = false;
 	l_current.timeDownPrevious = l_current.timeDown;
 	l_current.updatesDownPrevious = l_current.updatesDown;
 	l_current.updatesDown = 0;
 	l_current.timeDown = 0;
 }
-awe6.core.drivers.AInputKeyboard.prototype._reset = function(event) {
+awe6.core.drivers.AInputKeyboard.prototype._reset = function(p_event) {
 	this._buffer = [];
 	this._keys = [];
 	var _g = 0;
-	while(_g < 256) {
+	while(_g < 512) {
 		var i = _g++;
 		this._keys[i] = new awe6.core.drivers._AInputKeyboard._HelperKey(this._kernel);
 	}
 }
-awe6.core.drivers.AInputKeyboard.prototype.getIsKeyDown = function(type) {
-	if(type == null) return false;
-	var l_keyCode = this.getKeyCode(type);
+awe6.core.drivers.AInputKeyboard.prototype.getIsKeyDown = function(p_type) {
+	if(p_type == null) return false;
+	var l_keyCode = this.getKeyCode(p_type);
 	return this._keys[l_keyCode].isDown;
 }
-awe6.core.drivers.AInputKeyboard.prototype.getIsKeyPress = function(type) {
-	if(type == null) return false;
-	var l_keyCode = this.getKeyCode(type);
+awe6.core.drivers.AInputKeyboard.prototype.getIsKeyPress = function(p_type) {
+	if(p_type == null) return false;
+	var l_keyCode = this.getKeyCode(p_type);
 	return this._keys[l_keyCode].updatesDown == 1;
 }
-awe6.core.drivers.AInputKeyboard.prototype.getIsKeyRelease = function(type) {
-	if(type == null) return false;
-	var l_keyCode = this.getKeyCode(type);
+awe6.core.drivers.AInputKeyboard.prototype.getIsKeyRelease = function(p_type) {
+	if(p_type == null) return false;
+	var l_keyCode = this.getKeyCode(p_type);
 	return this._keys[l_keyCode].isUsed && this._keys[l_keyCode].updatesUp == 1;
 }
-awe6.core.drivers.AInputKeyboard.prototype.getKeyDownDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	if(type == null) return 0;
-	var l_keyCode = this.getKeyCode(type);
-	if(isPrevious) return asTime?this._keys[l_keyCode].timeDownPrevious:this._keys[l_keyCode].updatesDownPrevious;
-	return asTime?this._keys[l_keyCode].timeDown:this._keys[l_keyCode].updatesDown;
+awe6.core.drivers.AInputKeyboard.prototype.getKeyDownDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	if(p_type == null) return 0;
+	var l_keyCode = this.getKeyCode(p_type);
+	if(p_isPrevious) return p_asTime?this._keys[l_keyCode].timeDownPrevious:this._keys[l_keyCode].updatesDownPrevious;
+	return p_asTime?this._keys[l_keyCode].timeDown:this._keys[l_keyCode].updatesDown;
 }
-awe6.core.drivers.AInputKeyboard.prototype.getKeyUpDuration = function(type,asTime,isPrevious) {
-	if(isPrevious == null) isPrevious = false;
-	if(asTime == null) asTime = true;
-	if(type == null) return this._tools.BIG_NUMBER;
-	var l_keyCode = this.getKeyCode(type);
-	if(isPrevious) return asTime?this._keys[l_keyCode].timeUpPrevious:this._keys[l_keyCode].updatesUpPrevious;
-	return asTime?this._keys[l_keyCode].timeUp:this._keys[l_keyCode].updatesUp;
+awe6.core.drivers.AInputKeyboard.prototype.getKeyUpDuration = function(p_type,p_asTime,p_isPrevious) {
+	if(p_isPrevious == null) p_isPrevious = false;
+	if(p_asTime == null) p_asTime = true;
+	if(p_type == null) return this._tools.BIG_NUMBER;
+	var l_keyCode = this.getKeyCode(p_type);
+	if(p_isPrevious) return p_asTime?this._keys[l_keyCode].timeUpPrevious:this._keys[l_keyCode].updatesUpPrevious;
+	return p_asTime?this._keys[l_keyCode].timeUp:this._keys[l_keyCode].updatesUp;
 }
-awe6.core.drivers.AInputKeyboard.prototype.getKeyCode = function(type) {
+awe6.core.drivers.AInputKeyboard.prototype.getKeyCode = function(p_type) {
 	return (function($this) {
 		var $r;
-		var $e = (type);
+		var $e = (p_type);
 		switch( $e[1] ) {
 		case 0:
 			$r = 144;
@@ -5876,14 +6257,14 @@ awe6.core.drivers.AInputKeyboard.prototype.getKeyCode = function(type) {
 			$r = 223;
 			break;
 		case 99:
-			var value = $e[2];
-			$r = Std["int"](value);
+			var l_value = $e[2];
+			$r = Std["int"](l_value);
 			break;
 		}
 		return $r;
 	}(this));
 }
-awe6.core.drivers.AInputKeyboard.prototype.getKey = function(keyCode) {
+awe6.core.drivers.AInputKeyboard.prototype.getKey = function(p_keyCode) {
 	var l_constructors = Type.getEnumConstructs(awe6.interfaces.EKey);
 	l_constructors.pop();
 	var _g = 0;
@@ -5891,48 +6272,48 @@ awe6.core.drivers.AInputKeyboard.prototype.getKey = function(keyCode) {
 		var i = l_constructors[_g];
 		++_g;
 		var l_key = Type.createEnum(awe6.interfaces.EKey,i);
-		if(this.getKeyCode(l_key) == keyCode) return l_key;
+		if(this.getKeyCode(l_key) == p_keyCode) return l_key;
 	}
-	return awe6.interfaces.EKey.SUB_TYPE(keyCode);
+	return awe6.interfaces.EKey.SUB_TYPE(p_keyCode);
 }
 awe6.core.drivers.AInputKeyboard.prototype.__class__ = awe6.core.drivers.AInputKeyboard;
 awe6.core.drivers.AInputKeyboard.__interfaces__ = [awe6.interfaces.IInputKeyboard];
-awe6.core.drivers.js.InputKeyboard = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.drivers.AInputKeyboard.call(this,kernel);
+awe6.core.drivers.jeash.InputKeyboard = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.drivers.AInputKeyboard.call(this,p_kernel);
 }
-awe6.core.drivers.js.InputKeyboard.__name__ = ["awe6","core","drivers","js","InputKeyboard"];
-awe6.core.drivers.js.InputKeyboard.__super__ = awe6.core.drivers.AInputKeyboard;
-for(var k in awe6.core.drivers.AInputKeyboard.prototype ) awe6.core.drivers.js.InputKeyboard.prototype[k] = awe6.core.drivers.AInputKeyboard.prototype[k];
-awe6.core.drivers.js.InputKeyboard.prototype._stage = null;
-awe6.core.drivers.js.InputKeyboard.prototype._nativeInit = function() {
+awe6.core.drivers.jeash.InputKeyboard.__name__ = ["awe6","core","drivers","jeash","InputKeyboard"];
+awe6.core.drivers.jeash.InputKeyboard.__super__ = awe6.core.drivers.AInputKeyboard;
+for(var k in awe6.core.drivers.AInputKeyboard.prototype ) awe6.core.drivers.jeash.InputKeyboard.prototype[k] = awe6.core.drivers.AInputKeyboard.prototype[k];
+awe6.core.drivers.jeash.InputKeyboard.prototype._stage = null;
+awe6.core.drivers.jeash.InputKeyboard.prototype._driverInit = function() {
 	this._stage = jeash.Lib.jeashGetCurrent().GetStage();
 	this._stage.addEventListener(jeash.events.KeyboardEvent.KEY_DOWN,$closure(this,"_onKeyDown"));
 	this._stage.addEventListener(jeash.events.KeyboardEvent.KEY_UP,$closure(this,"_onKeyUp"));
 	this._stage.addEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
 }
-awe6.core.drivers.js.InputKeyboard.prototype._updater = function(timeInterval) {
-	if(timeInterval == null) timeInterval = 0;
+awe6.core.drivers.jeash.InputKeyboard.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
 	this._stage.SetFocus(this._stage);
-	awe6.core.drivers.AInputKeyboard.prototype._updater.call(this,timeInterval);
+	awe6.core.drivers.AInputKeyboard.prototype._updater.call(this,p_deltaTime);
 }
-awe6.core.drivers.js.InputKeyboard.prototype._disposer = function() {
+awe6.core.drivers.jeash.InputKeyboard.prototype._disposer = function() {
 	this._stage.removeEventListener(jeash.events.KeyboardEvent.KEY_DOWN,$closure(this,"_onKeyDown"));
 	this._stage.removeEventListener(jeash.events.KeyboardEvent.KEY_UP,$closure(this,"_onKeyUp"));
 	this._stage.removeEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
 	awe6.core.drivers.AInputKeyboard.prototype._disposer.call(this);
 }
-awe6.core.drivers.js.InputKeyboard.prototype._onKeyDown = function(event) {
+awe6.core.drivers.jeash.InputKeyboard.prototype._onKeyDown = function(p_event) {
 	if(!this.isActive) return;
-	this._addEvent(event.keyCode,true);
+	this._addEvent(p_event.keyCode,true);
 	return;
 }
-awe6.core.drivers.js.InputKeyboard.prototype._onKeyUp = function(event) {
+awe6.core.drivers.jeash.InputKeyboard.prototype._onKeyUp = function(p_event) {
 	if(!this.isActive) return;
-	this._addEvent(event.keyCode,false);
+	this._addEvent(p_event.keyCode,false);
 	return;
 }
-awe6.core.drivers.js.InputKeyboard.prototype.__class__ = awe6.core.drivers.js.InputKeyboard;
+awe6.core.drivers.jeash.InputKeyboard.prototype.__class__ = awe6.core.drivers.jeash.InputKeyboard;
 js.Boot = function() { }
 js.Boot.__name__ = ["js","Boot"];
 js.Boot.__unhtml = function(s) {
@@ -7078,33 +7459,53 @@ jeash.text.TextFieldAutoSize = function(p) {
 }
 jeash.text.TextFieldAutoSize.__name__ = ["jeash","text","TextFieldAutoSize"];
 jeash.text.TextFieldAutoSize.prototype.__class__ = jeash.text.TextFieldAutoSize;
-demo.Session = function(kernel,id) {
-	if( kernel === $_ ) return;
-	if(id == null) id = "";
-	awe6.core.drivers.js.Session.call(this,kernel,id);
+awe6.core.drivers.jeash.Session = function(p_kernel,p_id) {
+	if( p_kernel === $_ ) return;
+	if(p_id == null) p_id = "";
+	awe6.core.drivers.ASession.call(this,p_kernel,p_id);
+}
+awe6.core.drivers.jeash.Session.__name__ = ["awe6","core","drivers","jeash","Session"];
+awe6.core.drivers.jeash.Session.__super__ = awe6.core.drivers.ASession;
+for(var k in awe6.core.drivers.ASession.prototype ) awe6.core.drivers.jeash.Session.prototype[k] = awe6.core.drivers.ASession.prototype[k];
+awe6.core.drivers.jeash.Session.prototype._driverLoad = function() {
+	this._savedData = { };
+	if(js.Cookie.exists(this._kernel.factory.id)) this._savedData = this._tools.unserialize(js.Cookie.get(this._kernel.factory.id));
+}
+awe6.core.drivers.jeash.Session.prototype._driverReset = function() {
+	js.Cookie.remove(this._kernel.factory.id);
+	this._savedData = { };
+}
+awe6.core.drivers.jeash.Session.prototype._driverSave = function() {
+	js.Cookie.set(this._kernel.factory.id,this._tools.serialize(this._savedData));
+}
+awe6.core.drivers.jeash.Session.prototype.__class__ = awe6.core.drivers.jeash.Session;
+demo.Session = function(p_kernel,p_id) {
+	if( p_kernel === $_ ) return;
+	if(p_id == null) p_id = "";
+	awe6.core.drivers.jeash.Session.call(this,p_kernel,p_id);
 }
 demo.Session.__name__ = ["demo","Session"];
-demo.Session.__super__ = awe6.core.drivers.js.Session;
-for(var k in awe6.core.drivers.js.Session.prototype ) demo.Session.prototype[k] = awe6.core.drivers.js.Session.prototype[k];
+demo.Session.__super__ = awe6.core.drivers.jeash.Session;
+for(var k in awe6.core.drivers.jeash.Session.prototype ) demo.Session.prototype[k] = awe6.core.drivers.jeash.Session.prototype[k];
 demo.Session.prototype.name = null;
 demo.Session.prototype.highScore = null;
 demo.Session.prototype.isWin = null;
 demo.Session.prototype._init = function() {
 	this._version = 1;
-	awe6.core.drivers.js.Session.prototype._init.call(this);
+	awe6.core.drivers.jeash.Session.prototype._init.call(this);
 }
 demo.Session.prototype._getter = function() {
-	awe6.core.drivers.js.Session.prototype._getter.call(this);
+	awe6.core.drivers.jeash.Session.prototype._getter.call(this);
 	this.name = this._data.name;
 	this.highScore = this._data.highScore;
 }
 demo.Session.prototype._setter = function() {
-	awe6.core.drivers.js.Session.prototype._setter.call(this);
+	awe6.core.drivers.jeash.Session.prototype._setter.call(this);
 	this._data.name = this.name;
 	this._data.highScore = this.highScore;
 }
 demo.Session.prototype._resetter = function() {
-	awe6.core.drivers.js.Session.prototype._resetter.call(this);
+	awe6.core.drivers.jeash.Session.prototype._resetter.call(this);
 	this.name = "???";
 	this.highScore = 0;
 }
@@ -7160,6 +7561,44 @@ jeash.display.Shape.prototype.jeashGetObjectUnderPoint = function(point) {
 	return null;
 }
 jeash.display.Shape.prototype.__class__ = jeash.display.Shape;
+awe6.core.drivers.jeash.Profiler = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.drivers.AProfiler.call(this,p_kernel);
+}
+awe6.core.drivers.jeash.Profiler.__name__ = ["awe6","core","drivers","jeash","Profiler"];
+awe6.core.drivers.jeash.Profiler.__super__ = awe6.core.drivers.AProfiler;
+for(var k in awe6.core.drivers.AProfiler.prototype ) awe6.core.drivers.jeash.Profiler.prototype[k] = awe6.core.drivers.AProfiler.prototype[k];
+awe6.core.drivers.jeash.Profiler.prototype._bitmapData = null;
+awe6.core.drivers.jeash.Profiler.prototype._textFormat = null;
+awe6.core.drivers.jeash.Profiler.prototype._fpsTextField = null;
+awe6.core.drivers.jeash.Profiler.prototype._memoryTextField = null;
+awe6.core.drivers.jeash.Profiler.prototype._init = function() {
+	awe6.core.drivers.AProfiler.prototype._init.call(this);
+	this._width = 70;
+	this._height = 0;
+	this._marginHeight = 12;
+	this._bitmapData = new jeash.display.BitmapData(this._width,this._height,true,this._backgroundColor);
+	var l_bitmap = new jeash.display.Bitmap(this._bitmapData);
+	l_bitmap.jeashSetY(this._marginHeight);
+	this._context.addChild(l_bitmap);
+	this._textFormat = new jeash.text.TextFormat("_sans",10);
+	this._context.jeashGetGraphics().beginFill(this._marginColor);
+	this._context.jeashGetGraphics().drawRect(0,0,this._width,this._marginHeight);
+	this._context.jeashGetGraphics().endFill();
+	this._fpsTextField = new jeash.text.TextField();
+	this._fpsTextField.setTextFormat(this._textFormat);
+	this._fpsTextField.jeashSetWidth(this._width);
+	this._fpsTextField.selectable = false;
+	this._fpsTextField.SetTextColour(this._fpsColor);
+	this._fpsTextField.SetText(this._fpsLabel + ": 99 / 99");
+	this._context.addChild(this._fpsTextField);
+}
+awe6.core.drivers.jeash.Profiler.prototype._driverUpdate = function() {
+	var l_fps = Std["int"](this._kernel.getFramerate(true));
+	var l_fpsValue = Std["int"](Math.min(this._height,this._height / this._kernel.factory.targetFramerate * l_fps));
+	this._fpsTextField.SetText(this._fpsLabel + ": " + l_fps + " / " + this._kernel.factory.targetFramerate);
+}
+awe6.core.drivers.jeash.Profiler.prototype.__class__ = awe6.core.drivers.jeash.Profiler;
 if(!jeash.utils) jeash.utils = {}
 jeash.utils.ByteArray = function(p) {
 	if( p === $_ ) return;
@@ -7449,263 +7888,6 @@ jeash.utils.ByteArray.prototype.__SetEndian = function(endian) {
 	return endian;
 }
 jeash.utils.ByteArray.prototype.__class__ = jeash.utils.ByteArray;
-awe6.interfaces.IKernel = function() { }
-awe6.interfaces.IKernel.__name__ = ["awe6","interfaces","IKernel"];
-awe6.interfaces.IKernel.prototype.isDebug = null;
-awe6.interfaces.IKernel.prototype.isLocal = null;
-awe6.interfaces.IKernel.prototype.isEyeCandy = null;
-awe6.interfaces.IKernel.prototype.isFullScreen = null;
-awe6.interfaces.IKernel.prototype.overlay = null;
-awe6.interfaces.IKernel.prototype.assets = null;
-awe6.interfaces.IKernel.prototype.audio = null;
-awe6.interfaces.IKernel.prototype.inputs = null;
-awe6.interfaces.IKernel.prototype.scenes = null;
-awe6.interfaces.IKernel.prototype.messenger = null;
-awe6.interfaces.IKernel.prototype.tools = null;
-awe6.interfaces.IKernel.prototype.factory = null;
-awe6.interfaces.IKernel.prototype.session = null;
-awe6.interfaces.IKernel.prototype.getConfig = null;
-awe6.interfaces.IKernel.prototype.getFramerate = null;
-awe6.interfaces.IKernel.prototype.onPreloaderComplete = null;
-awe6.interfaces.IKernel.prototype.__class__ = awe6.interfaces.IKernel;
-awe6.interfaces.IKernel.__interfaces__ = [awe6.interfaces.ILogger,awe6.interfaces.IPauseable];
-awe6.core.drivers.AKernel = function(factory,context) {
-	if( factory === $_ ) return;
-	if(this.factory == null) this.factory = factory;
-	this._context = context;
-	if(this.tools == null) this.tools = this._tools = new awe6.core.Tools(this);
-	if(this._view == null) this._view = new awe6.core.drivers.js.View(this,this._context,0,this);
-	awe6.core.Process.call(this,this);
-}
-awe6.core.drivers.AKernel.__name__ = ["awe6","core","drivers","AKernel"];
-awe6.core.drivers.AKernel.__super__ = awe6.core.Process;
-for(var k in awe6.core.Process.prototype ) awe6.core.drivers.AKernel.prototype[k] = awe6.core.Process.prototype[k];
-awe6.core.drivers.AKernel.prototype.overlay = null;
-awe6.core.drivers.AKernel.prototype.factory = null;
-awe6.core.drivers.AKernel.prototype.isDebug = null;
-awe6.core.drivers.AKernel.prototype.isLocal = null;
-awe6.core.drivers.AKernel.prototype.isEyeCandy = null;
-awe6.core.drivers.AKernel.prototype.isFullScreen = null;
-awe6.core.drivers.AKernel.prototype.tools = null;
-awe6.core.drivers.AKernel.prototype.assets = null;
-awe6.core.drivers.AKernel.prototype.audio = null;
-awe6.core.drivers.AKernel.prototype.inputs = null;
-awe6.core.drivers.AKernel.prototype.scenes = null;
-awe6.core.drivers.AKernel.prototype.messenger = null;
-awe6.core.drivers.AKernel.prototype.session = null;
-awe6.core.drivers.AKernel.prototype._context = null;
-awe6.core.drivers.AKernel.prototype._view = null;
-awe6.core.drivers.AKernel.prototype._assetManagerProcess = null;
-awe6.core.drivers.AKernel.prototype._audioManager = null;
-awe6.core.drivers.AKernel.prototype._inputManager = null;
-awe6.core.drivers.AKernel.prototype._sceneManager = null;
-awe6.core.drivers.AKernel.prototype._messageManager = null;
-awe6.core.drivers.AKernel.prototype._overlayProcess = null;
-awe6.core.drivers.AKernel.prototype._logger = null;
-awe6.core.drivers.AKernel.prototype._isPreloaded = null;
-awe6.core.drivers.AKernel.prototype._preloader = null;
-awe6.core.drivers.AKernel.prototype._profiler = null;
-awe6.core.drivers.AKernel.prototype._processes = null;
-awe6.core.drivers.AKernel.prototype._helperFramerate = null;
-awe6.core.drivers.AKernel.prototype._init = function() {
-	awe6.core.Process.prototype._init.call(this);
-	this.isDebug = this.factory.isDebug;
-	this.isLocal = this._nativeGetIsLocal();
-	this._isPreloaded = false;
-	this._processes = new List();
-	this._helperFramerate = new awe6.core.drivers._AKernel._HelperFramerate(this.factory.targetFramerate);
-	this.assets = this._assetManagerProcess = new awe6.core.AAssetManager(this._kernel);
-	this.audio = this._audioManager = new awe6.core.drivers.js.AudioManager(this._kernel);
-	this.inputs = this._inputManager = new awe6.core.InputManager(this._kernel);
-	this.scenes = this._sceneManager = new awe6.core.SceneManager(this._kernel);
-	this.messenger = this._messageManager = new awe6.core.MessageManager(this._kernel);
-	this._view.addChild(this._sceneManager.view,1);
-	this._addProcess(this._assetManagerProcess);
-	this._addProcess(this._audioManager);
-	this._addProcess(this._inputManager);
-	this._addProcess(this._sceneManager);
-	this._addProcess(this._messageManager);
-	this.factory.onInitComplete(this);
-	this._nativeInit();
-	this.__set_isEyeCandy(true);
-	this.__set_isFullScreen(false);
-	this.__set_session(this.factory.createSession());
-	this.__get_session().reset();
-	this._preloader = this.factory.createPreloader();
-	this._addProcess(this._preloader);
-	this._view.addChild(this._preloader.__get_view(),2);
-	this._addProcess(this._view);
-}
-awe6.core.drivers.AKernel.prototype._nativeGetIsLocal = function() {
-	return false;
-}
-awe6.core.drivers.AKernel.prototype._nativeInit = function() {
-}
-awe6.core.drivers.AKernel.prototype._nativeDisposer = function() {
-}
-awe6.core.drivers.AKernel.prototype.onPreloaderComplete = function(preloader) {
-	this._isPreloaded = true;
-	this._removeProcess(this._preloader);
-	this._preloader = null;
-	this._logger = this.factory.createLogger();
-	var l_assetManagerProcess = this.factory.createAssetManager();
-	if(l_assetManagerProcess != this._assetManagerProcess) {
-		this._removeProcess(this._assetManagerProcess);
-		this.assets = this._assetManagerProcess = l_assetManagerProcess;
-		this._addProcess(this._assetManagerProcess);
-	}
-	this.overlay = this._overlayProcess = this.factory.createOverlay();
-	this._addProcess(this._overlayProcess,false);
-	this._view.addChild(this._overlayProcess.__get_view(),3);
-	if(this.isDebug) {
-		this._addProcess(this._profiler = new awe6.core.drivers.js.Profiler(this));
-		this._view.addChild(this._profiler.__get_view(),this._tools.BIG_NUMBER);
-	}
-	this.scenes.setScene(this.factory.startingSceneType);
-}
-awe6.core.drivers.AKernel.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	this._helperFramerate.update();
-	var l_deltaTime = this.factory.isFixedUpdates?Std["int"](1000 / this.factory.targetFramerate):this._helperFramerate.timeInterval;
-	awe6.core.Process.prototype._updater.call(this,l_deltaTime);
-	var $it0 = this._processes.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		i.update(l_deltaTime);
-	}
-}
-awe6.core.drivers.AKernel.prototype._disposer = function() {
-	var $it0 = this._processes.iterator();
-	while( $it0.hasNext() ) {
-		var i = $it0.next();
-		this._removeProcess(i);
-	}
-	if(Std["is"](this.factory,awe6.interfaces.IDisposable)) ((function($this) {
-		var $r;
-		var $t = $this.factory;
-		if(Std["is"]($t,awe6.interfaces.IDisposable)) $t; else throw "Class cast error";
-		$r = $t;
-		return $r;
-	}(this))).dispose();
-	this._view.dispose();
-	this._view = null;
-	this._nativeDisposer();
-	this.assets = this._assetManagerProcess = null;
-	this.audio = this._audioManager = null;
-	this.inputs = this._inputManager = null;
-	this.scenes = this._sceneManager = null;
-	this.messenger = this._messageManager = null;
-	this.overlay = this._overlayProcess = null;
-	this.factory = null;
-	this.tools = this._tools = null;
-	this._logger = null;
-	this._preloader = null;
-	this.__set_session(null);
-	awe6.core.Process.prototype._disposer.call(this);
-}
-awe6.core.drivers.AKernel.prototype.getConfig = function(id) {
-	return this.factory.config.exists(id)?this.factory.config.get(id):null;
-}
-awe6.core.drivers.AKernel.prototype.log = function(value) {
-	if(this._logger != null) this._logger.log(value); else if(this.isDebug) haxe.Log.trace("LOG: " + value,{ fileName : "AKernel.hx", lineNumber : 242, className : "awe6.core.drivers.AKernel", methodName : "log"});
-}
-awe6.core.drivers.AKernel.prototype.getFramerate = function(asActual) {
-	if(asActual == null) asActual = true;
-	return asActual?this._helperFramerate.framerate:this.factory.targetFramerate;
-}
-awe6.core.drivers.AKernel.prototype._addProcess = function(process,isLast) {
-	if(isLast == null) isLast = true;
-	if(process == null) return;
-	if(isLast) this._processes.add(process); else this._processes.push(process);
-}
-awe6.core.drivers.AKernel.prototype._removeProcess = function(process) {
-	if(process == null) return false;
-	process.dispose();
-	return this._processes.remove(process);
-}
-awe6.core.drivers.AKernel.prototype._totalReset = function() {
-	if(!this._isPreloaded) return;
-	this.__get_session().deleteAllSessions();
-	this.__set_session(this.factory.createSession());
-	this.scenes.setScene(this.factory.startingSceneType);
-}
-awe6.core.drivers.AKernel.prototype.__set_isEyeCandy = function(value) {
-	if(!this.factory.isEyeCandyOptionEnabled) {
-		this.isEyeCandy = true;
-		return this.isEyeCandy;
-	}
-	this.isEyeCandy = value;
-	this._nativeSetIsEyeCandy(value);
-	return this.isEyeCandy;
-}
-awe6.core.drivers.AKernel.prototype._nativeSetIsEyeCandy = function(value) {
-}
-awe6.core.drivers.AKernel.prototype.__set_isFullScreen = function(value) {
-	if(!this.factory.isFullScreenOptionEnabled) {
-		this.isFullScreen = false;
-		return this.isFullScreen;
-	}
-	this.isFullScreen = value;
-	this._nativeSetIsFullScreen(value);
-	return this.isFullScreen;
-}
-awe6.core.drivers.AKernel.prototype._nativeSetIsFullScreen = function(value) {
-}
-awe6.core.drivers.AKernel.prototype._pauser = function() {
-	awe6.core.Process.prototype._pauser.call(this);
-	if(this.scenes.__get_scene() != null) this.scenes.__get_scene().pause();
-}
-awe6.core.drivers.AKernel.prototype._resumer = function() {
-	awe6.core.Process.prototype._resumer.call(this);
-	if(this.scenes.__get_scene() != null) this.scenes.__get_scene().resume();
-}
-awe6.core.drivers.AKernel.prototype.__get_session = function() {
-	return this.session;
-}
-awe6.core.drivers.AKernel.prototype.__set_session = function(value) {
-	this.session = value;
-	return this.__get_session();
-}
-awe6.core.drivers.AKernel.prototype.__class__ = awe6.core.drivers.AKernel;
-awe6.core.drivers.AKernel.__interfaces__ = [awe6.interfaces.IKernel];
-awe6.core.drivers.js.Kernel = function(factory,context) {
-	if( factory === $_ ) return;
-	awe6.core.drivers.AKernel.call(this,factory,context);
-}
-awe6.core.drivers.js.Kernel.__name__ = ["awe6","core","drivers","js","Kernel"];
-awe6.core.drivers.js.Kernel.__super__ = awe6.core.drivers.AKernel;
-for(var k in awe6.core.drivers.AKernel.prototype ) awe6.core.drivers.js.Kernel.prototype[k] = awe6.core.drivers.AKernel.prototype[k];
-awe6.core.drivers.js.Kernel.prototype._stage = null;
-awe6.core.drivers.js.Kernel.prototype._nativeGetIsLocal = function() {
-	return jeash.system.Security.sandboxType != jeash.system.Security.REMOTE;
-}
-awe6.core.drivers.js.Kernel.prototype._nativeInit = function() {
-	this._stage = this._context.GetStage();
-	var l_instance = this;
-	jeash.Lib.jeashGetCurrent().focusRect = false;
-	this._stage.jeashSetFrameRate(this.factory.targetFramerate);
-	this._stage.scaleMode = jeash.display.StageScaleMode.NO_SCALE;
-	this._stage.jeashSetQuality(jeash.display.StageQuality.LOW);
-	var l_mask = new jeash.display.Sprite();
-	l_mask.jeashGetGraphics().beginFill(16777215);
-	l_mask.jeashGetGraphics().drawRect(0,0,this.factory.width,this.factory.height);
-	l_mask.jeashGetGraphics().endFill();
-	this._context.addChild(l_mask);
-	this._context.SetMask(l_mask);
-	this._stage.addEventListener(jeash.events.Event.ENTER_FRAME,$closure(this,"_onEnterFrame"));
-	this.__set_isEyeCandy(true);
-	this.__set_isFullScreen(false);
-}
-awe6.core.drivers.js.Kernel.prototype._nativeDisposer = function() {
-}
-awe6.core.drivers.js.Kernel.prototype._onEnterFrame = function(event) {
-	this._updater(0);
-}
-awe6.core.drivers.js.Kernel.prototype._nativeSetIsEyeCandy = function(value) {
-}
-awe6.core.drivers.js.Kernel.prototype._nativeSetIsFullScreen = function(value) {
-}
-awe6.core.drivers.js.Kernel.prototype.__class__ = awe6.core.drivers.js.Kernel;
 if(!jeash.net) jeash.net = {}
 jeash.net.URLRequest = function(inURL) {
 	if( inURL === $_ ) return;
@@ -7809,9 +7991,9 @@ jeash.media.Sound.prototype.__onSoundLoadError = function(evt) {
 	this.dispatchEvent(evt1);
 }
 jeash.media.Sound.prototype.__class__ = jeash.media.Sound;
-awe6.core.InputManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
+awe6.core.InputManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.InputManager.__name__ = ["awe6","core","InputManager"];
 awe6.core.InputManager.__super__ = awe6.core.Process;
@@ -7824,22 +8006,26 @@ awe6.core.InputManager.prototype._inputMouse = null;
 awe6.core.InputManager.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
 	this.joypad = this.createJoypad();
-	this.keyboard = this._inputKeyboard = new awe6.core.drivers.js.InputKeyboard(this._kernel);
-	this.mouse = this._inputMouse = new awe6.core.drivers.js.InputMouse(this._kernel);
+	this.keyboard = this._inputKeyboard = new awe6.core.drivers.jeash.InputKeyboard(this._kernel);
+	this.mouse = this._inputMouse = new awe6.core.drivers.jeash.InputMouse(this._kernel);
 }
-awe6.core.InputManager.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	this._inputKeyboard.update(deltaTime);
-	this._inputMouse.update(deltaTime);
+awe6.core.InputManager.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	this._inputKeyboard.update(p_deltaTime);
+	this._inputMouse.update(p_deltaTime);
 }
 awe6.core.InputManager.prototype._disposer = function() {
 	this._inputKeyboard.dispose();
 	this._inputMouse.dispose();
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.InputManager.prototype.createJoypad = function(up,right,down,left,primary,secondary,upAlt,rightAlt,downAlt,leftAlt,primaryAlt,secondaryAlt) {
-	return new awe6.core.InputJoypad(this._kernel,up,right,down,left,primary,secondary,upAlt,rightAlt,downAlt,leftAlt,primaryAlt,secondaryAlt);
+awe6.core.InputManager.prototype.createJoypad = function(p_up,p_right,p_down,p_left,p_primary,p_secondary,p_upAlt,p_rightAlt,p_downAlt,p_leftAlt,p_primaryAlt,p_secondaryAlt) {
+	return new awe6.core.InputJoypad(this._kernel,p_up,p_right,p_down,p_left,p_primary,p_secondary,p_upAlt,p_rightAlt,p_downAlt,p_leftAlt,p_primaryAlt,p_secondaryAlt);
+}
+awe6.core.InputManager.prototype.reset = function() {
+	this._init();
+	return true;
 }
 awe6.core.InputManager.prototype.__class__ = awe6.core.InputManager;
 awe6.core.InputManager.__interfaces__ = [awe6.interfaces.IInputManager];
@@ -8026,23 +8212,23 @@ jeash.display.GraphicsFillType.SOLID_FILL.__enum__ = jeash.display.GraphicsFillT
 jeash.display.GraphicsFillType.GRADIENT_FILL = ["GRADIENT_FILL",1];
 jeash.display.GraphicsFillType.GRADIENT_FILL.toString = $estr;
 jeash.display.GraphicsFillType.GRADIENT_FILL.__enum__ = jeash.display.GraphicsFillType;
-awe6.core.BasicButton = function(kernel,up,over,width,height,x,y,key,onClickCallback,onRollOverCallback,onRollOutCallback) {
-	if( kernel === $_ ) return;
-	if(y == null) y = 0;
-	if(x == null) x = 0;
-	if(height == null) height = 20;
-	if(width == null) width = 100;
-	this._stateUp = new awe6.core._BasicButton._HelperState(kernel,up);
-	this._stateOver = new awe6.core._BasicButton._HelperState(kernel,over);
-	Reflect.setField(this,"x",x);
-	Reflect.setField(this,"y",y);
-	this.__set_width(width);
-	this.__set_height(height);
-	this._keyType = key;
-	this.onClickCallback = onClickCallback;
-	this.onRollOverCallback = onRollOverCallback;
-	this.onRollOutCallback = onRollOutCallback;
-	awe6.core.Entity.call(this,kernel);
+awe6.core.BasicButton = function(p_kernel,p_up,p_over,p_width,p_height,p_x,p_y,p_keyType,p_onClickCallback,p_onRollOverCallback,p_onRollOutCallback) {
+	if( p_kernel === $_ ) return;
+	if(p_y == null) p_y = 0;
+	if(p_x == null) p_x = 0;
+	if(p_height == null) p_height = 20;
+	if(p_width == null) p_width = 100;
+	this._stateUp = new awe6.core._BasicButton._HelperState(p_kernel,p_up);
+	this._stateOver = new awe6.core._BasicButton._HelperState(p_kernel,p_over);
+	Reflect.setField(this,"x",p_x);
+	Reflect.setField(this,"y",p_y);
+	this._set_width(p_width);
+	this._set_height(p_height);
+	this._keyType = p_keyType;
+	this.onClickCallback = p_onClickCallback;
+	this.onRollOverCallback = p_onRollOverCallback;
+	this.onRollOutCallback = p_onRollOutCallback;
+	awe6.core.Entity.call(this,p_kernel);
 }
 awe6.core.BasicButton.__name__ = ["awe6","core","BasicButton"];
 awe6.core.BasicButton.__super__ = awe6.core.Entity;
@@ -8060,33 +8246,33 @@ awe6.core.BasicButton.prototype._stateOver = null;
 awe6.core.BasicButton.prototype._keyType = null;
 awe6.core.BasicButton.prototype._init = function() {
 	awe6.core.Entity.prototype._init.call(this);
-	this.__get_view().__set_x(this.x);
-	this.__get_view().__set_y(this.y);
+	this._get_view()._set_x(this.x);
+	this._get_view()._set_y(this.y);
 	this.isOver = false;
 	this.addEntity(this._stateUp,awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.UP),true);
 	this.addEntity(this._stateOver,awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.OVER),true);
 	this.setAgenda(awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.UP));
 }
-awe6.core.BasicButton.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
+awe6.core.BasicButton.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
 	var l_inputMouse = this._kernel.inputs.mouse;
-	var l_isOver = this._isPointInsideRectangle(l_inputMouse.x + this.__get_view().x - this.__get_view().globalX,l_inputMouse.y + this.__get_view().y - this.__get_view().globalY,this.x,this.y,this.width,this.height);
-	if(l_isOver) l_inputMouse.__set_cursorType(awe6.interfaces.EMouseCursor.BUTTON);
+	var l_isOver = this._isPointInsideRectangle(l_inputMouse.x + this._get_view().x - this._get_view().globalX,l_inputMouse.y + this._get_view().y - this._get_view().globalY,this.x,this.y,this.width,this.height);
+	if(l_isOver) l_inputMouse._set_cursorType(awe6.interfaces.EMouseCursor.BUTTON);
 	if(l_isOver && !this.isOver) this.onRollOver();
 	if(!l_isOver && this.isOver) {
-		l_inputMouse.__set_cursorType(awe6.interfaces.EMouseCursor.ARROW);
+		l_inputMouse._set_cursorType(awe6.interfaces.EMouseCursor.ARROW);
 		this.onRollOut();
 	}
 	this.isOver = l_isOver;
 	if(this.isOver && l_inputMouse.getIsButtonRelease()) this.onClick();
 	if(this._keyType != null && this._kernel.inputs.keyboard.getIsKeyRelease(this._keyType)) this.onClick();
 }
-awe6.core.BasicButton.prototype._isPointInsideRectangle = function(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
-	if(pointX < rectX) return false;
-	if(pointY < rectY) return false;
-	if(pointX > rectX + rectWidth) return false;
-	if(pointY > rectY + rectHeight) return false;
+awe6.core.BasicButton.prototype._isPointInsideRectangle = function(p_pointX,p_pointY,p_rectX,p_rectY,p_rectWidth,p_rectHeight) {
+	if(p_pointX < p_rectX) return false;
+	if(p_pointY < p_rectY) return false;
+	if(p_pointX > p_rectX + p_rectWidth) return false;
+	if(p_pointY > p_rectY + p_rectHeight) return false;
 	return true;
 }
 awe6.core.BasicButton.prototype.onClick = function() {
@@ -8103,42 +8289,42 @@ awe6.core.BasicButton.prototype.onRollOut = function() {
 	if(this.onRollOutCallback == null) return;
 	this.onRollOutCallback.apply(this,[]);
 }
-awe6.core.BasicButton.prototype.setPosition = function(x,y) {
-	this.__set_x(x);
-	this.__set_y(y);
+awe6.core.BasicButton.prototype.setPosition = function(p_x,p_y) {
+	this._set_x(p_x);
+	this._set_y(p_y);
 }
-awe6.core.BasicButton.prototype.__set_x = function(value) {
-	this.x = value;
-	this.__get_view().__set_x(this.x);
+awe6.core.BasicButton.prototype._set_x = function(p_value) {
+	this.x = p_value;
+	if(this._get_view() != null) this._get_view()._set_x(this.x);
 	return this.x;
 }
-awe6.core.BasicButton.prototype.__set_y = function(value) {
-	this.y = value;
-	this.__get_view().__set_y(this.y);
+awe6.core.BasicButton.prototype._set_y = function(p_value) {
+	this.y = p_value;
+	if(this._get_view() != null) this._get_view()._set_y(this.y);
 	return this.y;
 }
-awe6.core.BasicButton.prototype.__set_width = function(value) {
-	this.width = value;
+awe6.core.BasicButton.prototype._set_width = function(p_value) {
+	this.width = p_value;
 	return this.width;
 }
-awe6.core.BasicButton.prototype.__set_height = function(value) {
-	this.height = value;
+awe6.core.BasicButton.prototype._set_height = function(p_value) {
+	this.height = p_value;
 	return this.height;
 }
 awe6.core.BasicButton.prototype.__class__ = awe6.core.BasicButton;
-awe6.core.BasicButton.__interfaces__ = [awe6.interfaces.IPosition];
+awe6.core.BasicButton.__interfaces__ = [awe6.interfaces.IPositionable];
 if(!demo.gui) demo.gui = {}
-demo.gui.Button = function(kernel,key,x,y,onClick,onRollOver,onRollOut,label) {
-	if( kernel === $_ ) return;
-	if(y == null) y = 0;
-	if(x == null) x = 0;
-	this._assetManager = kernel.assets;
-	this.label = label;
+demo.gui.Button = function(p_kernel,p_key,p_x,p_y,p_onClick,p_onRollOver,p_onRollOut,p_label) {
+	if( p_kernel === $_ ) return;
+	if(p_y == null) p_y = 0;
+	if(p_x == null) p_x = 0;
+	this._assetManager = p_kernel.assets;
+	this.label = p_label;
 	this._upContext = new jeash.display.Sprite();
 	this._overContext = new jeash.display.Sprite();
-	this._upView = new awe6.core.drivers.js.View(kernel,this._upContext);
-	this._overView = new awe6.core.drivers.js.View(kernel,this._overContext);
-	awe6.core.BasicButton.call(this,kernel,this._upView,this._overView,160,40,x,y,key,onClick,onRollOver,onRollOut);
+	this._upView = new awe6.core.drivers.jeash.View(p_kernel,this._upContext);
+	this._overView = new awe6.core.drivers.jeash.View(p_kernel,this._overContext);
+	awe6.core.BasicButton.call(this,p_kernel,this._upView,this._overView,160,40,p_x,p_y,p_key,p_onClick,p_onRollOver,p_onRollOut);
 }
 demo.gui.Button.__name__ = ["demo","gui","Button"];
 demo.gui.Button.__super__ = awe6.core.BasicButton;
@@ -8158,10 +8344,10 @@ demo.gui.Button.prototype._init = function() {
 	this._upContext.addChild(this._createButtonState(false));
 	this._overContext.addChild(this._createButtonState(true));
 }
-demo.gui.Button.prototype._createButtonState = function(isOver) {
-	if(isOver == null) isOver = false;
+demo.gui.Button.prototype._createButtonState = function(p_isOver) {
+	if(p_isOver == null) p_isOver = false;
 	var l_result = new jeash.display.Sprite();
-	l_result.addChild(new jeash.display.Bitmap(isOver?this._assetManager.buttonOver:this._assetManager.buttonUp));
+	l_result.addChild(new jeash.display.Bitmap(p_isOver?this._assetManager.buttonOver:this._assetManager.buttonUp));
 	var l_text = new awe6.extras.gui.Text(this._kernel,this.width - 2 * this._marginWidth,this.height - 2 * this._marginHeight,this.label,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.BUTTON));
 	l_text.setPosition(this._marginWidth,this._marginHeight);
 	l_result.addChild(l_text._sprite);
@@ -8325,17 +8511,17 @@ jeash.ui.Keyboard.isAccessible = function() {
 }
 jeash.ui.Keyboard.prototype.__class__ = jeash.ui.Keyboard;
 if(!awe6.core.drivers._AInputKeyboard) awe6.core.drivers._AInputKeyboard = {}
-awe6.core.drivers._AInputKeyboard._HelperKey = function(kernel) {
-	if( kernel === $_ ) return;
+awe6.core.drivers._AInputKeyboard._HelperKey = function(p_kernel) {
+	if( p_kernel === $_ ) return;
 	this.isDown = false;
 	this.updatesDown = 0;
-	this.updatesUp = kernel.tools.BIG_NUMBER;
+	this.updatesUp = p_kernel.tools.BIG_NUMBER;
 	this.timeDown = 0;
-	this.timeUp = kernel.tools.BIG_NUMBER;
+	this.timeUp = p_kernel.tools.BIG_NUMBER;
 	this.updatesDownPrevious = 0;
-	this.updatesUpPrevious = kernel.tools.BIG_NUMBER;
+	this.updatesUpPrevious = p_kernel.tools.BIG_NUMBER;
 	this.timeDownPrevious = 0;
-	this.timeUpPrevious = kernel.tools.BIG_NUMBER;
+	this.timeUpPrevious = p_kernel.tools.BIG_NUMBER;
 }
 awe6.core.drivers._AInputKeyboard._HelperKey.__name__ = ["awe6","core","drivers","_AInputKeyboard","_HelperKey"];
 awe6.core.drivers._AInputKeyboard._HelperKey.prototype.isUsed = null;
@@ -8349,10 +8535,10 @@ awe6.core.drivers._AInputKeyboard._HelperKey.prototype.updatesUpPrevious = null;
 awe6.core.drivers._AInputKeyboard._HelperKey.prototype.timeDownPrevious = null;
 awe6.core.drivers._AInputKeyboard._HelperKey.prototype.timeUpPrevious = null;
 awe6.core.drivers._AInputKeyboard._HelperKey.prototype.__class__ = awe6.core.drivers._AInputKeyboard._HelperKey;
-awe6.core.drivers._AInputKeyboard._HelperKeyEvent = function(keyCode,isDown) {
-	if( keyCode === $_ ) return;
-	this.keyCode = keyCode;
-	this.isDown = isDown;
+awe6.core.drivers._AInputKeyboard._HelperKeyEvent = function(p_keyCode,p_isDown) {
+	if( p_keyCode === $_ ) return;
+	this.keyCode = p_keyCode;
+	this.isDown = p_isDown;
 }
 awe6.core.drivers._AInputKeyboard._HelperKeyEvent.__name__ = ["awe6","core","drivers","_AInputKeyboard","_HelperKeyEvent"];
 awe6.core.drivers._AInputKeyboard._HelperKeyEvent.prototype.keyCode = null;
@@ -8373,10 +8559,10 @@ jeash.events.FocusEvent.prototype.shiftKey = null;
 jeash.events.FocusEvent.prototype.relatedObject = null;
 jeash.events.FocusEvent.prototype.__class__ = jeash.events.FocusEvent;
 if(!awe6.core._BasicButton) awe6.core._BasicButton = {}
-awe6.core._BasicButton._HelperState = function(kernel,view) {
-	if( kernel === $_ ) return;
-	awe6.core.Entity.call(this,kernel);
-	this.view = view;
+awe6.core._BasicButton._HelperState = function(p_kernel,p_view) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Entity.call(this,p_kernel);
+	this.view = p_view;
 }
 awe6.core._BasicButton._HelperState.__name__ = ["awe6","core","_BasicButton","_HelperState"];
 awe6.core._BasicButton._HelperState.__super__ = awe6.core.Entity;
@@ -8637,9 +8823,9 @@ jeash.net._URLLoader.Http.prototype.getData = function() {
 }
 jeash.net._URLLoader.Http.prototype.__class__ = jeash.net._URLLoader.Http;
 if(!awe6.core.drivers._AKernel) awe6.core.drivers._AKernel = {}
-awe6.core.drivers._AKernel._HelperFramerate = function(framerate) {
-	if( framerate === $_ ) return;
-	this.framerate = framerate;
+awe6.core.drivers._AKernel._HelperFramerate = function(p_framerate) {
+	if( p_framerate === $_ ) return;
+	this.framerate = p_framerate;
 	this._timeAtLastUpdate = Std["int"](haxe.Timer.stamp() * 1000);
 }
 awe6.core.drivers._AKernel._HelperFramerate.__name__ = ["awe6","core","drivers","_AKernel","_HelperFramerate"];
@@ -9217,6 +9403,7 @@ DateTools.prototype.__class__ = DateTools;
 ApplicationMain = function() { }
 ApplicationMain.__name__ = ["ApplicationMain"];
 ApplicationMain.completed = null;
+ApplicationMain.preloader = null;
 ApplicationMain.total = null;
 ApplicationMain.loaders = null;
 ApplicationMain.urlLoaders = null;
@@ -9225,6 +9412,9 @@ ApplicationMain.main = function() {
 	ApplicationMain.loaders = new Hash();
 	ApplicationMain.urlLoaders = new Hash();
 	ApplicationMain.total = 0;
+	ApplicationMain.preloader = new NMEPreloader();
+	jeash.Lib.jeashGetCurrent().addChild(ApplicationMain.preloader);
+	ApplicationMain.preloader.onInit();
 	var urlLoader = new jeash.net.URLLoader();
 	ApplicationMain.urlLoaders.set("assets/audio/ButtonDown.aac",urlLoader);
 	ApplicationMain.total++;
@@ -9265,51 +9455,45 @@ ApplicationMain.main = function() {
 	ApplicationMain.loaders.set("assets/overlay/buttons/BackUp.png",loader3);
 	ApplicationMain.total++;
 	var loader4 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/ExitOver.png",loader4);
+	ApplicationMain.loaders.set("assets/overlay/buttons/MuteOver.png",loader4);
 	ApplicationMain.total++;
 	var loader5 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/ExitUp.png",loader5);
+	ApplicationMain.loaders.set("assets/overlay/buttons/MuteUp.png",loader5);
 	ApplicationMain.total++;
 	var loader6 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/MuteOver.png",loader6);
+	ApplicationMain.loaders.set("assets/overlay/buttons/PauseOver.png",loader6);
 	ApplicationMain.total++;
 	var loader7 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/MuteUp.png",loader7);
+	ApplicationMain.loaders.set("assets/overlay/buttons/PauseUp.png",loader7);
 	ApplicationMain.total++;
 	var loader8 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/PauseOver.png",loader8);
+	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteOver.png",loader8);
 	ApplicationMain.total++;
 	var loader9 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/PauseUp.png",loader9);
+	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteUp.png",loader9);
 	ApplicationMain.total++;
 	var loader10 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteOver.png",loader10);
+	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseOver.png",loader10);
 	ApplicationMain.total++;
 	var loader11 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteUp.png",loader11);
+	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseUp.png",loader11);
 	ApplicationMain.total++;
 	var loader12 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseOver.png",loader12);
+	ApplicationMain.loaders.set("assets/overlay/OverlayBackground.png",loader12);
 	ApplicationMain.total++;
 	var loader13 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseUp.png",loader13);
+	ApplicationMain.loaders.set("assets/scenes/Background.png",loader13);
 	ApplicationMain.total++;
 	var loader14 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/overlay/OverlayBackground.png",loader14);
-	ApplicationMain.total++;
-	var loader15 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/scenes/Background.png",loader15);
-	ApplicationMain.total++;
-	var loader16 = new jeash.display.Loader();
-	ApplicationMain.loaders.set("assets/Sphere.png",loader16);
+	ApplicationMain.loaders.set("assets/Sphere.png",loader14);
 	ApplicationMain.total++;
 	if(ApplicationMain.total == 0) ApplicationMain.begin(); else {
 		var $it0 = ApplicationMain.loaders.keys();
 		while( $it0.hasNext() ) {
 			var path = $it0.next();
-			var loader17 = ApplicationMain.loaders.get(path);
-			loader17.contentLoaderInfo.addEventListener("complete",ApplicationMain.loader_onComplete);
-			loader17.load(new jeash.net.URLRequest(path));
+			var loader15 = ApplicationMain.loaders.get(path);
+			loader15.contentLoaderInfo.addEventListener("complete",ApplicationMain.loader_onComplete);
+			loader15.load(new jeash.net.URLRequest(path));
 		}
 		var $it1 = ApplicationMain.urlLoaders.keys();
 		while( $it1.hasNext() ) {
@@ -9321,6 +9505,9 @@ ApplicationMain.main = function() {
 	}
 }
 ApplicationMain.begin = function() {
+	ApplicationMain.preloader.onLoaded();
+	jeash.Lib.jeashGetCurrent().removeChild(ApplicationMain.preloader);
+	ApplicationMain.preloader = null;
 	Main.main();
 }
 ApplicationMain.getAsset = function(inName) {
@@ -9354,8 +9541,6 @@ ApplicationMain.getAsset = function(inName) {
 	if(inName == "assets/fonts/orbitron.ttf.hash") return nme.installer.Assets.getBytes("assets/fonts/orbitron.ttf.hash");
 	if(inName == "assets/overlay/buttons/BackOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackOver.png");
 	if(inName == "assets/overlay/buttons/BackUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackUp.png");
-	if(inName == "assets/overlay/buttons/ExitOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/ExitOver.png");
-	if(inName == "assets/overlay/buttons/ExitUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/ExitUp.png");
 	if(inName == "assets/overlay/buttons/MuteOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png");
 	if(inName == "assets/overlay/buttons/MuteUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png");
 	if(inName == "assets/overlay/buttons/PauseOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png");
@@ -9371,6 +9556,7 @@ ApplicationMain.getAsset = function(inName) {
 }
 ApplicationMain.loader_onComplete = function(event) {
 	ApplicationMain.completed++;
+	ApplicationMain.preloader.onUpdate(ApplicationMain.completed,ApplicationMain.total);
 	if(ApplicationMain.completed == ApplicationMain.total) ApplicationMain.begin();
 }
 ApplicationMain.prototype.__class__ = ApplicationMain;
@@ -9464,16 +9650,16 @@ haxe.Stack.makeStack = function(s) {
 	return m;
 }
 haxe.Stack.prototype.__class__ = haxe.Stack;
-awe6.extras.gui.Text = function(kernel,width,height,text,textStyle,isMultiline,isInput) {
-	if( kernel === $_ ) return;
-	if(isInput == null) isInput = false;
-	if(isMultiline == null) isMultiline = false;
-	if(text == null) text = "";
-	this.textStyle = textStyle != null?textStyle:new awe6.core.TextStyle();
-	this._isMultiline = isMultiline;
-	this._isInput = isInput;
-	awe6.extras.gui.GuiEntity.call(this,kernel,width,height,false);
-	this.__set_text(text);
+awe6.extras.gui.Text = function(p_kernel,p_width,p_height,p_text,p_textStyle,p_isMultiline,p_isInput) {
+	if( p_kernel === $_ ) return;
+	if(p_isInput == null) p_isInput = false;
+	if(p_isMultiline == null) p_isMultiline = false;
+	if(p_text == null) p_text = "";
+	this.textStyle = p_textStyle != null?p_textStyle:new awe6.core.TextStyle();
+	this._isMultiline = p_isMultiline;
+	this._isInput = p_isInput;
+	awe6.extras.gui.GuiEntity.call(this,p_kernel,p_width,p_height,false);
+	this._set_text(p_text);
 }
 awe6.extras.gui.Text.__name__ = ["awe6","extras","gui","Text"];
 awe6.extras.gui.Text.__super__ = awe6.extras.gui.GuiEntity;
@@ -9502,9 +9688,9 @@ awe6.extras.gui.Text.prototype._init = function() {
 	this._isDirty = false;
 	this._prevTextStyle = this.textStyle.toString();
 }
-awe6.extras.gui.Text.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.extras.gui.GuiEntity.prototype._updater.call(this,deltaTime);
+awe6.extras.gui.Text.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.extras.gui.GuiEntity.prototype._updater.call(this,p_deltaTime);
 	this._isDirty = this._isDirty || this._prevTextStyle != this.textStyle.toString();
 	if(this._isDirty) this._draw();
 	this._prevTextStyle = this.textStyle.toString();
@@ -9539,34 +9725,24 @@ awe6.extras.gui.Text.prototype._draw = function() {
 		this._textFormat.italic = this.textStyle.isItalic;
 		this._textFormat.bold = this.textStyle.isBold;
 		this._textField.selectable = this._isInput;
-		this._textField.antiAliasType = jeash.text.AntiAliasType.ADVANCED;
 		this._textField.embedFonts = false;
-		var _g = 0, _g1 = jeash.text.Font.enumerateFonts();
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(i.fontName == this._textFormat.font) {
-				this._textField.embedFonts = true;
-				break;
-			}
-		}
 		this._textField.jeashSetFilters(this.textStyle.filters);
 		this._textField.setTextFormat(this._textFormat);
 		this._textField.setTextFormat(this._textFormat);
 	}
 	this._isDirty = false;
 }
-awe6.extras.gui.Text.prototype.__set_text = function(value) {
-	if(this.text == value) return this.text;
-	this.text = value;
+awe6.extras.gui.Text.prototype._set_text = function(p_value) {
+	if(this.text == p_value) return this.text;
+	this.text = p_value;
 	this._textField.SetHTMLText(this.text);
 	this._isDirty = true;
 	return this.text;
 }
 awe6.extras.gui.Text.prototype.__class__ = awe6.extras.gui.Text;
-awe6.core.MessageManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
+awe6.core.MessageManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.MessageManager.__name__ = ["awe6","core","MessageManager"];
 awe6.core.MessageManager.__super__ = awe6.core.Process;
@@ -9578,14 +9754,14 @@ awe6.core.MessageManager.prototype._init = function() {
 	this._isVerbose = false;
 	this._subscriptions = new haxe.FastList();
 }
-awe6.core.MessageManager.prototype.addSubscriber = function(subscriber,message,handler,sender,senderClassType,isRemovedAfterFirstSend) {
-	if(isRemovedAfterFirstSend == null) isRemovedAfterFirstSend = false;
-	var l_subscription = new awe6.core._MessageManager._HelperSubscription(subscriber,message,handler,sender,senderClassType,isRemovedAfterFirstSend);
+awe6.core.MessageManager.prototype.addSubscriber = function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType,p_isRemovedAfterFirstSend) {
+	if(p_isRemovedAfterFirstSend == null) p_isRemovedAfterFirstSend = false;
+	var l_subscription = new awe6.core._MessageManager._HelperSubscription(p_subscriber,p_message,p_handler,p_sender,p_senderClassType,p_isRemovedAfterFirstSend);
 	this._subscriptions.add(l_subscription);
 }
-awe6.core.MessageManager.prototype.getSubscribers = function(subscriber,message,handler,sender,senderClassType) {
+awe6.core.MessageManager.prototype.getSubscribers = function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType) {
 	var l_result = [];
-	var l_subscriptions = this._getSubscriptions(subscriber,message,handler,sender,senderClassType);
+	var l_subscriptions = this._getSubscriptions(p_subscriber,p_message,p_handler,p_sender,p_senderClassType);
 	var $it0 = l_subscriptions.iterator();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
@@ -9593,8 +9769,8 @@ awe6.core.MessageManager.prototype.getSubscribers = function(subscriber,message,
 	}
 	return l_result;
 }
-awe6.core.MessageManager.prototype.removeSubscribers = function(subscriber,message,handler,sender,senderClassType) {
-	var l_subscriptions = this._getSubscriptions(subscriber,message,handler,sender,senderClassType);
+awe6.core.MessageManager.prototype.removeSubscribers = function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType) {
+	var l_subscriptions = this._getSubscriptions(p_subscriber,p_message,p_handler,p_sender,p_senderClassType);
 	var $it0 = l_subscriptions.iterator();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
@@ -9602,63 +9778,63 @@ awe6.core.MessageManager.prototype.removeSubscribers = function(subscriber,messa
 		if(this._isVerbose) haxe.Log.trace("Removing " + i.sender + ":" + i.message,{ fileName : "MessageManager.hx", lineNumber : 78, className : "awe6.core.MessageManager", methodName : "removeSubscribers"});
 	}
 }
-awe6.core.MessageManager.prototype.sendMessage = function(message,sender,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	this._sendMessage(message,sender,sender,isBubbleDown,isBubbleUp,isBubbleEverywhere);
+awe6.core.MessageManager.prototype.sendMessage = function(p_message,p_sender,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	this._sendMessage(p_message,p_sender,p_sender,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere);
 }
-awe6.core.MessageManager.prototype._sendMessage = function(message,sender,target,isBubbleDown,isBubbleUp,isBubbleEverywhere) {
-	if(isBubbleEverywhere == null) isBubbleEverywhere = false;
-	if(isBubbleUp == null) isBubbleUp = false;
-	if(isBubbleDown == null) isBubbleDown = false;
-	if(this._isVerbose) haxe.Log.trace("Sending message: " + Std.string(message) + " from " + sender.id,{ fileName : "MessageManager.hx", lineNumber : 92, className : "awe6.core.MessageManager", methodName : "_sendMessage"});
-	if(isBubbleEverywhere) return this._sendMessage(message,sender,this._kernel.scenes.__get_scene().getEntities()[0],true);
-	var l_subscriptions = this._getSubscriptions(null,message,null,target);
+awe6.core.MessageManager.prototype._sendMessage = function(p_message,p_sender,p_target,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
+	if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
+	if(p_isBubbleUp == null) p_isBubbleUp = false;
+	if(p_isBubbleDown == null) p_isBubbleDown = false;
+	if(this._isVerbose) haxe.Log.trace("Sending message: " + Std.string(p_message) + " from " + p_sender.id,{ fileName : "MessageManager.hx", lineNumber : 92, className : "awe6.core.MessageManager", methodName : "_sendMessage"});
+	if(p_isBubbleEverywhere) return this._sendMessage(p_message,p_sender,this._kernel.scenes._get_scene().getEntities()[0],true);
+	var l_subscriptions = this._getSubscriptions(null,p_message,null,p_target);
 	var l_isContinue = true;
 	var $it0 = l_subscriptions.iterator();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
-		l_isContinue = this._send(i,message,sender);
+		l_isContinue = this._send(i,p_message,p_sender);
 		if(!l_isContinue) return;
 	}
-	if(isBubbleDown) {
-		var l_children = target.getEntities();
+	if(p_isBubbleDown) {
+		var l_children = p_target.getEntities();
 		var _g = 0;
 		while(_g < l_children.length) {
 			var j = l_children[_g];
 			++_g;
-			this._sendMessage(message,sender,j,true);
+			this._sendMessage(p_message,p_sender,j,true);
 		}
 	}
-	if(isBubbleUp && target.__get_parent() != null && Std["is"](target.__get_parent(),awe6.interfaces.IEntity)) this._sendMessage(message,sender,target.__get_parent(),false,true);
+	if(p_isBubbleUp && p_target._get_parent() != null && Std["is"](p_target._get_parent(),awe6.interfaces.IEntity)) this._sendMessage(p_message,p_sender,p_target._get_parent(),false,true);
 	return;
 }
-awe6.core.MessageManager.prototype._send = function(subscription,message,sender) {
-	var l_isContinue = subscription.handler.apply(subscription.subscriber,[message,sender]);
-	if(subscription.isRemovedAfterFirstSend) this._subscriptions.remove(subscription);
+awe6.core.MessageManager.prototype._send = function(p_subscription,p_message,p_sender) {
+	var l_isContinue = p_subscription.handler.apply(p_subscription.subscriber,[p_message,p_sender]);
+	if(p_subscription.isRemovedAfterFirstSend) this._subscriptions.remove(p_subscription);
 	return l_isContinue;
 }
-awe6.core.MessageManager.prototype._getSubscriptions = function(subscriber,message,handler,sender,senderClassType) {
+awe6.core.MessageManager.prototype._getSubscriptions = function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType) {
 	var l_result = new haxe.FastList();
 	var $it0 = this._subscriptions.iterator();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
-		if(subscriber != null && i.subscriber != subscriber) continue;
-		if(message != null && !Std["is"](message,i.messageClass)) {
-			var $e = (Type["typeof"](message));
+		if(p_subscriber != null && i.subscriber != p_subscriber) continue;
+		if(p_message != null && !Std["is"](p_message,i.messageClass)) {
+			var $e = (Type["typeof"](p_message));
 			switch( $e[1] ) {
 			case 7:
 				var e = $e[2];
-				if(!Type.enumEq(message,i.message)) continue;
+				if(!Type.enumEq(p_message,i.message)) continue;
 				break;
 			default:
-				if(message != i.message) continue;
+				if(p_message != i.message) continue;
 			}
 		}
-		if(handler != null && !Reflect.compareMethods(i.handler,handler)) continue;
-		if(sender != null && i.sender != null && i.sender != sender) continue;
-		if(i.senderClassType != null && !Std["is"](sender,i.senderClassType)) continue;
+		if(p_handler != null && !Reflect.compareMethods(i.handler,p_handler)) continue;
+		if(p_sender != null && i.sender != null && i.sender != p_sender) continue;
+		if(i.senderClassType != null && !Std["is"](p_sender,i.senderClassType)) continue;
 		l_result.head = new haxe.FastCell(i,l_result.head);
 	}
 	return l_result;
@@ -9666,16 +9842,16 @@ awe6.core.MessageManager.prototype._getSubscriptions = function(subscriber,messa
 awe6.core.MessageManager.prototype.__class__ = awe6.core.MessageManager;
 awe6.core.MessageManager.__interfaces__ = [awe6.interfaces.IMessageManager];
 if(!awe6.core._MessageManager) awe6.core._MessageManager = {}
-awe6.core._MessageManager._HelperSubscription = function(subscriber,message,handler,sender,senderClassType,isRemovedAfterFirstSend) {
-	if( subscriber === $_ ) return;
-	if(isRemovedAfterFirstSend == null) isRemovedAfterFirstSend = false;
-	this.subscriber = subscriber;
-	this.message = message;
-	this.handler = handler;
-	this.sender = sender;
-	this.senderClassType = senderClassType;
-	this.isRemovedAfterFirstSend = isRemovedAfterFirstSend;
-	this.messageClass = Type.getClass(message);
+awe6.core._MessageManager._HelperSubscription = function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType,p_isRemovedAfterFirstSend) {
+	if( p_subscriber === $_ ) return;
+	if(p_isRemovedAfterFirstSend == null) p_isRemovedAfterFirstSend = false;
+	this.subscriber = p_subscriber;
+	this.message = p_message;
+	this.handler = p_handler;
+	this.sender = p_sender;
+	this.senderClassType = p_senderClassType;
+	this.isRemovedAfterFirstSend = p_isRemovedAfterFirstSend;
+	this.messageClass = Type.getClass(p_message);
 }
 awe6.core._MessageManager._HelperSubscription.__name__ = ["awe6","core","_MessageManager","_HelperSubscription"];
 awe6.core._MessageManager._HelperSubscription.prototype.subscriber = null;
@@ -9690,12 +9866,12 @@ awe6.interfaces.IPreloader = function() { }
 awe6.interfaces.IPreloader.__name__ = ["awe6","interfaces","IPreloader"];
 awe6.interfaces.IPreloader.prototype.__class__ = awe6.interfaces.IPreloader;
 awe6.interfaces.IPreloader.__interfaces__ = [awe6.interfaces.IProgress,awe6.interfaces.IViewable,awe6.interfaces.IProcess];
-awe6.core.drivers.APreloader = function(kernel,assets,isDecached) {
-	if( kernel === $_ ) return;
-	if(isDecached == null) isDecached = false;
-	this._assets = assets;
-	this._isDecached = isDecached;
-	awe6.core.Process.call(this,kernel);
+awe6.core.drivers.APreloader = function(p_kernel,p_assets,p_isDecached) {
+	if( p_kernel === $_ ) return;
+	if(p_isDecached == null) p_isDecached = false;
+	this._assets = p_assets;
+	this._isDecached = p_isDecached;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.drivers.APreloader.__name__ = ["awe6","core","drivers","APreloader"];
 awe6.core.drivers.APreloader.__super__ = awe6.core.Process;
@@ -9711,7 +9887,7 @@ awe6.core.drivers.APreloader.prototype._isComplete = null;
 awe6.core.drivers.APreloader.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
 	this.progress = 0;
-	if(this.__get_view() == null) this.view = new awe6.core.drivers.js.View(this._kernel);
+	if(this._get_view() == null) this.view = new awe6.core.drivers.jeash.View(this._kernel);
 	this._encrypter = this._tools;
 	this._currentProgress = 0;
 	this._currentAsset = 0;
@@ -9722,131 +9898,66 @@ awe6.core.drivers.APreloader.prototype._next = function() {
 	this._currentAsset++;
 	if(this._currentAsset > this._assets.length) {
 		if(!this._isComplete) {
-			haxe.Timer.delay($closure(this,"dispose"),100);
+			haxe.Timer.delay((function(f,a1) {
+				return function() {
+					return f(a1);
+				};
+			})($closure(this._kernel,"onPreloaderComplete"),this),100);
 			this._isComplete = true;
 		}
 		return;
-	} else this._nativeLoad(this._assets[this._currentAsset - 1]);
+	} else this._driverLoad(this._assets[this._currentAsset - 1]);
 	this._currentProgress = 0;
 }
-awe6.core.drivers.APreloader.prototype._nativeLoad = function(url) {
+awe6.core.drivers.APreloader.prototype._driverLoad = function(p_url) {
 }
-awe6.core.drivers.APreloader.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	if(this._assets.length == 0) {
-		if(this.isDisposed) null; else {
-			this.isDisposed = true;
-			this.__set_isActive(false);
-			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
-			this._disposer();
-			null;
-		}
-	}
-	this.__get_view().__set_isVisible(this._age > 500);
+awe6.core.drivers.APreloader.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	if(this._assets.length == 0) this._kernel.onPreloaderComplete(this);
+	this._get_view()._set_isVisible(this._age > 500);
 }
 awe6.core.drivers.APreloader.prototype._disposer = function() {
-	this.__get_view().dispose();
-	this._nativeDisposer();
+	this._get_view().dispose();
+	this._driverDisposer();
 	awe6.core.Process.prototype._disposer.call(this);
-	this._kernel.onPreloaderComplete(this);
-	this._kernel.overlay.flash();
 }
-awe6.core.drivers.APreloader.prototype._nativeDisposer = function() {
+awe6.core.drivers.APreloader.prototype._driverDisposer = function() {
 }
-awe6.core.drivers.APreloader.prototype.__get_view = function() {
+awe6.core.drivers.APreloader.prototype._get_view = function() {
 	return this.view;
 }
-awe6.core.drivers.APreloader.prototype.__get_progress = function() {
+awe6.core.drivers.APreloader.prototype._get_progress = function() {
 	return this.progress;
 }
 awe6.core.drivers.APreloader.prototype.__class__ = awe6.core.drivers.APreloader;
 awe6.core.drivers.APreloader.__interfaces__ = [awe6.interfaces.IPreloader];
-awe6.core.drivers.js.Preloader = function(kernel,assets,isDecached) {
-	if( kernel === $_ ) return;
-	if(isDecached == null) isDecached = false;
-	awe6.core.drivers.APreloader.call(this,kernel,assets,isDecached);
+awe6.core.drivers.jeash.Preloader = function(p_kernel,p_assets,p_isDecached) {
+	if( p_kernel === $_ ) return;
+	if(p_isDecached == null) p_isDecached = false;
+	awe6.core.drivers.APreloader.call(this,p_kernel,p_assets,p_isDecached);
 }
-awe6.core.drivers.js.Preloader.__name__ = ["awe6","core","drivers","js","Preloader"];
-awe6.core.drivers.js.Preloader.__super__ = awe6.core.drivers.APreloader;
-for(var k in awe6.core.drivers.APreloader.prototype ) awe6.core.drivers.js.Preloader.prototype[k] = awe6.core.drivers.APreloader.prototype[k];
-awe6.core.drivers.js.Preloader.prototype.__class__ = awe6.core.drivers.js.Preloader;
-awe6.core.drivers.js.InputMouse = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.drivers.AInputMouse.call(this,kernel);
-}
-awe6.core.drivers.js.InputMouse.__name__ = ["awe6","core","drivers","js","InputMouse"];
-awe6.core.drivers.js.InputMouse.__super__ = awe6.core.drivers.AInputMouse;
-for(var k in awe6.core.drivers.AInputMouse.prototype ) awe6.core.drivers.js.InputMouse.prototype[k] = awe6.core.drivers.AInputMouse.prototype[k];
-awe6.core.drivers.js.InputMouse.prototype._stage = null;
-awe6.core.drivers.js.InputMouse.prototype._mouseClicks = null;
-awe6.core.drivers.js.InputMouse.prototype._nativeInit = function() {
-	this._stage = jeash.Lib.jeashGetCurrent().GetStage();
-	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
-	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
-	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
-	this._stage.addEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
-}
-awe6.core.drivers.js.InputMouse.prototype._disposer = function() {
-	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
-	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
-	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
-	this._stage.removeEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
-	awe6.core.drivers.AInputMouse.prototype._disposer.call(this);
-}
-awe6.core.drivers.js.InputMouse.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	this._stage.SetFocus(this._stage);
-	awe6.core.drivers.AInputMouse.prototype._updater.call(this,deltaTime);
-}
-awe6.core.drivers.js.InputMouse.prototype._isWithinBounds = function() {
-	return this._stage.jeashGetMouseX() >= 0 && this._stage.jeashGetMouseX() <= this._kernel.factory.width && this._stage.jeashGetMouseY() >= 0 && this._stage.jeashGetMouseY() <= this._kernel.factory.height;
-}
-awe6.core.drivers.js.InputMouse.prototype._getPosition = function() {
-	var l_x = Std["int"](this._tools.limit(this._stage.jeashGetMouseX(),0,this._kernel.factory.width));
-	var l_y = Std["int"](this._tools.limit(this._stage.jeashGetMouseY(),0,this._kernel.factory.height));
-	this.x = l_x == this._kernel.factory.width?this._xPrev:l_x;
-	this.y = l_y == this._kernel.factory.height?this._yPrev:l_y;
-}
-awe6.core.drivers.js.InputMouse.prototype._onMouseDown = function(event) {
-	if(!this.isActive) return;
-	this._buffer.push(true);
-}
-awe6.core.drivers.js.InputMouse.prototype._onMouseUp = function(event) {
-	if(!this.isActive) return;
-	this._buffer.push(false);
-}
-awe6.core.drivers.js.InputMouse.prototype._onMouseWheel = function(event) {
-	if(!this.isActive) return;
-	this.scroll += event.delta;
-	haxe.Log.trace(this.scroll,{ fileName : "InputMouse.hx", lineNumber : 111, className : "awe6.core.drivers.js.InputMouse", methodName : "_onMouseWheel"});
-}
-awe6.core.drivers.js.InputMouse.prototype.__set_isVisible = function(value) {
-	if(value) jeash.ui.Mouse.show(); else jeash.ui.Mouse.hide();
-	return awe6.core.drivers.AInputMouse.prototype.__set_isVisible.call(this,value);
-}
-awe6.core.drivers.js.InputMouse.prototype.__set_cursorType = function(value) {
-	var $e = (value);
-	switch( $e[1] ) {
-	case 0:
-		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
-		break;
-	case 1:
-		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
-		break;
-	case 2:
-		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
-		break;
-	case 3:
-		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
-		break;
-	case 4:
-		var value1 = $e[2];
-		break;
-	}
-	return awe6.core.drivers.AInputMouse.prototype.__set_cursorType.call(this,value);
-}
-awe6.core.drivers.js.InputMouse.prototype.__class__ = awe6.core.drivers.js.InputMouse;
+awe6.core.drivers.jeash.Preloader.__name__ = ["awe6","core","drivers","jeash","Preloader"];
+awe6.core.drivers.jeash.Preloader.__super__ = awe6.core.drivers.APreloader;
+for(var k in awe6.core.drivers.APreloader.prototype ) awe6.core.drivers.jeash.Preloader.prototype[k] = awe6.core.drivers.APreloader.prototype[k];
+awe6.core.drivers.jeash.Preloader.prototype.__class__ = awe6.core.drivers.jeash.Preloader;
+awe6.interfaces.EFullScreen = { __ename__ : ["awe6","interfaces","EFullScreen"], __constructs__ : ["DISABLED","NO_SCALE","SCALE_ASPECT_RATIO_IGNORE","SCALE_ASPECT_RATIO_PRESERVE","SCALE_NEAREST_MULTIPLE","SUB_TYPE"] }
+awe6.interfaces.EFullScreen.DISABLED = ["DISABLED",0];
+awe6.interfaces.EFullScreen.DISABLED.toString = $estr;
+awe6.interfaces.EFullScreen.DISABLED.__enum__ = awe6.interfaces.EFullScreen;
+awe6.interfaces.EFullScreen.NO_SCALE = ["NO_SCALE",1];
+awe6.interfaces.EFullScreen.NO_SCALE.toString = $estr;
+awe6.interfaces.EFullScreen.NO_SCALE.__enum__ = awe6.interfaces.EFullScreen;
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_IGNORE = ["SCALE_ASPECT_RATIO_IGNORE",2];
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_IGNORE.toString = $estr;
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_IGNORE.__enum__ = awe6.interfaces.EFullScreen;
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE = ["SCALE_ASPECT_RATIO_PRESERVE",3];
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE.toString = $estr;
+awe6.interfaces.EFullScreen.SCALE_ASPECT_RATIO_PRESERVE.__enum__ = awe6.interfaces.EFullScreen;
+awe6.interfaces.EFullScreen.SCALE_NEAREST_MULTIPLE = ["SCALE_NEAREST_MULTIPLE",4];
+awe6.interfaces.EFullScreen.SCALE_NEAREST_MULTIPLE.toString = $estr;
+awe6.interfaces.EFullScreen.SCALE_NEAREST_MULTIPLE.__enum__ = awe6.interfaces.EFullScreen;
+awe6.interfaces.EFullScreen.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",5,value]; $x.__enum__ = awe6.interfaces.EFullScreen; $x.toString = $estr; return $x; }
 jeash.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
 	if( type === $_ ) return;
 	if(clickCount == null) clickCount = 0;
@@ -9909,9 +10020,34 @@ jeash.display.SpreadMethod.REFLECT.__enum__ = jeash.display.SpreadMethod;
 jeash.display.SpreadMethod.PAD = ["PAD",2];
 jeash.display.SpreadMethod.PAD.toString = $estr;
 jeash.display.SpreadMethod.PAD.__enum__ = jeash.display.SpreadMethod;
-awe6.core.SceneManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.Process.call(this,kernel);
+jeash.system.System = function() { }
+jeash.system.System.__name__ = ["jeash","system","System"];
+jeash.system.System.vmVersion = null;
+jeash.system.System.getVersion = function() {
+	return "Jeash - tip";
+}
+jeash.system.System.totalMemory = null;
+jeash.system.System.exit = function(code) {
+	throw "System.close not implemented in Jeash";
+}
+jeash.system.System.gc = function() {
+}
+jeash.system.System.pause = function() {
+	throw "System.pause not implemented in Jeash";
+}
+jeash.system.System.resume = function() {
+	throw "System.resume not implemented in Jeash";
+}
+jeash.system.System.setClipboard = function(string) {
+	throw "System.setClipboard not implemented in Jeash";
+}
+jeash.system.System.GetMemory = function() {
+	return 0;
+}
+jeash.system.System.prototype.__class__ = jeash.system.System;
+awe6.core.SceneManager = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.Process.call(this,p_kernel);
 }
 awe6.core.SceneManager.__name__ = ["awe6","core","SceneManager"];
 awe6.core.SceneManager.__super__ = awe6.core.Process;
@@ -9921,52 +10057,52 @@ awe6.core.SceneManager.prototype.view = null;
 awe6.core.SceneManager.prototype._sceneTransition = null;
 awe6.core.SceneManager.prototype._init = function() {
 	awe6.core.Process.prototype._init.call(this);
-	this.view = new awe6.core.drivers.js.View(this._kernel);
+	this.view = new awe6.core.drivers.jeash.View(this._kernel);
 }
-awe6.core.SceneManager.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Process.prototype._updater.call(this,deltaTime);
-	if(this.__get_scene() != null) this.__get_scene().update(deltaTime);
-	if(this._sceneTransition != null) this._sceneTransition.update(deltaTime);
+awe6.core.SceneManager.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Process.prototype._updater.call(this,p_deltaTime);
+	if(this._get_scene() != null) this._get_scene().update(p_deltaTime);
+	if(this._sceneTransition != null) this._sceneTransition.update(p_deltaTime);
 }
 awe6.core.SceneManager.prototype._disposer = function() {
-	if(this.__get_scene() != null) this.__get_scene().dispose();
+	if(this._get_scene() != null) this._get_scene().dispose();
 	if(this._sceneTransition != null) this._sceneTransition.dispose();
 	this.view.dispose();
 	awe6.core.Process.prototype._disposer.call(this);
 }
-awe6.core.SceneManager.prototype.setScene = function(type) {
+awe6.core.SceneManager.prototype.setScene = function(p_type) {
 	var l_previousType = null;
-	if(this.__get_scene() != null) {
-		l_previousType = this.__get_scene().type;
-		var l_newSceneTransition = this._kernel.factory.createSceneTransition(type,l_previousType);
+	if(this._get_scene() != null) {
+		l_previousType = this._get_scene().type;
+		var l_newSceneTransition = this._kernel.factory.createSceneTransition(p_type,l_previousType);
 		if(this._sceneTransition != null) this._sceneTransition.dispose();
 		this._sceneTransition = l_newSceneTransition;
 		this._kernel.inputs.reset();
-		if(this.__get_scene().isDisposable) this.__get_scene().dispose();
+		if(this._get_scene().isDisposable) this._get_scene().dispose();
 		this.scene = null;
 	}
 	this._kernel.overlay.hideButtons();
-	this.scene = this._kernel.factory.createScene(type);
-	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.BACK,this._kernel.factory.getBackSceneType(this.__get_scene().type) != null);
-	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.MUTE,this.__get_scene().isMuteable && !this._kernel.audio.isMute);
-	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNMUTE,this.__get_scene().isMuteable && this._kernel.audio.isMute);
-	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.PAUSE,this.__get_scene().isPauseable && this._kernel.isActive);
-	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,this.__get_scene().isPauseable && !this._kernel.isActive);
-	this.view.addChild(this.__get_scene().__get_view());
-	if(this._sceneTransition != null) this.__get_scene().__get_view().addChild(this._sceneTransition.__get_view(),this._tools.BIG_NUMBER + 1);
+	this.scene = this._kernel.factory.createScene(p_type);
+	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.BACK,this._kernel.factory.getBackSceneType(this._get_scene().type) != null);
+	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.MUTE,this._get_scene().isMuteable && !this._kernel.audio.isMute);
+	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNMUTE,this._get_scene().isMuteable && this._kernel.audio.isMute);
+	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.PAUSE,this._get_scene().isPauseable && this._kernel.isActive);
+	this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,this._get_scene().isPauseable && !this._kernel.isActive);
+	this.view.addChild(this._get_scene()._get_view());
+	if(this._sceneTransition != null) this._get_scene()._get_view().addChild(this._sceneTransition._get_view(),this._tools.BIG_NUMBER + 1);
 }
 awe6.core.SceneManager.prototype.back = function() {
-	this.setScene(this._kernel.factory.getBackSceneType(this.__get_scene().type));
+	this.setScene(this._kernel.factory.getBackSceneType(this._get_scene().type));
 }
 awe6.core.SceneManager.prototype.next = function() {
-	if(this.__get_scene().isSessionSavedOnNext && this._kernel.__get_session() != null) this._kernel.__get_session().save();
-	this.setScene(this._kernel.factory.getNextSceneType(this.__get_scene().type));
+	if(this._get_scene().isSessionSavedOnNext && this._kernel._get_session() != null) this._kernel._get_session().save();
+	this.setScene(this._kernel.factory.getNextSceneType(this._get_scene().type));
 }
 awe6.core.SceneManager.prototype.restart = function() {
-	if(this.__get_scene() == null) this.setScene(this._kernel.factory.startingSceneType); else this.setScene(this.__get_scene().type);
+	if(this._get_scene() == null) this.setScene(this._kernel.factory.startingSceneType); else this.setScene(this._get_scene().type);
 }
-awe6.core.SceneManager.prototype.__get_scene = function() {
+awe6.core.SceneManager.prototype._get_scene = function() {
 	return this.scene;
 }
 awe6.core.SceneManager.prototype.__class__ = awe6.core.SceneManager;
@@ -9987,31 +10123,6 @@ jeash.display.GraphicsSolidFill.prototype.jeashGraphicsDataType = null;
 jeash.display.GraphicsSolidFill.prototype.jeashGraphicsFillType = null;
 jeash.display.GraphicsSolidFill.prototype.__class__ = jeash.display.GraphicsSolidFill;
 jeash.display.GraphicsSolidFill.__interfaces__ = [jeash.display.IGraphicsFill,jeash.display.IGraphicsData];
-awe6.extras.gui.Image = function(kernel,bitmapData) {
-	if( kernel === $_ ) return;
-	this._bitmapData = bitmapData;
-	awe6.extras.gui.GuiEntity.call(this,kernel,bitmapData.mTextureBuffer != null?bitmapData.mTextureBuffer.width:0,bitmapData.mTextureBuffer != null?bitmapData.mTextureBuffer.height:0);
-}
-awe6.extras.gui.Image.__name__ = ["awe6","extras","gui","Image"];
-awe6.extras.gui.Image.__super__ = awe6.extras.gui.GuiEntity;
-for(var k in awe6.extras.gui.GuiEntity.prototype ) awe6.extras.gui.Image.prototype[k] = awe6.extras.gui.GuiEntity.prototype[k];
-awe6.extras.gui.Image.prototype._bitmapData = null;
-awe6.extras.gui.Image.prototype._bitmap = null;
-awe6.extras.gui.Image.prototype._init = function() {
-	awe6.extras.gui.GuiEntity.prototype._init.call(this);
-	this._bitmap = new jeash.display.Bitmap(this._bitmapData);
-	this._sprite.mouseEnabled = false;
-	this._sprite.addChild(this._bitmap);
-}
-awe6.extras.gui.Image.prototype.configure = function(bitmapData) {
-	this._bitmapData = bitmapData;
-	this._bitmap.jeashSetBitmapData(this._bitmapData);
-}
-awe6.extras.gui.Image.prototype._disposer = function() {
-	this._bitmapData.dispose();
-	awe6.extras.gui.GuiEntity.prototype._disposer.call(this);
-}
-awe6.extras.gui.Image.prototype.__class__ = awe6.extras.gui.Image;
 jeash.geom.Rectangle = function(inX,inY,inWidth,inHeight) {
 	if( inX === $_ ) return;
 	this.x = inX == null?0:inX;
@@ -11434,11 +11545,141 @@ jeash.display.PixelSnapping.AUTO.__enum__ = jeash.display.PixelSnapping;
 jeash.display.PixelSnapping.ALWAYS = ["ALWAYS",2];
 jeash.display.PixelSnapping.ALWAYS.toString = $estr;
 jeash.display.PixelSnapping.ALWAYS.__enum__ = jeash.display.PixelSnapping;
-demo.scenes.Game = function(kernel,type) {
-	if( kernel === $_ ) return;
-	this._session = kernel.__get_session();
-	this._assetManager = kernel.assets;
-	awe6.core.Scene.call(this,kernel,type,true,true,true);
+awe6.core.drivers.jeash.InputMouse = function(p_kernel) {
+	if( p_kernel === $_ ) return;
+	awe6.core.drivers.AInputMouse.call(this,p_kernel);
+}
+awe6.core.drivers.jeash.InputMouse.__name__ = ["awe6","core","drivers","jeash","InputMouse"];
+awe6.core.drivers.jeash.InputMouse.__super__ = awe6.core.drivers.AInputMouse;
+for(var k in awe6.core.drivers.AInputMouse.prototype ) awe6.core.drivers.jeash.InputMouse.prototype[k] = awe6.core.drivers.AInputMouse.prototype[k];
+awe6.core.drivers.jeash.InputMouse.prototype._stage = null;
+awe6.core.drivers.jeash.InputMouse.prototype._mouseClicks = null;
+awe6.core.drivers.jeash.InputMouse.prototype._driverInit = function() {
+	this._stage = jeash.Lib.jeashGetCurrent().GetStage();
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
+	this._stage.addEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
+	this._stage.addEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
+}
+awe6.core.drivers.jeash.InputMouse.prototype._disposer = function() {
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_DOWN,$closure(this,"_onMouseDown"));
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_UP,$closure(this,"_onMouseUp"));
+	this._stage.removeEventListener(jeash.events.MouseEvent.MOUSE_WHEEL,$closure(this,"_onMouseWheel"));
+	this._stage.removeEventListener(jeash.events.Event.DEACTIVATE,$closure(this,"_reset"));
+	awe6.core.drivers.AInputMouse.prototype._disposer.call(this);
+}
+awe6.core.drivers.jeash.InputMouse.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	this._stage.SetFocus(this._stage);
+	awe6.core.drivers.AInputMouse.prototype._updater.call(this,p_deltaTime);
+}
+awe6.core.drivers.jeash.InputMouse.prototype._isWithinBounds = function() {
+	return this._stage.jeashGetMouseX() >= 0 && this._stage.jeashGetMouseX() <= this._kernel.factory.width && this._stage.jeashGetMouseY() >= 0 && this._stage.jeashGetMouseY() <= this._kernel.factory.height;
+}
+awe6.core.drivers.jeash.InputMouse.prototype._getPosition = function() {
+	var l_x = Std["int"](this._tools.limit(this._stage.jeashGetMouseX(),0,this._kernel.factory.width));
+	var l_y = Std["int"](this._tools.limit(this._stage.jeashGetMouseY(),0,this._kernel.factory.height));
+	this.x = l_x == this._kernel.factory.width?this._xPrev:l_x;
+	this.y = l_y == this._kernel.factory.height?this._yPrev:l_y;
+}
+awe6.core.drivers.jeash.InputMouse.prototype._onMouseDown = function(p_event) {
+	if(!this.isActive) return;
+	this._buffer.push(true);
+}
+awe6.core.drivers.jeash.InputMouse.prototype._onMouseUp = function(p_event) {
+	if(!this.isActive) return;
+	this._buffer.push(false);
+}
+awe6.core.drivers.jeash.InputMouse.prototype._onMouseWheel = function(p_event) {
+	if(!this.isActive) return;
+	this.scroll += p_event.delta;
+	haxe.Log.trace(this.scroll,{ fileName : "InputMouse.hx", lineNumber : 111, className : "awe6.core.drivers.jeash.InputMouse", methodName : "_onMouseWheel"});
+}
+awe6.core.drivers.jeash.InputMouse.prototype._set_isVisible = function(p_value) {
+	if(p_value) jeash.ui.Mouse.show(); else jeash.ui.Mouse.hide();
+	return awe6.core.drivers.AInputMouse.prototype._set_isVisible.call(this,p_value);
+}
+awe6.core.drivers.jeash.InputMouse.prototype._set_cursorType = function(p_value) {
+	var $e = (p_value);
+	switch( $e[1] ) {
+	case 0:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
+		break;
+	case 1:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
+		break;
+	case 2:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","pointer","");
+		break;
+	case 3:
+		if(jeash.Lib.mMe != null) jeash.Lib.mMe.__scr.style.setProperty("cursor","default","");
+		break;
+	case 4:
+		var l_value = $e[2];
+		null;
+		break;
+	}
+	return awe6.core.drivers.AInputMouse.prototype._set_cursorType.call(this,p_value);
+}
+awe6.core.drivers.jeash.InputMouse.prototype.__class__ = awe6.core.drivers.jeash.InputMouse;
+NMEPreloader = function(p) {
+	if( p === $_ ) return;
+	jeash.display.Sprite.call(this);
+	var backgroundColor = this.getBackgroundColor();
+	var r = backgroundColor >> 16 & 255;
+	var g = backgroundColor >> 8 & 255;
+	var b = backgroundColor & 255;
+	var perceivedLuminosity = 0.299 * r + 0.587 * g + 0.114 * b;
+	var color = 0;
+	if(perceivedLuminosity < 70) color = 16777215;
+	var x = 30;
+	var height = 9;
+	var y = this.getHeight() / 2 - height / 2;
+	var width = this.getWidth() - x * 2;
+	var padding = 3;
+	this.outline = new jeash.display.Sprite();
+	this.outline.jeashGetGraphics().lineStyle(1,color,0.15,true);
+	this.outline.jeashGetGraphics().drawRoundRect(0,0,width,height,padding * 2,padding * 2);
+	this.outline.jeashSetX(x);
+	this.outline.jeashSetY(y);
+	this.addChild(this.outline);
+	this.progress = new jeash.display.Sprite();
+	this.progress.jeashGetGraphics().beginFill(color,0.35);
+	this.progress.jeashGetGraphics().drawRect(0,0,width - padding * 2,height - padding * 2);
+	this.progress.jeashSetX(x + padding);
+	this.progress.jeashSetY(y + padding);
+	this.progress.jeashSetScaleX(0);
+	this.addChild(this.progress);
+}
+NMEPreloader.__name__ = ["NMEPreloader"];
+NMEPreloader.__super__ = jeash.display.Sprite;
+for(var k in jeash.display.Sprite.prototype ) NMEPreloader.prototype[k] = jeash.display.Sprite.prototype[k];
+NMEPreloader.prototype.outline = null;
+NMEPreloader.prototype.progress = null;
+NMEPreloader.prototype.getBackgroundColor = function() {
+	return 16777215;
+}
+NMEPreloader.prototype.getHeight = function() {
+	return 400;
+}
+NMEPreloader.prototype.getWidth = function() {
+	return 600;
+}
+NMEPreloader.prototype.onInit = function() {
+}
+NMEPreloader.prototype.onLoaded = function() {
+}
+NMEPreloader.prototype.onUpdate = function(bytesLoaded,bytesTotal) {
+	var percentLoaded = bytesLoaded / bytesTotal;
+	if(percentLoaded > 1) percentLoaded == 1;
+	this.progress.jeashSetScaleX(percentLoaded);
+}
+NMEPreloader.prototype.__class__ = NMEPreloader;
+demo.scenes.Game = function(p_kernel,p_type) {
+	if( p_kernel === $_ ) return;
+	this._session = p_kernel._get_session();
+	this._assetManager = p_kernel.assets;
+	awe6.core.Scene.call(this,p_kernel,p_type,true,true,true);
 }
 demo.scenes.Game.__name__ = ["demo","scenes","Game"];
 demo.scenes.Game.__super__ = awe6.core.Scene;
@@ -11447,13 +11688,12 @@ demo.scenes.Game.prototype._session = null;
 demo.scenes.Game.prototype._assetManager = null;
 demo.scenes.Game.prototype._timer = null;
 demo.scenes.Game.prototype._score = null;
-demo.scenes.Game.prototype._temp = null;
 demo.scenes.Game.prototype._init = function() {
 	awe6.core.Scene.prototype._init.call(this);
-	this.__get_view().addChild(this._assetManager.background,0);
+	this._get_view().addChild(this._assetManager.background,0);
 	this._session.isWin = false;
 	this._timer = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,Std.string(this._tools.convertAgeToFormattedTime(0)),this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
-	this._timer.__set_y(70);
+	this._timer._set_y(70);
 	this.addEntity(this._timer,null,true,1000);
 	this._kernel.audio.stop("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC);
 	this._kernel.audio.start("MusicGame",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.5,0,true);
@@ -11464,14 +11704,13 @@ demo.scenes.Game.prototype._init = function() {
 	}
 	var l_sphere = this.getEntitiesByClass(demo.entities.Sphere)[0];
 	var l_bouncer = l_sphere.getEntitiesByClass(demo.entities.Bouncer)[0];
-	this._temp = l_sphere;
 }
-demo.scenes.Game.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Scene.prototype._updater.call(this,deltaTime);
+demo.scenes.Game.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Scene.prototype._updater.call(this,p_deltaTime);
 	this._score = Std["int"](this._tools.limit(30000 - this._age,0,this._tools.BIG_NUMBER));
 	if(this._score == 0) this._gameOver();
-	this._timer.__set_text(this._tools.convertAgeToFormattedTime(this._age));
+	this._timer._set_text(this._tools.convertAgeToFormattedTime(this._age));
 	var l_spheres = this.getEntitiesByClass(demo.entities.Sphere);
 	if(l_spheres.length == 0) this._gameOver();
 }
@@ -12151,17 +12390,17 @@ jeash.display.Loader.prototype.BuildBounds = function() {
 	}
 }
 jeash.display.Loader.prototype.__class__ = jeash.display.Loader;
-awe6.extras.gui.BitmapDataScale9 = function(source,topLeftX,topLeftY,bottomRightX,bottomRightY,width,height,isTransparent,fillColor) {
-	if( source === $_ ) return;
-	if(fillColor == null) fillColor = -1;
-	if(isTransparent == null) isTransparent = true;
-	this._source = source.clone();
-	this._topLeftX = topLeftX;
-	this._topLeftY = topLeftY;
-	this._bottomRightX = bottomRightX;
-	this._bottomRightY = bottomRightY;
-	if(isTransparent && fillColor == -1) fillColor = 0;
-	jeash.display.BitmapData.call(this,width,height,isTransparent,fillColor);
+awe6.extras.gui.BitmapDataScale9 = function(p_source,p_topLeftX,p_topLeftY,p_bottomRightX,p_bottomRightY,p_width,p_height,p_isTransparent,p_fillColor) {
+	if( p_source === $_ ) return;
+	if(p_fillColor == null) p_fillColor = -1;
+	if(p_isTransparent == null) p_isTransparent = true;
+	this._source = p_source.clone();
+	this._topLeftX = p_topLeftX;
+	this._topLeftY = p_topLeftY;
+	this._bottomRightX = p_bottomRightX;
+	this._bottomRightY = p_bottomRightY;
+	if(p_isTransparent && p_fillColor == -1) p_fillColor = 0;
+	jeash.display.BitmapData.call(this,p_width,p_height,p_isTransparent,p_fillColor);
 	this._init();
 }
 awe6.extras.gui.BitmapDataScale9.__name__ = ["awe6","extras","gui","BitmapDataScale9"];
@@ -12598,31 +12837,31 @@ jeash.display.Stage.prototype.jeashGetFullScreenHeight = function() {
 	return jeash.Lib.jeashFullScreenHeight();
 }
 jeash.display.Stage.prototype.__class__ = jeash.display.Stage;
-awe6.core.Encrypter = function(defaultSecret) {
-	if( defaultSecret === $_ ) return;
-	this._defaultSecret = defaultSecret;
+awe6.core.Encrypter = function(p_defaultSecret) {
+	if( p_defaultSecret === $_ ) return;
+	this._defaultSecret = p_defaultSecret;
 }
 awe6.core.Encrypter.__name__ = ["awe6","core","Encrypter"];
 awe6.core.Encrypter.prototype._defaultSecret = null;
-awe6.core.Encrypter.prototype.encrypt = function(value,secret) {
-	if(secret == null) secret = "";
-	var l_secret = secret != ""?secret:this._defaultSecret;
-	return haxe.io.Bytes.ofData(this._xor(value.b,l_secret));
+awe6.core.Encrypter.prototype.encrypt = function(p_value,p_secret) {
+	if(p_secret == null) p_secret = "";
+	var l_secret = p_secret != ""?p_secret:this._defaultSecret;
+	return haxe.io.Bytes.ofData(this._xor(p_value.b,l_secret));
 }
-awe6.core.Encrypter.prototype.decrypt = function(value,secret) {
-	if(secret == null) secret = "";
-	var l_secret = secret != ""?secret:this._defaultSecret;
-	return haxe.io.Bytes.ofData(this._xor(value.b,l_secret));
+awe6.core.Encrypter.prototype.decrypt = function(p_value,p_secret) {
+	if(p_secret == null) p_secret = "";
+	var l_secret = p_secret != ""?p_secret:this._defaultSecret;
+	return haxe.io.Bytes.ofData(this._xor(p_value.b,l_secret));
 }
-awe6.core.Encrypter.prototype._xor = function(value,secret) {
+awe6.core.Encrypter.prototype._xor = function(p_value,p_secret) {
 	var l_result = new Array();
 	var l_secretIndex = 0;
-	var _g1 = 0, _g = value.length;
+	var _g1 = 0, _g = p_value.length;
 	while(_g1 < _g) {
 		var i = _g1++;
-		l_result[i] = value[i] ^ secret.charCodeAt(l_secretIndex);
+		l_result[i] = p_value[i] ^ p_secret.charCodeAt(l_secretIndex);
 		l_secretIndex++;
-		if(l_secretIndex >= secret.length) l_secretIndex = 0;
+		if(l_secretIndex >= p_secret.length) l_secretIndex = 0;
 	}
 	return l_result;
 }
@@ -12637,10 +12876,6 @@ jeash.errors.IOError.__name__ = ["jeash","errors","IOError"];
 jeash.errors.IOError.__super__ = jeash.errors.Error;
 for(var k in jeash.errors.Error.prototype ) jeash.errors.IOError.prototype[k] = jeash.errors.Error.prototype[k];
 jeash.errors.IOError.prototype.__class__ = jeash.errors.IOError;
-jeash.text.TextFieldType = function(p) {
-}
-jeash.text.TextFieldType.__name__ = ["jeash","text","TextFieldType"];
-jeash.text.TextFieldType.prototype.__class__ = jeash.text.TextFieldType;
 haxe.Serializer = function(p) {
 	if( p === $_ ) return;
 	this.buf = new StringBuf();
@@ -12877,6 +13112,10 @@ haxe.Serializer.prototype.serializeException = function(e) {
 	this.serialize(e);
 }
 haxe.Serializer.prototype.__class__ = haxe.Serializer;
+jeash.text.TextFieldType = function(p) {
+}
+jeash.text.TextFieldType.__name__ = ["jeash","text","TextFieldType"];
+jeash.text.TextFieldType.prototype.__class__ = jeash.text.TextFieldType;
 ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] }
 ValueType.TNull = ["TNull",0];
 ValueType.TNull.toString = $estr;
@@ -13057,10 +13296,6 @@ Reflect.makeVarArgs = function(f) {
 	};
 }
 Reflect.prototype.__class__ = Reflect;
-awe6.Types = function(p) {
-}
-awe6.Types.__name__ = ["awe6","Types"];
-awe6.Types.prototype.__class__ = awe6.Types;
 awe6.interfaces.EJoypadButton = { __ename__ : ["awe6","interfaces","EJoypadButton"], __constructs__ : ["FIRE","UP","RIGHT","DOWN","LEFT","PRIMARY","SECONDARY"] }
 awe6.interfaces.EJoypadButton.FIRE = ["FIRE",0];
 awe6.interfaces.EJoypadButton.FIRE.toString = $estr;
@@ -13084,11 +13319,11 @@ awe6.interfaces.EJoypadButton.SECONDARY = ["SECONDARY",6];
 awe6.interfaces.EJoypadButton.SECONDARY.toString = $estr;
 awe6.interfaces.EJoypadButton.SECONDARY.__enum__ = awe6.interfaces.EJoypadButton;
 if(!demo.entities) demo.entities = {}
-demo.entities.Sphere = function(kernel) {
-	if( kernel === $_ ) return;
+demo.entities.Sphere = function(p_kernel) {
+	if( p_kernel === $_ ) return;
 	this._sprite = new jeash.display.Sprite();
-	this._assetManager = kernel.assets;
-	awe6.core.Entity.call(this,kernel,null,this._sprite);
+	this._assetManager = p_kernel.assets;
+	awe6.core.Entity.call(this,p_kernel,null,this._sprite);
 }
 demo.entities.Sphere.__name__ = ["demo","entities","Sphere"];
 demo.entities.Sphere.__super__ = awe6.core.Entity;
@@ -13119,21 +13354,21 @@ demo.entities.Sphere.prototype._init = function() {
 	l_sphere.jeashSetY(-this._height2);
 	this._sprite.addChild(l_sphere);
 }
-demo.entities.Sphere.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
+demo.entities.Sphere.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
 	this._sprite.jeashSetX(this._bouncer.x);
 	this._sprite.jeashSetY(this._bouncer.y);
 	this._sprite.jeashSetScaleX(this._bouncer.vx > 1?1:-1);
-	this.__get_view().__set_priority(Std["int"](this._bouncer.y));
+	this._get_view()._set_priority(Std["int"](this._bouncer.y));
 	if(this._isHit()) {
 		this._kernel.audio.start("Sfx" + (Std.random(4) + 1),awe6.interfaces.EAudioChannel.EFFECTS,0,0,1,this._bouncer.x / this._kernel.factory.width);
 		this._kernel.overlay.flash(100,true,1,Std.random(16777215));
 		if(this.isDisposed) null; else {
 			this.isDisposed = true;
-			this.__set_isActive(false);
-			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
+			this._set_isActive(false);
 			this._disposer();
+			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this);
 			null;
 		}
 	}
@@ -13153,88 +13388,6 @@ jeash.text.FontType.EMBEDDED.__enum__ = jeash.text.FontType;
 jeash.text.FontType.DEVICE = ["DEVICE",1];
 jeash.text.FontType.DEVICE.toString = $estr;
 jeash.text.FontType.DEVICE.__enum__ = jeash.text.FontType;
-awe6.core.drivers.js.AudioManager = function(kernel) {
-	if( kernel === $_ ) return;
-	awe6.core.drivers.AAudioManager.call(this,kernel);
-}
-awe6.core.drivers.js.AudioManager.__name__ = ["awe6","core","drivers","js","AudioManager"];
-awe6.core.drivers.js.AudioManager.__super__ = awe6.core.drivers.AAudioManager;
-for(var k in awe6.core.drivers.AAudioManager.prototype ) awe6.core.drivers.js.AudioManager.prototype[k] = awe6.core.drivers.AAudioManager.prototype[k];
-awe6.core.drivers.js.AudioManager.prototype._extension = null;
-awe6.core.drivers.js.AudioManager.prototype._init = function() {
-	awe6.core.drivers.AAudioManager.prototype._init.call(this);
-	this._extension = jeash.media.Sound.jeashCanPlayType("mp3")?".mp3":".ogg";
-	this._packageId = StringTools.replace(this._packageId + ".",".","/");
-}
-awe6.core.drivers.js.AudioManager.prototype._nativeSoundFactory = function(id,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(startTime == null) startTime = 0;
-	if(loops == null) loops = 1;
-	return new awe6.core.drivers.js._HelperSound(this._kernel,id,this._packageId,this._extension,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
-}
-awe6.core.drivers.js.AudioManager.prototype._nativeSetIsMute = function(isMute) {
-	var _g = 0, _g1 = this._sounds;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		if(i._soundChannel == null) continue;
-		if(i._soundChannel.jeashAudio == null) continue;
-		i._soundChannel.jeashAudio.muted = isMute;
-	}
-}
-awe6.core.drivers.js.AudioManager.prototype.__class__ = awe6.core.drivers.js.AudioManager;
-awe6.core.drivers.js._HelperSound = function(kernel,id,packageId,extension,audioChannelType,loops,startTime,volume,pan,onCompleteCallback) {
-	if( kernel === $_ ) return;
-	if(pan == null) pan = 0;
-	if(volume == null) volume = 1;
-	if(startTime == null) startTime = 0;
-	if(loops == null) loops = 1;
-	this._extension = extension;
-	awe6.core.drivers._AHelperSound.call(this,kernel,id,packageId,audioChannelType,loops,startTime,volume,pan,onCompleteCallback);
-}
-awe6.core.drivers.js._HelperSound.__name__ = ["awe6","core","drivers","js","_HelperSound"];
-awe6.core.drivers.js._HelperSound.__super__ = awe6.core.drivers._AHelperSound;
-for(var k in awe6.core.drivers._AHelperSound.prototype ) awe6.core.drivers.js._HelperSound.prototype[k] = awe6.core.drivers._AHelperSound.prototype[k];
-awe6.core.drivers.js._HelperSound.prototype._extension = null;
-awe6.core.drivers.js._HelperSound.prototype._sound = null;
-awe6.core.drivers.js._HelperSound.prototype._soundChannel = null;
-awe6.core.drivers.js._HelperSound.prototype._nativeInit = function() {
-	this._sound = nme.installer.Assets.getSound(this._packageId + this.id + this._extension);
-	if(this._sound == null) return this.dispose();
-	this._soundChannel = this._sound.play(this._startTime,this._loops);
-	if(this._soundChannel == null) return this.dispose();
-	this._soundChannel.jeashAudio.muted = this._kernel.audio.isMute;
-	this._soundChannel.addEventListener(jeash.events.Event.SOUND_COMPLETE,$closure(this,"_onSoundComplete"));
-	this._nativeTransform();
-	return;
-}
-awe6.core.drivers.js._HelperSound.prototype._nativeTransform = function(asRelative) {
-	if(asRelative == null) asRelative = false;
-	if(this._soundChannel == null) return;
-	if(asRelative) {
-		this._volume *= this._soundChannel.soundTransform.volume;
-		this._pan *= this._soundChannel.soundTransform.pan;
-	}
-	var soundTransform = new jeash.media.SoundTransform(this._volume,this._pan);
-	this._soundChannel.__setSoundTransform(soundTransform);
-	this._soundChannel.jeashAudio.volume = this._volume;
-}
-awe6.core.drivers.js._HelperSound.prototype._nativeStop = function() {
-	if(this._soundChannel == null) return;
-	this._soundChannel.stop();
-}
-awe6.core.drivers.js._HelperSound.prototype._onSoundComplete = function(event) {
-	if(this._onCompleteCallback != null) this._onCompleteCallback.apply(this,[]);
-	this.dispose();
-}
-awe6.core.drivers.js._HelperSound.prototype._nativeDisposer = function() {
-	if(this._soundChannel != null) {
-		this.stop();
-		this._soundChannel.removeEventListener(jeash.events.Event.SOUND_COMPLETE,$closure(this,"_onSoundComplete"));
-	}
-}
-awe6.core.drivers.js._HelperSound.prototype.__class__ = awe6.core.drivers.js._HelperSound;
 Main = function() { }
 Main.__name__ = ["Main"];
 Main.main = function() {
@@ -13242,11 +13395,11 @@ Main.main = function() {
 	var l_factory = new demo.Factory(jeash.Lib.jeashGetCurrent(),l_isDebug,haxe.Resource.getString("config"));
 }
 Main.prototype.__class__ = Main;
-demo.entities.Bouncer = function(kernel,width,height) {
-	if( kernel === $_ ) return;
-	this._width = width;
-	this._height = height;
-	awe6.core.Entity.call(this,kernel);
+demo.entities.Bouncer = function(p_kernel,p_width,p_height) {
+	if( p_kernel === $_ ) return;
+	this._width = p_width;
+	this._height = p_height;
+	awe6.core.Entity.call(this,p_kernel);
 }
 demo.entities.Bouncer.__name__ = ["demo","entities","Bouncer"];
 demo.entities.Bouncer.__super__ = awe6.core.Entity;
@@ -13270,11 +13423,11 @@ demo.entities.Bouncer.prototype._init = function() {
 	this.x = this._kernel.factory.width * Math.random();
 	this.y = this._kernel.factory.height * Math.random();
 }
-demo.entities.Bouncer.prototype._updater = function(deltaTime) {
-	if(deltaTime == null) deltaTime = 0;
-	awe6.core.Entity.prototype._updater.call(this,deltaTime);
-	this.x += this.vx * (deltaTime / 1000);
-	this.y += this.vy * (deltaTime / 1000);
+demo.entities.Bouncer.prototype._updater = function(p_deltaTime) {
+	if(p_deltaTime == null) p_deltaTime = 0;
+	awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
+	this.x += this.vx * (p_deltaTime / 1000);
+	this.y += this.vy * (p_deltaTime / 1000);
 	if(this.x > this._kernel.factory.width - this._width2) this.vx *= -1;
 	if(this.y > this._kernel.factory.height - this._height2) this.vy *= -1;
 	if(this.x < this._width2) this.vx *= -1;
@@ -13317,12 +13470,12 @@ haxe.io.BytesBuffer.prototype.getBytes = function() {
 	return bytes;
 }
 haxe.io.BytesBuffer.prototype.__class__ = haxe.io.BytesBuffer;
-demo.scenes.Results = function(kernel,type,isPauseable,isMutable,isSessionSavedOnNext) {
-	if( kernel === $_ ) return;
-	if(isSessionSavedOnNext == null) isSessionSavedOnNext = false;
-	if(isMutable == null) isMutable = true;
-	if(isPauseable == null) isPauseable = false;
-	demo.scenes.AScene.call(this,kernel,type,isPauseable,isMutable,isSessionSavedOnNext);
+demo.scenes.Results = function(p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext) {
+	if( p_kernel === $_ ) return;
+	if(p_isSessionSavedOnNext == null) p_isSessionSavedOnNext = false;
+	if(p_isMutable == null) p_isMutable = true;
+	if(p_isPauseable == null) p_isPauseable = false;
+	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMutable,p_isSessionSavedOnNext);
 }
 demo.scenes.Results.__name__ = ["demo","scenes","Results"];
 demo.scenes.Results.__super__ = demo.scenes.AScene;
@@ -13334,7 +13487,7 @@ demo.scenes.Results.prototype._init = function() {
 	this.addEntity(l_button,null,true,1);
 	var l_message = this._kernel.getConfig("gui.scenes.results." + (this._session.isWin?"win":"lose")) + this._tools.convertAgeToFormattedTime(30000 - this._session.highScore);
 	var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,l_message,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
-	l_result.__set_y(70);
+	l_result._set_y(70);
 	this.addEntity(l_result,null,true,2);
 }
 demo.scenes.Results.prototype.__class__ = demo.scenes.Results;
@@ -13419,9 +13572,6 @@ StringBuf.prototype.toString = function() {
 }
 StringBuf.prototype.b = null;
 StringBuf.prototype.__class__ = StringBuf;
-jeash.text.AntiAliasType = function() { }
-jeash.text.AntiAliasType.__name__ = ["jeash","text","AntiAliasType"];
-jeash.text.AntiAliasType.prototype.__class__ = jeash.text.AntiAliasType;
 jeash.system.LoaderContext = function(checkPolicyFile,applicationDomain,securityDomain) {
 	if( checkPolicyFile === $_ ) return;
 	if(checkPolicyFile == null) checkPolicyFile = false;
@@ -13433,10 +13583,10 @@ jeash.system.LoaderContext.prototype.checkPolicyFile = null;
 jeash.system.LoaderContext.prototype.securityDomain = null;
 jeash.system.LoaderContext.prototype.__class__ = jeash.system.LoaderContext;
 if(!awe6.core._Entity) awe6.core._Entity = {}
-awe6.core._Entity._HelperEntityAgendaPair = function(entity,agenda) {
-	if( entity === $_ ) return;
-	this.entity = entity;
-	this.agenda = agenda;
+awe6.core._Entity._HelperEntityAgendaPair = function(p_entity,p_agenda) {
+	if( p_entity === $_ ) return;
+	this.entity = p_entity;
+	this.agenda = p_agenda;
 	this.isAddedToView = false;
 }
 awe6.core._Entity._HelperEntityAgendaPair.__name__ = ["awe6","core","_Entity","_HelperEntityAgendaPair"];
@@ -14263,14 +14413,14 @@ awe6.interfaces.EMouseCursor.IBEAM = ["IBEAM",3];
 awe6.interfaces.EMouseCursor.IBEAM.toString = $estr;
 awe6.interfaces.EMouseCursor.IBEAM.__enum__ = awe6.interfaces.EMouseCursor;
 awe6.interfaces.EMouseCursor.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",4,value]; $x.__enum__ = awe6.interfaces.EMouseCursor; $x.toString = $estr; return $x; }
-demo.Preloader = function(kernel,assets,isDecached) {
-	if( kernel === $_ ) return;
-	if(isDecached == null) isDecached = false;
-	awe6.core.drivers.js.Preloader.call(this,kernel,assets,isDecached);
+demo.Preloader = function(p_kernel,p_assets,p_isDecached) {
+	if( p_kernel === $_ ) return;
+	if(p_isDecached == null) p_isDecached = false;
+	awe6.core.drivers.jeash.Preloader.call(this,p_kernel,p_assets,p_isDecached);
 }
 demo.Preloader.__name__ = ["demo","Preloader"];
-demo.Preloader.__super__ = awe6.core.drivers.js.Preloader;
-for(var k in awe6.core.drivers.js.Preloader.prototype ) demo.Preloader.prototype[k] = awe6.core.drivers.js.Preloader.prototype[k];
+demo.Preloader.__super__ = awe6.core.drivers.jeash.Preloader;
+for(var k in awe6.core.drivers.jeash.Preloader.prototype ) demo.Preloader.prototype[k] = awe6.core.drivers.jeash.Preloader.prototype[k];
 demo.Preloader.prototype.__class__ = demo.Preloader;
 $_ = {}
 js.Boot.__res = {}
@@ -14399,7 +14549,14 @@ jeash.text.Font.__init = (function($this) {
 	$r = jeash.text.Font.jeashInit = true;
 	return $r;
 }(this));
-awe6.core.AAssetManager._PACKAGE_ID = "assets";
+awe6.core.drivers.AKernel._POWERED_BY = "Powered by awe6";
+awe6.core.drivers.AKernel._POWERED_BY_URL = "http://awe6.org";
+awe6.core.drivers.AKernel._RELEASE_CAUTION = "PUBLIC RELEASE NOT ADVISED";
+awe6.core.drivers.AKernel._RESET_SESSIONS = "Reset All Saved Information";
+awe6.core.drivers.AKernel._EYE_CANDY_ENABLE = "Enable Eye Candy";
+awe6.core.drivers.AKernel._EYE_CANDY_DISABLE = "Disable Eye Candy";
+awe6.core.drivers.AKernel._FULL_SCREEN_ENABLE = "Enter Full Screen Mode";
+awe6.core.drivers.AKernel._FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 jeash.events.Event.ACTIVATE = "activate";
 jeash.events.Event.ADDED = "added";
 jeash.events.Event.ADDED_TO_STAGE = "addedToStage";
@@ -14427,9 +14584,9 @@ jeash.events.Event.UNLOAD = "unload";
 jeash.events.Event.SOUND_COMPLETE = "soundComplete";
 jeash.events.KeyboardEvent.KEY_DOWN = "KEY_DOWN";
 jeash.events.KeyboardEvent.KEY_UP = "KEY_UP";
+awe6.core.drivers.AAudioManager._PACKAGE_ID = "assets.audio";
 jeash.events.IOErrorEvent.IO_ERROR = "IO_ERROR";
 jeash.display.DisplayObject.mNameID = 0;
-awe6.core.drivers.AAudioManager._PACKAGE_ID = "assets.audio";
 jeash.display.StageQuality.BEST = "best";
 jeash.display.StageQuality.HIGH = "high";
 jeash.display.StageQuality.MEDIUM = "medium";
@@ -14451,14 +14608,6 @@ jeash.text.TextFieldAutoSize.CENTER = "CENTER";
 jeash.text.TextFieldAutoSize.LEFT = "LEFT";
 jeash.text.TextFieldAutoSize.NONE = "NONE";
 jeash.text.TextFieldAutoSize.RIGHT = "RIGHT";
-awe6.core.drivers.AKernel._POWERED_BY = "Powered by awe6";
-awe6.core.drivers.AKernel._POWERED_BY_URL = "http://awe6.org";
-awe6.core.drivers.AKernel._RELEASE_CAUTION = "PUBLIC RELEASE NOT ADVISED";
-awe6.core.drivers.AKernel._RESET_SESSIONS = "Reset All Saved Information";
-awe6.core.drivers.AKernel._EYE_CANDY_ENABLE = "Enable Eye Candy";
-awe6.core.drivers.AKernel._EYE_CANDY_DISABLE = "Disable Eye Candy";
-awe6.core.drivers.AKernel._FULL_SCREEN_ENABLE = "Enter Full Screen Mode";
-awe6.core.drivers.AKernel._FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 jeash.media.Sound.MEDIA_TYPE_MP3 = "audio/mpeg";
 jeash.media.Sound.MEDIA_TYPE_OGG = "audio/ogg; codecs=\"vorbis\"";
 jeash.media.Sound.MEDIA_TYPE_WAV = "audio/wav; codecs=\"1\"";
@@ -14713,6 +14862,7 @@ jeash.events.MouseEvent.ROLL_OVER = "rollOver";
 jeash.events.EventPhase.CAPTURING_PHASE = 0;
 jeash.events.EventPhase.AT_TARGET = 1;
 jeash.events.EventPhase.BUBBLING_PHASE = 2;
+jeash.system.System.useCodePage = false;
 jeash.text.TextField.mDefaultFont = "Bitstream_Vera_Sans";
 jeash.text.TextField.sSelectionOwner = null;
 jeash.text.FontInstance.mSolidFonts = new Hash();
@@ -14734,13 +14884,11 @@ js.Lib.onerror = null;
 jeash.display.Stage.jeashMouseChanges = [jeash.events.MouseEvent.MOUSE_OUT,jeash.events.MouseEvent.MOUSE_OVER,jeash.events.MouseEvent.ROLL_OUT,jeash.events.MouseEvent.ROLL_OVER];
 jeash.display.Stage.DEFAULT_FRAMERATE = 60.0;
 jeash.display.Stage.DEFAULT_PROJ_MATRIX = [1.,0,0,0,0,1,0,0,0,0,-1,-1,0,0,0,0];
-jeash.text.TextFieldType.DYNAMIC = "DYNAMIC";
-jeash.text.TextFieldType.INPUT = "INPUT";
 haxe.Serializer.USE_CACHE = false;
 haxe.Serializer.USE_ENUM_INDEX = false;
 haxe.Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-jeash.text.AntiAliasType.ADVANCED = "advanced";
-jeash.text.AntiAliasType.NORMAL = "normal";
+jeash.text.TextFieldType.DYNAMIC = "DYNAMIC";
+jeash.text.TextFieldType.INPUT = "INPUT";
 haxe.Timer.arr = new Array();
 jeash.display.Graphics.defaultFontName = "ARIAL.TTF";
 jeash.display.Graphics.defaultFontSize = 12;
@@ -14796,4 +14944,4 @@ jeash.display.Graphics.BLEND_SUBTRACT = 13;
 jeash.display.Graphics.BLEND_SHADER = 14;
 jeash.display.Graphics.JEASH_SIZING_WARM_UP = 10;
 jeash.display.Graphics.JEASH_MAX_DIMENSION = 5000;
-window.addEventListener( "load", ApplicationMain.main, false );
+ApplicationMain.main()
