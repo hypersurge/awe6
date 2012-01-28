@@ -4,19 +4,20 @@
 
 Please help towards achieving the following tasks:
 
-  * MultiDrivers Branch:
+  * More Drivers:
+    * Release to haxelib
     * Any R&D into Unity3D driver
     * SWC testing
     * AS3 testing
     * Improved asset loading via NME
-    * Merge to trunk
     * Revised FlashDevelop templates (as NME?)
-    * Release to haxelib
   * Tutorials:
     * Complete [GameGenres genre examples]
     * OOP approach (i.e. classes and packages)
     * Data driven approach (i.e. from config files)
   * Spread the Word:
     * Organize game jams?
-    * Present at Haxe WWX 2012?
+	* Present at VIU?
+    * Present at Haxe WWX 2012 - confirmed
+	* Present at DroidCon 2012 - confirmed
     * Present at Casual Connect Seattle 2012?

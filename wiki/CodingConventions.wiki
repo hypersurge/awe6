@@ -19,7 +19,7 @@ No convention should be considered definitive - many of these choices may not be
   * Private scope members prefixed with `_`.
   * Local scope members prefixed with `l_`.
   * Parameter scope members prefixed with `p_`.
-  * Reserved members prefixed with `__`.
+  * Reserved members prefixed with `_`.
   * Enumerated constructors represented as `CONST_CASE`.
   * Some enumerators extensible via `SUB_TYPE( value:Dynamic )`.
   * Helper classes kept private and prefixed with `_Helper`.
@@ -31,7 +31,7 @@ No convention should be considered definitive - many of these choices may not be
   * New lines for all braces `{}`.
   * Spaces inside paranthesis: `( example )`.
   * All blocks for conditionals, loops, getters, setters etc to be wrapped in braces on new lines.
-  * Implicit Getter and Setter methods prefixed with `__get_%property%` & `__set_%property%`.
+  * Implicit Getter and Setter methods prefixed with `_get_%property%` & `_set_%property%`.
   * Getters for all readable interface variables that are not Bool or Enum and relate to state (i.e. are likely to change after initialization).
   * Setters for all writeable interface variables.
   * Bool property names prefixed with `is`, `as`, `has` or `was`.
