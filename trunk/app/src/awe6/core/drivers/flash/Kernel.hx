@@ -67,7 +67,7 @@ class Kernel extends AKernel
 	
 	override private function _driverInit():Void
 	{
-		_stage = _context.stage;		
+		_stage = _context.stage;	
 		var l_instance:Kernel = this;
 		Lib.current.focusRect = false;
 		_stage.frameRate = factory.targetFramerate;

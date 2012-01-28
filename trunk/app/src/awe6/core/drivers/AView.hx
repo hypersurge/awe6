@@ -66,10 +66,13 @@ class AView extends Process, implements IView
 	override private function _init():Void 
 	{
 		super._init();
+		globalX = 0;
+		globalY = 0;
+		x = 0;
+		y = 0;
 		isVisible = true;
 		_isDirty = true;
 		_children = new Array<AView>();
-		x = y = globalX = globalY = 0;
 	}
 	
 	public function addChild( p_child:IView, ?p_priority:Int = 0 ):Void
@@ -243,14 +246,14 @@ class AView extends Process, implements IView
 	private function _set_x( p_value:Float ):Float
 	{
 		x = p_value;
-		globalX = x + ( ( parent != null ) ? parent.globalX : 0 );
+		globalX = ( parent == null ) ? x : x + parent.globalX;
 		return x;
 	}
 	
 	private function _set_y( p_value:Float ):Float
 	{
 		y = p_value;
-		globalY = y + ( ( parent != null ) ? parent.globalY : 0 );
+		globalY = ( parent == null ) ? y : y + parent.globalY;
 		return y;
 	}
 	

@@ -4,7 +4,7 @@
 	<app title="awe6" file="awe6" main="Main" package="org.awe6.demo" version="1.0.0" company="Rob Fell" />
 
 	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="target_flash" />
-	<window width="480" height="320" fps="20" orientation="landscape" resizable="true" unless="target_flash" />
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" unless="target_flash" />
 	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="target_html5" />
  	
 	<set name="BUILD_DIR" value="export" />
