@@ -9,13 +9,17 @@
 
 THINGS TO DO:
 	
-** add getters and setters to all public properties
-* test nme fullscreen
-** add all manager creators to AFactory
-** add conditional compilation flag based on nme target, rather than haxe target?
+*** resolve proper asset pipeline for non-Flash targets
 
 
 key:
 * <10 mins
 ** ~30 mins
 *** > hour
+
+ReBuild RC list:
+	api regen
+	SWC
+	haxelib
+	zip
+	tag

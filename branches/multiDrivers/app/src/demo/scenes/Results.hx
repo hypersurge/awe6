@@ -29,7 +29,7 @@
 
 package demo.scenes;
 import awe6.extras.gui.Text;
-import awe6.Types;
+import awe6.interfaces.ETextStyle;
 import demo.gui.Button;
 
 class Results extends AScene

@@ -50,7 +50,7 @@ class ASceneTransition extends Entity, implements ISceneTransition
 	{
 		_duration = p_duration;
 		_context = new Context();
-		super( p_kernel, "SCENE_TRANSITION", _context );
+		super( p_kernel, _context );
 	}
 	
 	override private function _init():Void 

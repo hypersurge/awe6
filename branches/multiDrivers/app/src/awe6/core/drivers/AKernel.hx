@@ -118,15 +118,11 @@ class AKernel extends Process, implements IKernel
 		_isPreloaded = false;
 
 		// Perform driver specific initializations.
-		//
-
 		isDebug = factory.isDebug;
 		isLocal = _driverGetIsLocal();
 		_driverInit();
 
 		// Initialize managers.
-		//
-		
 		assets = _assetManagerProcess = new AAssetManager( _kernel );
 		audio =	_audioManager = new AudioManager( _kernel );
 		inputs = _inputManager = new InputManager( _kernel );
@@ -140,14 +136,10 @@ class AKernel extends Process, implements IKernel
 		_addProcess( _messageManager );
 		
 		// Set defaults for visual switches.
-		//
-		
 		isEyeCandy = true;
 		isFullScreen = false;
 
 		// Signal completion to the factory and initialize factory-dependent components.
-		//
-
 		factory.onInitComplete( this );
 
 		session = factory.createSession();

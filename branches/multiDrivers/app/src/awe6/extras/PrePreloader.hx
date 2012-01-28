@@ -165,7 +165,7 @@ class PrePreloader extends Sprite
 	
 	static function main()
 	{
-		if ( !__isExisting )
+		if ( !_isExisting )
 		{
 			Lib.current.addChild( new PrePreloader() );
 		}

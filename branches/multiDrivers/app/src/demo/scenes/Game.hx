@@ -28,13 +28,16 @@
  */
 
 package demo.scenes;
-import awe6.extras.gui.Image;
+import awe6.core.Scene;
 import awe6.extras.gui.Text;
-import awe6.Types;
+import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EScene;
+import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IKernel;
 import demo.AssetManager;
 import demo.entities.Bouncer;
-import demo.Session;
 import demo.entities.Sphere;
+import demo.Session;
 
 class Game extends Scene
 {
@@ -43,8 +46,6 @@ class Game extends Scene
 	private var _assetManager:AssetManager;
 	private var _timer:Text;
 	private var _score:Int;
-	
-	private var _temp:IEntity;
 	
 	public function new( p_kernel:IKernel, p_type:EScene ) 
 	{
@@ -72,7 +73,6 @@ class Game extends Scene
 		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
 		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
 
-		_temp = l_sphere;
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 

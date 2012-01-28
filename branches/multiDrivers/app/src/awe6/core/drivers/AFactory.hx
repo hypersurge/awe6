@@ -107,10 +107,7 @@ class AFactory implements IFactory, implements IDisposable
 
 	inline private function _init():Void
 	{
-		// R.Fell -- "don't" override me, use configurer and onInitComplete (for actions that require Kernel)
 		config = new Hash<Dynamic>();
-		// Proceed with platform-specific initializations.
-		//
 		_driverInit();
 	}
 
@@ -143,16 +140,12 @@ class AFactory implements IFactory, implements IDisposable
 				i.firstChild().nodeValue = i.firstChild().toString().split( "<![CDATA[" ).join( "" ).split( "]]>" ).join( "" );
 			}
 			config.set( l_name, i.firstChild() == null ? "" : i.firstChild().nodeValue );
-//#if debug
 //			trace( l_name + " = " + config.get( l_name ) );
-//#end
 			for ( j in i.attributes() )
 			{
 				var l_aName:String = l_name + "." + j;
 				config.set( l_aName, i.get( j ) );
-//#if debug
 //				trace( l_aName + " = " + config.get( l_aName ) );
-//#end
 			}
 		}
 	}
@@ -300,14 +293,12 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			return;
 		}
+		isDisposed = true;
 		_driverDisposer();
 		_concreteKernel.dispose();
 		_concreteKernel = null;
 		_kernel = null;
 		config = null;
-		// M.Ivanchev -- this is now set after the object is fully disposed of.
-		// R.Fell -- if so then we need a _isBeingDisposed as per Process to prevent potential recursive call
-		isDisposed = true;
 	}
 	
 	private function _driverDisposer():Void

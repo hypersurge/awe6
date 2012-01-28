@@ -52,7 +52,7 @@ class Process implements IProcess
 	private var _age:Int;
 	private var _updates:Int;
 	private var _isEntity:Bool;
-	private var _isSetterBypassed:Bool; // needed because for cpp target Reflect sets do call setters
+	private var _isIsActiveSetterBypassed:Bool; // needed because for cpp target Reflect sets do call setters
 
 	public function new( p_kernel:IKernel )
 	{
@@ -65,7 +65,7 @@ class Process implements IProcess
 	private function _init():Void
 	{
 //		Reflect.setField( this, "isActive", true ); // avoids the setter
-		_isSetterBypassed = true;
+		_isIsActiveSetterBypassed = true;
 		isActive = true;
 		isDisposed = false;
 		_age = 0;
@@ -130,7 +130,7 @@ class Process implements IProcess
 		}
 		if ( p_value != isActive )
 		{
-			if ( _isSetterBypassed )
+			if ( _isIsActiveSetterBypassed )
 			{
 				isActive = p_value;
 			}
@@ -139,7 +139,7 @@ class Process implements IProcess
 				p_value ? resume() : pause();
 			}
 		}
-		_isSetterBypassed = false;
+		_isIsActiveSetterBypassed = false;
 		return isActive;
 	}
 	
@@ -153,7 +153,7 @@ class Process implements IProcess
 		{
 			_pauser();
 	//		Reflect.setField( this, "isActive", false ); // avoids the setter
-			_isSetterBypassed = true;
+			_isIsActiveSetterBypassed = true;
 			isActive = false;
 			if ( _isEntity )
 			{
@@ -177,7 +177,7 @@ class Process implements IProcess
 		{
 			_resumer();
 	//		Reflect.setField( this, "isActive", true ); // avoids the setter
-			_isSetterBypassed = true;
+			_isIsActiveSetterBypassed = true;
 			isActive = true;
 			if ( _isEntity )
 			{

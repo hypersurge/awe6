@@ -83,7 +83,7 @@ class Kernel extends AKernel
 		_context.mask = l_mask;
 		
 		_contextMenu = new ContextMenu();
-		#if !air
+		#if !awe6Air
 		var l_isAuthorUrl:Bool = factory.config.exists( "settings.contextMenu.authorUrl" );
 		var l_author:ContextMenuItem = new ContextMenuItem( factory.id + " v" + factory.version + " By " + factory.author, false, l_isAuthorUrl );
 		if ( l_isAuthorUrl )

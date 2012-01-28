@@ -28,7 +28,10 @@
  */
 
 package demo.entities;
-import awe6.Types;
+import awe6.core.Entity;
+import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EMouseButton;
+import awe6.interfaces.IKernel;
 import demo.AssetManager;
 import flash.display.Bitmap;
 import flash.display.BitmapData;

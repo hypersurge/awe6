@@ -44,7 +44,6 @@ import awe6.interfaces.ITextStyle;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
-import haxe.Resource;
 
 class Factory extends AFactory
 {
@@ -53,7 +52,7 @@ class Factory extends AFactory
 	override private function _configurer():Void
 	{		
 		id = "awe6Demo";
-		version = "0.4.200"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+		version = "0.6.380"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
 		width = 600;
@@ -158,5 +157,3 @@ class Factory extends AFactory
 	}	
 	
 }
-
-
