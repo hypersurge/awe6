@@ -2,7 +2,7 @@
 
 cd ..
 rmdir docs /s /q
-haxe -cp src -swf9 bin/awe6.swf -swf-version 10 -xml scripts/chxdoc/output.xml --no-output awe6.Types
+haxe -cp src --no-output -xml scripts/chxdoc/output.xml awe6.Types
 cd scripts/chxdoc
 chxdoc -o ../../docs --tmpDir=_tmp --installTemplate=true --templateDir=template --generateTodoFile=true --showTodoTags=true --includeOnly=awe6.core.,awe6.interfaces.,Array,Bool,Class,Enum,Float,Hash,Int,List,Dynamic,String,Type,UInt,Void --title="awe6" --subtitle="Inverted Game Framework" --ignoreRoot=false output.xml
 rmdir _tmp /s /q

@@ -43,4 +43,6 @@ typedef Context = nme.display.Sprite;
 typedef Context = flash.display.Sprite;
 #elseif js
 typedef Context = jeash.display.Sprite;
+#else
+typedef Context = Array<Dynamic>; // acting as a placeholder for doc generation.
 #end
