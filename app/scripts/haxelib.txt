@@ -9,4 +9,12 @@ haxelib build list:
 	test run: haxelib run awe6 install
 	submit: haxelib submit awe6-X,X,X.zip
 At same time consider updated API docs on googlecode & new SWC
+	Run /app/scripts/generateDocs.bat
+	Run /app/scripts/generateUml.bat
+	Delete /app/docs from repo
+	Copy /app/docs to /docs/api
+	Delete /branches/api from repo
+	Copy /app/docs/api to /branches/api
+	Run /app/awe6Swc.hxml
+	Upload Swc and Zipped Api to googlecode
 	

@@ -40,4 +40,4 @@ package awe6.core.drivers.remap;
  * </ul>
  * @author	Robert Fell
  */
-typedef Context = flash.display.Sprite;
+typedef Context = Array<Dynamic>;

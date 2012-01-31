@@ -1,6 +1,5 @@
 -D awe6Xml
 -cp src
--swf bin/awe6Xml.swf
 --no-output
 -xml scripts/haxelib/haxedoc.xml
 awe6.Types
