@@ -1,8 +1,8 @@
 package $(PackageDot)gui;
 import awe6.core.BasicButton;
-import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.IKernel;
+import $(PackageDot)AssetManager;
 
 /**
 $(CBI)* ...
@@ -10,29 +10,35 @@ $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 
 class Overlay extends awe6.core.Overlay $(CSLB){
+	private var _assetManager:AssetManager;
+	private var _buttonSize:Float;
+	// private var _buttonRestart:BasicButton;
+	
 	public function new( p_kernel:IKernel ) $(CSLB){
-		var l_assetManager:AssetManager = cast( p_kernel.assets, AssetManager );
-		var l_overlayBackground:BitmapDataScale9 = new BitmapDataScale9( l_assetManager.overlayBackground, 20, 20, 580, 380, p_kernel.factory.width, p_kernel.factory.height, true );
-		super( p_kernel, l_overlayBackground, l_assetManager.overlayBackUp, l_assetManager.overlayBackOver, l_assetManager.overlayMuteUp, l_assetManager.overlayMuteOver, l_assetManager.overlayUnmuteUp, l_assetManager.overlayUnmuteOver, l_assetManager.overlayPauseUp, l_assetManager.overlayPauseOver, l_assetManager.overlayUnpauseUp, l_assetManager.overlayUnpauseOver );
+		_assetManager = cast( p_kernel.assets, AssetManager );
+		_buttonSize = 30;
+		super( p_kernel, _buttonSize, _buttonSize, _assetManager.overlayBackground, _assetManager.overlayBackUp, _assetManager.overlayBackOver, _assetManager.overlayMuteUp, _assetManager.overlayMuteOver, _assetManager.overlayUnmuteUp, _assetManager.overlayUnmuteOver, _assetManager.overlayPauseUp, _assetManager.overlayPauseOver, _assetManager.overlayUnpauseUp, _assetManager.overlayUnpauseOver );
 	}
 	
 	override private function _init():Void $(CSLB){
 		super._init();
-		var l_width:Int = 30;
-		var l_x:Int = _kernel.factory.width - 10 - ( 3 * l_width );
-		var l_y:Int = _kernel.factory.height - 30;
+		var l_x:Float = _kernel.factory.width - 10 - ( 3 * _buttonSize );
+		var l_y:Float = _kernel.factory.height - _buttonSize;
 		positionButton( BACK, l_x, l_y );
-		positionButton( PAUSE, l_x += l_width, l_y );
+		positionButton( PAUSE, l_x += _buttonSize, l_y );
 		positionButton( UNPAUSE, l_x, l_y );
-		positionButton( MUTE, l_x += l_width, l_y );
+		positionButton( MUTE, l_x += _buttonSize, l_y );
 		positionButton( UNMUTE, l_x, l_y );
-		// extend
+		// extend - e.g:
+		// _buttonRestart = new BasicButton( _kernel, _assetManager.overlayRestartUp, _assetManager.overlayRestartOver, _buttonSize, _buttonSize, 0, 0, null, callback( activateButton, EOverlayButton.SUB_TYPE( "RESTART" ) ) );
+		// addEntity( _buttonRestart, true, 20 );
 	}
 	
 	override private function _getButton( p_type:EOverlayButton ):BasicButton $(CSLB){
 		return switch( p_type ) $(CSLB){
 			case SUB_TYPE( value ) : 
 				switch( value ) $(CSLB){
+					// case "RESTART" : _buttonRestart;
 				}
 			default : super._getButton( p_type );
 		}
@@ -47,8 +53,12 @@ class Overlay extends awe6.core.Overlay $(CSLB){
 		switch( p_type ) $(CSLB){
 			case SUB_TYPE( value ) : 
 				switch( value ) $(CSLB){
+					// case "RESTART" : if ( _buttonPause.view.isInViewStack )
+					// {
+					// 	_kernel.scenes.restart();
+					// }
 				}
-			default : 
+			default : null;
 		}
 		super.activateButton( p_type );
 	}
