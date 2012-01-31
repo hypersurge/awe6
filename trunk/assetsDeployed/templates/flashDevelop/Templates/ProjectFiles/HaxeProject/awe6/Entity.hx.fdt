@@ -1,7 +1,7 @@
 package $(Package);
+import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
-import flash.display.Sprite;
 
 /**
 $(CBI)* ...
@@ -9,11 +9,11 @@ $(CBI)* @author $(DefaultUser)
 $(CBI)*/
 	
 class $(FileName) extends Entity $(CSLB){	
-	private var _sprite:Sprite;
+	private var _context:Context;
 	
 	public function new( p_kernel:IKernel ) $(CSLB){
-		_sprite = new Sprite();
-		super( p_kernel, _sprite );
+		_context = new Context(); // essentially a "flash.display.Sprite"
+		super( p_kernel, _context );
 	}
 	
 	override private function _init():Void $(CSLB){

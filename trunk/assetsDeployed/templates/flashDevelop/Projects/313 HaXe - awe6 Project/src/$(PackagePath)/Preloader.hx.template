@@ -16,7 +16,7 @@ class Preloader extends APreloader $(CSLB){
 		_preloaderMovieClip.progress.stop();
 		_preloaderMovieClip.x = ( _kernel.factory.width - _preloaderMovieClip.width ) / 2;
 		_preloaderMovieClip.y = ( _kernel.factory.height - _preloaderMovieClip.height ) / 2;
-		_sprite.addChild( _preloaderMovieClip );
+		_context.addChild( _preloaderMovieClip );
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
