@@ -71,7 +71,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( p_kernel:IKernel, ?p_buttonWidth:Float = 30, ?p_buttonHeight:Float = 30, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
+	public function new( p_kernel:IKernel, ?p_buttonWidth:Float = 30.0, ?p_buttonHeight:Float = 30.0, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
 	{
 		_borderView = p_border;
 		_buttonBack = new BasicButton( p_kernel, p_backUp, p_backOver, p_buttonWidth, p_buttonHeight );
