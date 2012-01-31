@@ -1,0 +1,6 @@
+-D awe6Swc
+-cp src
+-swf-version 10
+-swf export/awe6-1,0,391.swc
+-swf-header 100:100:25:000000
+awe6.Types

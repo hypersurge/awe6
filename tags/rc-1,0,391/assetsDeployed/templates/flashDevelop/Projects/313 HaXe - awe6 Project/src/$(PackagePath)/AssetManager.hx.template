@@ -1,0 +1,77 @@
+package $(PackageName);
+import awe6.core.AAssetManager;
+import awe6.core.Context;
+import awe6.core.View;
+import awe6.extras.gui.BitmapDataScale9;
+import awe6.interfaces.IView;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class AssetManager extends AAssetManager $(CSLB){	
+	public var overlayBackground( default, null ):IView;
+	public var overlayBackOver( default, null ):IView;
+	public var overlayBackUp( default, null ):IView;
+	public var overlayMuteOver( default, null ):IView;
+	public var overlayMuteUp( default, null ):IView;
+	public var overlayPauseOver( default, null ):IView;
+	public var overlayPauseUp( default, null ):IView;
+	public var overlayUnmuteOver( default, null ):IView;
+	public var overlayUnmuteUp( default, null ):IView;
+	public var overlayUnpauseOver( default, null ):IView;
+	public var overlayUnpauseUp( default, null ):IView;
+	
+	override private function _init():Void $(CSLB){
+		super._init();
+		overlayBackground = _createView( OVERLAY_BACKGROUND );
+		overlayBackUp = _createView( OVERLAY_BACK_UP );
+		overlayBackOver = _createView( OVERLAY_BACK_OVER );
+		overlayMuteUp = _createView( OVERLAY_MUTE_UP );
+		overlayMuteOver = _createView( OVERLAY_MUTE_OVER );
+		overlayUnmuteUp = _createView( OVERLAY_UNMUTE_UP );
+		overlayUnmuteOver = _createView( OVERLAY_UNMUTE_OVER );
+		overlayPauseUp = _createView( OVERLAY_PAUSE_UP );
+		overlayPauseOver = _createView( OVERLAY_PAUSE_OVER );
+		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
+		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
+	}
+	
+	private function _createView( p_type:EAsset ):IView $(CSLB){
+		var l_context:Context = new Context();
+		var l_bitmap:Bitmap = new Bitmap();
+		l_context.addChild( l_bitmap );
+		switch( p_type ) $(CSLB){
+			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = cast( new BitmapDataScale9( getAsset( "Background", "assets.overlay" ), 20, 20, 580, 380, _kernel.factory.width, _kernel.factory.height, true ), BitmapData );
+			case OVERLAY_BACK_UP : l_bitmap.bitmapData = getAsset( "BackUp", "assets.overlay" );
+			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = getAsset( "BackOver", "assets.overlay" );
+			case OVERLAY_MUTE_UP : l_bitmap.bitmapData = getAsset( "MuteUp", "assets.overlay" );
+			case OVERLAY_MUTE_OVER : l_bitmap.bitmapData = getAsset( "MuteOver", "assets.overlay" );
+			case OVERLAY_UNMUTE_UP : l_bitmap.bitmapData = getAsset( "UnmuteUp", "assets.overlay" );
+			case OVERLAY_UNMUTE_OVER : l_bitmap.bitmapData = getAsset( "UnmuteOver", "assets.overlay" );
+			case OVERLAY_PAUSE_UP : l_bitmap.bitmapData = getAsset( "PauseUp", "assets.overlay" );
+			case OVERLAY_PAUSE_OVER : l_bitmap.bitmapData = getAsset( "PauseOver", "assets.overlay" );
+			case OVERLAY_UNPAUSE_UP : l_bitmap.bitmapData = getAsset( "UnpauseUp", "assets.overlay" );
+			case OVERLAY_UNPAUSE_OVER : l_bitmap.bitmapData = getAsset( "UnpauseOver", "assets.overlay" );
+		}
+		return new View( _kernel, l_context );
+	}
+	
+}
+
+enum EAsset $(CSLB){
+	OVERLAY_BACKGROUND;
+	OVERLAY_BACK_UP;
+	OVERLAY_BACK_OVER;
+	OVERLAY_MUTE_UP;
+	OVERLAY_MUTE_OVER;
+	OVERLAY_UNMUTE_UP;
+	OVERLAY_UNMUTE_OVER;
+	OVERLAY_PAUSE_UP;
+	OVERLAY_PAUSE_OVER;
+	OVERLAY_UNPAUSE_UP;
+	OVERLAY_UNPAUSE_OVER;
+}

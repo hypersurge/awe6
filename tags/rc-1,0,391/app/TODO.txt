@@ -1,0 +1,25 @@
+
+                        _____ 
+     _____      _____  / ___/
+    /__   | /| /   _ \/ __ \ 
+   / _  / |/ |/ /  __  /_/ / 
+   \___/|__/|__/\___/\____/  
+    awe6 is game, inverted
+ 
+
+THINGS TO DO:
+	
+*** resolve proper asset pipeline for non-Flash targets
+
+
+key:
+* <10 mins
+** ~30 mins
+*** > hour
+
+ReBuild RC list:
+	api regen
+	SWC
+	haxelib
+	zip
+	tag
