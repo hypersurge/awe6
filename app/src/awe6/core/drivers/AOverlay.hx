@@ -71,14 +71,14 @@ class AOverlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( p_kernel:IKernel, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
+	public function new( p_kernel:IKernel, ?p_buttonWidth:Float = 30, ?p_buttonHeight:Float = 30, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
 	{
 		_borderView = p_border;
-		_buttonBack = new BasicButton( p_kernel, p_backUp, p_backOver, 30, 30 );
-		_buttonMute = new BasicButton( p_kernel, p_muteUp, p_muteOver, 30, 30 );
-		_buttonUnmute = new BasicButton( p_kernel, p_unmuteUp, p_unmuteOver, 30, 30 );
-		_buttonPause = new BasicButton( p_kernel, p_pauseUp, p_pauseOver, 30, 30 );
-		_buttonUnpause = new BasicButton( p_kernel, p_unpauseUp, p_unpauseOver, 30, 30 );
+		_buttonBack = new BasicButton( p_kernel, p_backUp, p_backOver, p_buttonWidth, p_buttonHeight );
+		_buttonMute = new BasicButton( p_kernel, p_muteUp, p_muteOver, p_buttonWidth, p_buttonHeight );
+		_buttonUnmute = new BasicButton( p_kernel, p_unmuteUp, p_unmuteOver, p_buttonWidth, p_buttonHeight );
+		_buttonPause = new BasicButton( p_kernel, p_pauseUp, p_pauseOver, p_buttonWidth, p_buttonHeight );
+		_buttonUnpause = new BasicButton( p_kernel, p_unpauseUp, p_unpauseOver, p_buttonWidth, p_buttonHeight );
 		_pauseBlur = p_pauseBlur;
 		_pauseColor = p_pauseColor;
 		_pauseAlpha = p_pauseAlpha;
@@ -204,11 +204,19 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 	}
 	
-	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float ):Void
+	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float, ?p_width:Float, ?p_height:Float ):Void
 	{
 		var l_button:BasicButton = _getButton( p_type );
 		l_button.x = p_x;
 		l_button.y = p_y;
+		if ( p_width != null )
+		{
+			l_button.width = p_width;
+		}
+		if ( p_height != null )
+		{
+			l_button.height = p_height;
+		}
 	}
 	
 	public function showProgress( p_progress:Float, ?p_message:String ):Void
