@@ -52,8 +52,10 @@ interface IOverlay
 	 * @param	type	The overlay button.
 	 * @param	x	The horizontal position.
 	 * @param	y	The vertical position.
+	 * @param	width	The width of the button hitArea, if null will not redefine.
+	 * @param	height	The height of the button hitArea, if null will not redefine.
 	 */
-	function positionButton( type:EOverlayButton, x:Float, y:Float ):Void;
+	function positionButton( type:EOverlayButton, x:Float, y:Float, ?width:Float, ?height:Float ):Void;
 	/**
 	 * Triggers an overlay button (as if it was clicked on).
 	 * @param	type	The overlay button.
