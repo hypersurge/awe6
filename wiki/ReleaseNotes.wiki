@@ -1,0 +1,14 @@
+#summary Release notes for each release candidate
+
+
+=RC 1,0,391=
+
+Major update.  Now compatible with all targets - directly or indirectly.  Can be consumed by NME (e.g. include as a lib in your NME project), or can consume NME / Jeash / etc as preferred.
+
+Please note this release required minor public API changes:
+
+ * overriding AFactory `_init` to set properties is now done by overriding AFactory `_configurer`.
+ * Overlay is constructed by injecting IView instead of !BitmapData.
+ * Overlay includes a buttonSize as part of its constructor.
+ * All getters and setters have changed to from `__get_%`, `__set_%` to `_get_%`, `_set_%`.
+ * Private members originally called `_sprite` and now called `_context`.
