@@ -1,19 +1,33 @@
 #summary Develop for mobile devices using awe6.
 
-= Adobe AIR Allows SWF Content to Target Multiple Devices =
-
 [https://awe6.googlecode.com/svn/trunk/docs/images/IosMockup.jpg]
 
-awe6 powered games have been deployed to multiple mobile devices (iOS and Android).  A Mac is not required.  No fee (other than iOS Developer Membership) is incurred.  Follow these steps to target your game to Web via awe6 + Flash Player, iPhone, iPod, iPad, Android via awe6 + AIR:
+You can readily deploy your awe6 powered games to multiple mobile devices (e.g. iOS, Android).  There are various approaches, each with its respective pros and cons.  Please note the author of awe6 is a fan of SWF & HTML5 as they represent ubiquitous platforms (today and tomorrow respectively).
+
+==NME==
+
+[http://haxenme.org NME] is haXe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
+
+To use NME with awe6 simply add the following line to your NME project's nmml file:
+
+{{{
+<haxelib name="awe6" />
+}}}
+
+Please note many subtle variances currently exist between the NME and Flash APIs so code methodically and consider fallbacks.  Specifically avoid frequent draw(), masks, filters, negative matrix transformations or complex Sounds.
+
+==Adobe AIR==
+
+Converts any SWF to a mobile app.  The majority of the Flash API is available and works generally as expected.
+
+To deploy to iOS a Mac is not required.  No fee (other than iOS Developer Membership) is incurred.  Follow these steps to target your game to Web via awe6 + Flash Player, iPhone, iPod, iPad, Android via awe6 + AIR:
 
  # Install [http://www.adobe.com/products/air/sdk/ AIR SDK (2.7+)].
- # Follow the [QuickStart Quick Start Tutorial] and build awe6 demo from Trunk.
- # Build the AIR target using [https://awe6.googlecode.com/svn/trunk/app/awe6Air.hxml awe6Air.hxml].  Note: the "air" conditional compilation tag disables some minor incompatible aspects (e.g. ContextMenu).
- # iOS: Build the generated "app.swf" into an AIR app using [http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html Adobe's Help].
- # Android: Build the generated "app.swf" into an AIR app using [http://help.adobe.com/en_US/air/build/WS901d38e593cd1bac25d3d8c712b2d86751e-8000.html Adobe's Help].
+ # Follow the [QuickStart Quick Start Tutorial] and build an awe6 application.
+ # Compile your application using compiler flag `-D awe6Air` (this disables some minor incompatible aspects within the flash driver).
+ # iOS: Build the generated swf into an AIR app using [http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html Adobe's Help].
+ # Android: Build the generated swf into an AIR app using [http://help.adobe.com/en_US/air/build/WS901d38e593cd1bac25d3d8c712b2d86751e-8000.html Adobe's Help].
 
 Note: deployment to iOS requires a valid membership of the Adobe Developer iOS program.  Certificate creation and application packaging can be done from either a Mac or Windows following [http://www.adobe.com/devnet/air/articles/packaging-air-apps-ios.html these steps].  Final push to iTunes requires a Mac (perhaps borrow a friend's, if you don't own one?).
 
 Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling in your Entities and blitting / copyPixels in your Views.
-
-An alternative approach to using Adobe AIR is to use the awe6 "!multiDrivers" branch which can target CPP and HTML5 via [http://haxenme.org NME].  This branch is completing beta stage.
