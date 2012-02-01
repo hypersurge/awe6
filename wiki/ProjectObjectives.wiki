@@ -7,6 +7,8 @@ Pronounced "awesome"; `awe6` is `game` inverted.
 
 Its purpose is to create a scalable, flexible and approachable tool to assist in the rapid development of [DeveloperGallery quality games].  What [GameGenres types of game], and for what type of platform are intentionally undefined to embrace extensibility.
 
+<p align="center">[http://code.google.com/p/awe6/wiki/DeveloperGallery https://awe6.googlecode.com/svn/trunk/docs/images/gamesThumbs.jpg]</p>
+
 == What's The "Big Idea"? ==
 
 This framework adopts an entity component approach (rather than a deep heirarchy structure).  For merits of such an approach please read Britt L Hannah's [http://www.devmaster.net/articles/oo-game-design/ article] or our [ReadingList recommended reading list].  In short: boundaries removed.  More benefits can be [DeveloperBenefits found here].
@@ -41,6 +43,8 @@ The framework uses synchronous state throughout all default components.  So the 
 The independent casual game developer / small team represents the target user of awe6.  Currently the primary targets for casual games are the web via Flash / SWF and mobile via iOS / AIR.  It is expected that HTML5, Android & Unity3D will become increasingly relevant targets.
 
 The Next Big Thing comes along too often to develop specifically for it.  Therefore awe6 is a collection of declarative interfaces, intended to be platform agnostic.  For practical purposes there is a working implementation targeting today's Big Things (SWF, HTML5, Android, iOS).
+
+<p align="center">[https://awe6.googlecode.com/svn/trunk/docs/images/platformLogos.png]</p>
 
 === Approach ===
 
