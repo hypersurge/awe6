@@ -29,6 +29,7 @@
 
 
 package awe6.core.drivers.flash;
+import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
