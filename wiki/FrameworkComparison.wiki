@@ -1,0 +1,38 @@
+#summary Attempting to compare awe6 to alternative frameworks.
+
+This comparison is work in progress.  It is not intended to suggest any framework is superior, simply to identify the differences between them. If you feel something is incorrect on this page, please let us know by adding a comment below.
+
+===Key===
+
+ * X: No support
+ * D: Easily Delegated (i.e. proxy or adapter)
+ * L: Low-level Support (i.e. no semantics)
+ * A: Abstraction Layer (i.e. expressed with context)
+
+===Portability===
+
+|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
+|| SWF/AIR || D,L || L || L || L ||
+|| HTML5 || D,L || X || X || L ||
+|| Native || D,L || X || X || L ||
+
+===Services===
+
+|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
+|| Game State || D,L,A || ? || ? || X ||
+|| User Input || D,L,A || ? || ? || L ||
+|| Assets || D,L,A || ? || ? || L,A ||
+|| Sounds || D,L,A || ? || ? || L ||
+|| 2D || D,L,A || ? || ? || L ||
+|| 3D || D,L || X || ? || L ||
+|| Physics || D || ? || ? || X ||
+|| Networking || D,L || ? || ? || L ||
+
+===Entity Framework===
+
+|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
+|| Global FSM || D,A || ? || A || X ||
+|| Entity FSM || D,A || ? || X || X ||
+|| Nested Entities || D,A || ? || X || X ||
+|| Type Safe || L,A || ? || X || X ||
+
