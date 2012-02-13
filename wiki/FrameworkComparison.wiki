@@ -4,7 +4,7 @@ This comparison is work in progress.  It is not intended to suggest any framewor
 
 ===Key===
 
- * X: No support
+ * -: No support
  * D: Easily Delegated (i.e. proxy or adapter)
  * L: Low-level Support (i.e. no semantics)
  * A: Abstraction Layer (i.e. expressed with context)
@@ -12,27 +12,26 @@ This comparison is work in progress.  It is not intended to suggest any framewor
 ===Portability===
 
 || *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| SWF/AIR || D,L || L || L || L ||
-|| HTML5 || D,L || X || X || L ||
-|| Native || D,L || X || X || L ||
+|| SWF/AIR || L || L || L || L ||
+|| HTML5 || D || - || - || L ||
+|| Native || D || - || - || L ||
 
 ===Services===
 
 || *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| Game State || D,L,A || ? || ? || X ||
+|| Game State || D,A || ? || ? || - ||
 || User Input || D,L,A || ? || ? || L ||
 || Assets || D,L,A || ? || ? || L,A ||
 || Sounds || D,L,A || ? || ? || L ||
 || 2D || D,L,A || ? || ? || L ||
-|| 3D || D,L || X || ? || L ||
-|| Physics || D || ? || ? || X ||
+|| 3D || D || X || ? || - ||
+|| Physics || D || ? || ? || - ||
 || Networking || D,L || ? || ? || L ||
 
 ===Entity Framework===
 
 || *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| Global FSM || D,A || ? || A || X ||
-|| Entity FSM || D,A || ? || X || X ||
-|| Nested Entities || D,A || ? || X || X ||
-|| Type Safe || L,A || ? || X || X ||
-
+|| Global FSM || D,A || ? || A || _N/A_ ||
+|| Entity FSM || D,A || ? || - || _N/A_ ||
+|| Nested Entities || D,A || ? || X || _N/A_ ||
+|| Type Safe || L,A || ? || - || _N/A_ ||
