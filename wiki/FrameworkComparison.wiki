@@ -18,7 +18,7 @@ If you notice something to be incorrect on this page, or would like to help us c
 Please note, not all examples claim to be multi-platform.
 
 || || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
-|| *SWF/AIR* || L || L || L || L || D ||
+|| *SWF/AIR* || D || L || L || L || D ||
 || *HTML5* || D || - || - || L || - ||
 || *Native* || D || - || - || L || L ||
 
@@ -27,14 +27,14 @@ Please note, not all examples claim to be multi-platform.
 Please note, not all examples claim to be game specific.
 
 || || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
-|| *Game State* || D,A || ? || ? || - || A ||
-|| *User Input* || D,L,A || ? || ? || L || A ||
-|| *Assets* || D,L,A || ? || ? || L,A || L ||
-|| *Sounds* || D,L,A || ? || ? || L || L,A || 
-|| *2D* || D,L,A || ? || ? || L || - ||
-|| *3D* || D || - || ? || - || L,A ||
+|| *Game State* || A || ? || ? || - || A ||
+|| *User Input* || A || ? || ? || L || A ||
+|| *Assets* || A || ? || ? || L || L ||
+|| *Sounds* || A || ? || ? || L || A || 
+|| *2D* || D || ? || ? || L || - ||
+|| *3D* || D || - || ? || - || A ||
 || *Physics* || D || ? || ? || - || A ||
-|| *Networking* || D,L || ? || ? || L || L ||
+|| *Networking* || D || ? || ? || L || L ||
 
 ===Entity Framework===
 
