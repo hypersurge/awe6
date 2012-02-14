@@ -27,14 +27,14 @@ Please note, not all examples claim to be multi-platform.
 Please note, not all examples claim to be game specific.
 
 || || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
-|| *Game State* || A || ? || ? || - || A ||
-|| *User Input* || A || ? || ? || L || A ||
-|| *Assets* || A || ? || ? || L || L ||
-|| *Sounds* || A || ? || ? || L || A || 
-|| *2D* || D || ? || ? || L || - ||
-|| *3D* || D || - || ? || - || A ||
-|| *Physics* || D || ? || ? || - || A ||
-|| *Networking* || D || ? || ? || L || L ||
+|| *Game State* || A || A || A || - || A ||
+|| *User Input* || A || A || A || L || A ||
+|| *Assets* || A || D || D || L || L ||
+|| *Sounds* || A || A || A || L || A || 
+|| *2D* || D || L || L || L || - ||
+|| *3D* || D || - || - || - || A ||
+|| *Physics* || D || A || D || - || A ||
+|| *Networking* || D || D || D || L || L ||
 
 ===Entity Framework===
 
