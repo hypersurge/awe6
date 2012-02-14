@@ -1,37 +1,69 @@
 #summary Attempting to compare awe6 to alternative frameworks.
 
-This comparison is work in progress.  It is not intended to suggest any framework is superior, simply to identify the differences between them. If you feel something is incorrect on this page, please let us know by adding a comment below.
+This comparison is work in progress, and the basis for much of this data is not yet fully researched!
+
+It is intended to answer the question "What does awe6 do that X doesn't do?" (or vice versa), and not "Which framework is best for project Y?".  For practical deployments it is sometimes appropriate to combine frameworks (e.g. NME + awe6 + Flixel).
+
+If you notice something to be incorrect on this page, or would like to help us complete this analysis, please let us know by adding a comment below.
 
 ===Key===
 
  * -: No support
- * D: Easily Delegated (i.e. proxy or adapter)
- * L: Low-level Support (i.e. no semantics)
- * A: Abstraction Layer (i.e. expressed with context)
+ * D: Delegated (i.e. proxied to a supporting library)
+ * L: Low-level Support (i.e. direct, no semantics)
+ * A: Abstraction Layer (i.e. elaborate, expressed with context)
 
-===Portability===
+===Platform Portability===
 
-|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| SWF/AIR || L || L || L || L ||
-|| HTML5 || D || - || - || L ||
-|| Native || D || - || - || L ||
+Please note, not all examples claim to be multi-platform.
 
-===Services===
+|| || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
+|| *SWF/AIR* || L || L || L || L || D ||
+|| *HTML5* || D || - || - || L || - ||
+|| *Native* || D || - || - || L || L ||
 
-|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| Game State || D,A || ? || ? || - ||
-|| User Input || D,L,A || ? || ? || L ||
-|| Assets || D,L,A || ? || ? || L,A ||
-|| Sounds || D,L,A || ? || ? || L ||
-|| 2D || D,L,A || ? || ? || L ||
-|| 3D || D || X || ? || - ||
-|| Physics || D || ? || ? || - ||
-|| Networking || D,L || ? || ? || L ||
+===Game Services===
+
+Please note, not all examples claim to be game specific.
+
+|| || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
+|| *Game State* || D,A || ? || ? || - || A ||
+|| *User Input* || D,L,A || ? || ? || L || A ||
+|| *Assets* || D,L,A || ? || ? || L,A || L ||
+|| *Sounds* || D,L,A || ? || ? || L || L,A || 
+|| *2D* || D,L,A || ? || ? || L || - ||
+|| *3D* || D || - || ? || - || L,A ||
+|| *Physics* || D || ? || ? || - || A ||
+|| *Networking* || D,L || ? || ? || L || L ||
 
 ===Entity Framework===
 
-|| *Feature* || *awe6* || *Flixel* || *!FlashPunk* || *NME* ||
-|| Global FSM || D,A || ? || A || _N/A_ ||
-|| Entity FSM || D,A || ? || - || _N/A_ ||
-|| Nested Entities || D,A || ? || X || _N/A_ ||
-|| Type Safe || L,A || ? || - || _N/A_ ||
+Please note, not all examples claim to be entity frameworks.
+
+|| || *awe6* || *Flixel* || *!FlashPunk* || *NME* || *Unity3D* ||
+|| *Global FSM* || A || ? || A || - || L ||
+|| *Entity FSM* || A || ? || - || - || - ||
+|| *Nested Entities* || A || ? || - || - || A ||
+|| *Messages* || A || ? || ? || L || L ||
+|| *Type Safe Database* || A || ? || - || - || L ||
+
+==More Frameworks==
+
+To review and add to the list:
+
+ * awe6
+ * Flixel
+ * !FlashPunk
+ * PBE
+ * NME
+ * GM2D
+ * Hydrax
+ * Cocos2D
+ * Unity3D
+ * !GameMaker
+ * NPlay
+ * Spaceport.io
+ * Sparrow
+ * FlashJS
+ * libGDX
+ * !AndEngine
