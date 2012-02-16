@@ -66,7 +66,10 @@ class InputMouse extends AInputMouse
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		_stage.focus = _stage;
+		if ( ( _stage.focus == null ) || ( _stage.focus.stage == null ) )
+		{
+			_stage.focus = _stage;
+		}
 		super._updater( p_deltaTime );
 	}
 	

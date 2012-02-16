@@ -31,6 +31,7 @@ package awe6.extras.gui;
 import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
+import flash.events.KeyboardEvent;
 #if flash
 import flash.text.AntiAliasType;
 #end
@@ -57,6 +58,9 @@ class Text extends GuiEntity
 		textStyle = ( p_textStyle != null ) ? p_textStyle : new TextStyle();
 		_isMultiline = p_isMultiline;
 		_isInput = p_isInput;
+		#if !flash
+		_isInput = false;
+		#end
 		super( p_kernel, p_width, p_height, false );
 		text = p_text;
 	}
@@ -65,12 +69,14 @@ class Text extends GuiEntity
 	{
 		super._init();
 		_textField = new TextField();
+		_textField.addEventListener( KeyboardEvent.KEY_DOWN, _stopEventPropogation );
+		_textField.addEventListener( KeyboardEvent.KEY_UP, _stopEventPropogation );
 		_textField.multiline = _isMultiline;
 		_textField.wordWrap = _isMultiline;
+		_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
 		#if js
 		_textField.wordWrap = true;
 		#end
-		_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
 		_textFormat = new TextFormat();
 		_draw();
 		_sprite.addChild( _textField );
@@ -79,6 +85,18 @@ class Text extends GuiEntity
 		_sprite.mouseChildren = _isInput;
 		_isDirty = false;
 		_prevTextStyle = textStyle.toString();
+	}
+	
+	override private function _disposer():Void
+	{
+		_textField.removeEventListener( KeyboardEvent.KEY_DOWN, _stopEventPropogation );
+		_textField.removeEventListener( KeyboardEvent.KEY_UP, _stopEventPropogation );
+		super._disposer();
+	}
+	
+	private function _stopEventPropogation( p_event:KeyboardEvent ):Void
+	{
+		p_event.stopImmediatePropagation();
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
