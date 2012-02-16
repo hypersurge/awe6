@@ -41,6 +41,7 @@ class Overlay extends AOverlay
 	
 	override private function _driverInit():Void
 	{
+		cast( _borderView, View ).context.mouseEnabled = false;
 		_context.mouseEnabled = false;
 		
 		_pauseContext = new Context();

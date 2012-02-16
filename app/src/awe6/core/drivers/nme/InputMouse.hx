@@ -65,7 +65,11 @@ class InputMouse extends AInputMouse
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
 	{
-		_stage.focus = _stage;
+		// cpp doesn't have "focus", but put here in case one day it does
+		if ( ( _stage.focus == null ) || ( _stage.focus.stage == null ) )
+		{
+			_stage.focus = _stage;
+		}
 		super._updater( p_deltaTime );
 	}
 	
