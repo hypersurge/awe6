@@ -3,7 +3,7 @@
 
 https://awe6.googlecode.com/svn/trunk/docs/images/icons/awe6.png
 
-Pronounced "awesome"; `awe6` is `game` inverted.
+`awe6` is `game` inverted.
 
 Its purpose is to create a scalable, flexible and approachable tool to assist in the rapid development of [DeveloperGallery quality games].  What [GameGenres types of game], and for what type of platform are intentionally undefined to embrace extensibility.
 
