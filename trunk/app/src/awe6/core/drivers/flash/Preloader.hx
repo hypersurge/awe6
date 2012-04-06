@@ -91,7 +91,8 @@ class Preloader extends APreloader
 		if ( _loader != null )
 		{
 			#if flash10
-			_loader.unloadAndStop();
+//			_loader.unloadAndStop(); // todo : potentially unsafe for globally registered fonts - needs investigation
+			_loader.unload();
 			#else
 			_loader.unload();
 			#end
@@ -200,6 +201,10 @@ private class _HelperSwfParser
 		}
 		for ( i in classes )
 		{
+			if ( i == Type.resolveClass( "com.google.analytics.components.FlashTracker" ) )
+			{
+				continue;
+			}
 			if ( Std.is( Type.createEmptyInstance( i ), Font ) )
 			{
 				try
