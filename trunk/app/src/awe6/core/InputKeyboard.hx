@@ -36,7 +36,7 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef InputKeyboard = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "InputKeyboard" ) )>;
+typedef InputKeyboard = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "InputKeyboard" ) ]>;
 #elseif cpp
 typedef InputKeyboard = awe6.core.drivers.nme.InputKeyboard;
 #elseif flash

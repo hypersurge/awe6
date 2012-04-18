@@ -37,7 +37,7 @@
  * @author	Robert Fell
  **/
 #if awe6DriverRemap
-typedef ASession = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Session" ) )>;
+typedef ASession = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Session" ) ]>;
 #elseif cpp
 typedef ASession = awe6.core.drivers.nme.Session;
 #elseif flash

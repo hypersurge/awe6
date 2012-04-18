@@ -36,7 +36,7 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Overlay = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Overlay" ) )>;
+typedef Overlay = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Overlay" ) ]>;
 #elseif cpp
 typedef Overlay = awe6.core.drivers.nme.Overlay;
 #elseif flash

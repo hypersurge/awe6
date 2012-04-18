@@ -37,7 +37,7 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef APreloader = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Preloader" ) )>;
+typedef APreloader = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Preloader" ) ]>;
 #elseif cpp
 typedef APreloader = awe6.core.drivers.nme.Preloader;
 #elseif flash
