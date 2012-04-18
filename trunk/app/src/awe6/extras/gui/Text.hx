@@ -32,6 +32,7 @@ import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
 import flash.events.KeyboardEvent;
+import flash.filters.BitmapFilter;
 #if flash
 import flash.text.AntiAliasType;
 #end
@@ -145,7 +146,15 @@ class Text extends GuiEntity
 				}				
 			}
 			#end
-			_textField.filters = textStyle.filters;
+			var l_filters:Array<BitmapFilter> = [];
+			for ( i in textStyle.filters )
+			{
+				if ( Std.is( i, BitmapFilter ) )
+				{
+					l_filters.push( i );
+				}
+			}
+			_textField.filters = l_filters;
 			_textField.defaultTextFormat = _textFormat;
 			_textField.setTextFormat( _textFormat );
 		}
