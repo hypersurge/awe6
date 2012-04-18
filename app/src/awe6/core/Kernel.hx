@@ -36,7 +36,7 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Kernel = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Kernel" ) )>;
+typedef Kernel = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Kernel" ) ]>;
 #elseif cpp
 typedef Kernel = awe6.core.drivers.nme.Kernel;
 #elseif flash

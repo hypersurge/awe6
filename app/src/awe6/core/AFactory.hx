@@ -38,7 +38,7 @@ package awe6.core;
  **/
 
 #if awe6DriverRemap
-typedef AFactory = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "Factory" ) )>;
+typedef AFactory = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Factory" ) ]>;
 #elseif cpp
 typedef AFactory = awe6.core.drivers.nme.Factory;
 #elseif flash

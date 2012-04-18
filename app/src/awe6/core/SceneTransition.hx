@@ -36,7 +36,7 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef SceneTransition = haxe.macro.MacroType<( awe6.core.Macros.driverRemap( "SceneTransition" ) )>;
+typedef SceneTransition = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "SceneTransition" ) ]>;
 #elseif cpp
 typedef SceneTransition = awe6.core.drivers.nme.SceneTransition;
 #elseif flash
