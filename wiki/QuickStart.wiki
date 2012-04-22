@@ -3,7 +3,7 @@
 
 = Prerequisites =
 
-  * Install [http://haxe.org/download haXe].
+  * Install [http://haxe.org/download Haxe].
   * Install [http://www.flashdevelop.org/wikidocs/index.php?title=Installation FlashDevelop].
 
 = Installing awe6 & !FlashDevelop project files & templates =
@@ -20,7 +20,7 @@ haxelib run awe6 install
 = Starting a new project with awe6 =
 
   * Open !FlashDevelop.
-  * _Project > New Project > !HaXe > awe6 Project_
+  * _Project > New Project > Haxe > awe6 Project_
   * Hit F5 to compile & run.
   * Extend / modify as required.
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
