@@ -49,5 +49,5 @@ The Next Big Thing comes along too often to develop specifically for it.  Theref
 === Approach ===
 
   # Cross platform interfaces defining top level game functionality. All public signatures are platform agnostic.
-  # [http://www.haxe.org HaXe] implementation of all model and controller functionality.  All code runs on supported haXe targets (swf, js, cpp).
+  # [http://www.haxe.org Haxe] implementation of all model and controller functionality.  All code runs on supported haxe targets (swf, js, cpp).
   # Platform specific implementation of view and input functionality using custom driver packages (flash, nme & jeash drivers are included).
