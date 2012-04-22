@@ -6,7 +6,7 @@ You can readily deploy your awe6 powered games to multiple mobile devices (e.g. 
 
 ==NME==
 
-[http://haxenme.org NME] is haXe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
+[http://haxenme.org NME] is haxe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
 
 To use NME with awe6 simply add the following line to your NME project's nmml file:
 
