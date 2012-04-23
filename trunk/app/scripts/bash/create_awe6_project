@@ -1,0 +1,72 @@
+#!/bin/bash
+
+HAXELIB_PATH="`cat $HOME/.haxelib`"
+AWE6_PATH="$HAXELIB_PATH/awe6"
+if [ -d "$AWE6_PATH" ];then
+
+  # Test if there are 3 arguments
+
+  if [ "$#" -eq 3 ]; then
+
+    FILE_FULL="$1"
+    PACKAGE_NAME="$2"
+    DEFAULT_USER="$3"
+    PACKAGE_DOT="$PACKAGE_NAME."
+    CBI=" "
+    CSLB=""
+
+    # Extract file path
+
+    FILE_NAME="`echo -n $FILE_FULL | sed -e 's/^.*\///'`"
+    FILE_BASE="`echo -n $FILE_FULL | sed -e "s/$FILE_NAME$//"`"
+
+    if [ -z "$FILE_BASE" ];then
+      FILE_BASE="."
+    fi
+
+    # Test if base directory exists
+
+    if [ -d "$FILE_BASE" ];then
+
+      # and go there
+
+      cd "$FILE_BASE"
+
+      # Test if project dir exists
+
+      if [ -d "$FILE_NAME" ];then
+        echo "Directory $FILE_FULL already exists"
+      else
+        mkdir "$FILE_NAME"
+        cd "$FILE_NAME"
+        AWE6_PATH="$AWE6_PATH/`cat $AWE6_PATH/.current | sed -e 's/\./,/g'`"
+        RES_PATH="$AWE6_PATH/__resources"
+        unzip "$RES_PATH/flashDevelop.zip" >/dev/null
+        rm -rf Templates
+        mv "Projects/313 HaXe - awe6 Project"/* .
+        rm -rf Projects
+        mv "src/\$(PackagePath)" "src/$PACKAGE_NAME"
+        find . -name *.template | while read;do
+          template="$REPLY"
+          hx="`echo $template | sed -e 's/.template$//'`"
+          cat "$template" | sed \
+            -e "s/\$(DefaultUser)/$DEFAULT_USER/" \
+            -e "s/\$(ProjectName)/$FILE_NAME/" \
+            -e "s/\$(PackageName)/$PACKAGE_NAME/" \
+            -e "s/\$(PackageDot)/$PACKAGE_DOT/" \
+            -e "s/\$(CBI)/$CBI/" \
+            -e "s/\$(CSLB)/$CSLB/" \
+          >"$hx"
+          rm -f "$template"
+        done
+        echo "Project $FILE_FULL successfully created"
+      fi
+    else
+      echo "Directory $FILE_BASE doesn't exists"
+    fi
+  else
+    echo "Syntax: $0 <ProjectPath> <PackageName> <AuthorName>"
+  fi
+else
+  echo "Project awe6 not installed.\nPlease run 'haxelib install awe6'"
+fi
