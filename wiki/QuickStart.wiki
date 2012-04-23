@@ -35,7 +35,7 @@ haxelib run awe6 install
 
 = on Linux =
 
-  * Follow the [http://www.joshuagranick.com/blog/2012/04/blog/2012/04/10/how-to-install-haxe-nme-and-monodevelop/ instructions] on this post
+  * Follow the [http://www.joshuagranick.com/blog/2012/04/10/how-to-install-haxe-nme-and-monodevelop/ instructions] on this post
   * Download these [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fscripts%2Fbash scripts] and put somewhere pointed by the PATH environment (Ex. ~/bin or /usr/local/bin)
   * make them runnable by running:
 {{{
