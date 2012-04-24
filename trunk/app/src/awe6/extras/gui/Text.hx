@@ -146,15 +146,18 @@ class Text extends GuiEntity
 				}				
 			}
 			#end
-			var l_filters:Array<BitmapFilter> = [];
-			for ( i in textStyle.filters )
+			if ( textStyle.filters != null )
 			{
-				if ( Std.is( i, BitmapFilter ) )
+				var l_filters:Array<BitmapFilter> = [];
+				for ( i in textStyle.filters )
 				{
-					l_filters.push( i );
+					if ( Std.is( i, BitmapFilter ) )
+					{
+						l_filters.push( i );
+					}
 				}
+				_textField.filters = l_filters;
 			}
-			_textField.filters = l_filters;
 			_textField.defaultTextFormat = _textFormat;
 			_textField.setTextFormat( _textFormat );
 		}
