@@ -1,6 +1,5 @@
 = Haxe WWX, 14 April 2012 =
 
-Big thanks to SilexLabs for organizing this event.  Great community and upbeat throughout.
+Big thanks to !SilexLabs for organizing this event.  Great community and upbeat throughout.
 
 Slides from Rob's presentation are available [http://prezi.com/yzvwdmevm9_c/_tagpub-may-the-force-be-with-you-making-a-game-with-awe6/?auth_key=8eadceff59596f8a8b289c119c02fa3dc670c4b9 via this link on Prezi.com].
-
