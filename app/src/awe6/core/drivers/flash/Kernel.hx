@@ -148,9 +148,11 @@ class Kernel extends AKernel
 	
 	override private function _driverSetIsEyeCandy( p_value:Bool ):Void
 	{
+		#if !awe6Air
 		_contextMenu.customItems.remove( _eyeCandyEnableContextMenuItem );
 		_contextMenu.customItems.remove( _eyeCandyDisableContextMenuItem );
 		_contextMenu.customItems.push( isEyeCandy ? _eyeCandyDisableContextMenuItem : _eyeCandyEnableContextMenuItem );
+		#end
 	}
 	
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
@@ -160,9 +162,11 @@ class Kernel extends AKernel
 			isFullScreen = false;
 			return;
 		}
+		#if !awe6Air
 		_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
 		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
 		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
+		#end
 		_stage.fullScreenSourceRect = null;
 		if ( isFullScreen )
 		{
@@ -204,4 +208,3 @@ class Kernel extends AKernel
 	}
 	
 }
-
