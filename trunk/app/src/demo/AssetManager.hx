@@ -125,21 +125,34 @@ class AssetManager extends AAssetManager
 		switch( p_type )
 		{
 			#if !js
-			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+			case OVERLAY_BACKGROUND :
+				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
-			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
+			case OVERLAY_BACKGROUND :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
 			#end
-			case OVERLAY_BACK_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackUp.png" );
-			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackOver.png" );
-			case OVERLAY_MUTE_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteUp.png" );
-			case OVERLAY_MUTE_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteOver.png" );
-			case OVERLAY_UNMUTE_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteUp.png" );
-			case OVERLAY_UNMUTE_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteOver.png" );
-			case OVERLAY_PAUSE_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseUp.png" );
-			case OVERLAY_PAUSE_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseOver.png" );
-			case OVERLAY_UNPAUSE_UP : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseUp.png" );
-			case OVERLAY_UNPAUSE_OVER : l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseOver.png" );
-			case BACKGROUND : l_bitmap.bitmapData = Assets.getBitmapData( "assets/scenes/Background.png" );
+			case OVERLAY_BACK_UP :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackUp.png" );
+			case OVERLAY_BACK_OVER :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackOver.png" );
+			case OVERLAY_MUTE_UP :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteUp.png" );
+			case OVERLAY_MUTE_OVER :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteOver.png" );
+			case OVERLAY_UNMUTE_UP :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteUp.png" );
+			case OVERLAY_UNMUTE_OVER :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteOver.png" );
+			case OVERLAY_PAUSE_UP :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseUp.png" );
+			case OVERLAY_PAUSE_OVER :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseOver.png" );
+			case OVERLAY_UNPAUSE_UP :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseUp.png" );
+			case OVERLAY_UNPAUSE_OVER :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseOver.png" );
+			case BACKGROUND :
+				l_bitmap.bitmapData = Assets.getBitmapData( "assets/scenes/Background.png" );
 		}
 		return new View( _kernel, l_sprite );
 	}

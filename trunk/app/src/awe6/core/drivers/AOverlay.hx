@@ -182,12 +182,18 @@ class AOverlay extends Entity, implements IOverlayProcess
 	{
 		return switch( p_type )
 		{
-			case BACK : _buttonBack;
-			case MUTE : _buttonMute;
-			case UNMUTE : _buttonUnmute;
-			case PAUSE : _buttonPause;
-			case UNPAUSE : _buttonUnpause;
-			case SUB_TYPE( l_value ) : null;
+			case BACK :
+				_buttonBack;
+			case MUTE :
+				_buttonMute;
+			case UNMUTE :
+				_buttonUnmute;
+			case PAUSE :
+				_buttonPause;
+			case UNPAUSE :
+				_buttonUnpause;
+			case SUB_TYPE( l_value ) :
+				null;
 		}		
 	}
 	
@@ -245,46 +251,52 @@ class AOverlay extends Entity, implements IOverlayProcess
 	{
 		switch( p_type )
 		{
-			case BACK : if ( _buttonBack.view.isInViewStack )
-			{
-				if ( !_kernel.isActive )
+			case BACK :
+				if ( _buttonBack.view.isInViewStack )
 				{
-					activateButton( EOverlayButton.UNPAUSE );
+					if ( !_kernel.isActive )
+					{
+						activateButton( EOverlayButton.UNPAUSE );
+					}
+					_drawPause( false );
+					_kernel.resume();
+					_kernel.scenes.back();
 				}
-				_drawPause( false );
-				_kernel.resume();
-				_kernel.scenes.back();
-			}
-			case MUTE : if ( _buttonMute.view.isInViewStack )
-			{
-				showButton( EOverlayButton.MUTE, false );
-				showButton( EOverlayButton.UNMUTE, true );
-				_kernel.audio.isMute = true;
-			}
-			case UNMUTE : if ( _buttonUnmute.view.isInViewStack && !_buttonUnpause.view.isInViewStack )
-			{
-				showButton( EOverlayButton.MUTE, true );
-				showButton( EOverlayButton.UNMUTE, false );
-				_kernel.audio.isMute = false;
-			}
-			case PAUSE : if ( _buttonPause.view.isInViewStack )
-			{
-				_wasMute = _kernel.audio.isMute;
-				showButton( EOverlayButton.PAUSE, false );
-				showButton( EOverlayButton.UNPAUSE, true );
-				_kernel.pause();
-				_drawPause( true );
-				activateButton( EOverlayButton.MUTE );
-			}
-			case UNPAUSE : if ( _buttonUnpause.view.isInViewStack )
-			{
-				showButton( EOverlayButton.PAUSE, true );
-				showButton( EOverlayButton.UNPAUSE, false );
-				_kernel.resume();
-				_drawPause( false );
-				activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
-			}
-			case SUB_TYPE( l_value ) : null;
+			case MUTE :
+				if ( _buttonMute.view.isInViewStack )
+				{
+					showButton( EOverlayButton.MUTE, false );
+					showButton( EOverlayButton.UNMUTE, true );
+					_kernel.audio.isMute = true;
+				}
+			case UNMUTE :
+				if ( _buttonUnmute.view.isInViewStack && !_buttonUnpause.view.isInViewStack )
+				{
+					showButton( EOverlayButton.MUTE, true );
+					showButton( EOverlayButton.UNMUTE, false );
+					_kernel.audio.isMute = false;
+				}
+			case PAUSE :
+				if ( _buttonPause.view.isInViewStack )
+				{
+					_wasMute = _kernel.audio.isMute;
+					showButton( EOverlayButton.PAUSE, false );
+					showButton( EOverlayButton.UNPAUSE, true );
+					_kernel.pause();
+					_drawPause( true );
+					activateButton( EOverlayButton.MUTE );
+				}
+			case UNPAUSE :
+				if ( _buttonUnpause.view.isInViewStack )
+				{
+					showButton( EOverlayButton.PAUSE, true );
+					showButton( EOverlayButton.UNPAUSE, false );
+					_kernel.resume();
+					_drawPause( false );
+					activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
+				}
+			case SUB_TYPE( l_value ) :
+				null;
 		}
 	}
 	
@@ -310,4 +322,3 @@ class AOverlay extends Entity, implements IOverlayProcess
 	}	
 	
 }
-

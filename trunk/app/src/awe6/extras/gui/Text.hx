@@ -119,10 +119,14 @@ class Text extends GuiEntity
 		{
 			_textFormat.align = switch ( textStyle.align )
 			{
-				case LEFT : TextFormatAlign.LEFT;
-				case CENTER : TextFormatAlign.CENTER;
-				case RIGHT : TextFormatAlign.RIGHT;
-				case JUSTIFY : TextFormatAlign.JUSTIFY;
+				case LEFT :
+					TextFormatAlign.LEFT;
+				case CENTER :
+					TextFormatAlign.CENTER;
+				case RIGHT :
+					TextFormatAlign.RIGHT;
+				case JUSTIFY :
+					TextFormatAlign.JUSTIFY;
 			}
 			_textFormat.color = textStyle.color;
 			_textFormat.font = textStyle.font;

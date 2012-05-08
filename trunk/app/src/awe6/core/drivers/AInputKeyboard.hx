@@ -198,106 +198,206 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	{
 		return switch ( p_type )
 		{
-			case NUM_LOCK: 144; 
-			case CLEAR: 12; 
-			case HELP: 47; 
-			case ALT: 18; 
-			case BACKSPACE: 8; 
-			case CAPS_LOCK: 20; 
-			case CONTROL: 17; 
-			case DELETE: 46; 
-			case DOWN: 40; 
-			case END: 35; 
-			case ENTER: 13; 
-			case ESCAPE: 27; 
-			case F1: 112; 
-			case F10: 121; 
-			case F11: 122; 
-			case F12: 123; 
-			case F13: 124; 
-			case F14: 125; 
-			case F15: 126; 
-			case F2: 113; 
-			case F3: 114; 
-			case F4: 115; 
-			case F5: 116; 
-			case F6: 117; 
-			case F7: 118; 
-			case F8: 119; 
-			case F9: 120; 
-			case HOME: 36; 
-			case INSERT: 45; 
-			case LEFT: 37; 
-			case NUMPAD_0: 96; 
-			case NUMPAD_1: 97; 
-			case NUMPAD_2: 98; 
-			case NUMPAD_3: 99; 
-			case NUMPAD_4: 100; 
-			case NUMPAD_5: 101; 
-			case NUMPAD_6: 102; 
-			case NUMPAD_7: 103; 
-			case NUMPAD_8: 104; 
-			case NUMPAD_9: 105; 
-			case NUMPAD_ADD: 107; 
-			case NUMPAD_DECIMAL: 110; 
-			case NUMPAD_DIVIDE: 111; 
-			case NUMPAD_ENTER: 108; 
-			case NUMPAD_MULTIPLY: 106; 
-			case NUMPAD_SUBTRACT: 109; 
-			case PAGE_DOWN: 34; 
-			case PAGE_UP: 33; 
-			case RIGHT: 39; 
-			case SHIFT: 16; 
-			case SPACE: 32; 
-			case TAB: 9; 
-			case UP: 38; 
-			case A: 65; 
-			case B: 66; 
-			case C: 67; 
-			case D: 68; 
-			case E: 69; 
-			case F: 70; 
-			case G: 71; 
-			case H: 72; 
-			case I: 73; 
-			case J: 74; 
-			case K: 75; 
-			case L: 76; 
-			case M: 77; 
-			case N: 78; 
-			case O: 79; 
-			case P: 80; 
-			case Q: 81; 
-			case R: 82; 
-			case S: 83; 
-			case T: 84; 
-			case U: 85; 
-			case V: 86; 
-			case W: 87; 
-			case X: 88; 
-			case Y: 89; 
-			case Z: 90; 
-			case NUMBER_0: 48; 
-			case NUMBER_1: 49; 
-			case NUMBER_2: 50; 
-			case NUMBER_3: 51; 
-			case NUMBER_4: 52; 
-			case NUMBER_5: 53; 
-			case NUMBER_6: 54; 
-			case NUMBER_7: 55; 
-			case NUMBER_8: 56; 
-			case NUMBER_9: 57; 
-			case COLON: 186; 
-			case EQUALS: 187; 
-			case HYPHEN: 189; 
-			case SLASH: 191; 
-			case TILDE: 222; 
-			case SQUARELEFT: 219; 
-			case SQUARERIGHT: 221; 
-			case BACKSLASH: 220; 
-			case APOSTROPHE: 192; 
-			case TOPLEFT: 223;
-			case SUB_TYPE( l_value ): Std.int( l_value );
+			case NUM_LOCK :
+				144; 
+			case CLEAR :
+				12; 
+			case HELP :
+				47; 
+			case ALT :
+				18; 
+			case BACKSPACE :
+				8; 
+			case CAPS_LOCK :
+				20; 
+			case CONTROL :
+				17; 
+			case DELETE :
+				46; 
+			case DOWN :
+				40; 
+			case END :
+				35; 
+			case ENTER :
+				13; 
+			case ESCAPE :
+				27; 
+			case F1 :
+				112; 
+			case F10 :
+				121; 
+			case F11 :
+				122; 
+			case F12 :
+				123; 
+			case F13 :
+				124; 
+			case F14 :
+				125; 
+			case F15 :
+				126; 
+			case F2 :
+				113; 
+			case F3 :
+				114; 
+			case F4 :
+				115; 
+			case F5 :
+				116; 
+			case F6 :
+				117; 
+			case F7 :
+				118; 
+			case F8 :
+				119; 
+			case F9 :
+				120; 
+			case HOME :
+				36; 
+			case INSERT :
+				45; 
+			case LEFT :
+				37; 
+			case NUMPAD_0 :
+				96; 
+			case NUMPAD_1 :
+				97; 
+			case NUMPAD_2 :
+				98; 
+			case NUMPAD_3 :
+				99; 
+			case NUMPAD_4 :
+				100; 
+			case NUMPAD_5 :
+				101; 
+			case NUMPAD_6 :
+				102; 
+			case NUMPAD_7 :
+				103; 
+			case NUMPAD_8 :
+				104; 
+			case NUMPAD_9 :
+				105; 
+			case NUMPAD_ADD :
+				107; 
+			case NUMPAD_DECIMAL :
+				110; 
+			case NUMPAD_DIVIDE :
+				111; 
+			case NUMPAD_ENTER :
+				108; 
+			case NUMPAD_MULTIPLY :
+				106; 
+			case NUMPAD_SUBTRACT :
+				109; 
+			case PAGE_DOWN :
+				34; 
+			case PAGE_UP :
+				33; 
+			case RIGHT :
+				39; 
+			case SHIFT :
+				16; 
+			case SPACE :
+				32; 
+			case TAB :
+				9; 
+			case UP :
+				38; 
+			case A :
+				65; 
+			case B :
+				66; 
+			case C :
+				67; 
+			case D :
+				68; 
+			case E :
+				69; 
+			case F :
+				70; 
+			case G :
+				71; 
+			case H :
+				72; 
+			case I :
+				73; 
+			case J :
+				74; 
+			case K :
+				75; 
+			case L :
+				76; 
+			case M :
+				77; 
+			case N :
+				78; 
+			case O :
+				79; 
+			case P :
+				80; 
+			case Q :
+				81; 
+			case R :
+				82; 
+			case S :
+				83; 
+			case T :
+				84; 
+			case U :
+				85; 
+			case V :
+				86; 
+			case W :
+				87; 
+			case X :
+				88; 
+			case Y :
+				89; 
+			case Z :
+				90; 
+			case NUMBER_0 :
+				48; 
+			case NUMBER_1 :
+				49; 
+			case NUMBER_2 :
+				50; 
+			case NUMBER_3 :
+				51; 
+			case NUMBER_4 :
+				52; 
+			case NUMBER_5 :
+				53; 
+			case NUMBER_6 :
+				54; 
+			case NUMBER_7 :
+				55; 
+			case NUMBER_8 :
+				56; 
+			case NUMBER_9 :
+				57; 
+			case COLON :
+				186; 
+			case EQUALS :
+				187; 
+			case HYPHEN :
+				189; 
+			case SLASH :
+				191; 
+			case TILDE :
+				222; 
+			case SQUARELEFT :
+				219; 
+			case SQUARERIGHT :
+				221; 
+			case BACKSLASH :
+				220; 
+			case APOSTROPHE :
+				192; 
+			case TOPLEFT :
+				223;
+			case SUB_TYPE( l_value ) :
+				Std.int( l_value );
 		}
 	}
 	

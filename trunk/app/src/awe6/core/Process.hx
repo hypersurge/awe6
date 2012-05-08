@@ -34,9 +34,6 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IProcess;
 import awe6.interfaces.ITools;
 
-// TODO: (M. Ivanchev) remove _isBeingDisposed once stability is guranteed.
-//
-
 /**
  * The Process class provides a minimalist implementation of the IProcess interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
