@@ -147,11 +147,16 @@ class InputMouse extends AInputMouse
 		#if flash10
 		switch( p_value )
 		{
-			case ARROW : Mouse.cursor = MouseCursor.ARROW;
-			case BUTTON : Mouse.cursor = MouseCursor.BUTTON;
-			case HAND : Mouse.cursor = MouseCursor.HAND;
-			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
-			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
+			case ARROW :
+				Mouse.cursor = MouseCursor.ARROW;
+			case BUTTON :
+				Mouse.cursor = MouseCursor.BUTTON;
+			case HAND :
+				Mouse.cursor = MouseCursor.HAND;
+			case IBEAM :
+				Mouse.cursor = MouseCursor.IBEAM;
+			case SUB_TYPE( l_value ) :
+				null; // Have a register cursor approach here;
 		}
 		#end
 		return super._set_cursorType( p_value );

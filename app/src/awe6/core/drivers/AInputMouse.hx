@@ -200,9 +200,12 @@ class AInputMouse extends Process, implements IInputMouse
 		}
 		return switch ( p_type )
 		{
-			case LEFT : _buttonLeft;
-			case MIDDLE : _buttonMiddle;
-			case RIGHT : _buttonRight;
+			case LEFT :
+				_buttonLeft;
+			case MIDDLE :
+				_buttonMiddle;
+			case RIGHT :
+				_buttonRight;
 		}
 	}
 	

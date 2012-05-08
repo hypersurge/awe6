@@ -104,10 +104,14 @@ class Factory extends AFactory
 	{
 		switch ( p_type )
 		{
-			case INTRO : return new Intro( _kernel, p_type );
-			case GAME : return new Game( _kernel, p_type );
-			case RESULTS : return new Results( _kernel, p_type );
-			default : null;
+			case INTRO :
+				return new Intro( _kernel, p_type );
+			case GAME :
+				return new Game( _kernel, p_type );
+			case RESULTS :
+				return new Results( _kernel, p_type );
+			default :
+				null;
 		}
 		return super.createScene( p_type );
 	}	
@@ -122,12 +126,18 @@ class Factory extends AFactory
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( p_type )
 		{
-			case ETextStyle.HEADLINE : 24;
-			case ETextStyle.OVERSIZED : 72;
-			case ETextStyle.SUBHEAD : 18;
-			case ETextStyle.BUTTON : 12;
-			case ETextStyle.SMALLPRINT : 6;
-			default : 12;
+			case ETextStyle.HEADLINE :
+				24;
+			case ETextStyle.OVERSIZED :
+				72;
+			case ETextStyle.SUBHEAD :
+				18;
+			case ETextStyle.BUTTON :
+				12;
+			case ETextStyle.SMALLPRINT :
+				6;
+			default :
+				12;
 		}
 		return l_result;
 	}
@@ -136,10 +146,14 @@ class Factory extends AFactory
 	{
 		switch ( p_type )
 		{
-			case INTRO : return null;
-			case GAME : return EScene.INTRO;
-			case RESULTS : return EScene.INTRO;
-			default : null;
+			case INTRO :
+				return null;
+			case GAME :
+				return EScene.INTRO;
+			case RESULTS :
+				return EScene.INTRO;
+			default :
+				null;
 		}
 		return super.getBackSceneType( p_type );
 	}	
@@ -148,10 +162,14 @@ class Factory extends AFactory
 	{
 		switch ( p_type )
 		{
-			case INTRO : return EScene.GAME;
-			case GAME : return EScene.RESULTS;
-			case RESULTS : return EScene.INTRO;
-			default : null;
+			case INTRO :
+				return EScene.GAME;
+			case GAME :
+				return EScene.RESULTS;
+			case RESULTS :
+				return EScene.INTRO;
+			default :
+				null;
 		}
 		return super.getNextSceneType( p_type );
 	}	

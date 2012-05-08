@@ -75,13 +75,20 @@ class InputJoypad implements IInputJoypad
 	{
 		switch ( p_type )
 		{
-			case FIRE : return ( _check( EJoypadButton.PRIMARY, p_function ) || _check( EJoypadButton.SECONDARY, p_function ) );
-			case UP : return p_function( _keyUp ) || p_function( _keyUpAlt );
-			case RIGHT : return p_function( _keyRight ) || p_function( _keyRightAlt );
-			case DOWN : return p_function( _keyDown ) || p_function( _keyDownAlt );
-			case LEFT : return p_function( _keyLeft ) || p_function( _keyLeftAlt );
-			case PRIMARY : return p_function( _keyPrimary ) || p_function( _keyPrimaryAlt );
-			case SECONDARY : return p_function( _keySecondary ) || p_function( _keySecondaryAlt );
+			case FIRE :
+				return ( _check( EJoypadButton.PRIMARY, p_function ) || _check( EJoypadButton.SECONDARY, p_function ) );
+			case UP :
+				return p_function( _keyUp ) || p_function( _keyUpAlt );
+			case RIGHT :
+				return p_function( _keyRight ) || p_function( _keyRightAlt );
+			case DOWN :
+				return p_function( _keyDown ) || p_function( _keyDownAlt );
+			case LEFT :
+				return p_function( _keyLeft ) || p_function( _keyLeftAlt );
+			case PRIMARY :
+				return p_function( _keyPrimary ) || p_function( _keyPrimaryAlt );
+			case SECONDARY :
+				return p_function( _keySecondary ) || p_function( _keySecondaryAlt );
 		}
 	}
 	
@@ -105,13 +112,20 @@ class InputJoypad implements IInputJoypad
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyDownDuration;
 		switch ( p_type )
 		{
-			case FIRE : return Std.int( Math.max( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
-			case UP : return Std.int( Math.max( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
-			case RIGHT : return Std.int( Math.max( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
-			case DOWN : return Std.int( Math.max( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
-			case LEFT : return Std.int( Math.max( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
-			case PRIMARY : return Std.int( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
-			case SECONDARY : return Std.int( Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
+			case FIRE :
+				return Std.int( Math.max( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
+			case UP :
+				return Std.int( Math.max( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
+			case RIGHT :
+				return Std.int( Math.max( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
+			case DOWN :
+				return Std.int( Math.max( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
+			case LEFT :
+				return Std.int( Math.max( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
+			case PRIMARY :
+				return Std.int( Math.max( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
+			case SECONDARY :
+				return Std.int( Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
 	
@@ -120,13 +134,20 @@ class InputJoypad implements IInputJoypad
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyUpDuration;
 		switch ( p_type )
 		{
-			case FIRE : return Std.int( Math.min( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
-			case UP : return Std.int( Math.min( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
-			case RIGHT : return Std.int( Math.min( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
-			case DOWN : return Std.int( Math.min( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
-			case LEFT : return Std.int( Math.min( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
-			case PRIMARY : return Std.int( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
-			case SECONDARY : return Std.int( Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
+			case FIRE :
+				return Std.int( Math.min( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ), Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) ) );
+			case UP :
+				return Std.int( Math.min( l_function( _keyUp, p_asTime, p_isPrevious ), l_function( _keyUpAlt, p_asTime, p_isPrevious ) ) );
+			case RIGHT :
+				return Std.int( Math.min( l_function( _keyRight, p_asTime, p_isPrevious ), l_function( _keyRightAlt, p_asTime, p_isPrevious ) ) );
+			case DOWN :
+				return Std.int( Math.min( l_function( _keyDown, p_asTime, p_isPrevious ), l_function( _keyDownAlt, p_asTime, p_isPrevious ) ) );
+			case LEFT :
+				return Std.int( Math.min( l_function( _keyLeft, p_asTime, p_isPrevious ), l_function( _keyLeftAlt, p_asTime, p_isPrevious ) ) );
+			case PRIMARY :
+				return Std.int( Math.min( l_function( _keyPrimary, p_asTime, p_isPrevious ), l_function( _keyPrimaryAlt, p_asTime, p_isPrevious ) ) );
+			case SECONDARY :
+				return Std.int( Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
 	

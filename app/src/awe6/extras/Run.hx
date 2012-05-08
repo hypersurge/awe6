@@ -61,7 +61,8 @@ class Run
 		}
 		switch ( l_command )
 		{
-			case _COMMAND_INSTALL : _install();
+			case _COMMAND_INSTALL :
+				_install();
 		}
 	}
 	

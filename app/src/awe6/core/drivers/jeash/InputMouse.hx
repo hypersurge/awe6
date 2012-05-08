@@ -125,11 +125,16 @@ class InputMouse extends AInputMouse
 	{
 		switch( p_value )
 		{
-			case ARROW : Lib.jeashSetCursor( false );
-			case BUTTON : Lib.jeashSetCursor( true );
-			case HAND : Lib.jeashSetCursor( true );
-			case IBEAM : Lib.jeashSetCursor( false );
-			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
+			case ARROW :
+				Lib.jeashSetCursor( false );
+			case BUTTON :
+				Lib.jeashSetCursor( true );
+			case HAND :
+				Lib.jeashSetCursor( true );
+			case IBEAM :
+				Lib.jeashSetCursor( false );
+			case SUB_TYPE( l_value ) :
+				null; // Have a register cursor approach here;
 		}
 		return super._set_cursorType( p_value );
 	}

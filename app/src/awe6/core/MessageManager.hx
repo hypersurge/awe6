@@ -143,8 +143,10 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				switch ( Type.typeof( p_message ) )
 				{
-					case ValueType.TEnum( e ) : if ( !Type.enumEq( p_message, i.message ) ) continue;
-					default : if ( p_message != i.message ) continue;
+					case ValueType.TEnum( e ) :
+						if ( !Type.enumEq( p_message, i.message ) ) continue;
+					default :
+						if ( p_message != i.message ) continue;
 				}
 			}
 			if ( ( p_handler != null ) && ( !Reflect.compareMethods( i.handler, p_handler ) ) )

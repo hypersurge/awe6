@@ -131,14 +131,6 @@ class InputMouse extends AInputMouse
 	
 	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-/*		switch( p_value )
-		{
-			case ARROW : Mouse.cursor = MouseCursor.ARROW;
-			case BUTTON : Mouse.cursor = MouseCursor.BUTTON;
-			case HAND : Mouse.cursor = MouseCursor.HAND;
-			case IBEAM : Mouse.cursor = MouseCursor.IBEAM;
-			case SUB_TYPE( l_value ) : null; // Have a register cursor approach here;
-		}*/
 		return super._set_cursorType( p_value );
 	}
 
