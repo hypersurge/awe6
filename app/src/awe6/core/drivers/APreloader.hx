@@ -110,7 +110,7 @@ class APreloader extends Process, implements IPreloader
 		{
 			_kernel.onPreloaderComplete( this );
 		}
-		view.isVisible = _age > 500;
+		view.isVisible = _age > 100;
 	}
 	
 	override private function _disposer():Void 
