@@ -95,7 +95,7 @@ class MessageManager extends Process, implements IMessageManager
 		{
 			return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0], true );		
 		}
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( null, p_message, null, p_target );
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( p_target, p_message, null, p_target );
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
@@ -144,9 +144,15 @@ class MessageManager extends Process, implements IMessageManager
 				switch ( Type.typeof( p_message ) )
 				{
 					case ValueType.TEnum( e ) :
-						if ( !Type.enumEq( p_message, i.message ) ) continue;
+						if ( !Type.enumEq( p_message, i.message ) )
+						{
+							continue;
+						}
 					default :
-						if ( p_message != i.message ) continue;
+						if ( p_message != i.message )
+						{
+							continue;
+						}
 				}
 			}
 			if ( ( p_handler != null ) && ( !Reflect.compareMethods( i.handler, p_handler ) ) )
@@ -187,4 +193,18 @@ private class _HelperSubscription<M,T>
 		isRemovedAfterFirstSend = p_isRemovedAfterFirstSend;
 		messageClass = Type.getClass( p_message );
 	}
+	
+	public function toString():String
+	{
+		var l_result:String = "_HelperSubscription { \n"
+			+ "subscriber : " + subscriber + "\n"
+			+ "message : " + message+ "\n"
+			+ "handler : " + handler+ "\n"
+			+ "sender : " + sender+ "\n"
+			+ "senderClassType : " + senderClassType+ "\n"
+			+ "isRemovedAfterFirstSend : " + isRemovedAfterFirstSend+ "\n"
+			+ "messageClass : " + messageClass + "\n }";
+		return l_result;
+	}
+	
 }
