@@ -157,7 +157,7 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				continue;
 			}
-			if ( ( i.senderClassType != null ) && ( !Std.is( p_sender, i.senderClassType ) ) )
+			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( !Std.is( i.senderClassType, p_sender ) ) )
 			{
 				continue;
 			}
