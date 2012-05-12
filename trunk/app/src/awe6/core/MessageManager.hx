@@ -95,7 +95,7 @@ class MessageManager extends Process, implements IMessageManager
 		{
 			return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0], true );		
 		}
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( p_target, p_message, null, p_target );
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
