@@ -144,7 +144,7 @@ class MessageManager extends Process, implements IMessageManager
 				switch ( Type.typeof( p_message ) )
 				{
 					case ValueType.TEnum( e ) :
-						if ( !Type.enumEq( p_message, i.message ) )
+						if ( Type.getEnum(p_message) != Type.getEnum( i.message ) || Type.enumConstructor(p_message) != Type.enumConstructor( i.message ))
 						{
 							continue;
 						}
@@ -163,7 +163,7 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				continue;
 			}
-			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( !Std.is( i.senderClassType, p_sender ) ) )
+			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( !Std.is( p_sender, i.senderClassType ) ) )
 			{
 				continue;
 			}
