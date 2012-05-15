@@ -65,7 +65,7 @@ class Preloader extends APreloader
 		_loaderContext = new LoaderContext();
 		_loaderContext.applicationDomain = ApplicationDomain.currentDomain;
 		#if awe6Air
-		_loaderContext.allowLoadBytesCodeExecution = true;
+		_loaderContext.allowCodeImport = true;
 		#end
 		super._init();
 	}
