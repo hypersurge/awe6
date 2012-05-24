@@ -32,6 +32,7 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IMessageManager;
 import awe6.interfaces.IPriority;
 import haxe.FastList;
+import haxe.Log;
 
 /**
  * The MessageManager class provides a minimalist implementation of the IMessageManager interface.
@@ -144,7 +145,7 @@ class MessageManager extends Process, implements IMessageManager
 				switch ( Type.typeof( p_message ) )
 				{
 					case ValueType.TEnum( e ) :
-						if ( Type.getEnum(cast (p_message, EnumValue)) != Type.getEnum( i.message ) || Type.enumConstructor(cast (p_message,EnumValue)) != Type.enumConstructor( i.message ))
+						if ( Type.getEnum(untyped p_message) != Type.getEnum( i.message ) || Type.enumConstructor(untyped p_message) != Type.enumConstructor( i.message ))
 						{
 							continue;
 						}
