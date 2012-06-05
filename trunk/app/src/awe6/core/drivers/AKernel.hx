@@ -133,10 +133,10 @@ class AKernel extends Process, implements IKernel
 		messenger = _messageManager = new MessageManager( _kernel );
 		_view.addChild( _sceneManager.view, 1 );
 		_addProcess( _assetManagerProcess );
-		_addProcess( _audioManager );
 		_addProcess( _inputManager );
 		_addProcess( _sceneManager );
 		_addProcess( _messageManager );
+		_addProcess( _audioManager );
 		
 		// Set defaults for visual switches.
 		isEyeCandy = true;
@@ -150,7 +150,6 @@ class AKernel extends Process, implements IKernel
 		_preloader = factory.createPreloader();
 		_addProcess( _preloader );
 		_view.addChild( _preloader.view, 2 );
-		_addProcess( _view );
 	}
 
 	private function _driverGetIsLocal():Bool
@@ -180,10 +179,10 @@ class AKernel extends Process, implements IKernel
 		{
 			_removeProcess( _assetManagerProcess );
 			assets = _assetManagerProcess = l_assetManagerProcess;
-			_addProcess( _assetManagerProcess );
+			_addProcess( _assetManagerProcess, false );
 		}
 		overlay = _overlayProcess = factory.createOverlay();
-		_addProcess( _overlayProcess, false );
+		_addProcess( _overlayProcess, true );
 		_view.addChild( _overlayProcess.view, 3 );
 		if ( isDebug )
 		{
@@ -203,6 +202,7 @@ class AKernel extends Process, implements IKernel
 		{
 			i.update( l_deltaTime );
 		}
+		_view.update( l_deltaTime );
 	}
 	
 	override private function _disposer():Void
