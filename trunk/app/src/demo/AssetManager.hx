@@ -88,6 +88,20 @@ class AssetManager extends AAssetManager
 		{
 			p_packageId = _PACKAGE_ID;
 		}		
+		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) )
+		{
+			var l_extension:String = ".mp3";
+			#if cpp
+			l_extension = ".ogg"; // doesn't work on Macs?
+			#elseif js
+			l_extension = untyped jeash.media.Sound.jeashCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+			#end
+			p_id += l_extension;
+		}
+		if ( ( p_packageId.length > 0 ) && ( p_packageId.substr( -1, 1 ) != "." ) )
+		{
+			p_packageId += ".";
+		}
 		var l_assetName:String = StringTools.replace( p_packageId, ".", "/" ) + p_id;
 		var l_result:Dynamic = Assets.getSound( l_assetName );
 		if ( l_result != null )
