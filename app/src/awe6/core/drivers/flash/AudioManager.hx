@@ -43,18 +43,10 @@ import flash.media.SoundTransform;
  */
 class AudioManager extends AAudioManager
 {
-	private var _extension:String;
 
-	override private function _init():Void
-	{
-		super._init();
-		_extension = ".mp3";
-		_packageId = StringTools.replace( _packageId + ".", ".", "/" );
-	}
-	
 	override private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
-		return new _HelperSound( _kernel, p_id, _packageId, _extension, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
+		return new _HelperSound( _kernel, p_id, _packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
 
 	override private function _driverSetIsMute( ?p_value:Bool ):Void
@@ -66,20 +58,18 @@ class AudioManager extends AAudioManager
 
 class _HelperSound extends _AHelperSound
 {
-	private var _extension:String;
 	private var _sound:Sound;
 	private var _soundChannel:SoundChannel;
 	
-	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, p_extension:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
 		// needed else some float signatures misinterpreted as ints ... should replicate and report to mailing list
-		_extension = p_extension;
 		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
 	}
 	
 	override private function _driverInit():Void
 	{
-		_sound = _kernel.assets.getAsset( id + _extension, _packageId );
+		_sound = _kernel.assets.getAsset( id, _packageId );
 		if ( _sound == null )
 		{
 			return dispose();
