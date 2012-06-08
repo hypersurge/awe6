@@ -8,10 +8,11 @@
  
 
 THINGS TO DO:
+
+	AKernel isEyeCandy and isFullScreen setters should skip if new value is same as current
+	AFactory configurer should consider settings prior to loading config (e.g. isDecached & secret)
 	
-*** resolve proper asset pipeline for non-Flash targets
-
-
+	
 key:
 * <10 mins
 ** ~30 mins
