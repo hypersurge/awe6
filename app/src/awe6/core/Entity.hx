@@ -30,7 +30,6 @@
 package awe6.core;
 import awe6.interfaces.EAgenda;
 import awe6.interfaces.IEntity;
-import awe6.interfaces.IEntityCollection;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import haxe.FastList;
@@ -44,7 +43,7 @@ class Entity extends Process, implements IEntity
 {
 	public var id( default, _set_id ):String;
 	public var agenda( _get_agenda, null ):EAgenda;
-	public var parent( _get_parent, null ):IEntityCollection;
+	public var parent( _get_parent, null ):IEntity;
 	public var view( _get_view, null ):IView;
 	
 	private var _entityAgendaPairs:FastList<_HelperEntityAgendaPair>;
@@ -292,7 +291,7 @@ class Entity extends Process, implements IEntity
 		return true;
 	}
 	
-	private function _setParent( p_parent:IEntityCollection ):Void
+	private function _setParent( p_parent:IEntity ):Void
 	{
 		parent = p_parent;
 	}
@@ -308,7 +307,7 @@ class Entity extends Process, implements IEntity
 		return agenda;
 	}
 	
-	private function _get_parent():IEntityCollection
+	private function _get_parent():IEntity
 	{
 		return parent;
 	}

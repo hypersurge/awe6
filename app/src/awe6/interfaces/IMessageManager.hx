@@ -36,7 +36,7 @@ package awe6.interfaces;
  * <p>This manager is intentionally abstract / generic.  It allows expressive synchronous events - i.e. use anything as a message (string, enumerator, type, state based object etc).</p>
  * <p>It may make more sense to handle events using an alternative, event or signal specific library.  Adapt one as an IEntity and inject into any scene as needed.</p>
  */
-interface IMessageManager
+interface IMessageManager implements IResettable
 {
 	/**
 	 * Register an entity's interest in a subject.

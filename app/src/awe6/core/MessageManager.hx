@@ -41,6 +41,7 @@ import haxe.FastList;
 class MessageManager extends Process, implements IMessageManager
 {
 	private var _subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>>;
+	private var _messageQueue:List<_HelperMessage<Dynamic>>;
 	private var _isVerbose:Bool;
 
 	override private function _init():Void 
@@ -48,6 +49,7 @@ class MessageManager extends Process, implements IMessageManager
 		super._init();
 		_isVerbose = false; // used for debugging / testing of this manager (work in progress)
 		_subscriptions = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
+		_messageQueue = new List<_HelperMessage<Dynamic>>();
 	}
 	
 	public function addSubscriber<M,T>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T>, ?p_isRemovedAfterFirstSend:Bool = false ):Void
@@ -85,15 +87,49 @@ class MessageManager extends Process, implements IMessageManager
 		_sendMessage( p_message, p_sender, p_sender, p_isBubbleDown, p_isBubbleUp, p_isBubbleEverywhere );
 	}
 	
+	public function reset():Bool
+	{
+		removeSubscribers();
+		_messageQueue = new List<_HelperMessage<Dynamic>>();
+		return true;
+	}
+	
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		if ( _isOkToSendMessage() )
+		{
+			for ( i in _messageQueue )
+			{
+				_sendMessage( i.message, i.sender, i.target, i.isBubbleDown, i.isBubbleUp, i.isBubbleEverywhere );
+				_messageQueue.remove( i );
+			}
+		}
+	}
+	
+	private function _isOkToSendMessage():Bool
+	{
+		return _kernel.scenes.scene != null;
+	}
+	
 	private function _sendMessage<M>( p_message:M, p_sender:IEntity, p_target:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Void
 	{
 		if ( _isVerbose )
 		{
 			trace( "Sending message: " + Std.string( p_message ) + " from " + p_sender.id );
 		}
+		if ( !_isOkToSendMessage() )
+		{
+			_messageQueue.push( new _HelperMessage( p_message, p_sender, p_target, p_isBubbleDown, p_isBubbleUp, p_isBubbleEverywhere ) );
+			return;
+		}
 		if ( p_isBubbleEverywhere )
 		{
-			return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0], true );		
+			var l_entityFromScene:IEntity = _kernel.scenes.scene.getEntities()[0];
+			if ( ( l_entityFromScene != null ) && ( l_entityFromScene.parent != null ) )
+			{
+				return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0].parent, true );
+			}
 		}
 		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
 		var l_isContinue:Bool = true;
@@ -206,5 +242,24 @@ private class _HelperSubscription<M,T>
 			+ "messageClass : " + messageClass + "\n }";
 		return l_result;
 	}
+}
+
+private class _HelperMessage<M>
+{
+	public var message( default, null ):M;
+	public var sender( default, null ):IEntity;
+	public var target( default, null ):IEntity;
+	public var isBubbleDown( default, null ):Bool;
+	public var isBubbleUp( default, null ):Bool;
+	public var isBubbleEverywhere( default, null ):Bool;
 	
+	public function new( p_message:M, p_sender:IEntity, p_target:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false )
+	{
+		message = p_message;
+		sender = p_sender;
+		target = p_target;
+		isBubbleDown = p_isBubbleDown;
+		isBubbleUp = p_isBubbleUp;
+		isBubbleEverywhere = p_isBubbleEverywhere;
+	}
 }

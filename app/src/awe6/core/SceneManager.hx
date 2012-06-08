@@ -102,6 +102,7 @@ class SceneManager extends Process, implements ISceneManager
 			if ( scene.isDisposable )
 			{
 				scene.dispose();
+				_kernel.messenger.reset(); // for garbage collection purposes
 			}
 			scene = null; // prevents access to previous scene from freshly created scene
 		}
