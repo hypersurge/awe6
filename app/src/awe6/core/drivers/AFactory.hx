@@ -233,9 +233,9 @@ class AFactory implements IFactory, implements IDisposable
 		return new Encrypter( secret );
 	}
 	
-	public function createEntity( ?p_id:String ):IEntity
+	public function createEntity( ?p_id:Dynamic ):IEntity
 	{
-		return new Entity( _kernel, p_id );
+		return new Entity( _kernel, p_id == null ? null : Std.string( p_id ) );
 	}
 	
 	public function createLogger():ILogger

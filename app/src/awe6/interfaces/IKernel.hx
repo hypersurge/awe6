@@ -90,7 +90,7 @@ interface IKernel implements IPauseable, implements ILogger
 	var session( _get_session, _set_session ):ISession;
 	/**
 	 * Used for read only application settings and localisation text.
-	 * @param	ID	Unique identifier for the config setting (e.g. XML node name).
+	 * @param	id	The unique identifier for the config setting (e.g. XML node name).
 	 * @return	Value of the corresponding config setting.
 	 */
 	function getConfig( id:String ):Dynamic;

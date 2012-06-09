@@ -144,7 +144,7 @@ interface IFactory
 	 * @param	?id	The unique identifier of this entity.
 	 * @return	An empty Entity.
 	 */
-	function createEntity( ?id:String ):IEntity;
+	function createEntity( ?id:Dynamic ):IEntity;
 	/**
 	 * Builds the application's logger to log events / analytics.
 	 * @return	Logger to log events / analytics.
