@@ -81,7 +81,9 @@ class Text extends GuiEntity
 		_textFormat = new TextFormat();
 		_draw();
 		_sprite.addChild( _textField );
+		#if ( flash || js )
 		_sprite.cacheAsBitmap = true;
+		#end
 		_sprite.mouseEnabled = _isInput;
 		_sprite.mouseChildren = _isInput;
 		_isDirty = false;
