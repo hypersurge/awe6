@@ -38,7 +38,7 @@ import flash.media.SoundMixer;
 import flash.media.SoundTransform;
 
 /**
- * This AudioManager class provides js target overrides.
+ * This AudioManager class provides flash target overrides.
  * @author	Robert Fell
  */
 class AudioManager extends AAudioManager
