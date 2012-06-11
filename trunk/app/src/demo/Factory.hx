@@ -49,19 +49,15 @@ class Factory extends AFactory
 {
 	private var _assetManager:AssetManager;
 	
-	override private function _configurer():Void
-	{		
+	override private function _configurer( ?p_isPreconfig:Bool = false ):Void
+	{
 		id = "awe6Demo";
 		version = "0.6.380"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 		author = "Robert Fell";
 		isDecached = true;
 		width = 600;
 		height = 400;
-		// R.Fell -- a quick experiment in fluid layout
-//		width = _context.stage.stageWidth;
-//		height = _context.stage.stageHeight;
 		bgColor = 0xFFFFFF;
-		secret = "ThereAreWaysToConcealThis";
 		startingSceneType = EScene.INTRO;
 		targetFramerate = 60;
 		isFixedUpdates = false;

@@ -60,7 +60,6 @@ class Factory extends AFactory
 			
 			_parseXml( _config );
 		}
-		_configure();
 		_launchKernel();
 	}
 	

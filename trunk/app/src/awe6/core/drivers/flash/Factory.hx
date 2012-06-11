@@ -81,7 +81,6 @@ class Factory extends AFactory
 		}
 		else
 		{
-			_configure();
 			_launchKernel();
 		}
 	}
@@ -121,7 +120,6 @@ class Factory extends AFactory
 		}
 		if ( _countConfigsLoaded == _countConfigsToLoad )
 		{
-			_configure();
 			_launchKernel();
 		}
 	}

@@ -37,6 +37,7 @@ import haxe.FastList;
  * The MessageManager class provides a minimalist implementation of the IMessageManager interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
+ * @author	Valerie Elimak
  */
 class MessageManager extends Process, implements IMessageManager
 {
