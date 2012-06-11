@@ -45,17 +45,28 @@ class AssetManager extends AAssetManager $(CSLB){
 		var l_bitmap:Bitmap = new Bitmap();
 		l_context.addChild( l_bitmap );
 		switch( p_type ) $(CSLB){
-			case OVERLAY_BACKGROUND : l_bitmap.bitmapData = cast( new BitmapDataScale9( getAsset( "Background", "assets.overlay" ), 20, 20, 580, 380, _kernel.factory.width, _kernel.factory.height, true ), BitmapData );
-			case OVERLAY_BACK_UP : l_bitmap.bitmapData = getAsset( "BackUp", "assets.overlay" );
-			case OVERLAY_BACK_OVER : l_bitmap.bitmapData = getAsset( "BackOver", "assets.overlay" );
-			case OVERLAY_MUTE_UP : l_bitmap.bitmapData = getAsset( "MuteUp", "assets.overlay" );
-			case OVERLAY_MUTE_OVER : l_bitmap.bitmapData = getAsset( "MuteOver", "assets.overlay" );
-			case OVERLAY_UNMUTE_UP : l_bitmap.bitmapData = getAsset( "UnmuteUp", "assets.overlay" );
-			case OVERLAY_UNMUTE_OVER : l_bitmap.bitmapData = getAsset( "UnmuteOver", "assets.overlay" );
-			case OVERLAY_PAUSE_UP : l_bitmap.bitmapData = getAsset( "PauseUp", "assets.overlay" );
-			case OVERLAY_PAUSE_OVER : l_bitmap.bitmapData = getAsset( "PauseOver", "assets.overlay" );
-			case OVERLAY_UNPAUSE_UP : l_bitmap.bitmapData = getAsset( "UnpauseUp", "assets.overlay" );
-			case OVERLAY_UNPAUSE_OVER : l_bitmap.bitmapData = getAsset( "UnpauseOver", "assets.overlay" );
+			case OVERLAY_BACKGROUND : 
+				l_bitmap.bitmapData = cast( new BitmapDataScale9( getAsset( "Background", "assets.overlay" ), 20, 20, 580, 380, _kernel.factory.width, _kernel.factory.height, true ), BitmapData );
+			case OVERLAY_BACK_UP : 
+				l_bitmap.bitmapData = getAsset( "BackUp", "assets.overlay" );
+			case OVERLAY_BACK_OVER : 
+				l_bitmap.bitmapData = getAsset( "BackOver", "assets.overlay" );
+			case OVERLAY_MUTE_UP : 
+				l_bitmap.bitmapData = getAsset( "MuteUp", "assets.overlay" );
+			case OVERLAY_MUTE_OVER : 
+				l_bitmap.bitmapData = getAsset( "MuteOver", "assets.overlay" );
+			case OVERLAY_UNMUTE_UP : 
+				l_bitmap.bitmapData = getAsset( "UnmuteUp", "assets.overlay" );
+			case OVERLAY_UNMUTE_OVER : 
+				l_bitmap.bitmapData = getAsset( "UnmuteOver", "assets.overlay" );
+			case OVERLAY_PAUSE_UP : 
+				l_bitmap.bitmapData = getAsset( "PauseUp", "assets.overlay" );
+			case OVERLAY_PAUSE_OVER : 
+				l_bitmap.bitmapData = getAsset( "PauseOver", "assets.overlay" );
+			case OVERLAY_UNPAUSE_UP : 
+				l_bitmap.bitmapData = getAsset( "UnpauseUp", "assets.overlay" );
+			case OVERLAY_UNPAUSE_OVER : 
+				l_bitmap.bitmapData = getAsset( "UnpauseOver", "assets.overlay" );
 		}
 		return new View( _kernel, l_context );
 	}

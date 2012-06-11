@@ -1,1 +1,1 @@
-An awe6 (inverted game) project written in the HaXe language
+An awe6 (inverted game) project written in the Haxe language

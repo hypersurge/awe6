@@ -23,17 +23,19 @@ $(CBI)*/
 class Factory extends AFactory $(CSLB){
 	private var _assetManager:AssetManager;
 	
-	override private function _configurer():Void $(CSLB){
-		id = "$(ProjectID)";
-		version = "0.0.1";
-		author = "$(DefaultUser)";
-		isDecached = true;
-		width = 600;
-		height = 400;
-		bgColor = 0xFF999999;
-		startingSceneType = INTRO;
-		targetFramerate = 20;
-		isFixedUpdates = true;
+	override private function _configurer( ?p_isPreconfig:Bool = false ):Void $(CSLB){
+		if ( p_isPreconfig ) $(CSLB){
+			id = "$(ProjectID)";
+			version = "0.0.1";
+			author = "$(DefaultUser)";
+			isDecached = true;
+			width = 600;
+			height = 400;
+			bgColor = 0xFF999999;
+			startingSceneType = INTRO;
+			targetFramerate = 20;
+			isFixedUpdates = true;
+		}
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess $(CSLB){
@@ -54,9 +56,12 @@ class Factory extends AFactory $(CSLB){
 	
 	override public function createScene( p_type:EScene ):IScene $(CSLB){
 		switch ( p_type ) $(CSLB){
-			case GAME : return new Game( _kernel, p_type );
-			case INTRO : return new Intro( _kernel, p_type );
-			default : null;
+			case GAME : 
+				return new Game( _kernel, p_type );
+			case INTRO : 
+				return new Intro( _kernel, p_type );
+			default : 
+				null;
 		}
 		return super.createScene( p_type );
 	}
@@ -77,11 +82,16 @@ class Factory extends AFactory $(CSLB){
 		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0x808080 );
 		l_result.size = switch ( p_type ) $(CSLB){
-			case HEADLINE : 24;
-			case OVERSIZED : 72;
-			case SUBHEAD : 18;
-			case BUTTON : 10;
-			case SMALLPRINT : 6;
+			case HEADLINE : 
+				24;
+			case OVERSIZED : 
+				72;
+			case SUBHEAD : 
+				18;
+			case BUTTON : 
+				10;
+			case SMALLPRINT : 
+				6;
 			default : 12;
 		}
 		return l_result;
@@ -89,8 +99,10 @@ class Factory extends AFactory $(CSLB){
 	
 	override public function getBackSceneType( p_type:EScene ):EScene $(CSLB){
 		switch ( p_type ) $(CSLB){
-			case GAME : return INTRO;
-			case INTRO : return null;
+			case GAME : 
+				return INTRO;
+			case INTRO : 
+				return null;
 			default : null;
 		}
 		return super.getBackSceneType( p_type );
@@ -98,8 +110,10 @@ class Factory extends AFactory $(CSLB){
 	
 	override public function getNextSceneType( type:EScene ):EScene $(CSLB){
 		switch ( type ) $(CSLB){
-			case GAME : return RESULTS;
-			case INTRO : return GAME;
+			case GAME : 
+				return RESULTS;
+			case INTRO : 
+				return GAME;
 			default : null;
 		}
 		return super.getNextSceneType( type );
