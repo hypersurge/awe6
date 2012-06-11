@@ -4,20 +4,14 @@
 
 Please help towards achieving the following tasks:
 
-  * More Drivers:
-    * Release to haxelib
-    * Any R&D into Unity3D driver
-    * SWC testing
-    * AS3 testing
-    * Improved asset loading via NME
-    * Revised FlashDevelop templates (as NME?)
+  * More tools:
+    * Any R&D into Unity3D driver or port
+    * Dedicated Asset Tool
+    * Canvas / BitmapData driver
   * Tutorials:
     * Complete [GameGenres genre examples]
     * OOP approach (i.e. classes and packages)
     * Data driven approach (i.e. from config files)
   * Spread the Word:
     * Organize game jams?
-	* Present at VIU?
-    * Present at Haxe WWX 2012 - confirmed
-	* Present at DroidCon 2012 - confirmed
-    * Present at Casual Connect Seattle 2012?
+	* Workshops

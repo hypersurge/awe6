@@ -5,11 +5,12 @@
 
   * Install [http://haxe.org/download Haxe].
   * Install awe6 via haxelib tool, by running in the command prompt:
+
 {{{
 haxelib install awe6
 }}}
 
-= on Windows =
+= Windows Operating Systems =
 
   * Install [http://www.flashdevelop.org/wikidocs/index.php?title=Installation FlashDevelop].
 
@@ -24,7 +25,7 @@ To install !FlashDevelop project files and templates via haxelib tool, run in th
 haxelib run awe6 install
 }}}
 
-=== Starting a new project with awe6 with FlashDevelop ===
+=== Starting a new project with awe6 with !FlashDevelop ===
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 Project_
@@ -33,28 +34,22 @@ haxelib run awe6 install
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
    * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
 
-= on Linux =
+= Linux Operating Systems =
 
   * Follow the [http://www.joshuagranick.com/blog/2012/04/10/how-to-install-haxe-nme-and-monodevelop/ instructions] on this post
   * Download these [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fscripts%2Fbash scripts] and put somewhere pointed by the PATH environment (Ex. ~/bin or /usr/local/bin)
   * make them runnable by running:
+
 {{{
 chmod a+x create_awe6_*
 }}}
 
 === Starting a new project with awe6 on Linux ===
 
-  * Create a new project with this command (arguments are mandatory):
-{{{
-create_awe6_project projectname packagename author
-}}}
-  * Create a new scene with this command (arguments are mandatory):
-{{{
-create_awe6_scene scenename packagename author
-}}}
-  * Create a new entity with this command (arguments are mandatory):
-{{{
-create_awe6_entity entityname packagename author
-}}}
+  * `create_awe6_project projectname packagename author`
+  * `create_awe6_scene scenename packagename author`
+  * `create_awe6_entity entityname packagename author`
 
-For a more detailed demo check out [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/].
+= Next Steps =
+
+For a more detailed demo check out [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/] and dig around.  Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group].

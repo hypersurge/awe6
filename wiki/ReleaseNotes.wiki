@@ -4,8 +4,8 @@
 
 Haxe 2.09 compatible release.  Many improvements, optimizations and consistency reviews.  Some breaking changes:
 
- * AFactory `_configurer` has p_isPreconfig parameter to allow two stage configuration
- * Driver AudioManagers do not assume file extension by target - specify accordingly in project specific AssetManager.
+ * AFactory `_configurer` has `p_isPreconfig` parameter to allow two stage configuration
+ * Driver !AudioManagers do not assume file extension by target - specify accordingly in project specific !AssetManager.
 
 
 =RC 1,0,391=
