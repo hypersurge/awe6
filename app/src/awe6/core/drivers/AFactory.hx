@@ -108,6 +108,7 @@ class AFactory implements IFactory, implements IDisposable
 	inline private function _init():Void
 	{
 		config = new Hash<Dynamic>();
+		_configure( true );
 		_driverInit();
 	}
 
@@ -118,7 +119,6 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			_traverseElements( Xml.parse( _config ).firstElement().elements(), "" );
 		}
-		_configure();
 		_launchKernel();
 	}
 
@@ -150,32 +150,38 @@ class AFactory implements IFactory, implements IDisposable
 		}
 	}
 
-	inline private function _configure():Void
+	inline private function _configure( p_isPreconfig:Bool = false ):Void
 	{
-		id = "awe6";
-		version = "0.0.1";
-		author = "unknown";
-		isDecached = false;
-		isEyeCandyOptionEnabled = true;
-		isFullScreenOptionEnabled = true;
-		isResetSessionsOptionEnabled = true;
-		width = 600;
-		height = 400;
-		bgColor = 0xFF0000;
-		fullScreenType = EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
-		secret = "YouMustOverrideThis";
-		targetFramerate = 25;
-		isFixedUpdates = true;
-		startingSceneType = EScene.GAME;
-		keyPause = EKey.P;
-		keyMute = EKey.M;
-		keyNext = EKey.SPACE;
-		keyBack = EKey.ESCAPE;
-		keySpecial = EKey.CONTROL;
-		_configurer();
+		if ( p_isPreconfig )
+		{
+			id = "awe6";
+			version = "0.0.1";
+			author = "unknown";
+			isDecached = false;
+			isEyeCandyOptionEnabled = true;
+			isFullScreenOptionEnabled = true;
+			isResetSessionsOptionEnabled = true;
+			width = 600;
+			height = 400;
+			bgColor = 0xFF0000;
+			fullScreenType = EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
+			secret = "YouMustOverrideThis";
+			targetFramerate = 25;
+			isFixedUpdates = true;
+			startingSceneType = EScene.GAME;
+			keyPause = EKey.P;
+			keyMute = EKey.M;
+			keyNext = EKey.SPACE;
+			keyBack = EKey.ESCAPE;
+			keySpecial = EKey.CONTROL;
+		}
+		_configurer( p_isPreconfig );
 	}
 	
-	private function _configurer():Void
+	/**
+	 * @param	?p_isPreconfig	Configurer is called twice.  Once before the config.xml has been passed (isPreconfig == true) and again later just before Kernel is instantiated (isPreconfig == false).  This allows some config to be redefined after the xml is loaded.  Whereas some config must be setup beforehand (e.g. secret key).
+	 */
+	private function _configurer( ?p_isPreconfig:Bool = false ):Void
 	{
 		// override me
 	}
@@ -186,6 +192,7 @@ class AFactory implements IFactory, implements IDisposable
 		{
 			return;
 		}
+		_configure( false );
 		_concreteKernel = new Kernel( this, _context );
 	}
 	
