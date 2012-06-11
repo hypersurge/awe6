@@ -200,6 +200,10 @@ class AOverlay extends Entity, implements IOverlayProcess
 	public function showButton( p_type:EOverlayButton, ?p_isVisible:Bool = true ):Void
 	{
 		var l_button:BasicButton = _getButton( p_type );
+		if ( l_button == null )
+		{
+			return;
+		}
 		if ( p_isVisible )
 		{
 			addEntity( l_button, true );
@@ -213,6 +217,10 @@ class AOverlay extends Entity, implements IOverlayProcess
 	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float, ?p_width:Float, ?p_height:Float ):Void
 	{
 		var l_button:BasicButton = _getButton( p_type );
+		if ( l_button == null )
+		{
+			return;
+		}
 		l_button.x = p_x;
 		l_button.y = p_y;
 		if ( p_width != null )

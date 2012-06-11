@@ -1,4 +1,4 @@
-<project name="awe6" url="http://awe6.org" license="BSD">
+<project name="awe6" url="http://awe6.org" license="MIT">
 	<user name="hypersurge"/>
 	<tag v="game"/>
 	<tag v="cross"/>
@@ -7,5 +7,5 @@
 	<tag v="js"/>
 	<tag v="nme"/>
 	<description>Pronounced "awesome"; awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.</description>
-	<version name="1.0.391">Major update.  Now compatible with all targets - directly or indirectly.  Can be consumed by NME (e.g. include as a lib in your NME project), or can consume NME / Jeash / etc as preferred.  Pleae note this release required minor public API changes documented here: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
+	<version name="1.1.445">Haxe 2.09 compatible release.  Many improvements, optimizations and consistency reviews.  Some breaking changes documented here: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
 </project>
