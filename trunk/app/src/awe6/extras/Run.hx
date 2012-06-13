@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package;
+package awe6.extras;
 #if neko
 import haxe.Resource;
 import haxe.io.Path;
