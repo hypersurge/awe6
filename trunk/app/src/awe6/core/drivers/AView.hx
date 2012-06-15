@@ -144,6 +144,9 @@ class AView extends Process, implements IView
 		{
 			_draw();
 		}
+		//TODO: inefficient recalculation of global position - necessary, but needs rethink
+		globalX = ( parent == null ) ? x : x + parent.globalX;
+		globalY = ( parent == null ) ? y : y + parent.globalY;
 	}
 	
 	override private function _disposer():Void 
