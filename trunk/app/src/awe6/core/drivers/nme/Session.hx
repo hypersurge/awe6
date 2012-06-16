@@ -42,6 +42,9 @@ class Session extends ASession
 	override private function _driverLoad():Void
 	{
 		_so = SharedObject.getLocal( _kernel.factory.id, "/" );
+		// for Linux tartet the path info may need translating - e.g.:
+		// _so = SharedObject.getLocal( _kernel.factory.id, FileSystem.fullPath( Path.directory( Sys.executablePath() ) ) );
+		// for full details see sevencoloredbox's issue submission: http://code.google.com/p/awe6/issues/detail?id=13
 		_savedData = _so.data;		
 	}
 	
