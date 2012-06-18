@@ -138,7 +138,10 @@ class Kernel extends AKernel
 	
 	private function _onFullScreen( ?p_event:FullScreenEvent ):Void
 	{
-		isFullScreen = p_event.fullScreen;
+		if ( p_event.fullScreen != isFullScreen )
+		{
+			isFullScreen = p_event.fullScreen;
+		}
 	}
 	
 	private function _onEnterFrame( p_event:Event ):Void
