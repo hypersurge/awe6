@@ -70,9 +70,6 @@ class Game extends Scene
 			addEntity( new Sphere( _kernel ), true, i + 10 );
 		}
 		
-		var l_sphere:Sphere = getEntitiesByClass( Sphere )[0];
-		var l_bouncer:Bouncer = l_sphere.getEntitiesByClass( Bouncer )[0];
-
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
@@ -86,7 +83,7 @@ class Game extends Scene
 		}
 		_timer.text = _tools.convertAgeToFormattedTime( _age );
 		var l_spheres:Array<Sphere> = getEntitiesByClass( Sphere );
-		if ( l_spheres.length == 0 )
+		if ( ( l_spheres == null ) || ( l_spheres.length == 0 ) )
 		{
 			_gameOver();
 		}
