@@ -79,6 +79,8 @@ class InputManager extends Process, implements IInputManager
 	
 	public function reset():Bool
 	{
+		_inputKeyboard.dispose();
+		_inputMouse.dispose();
 		_init();
 		return true;
 	}
