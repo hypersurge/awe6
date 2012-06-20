@@ -1,4 +1,4 @@
-.= Haxe WWX, 14 April 2012, Robert Fell =
+= Haxe WWX, 14 April 2012, Robert Fell =
 *_ May the Force be with you: making a game with awe6 _*
 
 Pronounced "awesome"; awe6 is game inverted. An IoC template framework providing scalable, flexible and intuitive tools for the rapid development of quality games. Learn how stunning Flash games including "LEGO® Star Wars™ Ace Assault" were built with awe6 and how they can be deployed to any platform including mobile and HTML5.
