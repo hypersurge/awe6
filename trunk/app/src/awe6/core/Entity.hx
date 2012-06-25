@@ -138,7 +138,7 @@ class Entity extends Process, implements IEntity
 		_entityAgendaPairs.add( l_helperEntityAgendaPair );
 		if ( p_isAddedToView )
 		{
-			if ( Type.enumEq( p_agenda, agenda ) )
+			if ( Type.enumEq( p_agenda, agenda ) || ( p_agenda == EAgenda.ALWAYS ) )
 			{
 				view.addChild( p_entity.view, p_viewPriority );
 			}
