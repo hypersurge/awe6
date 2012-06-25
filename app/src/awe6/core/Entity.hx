@@ -125,13 +125,16 @@ class Entity extends Process, implements IEntity
 			}
 		}
 		_isAgendaDirty = true;
-		var l_child:Entity = cast p_entity;
-		var l_helperEntityAgendaPair:_HelperEntityAgendaPair = new _HelperEntityAgendaPair( p_entity, p_agenda );
-		if ( l_child.parent != this )
+		if ( p_entity.parent != this )
 		{
-			l_child.remove( p_isAddedToView );
-			l_child._setParent( this );
+			p_entity.remove( p_isAddedToView );
+			if ( Std.is( p_entity, Entity ) )
+			{
+				var l_child:Entity = cast p_entity;
+				l_child._setParent( this );
+			}
 		}
+		var l_helperEntityAgendaPair:_HelperEntityAgendaPair = new _HelperEntityAgendaPair( p_entity, p_agenda );
 		_entityAgendaPairs.add( l_helperEntityAgendaPair );
 		if ( p_isAddedToView )
 		{
@@ -152,7 +155,6 @@ class Entity extends Process, implements IEntity
 		{
 			return;
 		}
-		var l_child:Entity = cast p_entity;
 		var l_isRemoved:Bool = false;
 		for ( i in _entityAgendaPairs )
 		{
@@ -165,7 +167,11 @@ class Entity extends Process, implements IEntity
 		if ( l_isRemoved )
 		{
 			_isAgendaDirty = true;
-			l_child._setParent( null );
+			if ( Std.is( p_entity, Entity ) )
+			{
+				var l_child:Entity = cast p_entity;
+				l_child._setParent( null );
+			}
 			if ( p_isRemovedFromView )
 			{
 				p_entity.view.remove();
