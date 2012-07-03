@@ -11,7 +11,7 @@ Its purpose is to create a scalable, flexible and approachable tool to assist in
 
 == What's The "Big Idea"? ==
 
-This framework adopts an entity component approach (rather than a deep heirarchy structure).  For merits of such an approach please read Britt L Hannah's [http://www.devmaster.net/articles/oo-game-design/ article] or our [ReadingList recommended reading list].  In short: boundaries removed.  More benefits can be [DeveloperBenefits found here].
+This framework adopts an entity component approach (rather than a deep heirarchy structure).  For merits of such an approach please read Britt L Hannah's [http://www.devmaster.net/posts/object-oriented-game-design article] or our [ReadingList recommended reading list].  In short: boundaries removed.  More benefits can be [DeveloperBenefits found here].
 
 All components are created using factory methods, and each component provides further methods to allow injection of child components.  Thus an inversion of control is achieved: a Factory populates components based on starting state (configuration) and subsequent controllers defined within those components (reacting to user input).  A new "game" is defined by a new configuration.  Therefore reuse of modular code is achieved.  Crucially, automated reuse of modular code becomes possible - including runtime adaptation.
 
