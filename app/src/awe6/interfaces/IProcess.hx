@@ -32,7 +32,7 @@ package awe6.interfaces;
 /**
  * The IProcess represents the smallest atom of the awe6 framework.
  * <p>Many managers will implement this interface.</p>
- * @author	Robet Fell
+ * @author	Robert Fell
  */
 interface IProcess implements IUpdateable, implements IDisposable, implements IPauseable
 {
