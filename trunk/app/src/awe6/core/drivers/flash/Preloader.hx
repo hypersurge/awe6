@@ -201,18 +201,18 @@ private class _HelperSwfParser
 		}
 		for ( i in classes )
 		{
-			if ( i == Type.resolveClass( "com.google.analytics.components.FlashTracker" ) )
+			try
 			{
-				continue;
-			}
-			if ( Std.is( Type.createEmptyInstance( i ), Font ) )
-			{
-				try
+				if ( Type.getSuperClass( i ) == Font )
 				{
-					Font.registerFont( i );
+					try
+					{
+						Font.registerFont( i );
+					}
+					catch ( l_error:Dynamic ) {}
 				}
-				catch ( l_error:Dynamic ) {}
 			}
+			catch ( l_error:Dynamic ) {}
 		}
 	}
 	
