@@ -52,7 +52,10 @@ class Entity extends Process, implements IEntity
 
 	public function new( p_kernel:IKernel, ?p_id:String, ?p_context:Context ) 
 	{
-		view = new View( p_kernel, p_context, 0, this );
+		if ( view == null )
+		{
+			view = new View( p_kernel, p_context, 0, this );
+		}
 		id = ( p_id == null ) ? p_kernel.tools.createGuid() : p_id;
 		super( p_kernel );
 	}
