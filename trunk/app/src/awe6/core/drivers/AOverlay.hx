@@ -73,6 +73,50 @@ class AOverlay extends Entity, implements IOverlayProcess
 	
 	public function new( p_kernel:IKernel, ?p_buttonWidth:Float = 30.0, ?p_buttonHeight:Float = 30.0, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, ?p_pauseBlur:Float = 8, ?p_pauseColor:Int = 0x000000, ?p_pauseAlpha:Float = .35  )
 	{
+		if ( p_border == null )
+		{
+			p_border = new View( p_kernel );
+		}
+		if ( p_backUp == null )
+		{
+			p_backUp = new View( p_kernel );
+		}
+		if ( p_backOver == null )
+		{
+			p_backOver = new View( p_kernel );
+		}
+		if ( p_muteUp == null )
+		{
+			p_muteUp = new View( p_kernel );
+		}
+		if ( p_muteOver == null )
+		{
+			p_muteOver = new View( p_kernel );
+		}
+		if ( p_unmuteUp == null )
+		{
+			p_unmuteUp = new View( p_kernel );
+		}
+		if ( p_unmuteOver == null )
+		{
+			p_unmuteOver = new View( p_kernel );
+		}
+		if ( p_pauseUp == null )
+		{
+			p_pauseUp = new View( p_kernel );
+		}
+		if ( p_pauseOver == null )
+		{
+			p_pauseOver = new View( p_kernel );
+		}
+		if ( p_unpauseUp == null )
+		{
+			p_unpauseUp = new View( p_kernel );
+		}
+		if ( p_unpauseOver == null )
+		{
+			p_unpauseOver = new View( p_kernel );
+		}
 		_borderView = p_border;
 		_buttonBack = new BasicButton( p_kernel, p_backUp, p_backOver, p_buttonWidth, p_buttonHeight );
 		_buttonMute = new BasicButton( p_kernel, p_muteUp, p_muteOver, p_buttonWidth, p_buttonHeight );
