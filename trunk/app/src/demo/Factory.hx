@@ -29,7 +29,6 @@
 
 package demo;
 import awe6.core.AFactory;
-import awe6.core.Overlay;
 import awe6.core.TextStyle;
 import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.EScene;
@@ -44,6 +43,7 @@ import awe6.interfaces.ITextStyle;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
+import demo.gui.Overlay;
 
 class Factory extends AFactory {
 	private var _assetManager:AssetManager;
@@ -56,7 +56,7 @@ class Factory extends AFactory {
 		width = 600;
 		height = 400;
 		bgColor = 0xFFFFFF;
-		startingSceneType = EScene.INTRO;
+		startingSceneType = INTRO;
 		targetFramerate = 60;
 		isFixedUpdates = false;
 	}
@@ -69,17 +69,9 @@ class Factory extends AFactory {
 	}
 	
 	override public function createOverlay():IOverlayProcess {
-		var l_width:Int = 30;
-		var l_overlay:Overlay = new Overlay( _kernel, l_width, l_width, _assetManager.overlayBackground, _assetManager.backUp, _assetManager.backOver, _assetManager.muteUp, _assetManager.muteOver, _assetManager.unmuteUp, _assetManager.unmuteOver, _assetManager.pauseUp, _assetManager.pauseOver, _assetManager.unpauseUp, _assetManager.unpauseOver );
-		var l_x:Int = width - 10 - ( 3 * l_width );
-		var l_y:Int = height - l_width;
-		l_overlay.positionButton( EOverlayButton.BACK, l_x, l_y );
-		l_overlay.positionButton( EOverlayButton.PAUSE, l_x += l_width, l_y );
-		l_overlay.positionButton( EOverlayButton.UNPAUSE, l_x, l_y );
-		l_overlay.positionButton( EOverlayButton.MUTE, l_x += l_width, l_y );
-		l_overlay.positionButton( EOverlayButton.UNMUTE, l_x, l_y );
+		var l_overlay:Overlay = new Overlay( _kernel);
 		return l_overlay;
-	}	
+	}
 	
 	override public function createPreloader():IPreloader {
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
@@ -105,20 +97,20 @@ class Factory extends AFactory {
 	
 	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle {
 		if ( p_type == null ) {
-			p_type = ETextStyle.BODY;
+			p_type = BODY;
 		}
 		var l_fontName:String = _assetManager.font.fontName;
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( p_type ) {
-			case ETextStyle.HEADLINE :
+			case HEADLINE :
 				24;
-			case ETextStyle.OVERSIZED :
+			case OVERSIZED :
 				72;
-			case ETextStyle.SUBHEAD :
+			case SUBHEAD :
 				18;
-			case ETextStyle.BUTTON :
+			case BUTTON :
 				12;
-			case ETextStyle.SMALLPRINT :
+			case SMALLPRINT :
 				6;
 			default :
 				12;
@@ -131,9 +123,9 @@ class Factory extends AFactory {
 			case INTRO :
 				return null;
 			case GAME :
-				return EScene.INTRO;
+				return INTRO;
 			case RESULTS :
-				return EScene.INTRO;
+				return INTRO;
 			default :
 				null;
 		}
@@ -143,11 +135,11 @@ class Factory extends AFactory {
 	override public function getNextSceneType( p_type:EScene ):EScene {
 		switch ( p_type ) {
 			case INTRO :
-				return EScene.GAME;
+				return GAME;
 			case GAME :
-				return EScene.RESULTS;
+				return RESULTS;
 			case RESULTS :
-				return EScene.INTRO;
+				return INTRO;
 			default :
 				null;
 		}
