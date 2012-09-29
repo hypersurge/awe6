@@ -51,6 +51,11 @@ class Intro extends AScene {
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void {
 		super._updater( p_deltaTime );
+		/* example:
+		if ( _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) ) {
+			_kernel.scenes.next();
+		}
+        */
 		if ( _kernel.inputs.keyboard.getIsKeyRelease( EKey.F ) ) {
 			_kernel.isFullScreen = !_kernel.isFullScreen;
 		}

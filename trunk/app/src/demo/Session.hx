@@ -31,6 +31,7 @@ package demo;
 import awe6.core.ASession;
 
 class Session extends ASession {
+	// example:
 	public var name:String;
 	public var highScore:Int;
 	public var isWin:Bool; // temporary
@@ -42,23 +43,27 @@ class Session extends ASession {
 	
 	override private function _getter():Void {
 		super._getter();
+		// example:
 		name = _data.name;
 		highScore = _data.highScore;
 	}
 	
 	override private function _setter():Void {
 		super._setter();
+		// example:
 		_data.name = name;
 		_data.highScore = highScore;
 	}
 	
 	override private function _resetter():Void {
 		super._resetter();
+		// example:
 		name = "???";
 		highScore = 0;
 	}
 	
 	override public function getPercentageComplete():Float {
+		// example:
 		return _tools.limit( Std.int( 100 * highScore / 1000 ), 0, 100 );
 	}	
 	
