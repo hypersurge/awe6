@@ -39,9 +39,11 @@ import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
+import awe6.interfaces.ISceneTransition;
 import demo.scenes.Game;
 import demo.scenes.Intro;
 import demo.scenes.Results;
+import demo.scenes.SceneTransition;
 import demo.gui.Overlay;
 
 class Factory extends AFactory {
@@ -94,6 +96,11 @@ class Factory extends AFactory {
 				null;
 		}
 		return super.createScene( p_type );
+	}
+	
+	override public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition {
+		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
+		return l_sceneTransition;
 	}
 	
 	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle {
