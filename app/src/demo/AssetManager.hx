@@ -29,46 +29,46 @@
 
 package demo;
 import awe6.core.AAssetManager;
+import awe6.core.Context;
 import awe6.core.View;
 import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.Sprite;
 import nme.Assets;
 import nme.text.Font;
 
 class AssetManager extends AAssetManager {
 	public var overlayBackground( default, null ):IView;
-	public var backUp( default, null ):IView;
-	public var backOver( default, null ):IView;
-	public var muteUp( default, null ):IView;
-	public var muteOver( default, null ):IView;
-	public var unmuteUp( default, null ):IView;
-	public var unmuteOver( default, null ):IView;
-	public var pauseUp( default, null ):IView;
-	public var pauseOver( default, null ):IView;
-	public var unpauseUp( default, null ):IView;
-	public var unpauseOver( default, null ):IView;
+	public var overlayBackOver( default, null ):IView;
+	public var overlayBackUp( default, null ):IView;
+	public var overlayMuteOver( default, null ):IView;
+	public var overlayMuteUp( default, null ):IView;
+	public var overlayPauseOver( default, null ):IView;
+	public var overlayPauseUp( default, null ):IView;
+	public var overlayUnmuteOver( default, null ):IView;
+	public var overlayUnmuteUp( default, null ):IView;
+	public var overlayUnpauseOver( default, null ):IView;
+	public var overlayUnpauseUp( default, null ):IView;
 	public var background( default, null ):IView;
 	public var buttonUp( default, null ):BitmapData;
 	public var buttonOver( default, null ):BitmapData;
 	public var sphere( default, null ):BitmapData;
 	public var font( default, null ):Font;
-	
+
 	override private function _init():Void {
 		super._init();
 		overlayBackground = _createView( OVERLAY_BACKGROUND );
-		backUp = _createView( OVERLAY_BACK_UP );
-		backOver = _createView( OVERLAY_BACK_OVER );
-		muteUp = _createView( OVERLAY_MUTE_UP );
-		muteOver = _createView( OVERLAY_MUTE_OVER );
-		unmuteUp = _createView( OVERLAY_UNMUTE_UP );
-		unmuteOver = _createView( OVERLAY_UNMUTE_OVER );
-		pauseUp = _createView( OVERLAY_PAUSE_UP );
-		pauseOver = _createView( OVERLAY_PAUSE_OVER );
-		unpauseUp = _createView( OVERLAY_UNPAUSE_UP );
-		unpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
+		overlayBackUp = _createView( OVERLAY_BACK_UP );
+		overlayBackOver = _createView( OVERLAY_BACK_OVER );
+		overlayMuteUp = _createView( OVERLAY_MUTE_UP );
+		overlayMuteOver = _createView( OVERLAY_MUTE_OVER );
+		overlayUnmuteUp = _createView( OVERLAY_UNMUTE_UP );
+		overlayUnmuteOver = _createView( OVERLAY_UNMUTE_OVER );
+		overlayPauseUp = _createView( OVERLAY_PAUSE_UP );
+		overlayPauseOver = _createView( OVERLAY_PAUSE_OVER );
+		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
+		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		background = _createView( BACKGROUND );
 		buttonUp = Assets.getBitmapData( "assets/ButtonUp.png" );
 		buttonOver = Assets.getBitmapData( "assets/ButtonOver.png" );
@@ -120,9 +120,9 @@ class AssetManager extends AAssetManager {
 	}	
 	
 	private function _createView( p_type:EAsset ):IView {
-		var l_sprite:Sprite = new Sprite();
+		var l_context:Context = new Context();
 		var l_bitmap:Bitmap = new Bitmap();
-		l_sprite.addChild( l_bitmap );
+		l_context.addChild( l_bitmap );
 		switch( p_type ) {
 			case OVERLAY_BACKGROUND :
 			#if !js
@@ -153,7 +153,7 @@ class AssetManager extends AAssetManager {
 			case BACKGROUND :
 				l_bitmap.bitmapData = Assets.getBitmapData( "assets/scenes/Background.png" );
 		}
-		return new View( _kernel, l_sprite );
+		return new View( _kernel, l_context );
 	}
 	
 }
