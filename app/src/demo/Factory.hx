@@ -72,7 +72,7 @@ class Factory extends AFactory {
 	}
 	
 	override public function createOverlay():IOverlayProcess {
-		var l_overlay:Overlay = new Overlay( _kernel);
+		var l_overlay:Overlay = new Overlay( _kernel );
 		return l_overlay;
 	}
 	
