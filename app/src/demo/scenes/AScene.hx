@@ -38,28 +38,24 @@ import demo.AssetManager;
 import demo.Session;
 
 class AScene extends Scene {
-	private var _session:Session;
 	private var _assetManager:AssetManager;
-	private var _title:String;
-	private var _titleText:Text;
+	private var _session:Session;
+	private var _title:Text;
 	private var _isMusic:Bool;
-	
-	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMutable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) {
-		_session = cast p_kernel.session;
-		_assetManager = cast p_kernel.assets;
-		_title = "?";
-		super( p_kernel, p_type, p_isPauseable, p_isMutable, p_isSessionSavedOnNext );
-	}
-	
+
 	override private function _init():Void {
 		super._init();
+		_assetManager = cast( _kernel.assets, AssetManager );
+		_session = cast( _kernel.session, Session );
+		var l_sceneType: String = _tools.toCamelCase( Std.string( type ) );
+		var l_titleText: String = _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" );
+		if ( l_titleText != null ) {
+			_title = new Text( _kernel, _kernel.factory.width, 50, l_titleText, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
+			_title.y = 40;
+			addEntity( _title, true, 100 );
+		}
+
 		view.addChild( _assetManager.background, 0 );
-		
-		var l_sceneType:String = _tools.toCamelCase( Std.string( type ) );
-		_title = Std.string( _kernel.getConfig( "gui.scenes." + l_sceneType + ".title" ) );
-		_titleText = new Text( _kernel, _kernel.factory.width, 50, _title, _kernel.factory.createTextStyle( ETextStyle.HEADLINE ) );
-		_titleText.y = 40;
-		addEntity( _titleText, true, 100 );
 		
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}

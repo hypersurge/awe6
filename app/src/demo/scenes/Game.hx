@@ -39,23 +39,14 @@ import demo.entities.Bouncer;
 import demo.entities.Sphere;
 import demo.Session;
 
-class Game extends Scene
-{
+class Game extends AScene {
 	public static inline var TIME_LIMIT = 30;
-	private var _session:Session;
-	private var _assetManager:AssetManager;
 	private var _timer:Text;
 	private var _score:Int;
 	
-	public function new( p_kernel:IKernel, p_type:EScene ) {
-		_session = cast p_kernel.session;
-		_assetManager = cast p_kernel.assets;
-		super( p_kernel, p_type, true, true, true );
-	}
-	
 	override private function _init():Void {
 		super._init();
-		view.addChild( _assetManager.background, 0 );
+		isPauseable = true;
 		_session.isWin = false;
 		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		_timer.y = 70;
