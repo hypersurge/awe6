@@ -37,24 +37,21 @@ import awe6.interfaces.IKernel;
 import demo.AssetManager;
 import demo.Session;
 
-class AScene extends Scene
-{
+class AScene extends Scene {
 	private var _session:Session;
 	private var _assetManager:AssetManager;
 	private var _title:String;
 	private var _titleText:Text;
 	private var _isMusic:Bool;
 	
-	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMutable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) 
-	{
+	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMutable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) {
 		_session = cast p_kernel.session;
 		_assetManager = cast p_kernel.assets;
 		_title = "?";
 		super( p_kernel, p_type, p_isPauseable, p_isMutable, p_isSessionSavedOnNext );
 	}
 	
-	override private function _init():Void 
-	{
+	override private function _init():Void {
 		super._init();
 		view.addChild( _assetManager.background, 0 );
 		

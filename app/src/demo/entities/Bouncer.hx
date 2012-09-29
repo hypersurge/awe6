@@ -31,8 +31,7 @@ package demo.entities;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
 
-class Bouncer extends Entity
-{
+class Bouncer extends Entity {
 	public var x( default, null ):Float;
 	public var y( default, null ):Float;
 	public var vx( default, null ):Float;
@@ -43,15 +42,13 @@ class Bouncer extends Entity
 	private var _width2:Float;
 	private var _height2:Float;
 	
-	public function new( p_kernel:IKernel, p_width:Float, p_height:Float ) 
-	{
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float ) {
 		_width = p_width;
 		_height = p_height;
 		super( p_kernel );
 	}
 	
-	override private function _init():Void 
-	{
+	override private function _init():Void {
 		super._init();
 		_width2 = _width / 2;
 		_height2 = _height / 2;
@@ -63,25 +60,20 @@ class Bouncer extends Entity
 		y = _kernel.factory.height * Math.random();
 	}	
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
-	{
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void {
 		super._updater( p_deltaTime );
 		x += vx * ( p_deltaTime / 1000 );
 		y += vy * ( p_deltaTime / 1000 );
-		if ( x > ( _kernel.factory.width - _width2 ) )
-		{
+		if ( x > ( _kernel.factory.width - _width2 ) ) {
 			vx *= -1;
 		}
-		if ( y > ( _kernel.factory.height - _height2 ) )
-		{
+		if ( y > ( _kernel.factory.height - _height2 ) ) {
 			vy *= -1;
 		}
-		if ( x < _width2 )
-		{
+		if ( x < _width2 ) {
 			vx *= -1;
 		}
-		if ( y < _height2 )
-		{
+		if ( y < _height2 ) {
 			vy *= -1;
 		}
 		x = _tools.limit( x, _width2, _kernel.factory.width - _width2 );

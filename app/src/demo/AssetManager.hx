@@ -38,8 +38,7 @@ import flash.display.Sprite;
 import nme.Assets;
 import nme.text.Font;
 
-class AssetManager extends AAssetManager
-{
+class AssetManager extends AAssetManager {
 	public var overlayBackground( default, null ):IView;
 	public var backUp( default, null ):IView;
 	public var backOver( default, null ):IView;
@@ -57,8 +56,7 @@ class AssetManager extends AAssetManager
 	public var sphere( default, null ):BitmapData;
 	public var font( default, null ):Font;
 	
-	override private function _init():Void
-	{
+	override private function _init():Void {
 		super._init();
 		overlayBackground = _createView( OVERLAY_BACKGROUND );
 		backUp = _createView( OVERLAY_BACK_UP );
@@ -78,18 +76,14 @@ class AssetManager extends AAssetManager
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 	}
 	
-	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
-	{
-		if ( p_packageId == null )
-		{
+	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic {
+		if ( p_packageId == null ) {
 			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
 		}
-		if ( p_packageId == null )
-		{
+		if ( p_packageId == null ) {
 			p_packageId = _PACKAGE_ID;
 		}		
-		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) )
-		{
+		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) ) {
 			var l_extension:String = ".mp3";
 			#if cpp
 			l_extension = ".ogg"; // doesn't work on Macs?
@@ -98,51 +92,42 @@ class AssetManager extends AAssetManager
 			#end
 			p_id += l_extension;
 		}
-		if ( ( p_packageId.length > 0 ) && ( p_packageId.substr( -1, 1 ) != "." ) )
-		{
+		if ( ( p_packageId.length > 0 ) && ( p_packageId.substr( -1, 1 ) != "." ) ) {
 			p_packageId += ".";
 		}
 		var l_assetName:String = StringTools.replace( p_packageId, ".", "/" ) + p_id;
 		var l_result:Dynamic = Assets.getSound( l_assetName );
-		if ( l_result != null )
-		{
+		if ( l_result != null ) {
 			return l_result;
 		}
 		var l_result:Dynamic = Assets.getBitmapData( l_assetName );
-		if ( l_result != null )
-		{
+		if ( l_result != null ) {
 			return l_result;
 		}
 		var l_result:Dynamic = Assets.getFont( l_assetName );
-		if ( l_result != null )
-		{
+		if ( l_result != null ) {
 			return l_result;
 		}
 		var l_result:Dynamic = Assets.getText( l_assetName );
-		if ( l_result != null )
-		{
+		if ( l_result != null ) {
 			return l_result;
 		}
 		var l_result:Dynamic = Assets.getBytes( l_assetName );
-		if ( l_result != null )
-		{
+		if ( l_result != null ) {
 			return l_result;
 		}
 		return super.getAsset( p_id, p_packageId, p_args );
 	}	
 	
-	private function _createView( p_type:EAsset ):IView
-	{
+	private function _createView( p_type:EAsset ):IView {
 		var l_sprite:Sprite = new Sprite();
 		var l_bitmap:Bitmap = new Bitmap();
 		l_sprite.addChild( l_bitmap );
-		switch( p_type )
-		{
-			#if !js
+		switch( p_type ) {
 			case OVERLAY_BACKGROUND :
+			#if !js
 				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
-			case OVERLAY_BACKGROUND :
 				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
 			#end
 			case OVERLAY_BACK_UP :
@@ -173,8 +158,7 @@ class AssetManager extends AAssetManager
 	
 }
 
-enum EAsset
-{
+enum EAsset {
 	OVERLAY_BACKGROUND;
 	OVERLAY_BACK_UP;
 	OVERLAY_BACK_OVER;
