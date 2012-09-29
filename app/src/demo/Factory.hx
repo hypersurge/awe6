@@ -30,10 +30,9 @@
 package demo;
 import awe6.core.AFactory;
 import awe6.core.TextStyle;
-import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.EScene;
-import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.ETextAlign;
 import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
@@ -49,16 +48,18 @@ class Factory extends AFactory {
 	private var _assetManager:AssetManager;
 	
 	override private function _configurer( ?p_isPreconfig:Bool = false ):Void {
-		id = "awe6Demo";
-		version = "0.6.380"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
-		author = "Robert Fell";
-		isDecached = true;
-		width = 600;
-		height = 400;
-		bgColor = 0xFFFFFF;
-		startingSceneType = INTRO;
-		targetFramerate = 60;
-		isFixedUpdates = false;
+		if ( p_isPreconfig ) {
+			id = "awe6Demo";
+			version = "0.6.380"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+			author = "Robert Fell";
+			isDecached = true;
+			width = 600;
+			height = 400;
+			bgColor = 0xFFFFFF;
+			startingSceneType = INTRO;
+			targetFramerate = 60;
+			isFixedUpdates = false;
+		}
 	}
 	
 	override public function createAssetManager():IAssetManagerProcess {
