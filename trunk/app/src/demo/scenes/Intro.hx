@@ -33,8 +33,7 @@ import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import demo.gui.Button;
 
-class Intro extends AScene
-{
+class Intro extends AScene {
 	
 	override private function _init():Void 
 	{
@@ -50,11 +49,9 @@ class Intro extends AScene
 		addEntity( l_button, true, 1 );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
-	{
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void {
 		super._updater( p_deltaTime );
-		if ( _kernel.inputs.keyboard.getIsKeyRelease( EKey.F ) )
-		{
+		if ( _kernel.inputs.keyboard.getIsKeyRelease( EKey.F ) ) {
 			_kernel.isFullScreen = !_kernel.isFullScreen;
 		}
 

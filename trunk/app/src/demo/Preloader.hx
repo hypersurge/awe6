@@ -30,7 +30,6 @@
 package demo;
 import awe6.core.APreloader;
 
-class Preloader extends APreloader
-{
+class Preloader extends APreloader {
 }
 

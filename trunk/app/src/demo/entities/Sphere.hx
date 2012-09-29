@@ -38,8 +38,7 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 
-class Sphere extends Entity
-{
+class Sphere extends Entity {
 	private var _assetManager:AssetManager;
 	private var _sprite:Sprite;
 	private var _width:Float;
@@ -48,15 +47,13 @@ class Sphere extends Entity
 	private var _height2:Float;
 	private var _bouncer:Bouncer;
 	
-	public function new( p_kernel:IKernel ) 
-	{
+	public function new( p_kernel:IKernel ) {
 		_sprite = new Sprite();
 		_assetManager = cast p_kernel.assets;
 		super( p_kernel, _sprite );
 	}
 	
-	override private function _init():Void 
-	{
+	override private function _init():Void {
 		super._init();
 		var l_scale:Float = _tools.range( Math.random(), .5, 1 );
 		_width = 100 * l_scale;
@@ -76,25 +73,21 @@ class Sphere extends Entity
 		_sprite.addChild( l_sphere );
 	}	
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
-	{
+	override private function _updater( ?p_deltaTime:Int = 0 ):Void {
 		super._updater( p_deltaTime );
 		_sprite.x = _bouncer.x;
 		_sprite.y = _bouncer.y;
 		_sprite.scaleX = _bouncer.vx > 1 ? 1 : -1;
 		view.priority = Std.int( _bouncer.y );
-		if ( _isHit() )
-		{
+		if ( _isHit() ) {
 			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _bouncer.x / _kernel.factory.width );
 			_kernel.overlay.flash( 100, true, 1, Std.random( 0xFFFFFF ) );
 			dispose();
 		}
 	}
 	
-	private function _isHit():Bool
-	{
-		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) )
-		{
+	private function _isHit():Bool {
+		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) ) {
 			return false;
 		}
 		var l_dx:Float = _kernel.inputs.mouse.x - _bouncer.x;
