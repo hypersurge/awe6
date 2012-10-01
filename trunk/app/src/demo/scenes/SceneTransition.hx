@@ -5,7 +5,7 @@ class SceneTransition extends awe6.core.SceneTransition
 {
 	public function new( p_kernel:IKernel )
 	{
-		var l_duration:Int = 200;
+		var l_duration:Int = 500;
 		super( p_kernel, l_duration );
 	}
 
