@@ -36,6 +36,7 @@ package awe6.interfaces;
 enum EMouseCursor 
 {
 	ARROW;
+	AUTO;
 	BUTTON;
 	HAND;
 	IBEAM;

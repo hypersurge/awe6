@@ -147,6 +147,7 @@ class Entity extends Process, implements IEntity
 			}
 			else
 			{
+				p_entity.view.priority = p_viewPriority;
 				l_helperEntityAgendaPair.isAddedToView = true;
 			}
 		}

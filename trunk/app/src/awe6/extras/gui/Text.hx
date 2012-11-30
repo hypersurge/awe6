@@ -172,6 +172,10 @@ class Text extends GuiEntity
 	
 	private function _set_text( p_value:String ):String
 	{
+		if ( p_value == null )
+		{
+			p_value = "";
+		}
 		if ( text == p_value )
 		{
 			return text;

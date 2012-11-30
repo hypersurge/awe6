@@ -331,11 +331,11 @@ class AOverlay extends Entity, implements IOverlayProcess
 			case PAUSE :
 				if ( _buttonPause.view.isInViewStack )
 				{
+					_kernel.pause();
+					_drawPause( true );
 					_wasMute = _kernel.audio.isMute;
 					showButton( EOverlayButton.PAUSE, false );
 					showButton( EOverlayButton.UNPAUSE, true );
-					_kernel.pause();
-					_drawPause( true );
 					activateButton( EOverlayButton.MUTE );
 				}
 			case UNPAUSE :
@@ -343,9 +343,9 @@ class AOverlay extends Entity, implements IOverlayProcess
 				{
 					showButton( EOverlayButton.PAUSE, true );
 					showButton( EOverlayButton.UNPAUSE, false );
+					activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
 					_kernel.resume();
 					_drawPause( false );
-					activateButton( _wasMute ? EOverlayButton.MUTE : EOverlayButton.UNMUTE );
 				}
 			case SUB_TYPE( l_value ) :
 				null;

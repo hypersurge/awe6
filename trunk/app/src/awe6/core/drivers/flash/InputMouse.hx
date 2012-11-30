@@ -149,6 +149,8 @@ class InputMouse extends AInputMouse
 		{
 			case ARROW :
 				Mouse.cursor = MouseCursor.ARROW;
+			case AUTO :
+				Mouse.cursor = MouseCursor.AUTO;
 			case BUTTON :
 				Mouse.cursor = MouseCursor.BUTTON;
 			case HAND :

@@ -89,7 +89,7 @@ class BasicButton extends Entity, implements IPositionable
 		}
 		if ( !l_isOver && isOver )
 		{
-			l_inputMouse.cursorType = EMouseCursor.ARROW;
+			l_inputMouse.cursorType = EMouseCursor.AUTO;
 			onRollOut();
 		}
 		isOver = l_isOver;
