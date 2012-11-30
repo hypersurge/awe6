@@ -135,13 +135,13 @@ class Preloader extends APreloader
 		_loader = new Loader();
 		_loader.loadBytes( _swfData, _loaderContext );
 		_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderComplete );
-		_next();
 	}
 	
 	private function _onLoaderComplete( p_event:Event ):Void
 	{
 		_loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, _onLoaderComplete );
 		new _HelperSwfParser( _swfData );
+		_next();
 	}
 	
 	private function _onProgress( ?p_event:ProgressEvent ):Void

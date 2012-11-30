@@ -81,7 +81,7 @@ class AInputMouse extends Process, implements IInputMouse
 		isMoving = false;
 		isVisible = true;
 		scroll = 0;
-		cursorType = EMouseCursor.ARROW;
+		cursorType = EMouseCursor.AUTO;
 		_scrollPrev = 0;
 		_stillUpdates = 0;
 		_stillDuration = 0;

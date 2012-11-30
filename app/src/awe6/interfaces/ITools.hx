@@ -115,7 +115,7 @@ interface ITools implements IEncrypter
 	function fromConstCase( value:String ):String;
 	/**
 	 * Reverts either a camelCase or CONST_CASE string to a word or phrase.
-	 * @param	value	ThecamelCase or CONST_CASE string.
+	 * @param	value	The camelCase or CONST_CASE string.
 	 * @return	Word or phrase.
 	 */
 	function toWords( value:String ):String;

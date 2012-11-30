@@ -127,6 +127,8 @@ class InputMouse extends AInputMouse
 		{
 			case ARROW :
 				Lib.jeashSetCursor( false );
+			case AUTO :
+				Lib.jeashSetCursor( false );
 			case BUTTON :
 				Lib.jeashSetCursor( true );
 			case HAND :
