@@ -58,4 +58,9 @@ class Main
 		#end
 		var l_factory = new Factory( Lib.current, l_isDebug, Resource.getString( "config" ) );
 	}
+	
+	public function new()
+	{
+		// needed for Jeash
+	}
 }
