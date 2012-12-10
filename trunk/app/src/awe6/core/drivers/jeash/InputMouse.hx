@@ -123,21 +123,7 @@ class InputMouse extends AInputMouse
 	
 	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		switch( p_value )
-		{
-			case ARROW :
-				Lib.jeashSetCursor( false );
-			case AUTO :
-				Lib.jeashSetCursor( false );
-			case BUTTON :
-				Lib.jeashSetCursor( true );
-			case HAND :
-				Lib.jeashSetCursor( true );
-			case IBEAM :
-				Lib.jeashSetCursor( false );
-			case SUB_TYPE( l_value ) :
-				null; // Have a register cursor approach here;
-		}
+		// Lib.jeashSetCursor unreliable / private enumerator, therefore removed
 		return super._set_cursorType( p_value );
 	}
 
