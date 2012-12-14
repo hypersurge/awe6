@@ -37,8 +37,10 @@ package awe6.interfaces;
 enum EScene
 {
 	INTRO;
-	SELECT_SESSION;	
+	SELECT_SESSION;
 	MENU;
+	AVATAR;
+	SHOP;
 	INSTRUCTIONS;
 	SETTINGS;
 	GAME;

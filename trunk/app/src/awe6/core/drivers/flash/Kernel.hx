@@ -194,7 +194,11 @@ class Kernel extends AKernel
 				case SUB_TYPE( l_value ) :
 					null;
 			}
-			_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			try
+			{
+				_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			}
+			catch ( l_error:Dynamic ) {}
 		}
 		else
 		{
