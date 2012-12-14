@@ -26,7 +26,25 @@ Pure gameplay sequel to the popular "Ace Assault" (a 3D space duelling game) by 
 [http://b10b.com/iondrift/epsilon/ https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/B10bIonDriftEpsilon.jpg]
 
 A futuristic 3D racing game produced by [http://www.b10b.com b10b].
+	
+== Adidas® / Coty Inc: "Ice Dive" BrandBoost Campaign (2012) ==
 
+[http://www.youtube.com/watch?v=f_hPIZyXPwY https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/AdidasIceDive.jpg]
+
+A simple high diving advergame for WildTangent's [http://www.wildtangent.com/Media/products-solutions/brandboost/ BrandBoost] advertising platform.
+
+== Aviva: "Back The Team" BrandBoost Campaign (2012) ==
+
+[http://www.youtube.com/watch?v=LvDXTvzmqc0 https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/AvivaBackTheTeam.jpg]
+
+A simple track and field advergame for WildTangent's [http://www.wildtangent.com/Media/products-solutions/brandboost/ BrandBoost] advertising platform.
+
+== BBC / CBBC: "Wizards Vs Aliens" (2012) ==
+
+[http://www.bbc.co.uk/cbbc/games/wizards-vs-aliens-game https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/BBCWizardsVsAliens.jpg]
+
+A magic and scifi themed platform game produced by [http://www.4T2.co.uk 4T2] for [http://www.bbc.co.uk BBC].
+	
 == More games coming soon ... ==
 
 We know of several other games being built using awe6 - if you have produced a game using awe6 and wish to have it featured on this page please send us a link and screenshot.
