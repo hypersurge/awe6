@@ -9,13 +9,11 @@ haxelib build list:
 	test run: haxelib run awe6 install
 	submit: haxelib submit awe6-X,X,X.zip
 	tag RC to /tags/rc-X,X,X.zip
-At same time consider updated API docs on googlecode & new SWC
+At same time consider updated API docs on googlecode
 	Run /app/scripts/generateDocs.bat
 	Run /app/scripts/generateUml.bat
 	Delete /app/docs from repo
 	Copy /app/docs to /docs/api
-	Delete /branches/api from repo
+	Delete /tags/api from repo
 	Copy /app/docs/api to /tags/api
-	Run /app/awe6Swc.hxml
-	Upload Swc and Zipped Api to googlecode
 	
