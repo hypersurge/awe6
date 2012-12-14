@@ -71,7 +71,7 @@ class Factory extends AFactory $(CSLB){
 		return l_sceneTransition;
 	}
 
-	override public function createSession( ?p_id:String ):ISession $(CLSB){
+	override public function createSession( ?p_id:String ):ISession $(CSLB){
 		return new Session( _kernel, p_id );
 	}
 
