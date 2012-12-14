@@ -21,4 +21,8 @@ class Main $(CSLB){
 		}
 		var l_factory = new Factory( Lib.current, l_isDebug, Resource.getString( "config" ) );
 	}
+	
+	public function new() $(CSLB){
+		// needed for Jeash
+	}
 }
