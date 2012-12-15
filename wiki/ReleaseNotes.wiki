@@ -1,5 +1,10 @@
 #summary Release notes for each release candidate
 
+=RC 1,2,492=
+
+Haxe 2.10 compatible release.  Several issue fixes, new NME !FlashDevelop templates and Linux creation scripts.  No breaking changes.
+
+
 =RC 1,1,445=
 
 Haxe 2.09 compatible release.  Many improvements, optimizations and consistency reviews.  Some breaking changes:
