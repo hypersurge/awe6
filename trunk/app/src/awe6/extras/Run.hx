@@ -44,7 +44,7 @@ import StringTools;
  * Neko file tools to run after haxelib install.
  * <p>Copies FlashDevelop templates.</p> 
  * @author	Robert Fell
- * @author	Enzo Gupi
+ * @author	Enzo Ferrari
  */
 
 class Run 
@@ -300,17 +300,21 @@ class Run
 		{
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
-			_moveAllFilesToDir( p_projectPath + "/Projects/313 HaXe - awe6 Project", p_projectPath );
-			// Remove Windows only directories
+			_moveAllFilesToDir( p_projectPath + "/Projects/373 HaXe - awe6 NME Project", p_projectPath );
+			// Remove Windows only files and directories
+			FileSystem.deleteFile( p_projectPath + "/Project.hxproj" );
 			_deleteTree( p_projectPath + "/Projects" );
-			_deleteTree( p_projectPath + "/src/org" );
-			_deleteTree( p_projectPath + "/scripts" );
 			//
 			FileSystem.rename( p_projectPath + "/src/$(PackagePath)", p_projectPath + "/src/" + p_packageName );
 			var l_projectName: String = new Path( p_projectPath ).file;
 			_modifyTemplates( p_projectPath,
 				[ "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
 				[ p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "" ] );
+			var l_projectNmml: String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
+			FileSystem.rename( p_projectPath + "/$(ProjectName).nmml", l_projectNmml );
+			_handleTemplate( l_projectNmml,
+				[ "$(ProjectID)", "package=\"" ],
+				[ l_projectName, "package=\"com.example." ] );
 			Lib.println( "Complete: Project " + l_projectName + " successfully created." );
 		}
 	}
