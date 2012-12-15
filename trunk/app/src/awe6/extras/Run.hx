@@ -44,6 +44,7 @@ import StringTools;
  * Neko file tools to run after haxelib install.
  * <p>Copies FlashDevelop templates.</p> 
  * @author	Robert Fell
+ * @author	Enzo Gupi
  */
 
 class Run 
@@ -57,10 +58,9 @@ class Run
 	private static inline var _TARGET_ENTITY = "entity";
 	
 	private static inline var _TEMPLATE_EXT = ".template";
-
 	private static inline var _OS = Sys.systemName();
 
-	private var callingDir: String;
+	private var callingDir:String;
 
 	static function main() 
 	{
@@ -81,11 +81,11 @@ class Run
 		}
 	}
 	
-	private function _install(): Void
+	private function _install():Void
 	{
 		if ( _OS == "Windows" )
 		{
-			if (Sys.args().length == 1)
+			if ( Sys.args().length == 1 )
 			{
 				_copyFlashDevelopTemplates();
 			}
@@ -100,7 +100,7 @@ class Run
 		}
 	}
 
-	private function _create(): Void
+	private function _create():Void
 	{
 		if ( _OS == "Windows" )
 		{
@@ -110,10 +110,10 @@ class Run
 		{
 			if ( Sys.args().length == 6 )
 			{
-				var l_target: String = Sys.args()[1];
-				var l_projectPath: String = Sys.args()[2];
-				var l_packageName: String = Sys.args()[3];
-				var l_authorName: String = Sys.args()[4];
+				var l_target:String = Sys.args()[1];
+				var l_projectPath:String = Sys.args()[2];
+				var l_packageName:String = Sys.args()[3];
+				var l_authorName:String = Sys.args()[4];
 				// When called from haxelib, the last argument is the calling directory
 				callingDir = Sys.args()[5];
 				if ( l_target == _TARGET_PROJECT )
@@ -140,7 +140,7 @@ class Run
 		}
 	}
 
-	private function _printSyntax(): Void
+	private function _printSyntax():Void
 	{
 		if ( _OS == "Windows" )
 		{
@@ -152,11 +152,11 @@ class Run
 		}
 	}
 	
-	private function _testDirectory( p_directory: String ): Void
+	private function _testDirectory( p_directory:String ):Void
 	{
 		while ( !FileSystem.exists( p_directory ) )
 		{
-			var l_path: Path = new Path( p_directory );
+			var l_path:Path = new Path( p_directory );
 			while ( !FileSystem.exists( l_path.dir ) )
 			{
 				l_path = new Path( l_path.dir );
@@ -165,7 +165,7 @@ class Run
 		}
 	}
 			
-	private function _unzipFlashDevelopTemplates( p_destination: String, ?p_filter: String="" ):Void
+	private function _unzipFlashDevelopTemplates( p_destination:String, ?p_filter:String = "" ):Void
 	{
 		var l_source:String = "__resources/flashDevelop.zip";
 		// var l_source:String = "scripts/haxelib/__resources/flashDevelop.zip";
@@ -177,7 +177,7 @@ class Run
 		var l_zipData = Reader.readZip( File.read( l_source, true ) );
 		for ( i in l_zipData )
 		{
-			if ( ( p_filter == "") || ( i.fileName.substr(-p_filter.length) == p_filter ) )
+			if ( ( p_filter == "" ) || ( i.fileName.substr( -p_filter.length ) == p_filter ) )
 			{
 				var l_content = ( i.compressed ) ? Reader.unzip( i ) : i.data;			
 				var l_finalDestination:String;
@@ -187,7 +187,7 @@ class Run
 				}
 				else
 				{
-					var l_destPath = new Path(i.fileName);
+					var l_destPath = new Path( i.fileName );
 					l_finalDestination = p_destination + "/" + l_destPath.file + "." + l_destPath.ext;
 				}
 				if ( i.fileSize == 0 )
@@ -216,12 +216,12 @@ class Run
 		Lib.println( "FlashDevelop awe6 templates copied successfully." );
 	}
 	
-	private function _deleteTree( p_path: String ): Void
+	private function _deleteTree( p_path:String ):Void
 	{
 		if ( FileSystem.isDirectory( p_path ) )
 		{
 			var l_files = FileSystem.readDirectory( p_path );
-			for (l_file in l_files)
+			for ( l_file in l_files )
 			{
 				_deleteTree( p_path + "/" + l_file );
 			}
@@ -233,35 +233,37 @@ class Run
 		}
 	}
 
-	private function _moveAllFilesToDir( p_sourcePath: String, p_targetPath: String ): Void
+	private function _moveAllFilesToDir( p_sourcePath:String, p_targetPath:String ):Void
 	{
 		if ( ( FileSystem.isDirectory( p_sourcePath ) ) && ( FileSystem.isDirectory( p_targetPath ) ) )
 		{
 			var l_files = FileSystem.readDirectory( p_sourcePath );
-			for (l_file in l_files)
+			for ( l_file in l_files )
 			{
 				FileSystem.rename( p_sourcePath + "/" + l_file, p_targetPath + "/" + l_file );
 			}
 		}
 	}
 
-	private function _handleTemplate( p_path: String, p_fromStrings: Array<String>, p_toStrings: Array<String> ) {
-		var l_sourcePath: String = p_path;
-		var l_targetPath: String = p_path.substr( 0, p_path.length - _TEMPLATE_EXT.length );
-		var l_source: FileInput = File.read( l_sourcePath, false );
-		var l_target: FileOutput = File.write( l_targetPath, false );
+	private function _handleTemplate( p_path:String, p_fromStrings:Array<String>, p_toStrings:Array<String> )
+	{
+		var l_sourcePath:String = p_path;
+		var l_targetPath:String = p_path.substr( 0, p_path.length - _TEMPLATE_EXT.length );
+		var l_source:FileInput = File.read( l_sourcePath, false );
+		var l_target:FileOutput = File.write( l_targetPath, false );
 		try
 		{
 			while ( true )
 			{
-				var line: String = l_source.readLine();
-				for (i in 0...p_fromStrings.length) {
+				var line:String = l_source.readLine();
+				for ( i in 0...p_fromStrings.length )
+				{
 					line = StringTools.replace( line, p_fromStrings[i], p_toStrings[i] );
 				}
 				l_target.writeString( line + "\n" );
 			}
 		}
-		catch ( ex: Eof )
+		catch ( ex:Eof )
 		{
 			// End of file
 		}
@@ -271,11 +273,12 @@ class Run
 		FileSystem.deleteFile( l_sourcePath );
 	}
 	
-	private function _modifyTemplates( p_path: String, p_fromStrings: Array<String>, p_toStrings: Array<String> ) {
+	private function _modifyTemplates( p_path:String, p_fromStrings:Array<String>, p_toStrings:Array<String> )
+	{
 		if ( FileSystem.isDirectory( p_path ) )
 		{
 			var l_files = FileSystem.readDirectory( p_path );
-			for (l_file in l_files)
+			for ( l_file in l_files )
 			{
 				_modifyTemplates( p_path + "/" + l_file, p_fromStrings, p_toStrings );
 			}
@@ -289,7 +292,7 @@ class Run
 		}
 	}
 
-	private function _createProjectFromTemplate( p_projectPath: String, p_packageName: String, p_authorName: String ): Void
+	private function _createProjectFromTemplate( p_projectPath:String, p_packageName:String, p_authorName:String ):Void
 	{
 		if ( p_projectPath.substr(0,1) != "/" )
 		{
@@ -299,7 +302,9 @@ class Run
 		if ( ( FileSystem.exists ( p_projectPath ) ) && ( FileSystem.isDirectory ( p_projectPath ) ) )
 		{
 			Lib.println( p_projectPath + " already exists" );
-		} else {
+		}
+		else
+		{
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
 			_moveAllFilesToDir( p_projectPath + "/Projects/313 HaXe - awe6 Project", p_projectPath );
@@ -317,7 +322,7 @@ class Run
 		}
 	}
 
-	private function _createSceneFromTemplate( p_sceneName: String, p_packageName: String, p_authorName: String ): Void
+	private function _createSceneFromTemplate( p_sceneName:String, p_packageName:String, p_authorName:String ):Void
 	{
 		if ( p_sceneName.substr(0,1) != "/" )
 		{
@@ -330,9 +335,9 @@ class Run
 		}
 		else
 		{
-			var l_scenePath: Path = new Path( p_sceneName );
+			var l_scenePath:Path = new Path( p_sceneName );
 			_unzipFlashDevelopTemplates( l_scenePath.dir, "Scene.hx.fdt" );
-			var l_templatePath: String = p_sceneName + ".hx" + _TEMPLATE_EXT;
+			var l_templatePath:String = p_sceneName + ".hx" + _TEMPLATE_EXT;
 			FileSystem.rename( l_scenePath.dir + "/Scene.hx.fdt", l_templatePath );
 			_handleTemplate( l_templatePath,
 					[ "$(DefaultUser)", "$(FileName)", "$(Package)", "$(CBI)", "$(CSLB)" ],
@@ -341,7 +346,7 @@ class Run
 		}
 	}
 
-	private function _createEntityFromTemplate( p_entityName: String, p_packageName: String, p_authorName: String ): Void
+	private function _createEntityFromTemplate( p_entityName:String, p_packageName:String, p_authorName:String ):Void
 	{
 		if ( p_entityName.substr(0,1) != "/" )
 		{
@@ -354,9 +359,9 @@ class Run
 		}
 		else
 		{
-			var l_entityPath: Path = new Path( p_entityName );
+			var l_entityPath:Path = new Path( p_entityName );
 			_unzipFlashDevelopTemplates( l_entityPath.dir, "Entity.hx.fdt" );
-			var l_templatePath: String = p_entityName + ".hx" + _TEMPLATE_EXT;
+			var l_templatePath:String = p_entityName + ".hx" + _TEMPLATE_EXT;
 			FileSystem.rename( l_entityPath.dir + "/Entity.hx.fdt", l_templatePath );
 			_handleTemplate( l_templatePath, 
 					[ "$(DefaultUser)", "$(FileName)", "$(Package)", "$(CBI)", "$(CSLB)" ],
