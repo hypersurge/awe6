@@ -76,7 +76,7 @@ class Run
 				_install();
 			case _COMMAND_CREATE :
 				_create();
-			default:
+			default :
 				_printSyntax();
 		}
 	}
@@ -85,18 +85,11 @@ class Run
 	{
 		if ( _OS == "Windows" )
 		{
-			if ( Sys.args().length == 1 )
-			{
-				_copyFlashDevelopTemplates();
-			}
-			else
-			{
-				_printSyntax();
-			}	
+			_copyFlashDevelopTemplates();
 		}
 		else
 		{
-			Lib.println( "install option is not available on Linux" );
+			Lib.println( "Error: install option is not available on Linux" );
 		}
 	}
 
@@ -104,7 +97,7 @@ class Run
 	{
 		if ( _OS == "Windows" )
 		{
-			Lib.println( "create option is not available on Windows" );
+			Lib.println( "Error: create option is not available on Windows" );
 		}
 		else
 		{
@@ -171,7 +164,7 @@ class Run
 		// var l_source:String = "scripts/haxelib/__resources/flashDevelop.zip";
 		if ( !FileSystem.exists( l_source ) )
 		{
-			Lib.println( "FlashDevelop awe6 templates not found: " + l_source + " does not exist." );
+			Lib.println( "Error: FlashDevelop awe6 templates not found: " + l_source + " does not exist." );
 			return;			
 		}
 		var l_zipData = Reader.readZip( File.read( l_source, true ) );
@@ -209,11 +202,11 @@ class Run
 		l_destination = StringTools.replace( l_destination, "\\", "/" );
 		if ( !FileSystem.exists( l_destination ) || !FileSystem.isDirectory( l_destination ) )
 		{
-			Lib.println( "Unable to copy FlashDevelop awe6 templates: " + l_destination + " does not exist.  Try unzipping them manually." );
+			Lib.println( "Error: Unable to copy FlashDevelop awe6 templates: " + l_destination + " does not exist.  Try unzipping them manually." );
 			return;
 		}
 		_unzipFlashDevelopTemplates( l_destination );
-		Lib.println( "FlashDevelop awe6 templates copied successfully." );
+		Lib.println( "Complete: FlashDevelop awe6 templates copied successfully." );
 	}
 	
 	private function _deleteTree( p_path:String ):Void
@@ -301,7 +294,7 @@ class Run
 		}
 		if ( ( FileSystem.exists ( p_projectPath ) ) && ( FileSystem.isDirectory ( p_projectPath ) ) )
 		{
-			Lib.println( p_projectPath + " already exists" );
+			Lib.println( "Error: " + p_projectPath + " already exists" );
 		}
 		else
 		{
@@ -318,7 +311,7 @@ class Run
 			_modifyTemplates( p_projectPath,
 				[ "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
 				[ p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "" ] );
-			Lib.println( "Project " + l_projectName + " successfully created." );
+			Lib.println( "Complete: Project " + l_projectName + " successfully created." );
 		}
 	}
 
@@ -331,7 +324,7 @@ class Run
 		}
 		if ( FileSystem.exists( p_sceneName + ".hx" ) )
 		{
-			Lib.println( p_sceneName + ".hx already exists" );
+			Lib.println( "Error: " + p_sceneName + ".hx already exists" );
 		}
 		else
 		{
@@ -342,7 +335,7 @@ class Run
 			_handleTemplate( l_templatePath,
 					[ "$(DefaultUser)", "$(FileName)", "$(Package)", "$(CBI)", "$(CSLB)" ],
 					[ p_authorName, l_scenePath.file, p_packageName, " ", "" ] );
-			Lib.println( "Scene " + l_scenePath.file + " successfully created." );
+			Lib.println( "Complete: Scene " + l_scenePath.file + " successfully created." );
 		}
 	}
 
@@ -355,7 +348,7 @@ class Run
 		}
 		if ( FileSystem.exists( p_entityName + ".hx" ) )
 		{
-			Lib.println( p_entityName + ".hx already exists" );
+			Lib.println( "Error: " + p_entityName + ".hx already exists" );
 		}
 		else
 		{
@@ -366,7 +359,7 @@ class Run
 			_handleTemplate( l_templatePath, 
 					[ "$(DefaultUser)", "$(FileName)", "$(Package)", "$(CBI)", "$(CSLB)" ],
 					[ p_authorName, l_entityPath.file, p_packageName, " ", "" ] );
-			Lib.println( "Entity " + l_entityPath.file + " successfully created." );
+			Lib.println( "Complete: Entity " + l_entityPath.file + " successfully created." );
 		}
 	}
 

@@ -2,6 +2,6 @@
 -neko scripts/haxelib/run.n
 -main awe6.extras.Run
 
---next
--cmd neko scripts/haxelib/run.n
--cmd pause
+# --next
+# -cmd neko scripts/haxelib/run.n
+# -cmd pause

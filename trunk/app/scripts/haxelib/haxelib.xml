@@ -6,6 +6,6 @@
 	<tag v="cpp"/>
 	<tag v="js"/>
 	<tag v="nme"/>
-	<description>Pronounced "awesome"; awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.</description>
-	<version name="1.1.445">Haxe 2.09 compatible release.  Many improvements, optimizations and consistency reviews.  Some breaking changes documented here: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
+	<description>awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.  For more information visit awe6.org</description>
+	<version name="1.2.492">Haxe 2.10 compatible release.  Includes issue fixes and NME FlashDevelop templates: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
 </project>
