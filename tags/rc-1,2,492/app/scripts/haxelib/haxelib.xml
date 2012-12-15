@@ -1,0 +1,11 @@
+<project name="awe6" url="http://awe6.org" license="MIT">
+	<user name="hypersurge"/>
+	<tag v="game"/>
+	<tag v="cross"/>
+	<tag v="flash"/>
+	<tag v="cpp"/>
+	<tag v="js"/>
+	<tag v="nme"/>
+	<description>awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.  For more information visit awe6.org</description>
+	<version name="1.2.492">Haxe 2.10 compatible release.  Includes issue fixes and NME FlashDevelop templates: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
+</project>
