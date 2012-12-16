@@ -52,6 +52,9 @@ class Run
 	// Commands
 	private static inline var _COMMAND_INSTALL = "install";
 	private static inline var _COMMAND_CREATE = "create";
+	// Project types
+	private static inline var _PROJECT_SWF = "swf";
+	private static inline var _PROJECT_NME = "nme";
 	// Creation targets	
 	private static inline var _TARGET_PROJECT = "project";
 	private static inline var _TARGET_SCENE = "scene";
@@ -101,25 +104,46 @@ class Run
 		}
 		else
 		{
-			if ( Sys.args().length == 6 )
+			if ( ( Sys.args().length >= 6 ) && ( Sys.args().length <= 7 ) )
 			{
-				var l_target:String = Sys.args()[1];
-				var l_projectPath:String = Sys.args()[2];
-				var l_packageName:String = Sys.args()[3];
-				var l_authorName:String = Sys.args()[4];
-				// When called from haxelib, the last argument is the calling directory
-				callingDir = Sys.args()[5];
+				var l_param = 1;
+				var l_target:String = Sys.args()[ l_param ];
+				var l_projectType:String = "";
 				if ( l_target == _TARGET_PROJECT )
 				{
-					_createProjectFromTemplate( l_projectPath, l_packageName, l_authorName );
+					l_param++;
+					l_projectType = Sys.args()[ l_param ];
 				}
-				else if ( l_target == _TARGET_SCENE )
+				var l_projectPath:String = Sys.args()[ l_param+1 ];
+				var l_packageName:String = Sys.args()[ l_param+2 ];
+				var l_authorName:String = Sys.args()[ l_param+3 ];
+				// When called from haxelib, the last argument is the calling directory
+				callingDir = Sys.args()[ l_param+4 ];
+				if ( l_target == _TARGET_PROJECT )
 				{
-					_createSceneFromTemplate( l_projectPath, l_packageName, l_authorName );
+					if ( ( l_projectType == _PROJECT_SWF) || ( l_projectType == _PROJECT_NME ) )
+					{
+						_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
+					}
+					else
+					{
+						_printSyntax();
+					}
 				}
-				else if ( l_target == _TARGET_ENTITY )
+				else if ( Sys.args().length == 6 )
 				{
-					_createEntityFromTemplate( l_projectPath, l_packageName, l_authorName );
+					if ( l_target == _TARGET_SCENE )
+					{
+						_createSceneFromTemplate( l_projectPath, l_packageName, l_authorName );
+					}
+					else if ( l_target == _TARGET_ENTITY )
+					{
+						_createEntityFromTemplate( l_projectPath, l_packageName, l_authorName );
+					}
+					else
+					{
+						_printSyntax();
+					}
 				}
 				else
 				{
@@ -141,7 +165,11 @@ class Run
 		}
 		else
 		{
-			Lib.println( "Syntax: haxelib run awe6 create project|scene|entity <name> <package> <author>" );
+			Lib.println( "Syntax:");
+			Lib.println("   to create a new project" );
+			Lib.println("     haxelib run awe6 create project swf|nme <name> <package> <author>" );
+			Lib.println("   to create scenes or entities" );
+			Lib.println("     haxelib run awe6 create scene|entity <name> <package> <author>" );
 		}
 	}
 	
@@ -211,18 +239,21 @@ class Run
 	
 	private function _deleteTree( p_path:String ):Void
 	{
-		if ( FileSystem.isDirectory( p_path ) )
+		if ( FileSystem.exists( p_path ) )
 		{
-			var l_files = FileSystem.readDirectory( p_path );
-			for ( l_file in l_files )
+			if ( FileSystem.isDirectory( p_path ) )
 			{
-				_deleteTree( p_path + "/" + l_file );
+				var l_files = FileSystem.readDirectory( p_path );
+				for ( l_file in l_files )
+				{
+					_deleteTree( p_path + "/" + l_file );
+				}
+				FileSystem.deleteDirectory( p_path );
 			}
-			FileSystem.deleteDirectory( p_path );
-		}
-		else
-		{
-			FileSystem.deleteFile( p_path );
+			else
+			{
+				FileSystem.deleteFile( p_path );
+			}
 		}
 	}
 
@@ -285,7 +316,7 @@ class Run
 		}
 	}
 
-	private function _createProjectFromTemplate( p_projectPath:String, p_packageName:String, p_authorName:String ):Void
+	private function _createProjectFromTemplate( p_projectType: String, p_projectPath:String, p_packageName:String, p_authorName:String ):Void
 	{
 		if ( p_projectPath.substr(0,1) != "/" )
 		{
@@ -298,23 +329,37 @@ class Run
 		}
 		else
 		{
+			var l_targetIsNME:Bool = ( p_projectType == _PROJECT_NME );
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
-			_moveAllFilesToDir( p_projectPath + "/Projects/373 HaXe - awe6 NME Project", p_projectPath );
-			// Remove Windows only files and directories
-			FileSystem.deleteFile( p_projectPath + "/Project.hxproj" );
+			if ( l_targetIsNME )
+			{
+				_moveAllFilesToDir( p_projectPath + "/Projects/373 HaXe - awe6 NME Project", p_projectPath );
+			}
+			else
+			{
+				_moveAllFilesToDir( p_projectPath + "/Projects/313 HaXe - awe6 Project", p_projectPath );
+			}
+			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
+			_deleteTree( p_projectPath + "/src/org" );
+			_deleteTree( p_projectPath + "/scripts" );
+			// Remove useless FlashDevelop project file
+			FileSystem.deleteFile( p_projectPath + "/Project.hxproj" );
 			//
 			FileSystem.rename( p_projectPath + "/src/$(PackagePath)", p_projectPath + "/src/" + p_packageName );
 			var l_projectName: String = new Path( p_projectPath ).file;
 			_modifyTemplates( p_projectPath,
 				[ "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
 				[ p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "" ] );
-			var l_projectNmml: String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
-			FileSystem.rename( p_projectPath + "/$(ProjectName).nmml", l_projectNmml );
-			_handleTemplate( l_projectNmml,
-				[ "$(ProjectID)", "package=\"" ],
-				[ l_projectName, "package=\"com.example." ] );
+			if ( l_targetIsNME )
+			{
+				var l_projectNmml: String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
+				FileSystem.rename( p_projectPath + "/$(ProjectName).nmml", l_projectNmml );
+				_handleTemplate( l_projectNmml,
+					[ "$(ProjectID)", "package=\"" ],
+					[ l_projectName, "package=\"com.example." ] );
+			}
 			Lib.println( "Complete: Project " + l_projectName + " successfully created." );
 		}
 	}
