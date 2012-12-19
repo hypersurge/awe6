@@ -16,10 +16,6 @@ haxelib install awe6
 
 === Installing awe6 & !FlashDevelop project files & templates ===
 
-To install latest awe6 via haxelib tool, run in the command prompt:
-{{{
-haxelib install awe6
-}}}
 To install !FlashDevelop project files and templates via haxelib tool, run in the command prompt:
 {{{
 haxelib run awe6 install
@@ -37,18 +33,31 @@ haxelib run awe6 install
 = Linux Operating Systems =
 
   * Choose an [http://haxe.org/com/ide Haxe IDE]
-  * Download these [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fscripts%2Fbash scripts] and put somewhere pointed by the PATH environment (Ex. ~/bin or /usr/local/bin)
-  * make them runnable by running:
-
+  * Type these commands to go into awe6 path and replace the file run.n with the latest version
 {{{
-chmod a+x create_awe6_*
+cd $(haxelib path awe6 | head -n 1)
+mv run.n run.n.old
+wget "http://awe6.googlecode.com/svn/trunk/app/scripts/haxelib/run.n"
 }}}
 
 === Starting a new project with awe6 on Linux ===
 
-  * `create_awe6_project projectname packagename author`
-  * `create_awe6_scene scenename packagename author`
-  * `create_awe6_entity entityname packagename author`
+  * To create a project that targets flash use
+{{{
+haxelib run awe6 create project swf <projectname> <packagename> <author>
+}}}
+  * To create a project that targets nme use
+{{{
+haxelib run awe6 create project nme <projectname> <packagename> <author>
+}}}
+  * To create a new scene use
+{{{
+haxelib run awe6 create scene <projectname> <packagename> <author>
+}}}
+  * To create a new entity use
+{{{
+haxelib run awe6 create entity <projectname> <packagename> <author>
+}}}
 
 = Next Steps =
 
