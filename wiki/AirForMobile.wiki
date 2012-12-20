@@ -2,19 +2,21 @@
 
 [https://awe6.googlecode.com/svn/trunk/docs/images/IosMockup.jpg]
 
-You can readily deploy your awe6 powered games to multiple mobile devices (e.g. iOS, Android).  There are various approaches, each with its respective pros and cons.  Please note the author of awe6 is a fan of SWF & HTML5 as they represent ubiquitous platforms (today and tomorrow respectively).
+You can readily deploy your awe6 powered games to multiple mobile devices (e.g. iOS, Android).  There are various approaches, each with its respective pros and cons.  Please note the author of awe6 is a fan of SWF & HTML5 as they represent ubiquitous platforms (today and tomorrow respectively) and there are many HTML5 accelerators now available in this space.
 
 ==NME==
 
-[http://haxenme.org NME] is haxe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
+[http://haxenme.org NME] is Haxe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
 
-To use NME with awe6 simply add the following line to your NME project's nmml file:
+To use awe6 with your NME project add the following line to your NME project's nmml file:
 
 {{{
 <haxelib name="awe6" />
 }}}
 
-Please note many subtle variances currently exist between the NME and Flash APIs so code methodically and consider fallbacks.  Specifically avoid frequent draw(), masks, filters, negative matrix transformations or complex Sounds.
+Alternatively create a new awe6 NME project using the templates included in the haxelib installation.  See QuickStart for more information.
+
+Please note many subtle variances currently exist between the NME and Flash APIs so code methodically and consider fallbacks.  Specifically avoid frequent draw(), masks, filters, negative matrix transformations or complex Sounds.  The other drawback of NME is that existing ActionScript libraries may not be available to your project.
 
 ==Adobe AIR==
 
@@ -28,6 +30,6 @@ To deploy to iOS a Mac is not required.  No fee (other than iOS Developer Member
  # iOS: Build the generated swf into an AIR app using [http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html Adobe's Help].
  # Android: Build the generated swf into an AIR app using [http://help.adobe.com/en_US/air/build/WS901d38e593cd1bac25d3d8c712b2d86751e-8000.html Adobe's Help].
 
-Note: deployment to iOS requires a valid membership of the Adobe Developer iOS program.  Certificate creation and application packaging can be done from either a Mac or Windows following [http://www.adobe.com/devnet/air/articles/packaging-air-apps-ios.html these steps].  Final push to iTunes requires a Mac (perhaps borrow a friend's, if you don't own one?).
+Note: deployment to iOS requires a valid membership of the Apple Developer iOS program.  Certificate creation and application packaging can be done from either a Mac or Windows following [http://www.adobe.com/devnet/air/articles/packaging-air-apps-ios.html these steps].  Final push to iTunes requires a Mac (perhaps borrow a friend's, if you don't own one?).
 
-Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling in your Entities and blitting / copyPixels in your Views.
+Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling (to avoid GC calls) in your Entities and make effective use of flash.display.Bitmap (which has been optimised for use with mobile devices).  Using GPU specific libraries (e.g. Starling) is also increasingly effective.
