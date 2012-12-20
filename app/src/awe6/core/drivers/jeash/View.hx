@@ -62,11 +62,6 @@ class View extends AView
 	
 	override private function _driverDraw():Void
 	{
-		if ( parent != null )
-		{
-			// a workaround to set the _isDirty flag to force jeash to redraw - only needed for jeash < 0.8.7, will be removed once jeash > 0.8.7 DisplayObject issue is released
-			parent.x = parent.x;
-		}
 		if ( _container != null && _container.parent != null )
 		{
 			_container.parent.removeChild( _container );
@@ -87,16 +82,12 @@ class View extends AView
 	override private function _set_x( p_value:Float ):Float
 	{
 		context.x = p_value;
-		// a workaround to force redraw in jeash < 0.8.7, will be removed once jeash > 0.8.7 DisplayObject issue is released
-		_isDirty = true;
 		return super._set_x( p_value );
 	}
 	
 	override private function _set_y( p_value:Float ):Float
 	{
 		context.y = p_value;
-		// a workaround to force redraw in jeash < 0.8.7, will be removed once jeash > 0.8.7 DisplayObject issue is released
-		_isDirty = true;
 		return super._set_y( p_value );
 	}
 	
