@@ -1,0 +1,5 @@
+#summary awe6 API docs.
+
+<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6ApiGadget.xml" border="0" width="895" height="750" />
+
+Detailed API documentation is included in the awe6.interfaces package.  Other packages implement that functionality.
