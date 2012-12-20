@@ -51,6 +51,7 @@ class Sphere extends Entity
 	public function new( p_kernel:IKernel )
 	{
 		_sprite = new Sprite();
+		_sprite.mouseEnabled = false;
 		_assetManager = cast p_kernel.assets;
 		super( p_kernel, _sprite );
 	}
