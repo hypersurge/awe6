@@ -81,7 +81,7 @@ class Sphere extends Entity
 		super._updater( p_deltaTime );
 		_sprite.x = _bouncer.x;
 		_sprite.y = _bouncer.y;
-		_sprite.scaleX = _bouncer.vx > 1 ? 1 : -1;
+		_sprite.scaleX = ( _bouncer.vx > 1 ) ? 1.001 : -1; // 1.001 is a workaround for Js' float issue: scale expects a float
 		view.priority = Std.int( _bouncer.y );
 		if ( _isHit() )
 		{

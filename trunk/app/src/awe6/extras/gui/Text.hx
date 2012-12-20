@@ -181,7 +181,11 @@ class Text extends GuiEntity
 			return text;
 		}
 		text = p_value;
+		#if js
+		_textField.text = text;
+		#else
 		_textField.htmlText = text;
+		#end
 		_isDirty = true;
 		return text;
 	}	
