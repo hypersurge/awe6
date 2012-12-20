@@ -10,6 +10,8 @@
 haxelib install awe6
 }}}
 
+----
+
 = Windows Operating Systems =
 
   * Install [http://www.flashdevelop.org/wikidocs/index.php?title=Installation FlashDevelop].
@@ -21,44 +23,74 @@ To install !FlashDevelop project files and templates via haxelib tool, run in th
 haxelib run awe6 install
 }}}
 
-=== Starting a new project with awe6 with !FlashDevelop ===
+=== Starting a new awe6 swf project with !FlashDevelop ===
+
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20HaXe%20-%20awe6%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 Project_
   * Hit F5 to compile & run.
   * Extend / modify as required.
+   * Add new assets via config.xml assets url nodes (as Swfs).
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
    * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
 
-= Linux Operating Systems =
+=== Starting a new awe6 NME project with !FlashDevelop ===
 
-  * Choose an [http://haxe.org/com/ide Haxe IDE]
-  * Type these commands to go into awe6 path and replace the file run.n with the latest version
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20HaXe%20-%20awe6%20NME%20Project/Project.png
+
+  * Open !FlashDevelop.
+  * _Project > New Project > Haxe > awe6 NME Project_
+  * Select your target from the top pull down menu.
+  * Hit F5 to compile & run.
+  * Extend / modify as required.
+   * Add new assets via the NMML file.
+   * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
+   * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
+
+----
+
+= Mac or Linux Operating Systems =
+
+  * Choose a [http://haxe.org/com/ide Haxe IDE]
+  * Patch latest run.n with
+
 {{{
 cd $(haxelib path awe6 | head -n 1)
 mv run.n run.n.old
 wget "http://awe6.googlecode.com/svn/trunk/app/scripts/haxelib/run.n"
 }}}
 
-=== Starting a new project with awe6 on Linux ===
+=== Starting a new project with awe6 ===
 
-  * To create a project that targets flash use
+  * Create an awe6 swf project:
+
 {{{
 haxelib run awe6 create project swf <projectname> <packagename> <author>
 }}}
-  * To create a project that targets nme use
+
+  * Create an awe6 NME project:
+
 {{{
 haxelib run awe6 create project nme <projectname> <packagename> <author>
 }}}
-  * To create a new scene use
+
+  * Add new Scenes with:
+
 {{{
 haxelib run awe6 create scene <projectname> <packagename> <author>
 }}}
-  * To create a new entity use
+
+  * Add new Entities with:
+
 {{{
 haxelib run awe6 create entity <projectname> <packagename> <author>
 }}}
 
+----
+
 = Next Steps =
 
-For a more detailed demo check out [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/] and dig around.  Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group].
+  * See ExampleHelloWorld.
+  * See a more detailed cross platform demo [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/].
+  * Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group].
