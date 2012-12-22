@@ -41,4 +41,4 @@ And compile with !HelloWorld.hxml
 
 Result will be a 600x400 white swf with "Hello World!" written in sans serif font top left corner.
 
-To do more, override more methods of AFactory ... see our !FlashDevelop template files (or Linux bash scripts) for an example which includes multiple scenes, asset manager and custom overlay.
+To do more, override more methods of AFactory ... see our !FlashDevelop template files (or Mac/Linux haxelib run script) for an example which includes multiple scenes, asset manager and custom overlay.
