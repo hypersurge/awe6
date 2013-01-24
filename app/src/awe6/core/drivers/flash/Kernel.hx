@@ -166,9 +166,12 @@ class Kernel extends AKernel
 			return;
 		}
 		#if !awe6Air
-		_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
-		_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
-		_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );		
+		if ( _getFlashVersion() < 11.3 ) // I liked this, but doesn't work anymore ... see: https://bugbase.adobe.com/index.cfm?event=bug&id=3310959
+		{
+			_contextMenu.customItems.remove( _fullScreenEnableContextMenuItem );
+			_contextMenu.customItems.remove( _fullScreenDisableContextMenuItem );
+			_contextMenu.customItems.push( isFullScreen ? _fullScreenDisableContextMenuItem : _fullScreenEnableContextMenuItem );
+		}
 		#end
 		_stage.fullScreenSourceRect = null;
 		if ( isFullScreen )
@@ -196,7 +199,7 @@ class Kernel extends AKernel
 			}
 			try
 			{
-				_stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+				_stage.displayState = StageDisplayState.FULL_SCREEN; // FULL_SCREEN_INTERACTIVE is troublesome
 			}
 			catch ( l_error:Dynamic ) {}
 		}
