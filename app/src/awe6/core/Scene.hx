@@ -49,12 +49,12 @@ class Scene extends Process, implements IScene
 	public var isPauseable( default, null ):Bool;
 	public var isMuteable( default, null ):Bool;	
 	public var isSessionSavedOnNext( default, null ):Bool;
+	public var agenda( _get_agenda, null ):EAgenda;
 
 	private var _entity( default, null ):IEntity;
 
 	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMuteable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) 
 	{
-		//TODO: these defaults aren't working for 2.09 (all set to false)?
 		type = p_type;
 		isPauseable = p_isPauseable;
 		isMuteable = p_isMuteable;
@@ -112,5 +112,16 @@ class Scene extends Process, implements IScene
 	{
 		return view;
 	}
+	
+	private function _get_agenda():EAgenda
+	{
+		return _entity.agenda;
+	}
+	
+	public function setAgenda( p_type:EAgenda ):Bool
+	{
+		return _entity.setAgenda( p_type );
+	}
+	
 }
 
