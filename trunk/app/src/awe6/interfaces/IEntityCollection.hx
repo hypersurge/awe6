@@ -33,7 +33,7 @@ package awe6.interfaces;
  * The IEntityCollection interface should be implemented by objects which compose multiple entities.
  * @author Robert Fell
  */
-interface IEntityCollection
+interface IEntityCollection implements IAgendaManager
 {
 	/**
 	 * Adds an entity to this object's children.

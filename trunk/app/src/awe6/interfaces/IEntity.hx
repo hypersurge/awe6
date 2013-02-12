@@ -35,7 +35,7 @@ package awe6.interfaces;
  * <p>Project specific entities can be created as custom classes, or by injecting functionality through the IEntity interface.</p>
  * @author Robert Fell
  */
-interface IEntity implements IProcess, implements IViewable, implements IEntityCollection, implements IAgendaManager
+interface IEntity implements IProcess, implements IViewable, implements IEntityCollection
 {
 	/**
 	 * The unique identifier of this entity.
