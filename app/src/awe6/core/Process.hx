@@ -57,6 +57,10 @@ class Process implements IProcess
 		_tools = cast _kernel.tools;
 		_isEntity = Std.is( this, IEntity );
 		_init();
+		if ( _isEntity )
+		{
+			_kernel.messenger.sendMessage( EMessage.INIT, cast this, true, true, true );
+		}
 	}
 	
 	private function _init():Void
@@ -79,11 +83,11 @@ class Process implements IProcess
 		{
 			isDisposed = true;
 			isActive = false;
-			_disposer();
 			if ( _isEntity )
 			{
-				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this );
+				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this, true, true, true );
 			}
+			_disposer();
 			return;
 		}
 	}
@@ -149,12 +153,12 @@ class Process implements IProcess
 		else
 		{
 			_pauser();
-	//		Reflect.setField( this, "isActive", false ); // avoids the setter
+//			Reflect.setField( this, "isActive", false ); // avoids the setter
 			_isIsActiveSetterBypassed = true;
 			isActive = false;
 			if ( _isEntity )
 			{
-				_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true );
+				_kernel.messenger.sendMessage( EMessage.PAUSE, cast this, true, true, true );
 			}
 		}
 	}
@@ -178,7 +182,7 @@ class Process implements IProcess
 			isActive = true;
 			if ( _isEntity )
 			{
-				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true );
+				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true, true, true );
 			}
 			return;
 		}
