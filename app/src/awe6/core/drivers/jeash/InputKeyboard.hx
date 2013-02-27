@@ -29,13 +29,13 @@
 
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AInputKeyboard;
-import jeash.display.Stage;
-import jeash.events.Event;
-import jeash.events.KeyboardEvent;
-import jeash.Lib;
+import browser.display.Stage;
+import browser.events.Event;
+import browser.events.KeyboardEvent;
+import browser.Lib;
 
 /**
- * This InputKeyboard class provides jeash target overrides.
+ * This InputKeyboard class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

@@ -32,7 +32,7 @@ import awe6.core.drivers.ASession;
 import js.Cookie;
 
 /**
- * This Session class provides jeash target overrides.
+ * This Session class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class Session extends ASession

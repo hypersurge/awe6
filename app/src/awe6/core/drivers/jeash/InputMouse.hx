@@ -30,15 +30,15 @@
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import jeash.display.Loader;
-import jeash.display.Stage;
-import jeash.events.Event;
-import jeash.events.MouseEvent;
-import jeash.Lib;
-import jeash.ui.Mouse;
+import browser.display.Loader;
+import browser.display.Stage;
+import browser.events.Event;
+import browser.events.MouseEvent;
+import browser.Lib;
+import browser.ui.Mouse;
 
 /**
- * This InputMouse class provides jeash target overrides.
+ * This InputMouse class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
@@ -123,7 +123,7 @@ class InputMouse extends AInputMouse
 	
 	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		// Lib.jeashSetCursor unreliable / private enumerator, therefore removed
+		// Lib.nmeSetCursor unreliable / private enumerator, therefore removed
 		return super._set_cursorType( p_value );
 	}
 

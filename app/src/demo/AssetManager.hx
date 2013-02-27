@@ -94,7 +94,7 @@ class AssetManager extends AAssetManager
 			#if cpp
 			l_extension = ".ogg"; // doesn't work on Macs?
 			#elseif js
-			l_extension = untyped jeash.media.Sound.jeashCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+			l_extension = untyped browser.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
 			#end
 			p_id += l_extension;
 		}

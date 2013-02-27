@@ -32,7 +32,7 @@ import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides nme target overrides.
+ * This View class provides nme native target overrides.
  * @author	Robert Fell
  */
 class View extends AView

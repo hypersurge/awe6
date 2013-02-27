@@ -31,7 +31,7 @@ package awe6.core.drivers.jeash;
 import awe6.core.drivers.APreloader;
 
 /**
- * This Preloader class provides jeash target overrides.
+ * This Preloader class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class Preloader extends APreloader

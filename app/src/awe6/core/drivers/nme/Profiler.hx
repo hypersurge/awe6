@@ -29,15 +29,15 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AProfiler;
-import nme.display.Bitmap;
-import nme.display.BitmapData;
-import nme.geom.Rectangle;
-import nme.system.System;
-import nme.text.TextField;
-import nme.text.TextFormat;
+import native.display.Bitmap;
+import native.display.BitmapData;
+import native.geom.Rectangle;
+import native.system.System;
+import native.text.TextField;
+import native.text.TextFormat;
 	
 /**
- * This Profiler class provides nme target overrides.
+ * This Profiler class provides nme native target overrides.
  * <p>Based on net.hires.utils.Stats by Mr.doob & Theo v1.3</p>
  * @author	Werner Avenant
  * @author	Mr.doob

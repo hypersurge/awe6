@@ -29,19 +29,19 @@
 
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AProfiler;
-import jeash.display.Bitmap;
-import jeash.display.BitmapData;
-import jeash.geom.Matrix;
-import jeash.geom.Point;
-import jeash.geom.Point;
-import jeash.geom.Rectangle;
-import jeash.geom.Rectangle;
-import jeash.system.System;
-import jeash.text.TextField;
-import jeash.text.TextFormat;
+import browser.display.Bitmap;
+import browser.display.BitmapData;
+import browser.geom.Matrix;
+import browser.geom.Point;
+import browser.geom.Point;
+import browser.geom.Rectangle;
+import browser.geom.Rectangle;
+import browser.system.System;
+import browser.text.TextField;
+import browser.text.TextFormat;
 	
 /**
- * This Profiler class provides jeash target overrides.
+ * This Profiler class provides nme browser (aka jeash) target overrides.
  * <p>Based on net.hires.utils.Stats by Mr.doob & Theo v1.3</p>
  * @author	Werner Avenant
  * @author	Mr.doob
