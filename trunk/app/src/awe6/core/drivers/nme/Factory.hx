@@ -30,10 +30,10 @@
 package awe6.core.drivers.nme;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
-import nme.events.Event;
+import native.events.Event;
 
 /**
- * This Factory class provides nme target overrides.
+ * This Factory class provides nme native target overrides.
  * @author	Robert Fell
  */
 class Factory extends AFactory

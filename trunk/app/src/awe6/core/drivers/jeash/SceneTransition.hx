@@ -31,7 +31,7 @@ package awe6.core.drivers.jeash;
 import awe6.core.drivers.ASceneTransition;
 
 /**
- * This SceneTransition class provides jeash target overrides.
+ * This SceneTransition class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class SceneTransition extends ASceneTransition

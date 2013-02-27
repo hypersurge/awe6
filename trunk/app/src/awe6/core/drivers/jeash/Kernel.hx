@@ -29,15 +29,15 @@
 
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AKernel;
-import jeash.display.Stage;
-import jeash.display.StageQuality;
-import jeash.display.StageScaleMode;
-import jeash.events.Event;
-import jeash.Lib;
-import jeash.system.Security;
+import browser.display.Stage;
+import browser.display.StageQuality;
+import browser.display.StageScaleMode;
+import browser.events.Event;
+import browser.Lib;
+import browser.system.Security;
 
 /**
- * This Kernel class provides jeash target overrides.
+ * This Kernel class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class Kernel extends AKernel

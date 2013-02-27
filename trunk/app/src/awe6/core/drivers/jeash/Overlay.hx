@@ -33,7 +33,7 @@ import awe6.core.drivers.AOverlay;
 import awe6.core.View;
 
 /**
- * This Overlay class provides js target overrides.
+ * This Overlay class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class Overlay extends AOverlay

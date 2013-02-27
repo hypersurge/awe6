@@ -32,7 +32,7 @@ import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 
 /**
- * This Factory class provides jeash target overrides.
+ * This Factory class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class Factory extends AFactory

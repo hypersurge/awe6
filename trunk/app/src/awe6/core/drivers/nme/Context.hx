@@ -30,7 +30,7 @@
 package awe6.core.drivers.nme;
 
 /**
- * This Context class provides nme target overrides.
+ * This Context class provides nme native target overrides.
  * @author	Robert Fell
  */
-typedef Context = nme.display.Sprite;
+typedef Context = native.display.Sprite;

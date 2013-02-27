@@ -52,12 +52,13 @@ class Game extends AScene
 		super._init();
 		isPauseable = true;
 		_session.isWin = false;
-		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
+		var l_textStyle = _kernel.factory.createTextStyle( ETextStyle.SUBHEAD );
 		#if js
 		// for js performance boost (realtime filters very constly)
-		_timer.textStyle.filters = [];
-		_timer.textStyle.color = 0x020382;
+		l_textStyle.filters = [];
+		l_textStyle.color = 0x020382;
 		#end
+		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), l_textStyle );
 		_timer.y = 70;
 		addEntity( _timer, true, 1000 );
 

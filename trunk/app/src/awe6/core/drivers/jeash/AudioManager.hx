@@ -31,13 +31,13 @@ package awe6.core.drivers.jeash;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
-import jeash.events.Event;
-import jeash.media.Sound;
-import jeash.media.SoundChannel;
-import jeash.media.SoundTransform;
+import browser.events.Event;
+import browser.media.Sound;
+import browser.media.SoundChannel;
+import browser.media.SoundTransform;
 
 /**
- * This AudioManager class provides jeash target overrides.
+ * This AudioManager class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
 class AudioManager extends AAudioManager
@@ -56,11 +56,11 @@ class AudioManager extends AAudioManager
 			{
 				continue;
 			}
-			if ( untyped i._soundChannel.jeashAudio == null )
+			if ( untyped i._soundChannel.nmeAudio == null )
 			{
 				continue;
 			}
-			untyped i._soundChannel.jeashAudio.muted = p_value;
+			untyped i._soundChannel.nmeAudio.muted = p_value;
 		}
 	}	
 	
@@ -89,7 +89,7 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose(); // perhaps sounds are flooded?
 		}
-		untyped _soundChannel.jeashAudio.muted = _kernel.audio.isMute;
+		untyped _soundChannel.nmeAudio.muted = _kernel.audio.isMute;
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		_driverTransform();
 		return;
@@ -108,7 +108,7 @@ class _HelperSound extends _AHelperSound
 		}
 		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
 		_soundChannel.soundTransform = soundTransform;
-		untyped _soundChannel.jeashAudio.volume = _volume;
+		untyped _soundChannel.nmeAudio.volume = _volume;
 	}
 
 	override private function _driverStop():Void

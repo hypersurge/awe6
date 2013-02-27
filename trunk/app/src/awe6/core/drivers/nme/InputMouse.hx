@@ -30,15 +30,15 @@
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import nme.display.Stage;
-import nme.events.Event;
-import nme.events.MouseEvent;
-import nme.Lib;
-import nme.ui.Mouse;
+import native.display.Stage;
+import native.events.Event;
+import native.events.MouseEvent;
+import native.Lib;
+import native.ui.Mouse;
 import haxe.io.Bytes;
 
 /**
- * This InputMouse class provides nme target overrides.
+ * This InputMouse class provides nme native target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

@@ -29,10 +29,10 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.ASession;
-import nme.net.SharedObject;
+import native.net.SharedObject;
 
 /**
- * This Session class provides nme target overrides.
+ * This Session class provides nme native target overrides.
  * @author	Robert Fell
  */
 class Session extends ASession

@@ -29,14 +29,14 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AKernel;
-import nme.display.Stage;
-import nme.display.StageDisplayState;
-import nme.display.StageQuality;
-import nme.display.StageScaleMode;
-import nme.events.Event;
+import native.display.Stage;
+import native.display.StageDisplayState;
+import native.display.StageQuality;
+import native.display.StageScaleMode;
+import native.events.Event;
 
 /**
- * This Kernel class provides nme target overrides.
+ * This Kernel class provides nme native target overrides.
  * @author	Robert Fell
  */
 class Kernel extends AKernel
