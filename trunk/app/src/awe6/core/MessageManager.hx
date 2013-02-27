@@ -41,7 +41,7 @@ import haxe.FastList;
  */
 class MessageManager extends Process, implements IMessageManager
 {
-	private var _subscriptions:FastList<_HelperSubscription<Dynamic,Dynamic>>;
+	private var _subscriptions:FastList<_HelperSubscription<Dynamic>>;
 	private var _messageQueue:List<_HelperMessage<Dynamic>>;
 	private var _isVerbose:Bool;
 
@@ -49,17 +49,17 @@ class MessageManager extends Process, implements IMessageManager
 	{
 		super._init();
 		_isVerbose = false; // used for debugging / testing of this manager (work in progress)
-		_subscriptions = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
+		_subscriptions = new FastList<_HelperSubscription<Dynamic>>();
 		_messageQueue = new List<_HelperMessage<Dynamic>>();
 	}
 	
-	public function addSubscriber<M,T>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T>, ?p_isRemovedAfterFirstSend:Bool = false ):Void
+	public function addSubscriber<M>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemovedAfterFirstSend:Bool = false ):Void
 	{
-		var l_subscription:_HelperSubscription<M,T> = new _HelperSubscription( p_subscriber, p_message, p_handler, p_sender, p_senderClassType, p_isRemovedAfterFirstSend );
+		var l_subscription:_HelperSubscription<M> = new _HelperSubscription( p_subscriber, p_message, p_handler, p_sender, p_senderClassType, p_isRemovedAfterFirstSend );
 		_subscriptions.add( l_subscription );
 	}
 	
-	public function getSubscribers<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):Array<IEntity>
+	public function getSubscribers<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity> ):Array<IEntity>
 	{
 		var l_result:Array<IEntity> = [];
 		var l_subscriptions = _getSubscriptions( p_subscriber, p_message, p_handler, p_sender, p_senderClassType );
@@ -70,9 +70,9 @@ class MessageManager extends Process, implements IMessageManager
 		return l_result;
 	}
 	
-	public function removeSubscribers<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):Void
+	public function removeSubscribers<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity> ):Void
 	{
-		var l_subscriptions = _getSubscriptions( p_subscriber, p_message, p_handler, p_sender, p_senderClassType );
+		var l_subscriptions = _getSubscriptions( p_subscriber, p_message, p_handler, p_sender, p_senderClassType, true );
 		for ( i in l_subscriptions )
 		{
 			_subscriptions.remove( i );
@@ -132,7 +132,7 @@ class MessageManager extends Process, implements IMessageManager
 				return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0].parent, true );
 			}
 		}
-		var l_subscriptions:FastList<_HelperSubscription<Dynamic, Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
@@ -157,7 +157,7 @@ class MessageManager extends Process, implements IMessageManager
 		return;
 	}
 	
-	private function _send<M>( p_subscription:_HelperSubscription<Dynamic,Dynamic>, p_message:M, p_sender:IEntity ):Bool
+	private function _send<M>( p_subscription:_HelperSubscription<Dynamic>, p_message:M, p_sender:IEntity ):Bool
 	{
 		var l_isContinue:Bool = Reflect.callMethod( p_subscription.subscriber, p_subscription.handler, [p_message, p_sender] );
 		if ( p_subscription.isRemovedAfterFirstSend )
@@ -167,9 +167,9 @@ class MessageManager extends Process, implements IMessageManager
 		return l_isContinue;
 	}
 	
-	private function _getSubscriptions<M,T>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T> ):FastList<_HelperSubscription<Dynamic,Dynamic>>
+	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemove:Bool = false ):FastList<_HelperSubscription<Dynamic>>
 	{
-		var l_result:FastList<_HelperSubscription<Dynamic,Dynamic>> = new FastList<_HelperSubscription<Dynamic,Dynamic>>();
+		var l_result:FastList<_HelperSubscription<Dynamic>> = new FastList<_HelperSubscription<Dynamic>>();
 		for ( i in _subscriptions )
 		{
 			if ( ( p_subscriber != null ) && ( i.subscriber != p_subscriber ) )
@@ -200,7 +200,7 @@ class MessageManager extends Process, implements IMessageManager
 			{
 				continue;
 			}
-			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( !Std.is( p_sender, i.senderClassType ) ) )
+			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( p_isRemove || !Std.is( p_sender, i.senderClassType ) ) )
 			{
 				continue;
 			}
@@ -210,17 +210,17 @@ class MessageManager extends Process, implements IMessageManager
 	}	
 }
 
-private class _HelperSubscription<M,T>
+private class _HelperSubscription<M>
 {
 	public var subscriber( default, null ):IEntity;
 	public var message( default, null ):M;
 	public var messageClass( default, null ):Class<M>;
 	public var handler( default, null ):M->IEntity->Bool;
 	public var sender( default, null ):IEntity;
-	public var senderClassType( default, null ):Class<T>;
+	public var senderClassType( default, null ):Class<IEntity>;
 	public var isRemovedAfterFirstSend( default, null ):Bool;
 	
-	public function new( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<T>, ?p_isRemovedAfterFirstSend:Bool = false )
+	public function new( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemovedAfterFirstSend:Bool = false )
 	{
 		subscriber = p_subscriber;
 		message = p_message;

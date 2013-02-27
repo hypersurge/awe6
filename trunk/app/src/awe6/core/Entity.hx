@@ -91,7 +91,7 @@ class Entity extends Process, implements IEntity
 	{
 		remove();
 		_kernel.messenger.removeSubscribers( this );
-		_kernel.messenger.removeSubscribers( null, null, null, this );
+		_kernel.messenger.removeSubscribers( null, null, null, this, null );
 		var l_entities:Array<IEntity> = _getEntities();
 		l_entities.reverse();
 		for ( i in l_entities )

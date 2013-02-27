@@ -31,8 +31,10 @@ package demo.scenes;
 import awe6.core.Scene;
 import awe6.extras.gui.Text;
 import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EMessage;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import demo.AssetManager;
 import demo.entities.Bouncer;
@@ -65,8 +67,16 @@ class Game extends AScene
 		{
 			addEntity( new Sphere( _kernel ), true, i + 10 );
 		}
-
+		_kernel.messenger.addSubscriber( _entity, EMessage.INIT, handleSphereDispose, Sphere );
+		_kernel.messenger.addSubscriber( _entity, EMessage.DISPOSE, handleSphereDispose, Sphere );
 	}
+	
+	public function handleSphereDispose( p_message:EMessage, p_entity:IEntity ):Bool
+	{
+//		trace( p_message + " " + p_entity );
+		return true;
+	}
+	
 
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void
 	{
