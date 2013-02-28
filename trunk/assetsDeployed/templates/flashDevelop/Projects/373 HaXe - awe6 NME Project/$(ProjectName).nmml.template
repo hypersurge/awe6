@@ -13,7 +13,8 @@
 	<haxelib name="nme" />
 	<haxelib name="awe6" />
 	
-	<assets path="assets" rename="assets" include="*" exclude="_exclude" />
+	<assets path="assets" rename="assets" include="*" exclude="_exclude|*.ogg" if="flash" />
+	<assets path="assets" rename="assets" include="*" exclude="_exclude" unless="flash" />
 	
 	<icon name="assets/_exclude/nme.svg" />
 	
@@ -21,6 +22,10 @@
 	<ndll name="regexp" />
 	<ndll name="zlib" />
 	<ndll name="nme" haxelib="nme" />
+	
+	<haxeflag name="--flash-strict" if="flash" />
+	<!-- <haxeflag name="--dead-code-elimination" if="html5" /> IE9 says not yet -->
+	<haxeflag name="--js-modern" if="html5" />
 	
 	<compilerflag name="-resource assets/_exclude/config.xml@config" />
 	
