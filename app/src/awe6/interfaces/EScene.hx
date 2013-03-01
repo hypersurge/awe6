@@ -37,6 +37,7 @@ package awe6.interfaces;
 enum EScene
 {
 	INTRO;
+	EXIT;
 	SELECT_SESSION;
 	MENU;
 	AVATAR;

@@ -68,13 +68,13 @@ class Game extends AScene
 		{
 			addEntity( new Sphere( _kernel ), true, i + 10 );
 		}
-		_kernel.messenger.addSubscriber( _entity, EMessage.INIT, handleSphereDispose, Sphere );
-		_kernel.messenger.addSubscriber( _entity, EMessage.DISPOSE, handleSphereDispose, Sphere );
+		_kernel.messenger.addSubscriber( _entity, EMessage.INIT, handleSphere, Sphere );
+		_kernel.messenger.addSubscriber( _entity, EMessage.DISPOSE, handleSphere, Sphere );
 	}
 	
-	public function handleSphereDispose( p_message:EMessage, p_entity:IEntity ):Bool
+	public function handleSphere( p_message:EMessage, p_sender:IEntity ):Bool
 	{
-//		trace( p_message + " " + p_entity );
+//		trace( p_message + " " + p_sender );
 		return true;
 	}
 	
