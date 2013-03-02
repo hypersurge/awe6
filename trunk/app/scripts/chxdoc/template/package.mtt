@@ -17,11 +17,11 @@
 ::else::
  ::set packageName=full::
 ::end::
-			<div id="packages-header">
+<!--			<div id="packages-header">
 				<ul>
 					<li class="overview"><a href="::rootRelative::../uml/::packageName::.html" title="::full::" target="classFrame">Class Diagram</a></li>
 				</ul>
-			</div>
+			</div>	-->
 
 			<ul class="packages">
 ::foreach i types::
