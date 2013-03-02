@@ -2,7 +2,7 @@
 
   * Overview
     * [ProjectObjectives Objectives]
-    * [DeveloperGallery Gallery]
+    * [DeveloperGallery Gallery & Examples]
     * [DeveloperBenefits Benefits]
     * [CodingConventions Coding Conventions]
     * [ToDo Tasks Under Construction]
@@ -20,10 +20,12 @@
       * [ComponentScene Scene]
       * [ComponentSession Session]
   * Using awe6
-    * [QuickStart Quick Start Tutorial]
+    * [QuickStart Installation Instructions]
+    * [ExampleHelloWorld Hello World]
     * [http://awe6.googlecode.com/svn/tags/api/index.html API]
-    * [AirForMobile Mobile Device Deployment]	
-    * [GameGenres Game Genre Examples]
+    * [ReleaseNotes Release Notes]
+    * [AirForMobile Mobile Device Deployment]
+    * [http://groups.google.com/group/awe6 Further Help]
   * Multi Device Online Demos
     * [DemoFlash Flash]
     * [DemoHtml5 HTML5]
