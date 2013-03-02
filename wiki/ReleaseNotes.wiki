@@ -1,5 +1,15 @@
 #summary Release notes for each release candidate
 
+=RC 1,3,522=
+
+Haxe 2.10, NME 3.5.5 (optional) compatible release.  Includes:
+
+ * Linux run scripts to include NME template
+ * Flash Fullscreen Context Menu conditional of Player Version
+ * IMessageManager expects IEntity as sender type
+ * nme and jeash drivers refactored to NME 3.5.x package names
+
+
 =RC 1,2,492=
 
 Haxe 2.10 compatible release.  Several issue fixes, new NME !FlashDevelop templates and Linux creation scripts.  No breaking changes.
