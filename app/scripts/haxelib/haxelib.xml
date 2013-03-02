@@ -5,7 +5,10 @@
 	<tag v="flash"/>
 	<tag v="cpp"/>
 	<tag v="js"/>
+	<tag v="javascript"/>
 	<tag v="nme"/>
-	<description>awe6 is game inverted: a scalable, flexible and approachable tool to assist in the rapid development of quality games.  For more information visit awe6.org</description>
-	<version name="1.2.492">Haxe 2.10 compatible release.  Includes issue fixes and NME FlashDevelop templates: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
+	<tag v="awe6"/>
+	<tag v="entity"/>
+	<description>awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org</description>
+	<version name="1.3.522">Haxe 2.10, NME 3.5.5 (optional) compatible release.  Includes issue fixes and Linux run scripts for NME: http://code.google.com/p/awe6/wiki/ReleaseNotes</version>
 </project>
