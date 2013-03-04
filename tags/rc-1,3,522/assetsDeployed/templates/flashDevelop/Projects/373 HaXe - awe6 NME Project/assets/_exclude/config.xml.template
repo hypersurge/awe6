@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<settings>
+		<assets>
+			<packages default="assets" audio="assets.audio" />
+		</assets>
+		<font name="assets_fonts_orbitron_ttf" />
+	</settings>
+</data>
