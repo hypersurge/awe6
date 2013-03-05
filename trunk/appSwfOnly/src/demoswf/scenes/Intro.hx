@@ -48,6 +48,7 @@ class Intro extends AScene
 		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
+		
 	}
 
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void

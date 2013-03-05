@@ -28,5 +28,6 @@ class Main
 			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
 		}
 		var l_factory = new Factory( Lib.current, l_isDebug );
-	}	
+	}
+	
 }

@@ -68,7 +68,6 @@ class AssetManager extends AAssetManager
 	public var buttonUp( default, null ):BitmapData;
 	public var buttonOver( default, null ):BitmapData;
 	public var sphere( default, null ):BitmapData;
-//	public var font( default, null ):Font;
 
 	override private function _init():Void
 	{
@@ -88,61 +87,7 @@ class AssetManager extends AAssetManager
 		buttonUp = new ButtonUp();
 		buttonOver = new ButtonOver();
 		sphere = new Sphere();
-//		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 	}
-
-/*	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
-	{
-		if ( p_packageId == null )
-		{
-			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		}
-		if ( p_packageId == null )
-		{
-			p_packageId = _PACKAGE_ID;
-		}
-		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) )
-		{
-			var l_extension:String = ".mp3";
-			#if cpp
-			l_extension = ".ogg"; // doesn't work on Macs?
-			#elseif js
-			l_extension = untyped browser.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
-			#end
-			p_id += l_extension;
-		}
-		if ( ( p_packageId.length > 0 ) && ( p_packageId.substr( -1, 1 ) != "." ) )
-		{
-			p_packageId += ".";
-		}
-		var l_assetName:String = StringTools.replace( p_packageId, ".", "/" ) + p_id;
-		var l_result:Dynamic = Assets.getSound( l_assetName );
-		if ( l_result != null )
-		{
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getBitmapData( l_assetName );
-		if ( l_result != null )
-		{
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getFont( l_assetName );
-		if ( l_result != null )
-		{
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getText( l_assetName );
-		if ( l_result != null )
-		{
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getBytes( l_assetName );
-		if ( l_result != null )
-		{
-			return l_result;
-		}
-		return super.getAsset( p_id, p_packageId, p_args );
-	}*/
 
 	private function _createView( p_type:EAsset ):IView
 	{
