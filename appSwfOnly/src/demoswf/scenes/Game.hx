@@ -110,7 +110,6 @@ class Game extends AScene
 			_session.isWin = true;
 			_session.highScore = _score;
 		}
-		trace( _session.highScore );
 		_kernel.scenes.next();
 	}
 

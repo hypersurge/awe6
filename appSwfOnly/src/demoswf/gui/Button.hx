@@ -77,7 +77,7 @@ class Button extends BasicButton
 		l_result.addChild( new Bitmap( p_isOver ? _assetManager.buttonOver : _assetManager.buttonUp ) );
 		var l_text:Text = new Text( _kernel, width - ( 2 * _marginWidth ), height - ( 2 * _marginHeight ), label, _kernel.factory.createTextStyle( ETextStyle.BUTTON ) );
 		l_text.setPosition( _marginWidth, _marginHeight );
-		l_result.addChild( untyped l_text._sprite ); // safe ancestry cast
+		l_result.addChild( untyped l_text._context ); // safe ancestry cast
 		return l_result;
 	}
 

@@ -1,4 +1,5 @@
 :: Run prior to haxe compilation of demo project
+exit
 
 @echo off
 cd scripts
