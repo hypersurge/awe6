@@ -99,7 +99,11 @@ interface IFactory
 	/**
 	 * Dictionary of values.  Can be used to load initial configuration settings or store global variables.
 	 */
+	#if haxe3
+	var config( default, null ):Map<String,Dynamic>;
+	#else
 	var config( default, null ):Hash<Dynamic>;
+	#end
 	/**
 	 * The scene which is displayed first.  The application starts here.
 	 */

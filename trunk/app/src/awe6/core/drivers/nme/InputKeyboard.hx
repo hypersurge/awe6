@@ -291,8 +291,8 @@ class InputKeyboard extends AInputKeyboard
 				222; 
 			case TOPLEFT :
 				192;
-			case SUB_TYPE( l_value ) :
-				Std.int( l_value );
+			case SUB_TYPE( p_value ) :
+				Std.int( p_value );
 		}
 	}
 	

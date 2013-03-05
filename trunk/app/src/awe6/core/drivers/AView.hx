@@ -39,18 +39,31 @@ import awe6.interfaces.IView;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class AView extends Process implements IView
+#else
 class AView extends Process, implements IView
+#end
 {
 	public var context( default, null ):Context;
-	public var priority( _get_priority, _set_priority ):Int;
 	public var owner( default, null ):Dynamic;
-	public var parent( _get_parent, null ):IView;
-	public var isVisible( default, _set_isVisible ):Bool;	
-	public var isInViewStack( _get_isInViewStack, null ):Bool;
-	public var x( default, _set_x ):Float;
-	public var y( default, _set_y ):Float;
 	public var globalX( default, null ):Float;
 	public var globalY( default, null ):Float;
+	#if haxe3
+	@:isVar public var priority( get, set ):Int;
+	public var x( default, set ):Float;
+	public var y( default, set ):Float;
+	public var isVisible( default, set ):Bool;	
+	public var isInViewStack( get, null ):Bool;
+	public var parent( get, null ):IView;
+	#else
+	public var priority( get_priority, set_priority ):Int;
+	public var x( default, set_x ):Float;
+	public var y( default, set_y ):Float;
+	public var isVisible( default, set_isVisible ):Bool;	
+	public var isInViewStack( get_isInViewStack, null ):Bool;
+	public var parent( get_parent, null ):IView;
+	#end
 	
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;
@@ -183,12 +196,12 @@ class AView extends Process, implements IView
 		parent = p_parent;
 	}
 	
-	private function _get_priority():Int
+	private function get_priority():Int
 	{
 		return priority;
 	}
 	
-	private function _set_priority( p_value:Int ):Int
+	private function set_priority( p_value:Int ):Int
 	{
 		if ( p_value == priority )
 		{
@@ -206,7 +219,7 @@ class AView extends Process, implements IView
 		return priority;
 	}
 	
-	private function _set_isVisible( p_value:Bool ):Bool
+	private function set_isVisible( p_value:Bool ):Bool
 	{
 		if ( p_value == isVisible )
 		{
@@ -224,12 +237,12 @@ class AView extends Process, implements IView
 		return isVisible;
 	}
 	
-	private function _get_parent():IView
+	private function get_parent():IView
 	{
 		return parent;
 	}
 	
-	private function _get_isInViewStack():Bool
+	private function get_isInViewStack():Bool
 	{
 		if ( !isVisible )
 		{
@@ -246,14 +259,14 @@ class AView extends Process, implements IView
 		return parent.isInViewStack;
 	}
 	
-	private function _set_x( p_value:Float ):Float
+	private function set_x( p_value:Float ):Float
 	{
 		x = p_value;
 		globalX = ( parent == null ) ? x : x + parent.globalX;
 		return x;
 	}
 	
-	private function _set_y( p_value:Float ):Float
+	private function set_y( p_value:Float ):Float
 	{
 		y = p_value;
 		globalY = ( parent == null ) ? y : y + parent.globalY;

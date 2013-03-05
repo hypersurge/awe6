@@ -36,7 +36,11 @@ import haxe.io.BytesData;
  * <p>The other functions are often regularly used in entity creation.</p>
  * @author	Robert Fell
  */
+#if haxe3
+interface ITools extends IEncrypter
+#else
 interface ITools implements IEncrypter
+#end
 {
 	/**
 	 * Used as an arbitrarily high number to avoid infinity and division by zero issues.

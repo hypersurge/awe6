@@ -63,7 +63,11 @@ import awe6.interfaces.ITools;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class AFactory implements IFactory implements IDisposable
+#else
 class AFactory implements IFactory, implements IDisposable
+#end
 {
 	private static inline var _CONFIG_ASSETS_NODE = "settings.assets.url";
 	
@@ -89,7 +93,11 @@ class AFactory implements IFactory, implements IDisposable
 	public var secret( default, null ):String;
 	public var targetFramerate( default, null ):Int;
 	public var isFixedUpdates( default, null ):Bool;
+	#if haxe3
+	public var config( default, null ):Map<String,Dynamic>;
+	#else
 	public var config( default, null ):Hash<Dynamic>;
+	#end
 	public var startingSceneType( default, null ):EScene;
 	public var keyPause( default, null ):EKey;
 	public var keyMute( default, null ):EKey;
@@ -107,7 +115,11 @@ class AFactory implements IFactory, implements IDisposable
 
 	inline private function _init():Void
 	{
+		#if haxe3
+		config = new Map<String,Dynamic>();
+		#else
 		config = new Hash<Dynamic>();
+		#end
 		_configure( true );
 		_driverInit();
 	}

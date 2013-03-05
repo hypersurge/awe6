@@ -28,21 +28,32 @@
  */
 
 package awe6.extras.gui;
+import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
-import flash.display.Sprite;
 
+#if haxe3
+class GuiEntity extends Entity implements IPositionable
+#else
 class GuiEntity extends Entity, implements IPositionable
+#end
 {
-	public var x( default, _set_x ):Float;
-	public var y( default, _set_y ):Float;
 	public var width( default, null ):Float;
 	public var height( default, null ):Float;
-	public var isFlippedX( default, _set_isFlippedX ):Bool;
-	public var isFlippedY( default, _set_isFlippedY ):Bool;
+	#if haxe3
+	public var x( default, set ):Float;
+	public var y( default, set ):Float;
+	public var isFlippedX( default, set ):Bool;
+	public var isFlippedY( default, set ):Bool;
+	#else
+	public var x( default, set_x ):Float;
+	public var y( default, set_y ):Float;
+	public var isFlippedX( default, set_isFlippedX ):Bool;
+	public var isFlippedY( default, set_isFlippedY ):Bool;
+	#end
 	
-	private var _sprite:Sprite;
+	private var _context:Context;
 	
 	public function new( p_kernel:IKernel, ?p_width:Float = 100, ?p_height:Float = 100, ?p_isMasked:Bool = true )
 	{
@@ -50,16 +61,22 @@ class GuiEntity extends Entity, implements IPositionable
 		Reflect.setField( this, "isFlippedY", false );
 		width = p_width;
 		height = p_height;
-		_sprite = new Sprite();
+		_context = new Context();
 		if ( p_isMasked )
 		{
-			var l_mask:Sprite = new Sprite();
-			l_mask.graphics.beginFill( 0xFF0000 );
-			l_mask.graphics.drawRect( 0, 0, p_width, p_height );
-			_sprite.addChild( l_mask );
-			_sprite.mask = l_mask;
+			var l_mask:Context = new Context();
+			try untyped
+			{
+				l_mask.graphics.beginFill( 0xFF0000 );
+				l_mask.graphics.drawRect( 0, 0, p_width, p_height );
+				_context.addChild( l_mask );
+				_context.mask = l_mask;
+			}
+			catch( p_error:Dynamic )
+			{
+			}
 		}
-		super( p_kernel, _sprite );
+		super( p_kernel, _context );
 	}
 	
 	public function setPosition( p_x:Float, p_y:Float ):Void
@@ -68,28 +85,28 @@ class GuiEntity extends Entity, implements IPositionable
 		y = p_y;
 	}
 	
-	private function _set_x( p_value:Float ):Float
+	private function set_x( p_value:Float ):Float
 	{
 		x = p_value;
-		_sprite.x = x;
+		_context.x = x;
 		return x;
 	}
 	
-	private function _set_y( p_value:Float ):Float
+	private function set_y( p_value:Float ):Float
 	{
 		y = p_value;
-		_sprite.y = y;
+		_context.y = y;
 		return y;
 	}
 	
-	private function _set_isFlippedX( p_value:Bool ):Bool
+	private function set_isFlippedX( p_value:Bool ):Bool
 	{
 		if ( p_value == isFlippedX )
 		{
 			return isFlippedX;
 		}
 		isFlippedX = p_value;
-		_sprite.scaleX *= -1;
+		_context.scaleX *= -1;
 		if ( isFlippedX )
 		{
 			x += width;
@@ -101,14 +118,14 @@ class GuiEntity extends Entity, implements IPositionable
 		return isFlippedX;
 	}
 
-	private function _set_isFlippedY( p_value:Bool ):Bool
+	private function set_isFlippedY( p_value:Bool ):Bool
 	{
 		if ( p_value == isFlippedY )
 		{
 			return isFlippedY;
 		}
 		isFlippedY = p_value;
-		_sprite.scaleY *= -1;
+		_context.scaleY *= -1;
 		if ( isFlippedY )
 		{
 			y += height;

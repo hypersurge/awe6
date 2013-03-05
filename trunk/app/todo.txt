@@ -9,3 +9,9 @@ Haxe 3 migration:
 	Interface extends, commas
 	Getters, Setters
 	Directive, #if haxe3 ?  initially, then remove?
+	
+Upgrades:
+	Gui to _context
+	Trigger to do typed callback
+	Easing
+	

@@ -50,7 +50,11 @@ class ASession implements ISession
 	private var _version:Int;
 	
 	public var id( default, null ):String;
-	public var isTester( _get_isTester, null ):Bool;
+	#if haxe3
+	public var isTester( get, null ):Bool;
+	#else
+	public var isTester( get_isTester, null ):Bool;
+	#end
 	public var loadCount:Int;
 	public var saveCount:Int;
 	//extend me
@@ -208,7 +212,7 @@ class ASession implements ISession
 		return id + ": " + Std.string( _data );
 	}
 	
-	private function _get_isTester():Bool
+	private function get_isTester():Bool
 	{
 		return ( _kernel.isDebug || ( id == DEBUG_ID ) );
 	}

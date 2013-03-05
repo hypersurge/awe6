@@ -32,21 +32,36 @@ import awe6.interfaces.EAgenda;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-import haxe.FastList;
+#if haxe3
+typedef GenericStackEntity<T> = haxe.ds.GenericStack<T>;
+#else
+typedef GenericStackEntity<T> = haxe.FastList<T>;
+#end
 
 /**
  * The Entity class provides a minimalist implementation of the IEntity interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class Entity extends Process implements IEntity
+#else
 class Entity extends Process, implements IEntity
+#end
 {
-	public var id( default, _set_id ):String;
-	public var agenda( _get_agenda, null ):EAgenda;
-	public var parent( _get_parent, null ):IEntity;
-	public var view( _get_view, null ):IView;
+	#if haxe3
+	public var id( default, set ):String;
+	public var agenda( get, null ):EAgenda;
+	public var parent( get, null ):IEntity;
+	public var view( get, null ):IView;
+	#else
+	public var id( default, set_id ):String;
+	public var agenda( get_agenda, null ):EAgenda;
+	public var parent( get_parent, null ):IEntity;
+	public var view( get_view, null ):IView;
+	#end
 	
-	private var _entityAgendaPairs:FastList<_HelperEntityAgendaPair>;
+	private var _entityAgendaPairs:GenericStackEntity<_HelperEntityAgendaPair>;
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
@@ -64,7 +79,7 @@ class Entity extends Process, implements IEntity
 	{
 		super._init();
 		agenda = EAgenda.ALWAYS;
-		_entityAgendaPairs = new FastList<_HelperEntityAgendaPair>();
+		_entityAgendaPairs = new GenericStackEntity<_HelperEntityAgendaPair>();
 		_isAgendaDirty = true;
 		_cachedEntities = [];
 	}
@@ -306,23 +321,23 @@ class Entity extends Process, implements IEntity
 		parent = p_parent;
 	}
 	
-	private function _set_id( p_value:String ):String
+	private function set_id( p_value:String ):String
 	{
 		id = p_value;
 		return id;
 	}
 	
-	private function _get_agenda():EAgenda
+	private function get_agenda():EAgenda
 	{
 		return agenda;
 	}
 	
-	private function _get_parent():IEntity
+	private function get_parent():IEntity
 	{
 		return parent;
 	}
 	
-	private function _get_view():IView
+	private function get_view():IView
 	{
 		return view;
 	}	

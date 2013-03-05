@@ -194,7 +194,7 @@ class Kernel extends AKernel
 					var l_marginX:Int = Std.int( ( Capabilities.screenResolutionX - ( factory.width * l_nearestMultiple ) ) / l_nearestMultiple );
 					var l_marginY:Int = Std.int( ( Capabilities.screenResolutionY - ( factory.height * l_nearestMultiple ) ) / l_nearestMultiple );
 					_stage.fullScreenSourceRect = new Rectangle( Std.int( - l_marginX / 2 ), Std.int( - l_marginY / 2 ), factory.width + l_marginX, factory.height + l_marginY );	
-				case SUB_TYPE( l_value ) :
+				case SUB_TYPE( _ ) :
 					null;
 			}
 			try

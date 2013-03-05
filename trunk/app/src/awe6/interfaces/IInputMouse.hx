@@ -72,7 +72,11 @@ interface IInputMouse
 	 * Specify the visibility of the mouse cursor.
 	 * <p>If true the cursor will be displayed, if false the cursor is hidden.</p>
 	 */
-	var isVisible( default, _set_isVisible ):Bool;
+	#if haxe3
+	var isVisible( default, set ):Bool;
+	#else
+	var isVisible( default, set_isVisible ):Bool;
+	#end
 	/**
 	 * The current scroll position.  Starts at 0.  Range -infinity...infinity.
 	 */
@@ -80,7 +84,11 @@ interface IInputMouse
 	/**
 	 * The current cursor type.
 	 */
-	var cursorType( default, _set_cursorType ):EMouseCursor;
+	#if haxe3
+	var cursorType( default, set ):EMouseCursor;
+	#else
+	var cursorType( default, set_cursorType ):EMouseCursor;
+	#end
 	/**
 	 * The horizontal velocity of the mouse position.
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.

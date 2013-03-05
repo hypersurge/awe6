@@ -36,7 +36,11 @@ import awe6.interfaces.IAssetManagerProcess;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class AAssetManager extends Process implements IAssetManagerProcess
+#else
 class AAssetManager extends Process, implements IAssetManagerProcess
+#end
 {
 	private var _PACKAGE_ID:String;	
 	

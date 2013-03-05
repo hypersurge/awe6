@@ -44,7 +44,11 @@ import flash.text.TextFormatAlign;
 
 class Text extends GuiEntity
 {
-	public var text( default, _set_text ):String;
+	#if haxe3
+	public var text( default, set ):String;
+	#else
+	public var text( default, set_text ):String;
+	#end
 	public var textStyle:ITextStyle;
 	
 	private var _textField:TextField;
@@ -80,12 +84,12 @@ class Text extends GuiEntity
 		#end
 		_textFormat = new TextFormat();
 		_draw();
-		_sprite.addChild( _textField );
+		_context.addChild( _textField );
 		#if ( flash || js )
-		_sprite.cacheAsBitmap = true;
+		_context.cacheAsBitmap = true;
 		#end
-		_sprite.mouseEnabled = _isInput;
-		_sprite.mouseChildren = _isInput;
+		_context.mouseEnabled = _isInput;
+		_context.mouseChildren = _isInput;
 		_isDirty = false;
 		_prevTextStyle = textStyle.toString();
 	}
@@ -170,7 +174,7 @@ class Text extends GuiEntity
 		_isDirty = false;
 	}
 	
-	private function _set_text( p_value:String ):String
+	private function set_text( p_value:String ):String
 	{
 		if ( p_value == null )
 		{

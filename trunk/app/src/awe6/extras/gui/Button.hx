@@ -38,7 +38,11 @@ import flash.events.MouseEvent;
 class Button extends GuiEntity
 {
 	public static inline var DEFAULT_LABEL = "Button";
-	public var label( default, _set_label ):String;
+	#if haxe3
+	public var label( default, set ):String;
+	#else
+	public var label( default, set_label ):String;
+	#end
 	
 	private var _key:EKey;
 	private var _onClickCallback:Void->Void;
@@ -74,7 +78,7 @@ class Button extends GuiEntity
 		_simpleButton.addEventListener( MouseEvent.ROLL_OVER, _onRollOver );
 		_simpleButton.addEventListener( MouseEvent.ROLL_OUT, _onRollOut );
 		
-		_sprite.addChild( _simpleButton );
+		_context.addChild( _simpleButton );
 	}
 	
 	private function _onClick( p_event:MouseEvent ):Void
@@ -112,7 +116,7 @@ class Button extends GuiEntity
 		{
 			var l_text:Text = new Text( _kernel, width - ( 2 * _marginWidth ), height - ( 2 * _marginHeight ), label, _kernel.factory.createTextStyle( ETextStyle.BUTTON ) );
 			l_text.setPosition( _marginWidth, _marginHeight );
-			l_result.addChild( cast( l_text, GuiEntity)._sprite ); // safe ancestry cast
+			l_result.addChild( cast( l_text, GuiEntity)._context ); // safe ancestry cast
 		}		
 		return l_result;
 	}
@@ -161,7 +165,7 @@ class Button extends GuiEntity
 		Reflect.callMethod( this, _onRollOutCallback, [] );		
 	}
 	
-	private function _set_label( p_value:String ):String
+	private function set_label( p_value:String ):String
 	{
 		if ( p_value == label )
 		{

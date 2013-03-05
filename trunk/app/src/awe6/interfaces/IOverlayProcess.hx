@@ -34,6 +34,10 @@ package awe6.interfaces;
  * <p>These extra interface requirements are required for internal workings, but are not exposed via the minimal IOverlay interface.</p>
  * @author	Robert Fell
  */
+#if haxe3
+interface IOverlayProcess extends IOverlay extends IProcess extends IViewable
+#else
 interface IOverlayProcess implements IOverlay, implements IProcess, implements IViewable
+#end
 {
 }

@@ -47,8 +47,8 @@ class Image extends GuiEntity
 	{
 		super._init();
 		_bitmap = new Bitmap( _bitmapData );
-		_sprite.mouseEnabled = false;
-		_sprite.addChild( _bitmap );
+		_context.mouseEnabled = false;
+		_context.addChild( _bitmap );
 	}
 	
 	public function configure( p_bitmapData:BitmapData ):Void

@@ -43,9 +43,17 @@ import awe6.interfaces.IView;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class AOverlay extends Entity implements IOverlayProcess
+#else
 class AOverlay extends Entity, implements IOverlayProcess
+#end
 {
-	public var pauseEntity( _get_pauseEntity, _set_pauseEntity ):IEntity;
+	#if haxe3
+	@:isVar public var pauseEntity( get, set ):IEntity;
+	#else
+	public var pauseEntity( get_pauseEntity, set_pauseEntity ):IEntity;
+	#end
 	
 	private var _borderView:IView;
 	private var _progressContext:Context;
@@ -150,11 +158,19 @@ class AOverlay extends Entity, implements IOverlayProcess
 		_flashAsTime = true;
 		_flashDuration = _flashStartingDuration = 100;
 		
+		#if haxe3
+		_buttonBack.onClickCallback = activateButton.bind( EOverlayButton.BACK );
+		_buttonMute.onClickCallback = activateButton.bind( EOverlayButton.MUTE );
+		_buttonPause.onClickCallback = activateButton.bind( EOverlayButton.PAUSE );
+		_buttonUnmute.onClickCallback = activateButton.bind( EOverlayButton.UNMUTE );
+		_buttonUnpause.onClickCallback = activateButton.bind( EOverlayButton.UNPAUSE );
+		#else
 		_buttonBack.onClickCallback = callback( activateButton, EOverlayButton.BACK );
 		_buttonMute.onClickCallback = callback( activateButton, EOverlayButton.MUTE );
 		_buttonPause.onClickCallback = callback( activateButton, EOverlayButton.PAUSE );
 		_buttonUnmute.onClickCallback = callback( activateButton, EOverlayButton.UNMUTE );
 		_buttonUnpause.onClickCallback = callback( activateButton, EOverlayButton.UNPAUSE );
+		#end
 		
 		view.addChild( _flashView, 1 );
 		view.addChild( _pauseView, 2 );
@@ -236,7 +252,8 @@ class AOverlay extends Entity, implements IOverlayProcess
 				_buttonPause;
 			case UNPAUSE :
 				_buttonUnpause;
-			case SUB_TYPE( l_value ) :
+			case SUB_TYPE( p_value ) :
+				p_value;
 				null;
 		}		
 	}
@@ -347,7 +364,8 @@ class AOverlay extends Entity, implements IOverlayProcess
 					_kernel.resume();
 					_drawPause( false );
 				}
-			case SUB_TYPE( l_value ) :
+			case SUB_TYPE( p_value ) :
+				p_value;
 				null;
 		}
 	}
@@ -357,12 +375,12 @@ class AOverlay extends Entity, implements IOverlayProcess
 		_pauseView.isVisible = p_isVisible;
 	}
 	
-	private function _get_pauseEntity():IEntity
+	private function get_pauseEntity():IEntity
 	{
 		return pauseEntity;
 	}
 	
-	private function _set_pauseEntity( p_value:IEntity ):IEntity
+	private function set_pauseEntity( p_value:IEntity ):IEntity
 	{
 		if ( pauseEntity != null )
 		{

@@ -40,7 +40,11 @@ interface IOverlay
 	/**
 	 * An optional IEntity which is displayed and updated when the game is paused.
 	 */
-	var pauseEntity( _get_pauseEntity, _set_pauseEntity ):IEntity;
+	#if haxe3
+	var pauseEntity( get, set ):IEntity;
+	#else
+	var pauseEntity( get_pauseEntity, set_pauseEntity ):IEntity;
+	#end
 	/**
 	 * Sets the visibility of a specific overlay button.
 	 * @param	type	The overlay button.

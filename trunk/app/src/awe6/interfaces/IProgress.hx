@@ -38,5 +38,9 @@ interface IProgress
 	/**
 	 * Range: 0...1.  0 represents just starting, 1 represents complete.
 	 */
-	var progress( _get_progress, null ):Float;
+	#if haxe3
+	var progress( get, null ):Float;
+	#else
+	var progress( get_progress, null ):Float;
+	#end
 }
