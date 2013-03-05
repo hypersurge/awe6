@@ -64,7 +64,11 @@ import haxe.Timer;
  * @author	Robert Fell
  * @author	Mihail Ivanchev
  */
+#if haxe3
+class AKernel extends Process implements IKernel
+#else
 class AKernel extends Process, implements IKernel
+#end
 {
 	private static inline var _POWERED_BY = "Powered by awe6";
 	private static inline var _POWERED_BY_URL = "http://awe6.org";
@@ -79,15 +83,21 @@ class AKernel extends Process, implements IKernel
 	public var factory( default, null ):IFactory;
 	public var isDebug( default, null ):Bool;
 	public var isLocal( default, null ):Bool;
-	public var isEyeCandy( default, _set_isEyeCandy ):Bool;
-	public var isFullScreen( default, _set_isFullScreen ):Bool;
 	public var tools( default, null ):ITools;
 	public var assets( default, null ):IAssetManager;
 	public var audio( default, null ):IAudioManager;
 	public var inputs( default, null ):IInputManager;
 	public var scenes( default, null ):ISceneManager;
 	public var messenger( default, null ):IMessageManager;
-	public var session( _get_session, _set_session ):ISession;
+	#if haxe3
+	public var isEyeCandy( default, set ):Bool;
+	public var isFullScreen( default, set ):Bool;
+	@:isVar public var session( get, set ):ISession;
+	#else
+	public var isEyeCandy( default, set_isEyeCandy ):Bool;
+	public var isFullScreen( default, set_isFullScreen ):Bool;
+	public var session( get_session, set_session ):ISession;
+	#end
 	
 	private var _context:Context;
 	private var _view:View;
@@ -291,7 +301,7 @@ class AKernel extends Process, implements IKernel
 		scenes.setScene( factory.startingSceneType );
 	}
 	
-	private function _set_isEyeCandy( p_value:Bool ):Bool
+	private function set_isEyeCandy( p_value:Bool ):Bool
 	{
 		if ( !factory.isEyeCandyOptionEnabled )
 		{
@@ -308,7 +318,7 @@ class AKernel extends Process, implements IKernel
 		//override me
 	}
 	
-	private function _set_isFullScreen( p_value:Bool ):Bool
+	private function set_isFullScreen( p_value:Bool ):Bool
 	{
 		if ( !factory.isFullScreenOptionEnabled || Type.enumEq( factory.fullScreenType, EFullScreen.DISABLED ) )
 		{
@@ -343,12 +353,12 @@ class AKernel extends Process, implements IKernel
 		}
 	}
 	
-	private function _get_session():ISession
+	private function get_session():ISession
 	{
 		return session;
 	}
 	
-	private function _set_session( p_value:ISession ):ISession
+	private function set_session( p_value:ISession ):ISession
 	{
 		session = p_value;
 		return session;

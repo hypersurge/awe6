@@ -40,7 +40,11 @@ interface ISceneManager
 	 * The currently active scene.
 	 * <p>Use as a runtime property and not as an initialization property.</p>
 	 */
-	var scene( _get_scene, null ):IScene;
+	#if haxe3
+	var scene( get, null ):IScene;
+	#else
+	var scene( get_scene, null ):IScene;
+	#end
 	/**
 	 * Sets the current scene to a new scene.
 	 * @param	type	The new scene.

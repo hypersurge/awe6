@@ -38,11 +38,19 @@ interface IPositionable
 	/**
 	 * The horizontal position.
 	 */
-	var x( default, _set_x ):Float;
+	#if haxe3
+	var x( default, set ):Float;
+	#else
+	var x( default, set_x ):Float;
+	#end
 	/**
 	 * The vertical position.
 	 */
-	var y( default, _set_y ):Float;
+	#if haxe3
+	var y( default, set ):Float;
+	#else
+	var y( default, set_y ):Float;
+	#end
 	/**
 	 * Sets both the horizontal and vertical position;
 	 * @param	x	The horizontal position.

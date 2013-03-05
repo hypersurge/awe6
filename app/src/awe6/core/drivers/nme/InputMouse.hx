@@ -123,15 +123,15 @@ class InputMouse extends AInputMouse
 		scroll += p_event.delta;
 	}
 	
-	override private function _set_isVisible( p_value:Bool ):Bool
+	override private function set_isVisible( p_value:Bool ):Bool
 	{
 		p_value ? Mouse.show() : Mouse.hide();
-		return super._set_isVisible( p_value );
+		return super.set_isVisible( p_value );
 	}
 	
-	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		return super._set_cursorType( p_value );
+		return super.set_cursorType( p_value );
 	}
 
 }

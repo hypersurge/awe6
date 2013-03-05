@@ -34,7 +34,11 @@ import awe6.core.MessageManager;
  * Handles main updates and provides global locators for all managers
  * @author	Robert Fell
  */
+#if haxe3
+interface IKernel extends IPauseable extends ILogger
+#else
 interface IKernel implements IPauseable, implements ILogger
+#end
 {
 	/**
 	 * Defined by the IFactory, can be used for conditional logic relating to build modes and debug.
@@ -47,11 +51,19 @@ interface IKernel implements IPauseable, implements ILogger
 	/**
 	 * Toggleable by the user, intended to be used as a switch to disable intensive, but non essential, content (performance vs wow).
 	 */
-	var isEyeCandy( default, _set_isEyeCandy ):Bool;
+	#if haxe3
+	var isEyeCandy( default, set ):Bool;
+	#else
+	var isEyeCandy( default, set_isEyeCandy ):Bool;
+	#end
 	/**
 	 * Toggleable by the user, enables or disables full screen mode.
 	 */
-	var isFullScreen( default, _set_isFullScreen ):Bool;
+	#if haxe3
+	var isFullScreen( default, set ):Bool;
+	#else
+	var isFullScreen( default, set_isFullScreen ):Bool;
+	#end
 	/**
 	 * The topmost visual element, used for chrome & global controls.
 	 */
@@ -87,7 +99,11 @@ interface IKernel implements IPauseable, implements ILogger
 	/**
 	 * Read and write globally accessible variables.
 	 */
-	var session( _get_session, _set_session ):ISession;
+	#if haxe3
+	var session( get, set ):ISession;
+	#else
+	var session( get_session, set_session ):ISession;
+	#end
 	/**
 	 * Used for read only application settings and localisation text.
 	 * @param	id	The unique identifier for the config setting (e.g. XML node name).

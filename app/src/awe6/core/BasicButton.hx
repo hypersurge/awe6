@@ -36,12 +36,23 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
 import awe6.interfaces.IView;
 
+#if haxe3
+class BasicButton extends Entity implements IPositionable
+#else
 class BasicButton extends Entity, implements IPositionable
+#end
 {
-	public var x( default, _set_x ):Float;
-	public var y( default, _set_y ):Float;
-	public var width( default, _set_width ):Float;
-	public var height( default, _set_height ):Float;
+	#if haxe3
+	public var x( default, set ):Float;
+	public var y( default, set ):Float;
+	public var width( default, set ):Float;
+	public var height( default, set ):Float;
+	#else
+	public var x( default, set_x ):Float;
+	public var y( default, set_y ):Float;
+	public var width( default, set_width ):Float;
+	public var height( default, set_height ):Float;
+	#end
 	public var isOver( default, null ):Bool;
 	public var onClickCallback:Void->Void;
 	public var onRollOverCallback:Void->Void;
@@ -159,7 +170,7 @@ class BasicButton extends Entity, implements IPositionable
 		y = p_y;
 	}
 	
-	private function _set_x( p_value:Float ):Float
+	private function set_x( p_value:Float ):Float
 	{
 		x = p_value;
 		if ( view != null )
@@ -169,7 +180,7 @@ class BasicButton extends Entity, implements IPositionable
 		return x;
 	}
 	
-	private function _set_y( p_value:Float ):Float
+	private function set_y( p_value:Float ):Float
 	{
 		y = p_value;
 		if ( view != null )
@@ -179,13 +190,13 @@ class BasicButton extends Entity, implements IPositionable
 		return y;
 	}
 	
-	private function _set_width( p_value:Float ):Float
+	private function set_width( p_value:Float ):Float
 	{
 		width = p_value;
 		return width;
 	}
 	
-	private function _set_height( p_value:Float ):Float
+	private function set_height( p_value:Float ):Float
 	{
 		height = p_value;
 		return height;

@@ -41,9 +41,17 @@ import awe6.interfaces.IView;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class SceneManager extends Process implements ISceneManager
+#else
 class SceneManager extends Process, implements ISceneManager
+#end
 {
-	public var scene( _get_scene, null ):IScene;
+	#if haxe3
+	public var scene( get, null ):IScene;
+	#else
+	public var scene( get_scene, null ):IScene;
+	#end
 	public var view( default, null ):IView;
 	
 	private var _sceneTransition:ISceneTransition;
@@ -144,7 +152,7 @@ class SceneManager extends Process, implements ISceneManager
 		else setScene( scene.type );
 	}
 	
-	private function _get_scene():IScene
+	private function get_scene():IScene
 	{
 		return scene;
 	}

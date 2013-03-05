@@ -62,9 +62,9 @@ class Shine extends GuiEntity
 		_canvas = new BitmapData( _mask.width, _mask.height, true, 0x00 );
 		_bitmap = new Bitmap( _canvas );
 		_bitmap.blendMode = BlendMode.ADD;
-		_sprite.addChild( _bitmap );
-		_sprite.mouseEnabled = false;
-		_sprite.mouseChildren = false;
+		_context.addChild( _bitmap );
+		_context.mouseEnabled = false;
+		_context.mouseChildren = false;
 	}
 	
 	override private function _updater( ?p_deltaTime:Int = 0 ):Void 

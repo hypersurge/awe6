@@ -34,6 +34,10 @@ package awe6.interfaces;
  * <p>These extra interface requirements are required for internal workings, but are not exposed via the minimal IAssetManager interface.</p>
  * @author	Robert Fell
  */
+#if haxe3
+interface IAssetManagerProcess extends IAssetManager extends IProcess
+#else
 interface IAssetManagerProcess implements IAssetManager, implements IProcess
+#end
 {
 }

@@ -41,7 +41,11 @@ import awe6.interfaces.IKernel;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
+#if haxe3
+class InputManager extends Process implements IInputManager
+#else
 class InputManager extends Process, implements IInputManager
+#end
 {
 	public var joypad( default, null ):IInputJoypad;
 	public var keyboard( default, null ):IInputKeyboard;

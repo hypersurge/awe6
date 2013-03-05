@@ -33,7 +33,11 @@ package awe6.interfaces;
  * The IView interface should be implemented by all objects in the view broad phase traversal stack.
  * @author	Robert Fell
  */
+#if haxe3
+interface IView extends IPriority extends IPositionable extends IDisposable extends IUpdateable
+#else
 interface IView implements IPriority, implements IPositionable, implements IDisposable, implements IUpdateable
+#end
 {
 	/**
 	 * Optional: the object who this view represents.
@@ -43,17 +47,29 @@ interface IView implements IPriority, implements IPositionable, implements IDisp
 	 * The parent view of this view.
 	 * <p>The reference is null if this view has no parent (for exemple a view not in the view traversal stack).</p>
 	 */
-	var parent( _get_parent, null ):IView;
+	#if haxe3
+	var parent( get, null ):IView;
+	#else
+	var parent( get_parent, null ):IView;
+	#end
 	/**
 	 * Specify the visibility of this view.
 	 * <p>If true the view will be displayed, if false the view is hidden.</p>
 	 */
-	var isVisible( default, _set_isVisible ):Bool;
+	#if haxe3
+	var isVisible( default, set ):Bool;
+	#else
+	var isVisible( default, set_isVisible ):Bool;
+	#end
 	/**
 	 * Determined by whether this view is visible and included in a visible branch of the view stack (i.e. actually has the potential to be drawn within the overlay).
 	 * <p>If true the view is potentially visible, if false the view is impossible to be seen.</p>
 	 */
-	var isInViewStack( _get_isInViewStack, null ):Bool;
+	#if haxe3
+	var isInViewStack( get, null ):Bool;
+	#else
+	var isInViewStack( get_isInViewStack, null ):Bool;
+	#end
 	/**
 	 * The horizontal position considering all parent's positions / scene graph.
 	 */

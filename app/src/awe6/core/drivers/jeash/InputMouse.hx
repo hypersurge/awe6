@@ -114,17 +114,17 @@ class InputMouse extends AInputMouse
 		trace( scroll );
 	}
 	
-	override private function _set_isVisible( p_value:Bool ):Bool
+	override private function set_isVisible( p_value:Bool ):Bool
 	{
 		// doesn't work in js
 		p_value ? Mouse.show() : Mouse.hide();
-		return super._set_isVisible( p_value );
+		return super.set_isVisible( p_value );
 	}
 	
-	override private function _set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 		// Lib.nmeSetCursor unreliable / private enumerator, therefore removed
-		return super._set_cursorType( p_value );
+		return super.set_cursorType( p_value );
 	}
 
 }
