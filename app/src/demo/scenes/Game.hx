@@ -51,6 +51,7 @@ class Game extends AScene
 	{
 		super._init();
 		isPauseable = true;
+		isSessionSavedOnNext = true;
 		_session.isWin = false;
 		var l_textStyle = _kernel.factory.createTextStyle( ETextStyle.SUBHEAD );
 		#if js

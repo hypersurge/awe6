@@ -38,8 +38,8 @@ class Intro extends AScene
 
 	override private function _init():Void
 	{
-		super._init();
 		_kernel.session = _kernel.factory.createSession( "Basic" );
+		super._init();
 
 		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, _kernel.getConfig( "gui.scenes.intro.instructions" ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		l_result.y = 70;
