@@ -334,11 +334,11 @@ class Run
 			_deleteTree( p_projectPath + "/Templates" );
 			if ( l_targetIsNME )
 			{
-				_moveAllFilesToDir( p_projectPath + "/Projects/373 HaXe - awe6 NME Project", p_projectPath );
+				_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 NME Project", p_projectPath );
 			}
 			else
 			{
-				_moveAllFilesToDir( p_projectPath + "/Projects/313 HaXe - awe6 Project", p_projectPath );
+				_moveAllFilesToDir( p_projectPath + "/Projects/313 Haxe - awe6 Project", p_projectPath );
 			}
 			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
