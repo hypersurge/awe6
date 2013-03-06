@@ -53,13 +53,6 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 = Mac or Linux Operating Systems =
 
   * Choose a [http://haxe.org/com/ide Haxe IDE]
-  * Patch latest run.n with
-
-{{{
-cd $(haxelib path awe6 | head -n 1)
-mv run.n run.n.old
-wget "http://awe6.googlecode.com/svn/trunk/app/scripts/haxelib/run.n"
-}}}
 
 === Starting a new project with awe6 ===
 
