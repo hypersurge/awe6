@@ -25,7 +25,7 @@ haxelib run awe6 install
 
 === Starting a new awe6 swf project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20HaXe%20-%20awe6%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20Haxe%20-%20awe6%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 Project_
@@ -37,7 +37,7 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 
 === Starting a new awe6 NME project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20HaXe%20-%20awe6%20NME%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20Haxe%20-%20awe6%20NME%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 NME Project_
