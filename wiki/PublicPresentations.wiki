@@ -1,9 +1,9 @@
 = Silex-Labs, 21st June 2012, Valerie Elimak =
 *_ Practical awe6 workshops _*
 
-A whole day dedicated to discovering Haxe.  Morning session focused on a theoretical introduction to cross-platform development.
+A whole day dedicated to discovering Haxe.  Morning sessions focused on a theoretical introduction to cross-platform development.
 
-The afternoon session focused on awe6: introduction, understanding the main components, going deeper into the architecture.  Slides and comprehensive coding examples can be found on [http://workshops.elimak.com/awe6june12/ Valerie's website].
+Afternoon sessions focused on awe6: introduction, understanding the main components & going deeper into the architecture.  [https://docs.google.com/presentation/d/16HxI4Wkdd8jwiEK5vwUv_E8J5cOqySka5B2Jeo8XAbA/edit?usp=sharing Slides] and comprehensive coding examples can be found on [http://workshops.elimak.com/awe6june12/ Valerie's website].
 
 = Haxe WWX, 14 April 2012, Robert Fell =
 *_ May the Force be with you: making a game with awe6 _*
