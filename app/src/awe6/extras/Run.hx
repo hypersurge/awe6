@@ -32,12 +32,20 @@ package awe6.extras;
 import haxe.Resource;
 import haxe.io.Path;
 import haxe.io.Eof;
+#if haxe3
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.FileInput;
+import sys.io.FileOutput;
+import haxe.zip.Reader;
+#else
 import neko.FileSystem;
-import neko.Lib;
 import neko.io.File;
 import neko.io.FileInput;
 import neko.io.FileOutput;
 import neko.zip.Reader;
+#end
+import neko.Lib;
 import StringTools;
 
 /**
@@ -61,9 +69,9 @@ class Run
 	private static inline var _TARGET_ENTITY = "entity";
 	
 	private static inline var _TEMPLATE_EXT = ".template";
-	private static inline var _OS = Sys.systemName();
+	private static var _OS = Sys.systemName();
 
-	private var callingDir:String;
+	private var _callingDir:String;
 
 	static function main() 
 	{
@@ -92,7 +100,7 @@ class Run
 		}
 		else
 		{
-			Lib.println( "Error: install option is not available on Linux" );
+			Lib.println( "Error: install option is only available on Windows (requires FlashDevelop)" );
 		}
 	}
 
@@ -100,50 +108,43 @@ class Run
 	{
 		if ( _OS == "Windows" )
 		{
-			Lib.println( "Error: create option is not available on Windows" );
+			Lib.println( "Warning: install option is recommended for Windows (use with FlashDevelop)" );
 		}
-		else
+		if ( ( Sys.args().length >= 6 ) && ( Sys.args().length <= 7 ) )
 		{
-			if ( ( Sys.args().length >= 6 ) && ( Sys.args().length <= 7 ) )
+			var l_param = 1;
+			var l_target:String = Sys.args()[ l_param ];
+			var l_projectType:String = "";
+			if ( l_target == _TARGET_PROJECT )
 			{
-				var l_param = 1;
-				var l_target:String = Sys.args()[ l_param ];
-				var l_projectType:String = "";
-				if ( l_target == _TARGET_PROJECT )
+				l_param++;
+				l_projectType = Sys.args()[ l_param ];
+			}
+			var l_projectPath:String = Sys.args()[ l_param+1 ];
+			var l_packageName:String = Sys.args()[ l_param+2 ];
+			var l_authorName:String = Sys.args()[ l_param+3 ];
+			// When called from haxelib, the last argument is the calling directory
+			_callingDir = Sys.args()[ l_param+4 ];
+			if ( l_target == _TARGET_PROJECT )
+			{
+				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_NME ) )
 				{
-					l_param++;
-					l_projectType = Sys.args()[ l_param ];
+					_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
 				}
-				var l_projectPath:String = Sys.args()[ l_param+1 ];
-				var l_packageName:String = Sys.args()[ l_param+2 ];
-				var l_authorName:String = Sys.args()[ l_param+3 ];
-				// When called from haxelib, the last argument is the calling directory
-				callingDir = Sys.args()[ l_param+4 ];
-				if ( l_target == _TARGET_PROJECT )
+				else
 				{
-					if ( ( l_projectType == _PROJECT_SWF) || ( l_projectType == _PROJECT_NME ) )
-					{
-						_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
-					}
-					else
-					{
-						_printSyntax();
-					}
+					_printSyntax();
 				}
-				else if ( Sys.args().length == 6 )
+			}
+			else if ( Sys.args().length == 6 )
+			{
+				if ( l_target == _TARGET_SCENE )
 				{
-					if ( l_target == _TARGET_SCENE )
-					{
-						_createSceneFromTemplate( l_projectPath, l_packageName, l_authorName );
-					}
-					else if ( l_target == _TARGET_ENTITY )
-					{
-						_createEntityFromTemplate( l_projectPath, l_packageName, l_authorName );
-					}
-					else
-					{
-						_printSyntax();
-					}
+					_createSceneFromTemplate( l_projectPath, l_packageName, l_authorName );
+				}
+				else if ( l_target == _TARGET_ENTITY )
+				{
+					_createEntityFromTemplate( l_projectPath, l_packageName, l_authorName );
 				}
 				else
 				{
@@ -154,6 +155,10 @@ class Run
 			{
 				_printSyntax();
 			}
+		}
+		else
+		{
+			_printSyntax();
 		}
 	}
 
@@ -200,7 +205,7 @@ class Run
 		{
 			if ( ( p_filter == "" ) || ( i.fileName.substr( -p_filter.length ) == p_filter ) )
 			{
-				var l_content = ( i.compressed ) ? Reader.unzip( i ) : i.data;			
+				var l_content = i.compressed ? Reader.unzip( i ) : i.data;			
 				var l_finalDestination:String;
 				if ( p_filter == "" )
 				{
@@ -279,12 +284,12 @@ class Run
 		{
 			while ( true )
 			{
-				var line:String = l_source.readLine();
+				var l_line:String = l_source.readLine();
 				for ( i in 0...p_fromStrings.length )
 				{
-					line = StringTools.replace( line, p_fromStrings[i], p_toStrings[i] );
+					l_line = StringTools.replace( l_line, p_fromStrings[i], p_toStrings[i] );
 				}
-				l_target.writeString( line + "\n" );
+				l_target.writeString( l_line + "\n" );
 			}
 		}
 		catch ( ex:Eof )
@@ -316,12 +321,12 @@ class Run
 		}
 	}
 
-	private function _createProjectFromTemplate( p_projectType: String, p_projectPath:String, p_packageName:String, p_authorName:String ):Void
+	private function _createProjectFromTemplate( p_projectType:String, p_projectPath:String, p_packageName:String, p_authorName:String ):Void
 	{
 		if ( p_projectPath.substr(0,1) != "/" )
 		{
 			// Path was relative, make it absolute
-			p_projectPath = callingDir + p_projectPath;
+			p_projectPath = _callingDir + p_projectPath;
 		}
 		if ( ( FileSystem.exists ( p_projectPath ) ) && ( FileSystem.isDirectory ( p_projectPath ) ) )
 		{
@@ -329,10 +334,10 @@ class Run
 		}
 		else
 		{
-			var l_targetIsNME:Bool = ( p_projectType == _PROJECT_NME );
+			var l_isNme:Bool = ( p_projectType == _PROJECT_NME );
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
-			if ( l_targetIsNME )
+			if ( l_isNme )
 			{
 				_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 NME Project", p_projectPath );
 			}
@@ -342,26 +347,58 @@ class Run
 			}
 			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
-			_deleteTree( p_projectPath + "/src/org" );
 			_deleteTree( p_projectPath + "/scripts" );
-			// Remove useless FlashDevelop project file
+			// Remove useless FlashDevelop project files
 			FileSystem.deleteFile( p_projectPath + "/Project.hxproj" );
+			FileSystem.deleteFile( p_projectPath + "/Project.png" );
+			FileSystem.deleteFile( p_projectPath + "/Project.txt" );
 			//
-			FileSystem.rename( p_projectPath + "/src/$(PackagePath)", p_projectPath + "/src/" + p_packageName );
-			var l_projectName: String = new Path( p_projectPath ).file;
-			_modifyTemplates( p_projectPath,
-				[ "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
-				[ p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "" ] );
-			if ( l_targetIsNME )
+			var l_packageNameParts:Array<String> = p_packageName.split( "." );
+			var l_currentPackageNamePath:String = p_projectPath + "/src/";
+			for ( i in l_packageNameParts )
 			{
-				var l_projectNmml: String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
+				FileSystem.createDirectory( l_currentPackageNamePath );
+				l_currentPackageNamePath += i + "/";
+			}
+			FileSystem.rename( p_projectPath + "/src/$(PackagePath)", l_currentPackageNamePath );
+			var l_projectName:String = new Path( p_projectPath ).file;
+			var l_projectHxml:String = p_projectPath + "/" + l_projectName + ".hxml" + _TEMPLATE_EXT;
+			_createHxml( l_projectHxml, l_isNme );
+			_handleTemplate( l_projectHxml, [ "$(ProjectName)" ], [ l_projectName ] );
+			_modifyTemplates( p_projectPath,
+				[ "$(ProjectID)", "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
+				[ l_projectName, p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "\n" ] );
+			if ( l_isNme )
+			{
+				var l_projectNmml:String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
 				FileSystem.rename( p_projectPath + "/$(ProjectName).nmml", l_projectNmml );
-				_handleTemplate( l_projectNmml,
-					[ "$(ProjectID)", "package=\"" ],
-					[ l_projectName, "package=\"com.example." ] );
+				_handleTemplate( l_projectNmml, [], [] );
 			}
 			Lib.println( "Complete: Project " + l_projectName + " successfully created." );
 		}
+	}
+	
+	private function _createHxml( p_fileName:String, p_isNme:Bool = false ):Void
+	{
+		var l_content:String = "";
+		if ( p_isNme )
+		{
+			l_content = "
+-cmd \"haxelib run nme test $(ProjectName).nmml flash\"
+";
+		}
+		else
+		{
+			l_content = "
+-cp src
+-swf assets/game.swf
+-swf-header 600:400:25:FFFFFF
+-swf-lib assets/preloader.swf
+-lib awe6
+-main Main
+";
+		}
+		File.saveContent( p_fileName, l_content );
 	}
 
 	private function _createSceneFromTemplate( p_sceneName:String, p_packageName:String, p_authorName:String ):Void
@@ -369,7 +406,7 @@ class Run
 		if ( p_sceneName.substr(0,1) != "/" )
 		{
 			// Path was relative, make it absolute
-			p_sceneName = callingDir + p_sceneName;
+			p_sceneName = _callingDir + p_sceneName;
 		}
 		if ( FileSystem.exists( p_sceneName + ".hx" ) )
 		{
@@ -393,7 +430,7 @@ class Run
 		if ( p_entityName.substr(0,1) != "/" )
 		{
 			// Path was relative, make it absolute
-			p_entityName = callingDir + p_entityName;
+			p_entityName = _callingDir + p_entityName;
 		}
 		if ( FileSystem.exists( p_entityName + ".hx" ) )
 		{
