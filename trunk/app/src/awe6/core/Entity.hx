@@ -213,6 +213,10 @@ class Entity extends Process, implements IEntity
 	
 	private function _getEntities( ?p_agenda:EAgenda ):Array<IEntity>
 	{
+		if ( !_isAgendaDirty && ( ( p_agenda == null ) || ( Type.enumEq( p_agenda, agenda ) ) ) )
+		{
+			return _cachedEntities;
+		}
 		var l_result:Array<IEntity> = new Array<IEntity>();
 		for ( i in _entityAgendaPairs )
 		{
