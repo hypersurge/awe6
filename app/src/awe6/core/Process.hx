@@ -61,10 +61,13 @@ class Process implements IProcess
 		_tools = cast _kernel.tools;
 		_isEntity = Std.is( this, IEntity );
 		_init();
+//		removed from default for performance reasons. If required you can reinstate it in the concrete class's _init
+/*
 		if ( _isEntity )
 		{
 			_kernel.messenger.sendMessage( EMessage.INIT, cast this, true, true, true );
 		}
+*/
 	}
 	
 	private function _init():Void
@@ -87,10 +90,13 @@ class Process implements IProcess
 		{
 			isDisposed = true;
 			isActive = false;
+//			removed from default for performance reasons. If required you can reinstate it in the concrete class's _disposer
+/*
 			if ( _isEntity )
 			{
 				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this, true, true, true );
 			}
+*/
 			_disposer();
 			return;
 		}
