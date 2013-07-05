@@ -10,7 +10,7 @@ Common terminologies and interfaces with existing game APIs such as:
   * Unity API: http://unity3d.com/support/documentation/ScriptReference/Component.html
 
 High level best practices:
-  * OOP Game Design: http://www.devmaster.net/articles/oo-game-design/
+  * OOP Game Design: http://devmaster.net/posts/2820/object-oriented-game-design
   * States: http://www.icad.puc-rio.br/~lvalente/docs/2006_sbgames.pdf
   * Interface injection: http://martinfowler.com/articles/injection.html
   * SOLID: [http://en.wikipedia.org/wiki/Solid_(object-oriented_design)]
