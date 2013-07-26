@@ -65,7 +65,7 @@ class Entity extends Process, implements IEntity
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
-	public function new( p_kernel:IKernel, p_id:String = null, p_context:Context = null ) 
+	public function new( p_kernel:IKernel, ?p_id:String, ?p_context:Context ) 
 	{
 		if ( view == null )
 		{
@@ -121,7 +121,7 @@ class Entity extends Process, implements IEntity
 		super._disposer();
 	}
 
-	public function addEntity( p_entity:IEntity, p_agenda:EAgenda = null, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):Void
+	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):Void
 	{
 		if ( isDisposed )
 		{
@@ -168,7 +168,7 @@ class Entity extends Process, implements IEntity
 		}
 	}
 	
-	public function removeEntity( p_entity:IEntity, p_agenda:EAgenda = null, p_isRemovedFromView:Bool = false ):Void
+	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isRemovedFromView:Bool = false ):Void
 	{
 		if ( isDisposed )
 		{
@@ -206,12 +206,12 @@ class Entity extends Process, implements IEntity
 		}
 	}	
 	
-	public function getEntities( p_agenda:EAgenda = null ):Array<IEntity>
+	public function getEntities( ?p_agenda:EAgenda ):Array<IEntity>
 	{
 		return _getEntities( p_agenda );
 	}
 	
-	private function _getEntities( p_agenda:EAgenda = null ):Array<IEntity>
+	private function _getEntities( ?p_agenda:EAgenda ):Array<IEntity>
 	{
 		if ( !_isAgendaDirty && ( ( p_agenda == null ) || ( Type.enumEq( p_agenda, agenda ) ) ) )
 		{
@@ -229,7 +229,7 @@ class Entity extends Process, implements IEntity
 		return l_result;
 	}
 	
-	public function getEntitiesByClass<T>( p_classType:Class<T>, p_agenda:EAgenda = null, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):Array<T>
+	public function getEntitiesByClass<T>( p_classType:Class<T>, ?p_agenda:EAgenda, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):Array<T>
 	{
 		if ( p_isBubbleEverywhere && ( _kernel.scenes.scene != null ) )
 		{
@@ -255,7 +255,7 @@ class Entity extends Process, implements IEntity
 		return l_result;
 	}
 	
-	public function getEntityById( p_id:String, p_agenda:EAgenda = null, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):IEntity
+	public function getEntityById( p_id:String, ?p_agenda:EAgenda, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):IEntity
 	{
 		if ( id == p_id )
 		{
@@ -353,7 +353,7 @@ private class _HelperEntityAgendaPair
 	public var agenda( default, null ):EAgenda;
 	public var isAddedToView:Bool;
 	
-	public function new( p_entity:IEntity, p_agenda:EAgenda = null )
+	public function new( p_entity:IEntity, ?p_agenda:EAgenda )
 	{
 		entity = p_entity;
 		agenda = p_agenda;

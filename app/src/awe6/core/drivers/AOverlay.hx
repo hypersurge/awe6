@@ -79,7 +79,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 	private var _buttonPause:BasicButton;
 	private var _buttonUnpause:BasicButton;
 	
-	public function new( p_kernel:IKernel, p_buttonWidth:Float = 30.0, p_buttonHeight:Float = 30.0, p_border:IView = null, p_backUp:IView = null, p_backOver:IView = null, p_muteUp:IView = null, p_muteOver:IView = null, p_unmuteUp:IView = null, p_unmuteOver:IView = null, p_pauseUp:IView = null, p_pauseOver:IView = null, p_unpauseUp:IView = null, p_unpauseOver:IView = null, p_pauseBlur:Float = 8, p_pauseColor:Int = 0x000000, p_pauseAlpha:Float = .35  )
+	public function new( p_kernel:IKernel, p_buttonWidth:Float = 30.0, p_buttonHeight:Float = 30.0, ?p_border:IView, ?p_backUp:IView, ?p_backOver:IView, ?p_muteUp:IView, ?p_muteOver:IView, ?p_unmuteUp:IView, ?p_unmuteOver:IView, ?p_pauseUp:IView, ?p_pauseOver:IView, ?p_unpauseUp:IView, ?p_unpauseOver:IView, p_pauseBlur:Float = 8, p_pauseColor:Int = 0x000000, p_pauseAlpha:Float = .35  )
 	{
 		if ( p_border == null )
 		{
@@ -275,7 +275,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 	}
 	
-	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float, p_width:Null<Float> = null, p_height:Null<Float> = null ):Void
+	public function positionButton( p_type:EOverlayButton, p_x:Float, p_y:Float, ?p_width:Float, ?p_height:Float ):Void
 	{
 		var l_button:BasicButton = _getButton( p_type );
 		if ( l_button == null )
@@ -294,7 +294,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		}
 	}
 	
-	public function showProgress( p_progress:Float, p_message:String = null ):Void
+	public function showProgress( p_progress:Float, ?p_message:String ):Void
 	{
 		_progressView.isVisible = p_progress < 1;		
 	}
@@ -308,7 +308,7 @@ class AOverlay extends Entity, implements IOverlayProcess
 		showButton( EOverlayButton.UNPAUSE, false );
 	}
 	
-	public function flash( p_duration:Null<Float> = null, p_asTime:Bool = true, p_startingAlpha:Float = 1, p_color:Int = 0xFFFFFF ):Void
+	public function flash( ?p_duration:Float, p_asTime:Bool = true, p_startingAlpha:Float = 1, p_color:Int = 0xFFFFFF ):Void
 	{
 		p_duration = ( p_duration != null ) ? p_duration : p_asTime ? 500 : _kernel.factory.targetFramerate * .5;
 		_flashDuration = _flashStartingDuration = p_duration;

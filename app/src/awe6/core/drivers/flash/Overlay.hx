@@ -71,7 +71,7 @@ class Overlay extends AOverlay
 		_flashContext.alpha = _flashAlpha;
 	}
 	
-	override public function flash( p_duration:Null<Float> = null, p_asTime:Bool = true, p_startingAlpha:Float = 1, p_color:Int = 0xFFFFFF ):Void
+	override public function flash( ?p_duration:Float, p_asTime:Bool = true, p_startingAlpha:Float = 1, p_color:Int = 0xFFFFFF ):Void
 	{
 		_flashContext.graphics.clear();
 		_flashContext.graphics.beginFill( p_color );

@@ -193,7 +193,7 @@ class AInputMouse extends Process, implements IInputMouse
 		super._disposer();		
 	}
 	
-	private function _reset( p_event:Dynamic = null ):Void
+	private function _reset( ?p_event:Dynamic ):Void
 	{
 		_buffer = [];
 		_buttonLeft = new _HelperButton( _kernel );
@@ -256,13 +256,13 @@ class AInputMouse extends Process, implements IInputMouse
 		return Math.round( l_result );
 	}	
 	
-	public function getIsButtonDoubleClick( p_type:EMouseButton = null, p_delay:Int = 100 ):Bool
+	public function getIsButtonDoubleClick( ?p_type:EMouseButton, p_delay:Int = 100 ):Bool
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.isDown ? ( l_button.timeUpPrevious <= p_delay ) : false;
 	}
 	
-	public function getIsButtonDrag( p_type:EMouseButton = null, p_delay:Int = 100 ):Bool
+	public function getIsButtonDrag( ?p_type:EMouseButton, p_delay:Int = 100 ):Bool
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.isDown ? l_button.timeDown > p_delay : false;
@@ -273,25 +273,25 @@ class AInputMouse extends Process, implements IInputMouse
 		return p_asTime ? _stillDuration : _stillUpdates;
 	}
 	
-	public function getIsButtonDown( p_type:EMouseButton = null ):Bool
+	public function getIsButtonDown( ?p_type:EMouseButton ):Bool
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.isDown;
 	}
 	
-	public function getIsButtonPress( p_type:EMouseButton = null ):Bool
+	public function getIsButtonPress( ?p_type:EMouseButton ):Bool
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.updatesDown == 1;		
 	}
 	
-	public function getIsButtonRelease( p_type:EMouseButton = null ):Bool
+	public function getIsButtonRelease( ?p_type:EMouseButton ):Bool
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.updatesUp == 1;		
 	}
 	
-	public function getButtonDownDuration( p_type:EMouseButton = null, p_asTime:Bool = true, p_isPrevious:Bool = false ):Float
+	public function getButtonDownDuration( ?p_type:EMouseButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Float
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		if ( p_isPrevious )
@@ -301,7 +301,7 @@ class AInputMouse extends Process, implements IInputMouse
 		return p_asTime ? l_button.timeDown : l_button.updatesDown;
 	}
 	
-	public function getButtonUpDuration( p_type:EMouseButton = null, p_asTime:Bool = true, p_isPrevious:Bool = false  ):Float
+	public function getButtonUpDuration( ?p_type:EMouseButton, p_asTime:Bool = true, p_isPrevious:Bool = false  ):Float
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		if ( p_isPrevious )
@@ -311,25 +311,25 @@ class AInputMouse extends Process, implements IInputMouse
 		return p_asTime ? l_button.timeUp : l_button.updatesUp;
 	}
 	
-	public function getButtonDragWidth( p_type:EMouseButton = null ):Int
+	public function getButtonDragWidth( ?p_type:EMouseButton ):Int
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.isDown ? x - l_button.clickX : 0;
 	}
 	
-	public function getButtonDragHeight( p_type:EMouseButton = null ):Int
+	public function getButtonDragHeight( ?p_type:EMouseButton ):Int
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.isDown ? y - l_button.clickY : 0;
 	}
 	
-	public function getButtonLastClickedX( p_type:EMouseButton = null ):Int
+	public function getButtonLastClickedX( ?p_type:EMouseButton ):Int
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.clickX;
 	}
 	
-	public function getButtonLastClickedY( p_type:EMouseButton = null ):Int
+	public function getButtonLastClickedY( ?p_type:EMouseButton ):Int
 	{
 		var l_button:_HelperButton = _getButton( p_type );
 		return l_button.clickY;
