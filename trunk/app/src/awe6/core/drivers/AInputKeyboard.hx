@@ -134,7 +134,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeDown = 0;
 	}
 		
-	private function _reset( p_event:Dynamic = null ):Void
+	private function _reset( ?p_event:Dynamic ):Void
 	{
 		_buffer = [];
 		_keys = [];

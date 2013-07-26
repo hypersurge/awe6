@@ -87,7 +87,7 @@ class Factory extends AFactory
 		return new Preloader( _kernel, _getAssetUrls(), isDecached );
 	}
 
-	override public function createSession( p_id:String = null ):ISession
+	override public function createSession( ?p_id:String ):ISession
 	{
 		return new Session( _kernel, p_id );
 	}
@@ -108,13 +108,13 @@ class Factory extends AFactory
 		return super.createScene( p_type );
 	}
 
-	override public function createSceneTransition( p_typeIncoming:EScene = null, p_typeOutgoing:EScene = null ):ISceneTransition
+	override public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition
 	{
 		var l_sceneTransition:SceneTransition = new SceneTransition( _kernel );
 		return l_sceneTransition;
 	}
 
-	override public function createTextStyle( p_type:ETextStyle = null ):ITextStyle
+	override public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
 	{
 		if ( p_type == null )
 		{

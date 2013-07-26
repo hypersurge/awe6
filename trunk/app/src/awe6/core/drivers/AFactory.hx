@@ -105,7 +105,7 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 	
-	public function new( p_context:Context, p_isDebug:Bool = false, p_config:String = null )
+	public function new( p_context:Context, p_isDebug:Bool = false, ?p_config:String )
 	{
 		_context = p_context;
 		isDebug = p_isDebug;
@@ -252,7 +252,7 @@ class AFactory implements IFactory, implements IDisposable
 		return new Encrypter( secret );
 	}
 	
-	public function createEntity( p_id:Dynamic = null ):IEntity
+	public function createEntity( ?p_id:Dynamic ):IEntity
 	{
 		return new Entity( _kernel, p_id == null ? null : Std.string( p_id ) );
 	}
@@ -281,17 +281,17 @@ class AFactory implements IFactory, implements IDisposable
 		return new Scene( _kernel, p_type );
 	}
 	
-	public function createSceneTransition( p_typeIncoming:EScene = null, p_typeOutgoing:EScene = null ):ISceneTransition
+	public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition
 	{
 		return new SceneTransition( _kernel );
 	}
 
-	public function createSession( p_id:String = null ):ISession
+	public function createSession( ?p_id:String ):ISession
 	{
 		return new ASession( _kernel, p_id );
 	}
 	
-	public function createTextStyle( p_type:ETextStyle = null ):ITextStyle
+	public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
 	{
 		return new TextStyle();
 	}
