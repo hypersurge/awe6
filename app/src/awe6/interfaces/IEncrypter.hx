@@ -43,12 +43,12 @@ interface IEncrypter
 	 * @param	?secret	The secret key to encrypt the data with.  Leave blank to use default secret key.
 	 * @return	Encrypted (or obfuscated) version of the original.
 	 */
-	function encrypt( value:Bytes, ?secret:String = "" ):Bytes;
+	function encrypt( value:Bytes, secret:String = "" ):Bytes;
 	/**
 	 * Decrypts bytes.
 	 * @param	value	The encrypted data.
 	 * @param	?secret	The secret key to encrypt the data with.  Leave blank to use default secret key.
 	 * @return	Decrypted (or unobfuscated) version of the encrypted data.
 	 */
-	function decrypt( value:Bytes, ?secret:String = "" ):Bytes;
+	function decrypt( value:Bytes, secret:String = "" ):Bytes;
 }

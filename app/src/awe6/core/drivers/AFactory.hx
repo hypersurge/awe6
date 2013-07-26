@@ -105,7 +105,7 @@ class AFactory implements IFactory, implements IDisposable
 	public var keyNext( default, null ):EKey;
 	public var keySpecial( default, null ):EKey;
 	
-	public function new( p_context:Context, ?p_isDebug:Bool = false, ?p_config:String )
+	public function new( p_context:Context, p_isDebug:Bool = false, p_config:String = null )
 	{
 		_context = p_context;
 		isDebug = p_isDebug;
@@ -191,9 +191,9 @@ class AFactory implements IFactory, implements IDisposable
 	}
 	
 	/**
-	 * @param	?p_isPreconfig	Configurer is called twice.  Once before the config.xml has been passed (isPreconfig == true) and again later just before Kernel is instantiated (isPreconfig == false).  This allows some config to be redefined after the xml is loaded.  Whereas some config must be setup beforehand (e.g. secret key).
+	 * @param	p_isPreconfig	Configurer is called twice.  Once before the config.xml has been passed (isPreconfig == true) and again later just before Kernel is instantiated (isPreconfig == false).  This allows some config to be redefined after the xml is loaded.  Whereas some config must be setup beforehand (e.g. secret key).
 	 */
-	private function _configurer( ?p_isPreconfig:Bool = false ):Void
+	private function _configurer( p_isPreconfig:Bool = false ):Void
 	{
 		// override me
 	}
@@ -252,7 +252,7 @@ class AFactory implements IFactory, implements IDisposable
 		return new Encrypter( secret );
 	}
 	
-	public function createEntity( ?p_id:Dynamic ):IEntity
+	public function createEntity( p_id:Dynamic = null ):IEntity
 	{
 		return new Entity( _kernel, p_id == null ? null : Std.string( p_id ) );
 	}
@@ -281,17 +281,17 @@ class AFactory implements IFactory, implements IDisposable
 		return new Scene( _kernel, p_type );
 	}
 	
-	public function createSceneTransition( ?p_typeIncoming:EScene, ?p_typeOutgoing:EScene ):ISceneTransition
+	public function createSceneTransition( p_typeIncoming:EScene = null, p_typeOutgoing:EScene = null ):ISceneTransition
 	{
 		return new SceneTransition( _kernel );
 	}
 
-	public function createSession( ?p_id:String ):ISession
+	public function createSession( p_id:String = null ):ISession
 	{
 		return new ASession( _kernel, p_id );
 	}
 	
-	public function createTextStyle( ?p_type:ETextStyle ):ITextStyle
+	public function createTextStyle( p_type:ETextStyle = null ):ITextStyle
 	{
 		return new TextStyle();
 	}

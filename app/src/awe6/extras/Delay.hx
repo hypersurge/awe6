@@ -36,7 +36,7 @@ class Delay extends Entity
 	private var _callbackFunction:Void->Void;
 	private var _duration:Int;
 	
-	public function new( p_kernel:IKernel, p_callbackFunction:Void->Void, ?p_duration:Int = 1000 ) 
+	public function new( p_kernel:IKernel, p_callbackFunction:Void->Void, p_duration:Int = 1000 ) 
 	{
 		_callbackFunction = p_callbackFunction;
 		_duration = p_duration;

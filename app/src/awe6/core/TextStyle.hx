@@ -49,7 +49,7 @@ class TextStyle implements ITextStyle
 	public var thickness:Float;
 	public var filters:Array<Dynamic>;
 
-	public function new( ?p_font:String, ?p_size:Float, ?p_color:Int, ?p_isBold:Bool = false, ?p_isItalic:Bool = false, ?p_align:ETextAlign, ?p_spacingHorizontal:Float, ?p_spacingVertical:Float, ?p_thickness:Float = 0, ?p_filters:Array<Dynamic> ) 
+	public function new( ?p_font:String, ?p_size:Float, ?p_color:Int, p_isBold:Bool = false, p_isItalic:Bool = false, ?p_align:ETextAlign, ?p_spacingHorizontal:Float, ?p_spacingVertical:Float, p_thickness:Float = 0, ?p_filters:Array<Dynamic> ) 
 	{
 		font = ( p_font != null ) ? p_font : "_sans";
 		size = ( p_size != null ) ? p_size : 12;

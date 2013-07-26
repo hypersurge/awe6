@@ -71,7 +71,7 @@ class AAudioManager extends Process, implements IAudioManager
 		isMute = false;
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		for ( i in _sounds )
@@ -93,7 +93,7 @@ class AAudioManager extends Process, implements IAudioManager
 		super._disposer();
 	}
 	
-	public function start( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_isIgnoredIfPlaying:Bool = false, ?p_onCompleteCallback:Void->Void ):Void
+	public function start( p_id:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, p_isIgnoredIfPlaying:Bool = false, ?p_onCompleteCallback:Void->Void ):Void
 	{
 		if ( p_audioChannelType == null )
 		{
@@ -110,7 +110,7 @@ class AAudioManager extends Process, implements IAudioManager
 		_sounds.push( _driverSoundFactory( p_id, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback ) );
 	}
 	
-	private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
+	private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		//override me
 		return new _AHelperSound( _kernel, p_id, _packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
@@ -125,7 +125,7 @@ class AAudioManager extends Process, implements IAudioManager
 		}
 	}
 	
-	public function transform( ?p_id:String, ?p_audioChannelType:EAudioChannel, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_asRelative:Bool = false ):Void
+	public function transform( ?p_id:String, ?p_audioChannelType:EAudioChannel, p_volume:Float = 1, p_pan:Float = 0, p_asRelative:Bool = false ):Void
 	{
 		var l_sounds:Array<_AHelperSound> = _getSounds( p_id, p_audioChannelType );
 		for ( i in l_sounds )
@@ -145,7 +145,7 @@ class AAudioManager extends Process, implements IAudioManager
 		return isMute;
 	}
 	
-	private function _driverSetIsMute( ?p_value:Bool ):Void
+	private function _driverSetIsMute( p_value:Bool ):Void
 	{
 		//override me
 	}
@@ -213,7 +213,7 @@ class _AHelperSound implements IDisposable
 	
 	private var _kernel:IKernel;
 	
-	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
 		_kernel = p_kernel;
 		isDisposed = false;
@@ -242,7 +242,7 @@ class _AHelperSound implements IDisposable
 		//override me
 	}
 	
-	public function transform( ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_asRelative:Bool = false ):Void
+	public function transform( p_volume:Float = 1, p_pan:Float = 0, p_asRelative:Bool = false ):Void
 	{
 		if ( isDisposed )
 		{
@@ -253,7 +253,7 @@ class _AHelperSound implements IDisposable
 		_driverTransform( p_asRelative );
 	}
 	
-	private function _driverTransform( ?p_asRelative:Bool = false ):Void
+	private function _driverTransform( p_asRelative:Bool = false ):Void
 	{
 		//override me
 	}

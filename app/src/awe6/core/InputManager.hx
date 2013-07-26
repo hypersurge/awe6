@@ -62,7 +62,7 @@ class InputManager extends Process, implements IInputManager
 		mouse = _inputMouse = new InputMouse( _kernel );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		_inputKeyboard.update( p_deltaTime );

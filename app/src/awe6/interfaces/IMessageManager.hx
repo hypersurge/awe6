@@ -52,7 +52,7 @@ interface IMessageManager implements IResettable
 	 * @param	?isRemovedAfterFirstSend	Once a message has been received, no longer listen for further messages under the same criteria.
 	 * @type	<M>	Messages can be any type: String, Class, Enum.  For recursive types use Enums.
 	 */
-	function addSubscriber<M>( subscriber:IEntity, message:M, handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<IEntity>, ?isRemovedAfterFirstSend:Bool = false ):Void;
+	function addSubscriber<M>( subscriber:IEntity, message:M, handler:M->IEntity->Bool, ?sender:IEntity, ?senderClassType:Class<IEntity>, isRemovedAfterFirstSend:Bool = false ):Void;
 	/**
 	 * Retrieve all entity's interested in a subject.
 	 * <p>All parameters are optional to allow wildcard filtering.</p>
@@ -84,5 +84,5 @@ interface IMessageManager implements IResettable
 	 * @param	?isBubbleEverywhere	Set to true if you want to dispatch this message to the entity traversal stack.
 	 * @type	<M>	Messages can be any type: String, Class, Enum.  For recursive types use Enums.
 	 */
-	function sendMessage<M>( message:M, sender:IEntity, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Void;
+	function sendMessage<M>( message:M, sender:IEntity, isBubbleDown:Bool = false, isBubbleUp:Bool = false, isBubbleEverywhere:Bool = false ):Void;
 }

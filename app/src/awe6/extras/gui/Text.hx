@@ -58,7 +58,7 @@ class Text extends GuiEntity
 	private var _isDirty:Bool;
 	private var _prevTextStyle:String;
 	
-	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, ?p_text:String = "", ?p_textStyle:ITextStyle, ?p_isMultiline:Bool = false, ?p_isInput:Bool = false )
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, p_text:String = "", ?p_textStyle:ITextStyle, p_isMultiline:Bool = false, p_isInput:Bool = false )
 	{
 		textStyle = ( p_textStyle != null ) ? p_textStyle : new TextStyle();
 		_isMultiline = p_isMultiline;
@@ -106,7 +106,7 @@ class Text extends GuiEntity
 		p_event.stopImmediatePropagation();
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		_isDirty = _isDirty || ( _prevTextStyle != textStyle.toString() );

@@ -203,7 +203,7 @@ class AKernel extends Process, implements IKernel
 		overlay.flash();
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		_helperFramerate.update();
 		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
@@ -259,12 +259,12 @@ class AKernel extends Process, implements IKernel
 		}
 	}
 	
-	public function getFramerate( ?p_asActual:Bool = true ):Float
+	public function getFramerate( p_asActual:Bool = true ):Float
 	{
 		return p_asActual ? _helperFramerate.framerate : factory.targetFramerate;
 	}
 	
-	private function _addProcess( p_process:IProcess, ?p_isLast:Bool = true ):Void
+	private function _addProcess( p_process:IProcess, p_isLast:Bool = true ):Void
 	{
 		if ( p_process == null )
 		{

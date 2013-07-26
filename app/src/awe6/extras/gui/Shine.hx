@@ -67,7 +67,7 @@ class Shine extends GuiEntity
 		_context.mouseChildren = false;
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		_canvas.lock();

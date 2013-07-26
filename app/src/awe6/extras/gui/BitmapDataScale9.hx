@@ -40,7 +40,7 @@ class BitmapDataScale9 extends BitmapData
 	private var _bottomRightX:Int;
 	private var _bottomRightY:Int;
 	
-	public function new( p_source:BitmapData, p_topLeftX:Int, p_topLeftY:Int, p_bottomRightX:Int, p_bottomRightY:Int, p_width:Int, p_height:Int, ?p_isTransparent:Bool = true, ?p_fillColor:Int = 0xFFFFFFFF )
+	public function new( p_source:BitmapData, p_topLeftX:Int, p_topLeftY:Int, p_bottomRightX:Int, p_bottomRightY:Int, p_width:Int, p_height:Int, p_isTransparent:Bool = true, p_fillColor:Int = 0xFFFFFFFF )
 	{
 		_source = p_source.clone();
 		_topLeftX = p_topLeftX;

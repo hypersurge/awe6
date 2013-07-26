@@ -64,7 +64,7 @@ class Kernel extends AKernel
 	{
 	}
 	
-	private function _onResize( ?p_event:Event ):Void
+	private function _onResize( p_event:Event ):Void
 	{
 		// note this logic interferes with mouse inputs
 //		_view.x = Std.int( ( _stage.stageWidth - factory.width ) / 2 );

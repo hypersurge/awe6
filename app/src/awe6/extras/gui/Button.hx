@@ -54,7 +54,7 @@ class Button extends GuiEntity
 	private var _marginHeight:Float;
 	private var _isBlank:Bool;
 
-	public function new( p_kernel:IKernel, ?p_key:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void, ?p_label:String = DEFAULT_LABEL, ?p_width:Float = 100, ?p_height:Float = 25, ?p_marginWidth:Float = 10, ?p_marginHeight:Float = 10, ?p_isBlank:Bool = false )
+	public function new( p_kernel:IKernel, ?p_key:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void, p_label:String = DEFAULT_LABEL, p_width:Float = 100, p_height:Float = 25, p_marginWidth:Float = 10, p_marginHeight:Float = 10, p_isBlank:Bool = false )
 	{
 		_key = p_key;
 		_onClickCallback = p_onClickCallback;
@@ -105,7 +105,7 @@ class Button extends GuiEntity
 		_simpleButton.overState = _simpleButton.hitTestState = _createButtonState( true );
 	}
 	
-	private function _createButtonState( ?p_isOver:Bool = false ):Sprite
+	private function _createButtonState( p_isOver:Bool = false ):Sprite
 	{
 		// override me
 		var l_result:Sprite = new Sprite();
@@ -121,7 +121,7 @@ class Button extends GuiEntity
 		return l_result;
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		if ( ( _key != null ) && ( _kernel.inputs.keyboard.getIsKeyRelease( _key ) ) )

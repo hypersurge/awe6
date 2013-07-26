@@ -50,7 +50,7 @@ interface IOverlay
 	 * @param	type	The overlay button.
 	 * @param	?isVisible	If true shows the button, if false hides it.
 	 */
-	function showButton( type:EOverlayButton, ?isVisible:Bool = true ):Void;
+	function showButton( type:EOverlayButton, isVisible:Bool = true ):Void;
 	/**
 	 * Set the position of a specific overlay button.
 	 * @param	type	The overlay button.
@@ -82,5 +82,5 @@ interface IOverlay
 	 * @param	?startingAlpha	The alpha at which the flash starts.  Range: 0...1.
 	 * @param	?color	The color of the flash.  Defaults to white.
 	 */
-	function flash( ?duration:Float, ?asTime:Bool = true, ?startingAlpha:Float = 1, ?color:Int = 0xFFFFFF ):Void;
+	function flash( ?duration:Float, asTime:Bool = true, startingAlpha:Float = 1, color:Int = 0xFFFFFF ):Void;
 }

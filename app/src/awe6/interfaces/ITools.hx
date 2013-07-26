@@ -52,7 +52,7 @@ interface ITools implements IEncrypter
 	 * @param	?prefix	Adds characters to the front of the GUID.
 	 * @return	A Globally Unique Identifier.
 	 */
-	function createGuid( ?isSmall:Bool = false, ?prefix:String = "" ):String;
+	function createGuid( isSmall:Bool = false, prefix:String = "" ):String;
 	/**
 	 * Find the tween of two values.
 	 * @param	originalValue	Value A.
@@ -95,7 +95,7 @@ interface ITools implements IEncrypter
 	 * @param	?isUpper	If true returns PascalCase (first character uppercased).
 	 * @return	camelCase or PascalCase representation of a string.
 	 */
-	function toCamelCase( value:String, ?isUpper:Bool = false ):String;
+	function toCamelCase( value:String, isUpper:Bool = false ):String;
 	/**
 	 * Turns a word of sentence into CONST_CASE.
 	 * <p>E.g. "this example string" becomes "THIS_EXAMPLE_STRING".</p>

@@ -122,7 +122,7 @@ class Preloader extends APreloader
 		view.clear();
 	}
 	
-	private function _onComplete( ?p_event:Event ):Void
+	private function _onComplete( p_event:Event ):Void
 	{
 		_urlLoader.removeEventListener( IOErrorEvent.IO_ERROR, _onError );
 		_urlLoader.removeEventListener( ProgressEvent.PROGRESS, _onProgress );
@@ -144,7 +144,7 @@ class Preloader extends APreloader
 		_next();
 	}
 	
-	private function _onProgress( ?p_event:ProgressEvent ):Void
+	private function _onProgress( p_event:ProgressEvent ):Void
 	{
 		_currentProgress = p_event.bytesLoaded / p_event.bytesTotal;
 		progress = _tools.limit( ( _currentAsset - 1 + _currentProgress ) / _assets.length , 0, 1 );

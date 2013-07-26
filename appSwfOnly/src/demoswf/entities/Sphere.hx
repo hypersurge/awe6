@@ -77,7 +77,7 @@ class Sphere extends Entity
 		_context.addChild( l_sphere );
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		_context.x = _bouncer.x;

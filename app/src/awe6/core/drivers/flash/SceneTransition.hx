@@ -57,7 +57,7 @@ class SceneTransition extends ASceneTransition
 		_context.addChild( new Bitmap( l_bitmapData ) );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		if ( !isDisposed )

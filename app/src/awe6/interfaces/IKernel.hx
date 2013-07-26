@@ -115,7 +115,7 @@ interface IKernel implements IPauseable, implements ILogger
 	 * @param	?asActual	Use actual framerate (potentially laggy), or the desired framerate (from IFactory).
 	 * @return	Frames per second.
 	 */
-	function getFramerate( ?asActual:Bool = true ):Float;
+	function getFramerate( asActual:Bool = true ):Float;
 	/**
 	 * Internal method called when preloader completes; launches the starting scene as defined by IFactory.startingSceneType.
 	 * @param	preloader	Corresponding IPreloader.

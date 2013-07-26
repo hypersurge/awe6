@@ -67,7 +67,7 @@ class SceneManager extends Process, implements ISceneManager
 		view = new View( _kernel );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		if ( scene != null )

@@ -62,7 +62,7 @@ class Scene extends Process, implements IScene
 
 	private var _entity( default, null ):IEntity;
 
-	public function new( p_kernel:IKernel, p_type:EScene, ?p_isPauseable:Bool = false, ?p_isMuteable:Bool = true, ?p_isSessionSavedOnNext:Bool = false ) 
+	public function new( p_kernel:IKernel, p_type:EScene, p_isPauseable:Bool = false, p_isMuteable:Bool = true, p_isSessionSavedOnNext:Bool = false ) 
 	{
 		type = p_type;
 		isPauseable = p_isPauseable;
@@ -79,7 +79,7 @@ class Scene extends Process, implements IScene
 		view = _entity.view;
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		_entity.update( p_deltaTime );
@@ -92,27 +92,27 @@ class Scene extends Process, implements IScene
 		super._disposer();		
 	}
 	
-	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, ?p_isAddedToView:Bool = false, ?p_viewPriority:Int = 0 ):Void
+	public function addEntity( p_entity:IEntity, p_agenda:EAgenda = null, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):Void
 	{
 		_entity.addEntity( p_entity, p_agenda, p_isAddedToView, p_viewPriority );
 	}
 	
-	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, ?p_isRemovedFromView:Bool = false ):Void
+	public function removeEntity( p_entity:IEntity, p_agenda:EAgenda = null, p_isRemovedFromView:Bool = false ):Void
 	{
 		_entity.removeEntity( p_entity, p_agenda, p_isRemovedFromView );
 	}
 	
-	public function getEntities( ?p_agenda:EAgenda ):Array<IEntity>
+	public function getEntities( p_agenda:EAgenda = null ):Array<IEntity>
 	{
 		return _entity.getEntities( p_agenda );
 	}
 	
-	public function getEntitiesByClass<T>( p_classType:Class<T>, ?p_agenda:EAgenda, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Array<T>
+	public function getEntitiesByClass<T>( p_classType:Class<T>, p_agenda:EAgenda = null, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):Array<T>
 	{
 		return _entity.getEntitiesByClass( p_classType, p_agenda, p_isBubbleDown, p_isBubbleUp, false );
 	}
 	
-	public function getEntityById( p_id:String, ?p_agenda:EAgenda, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):IEntity
+	public function getEntityById( p_id:String, p_agenda:EAgenda = null, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):IEntity
 	{
 		return _entity.getEntityById( p_id, p_agenda, p_isBubbleDown, p_isBubbleUp, false );
 	}

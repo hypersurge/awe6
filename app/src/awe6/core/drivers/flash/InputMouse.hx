@@ -75,7 +75,7 @@ class InputMouse extends AInputMouse
 		super._disposer();		
 	}	
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		if ( ( _stage.focus == null ) || ( _stage.focus.stage == null ) )
 		{

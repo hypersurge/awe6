@@ -44,5 +44,5 @@ interface ISceneTransition implements IProcess, implements IProgress, implements
 	 * @param	?asTime	If true returns duration in milliseconds, else updates.
 	 * @return	The time over which the transition occurs.
 	 */
-	function getDuration( ?asTime:Bool = true ):Float;
+	function getDuration( asTime:Bool = true ):Float;
 }

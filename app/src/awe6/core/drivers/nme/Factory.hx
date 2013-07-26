@@ -57,7 +57,6 @@ class Factory extends AFactory
 	{
 		if ( _config != "" )
 		{
-			
 			_parseXml( _config );
 		}
 		_launchKernel();

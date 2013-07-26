@@ -68,7 +68,7 @@ class AView extends Process, implements IView
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;
 	
-	public function new( p_kernel:IKernel, ?p_context:Context, ?p_priority:Int = 0, ?p_owner:Dynamic ) 
+	public function new( p_kernel:IKernel, ?p_context:Context, p_priority:Int = 0, ?p_owner:Dynamic ) 
 	{
 		context = p_context;
 		priority = p_priority;
@@ -88,7 +88,7 @@ class AView extends Process, implements IView
 		_children = new Array<AView>();
 	}
 	
-	public function addChild( p_child:IView, ?p_priority:Int = 0 ):Void
+	public function addChild( p_child:IView, p_priority:Int = 0 ):Void
 	{
 		if ( isDisposed || ( p_child == null ) )
 		{
@@ -146,7 +146,7 @@ class AView extends Process, implements IView
 		}
 	}
 		
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		for ( i in _children )
