@@ -43,12 +43,12 @@ import native.media.SoundTransform;
 class AudioManager extends AAudioManager
 {
 
-	override private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
+	override private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
 		return new _HelperSound( _kernel, p_id, _packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
 
-	override private function _driverSetIsMute( ?p_value:Bool ):Void
+	override private function _driverSetIsMute( p_value:Bool ):Void
 	{
 		for ( i in _sounds )
 		{
@@ -64,7 +64,7 @@ class _HelperSound extends _AHelperSound
 	private var _soundChannel:SoundChannel;
 	private var _prevVolume:Float;
 	
-	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, ?p_loops:Int = 1, ?p_startTime:Int = 0, ?p_volume:Float = 1, ?p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
 		// needed else some float signatures misinterpreted as ints ... should replicate and report to mailing list
 		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
@@ -87,7 +87,7 @@ class _HelperSound extends _AHelperSound
 		return;
 	}
 	
-	override private function _driverTransform( ?p_asRelative:Bool = false ):Void
+	override private function _driverTransform( p_asRelative:Bool = false ):Void
 	{
 		if ( _soundChannel == null )
 		{

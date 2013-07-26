@@ -157,7 +157,7 @@ class PrePreloader extends Sprite
 		removeChild( _progressBar );
 	}
 	
-	private function _onProgress( ?p_event:ProgressEvent ):Void
+	private function _onProgress( p_event:ProgressEvent ):Void
 	{
 		var l_perc:Float = p_event.bytesLoaded / p_event.bytesTotal;
 		_progressBarLine.scaleX = l_perc;

@@ -54,7 +54,7 @@ class Trigger extends Entity
 		_previousValue = _getValue();
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		var l_value:String = _getValue();
@@ -73,7 +73,7 @@ class Trigger extends Entity
 		return Serializer.run( Reflect.field( _entity, _field ) );
 	}
 	
-	public function activate( ?p_isActivated:Bool = true ):Void
+	public function activate( p_isActivated:Bool = true ):Void
 	{
 		Reflect.callMethod( this, _callbackFunction, [] );
 		dispose();

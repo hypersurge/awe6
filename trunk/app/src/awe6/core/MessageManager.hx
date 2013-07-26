@@ -61,7 +61,7 @@ class MessageManager extends Process, implements IMessageManager
 		_messageQueue = new List<_HelperMessage<Dynamic>>();
 	}
 	
-	public function addSubscriber<M>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemovedAfterFirstSend:Bool = false ):Void
+	public function addSubscriber<M>( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemovedAfterFirstSend:Bool = false ):Void
 	{
 		var l_subscription:_HelperSubscription<M> = new _HelperSubscription( p_subscriber, p_message, p_handler, p_sender, p_senderClassType, p_isRemovedAfterFirstSend );
 		_subscriptions.add( l_subscription );
@@ -91,7 +91,7 @@ class MessageManager extends Process, implements IMessageManager
 		}		
 	}
 	
-	public function sendMessage<M>( p_message:M, p_sender:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Void
+	public function sendMessage<M>( p_message:M, p_sender:IEntity, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):Void
 	{
 		_sendMessage( p_message, p_sender, p_sender, p_isBubbleDown, p_isBubbleUp, p_isBubbleEverywhere );
 	}
@@ -103,7 +103,7 @@ class MessageManager extends Process, implements IMessageManager
 		return true;
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		if ( _isOkToSendMessage() )
@@ -121,7 +121,7 @@ class MessageManager extends Process, implements IMessageManager
 		return _kernel.scenes.scene != null;
 	}
 	
-	private function _sendMessage<M>( p_message:M, p_sender:IEntity, p_target:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false ):Void
+	private function _sendMessage<M>( p_message:M, p_sender:IEntity, p_target:IEntity, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false ):Void
 	{
 		if ( _isVerbose )
 		{
@@ -175,7 +175,7 @@ class MessageManager extends Process, implements IMessageManager
 		return l_isContinue;
 	}
 	
-	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemove:Bool = false ):GenericStackMessageManager<_HelperSubscription<Dynamic>>
+	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):GenericStackMessageManager<_HelperSubscription<Dynamic>>
 	{
 		var l_result:GenericStackMessageManager<_HelperSubscription<Dynamic>> = new GenericStackMessageManager<_HelperSubscription<Dynamic>>();
 		for ( i in _subscriptions )
@@ -229,7 +229,7 @@ private class _HelperSubscription<M>
 	public var senderClassType( default, null ):Class<IEntity>;
 	public var isRemovedAfterFirstSend( default, null ):Bool;
 	
-	public function new( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, ?p_isRemovedAfterFirstSend:Bool = false )
+	public function new( p_subscriber:IEntity, p_message:M, p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemovedAfterFirstSend:Bool = false )
 	{
 		subscriber = p_subscriber;
 		message = p_message;
@@ -263,7 +263,7 @@ private class _HelperMessage<M>
 	public var isBubbleUp( default, null ):Bool;
 	public var isBubbleEverywhere( default, null ):Bool;
 	
-	public function new( p_message:M, p_sender:IEntity, p_target:IEntity, ?p_isBubbleDown:Bool = false, ?p_isBubbleUp:Bool = false, ?p_isBubbleEverywhere:Bool = false )
+	public function new( p_message:M, p_sender:IEntity, p_target:IEntity, p_isBubbleDown:Bool = false, p_isBubbleUp:Bool = false, p_isBubbleEverywhere:Bool = false )
 	{
 		message = p_message;
 		sender = p_sender;

@@ -73,7 +73,7 @@ class AProfiler extends Entity
 		_agePrev = 0;
 	}
 		
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		if ( _age < _agePrev + 250 )

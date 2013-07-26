@@ -56,7 +56,7 @@ class Tools implements ITools
 		_encrypter = _kernel.factory.createEncrypter();
 	}
 
-	public function createGuid( ?p_isSmall:Bool = false, ?p_prefix:String = "" ):String
+	public function createGuid( p_isSmall:Bool = false, p_prefix:String = "" ):String
 	{
 		return p_isSmall ? p_prefix + ( _randomCharacter() + _randomCharacter() + _randomCharacter() ).substr( 0, 10 ) : p_prefix + ( _randomCharacter() + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + "-" + _randomCharacter() + _randomCharacter() + _randomCharacter() );
 	}
@@ -131,7 +131,7 @@ class Tools implements ITools
 		return true;
 	}
 	
-	public function toCamelCase( p_value:String, ?p_isUpper:Bool = false ):String
+	public function toCamelCase( p_value:String, p_isUpper:Bool = false ):String
 	{
 		if ( ( p_value == null ) || ( p_value == "" ) )
 		{
@@ -397,12 +397,12 @@ class Tools implements ITools
 		return Unserializer.run( p_value );
 	}
 	
-	public function encrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
+	public function encrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		return _encrypter.encrypt( p_value, p_secret );
 	}
 	
-	public function decrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
+	public function decrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		return _encrypter.decrypt( p_value, p_secret );
 	}

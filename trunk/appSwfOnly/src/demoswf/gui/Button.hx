@@ -51,7 +51,7 @@ class Button extends BasicButton
 	private var _upContext:Context;
 	private var _overContext:Context;
 
-	public function new( p_kernel:IKernel, ?p_key:EKey, ?p_x:Float = 0, ?p_y:Float = 0, ?p_onClick:Void->Void, ?p_onRollOver:Void->Void, ?p_onRollOut:Void->Void, ?p_label:String )
+	public function new( p_kernel:IKernel, ?p_key:EKey, p_x:Float = 0, p_y:Float = 0, ?p_onClick:Void->Void, ?p_onRollOver:Void->Void, ?p_onRollOut:Void->Void, p_label:String = "" )
 	{
 		_assetManager = cast p_kernel.assets;
 		label = p_label;
@@ -71,7 +71,7 @@ class Button extends BasicButton
 		_overContext.addChild( _createButtonState( true ) );
 	}
 
-	private function _createButtonState( ?p_isOver:Bool = false ):Context
+	private function _createButtonState( p_isOver:Bool = false ):Context
 	{
 		var l_result:Context = new Context();
 		l_result.addChild( new Bitmap( p_isOver ? _assetManager.buttonOver : _assetManager.buttonUp ) );

@@ -54,7 +54,7 @@ interface IAudioManager
 	 * @param	?isIgnoredIfPlaying	If true and this sound is already playing in the specified channel the start request will be skipped.  If false there is a potential for the same sound to play over the top of itself.
 	 * @param	?onCompleteCallback	Callback method to execute on sound complete.
 	 */
-	 function start( id:String, ?audioChannelType:EAudioChannel, ?loops:Int = 1, ?startTime:Int = 0, ?volume:Float = 1, ?pan:Float = 0, ?isIgnoredIfPlaying:Bool = false, ?onCompleteCallback:Void->Void ):Void;
+	function start( id:String, ?audioChannelType:EAudioChannel, loops:Int = 1, startTime:Int = 0, volume:Float = 1, pan:Float = 0, isIgnoredIfPlaying:Bool = false, ?onCompleteCallback:Void->Void ):Void;
 	/**
 	 * End playback of any specified sound.  To stop all sounds on all channels, leave all parameters blank.
 	 * @param	?id	The unique id of the audio media asset intended to be stopped.  If null will stop all sounds on the specific audioChannel.
@@ -69,7 +69,7 @@ interface IAudioManager
 	 * @param	?pan	Adjusts this sound's stereo effect relative to the audioChannel.  -1...1: -1 is left channel only, 0 is central, 1 is right channel only.
 	 * @param	?asRelative	If true will adjust sounds relative to their original transformation.  If false will set them as absolute values.
 	 */
-	function transform( ?id:String, ?audioChannelType:EAudioChannel, ?volume:Float = 1, ?pan:Float = 0, ?asRelative:Bool = false  ):Void;
+	function transform( ?id:String, ?audioChannelType:EAudioChannel, volume:Float = 1, pan:Float = 0, asRelative:Bool = false  ):Void;
 	/**
 	 * Discover if a specified sound is playing.
 	 * @param	?id	The unique id of the audio media asset under investigation.  If null will search entire audioChannel for activity.

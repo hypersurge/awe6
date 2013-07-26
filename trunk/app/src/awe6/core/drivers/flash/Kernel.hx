@@ -136,7 +136,7 @@ class Kernel extends AKernel
 		_stage.removeEventListener( Event.ENTER_FRAME, _onEnterFrame );
 	}
 	
-	private function _onFullScreen( ?p_event:FullScreenEvent ):Void
+	private function _onFullScreen( p_event:FullScreenEvent ):Void
 	{
 		if ( p_event.fullScreen != isFullScreen )
 		{

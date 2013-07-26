@@ -59,7 +59,7 @@ interface ISession
 	 * Reverts the session back to factory settings (as if created afresh).
 	 * @param	?isSaved	If true immediately writes the reset session to disk.
 	 */
-	function reset( ?isSaved:Bool = false ):Void;
+	function reset( isSaved:Bool = false ):Void;
 	/**
 	 * Writes the session to disk.
 	 */
@@ -78,13 +78,13 @@ interface ISession
 	 * @param	?suggestions	Prepopulates results with the suggestions.
 	 * @return	A collection of sessions identifiers currently save to disk.
 	 */
-	function getSessionIds( ?suggestions:Array<String> = null ):Array<String>;
+	function getSessionIds( ?suggestions:Array<String> ):Array<String>;
 	/**
 	 * Retrieve the collection of sessions currently saved to disk.
 	 * @param	?suggestions	Prepopulates results with the suggestions.
 	 * @return	A collection of sessions currently save to disk.
 	 */
-	function getSessions( ?suggestions:Array<String> = null ):Array<ISession>;
+	function getSessions( ?suggestions:Array<String> ):Array<ISession>;
 	/**
 	 * Removes all session data from disk.
 	 */

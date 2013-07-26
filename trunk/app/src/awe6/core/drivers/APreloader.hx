@@ -63,7 +63,7 @@ class APreloader extends Process, implements IPreloader
 	private var _currentAsset:Int;
 	private var _isComplete:Bool;
 	
-	public function new( p_kernel:IKernel, p_assets:Array<String>, ?p_isDecached:Bool = false ) 
+	public function new( p_kernel:IKernel, p_assets:Array<String>, p_isDecached:Bool = false ) 
 	{
 		_assets = p_assets;
 		_isDecached = p_isDecached;
@@ -116,7 +116,7 @@ class APreloader extends Process, implements IPreloader
 		//override me
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		if ( _assets.length == 0 )

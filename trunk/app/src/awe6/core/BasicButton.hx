@@ -62,7 +62,7 @@ class BasicButton extends Entity, implements IPositionable
 	private var _stateOver:_HelperState;
 	private var _keyType:EKey;
 	
-	public function new( p_kernel:IKernel, p_up:IView, p_over:IView, ?p_width:Float = 100, ?p_height:Float = 20, ?p_x:Float = 0, ?p_y:Float = 0, ?p_keyType:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void )
+	public function new( p_kernel:IKernel, p_up:IView, p_over:IView, p_width:Float = 100, p_height:Float = 20, p_x:Float = 0, p_y:Float = 0, ?p_keyType:EKey, ?p_onClickCallback:Void->Void, ?p_onRollOverCallback:Void->Void, ?p_onRollOutCallback:Void->Void )
 	{
 		_stateUp = new _HelperState( p_kernel, p_up );
 		_stateOver = new _HelperState( p_kernel, p_over );
@@ -88,7 +88,7 @@ class BasicButton extends Entity, implements IPositionable
 		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
 	}
 		
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		var l_inputMouse:IInputMouse = _kernel.inputs.mouse;

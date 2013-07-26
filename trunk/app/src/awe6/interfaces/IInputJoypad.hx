@@ -64,7 +64,7 @@ interface IInputJoypad
 	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	Returns the duration the joypad button has been down.
 	 */
-	function getButtonDownDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
+	function getButtonDownDuration( type:EJoypadButton, asTime:Bool = true, isPrevious:Bool = false ):Float;
 	/**
 	 * Determine how long a specific joypad button has been up.
 	 * @param	type	The joypad button.
@@ -72,5 +72,5 @@ interface IInputJoypad
 	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	Returns the duration the joypad button has been up.
 	 */
-	function getButtonUpDuration( type:EJoypadButton, ?asTime:Bool = true, ?isPrevious:Bool = false  ):Float;
+	function getButtonUpDuration( type:EJoypadButton, asTime:Bool = true, isPrevious:Bool = false  ):Float;
 }

@@ -60,7 +60,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		//override me
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		#if haxe3
@@ -134,7 +134,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		l_current.timeDown = 0;
 	}
 		
-	private function _reset( ?p_event:Dynamic = null ):Void
+	private function _reset( p_event:Dynamic = null ):Void
 	{
 		_buffer = [];
 		_keys = [];
@@ -174,7 +174,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		return ( _keys[l_keyCode].isUsed && ( _keys[l_keyCode].updatesUp == 1 ) );
 	}	
 	
-	public function getKeyDownDuration( p_type:EKey, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false ):Float
+	public function getKeyDownDuration( p_type:EKey, p_asTime:Bool = true, p_isPrevious:Bool = false ):Float
 	{
 		if ( p_type == null )
 		{
@@ -188,7 +188,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 		return p_asTime ? _keys[l_keyCode].timeDown : _keys[l_keyCode].updatesDown;
 	}
 	
-	public function getKeyUpDuration( p_type:EKey, ?p_asTime:Bool = true, ?p_isPrevious:Bool = false  ):Float
+	public function getKeyUpDuration( p_type:EKey, p_asTime:Bool = true, p_isPrevious:Bool = false  ):Float
 	{
 		if ( p_type == null )
 		{

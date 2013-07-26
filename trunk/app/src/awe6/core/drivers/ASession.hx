@@ -59,7 +59,7 @@ class ASession implements ISession
 	public var saveCount:Int;
 	//extend me
 	
-	public function new( p_kernel:IKernel, ?p_id:String = "" )
+	public function new( p_kernel:IKernel, p_id:String = "" )
 	{
 		_kernel = p_kernel;
 		if ( p_id == "" )
@@ -139,7 +139,7 @@ class ASession implements ISession
 		return Type.createInstance( Type.getClass( this ), [ _kernel, p_newId ] );
 	}
 	
-	public inline function reset( ?p_isSaved:Bool = false ):Void
+	public inline function reset( p_isSaved:Bool = false ):Void
 	{
 		_data = { };
 		_resetter();
@@ -170,7 +170,7 @@ class ASession implements ISession
 		return 0;
 	}
 	
-	public function getSessionIds( ?p_suggestions:Array<String> = null ):Array<String>
+	public function getSessionIds( ?p_suggestions:Array<String> ):Array<String>
 	{
 		var l_result:Array<String> = Reflect.fields( _savedData );
 		l_result.remove( _VERSION_ID );
@@ -191,7 +191,7 @@ class ASession implements ISession
 		return l_result;
 	}
 	
-	public function getSessions( ?p_suggestions:Array<String> = null ):Array<ISession>
+	public function getSessions( ?p_suggestions:Array<String> ):Array<ISession>
 	{
 		var l_ids:Array<String> = getSessionIds( p_suggestions );
 		var l_result:Array<ISession> = new Array<ISession>();

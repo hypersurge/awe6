@@ -55,7 +55,7 @@ class GuiEntity extends Entity, implements IPositionable
 	
 	private var _context:Context;
 	
-	public function new( p_kernel:IKernel, ?p_width:Float = 100, ?p_height:Float = 100, ?p_isMasked:Bool = true )
+	public function new( p_kernel:IKernel, p_width:Float = 100, p_height:Float = 100, p_isMasked:Bool = true )
 	{
 		Reflect.setField( this, "isFlippedX", false );
 		Reflect.setField( this, "isFlippedY", false );

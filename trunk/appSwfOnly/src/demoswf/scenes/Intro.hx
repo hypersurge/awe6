@@ -51,7 +51,7 @@ class Intro extends AScene
 		
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		/* example:

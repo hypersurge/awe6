@@ -46,13 +46,13 @@ class Encrypter implements IEncrypter
 		_defaultSecret = p_defaultSecret;
 	}
 	
-	public function encrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
+	public function encrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
 		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );
 	}
 	
-	public function decrypt( p_value:Bytes, ?p_secret:String = "" ):Bytes
+	public function decrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
 		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );

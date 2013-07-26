@@ -46,14 +46,14 @@ interface IEntityCollection implements IAgendaManager
 	 * @param	?isAddedToView	If true will add the child entity's view to this object's view.
 	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack).
 	 */
-	function addEntity( entity:IEntity, ?agenda:EAgenda, ?isAddedToView:Bool = false, ?viewPriority:Int = 0 ):Void;
+	function addEntity( entity:IEntity, ?agenda:EAgenda, isAddedToView:Bool = false, viewPriority:Int = 0 ):Void;
 	/**
 	 * Removes an entity from this object's children.
 	 * @param	entity	The entity to remove.
 	 * @param	?agenda	If set then will only remove the specified entity from this agenda, else will remove from all agendas.
 	 * @param	?isRemovedFromView	If true the child entity's view will be removed from this object's view.
 	 */
-	function removeEntity( entity:IEntity, ?agenda:EAgenda, ?isRemovedFromView:Bool = false ):Void;
+	function removeEntity( entity:IEntity, ?agenda:EAgenda, isRemovedFromView:Bool = false ):Void;
 	/**
 	 * Retrieves all child entities.
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
@@ -71,7 +71,7 @@ interface IEntityCollection implements IAgendaManager
 	 * @param	?isBubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
 	 * @return	Array of matching entities.
 	 */
-	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):Array<T>;
+	function getEntitiesByClass<T>( classType:Class<T>, ?agenda:EAgenda, isBubbleDown:Bool = false, isBubbleUp:Bool = false, isBubbleEverywhere:Bool = false ):Array<T>;
 	/**
 	 * Retrieves the child entity with the specified id. 
 	 * <p>Consider this a runtime only method, rather than calling it during constructor or initialization phases.</p>
@@ -82,5 +82,5 @@ interface IEntityCollection implements IAgendaManager
 	 * @param	?isBubbleEverywhere	Set to true if you want to search the entire entity traversal stack for the requested entity.
 	 * @return	The requested entity or null if no entity with this id was found.
 	 */
-	function getEntityById( id:String, ?agenda:EAgenda, ?isBubbleDown:Bool = false, ?isBubbleUp:Bool = false, ?isBubbleEverywhere:Bool = false ):IEntity;
+	function getEntityById( id:String, ?agenda:EAgenda, isBubbleDown:Bool = false, isBubbleUp:Bool = false, isBubbleEverywhere:Bool = false ):IEntity;
 }

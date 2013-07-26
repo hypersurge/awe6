@@ -64,5 +64,5 @@ interface IEntity implements IProcess, implements IViewable, implements IEntityC
 	 * Used to easily remove this entity from its parent.
 	 * @param	?isRemovedFromView	Determines whether this object's view is removed from the view stack at the same time.
 	 */
-	function remove( ?isRemovedFromView:Bool = false ):Void;
+	function remove( isRemovedFromView:Bool = false ):Void;
 }

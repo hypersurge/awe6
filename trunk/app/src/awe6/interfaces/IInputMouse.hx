@@ -94,45 +94,45 @@ interface IInputMouse
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
 	 * @return	The horizontal velocity of the mouse.
 	 */
-	function getDeltaX( ?asTime:Bool = true ):Int;
+	function getDeltaX( asTime:Bool = true ):Int;
 	/**
 	 * The vertical velocity of the mouse position.
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
 	 * @return	The vertical velocity of the mouse.
 	 */
-	function getDeltaY( ?asTime:Bool = true ):Int;
+	function getDeltaY( asTime:Bool = true ):Int;
 	/**
 	 * The velocity of the mouse.
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as pixels moved in previous update.
 	 * @return	The velocity of the mouse.
 	 */
-	function getSpeed( ?asTime:Bool = true ):Int;
+	function getSpeed( asTime:Bool = true ):Int;
 	/**
 	 * The velocity of scrolling.
 	 * @param	?asTime	If true then returns the velocity as pixels per second (extrapolated from the previous update), else returns velocity as scroll moved in previous update.
 	 * @return	The scroll velocity of the mouse.
 	 */
-	function getDeltaScroll( ?asTime:Bool = true ):Int;
+	function getDeltaScroll( asTime:Bool = true ):Int;
 	/**
 	 * Determine how long the mouse has been still.
 	 * @param	?asTime	If true then returns duration as milliseconds, else returns duration as frame updates.
 	 * @return	Returns the duration the mouse has been still.
 	 */
-	function getStillDuration( ?asTime:Bool = true ):Int;
+	function getStillDuration( asTime:Bool = true ):Int;
 	/**
 	 * Determine if a specific mouse button was clicked twice (within the defined time).
 	 * @param	?type	The mouse button.
 	 * @param	?delay	The time within which the mouse button must be clicked twice.
 	 * @return	Returns true if the mouse button was clicked twice (within the defined time).
 	 */
-	function getIsButtonDoubleClick( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
+	function getIsButtonDoubleClick( ?type:EMouseButton, delay:Int = 100 ):Bool;
 	/**
 	 * Determine if the mouse is being dragged with a specific mouse button down (for at least the defined delay).
 	 * @param	?type	The mouse button.
 	 * @param	?delay	The time which, if exceeded, assumes the mouse is being dragged. 
 	 * @return	Returns true if the mouse button was down for a duration exceeding delay.
 	 */
-	function getIsButtonDrag( ?type:EMouseButton, ?delay:Int = 100 ):Bool;
+	function getIsButtonDrag( ?type:EMouseButton, delay:Int = 100 ):Bool;
 	/**
 	 * Determine if a specific mouse button is currently down.
 	 * @param	?type	The mouse button.
@@ -160,7 +160,7 @@ interface IInputMouse
 	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	The duration a specific mouse button is down.
 	 */
-	function getButtonDownDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
+	function getButtonDownDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Float;
 	/**
 	 * Determine the duration a specific mouse button is up.
 	 * @param	?type	The mouse button.
@@ -168,7 +168,7 @@ interface IInputMouse
 	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	The duration a specific mouse button is up.
 	 */
-	function getButtonUpDuration( ?type:EMouseButton, ?asTime:Bool = true, ?isPrevious:Bool = false ):Float;
+	function getButtonUpDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Float;
 	/**
 	 * Determine the horizontal movement of the mouse since a specific mouse button was pressed.
 	 * @param	?type	The mouse button.
