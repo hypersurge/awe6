@@ -29,9 +29,9 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.ASceneTransition;
-import native.display.Bitmap;
-import native.display.BitmapData;
-import native.filters.BlurFilter;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.filters.BlurFilter;
 
 /**
  * This SceneTransition class provides nme native target overrides.

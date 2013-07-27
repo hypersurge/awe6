@@ -31,10 +31,10 @@ package awe6.core.drivers.jeash;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
-import browser.events.Event;
-import browser.media.Sound;
-import browser.media.SoundChannel;
-import browser.media.SoundTransform;
+import flash.events.Event;
+import flash.media.Sound;
+import flash.media.SoundChannel;
+import flash.media.SoundTransform;
 
 /**
  * This AudioManager class provides nme browser (aka jeash) target overrides.

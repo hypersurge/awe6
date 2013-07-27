@@ -30,11 +30,11 @@
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import native.display.Stage;
-import native.events.Event;
-import native.events.MouseEvent;
-import native.Lib;
-import native.ui.Mouse;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
+import flash.ui.Mouse;
 import haxe.io.Bytes;
 
 /**

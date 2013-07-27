@@ -30,12 +30,12 @@
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import browser.display.Loader;
-import browser.display.Stage;
-import browser.events.Event;
-import browser.events.MouseEvent;
-import browser.Lib;
-import browser.ui.Mouse;
+import flash.display.Loader;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
+import flash.ui.Mouse;
 
 /**
  * This InputMouse class provides nme browser (aka jeash) target overrides.

@@ -33,7 +33,7 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 #if haxe3
-typedef GenericStackEntity<T> = haxe.ds.GenericStack<T>;
+//typedef GenericStackEntity<T> = haxe.ds.GenericStack<T>;
 #else
 typedef GenericStackEntity<T> = haxe.FastList<T>;
 #end
@@ -61,7 +61,7 @@ class Entity extends Process, implements IEntity
 	public var view( get_view, null ):IView;
 	#end
 	
-	private var _entityAgendaPairs:GenericStackEntity<_HelperEntityAgendaPair>;
+	private var _entityAgendaPairs:haxe.ds.GenericStack<_HelperEntityAgendaPair>;
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
@@ -79,7 +79,7 @@ class Entity extends Process, implements IEntity
 	{
 		super._init();
 		agenda = EAgenda.ALWAYS;
-		_entityAgendaPairs = new GenericStackEntity<_HelperEntityAgendaPair>();
+		_entityAgendaPairs = new haxe.ds.GenericStack<_HelperEntityAgendaPair>();
 		_isAgendaDirty = true;
 		_cachedEntities = [];
 	}

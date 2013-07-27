@@ -30,10 +30,10 @@
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AInputKeyboard;
 import awe6.interfaces.EKey;
-import native.display.Stage;
-import native.events.Event;
-import native.events.KeyboardEvent;
-import native.Lib;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.KeyboardEvent;
+import flash.Lib;
 
 /**
  * This InputKeyboard class provides nme native target overrides.

@@ -29,7 +29,7 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.ASession;
-import native.net.SharedObject;
+import flash.net.SharedObject;
 
 /**
  * This Session class provides nme native target overrides.

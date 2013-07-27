@@ -50,7 +50,7 @@ class Factory extends AFactory
 {
 	private var _assetManager:AssetManager;
 
-	override private function _configurer( ?p_isPreconfig:Bool = false ):Void
+	override private function _configurer( p_isPreconfig:Bool = false ):Void
 	{
 		if ( p_isPreconfig )
 		{

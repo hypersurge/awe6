@@ -35,8 +35,8 @@ import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import nme.Assets;
-import nme.text.Font;
+import openfl.Assets;
+import flash.text.Font;
 
 class AssetManager extends AAssetManager
 {
@@ -94,7 +94,8 @@ class AssetManager extends AAssetManager
 			#if cpp
 			l_extension = ".ogg"; // doesn't work on Macs?
 			#elseif js
-			l_extension = untyped browser.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+			return null; // js not playing nice yet
+//			l_extension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
 			#end
 			p_id += l_extension;
 		}

@@ -65,10 +65,14 @@ class Overlay extends awe6.core.Overlay
 	{
 		return switch( p_type )
 		{
-			case SUB_TYPE( value ) :
-				switch( value )
+			case SUB_TYPE( p_value ) :
+				switch( p_value )
 				{
-					// case "RESTART" : _buttonRestart;
+					// case "RESTART" : 
+					//	_buttonRestart;
+					default :
+						p_value;
+						null;
 				}
 			default : super._getButton( p_type );
 		}
@@ -84,13 +88,16 @@ class Overlay extends awe6.core.Overlay
 	{
 		switch( p_type )
 		{
-			case SUB_TYPE( value ) :
-				switch( value )
+			case SUB_TYPE( p_value ) :
+				switch( p_value )
 				{
 					// case "RESTART" : if ( _buttonPause.view.isInViewStack )
 					// {
 					// 	_kernel.scenes.restart();
 					// }
+					default :
+						p_value;
+						null;
 				}
 			default : null;
 		}

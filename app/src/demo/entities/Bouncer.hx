@@ -63,7 +63,7 @@ class Bouncer extends Entity
 		y = _kernel.factory.height * Math.random();
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		x += vx * ( p_deltaTime / 1000 );

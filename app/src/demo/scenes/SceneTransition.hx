@@ -44,7 +44,7 @@ class SceneTransition extends awe6.core.SceneTransition
 		// extend
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		//extend
