@@ -29,12 +29,12 @@
 
 package awe6.core.drivers.jeash;
 import awe6.core.drivers.AKernel;
-import browser.display.Stage;
-import browser.display.StageQuality;
-import browser.display.StageScaleMode;
-import browser.events.Event;
-import browser.Lib;
-import browser.system.Security;
+import flash.display.Stage;
+import flash.display.StageQuality;
+import flash.display.StageScaleMode;
+import flash.events.Event;
+import flash.Lib;
+import flash.system.Security;
 
 /**
  * This Kernel class provides nme browser (aka jeash) target overrides.

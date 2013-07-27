@@ -28,6 +28,7 @@
  */
 
 package demo.entities;
+import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMouseButton;
@@ -35,13 +36,12 @@ import awe6.interfaces.IKernel;
 import demo.AssetManager;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.Sprite;
 import flash.geom.Matrix;
 
 class Sphere extends Entity
 {
 	private var _assetManager:AssetManager;
-	private var _sprite:Sprite;
+	private var _context:Context;
 	private var _width:Float;
 	private var _height:Float;
 	private var _width2:Float;
@@ -50,10 +50,10 @@ class Sphere extends Entity
 
 	public function new( p_kernel:IKernel )
 	{
-		_sprite = new Sprite();
-		_sprite.mouseEnabled = false;
+		_context = new Context();
+		_context.mouseEnabled = false;
 		_assetManager = cast p_kernel.assets;
-		super( p_kernel, _sprite );
+		super( p_kernel, _context );
 	}
 
 	override private function _init():Void
@@ -74,15 +74,15 @@ class Sphere extends Entity
 		l_sphere.smoothing = true;
 		l_sphere.x = -_width2;
 		l_sphere.y = -_height2;
-		_sprite.addChild( l_sphere );
+		_context.addChild( l_sphere );
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
-		_sprite.x = _bouncer.x;
-		_sprite.y = _bouncer.y;
-		_sprite.scaleX = ( _bouncer.vx > 1 ) ? 1.001 : -1; // 1.001 is a workaround for Js' float issue: scale expects a float
+		_context.x = _bouncer.x;
+		_context.y = _bouncer.y;
+		_context.scaleX = ( _bouncer.vx > 1 ) ? 1.001 : -1; // 1.001 is a workaround for Js' float issue: scale expects a float
 		view.priority = Std.int( _bouncer.y );
 		if ( _isHit() )
 		{

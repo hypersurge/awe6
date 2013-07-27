@@ -33,4 +33,4 @@ package awe6.core.drivers.jeash;
  * This Context class provides nme browser (aka jeash) target overrides.
  * @author	Robert Fell
  */
-typedef Context = browser.display.Sprite;
+typedef Context = flash.display.Sprite;

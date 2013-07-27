@@ -31,10 +31,10 @@ package awe6.core.drivers.nme;
 import awe6.core.Context;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;
-import native.display.Bitmap;
-import native.display.BitmapData;
-import native.display.Sprite;
-import native.filters.BlurFilter;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Sprite;
+import flash.filters.BlurFilter;
 
 /**
  * This Overlay class provides nme native target overrides.

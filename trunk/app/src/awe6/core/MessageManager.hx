@@ -32,7 +32,7 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IMessageManager;
 import awe6.interfaces.IPriority;
 #if haxe3
-typedef GenericStackMessageManager<T> = haxe.ds.GenericStack<T>;
+//typedef GenericStackMessageManager<T> = haxe.ds.GenericStack<T>;
 #else
 typedef GenericStackMessageManager<T> = haxe.FastList<T>;
 #end
@@ -49,7 +49,7 @@ class MessageManager extends Process implements IMessageManager
 class MessageManager extends Process, implements IMessageManager
 #end
 {
-	private var _subscriptions:GenericStackMessageManager<_HelperSubscription<Dynamic>>;
+	private var _subscriptions:haxe.ds.GenericStack<_HelperSubscription<Dynamic>>;
 	private var _messageQueue:List<_HelperMessage<Dynamic>>;
 	private var _isVerbose:Bool;
 
@@ -57,7 +57,7 @@ class MessageManager extends Process, implements IMessageManager
 	{
 		super._init();
 		_isVerbose = false; // used for debugging / testing of this manager (work in progress)
-		_subscriptions = new GenericStackMessageManager<_HelperSubscription<Dynamic>>();
+		_subscriptions = new haxe.ds.GenericStack<_HelperSubscription<Dynamic>>();
 		_messageQueue = new List<_HelperMessage<Dynamic>>();
 	}
 	
@@ -140,7 +140,7 @@ class MessageManager extends Process, implements IMessageManager
 				return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0].parent, true );
 			}
 		}
-		var l_subscriptions:GenericStackMessageManager<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
+		var l_subscriptions:haxe.ds.GenericStack<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
@@ -175,9 +175,9 @@ class MessageManager extends Process, implements IMessageManager
 		return l_isContinue;
 	}
 	
-	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):GenericStackMessageManager<_HelperSubscription<Dynamic>>
+	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):haxe.ds.GenericStack<_HelperSubscription<Dynamic>>
 	{
-		var l_result:GenericStackMessageManager<_HelperSubscription<Dynamic>> = new GenericStackMessageManager<_HelperSubscription<Dynamic>>();
+		var l_result:haxe.ds.GenericStack<_HelperSubscription<Dynamic>> = new haxe.ds.GenericStack<_HelperSubscription<Dynamic>>();
 		for ( i in _subscriptions )
 		{
 			if ( ( p_subscriber != null ) && ( i.subscriber != p_subscriber ) )

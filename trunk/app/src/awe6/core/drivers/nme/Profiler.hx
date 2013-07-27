@@ -29,12 +29,12 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AProfiler;
-import native.display.Bitmap;
-import native.display.BitmapData;
-import native.geom.Rectangle;
-import native.system.System;
-import native.text.TextField;
-import native.text.TextFormat;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.geom.Rectangle;
+import flash.system.System;
+import flash.text.TextField;
+import flash.text.TextFormat;
 	
 /**
  * This Profiler class provides nme native target overrides.

@@ -31,10 +31,10 @@ package awe6.core.drivers.nme;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
-import native.events.Event;
-import native.media.Sound;
-import native.media.SoundChannel;
-import native.media.SoundTransform;
+import flash.events.Event;
+import flash.media.Sound;
+import flash.media.SoundChannel;
+import flash.media.SoundTransform;
 
 /**
  * This AudioManager class provides nme native target overrides.

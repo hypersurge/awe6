@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<app title="awe6" file="awe6" main="Main" package="org.awe6.demo" version="1.0.0" company="awe6" />
+	<meta title="awe6" package="org.awe6.demo" version="1.0.0" company="awe6" />
+	<app main="Main" path="export" file="awe6" />
 
 	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="flash" />
 	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" unless="flash" />
  	
-	<set name="BUILD_DIR" value="export" />
-	
-	<classpath name="src" />
-	
-	<haxelib name="nme" />
+	<source path="src" />
+	<haxelib name="openfl" />
 	
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude|*.ogg" if="flash" />
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude" unless="flash" />
 	
-	<ndll name="std" />
-	<ndll name="regexp" />
-	<ndll name="zlib" />
-	<ndll name="nme" haxelib="nme" />
-	
 	<haxeflag name="--flash-strict" if="flash" />
 	<!-- <haxeflag name="--dead-code-elimination" if="html5" /> IE9 says not yet -->
-	<haxeflag name="--js-modern" if="html5" />
 	
 	<!--
 	<compilerflag name="-D awe6DriverRemap" />

@@ -29,11 +29,11 @@
 
 package awe6.core.drivers.nme;
 import awe6.core.drivers.AKernel;
-import native.display.Stage;
-import native.display.StageDisplayState;
-import native.display.StageQuality;
-import native.display.StageScaleMode;
-import native.events.Event;
+import flash.display.Stage;
+import flash.display.StageDisplayState;
+import flash.display.StageQuality;
+import flash.display.StageScaleMode;
+import flash.events.Event;
 
 /**
  * This Kernel class provides nme native target overrides.
@@ -64,7 +64,7 @@ class Kernel extends AKernel
 	{
 	}
 	
-	private function _onResize( p_event:Event ):Void
+	private function _onResize( ?p_event:Event ):Void
 	{
 		// note this logic interferes with mouse inputs
 //		_view.x = Std.int( ( _stage.stageWidth - factory.width ) / 2 );

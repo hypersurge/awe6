@@ -30,7 +30,7 @@
 package awe6.core.drivers.nme;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
-import native.events.Event;
+import flash.events.Event;
 
 /**
  * This Factory class provides nme native target overrides.
