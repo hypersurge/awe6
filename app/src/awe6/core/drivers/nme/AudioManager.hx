@@ -52,7 +52,8 @@ class AudioManager extends AAudioManager
 	{
 		for ( i in _sounds )
 		{
-			untyped i.setIsMute( p_value );
+			var l_sound:_HelperSound = cast i;
+			l_sound.setIsMute( p_value );
 		}
 	}	
 	
@@ -98,8 +99,8 @@ class _HelperSound extends _AHelperSound
 			_volume *= _soundChannel.soundTransform.volume;
 			_pan *= _soundChannel.soundTransform.pan;
 		}
-		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
-		_soundChannel.soundTransform = soundTransform;
+		var l_soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
+		_soundChannel.soundTransform = l_soundTransform;
 	}
 
 	override private function _driverStop():Void
