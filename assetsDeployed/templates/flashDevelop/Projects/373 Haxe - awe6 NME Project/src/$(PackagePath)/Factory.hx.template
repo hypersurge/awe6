@@ -23,7 +23,7 @@ $(CBI)*/
 class Factory extends AFactory $(CSLB){
 	private var _assetManager:AssetManager;
 
-	override private function _configurer( ?p_isPreconfig:Bool = false ):Void $(CSLB){
+	override private function _configurer( p_isPreconfig:Bool = false ):Void $(CSLB){
 		if ( p_isPreconfig ) $(CSLB){
 			id = "$(ProjectID)";
 			version = "0.0.1";
@@ -92,7 +92,8 @@ class Factory extends AFactory $(CSLB){
 				10;
 			case SMALLPRINT :
 				6;
-			default : 12;
+			default : 
+				12;
 		}
 		return l_result;
 	}
@@ -103,7 +104,8 @@ class Factory extends AFactory $(CSLB){
 				return INTRO;
 			case INTRO :
 				return null;
-			default : null;
+			default : 
+				null;
 		}
 		return super.getBackSceneType( p_type );
 	}
@@ -114,7 +116,8 @@ class Factory extends AFactory $(CSLB){
 				return RESULTS;
 			case INTRO :
 				return GAME;
-			default : null;
+			default : 
+				null;
 		}
 		return super.getNextSceneType( p_type );
 	}

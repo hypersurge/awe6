@@ -17,7 +17,7 @@ class SceneTransition extends awe6.core.SceneTransition $(CSLB){
 		// extend
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		//extend
 	}

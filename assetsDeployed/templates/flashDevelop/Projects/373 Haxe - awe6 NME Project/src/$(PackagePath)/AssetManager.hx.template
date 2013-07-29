@@ -27,6 +27,8 @@ class AssetManager extends AAssetManager $(CSLB){
 	public var overlayUnpauseOver( default, null ):IView;
 	public var overlayUnpauseUp( default, null ):IView;
 	public var font( default, null ):Font;
+		
+	private var _html5AudioExtension:String;
 	
 	override private function _init():Void $(CSLB){
 		super._init();
@@ -42,6 +44,9 @@ class AssetManager extends AAssetManager $(CSLB){
 		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
+		#if js
+		_html5AudioExtension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+		#end
 	}
 
 	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic $(CSLB){
@@ -56,7 +61,7 @@ class AssetManager extends AAssetManager $(CSLB){
 			#if cpp
 			l_extension = ".ogg"; // doesn't work on Macs?
 			#elseif js
-			l_extension = untyped browser.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+			l_extension = _html5AudioExtension;
 			#end
 			p_id += l_extension;
 		}

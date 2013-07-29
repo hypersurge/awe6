@@ -12,7 +12,7 @@ class Intro extends AScene $(CSLB){
 		_title.text = "INTRO";
 	}
 
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		// example:
 		if ( _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) ) $(CSLB){
