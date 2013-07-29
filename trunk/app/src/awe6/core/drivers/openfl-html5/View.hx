@@ -27,12 +27,12 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides nme browser (aka jeash) target overrides.
+ * This View class provides openfl-html5 target overrides.
  * @author	Robert Fell
  */
 class View extends AView

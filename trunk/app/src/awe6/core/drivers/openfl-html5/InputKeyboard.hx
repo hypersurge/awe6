@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 import awe6.core.drivers.AInputKeyboard;
 import flash.display.Stage;
 import flash.events.Event;
@@ -35,7 +35,7 @@ import flash.events.KeyboardEvent;
 import flash.Lib;
 
 /**
- * This InputKeyboard class provides nme browser (aka jeash) target overrides.
+ * This InputKeyboard class provides openfl-html5 target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

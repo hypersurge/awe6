@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 import awe6.core.drivers.AKernel;
 import flash.display.Stage;
 import flash.display.StageQuality;
@@ -37,7 +37,7 @@ import flash.Lib;
 import flash.system.Security;
 
 /**
- * This Kernel class provides nme browser (aka jeash) target overrides.
+ * This Kernel class provides openfl-html5 target overrides.
  * @author	Robert Fell
  */
 class Kernel extends AKernel

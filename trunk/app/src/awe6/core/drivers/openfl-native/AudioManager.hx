@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
@@ -37,7 +37,7 @@ import flash.media.SoundChannel;
 import flash.media.SoundTransform;
 
 /**
- * This AudioManager class provides nme native target overrides.
+ * This AudioManager class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class AudioManager extends AAudioManager

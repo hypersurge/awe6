@@ -27,13 +27,13 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 import flash.events.Event;
 
 /**
- * This Factory class provides nme native target overrides.
+ * This Factory class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class Factory extends AFactory

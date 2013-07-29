@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
 import flash.display.Loader;
@@ -38,7 +38,7 @@ import flash.Lib;
 import flash.ui.Mouse;
 
 /**
- * This InputMouse class provides nme browser (aka jeash) target overrides.
+ * This InputMouse class provides openfl-html5 target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse

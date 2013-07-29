@@ -27,10 +27,10 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 
 /**
- * This Context class provides nme browser (aka jeash) target overrides.
+ * This Context class provides openfl-html5 target overrides.
  * @author	Robert Fell
  */
 typedef Context = flash.display.Sprite;
