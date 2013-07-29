@@ -12,7 +12,7 @@ class $(FileName) extends Entity $(CSLB){
 	private var _context:Context;
 	
 	public function new( p_kernel:IKernel ) $(CSLB){
-		_context = new Context(); // essentially a "flash.display.Sprite"
+		_context = new Context();
 		super( p_kernel, _context );
 	}
 	
@@ -21,7 +21,7 @@ class $(FileName) extends Entity $(CSLB){
 		// extend here
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		// extend here
 	}

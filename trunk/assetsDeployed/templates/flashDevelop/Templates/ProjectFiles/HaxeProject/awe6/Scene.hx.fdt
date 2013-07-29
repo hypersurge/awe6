@@ -21,7 +21,7 @@ class $(FileName) extends Scene $(CSLB){
 		// extend here
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		// extend here
 	}
