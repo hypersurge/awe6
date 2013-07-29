@@ -32,9 +32,10 @@ import awe6.interfaces.IEntity;
 import awe6.interfaces.IMessageManager;
 import awe6.interfaces.IPriority;
 #if haxe3
-//typedef GenericStackMessageManager<T> = haxe.ds.GenericStack<T>;
+// typedef aliasing caused issue on hxcpp
+import haxe.ds.GenericStack;
 #else
-typedef GenericStackMessageManager<T> = haxe.FastList<T>;
+import haxe.FastList;
 #end
 
 /**
@@ -49,7 +50,11 @@ class MessageManager extends Process implements IMessageManager
 class MessageManager extends Process, implements IMessageManager
 #end
 {
-	private var _subscriptions:haxe.ds.GenericStack<_HelperSubscription<Dynamic>>;
+#if haxe3
+	private var _subscriptions:GenericStack<_HelperSubscription<Dynamic>> ;
+#else
+	private var _subscriptions:FastList< _HelperSubscription<Dynamic>> ;
+#end
 	private var _messageQueue:List<_HelperMessage<Dynamic>>;
 	private var _isVerbose:Bool;
 
@@ -57,7 +62,11 @@ class MessageManager extends Process, implements IMessageManager
 	{
 		super._init();
 		_isVerbose = false; // used for debugging / testing of this manager (work in progress)
-		_subscriptions = new haxe.ds.GenericStack<_HelperSubscription<Dynamic>>();
+#if haxe3
+		_subscriptions = new GenericStack<_HelperSubscription<Dynamic>>();
+#else
+		_subscriptions = new FastList<_HelperSubscription<Dynamic>>();
+#end
 		_messageQueue = new List<_HelperMessage<Dynamic>>();
 	}
 	
@@ -140,7 +149,11 @@ class MessageManager extends Process, implements IMessageManager
 				return _sendMessage( p_message, p_sender, _kernel.scenes.scene.getEntities()[0].parent, true );
 			}
 		}
-		var l_subscriptions:haxe.ds.GenericStack<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
+#if haxe3
+		var l_subscriptions:GenericStack<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
+#else
+		var l_subscriptions:FastList<_HelperSubscription<Dynamic>> = _getSubscriptions( p_target, p_message, null, p_sender );
+#end
 		var l_isContinue:Bool = true;
 		for ( i in l_subscriptions )
 		{
@@ -175,9 +188,17 @@ class MessageManager extends Process, implements IMessageManager
 		return l_isContinue;
 	}
 	
-	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):haxe.ds.GenericStack<_HelperSubscription<Dynamic>>
+#if haxe3
+	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):GenericStack<_HelperSubscription<Dynamic>>
+#else
+	private function _getSubscriptions<M>( ?p_subscriber:IEntity, ?p_message:M, ?p_handler:M->IEntity->Bool, ?p_sender:IEntity, ?p_senderClassType:Class<IEntity>, p_isRemove:Bool = false ):FastList<_HelperSubscription<Dynamic>>
+#end
 	{
-		var l_result:haxe.ds.GenericStack<_HelperSubscription<Dynamic>> = new haxe.ds.GenericStack<_HelperSubscription<Dynamic>>();
+#if haxe3
+		var l_result:GenericStack<_HelperSubscription<Dynamic>> = new GenericStack<_HelperSubscription<Dynamic>>();
+#else
+		var l_result:FastList<_HelperSubscription<Dynamic>> = new FastList<_HelperSubscription<Dynamic>>();
+#end
 		for ( i in _subscriptions )
 		{
 			if ( ( p_subscriber != null ) && ( i.subscriber != p_subscriber ) )

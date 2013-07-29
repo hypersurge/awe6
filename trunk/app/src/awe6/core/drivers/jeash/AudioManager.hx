@@ -52,15 +52,16 @@ class AudioManager extends AAudioManager
 	{
 		for ( i in _sounds )
 		{
-			if ( untyped i._soundChannel == null )
+			var l_sound:_HelperSound = cast i;
+			if ( l_sound.getSoundChannel() == null )
 			{
 				continue;
 			}
-			if ( untyped i._soundChannel.nmeAudio == null )
+			if ( l_sound.getSoundChannel().nmeAudio == null )
 			{
 				continue;
 			}
-			untyped i._soundChannel.nmeAudio.muted = p_value;
+			l_sound.getSoundChannel().nmeAudio.muted = p_value;
 		}
 	}	
 	
@@ -106,9 +107,11 @@ class _HelperSound extends _AHelperSound
 			_volume *= _soundChannel.soundTransform.volume;
 			_pan *= _soundChannel.soundTransform.pan;
 		}
-		var soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
-		_soundChannel.soundTransform = soundTransform;
-		untyped _soundChannel.nmeAudio.volume = _volume;
+		var l_soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
+		// as a fix to a broken constructor param handling in openfl
+		l_soundTransform.volume = _volume;
+		l_soundTransform.pan = _pan;
+		_soundChannel.soundTransform = l_soundTransform;
 	}
 
 	override private function _driverStop():Void
@@ -136,5 +139,10 @@ class _HelperSound extends _AHelperSound
 			stop();
 			_soundChannel.removeEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		}
+	}
+	
+	public function getSoundChannel():SoundChannel
+	{
+		return _soundChannel;
 	}
 }
