@@ -78,7 +78,9 @@ class AssetManager extends AAssetManager
 		buttonOver = Assets.getBitmapData( "assets/ButtonOver.png" );
 		sphere = Assets.getBitmapData( "assets/Sphere.png" );
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
+		#if js
 		_html5AudioExtension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+		#end
 	}
 
 	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
@@ -97,7 +99,6 @@ class AssetManager extends AAssetManager
 			#if cpp
 			l_extension = ".ogg"; // doesn't work on Macs?
 			#elseif js
-//			return null; // js not playing nice yet
 			l_extension = _html5AudioExtension;
 			#end
 			p_id += l_extension;

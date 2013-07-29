@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-native;
+package awe6.core.drivers.openfl.native;
 import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;

@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-native;
+package awe6.core.drivers.openfl.native;
 import awe6.core.Context;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;

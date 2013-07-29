@@ -39,11 +39,11 @@
 #if awe6DriverRemap
 typedef ASession = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Session" ) ]>;
 #elseif cpp
-typedef ASession = awe6.core.drivers.openfl-native.Session;
+typedef ASession = awe6.core.drivers.openfl.native.Session;
 #elseif flash
 typedef ASession = awe6.core.drivers.flash.Session;
 #elseif js
-typedef ASession = awe6.core.drivers.openfl-html5.Session;
+typedef ASession = awe6.core.drivers.openfl.html5.Session;
 #else
 typedef ASession = awe6.core.drivers.ASession;
 #end

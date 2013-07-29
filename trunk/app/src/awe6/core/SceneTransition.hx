@@ -38,11 +38,11 @@ package awe6.core;
 #if awe6DriverRemap
 typedef SceneTransition = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "SceneTransition" ) ]>;
 #elseif cpp
-typedef SceneTransition = awe6.core.drivers.openfl-native.SceneTransition;
+typedef SceneTransition = awe6.core.drivers.openfl.native.SceneTransition;
 #elseif flash
 typedef SceneTransition = awe6.core.drivers.flash.SceneTransition;
 #elseif js
-typedef SceneTransition = awe6.core.drivers.openfl-html5.SceneTransition;
+typedef SceneTransition = awe6.core.drivers.openfl.html5.SceneTransition;
 #else
 typedef SceneTransition = awe6.core.drivers.ASceneTransition;
 #end

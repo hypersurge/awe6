@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-native;
+package awe6.core.drivers.openfl.native;
 
 /**
  * This Context class provides openfl-native target overrides.

@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-native;
+package awe6.core.drivers.openfl.native;
 import awe6.core.drivers.AProfiler;
 import flash.display.Bitmap;
 import flash.display.BitmapData;

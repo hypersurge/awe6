@@ -38,11 +38,11 @@ package awe6.core;
 #if awe6DriverRemap
 typedef InputKeyboard = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "InputKeyboard" ) ]>;
 #elseif cpp
-typedef InputKeyboard = awe6.core.drivers.openfl-native.InputKeyboard;
+typedef InputKeyboard = awe6.core.drivers.openfl.native.InputKeyboard;
 #elseif flash
 typedef InputKeyboard = awe6.core.drivers.flash.InputKeyboard;
 #elseif js
-typedef InputKeyboard = awe6.core.drivers.openfl-html5.InputKeyboard;
+typedef InputKeyboard = awe6.core.drivers.openfl.html5.InputKeyboard;
 #else
 typedef InputKeyboard = awe6.core.drivers.AInputKeyboard;
 #end
