@@ -14,4 +14,6 @@ Upgrades:
 	Gui to _context
 	Trigger to do typed callback
 	Easing
+	FlashDevelop default SDK on templates
+	Test
 	
