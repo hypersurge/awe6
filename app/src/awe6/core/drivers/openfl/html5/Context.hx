@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-html5;
+package awe6.core.drivers.openfl.html5;
 
 /**
  * This Context class provides openfl-html5 target overrides.

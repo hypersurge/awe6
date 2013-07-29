@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.openfl-html5;
+package awe6.core.drivers.openfl.html5;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
 import flash.display.Loader;

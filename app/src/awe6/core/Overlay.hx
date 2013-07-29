@@ -38,11 +38,11 @@ package awe6.core;
 #if awe6DriverRemap
 typedef Overlay = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Overlay" ) ]>;
 #elseif cpp
-typedef Overlay = awe6.core.drivers.openfl-native.Overlay;
+typedef Overlay = awe6.core.drivers.openfl.native.Overlay;
 #elseif flash
 typedef Overlay = awe6.core.drivers.flash.Overlay;
 #elseif js
-typedef Overlay = awe6.core.drivers.openfl-html5.Overlay;
+typedef Overlay = awe6.core.drivers.openfl.html5.Overlay;
 #else
 typedef Overlay = awe6.core.drivers.AOverlay;
 #end
