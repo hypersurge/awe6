@@ -43,7 +43,7 @@ class Delay extends Entity
 		super( p_kernel );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		_duration -= p_deltaTime;
