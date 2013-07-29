@@ -19,7 +19,7 @@ class Preloader extends APreloader $(CSLB){
 		_context.addChild( _preloaderMovieClip );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void $(CSLB){
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		if ( _preloaderMovieClip != null ) $(CSLB){
 			_preloaderMovieClip.progress.gotoAndStop( Std.int( 100 * progress ) );

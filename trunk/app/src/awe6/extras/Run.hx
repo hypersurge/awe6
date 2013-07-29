@@ -62,7 +62,7 @@ class Run
 	private static inline var _COMMAND_CREATE = "create";
 	// Project types
 	private static inline var _PROJECT_SWF = "swf";
-	private static inline var _PROJECT_NME = "nme";
+	private static inline var _PROJECT_OPENFL = "openfl";
 	// Creation targets	
 	private static inline var _TARGET_PROJECT = "project";
 	private static inline var _TARGET_SCENE = "scene";
@@ -127,7 +127,7 @@ class Run
 			_callingDir = Sys.args()[ l_param+4 ];
 			if ( l_target == _TARGET_PROJECT )
 			{
-				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_NME ) )
+				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_OPENFL ) )
 				{
 					_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
 				}
@@ -172,9 +172,9 @@ class Run
 		{
 			Lib.println( "Syntax:");
 			Lib.println("   to create a new project" );
-			Lib.println("     haxelib run awe6 create project swf|nme <name> <package> <author>" );
+			Lib.println("     haxelib run awe6 create project " + _PROJECT_SWF + "|" + _PROJECT_OPENFL + " <name> <package> <author>" );
 			Lib.println("   to create scenes or entities" );
-			Lib.println("     haxelib run awe6 create scene|entity <name> <package> <author>" );
+			Lib.println("     haxelib run awe6 create " + _TARGET_SCENE + "|" + _TARGET_ENTITY + " <name> <package> <author>" );
 		}
 	}
 	
@@ -334,12 +334,12 @@ class Run
 		}
 		else
 		{
-			var l_isNme:Bool = ( p_projectType == _PROJECT_NME );
+			var l_isNme:Bool = ( p_projectType == _PROJECT_OPENFL );
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
 			if ( l_isNme )
 			{
-				_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 NME Project", p_projectPath );
+				_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 OpenFL Project", p_projectPath );
 			}
 			else
 			{
@@ -370,21 +370,21 @@ class Run
 				[ l_projectName, p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "\n" ] );
 			if ( l_isNme )
 			{
-				var l_projectNmml:String = p_projectPath + "/" + l_projectName + ".nmml" + _TEMPLATE_EXT;
-				FileSystem.rename( p_projectPath + "/$(ProjectName).nmml", l_projectNmml );
-				_handleTemplate( l_projectNmml, [], [] );
+				var l_projectXml:String = p_projectPath + "/" + l_projectName + ".xml" + _TEMPLATE_EXT;
+				FileSystem.rename( p_projectPath + "/$(ProjectName).xml", l_projectXml );
+				_handleTemplate( l_projectXml, [], [] );
 			}
 			Lib.println( "Complete: Project " + l_projectName + " successfully created." );
 		}
 	}
 	
-	private function _createHxml( p_fileName:String, p_isNme:Bool = false ):Void
+	private function _createHxml( p_fileName:String, p_isOpenfl:Bool = false ):Void
 	{
 		var l_content:String = "";
-		if ( p_isNme )
+		if ( p_isOpenfl )
 		{
 			l_content = "
--cmd \"haxelib run nme test $(ProjectName).nmml flash\"
+-cmd \"openfl test flash\"
 ";
 		}
 		else
