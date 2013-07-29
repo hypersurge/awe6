@@ -27,12 +27,12 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.ASession;
 import flash.net.SharedObject;
 
 /**
- * This Session class provides nme native target overrides.
+ * This Session class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class Session extends ASession

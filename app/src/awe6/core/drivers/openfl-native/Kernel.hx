@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.AKernel;
 import flash.display.Stage;
 import flash.display.StageDisplayState;
@@ -36,7 +36,7 @@ import flash.display.StageScaleMode;
 import flash.events.Event;
 
 /**
- * This Kernel class provides nme native target overrides.
+ * This Kernel class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class Kernel extends AKernel

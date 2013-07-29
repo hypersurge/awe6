@@ -27,12 +27,12 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides nme native target overrides.
+ * This View class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class View extends AView

@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.AInputKeyboard;
 import awe6.interfaces.EKey;
 import flash.display.Stage;
@@ -36,7 +36,7 @@ import flash.events.KeyboardEvent;
 import flash.Lib;
 
 /**
- * This InputKeyboard class provides nme native target overrides.
+ * This InputKeyboard class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

@@ -27,10 +27,10 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 
 /**
- * This Context class provides nme native target overrides.
+ * This Context class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 typedef Context = flash.display.Sprite;

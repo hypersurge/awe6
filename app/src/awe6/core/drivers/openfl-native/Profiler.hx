@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.AProfiler;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -37,7 +37,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 	
 /**
- * This Profiler class provides nme native target overrides.
+ * This Profiler class provides openfl-native target overrides.
  * <p>Based on net.hires.utils.Stats by Mr.doob & Theo v1.3</p>
  * @author	Werner Avenant
  * @author	Mr.doob

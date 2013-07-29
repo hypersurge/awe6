@@ -38,11 +38,11 @@ package awe6.core;
 #if awe6DriverRemap
 typedef Kernel = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Kernel" ) ]>;
 #elseif cpp
-typedef Kernel = awe6.core.drivers.nme.Kernel;
+typedef Kernel = awe6.core.drivers.openfl-native.Kernel;
 #elseif flash
 typedef Kernel = awe6.core.drivers.flash.Kernel;
 #elseif js
-typedef Kernel = awe6.core.drivers.jeash.Kernel;
+typedef Kernel = awe6.core.drivers.openfl-html5.Kernel;
 #else
 typedef Kernel = awe6.core.drivers.AKernel;
 #end

@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.jeash;
+package awe6.core.drivers.openfl-html5;
 import awe6.core.drivers.AProfiler;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -41,7 +41,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 	
 /**
- * This Profiler class provides nme browser (aka jeash) target overrides.
+ * This Profiler class provides openfl-html5 target overrides.
  * <p>Based on net.hires.utils.Stats by Mr.doob & Theo v1.3</p>
  * @author	Werner Avenant
  * @author	Mr.doob

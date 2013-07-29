@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package awe6.core.drivers.nme;
+package awe6.core.drivers.openfl-native;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
 import flash.display.Stage;
@@ -38,7 +38,7 @@ import flash.ui.Mouse;
 import haxe.io.Bytes;
 
 /**
- * This InputMouse class provides nme native target overrides.
+ * This InputMouse class provides openfl-native target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
