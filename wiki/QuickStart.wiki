@@ -35,16 +35,17 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
    * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
 
-=== Starting a new awe6 NME project with !FlashDevelop ===
+=== Starting a new awe6 OpenFL (formerly NME) project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20Haxe%20-%20awe6%20NME%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20Haxe%20-%20awe6%20OpenFL%20Project/Project.png
 
   * Open !FlashDevelop.
-  * _Project > New Project > Haxe > awe6 NME Project_
+  * _Project > New Project > Haxe > awe6 OpenFL Project_
   * Select your target from the top pull down menu.
   * Hit F5 to compile & run.
+   * Alternatively use command `openfl test flash`
   * Extend / modify as required.
-   * Add new assets via the NMML file.
+   * Add new assets via the OpenFL project xml file.
    * Add new Scenes with _Project > Right Click > Add > awe6 > New Scene_
    * Add new Entities with _Project > Right Click > Add > awe6 > New Entity_
 
@@ -62,10 +63,10 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 haxelib run awe6 create project swf <projectname> <packagename> <author>
 }}}
 
-  * Create an awe6 NME project:
+  * Create an awe6 OpenFL project:
 
 {{{
-haxelib run awe6 create project nme <projectname> <packagename> <author>
+haxelib run awe6 create project openfl <projectname> <packagename> <author>
 }}}
 
   * Add new Scenes with:
