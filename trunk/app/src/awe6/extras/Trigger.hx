@@ -40,7 +40,7 @@ class Trigger extends Entity
 	private var _callbackFunction:Void->Void;
 	private var _previousValue:String;
 	
-	public function new( p_kernel:IKernel, p_entity:IEntity, p_field:String, p_callbackFunction:Void->Dynamic ) 
+	public function new( p_kernel:IKernel, p_entity:IEntity, p_field:String, p_callbackFunction:Void->Void ) 
 	{
 		_entity = p_entity;
 		_field = p_field;
