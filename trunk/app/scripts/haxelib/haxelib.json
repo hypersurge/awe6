@@ -5,7 +5,7 @@
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
   "releasenote": "Haxe 3.0, OpenFL compatible release (for Early Adopters).  Breaking changes due to migration: http://code.google.com/p/awe6/wiki/ReleaseNotes",
-  "version": "2.0.570",
+  "version": "2.0.572",
   "url": "http://awe6.org",
   "dependencies": {
 
