@@ -5,7 +5,7 @@ haxelib build list:
 	Export /app/src/awe6 and copy to /app/scripts/haxelib/
 	Update /app/scripts/haxelib/haxelib.xml with relevant version and comments
 	zip /app/scripts/haxelib name as awe6-X,X,X.zip
-	test: haxelib test awe6-X,X,X.zip
+	test: haxelib install awe6-X,X,X.zip
 	test run: haxelib run awe6 install
 	submit: haxelib submit awe6-X,X,X.zip
 	tag RC to /tags/rc-X,X,X.zip
