@@ -6,8 +6,8 @@ import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import nme.Assets;
-import nme.text.Font;
+import openfl.Assets;
+import flash.text.Font;
 
 /**
 $(CBI)* ...

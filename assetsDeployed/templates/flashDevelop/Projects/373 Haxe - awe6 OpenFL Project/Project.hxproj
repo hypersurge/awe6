@@ -4,15 +4,15 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="$(ProjectName).xml" />
-    <movie fps="20" />
-    <movie width="600" />
-    <movie height="400" />
+    <movie path="application.xml" />
+    <movie fps="0" />
+    <movie width="0" />
+    <movie height="0" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
     <movie background="#FFFFFF" />
-    <movie preferredSDK="Haxe 3.0.0;3.0.0;" />
+    <movie preferredSDK=";3;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -22,7 +22,7 @@
   <build>
     <option directives="" />
     <option flashStrict="False" />
-    <option mainClass="$(PackageDot)$(ProjectID)" />
+    <option mainClass="Main" />
     <option enabledebug="False" />
     <option additional="" />
   </build>
