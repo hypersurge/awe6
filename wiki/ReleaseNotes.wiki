@@ -1,5 +1,17 @@
 #summary Release notes for each release candidate
 
+=RC 2,0,572=
+
+Major release, some breaking changes.  Includes:
+
+ * Haxe 3 compatible (refactor to new syntax and conventions)
+ * NME drivers replaced with OpenFL drivers
+ * Optional paramaters refactored (Floats, Ints, Bools made non-nullable)
+ * Run script NME references replaced with OpenFL references
+ * FlashDevelop templates updated for above
+ * API docs not yet revised, due to chxdoc compatibility
+
+
 =RC 1,4,550=
 
 Minor fixes release.  Includes:
