@@ -1,0 +1,19 @@
+
+API changes:
+	addChild, removeChild should return child (to allow chaining)
+	
+Haxe 3 migration:
+	http://haxe.org/manual/haxe3
+	Hash to haxe.ds.Map
+	FastList to haxe.ds.GenericStack
+	Interface extends, commas
+	Getters, Setters
+	Directive, #if haxe3 ?  initially, then remove?
+	
+Upgrades:
+	Gui to _context
+	Trigger to do typed callback
+	Easing
+	FlashDevelop default SDK on templates
+	Test
+	
