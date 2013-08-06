@@ -73,6 +73,7 @@ class _HelperSound extends _AHelperSound
 	
 	override private function _driverInit():Void
 	{
+		_prevVolume = 0;
 		_sound = _kernel.assets.getAsset( id, _packageId );
 		if ( _sound == null )
 		{
