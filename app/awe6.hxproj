@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="awe6.nmml" />
+    <movie path="awe6.xml" />
     <movie fps="20" />
     <movie width="600" />
     <movie height="400" />
