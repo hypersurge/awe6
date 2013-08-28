@@ -9,6 +9,7 @@
  	
 	<source path="src" />
 	<haxelib name="openfl" />
+	<!-- <haxelib name="openfl-bitfive" if="html5" /> soon this might be a better option for games -->
 	
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude|*.ogg" if="flash" />
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude" unless="flash" />

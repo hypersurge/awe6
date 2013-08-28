@@ -79,7 +79,23 @@ class AssetManager extends AAssetManager
 		sphere = Assets.getBitmapData( "assets/Sphere.png" );
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 		#if js
-		_html5AudioExtension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+		_html5AudioExtension = ".mp3";
+		try
+		{
+			// openfl-html5
+			_html5AudioExtension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+		}
+		catch ( p_error:Dynamic )
+		{
+			try
+			{
+				// openfl-bitfive
+				untyped flash.Lib.current.stage.component.style.width = Std.string( _kernel.factory.width + "px" );
+				untyped flash.Lib.current.stage.component.style.height = Std.string( _kernel.factory.height + "px" );
+				// _html5AudioExtension = untyped flash.media.Sound.canPlayType( "ogg" ) ? ".ogg" : ".mp3"; // doesn't work reliably
+			}
+			catch ( p_error:Dynamic ) {}
+		}
 		#end
 	}
 

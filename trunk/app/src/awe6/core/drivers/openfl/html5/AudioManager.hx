@@ -57,11 +57,20 @@ class AudioManager extends AAudioManager
 			{
 				continue;
 			}
-			if ( l_sound.getSoundChannel().nmeAudio == null )
+			try
 			{
-				continue;
+				// openfl-html5
+				untyped l_sound.getSoundChannel().nmeAudio.muted = p_value;
 			}
-			l_sound.getSoundChannel().nmeAudio.muted = p_value;
+			catch ( p_error:Dynamic )
+			{
+				try
+				{
+					// openfl-bitfive
+					untyped l_sound.getSoundChannel().component.muted = p_value;
+				}
+				catch ( p_error:Dynamic ) {}
+			}
 		}
 	}	
 	
@@ -90,7 +99,20 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose(); // perhaps sounds are flooded?
 		}
-		untyped _soundChannel.nmeAudio.muted = _kernel.audio.isMute;
+		try
+		{
+			// openfl-html5
+			untyped _soundChannel.nmeAudio.muted = _kernel.audio.isMute;
+		}
+		catch ( p_error:Dynamic )
+		{
+			try
+			{
+				// openfl-bitfive
+				untyped _soundChannel.component.muted = _kernel.audio.isMute;
+			}
+			catch ( p_error:Dynamic ) {}
+		}
 		_soundChannel.addEventListener( Event.SOUND_COMPLETE, _onSoundComplete );
 		_driverTransform();
 		return;
@@ -108,7 +130,7 @@ class _HelperSound extends _AHelperSound
 			_pan *= _soundChannel.soundTransform.pan;
 		}
 		var l_soundTransform:SoundTransform = new SoundTransform( _volume, _pan );
-		// as a fix to a broken constructor param handling in openfl
+		// as a fix to a broken constructor param handling in openfl (bug fix accepted)
 		l_soundTransform.volume = _volume;
 		l_soundTransform.pan = _pan;
 		_soundChannel.soundTransform = l_soundTransform;
