@@ -30,6 +30,7 @@
 package awe6.extras.gui;
 import flash.display.BitmapData;
 import flash.geom.Matrix;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 
 class BitmapDataScale9 extends BitmapData
@@ -59,7 +60,7 @@ class BitmapDataScale9 extends BitmapData
 	{
 		if ( ( width == _source.width ) && ( height == _source.height ) )
 		{
-			copyPixels( _source, _source.rect, _source.rect.topLeft );
+			copyPixels( _source, _source.rect, new Point( _source.rect.x, _source.rect.y ) );
 		}
 		else
 		{

@@ -86,7 +86,11 @@ class Text extends GuiEntity
 		_draw();
 		_context.addChild( _textField );
 		#if ( flash || js )
-		_context.cacheAsBitmap = true;
+		try
+		{
+			untyped _context.cacheAsBitmap = true;
+		}
+		catch ( p_error:Dynamic ) {}
 		#end
 		_context.mouseEnabled = _isInput;
 		_context.mouseChildren = _isInput;
@@ -103,7 +107,11 @@ class Text extends GuiEntity
 	
 	private function _stopEventPropogation( p_event:KeyboardEvent ):Void
 	{
-		p_event.stopImmediatePropagation();
+		try
+		{
+			untyped p_event.stopImmediatePropagation();
+		}
+		catch ( p_error:Dynamic ) {}
 	}
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void 
