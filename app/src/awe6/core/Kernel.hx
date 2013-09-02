@@ -37,7 +37,7 @@ package awe6.core;
  */
 #if awe6DriverRemap
 typedef Kernel = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Kernel" ) ]>;
-#elseif cpp
+#elseif ( cpp || neko )
 typedef Kernel = awe6.core.drivers.openfl.native.Kernel;
 #elseif flash
 typedef Kernel = awe6.core.drivers.flash.Kernel;
