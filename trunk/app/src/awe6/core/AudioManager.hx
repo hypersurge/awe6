@@ -37,7 +37,7 @@ package awe6.core;
  */
 #if awe6DriverRemap
 typedef AudioManager = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "AudioManager" ) ]>;
-#elseif cpp
+#elseif ( cpp || neko )
 typedef AudioManager = awe6.core.drivers.openfl.native.AudioManager;
 #elseif flash
 typedef AudioManager = awe6.core.drivers.flash.AudioManager;

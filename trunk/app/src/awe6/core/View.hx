@@ -37,7 +37,7 @@ package awe6.core;
  */
 #if awe6DriverRemap
 typedef View = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "View" ) ]>;
-#elseif cpp
+#elseif ( cpp || neko )
 typedef View = awe6.core.drivers.openfl.native.View;
 #elseif flash
 typedef View = awe6.core.drivers.flash.View;

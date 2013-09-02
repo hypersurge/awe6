@@ -65,6 +65,10 @@ class Encrypter implements IEncrypter
 	 */
 	private function _xor( p_value:BytesData, p_secret:String ):BytesData
 	{
+		#if neko
+		// TODO: no XOR for Neko!?
+		return p_value;
+		#else
 		var l_result:BytesData = new BytesData();
 		var l_secretIndex:Int = 0;
 		for ( i in 0...p_value.length )
@@ -77,6 +81,7 @@ class Encrypter implements IEncrypter
 			}
 		}
 		return l_result;
+		#end
 	}	
 	
 }
