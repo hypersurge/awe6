@@ -88,11 +88,11 @@ class AView extends Process, implements IView
 		_children = new Array<AView>();
 	}
 	
-	public function addChild( p_child:IView, p_priority:Int = 0 ):Void
+	public function addChild( p_child:IView, p_priority:Int = 0 ):IView
 	{
 		if ( isDisposed || ( p_child == null ) )
 		{
-			return;
+			return null;
 		}
 		if ( p_child.parent != this )
 		{
@@ -109,6 +109,7 @@ class AView extends Process, implements IView
 			p_child.priority = p_priority;
 		}
 		_isDirty = true;
+		return p_child;
 	}
 	
 	public function removeChild( p_child:IView ):Void

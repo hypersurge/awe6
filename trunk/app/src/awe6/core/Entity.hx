@@ -130,15 +130,11 @@ class Entity extends Process, implements IEntity
 		super._disposer();
 	}
 
-	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):Void
+	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):IEntity
 	{
-		if ( isDisposed )
+		if ( isDisposed || ( p_entity == null ) )
 		{
-			return;
-		}
-		if ( p_entity == null )
-		{
-			return;
+			return null;
 		}
 		if ( p_agenda == null )
 		{
@@ -148,7 +144,7 @@ class Entity extends Process, implements IEntity
 		{
 			if ( ( i.entity == p_entity ) && ( Type.enumEq( i.agenda, p_agenda ) ) )
 			{
-				return; // already exists
+				return p_entity; // already exists
 			}
 		}
 		_isAgendaDirty = true;
@@ -175,11 +171,12 @@ class Entity extends Process, implements IEntity
 				l_helperEntityAgendaPair.isAddedToView = true;
 			}
 		}
+		return p_entity;
 	}
 	
 	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isRemovedFromView:Bool = false ):Void
 	{
-		if ( isDisposed )
+		if ( isDisposed || ( p_entity == null ) )
 		{
 			return;
 		}
