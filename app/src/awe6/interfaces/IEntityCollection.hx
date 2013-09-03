@@ -45,8 +45,9 @@ interface IEntityCollection implements IAgendaManager
 	 * @param	?agenda	Assigns the entity to a specific agenda.  If none is specified will assign to EAgenda.ALWAYS.
 	 * @param	?isAddedToView	If true will add the child entity's view to this object's view.
 	 * @param	?viewPriority	Sets the child entity's view stack priority order (higher numbers appear closer to the top of the stack).
+	 * @return	Added entity (to allow decoration).  Or null if addition was unsuccessful.
 	 */
-	function addEntity( entity:IEntity, ?agenda:EAgenda, isAddedToView:Bool = false, viewPriority:Int = 0 ):Void;
+	function addEntity( entity:IEntity, ?agenda:EAgenda, isAddedToView:Bool = false, viewPriority:Int = 0 ):IEntity;
 	/**
 	 * Removes an entity from this object's children.
 	 * @param	entity	The entity to remove.

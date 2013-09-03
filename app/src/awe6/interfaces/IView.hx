@@ -83,8 +83,9 @@ interface IView implements IPriority, implements IPositionable, implements IDisp
 	 * <p>A view can have multiple children, and when you add a child to a view, it is automatically connected to the parent node through its parent property.</p>
 	 * @param	child	The child view to add.
 	 * @param	?priority	The sorting priority of the child view to add.  Higher numbers will appear towards the top of the view stack.  Default value is 0.
+	 * @return	Added view (to allow decoration).  Or null if addition was unsuccessful.
 	 */
-	function addChild( child:IView, priority:Int = 0 ):Void;
+	function addChild( child:IView, priority:Int = 0 ):IView;
 	/**
 	 * Remove the specified view.
 	 * <p>The removed view will no longer be included in the view traversal stack so will no longer be visible.</p>

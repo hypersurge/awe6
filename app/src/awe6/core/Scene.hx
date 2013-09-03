@@ -92,14 +92,14 @@ class Scene extends Process, implements IScene
 		super._disposer();		
 	}
 	
-	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):Void
+	public function addEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isAddedToView:Bool = false, p_viewPriority:Int = 0 ):IEntity
 	{
-		_entity.addEntity( p_entity, p_agenda, p_isAddedToView, p_viewPriority );
+		return _entity.addEntity( p_entity, p_agenda, p_isAddedToView, p_viewPriority );
 	}
 	
 	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isRemovedFromView:Bool = false ):Void
 	{
-		_entity.removeEntity( p_entity, p_agenda, p_isRemovedFromView );
+		return _entity.removeEntity( p_entity, p_agenda, p_isRemovedFromView );
 	}
 	
 	public function getEntities( ?p_agenda:EAgenda ):Array<IEntity>
