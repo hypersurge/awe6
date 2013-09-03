@@ -160,7 +160,7 @@ interface IInputMouse
 	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	The duration a specific mouse button is down.
 	 */
-	function getButtonDownDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Float;
+	function getButtonDownDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Int;
 	/**
 	 * Determine the duration a specific mouse button is up.
 	 * @param	?type	The mouse button.
@@ -168,7 +168,7 @@ interface IInputMouse
 	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	The duration a specific mouse button is up.
 	 */
-	function getButtonUpDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Float;
+	function getButtonUpDuration( ?type:EMouseButton, asTime:Bool = true, isPrevious:Bool = false ):Int;
 	/**
 	 * Determine the horizontal movement of the mouse since a specific mouse button was pressed.
 	 * @param	?type	The mouse button.

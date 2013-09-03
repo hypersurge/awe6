@@ -75,9 +75,9 @@ class ASceneTransition extends Entity, implements ISceneTransition
 		}
 	}
 	
-	public function getDuration( p_asTime:Bool = true ):Float
+	public function getDuration( p_asTime:Bool = true ):Int
 	{
-		return p_asTime ? _duration : _duration / ( 1000 / _kernel.getFramerate() );
+		return p_asTime ? _duration : Std.int( _duration / ( 1000 / _kernel.getFramerate() ) );
 	}
 	
 	private function get_progress():Float
