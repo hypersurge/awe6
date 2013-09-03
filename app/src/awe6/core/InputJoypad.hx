@@ -107,7 +107,7 @@ class InputJoypad implements IInputJoypad
 		return _check( p_type, _kernel.inputs.keyboard.getIsKeyRelease );
 	}
 	
-	public function getButtonDownDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Float
+	public function getButtonDownDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
 	{
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyDownDuration;
 		switch ( p_type )
@@ -129,7 +129,7 @@ class InputJoypad implements IInputJoypad
 		}
 	}
 	
-	public function getButtonUpDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Float
+	public function getButtonUpDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
 	{
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyUpDuration;
 		switch ( p_type )

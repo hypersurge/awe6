@@ -62,7 +62,7 @@ interface IInputKeyboard
 	 * @param	?isPrevious	If true then returns the previous duration down (the time held prior to the most recent release).
 	 * @return	Returns the duration the key has been down.
 	 */
-	function getKeyDownDuration( type:EKey, asTime:Bool = true, isPrevious:Bool = false ):Float;
+	function getKeyDownDuration( type:EKey, asTime:Bool = true, isPrevious:Bool = false ):Int;
 	/**
 	 * Determine how long a specific key has been up.
 	 * @param	type	The key.
@@ -70,7 +70,7 @@ interface IInputKeyboard
 	 * @param	?isPrevious	If true then returns the previous duration up (the time unused prior to the most recent press).
 	 * @return	Returns the duration the key has been up.
 	 */
-	function getKeyUpDuration( type:EKey, asTime:Bool = true, isPrevious:Bool = false  ):Float;
+	function getKeyUpDuration( type:EKey, asTime:Bool = true, isPrevious:Bool = false  ):Int;
 	/**
 	 * Translate a specific key to a keyboard keyCode.
 	 * @param	type	The key.
