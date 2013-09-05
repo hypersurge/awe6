@@ -23,6 +23,6 @@ class Main $(CSLB){
 	}
 	
 	public function new() $(CSLB){
-		// needed for NME browser (jeash)
+		// needed for good form
 	}
 }
