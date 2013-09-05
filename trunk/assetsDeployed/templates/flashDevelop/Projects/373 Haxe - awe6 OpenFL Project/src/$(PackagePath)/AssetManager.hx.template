@@ -58,7 +58,7 @@ class AssetManager extends AAssetManager $(CSLB){
 		}
 		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) ) $(CSLB){
 			var l_extension:String = ".mp3";
-			#if cpp
+			#if ( cpp || neko )
 			l_extension = ".ogg"; // doesn't work on Macs?
 			#elseif js
 			l_extension = _html5AudioExtension;
