@@ -1,0 +1,28 @@
+import $(PackageDot)Factory;
+import flash.Lib;
+import haxe.Log;
+import haxe.PosInfos;
+import haxe.Resource;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Main $(CSLB){	
+	static function main() $(CSLB){
+		#if debug
+		var l_isDebug:Bool = true;
+		#else
+		var l_isDebug:Bool = false;
+		#end
+		if ( !l_isDebug ) $(CSLB){
+			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
+		}
+		var l_factory = new Factory( Lib.current, l_isDebug, Resource.getString( "config" ) );
+	}
+	
+	public function new() $(CSLB){
+		// needed for good form
+	}
+}
