@@ -1,5 +1,16 @@
 #summary Release notes for each release candidate
 
+=RC 2,1,585=
+
+Minor release.  Includes:
+
+ * Minor API fixes and consistencies (e.g. durations to ms:Int)
+ * Wrapped untyped driver methods in try catch to ease additional OpenFL HTML5 backends (e.g. bitfive)
+ * Minor FlashDevelop template fixes for OpenFL build compatibility
+ * View and Entity collections add methods return added item (to allow decoration)
+ * Compiles to Neko (via OpenFL native)
+
+
 =RC 2,0,572=
 
 Major release, some breaking changes.  Includes:
