@@ -40,7 +40,7 @@ class Image extends GuiEntity
 	public function new( p_kernel:IKernel, p_bitmapData:BitmapData )
 	{
 		_bitmapData = p_bitmapData;
-		super( p_kernel, p_bitmapData.width, p_bitmapData.height );
+		super( p_kernel, p_bitmapData.width, p_bitmapData.height, true );
 	}
 	
 	override private function _init():Void 
