@@ -21,9 +21,9 @@ A 3D racing game produced by [http://www.4T2.ca 4T2] for [http://www.lego.com LE
 
 Pure gameplay sequel to the popular "Ace Assault" (a 3D space duelling game) by [http://www.4T2.ca 4T2] for [http://www.lego.com LEGO].
 
-== ionDrift: "Epsilon" (2012) ==
+== "IonDrift: Epsilon" (2012) ==
 
-[http://b10b.com/iondrift/epsilon/ https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/B10bIonDriftEpsilon.jpg]
+[http://b10b.com/games/iondrift-epsilon/ https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/B10bIonDriftEpsilon.jpg]
 
 A futuristic 3D racing game produced by [http://www.b10b.com b10b].
 	
@@ -44,6 +44,19 @@ A simple track and field advergame for !WildTangent's [http://www.wildtangent.co
 [http://www.bbc.co.uk/cbbc/games/wizards-vs-aliens-game https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/BBCWizardsVsAliens.jpg]
 
 A magic and scifi themed platform game produced by [http://www.4T2.ca 4T2] for [http://www.bbc.co.uk BBC].
+
+== "Dead Tread" (2013) ==
+
+[http://b10b.com/games/dead-tread/ https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/B10bDeadTread.jpg]
+
+A graphically violent 3D racing game produced by [http://www.b10b.com b10b].
+	
+== "Sushi Shefu" (2013) ==
+
+[http://b10b.com/orcajam4/swf/ https://awe6.googlecode.com/svn/trunk/docs/images/developerGallery/B10bSushiShefu.jpg]
+
+48 hour !OrcaJam4 game build: 2D platformer showcasing HTML5 & SWF targets.
+
 	
 == More games coming soon ... ==
 
