@@ -99,7 +99,7 @@ class Scene extends Process, implements IScene
 	
 	public function removeEntity( p_entity:IEntity, ?p_agenda:EAgenda, p_isRemovedFromView:Bool = false ):Void
 	{
-		return _entity.removeEntity( p_entity, p_agenda, p_isRemovedFromView );
+		_entity.removeEntity( p_entity, p_agenda, p_isRemovedFromView );
 	}
 	
 	public function getEntities( ?p_agenda:EAgenda ):Array<IEntity>
