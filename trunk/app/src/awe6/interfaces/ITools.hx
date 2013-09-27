@@ -176,6 +176,16 @@ interface ITools implements IEncrypter
 	 */
 	function nearestSquare( value:Float ):Int;
 	/**
+	 * Calculates the distance between two coordinates.
+	 * @param	startX	The starting position horizontal coordinate.
+	 * @param	startY	The starting position vertical coordinate.
+	 * @param	endX	The ending position horizontal coordinate.
+	 * @param	endY	The ending position vertical coordinate.
+	 * @param	isSquared	For performance.  Set this to true square comparator (to avoid sqrt).
+	 * @return	The distance between two coordinates.
+	 */
+	function distance( startX:Float, startY:Float, endX:Float, endY:Float, isSquared:Bool = false ):Float;
+	/**
 	 * Creates a string representing a clock in the format "hh'mm'ss".
 	 * <p>Uses IFactory.targetFramerate to determine the duration from updates.</p>
 	 * @param	updates	The update cycles elapsed in the duration.

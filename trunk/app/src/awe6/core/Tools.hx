@@ -298,6 +298,14 @@ class Tools implements ITools
 		return ( p_value != 0 && p_value != null && p_value != false );
 	}
 	
+	public inline function distance( p_startX:Float, p_startY:Float, p_endX:Float, p_endY:Float, p_isSquared:Bool = false ):Float
+	{
+		var l_dx:Float = p_endX - p_startX;
+		var l_dy:Float = p_endY - p_startY;
+		var l_distance:Float = ( l_dx * l_dx ) + ( l_dy * l_dy );
+		return p_isSquared ? l_distance : Math.sqrt( l_distance );
+	}
+	
 	public inline function nearestSquare( p_value:Float ):Int
 	{
 		if ( p_value == 0 )
