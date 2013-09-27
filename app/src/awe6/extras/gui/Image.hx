@@ -57,11 +57,4 @@ class Image extends GuiEntity
 		_bitmap.bitmapData = _bitmapData;
 	}
 	
-	override private function _disposer():Void
-	{
-		_bitmapData.dispose();
-		super._disposer();
-	}
-	
-	
 }
