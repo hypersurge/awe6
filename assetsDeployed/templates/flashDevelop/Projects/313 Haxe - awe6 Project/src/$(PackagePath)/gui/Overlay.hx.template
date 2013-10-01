@@ -35,17 +35,18 @@ class Overlay extends awe6.core.Overlay $(CSLB){
 	}
 	
 	override private function _getButton( p_type:EOverlayButton ):BasicButton $(CSLB){
-		return switch( p_type ) $(CSLB){
+		switch( p_type ) $(CSLB){
 			case SUB_TYPE( p_value ) :
 				switch( p_value ) $(CSLB){
 					// case "RESTART" : 
-					//	_buttonRestart;
+					//	return _buttonRestart;
 					default :
 						p_value;
 						null;
 				}
-			default : super._getButton( p_type );
+			default : null;
 		}
+		return super._getButton( p_type );
 	}
 	
 	override public function hideButtons():Void $(CSLB){
