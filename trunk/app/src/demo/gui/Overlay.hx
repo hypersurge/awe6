@@ -63,19 +63,20 @@ class Overlay extends awe6.core.Overlay
 
 	override private function _getButton( p_type:EOverlayButton ):BasicButton
 	{
-		return switch( p_type )
+		switch( p_type )
 		{
 			case SUB_TYPE( p_value ) :
 				switch( p_value )
 				{
 					// case "RESTART" : 
-					//	_buttonRestart;
+					//	return _buttonRestart;
 					default :
 						p_value;
 						null;
 				}
-			default : super._getButton( p_type );
+			default : null;
 		}
+		return super._getButton( p_type );
 	}
 
 	override public function hideButtons():Void
