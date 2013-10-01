@@ -3,124 +3,110 @@ var $hxClasses = {},$estr = function() { return js.Boot.__string_rec(this,''); }
 function $extend(from, fields) {
 	function inherit() {}; inherit.prototype = from; var proto = new inherit();
 	for (var name in fields) proto[name] = fields[name];
+	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
 var ApplicationMain = function() { }
 $hxClasses["ApplicationMain"] = ApplicationMain;
 ApplicationMain.__name__ = ["ApplicationMain"];
-ApplicationMain.completed = null;
-ApplicationMain.preloader = null;
-ApplicationMain.total = null;
-ApplicationMain.loaders = null;
-ApplicationMain.urlLoaders = null;
 ApplicationMain.main = function() {
 	ApplicationMain.completed = 0;
-	ApplicationMain.loaders = new Hash();
-	ApplicationMain.urlLoaders = new Hash();
+	ApplicationMain.loaders = new haxe.ds.StringMap();
+	ApplicationMain.urlLoaders = new haxe.ds.StringMap();
 	ApplicationMain.total = 0;
+	flash.Lib.get_current().loaderInfo = flash.display.LoaderInfo.create(null);
+	try {
+		if(Reflect.hasField(js.Browser.window,"winParameters")) flash.Lib.get_current().loaderInfo.parameters = (Reflect.field(js.Browser.window,"winParameters"))();
+		flash.Lib.get_current().get_stage().loaderInfo = flash.Lib.get_current().loaderInfo;
+	} catch( e ) {
+	}
 	ApplicationMain.preloader = new NMEPreloader();
-	nme.Lib.get_current().addChild(ApplicationMain.preloader);
+	flash.Lib.get_current().addChild(ApplicationMain.preloader);
 	ApplicationMain.preloader.onInit();
-	var loader = new browser.display.Loader();
+	var loader = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/ButtonOver.png",loader);
 	ApplicationMain.total++;
-	var loader1 = new browser.display.Loader();
+	var loader1 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/ButtonUp.png",loader1);
 	ApplicationMain.total++;
-	var loader2 = new browser.display.Loader();
+	var loader2 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/BackOver.png",loader2);
 	ApplicationMain.total++;
-	var loader3 = new browser.display.Loader();
+	var loader3 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/BackUp.png",loader3);
 	ApplicationMain.total++;
-	var loader4 = new browser.display.Loader();
+	var loader4 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/MuteOver.png",loader4);
 	ApplicationMain.total++;
-	var loader5 = new browser.display.Loader();
+	var loader5 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/MuteUp.png",loader5);
 	ApplicationMain.total++;
-	var loader6 = new browser.display.Loader();
+	var loader6 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/PauseOver.png",loader6);
 	ApplicationMain.total++;
-	var loader7 = new browser.display.Loader();
+	var loader7 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/PauseUp.png",loader7);
 	ApplicationMain.total++;
-	var loader8 = new browser.display.Loader();
+	var loader8 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteOver.png",loader8);
 	ApplicationMain.total++;
-	var loader9 = new browser.display.Loader();
+	var loader9 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/UnmuteUp.png",loader9);
 	ApplicationMain.total++;
-	var loader10 = new browser.display.Loader();
+	var loader10 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseOver.png",loader10);
 	ApplicationMain.total++;
-	var loader11 = new browser.display.Loader();
+	var loader11 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/buttons/UnpauseUp.png",loader11);
 	ApplicationMain.total++;
-	var loader12 = new browser.display.Loader();
+	var loader12 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/overlay/OverlayBackground.png",loader12);
 	ApplicationMain.total++;
-	var loader13 = new browser.display.Loader();
+	var loader13 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/scenes/Background.png",loader13);
 	ApplicationMain.total++;
-	var loader14 = new browser.display.Loader();
+	var loader14 = new flash.display.Loader();
 	ApplicationMain.loaders.set("assets/Sphere.png",loader14);
 	ApplicationMain.total++;
+	var resourcePrefix = "NME_:bitmap_";
+	var _g = 0, _g1 = haxe.Resource.listNames();
+	while(_g < _g1.length) {
+		var resourceName = _g1[_g];
+		++_g;
+		if(StringTools.startsWith(resourceName,resourcePrefix)) {
+			var type = Type.resolveClass(StringTools.replace(resourceName.substring(resourcePrefix.length),"_","."));
+			if(type != null) {
+				ApplicationMain.total++;
+				var instance = Type.createInstance(type,[0,0,true,16777215,ApplicationMain.bitmapClass_onComplete]);
+			}
+		}
+	}
 	if(ApplicationMain.total == 0) ApplicationMain.begin(); else {
 		var $it0 = ApplicationMain.loaders.keys();
 		while( $it0.hasNext() ) {
 			var path = $it0.next();
 			var loader15 = ApplicationMain.loaders.get(path);
 			loader15.contentLoaderInfo.addEventListener("complete",ApplicationMain.loader_onComplete);
-			loader15.load(new browser.net.URLRequest(path));
+			loader15.load(new flash.net.URLRequest(path));
 		}
 		var $it1 = ApplicationMain.urlLoaders.keys();
 		while( $it1.hasNext() ) {
 			var path = $it1.next();
 			var urlLoader = ApplicationMain.urlLoaders.get(path);
 			urlLoader.addEventListener("complete",ApplicationMain.loader_onComplete);
-			urlLoader.load(new browser.net.URLRequest(path));
+			urlLoader.load(new flash.net.URLRequest(path));
 		}
 	}
 }
 ApplicationMain.begin = function() {
-	ApplicationMain.preloader.addEventListener(browser.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
+	ApplicationMain.preloader.addEventListener(flash.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
 	ApplicationMain.preloader.onLoaded();
 }
-ApplicationMain.getAsset = function(inName) {
-	if(inName == "assets/audio/ButtonDown.mp3") return nme.installer.Assets.getSound("assets/audio/ButtonDown.mp3");
-	if(inName == "assets/audio/ButtonDown.ogg") return nme.installer.Assets.getSound("assets/audio/ButtonDown.ogg");
-	if(inName == "assets/audio/ButtonOver.mp3") return nme.installer.Assets.getSound("assets/audio/ButtonOver.mp3");
-	if(inName == "assets/audio/ButtonOver.ogg") return nme.installer.Assets.getSound("assets/audio/ButtonOver.ogg");
-	if(inName == "assets/audio/MusicGame.mp3") return nme.installer.Assets.getSound("assets/audio/MusicGame.mp3");
-	if(inName == "assets/audio/MusicGame.ogg") return nme.installer.Assets.getSound("assets/audio/MusicGame.ogg");
-	if(inName == "assets/audio/MusicMenu.mp3") return nme.installer.Assets.getSound("assets/audio/MusicMenu.mp3");
-	if(inName == "assets/audio/MusicMenu.ogg") return nme.installer.Assets.getSound("assets/audio/MusicMenu.ogg");
-	if(inName == "assets/audio/Sfx1.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx1.mp3");
-	if(inName == "assets/audio/Sfx1.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx1.ogg");
-	if(inName == "assets/audio/Sfx2.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx2.mp3");
-	if(inName == "assets/audio/Sfx2.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx2.ogg");
-	if(inName == "assets/audio/Sfx3.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx3.mp3");
-	if(inName == "assets/audio/Sfx3.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx3.ogg");
-	if(inName == "assets/audio/Sfx4.mp3") return nme.installer.Assets.getSound("assets/audio/Sfx4.mp3");
-	if(inName == "assets/audio/Sfx4.ogg") return nme.installer.Assets.getSound("assets/audio/Sfx4.ogg");
-	if(inName == "assets/ButtonOver.png") return nme.installer.Assets.getBitmapData("assets/ButtonOver.png");
-	if(inName == "assets/ButtonUp.png") return nme.installer.Assets.getBitmapData("assets/ButtonUp.png");
-	if(inName == "assets/fonts/orbitron.ttf") return nme.installer.Assets.getFont("assets/fonts/orbitron.ttf");
-	if(inName == "assets/overlay/buttons/BackOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackOver.png");
-	if(inName == "assets/overlay/buttons/BackUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackUp.png");
-	if(inName == "assets/overlay/buttons/MuteOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png");
-	if(inName == "assets/overlay/buttons/MuteUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png");
-	if(inName == "assets/overlay/buttons/PauseOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png");
-	if(inName == "assets/overlay/buttons/PauseUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseUp.png");
-	if(inName == "assets/overlay/buttons/UnmuteOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteOver.png");
-	if(inName == "assets/overlay/buttons/UnmuteUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteUp.png");
-	if(inName == "assets/overlay/buttons/UnpauseOver.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseOver.png");
-	if(inName == "assets/overlay/buttons/UnpauseUp.png") return nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseUp.png");
-	if(inName == "assets/overlay/OverlayBackground.png") return nme.installer.Assets.getBitmapData("assets/overlay/OverlayBackground.png");
-	if(inName == "assets/scenes/Background.png") return nme.installer.Assets.getBitmapData("assets/scenes/Background.png");
-	if(inName == "assets/Sphere.png") return nme.installer.Assets.getBitmapData("assets/Sphere.png");
-	return null;
+ApplicationMain.bitmapClass_onComplete = function(instance) {
+	ApplicationMain.completed++;
+	var classType = Type.getClass(instance);
+	classType.preload = instance;
+	if(ApplicationMain.completed == ApplicationMain.total) ApplicationMain.begin();
 }
 ApplicationMain.loader_onComplete = function(event) {
 	ApplicationMain.completed++;
@@ -128,222 +114,37 @@ ApplicationMain.loader_onComplete = function(event) {
 	if(ApplicationMain.completed == ApplicationMain.total) ApplicationMain.begin();
 }
 ApplicationMain.preloader_onComplete = function(event) {
-	ApplicationMain.preloader.removeEventListener(browser.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
-	nme.Lib.get_current().removeChild(ApplicationMain.preloader);
+	ApplicationMain.preloader.removeEventListener(flash.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
+	flash.Lib.get_current().removeChild(ApplicationMain.preloader);
 	ApplicationMain.preloader = null;
 	if(Reflect.field(Main,"main") == null) {
-		var mainDisplayObj = new Main();
-		if(js.Boot.__instanceof(mainDisplayObj,browser.display.DisplayObject)) nme.Lib.get_current().addChild(mainDisplayObj);
+		var mainDisplayObj = Type.createInstance(DocumentClass,[]);
+		if(js.Boot.__instanceof(mainDisplayObj,flash.display.DisplayObject)) flash.Lib.get_current().addChild(mainDisplayObj);
 	} else Reflect.field(Main,"main").apply(Main,[]);
 }
-var browser = {}
-browser.text = {}
-browser.text.Font = function() {
-	this.nmeMetrics = [];
-	this.nmeFontScale = 9.0;
-	var className = Type.getClassName(Type.getClass(this));
-	if(browser.text.Font.nmeFontData == null) {
-		browser.text.Font.nmeFontData = [];
-		browser.text.Font.nmeFontData["Bitstream_Vera_Sans"] = browser.text.Font.DEFAULT_FONT_DATA;
-	}
-	if(className == "browser.text.Font") this.set_fontName("Bitstream_Vera_Sans"); else this.set_fontName(className.split(".").pop());
+var Main = function() {
 };
-$hxClasses["browser.text.Font"] = browser.text.Font;
-browser.text.Font.__name__ = ["browser","text","Font"];
-browser.text.Font.nmeFontData = null;
-browser.text.Font.enumerateFonts = function(enumerateDeviceFonts) {
-	if(enumerateDeviceFonts == null) enumerateDeviceFonts = false;
-	var sans = new browser.text.Font();
-	sans.set_fontName("Bitstream_Vera_Sans");
-	sans.fontStyle = browser.text.FontStyle.REGULAR;
-	sans.fontType = browser.text.FontType.DEVICE;
-	return [sans];
+$hxClasses["Main"] = Main;
+Main.__name__ = ["Main"];
+Main.main = function() {
+	var l_isDebug = false;
+	var l_factory = new demo.Factory(flash.Lib.get_current(),l_isDebug,haxe.Resource.getString("config"));
 }
-browser.text.Font.nmeOfResource = function(name) {
-	var data = haxe.Resource.getString(name);
-	if(data == null) haxe.Log.trace("Resource data for string '" + name + "' not found.",{ fileName : "Font.hx", lineNumber : 107, className : "browser.text.Font", methodName : "nmeOfResource"}); else browser.text.Font.nmeFontData[name] = data;
+Main.prototype = {
+	__class__: Main
 }
-browser.text.Font.registerFont = function(font) {
-}
-browser.text.Font.prototype = {
-	set_fontName: function(name) {
-		if(name == "_sans" || name == "_serif" || name == "_typewriter") name = "Bitstream_Vera_Sans";
-		this.fontName = name;
-		if(browser.text.Font.nmeFontData[this.fontName] == null) try {
-			browser.text.Font.nmeOfResource(name);
-		} catch( e ) {
-			this.fontName = "Bitstream_Vera_Sans";
-		}
-		if(browser.text.Font.nmeFontData[this.fontName] != null) try {
-			this.nmeGlyphData = haxe.Unserializer.run(browser.text.Font.nmeFontData[this.fontName]);
-		} catch( e ) {
-			this.fontName = "Bitstream_Vera_Sans";
-		}
-		return name;
-	}
-	,nmeSetScale: function(scale) {
-		this.nmeFontScale = scale / 1024;
-	}
-	,nmeRender: function(graphics,inChar,inX,inY,inOutline) {
-		var index = 0;
-		var glyph = this.nmeGlyphData.get(inChar);
-		if(glyph == null) return;
-		var commands = glyph.commands;
-		var data = glyph.data;
-		var _g = 0;
-		while(_g < commands.length) {
-			var c = commands[_g];
-			++_g;
-			switch(c) {
-			case 1:
-				graphics.moveTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
-				break;
-			case 2:
-				graphics.lineTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
-				break;
-			case 3:
-				graphics.curveTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale,inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
-				break;
-			}
-		}
-	}
-	,nmeGetAdvance: function(inGlyph,height) {
-		var m = this.nmeMetrics[inGlyph];
-		if(m == null) {
-			var glyph = this.nmeGlyphData.get(inGlyph);
-			if(glyph == null) return 0;
-			this.nmeMetrics[inGlyph] = m = glyph._width * this.nmeFontScale | 0;
-		}
-		if(m == null) return 0;
-		return m;
-	}
-	,hasGlyph: function(str) {
-		return this.nmeGlyphData.exists(HxOverrides.cca(str,0));
-	}
-	,nmeMetrics: null
-	,nmeGlyphData: null
-	,nmeFontScale: null
-	,fontType: null
-	,fontStyle: null
-	,fontName: null
-	,__class__: browser.text.Font
-	,__properties__: {set_fontName:"set_fontName"}
-}
-var NME_assets_fonts_orbitron_ttf = function() {
-	browser.text.Font.call(this);
+var DocumentClass = function() {
+	Main.call(this);
 };
-$hxClasses["NME_assets_fonts_orbitron_ttf"] = NME_assets_fonts_orbitron_ttf;
-NME_assets_fonts_orbitron_ttf.__name__ = ["NME_assets_fonts_orbitron_ttf"];
-NME_assets_fonts_orbitron_ttf.__super__ = browser.text.Font;
-NME_assets_fonts_orbitron_ttf.prototype = $extend(browser.text.Font.prototype,{
-	__class__: NME_assets_fonts_orbitron_ttf
+$hxClasses["DocumentClass"] = DocumentClass;
+DocumentClass.__name__ = ["DocumentClass"];
+DocumentClass.__super__ = Main;
+DocumentClass.prototype = $extend(Main.prototype,{
+	__class__: DocumentClass
 });
 var DateTools = function() { }
 $hxClasses["DateTools"] = DateTools;
 DateTools.__name__ = ["DateTools"];
-DateTools.__format_get = function(d,e) {
-	return (function($this) {
-		var $r;
-		switch(e) {
-		case "%":
-			$r = "%";
-			break;
-		case "C":
-			$r = StringTools.lpad(Std.string(d.getFullYear() / 100 | 0),"0",2);
-			break;
-		case "d":
-			$r = StringTools.lpad(Std.string(d.getDate()),"0",2);
-			break;
-		case "D":
-			$r = DateTools.__format(d,"%m/%d/%y");
-			break;
-		case "e":
-			$r = Std.string(d.getDate());
-			break;
-		case "H":case "k":
-			$r = StringTools.lpad(Std.string(d.getHours()),e == "H"?"0":" ",2);
-			break;
-		case "I":case "l":
-			$r = (function($this) {
-				var $r;
-				var hour = d.getHours() % 12;
-				$r = StringTools.lpad(Std.string(hour == 0?12:hour),e == "I"?"0":" ",2);
-				return $r;
-			}($this));
-			break;
-		case "m":
-			$r = StringTools.lpad(Std.string(d.getMonth() + 1),"0",2);
-			break;
-		case "M":
-			$r = StringTools.lpad(Std.string(d.getMinutes()),"0",2);
-			break;
-		case "n":
-			$r = "\n";
-			break;
-		case "p":
-			$r = d.getHours() > 11?"PM":"AM";
-			break;
-		case "r":
-			$r = DateTools.__format(d,"%I:%M:%S %p");
-			break;
-		case "R":
-			$r = DateTools.__format(d,"%H:%M");
-			break;
-		case "s":
-			$r = Std.string(d.getTime() / 1000 | 0);
-			break;
-		case "S":
-			$r = StringTools.lpad(Std.string(d.getSeconds()),"0",2);
-			break;
-		case "t":
-			$r = "\t";
-			break;
-		case "T":
-			$r = DateTools.__format(d,"%H:%M:%S");
-			break;
-		case "u":
-			$r = (function($this) {
-				var $r;
-				var t = d.getDay();
-				$r = t == 0?"7":Std.string(t);
-				return $r;
-			}($this));
-			break;
-		case "w":
-			$r = Std.string(d.getDay());
-			break;
-		case "y":
-			$r = StringTools.lpad(Std.string(d.getFullYear() % 100),"0",2);
-			break;
-		case "Y":
-			$r = Std.string(d.getFullYear());
-			break;
-		default:
-			$r = (function($this) {
-				var $r;
-				throw "Date.format %" + e + "- not implemented yet.";
-				return $r;
-			}($this));
-		}
-		return $r;
-	}(this));
-}
-DateTools.__format = function(d,f) {
-	var r = new StringBuf();
-	var p = 0;
-	while(true) {
-		var np = f.indexOf("%",p);
-		if(np < 0) break;
-		r.b += HxOverrides.substr(f,p,np - p);
-		r.b += Std.string(DateTools.__format_get(d,HxOverrides.substr(f,np + 1,1)));
-		p = np + 2;
-	}
-	r.b += HxOverrides.substr(f,p,f.length - p);
-	return r.b;
-}
-DateTools.format = function(d,f) {
-	return DateTools.__format(d,f);
-}
 DateTools.delta = function(d,t) {
 	return (function($this) {
 		var $r;
@@ -353,34 +154,6 @@ DateTools.delta = function(d,t) {
 		return $r;
 	}(this));
 }
-DateTools.getMonthDays = function(d) {
-	var month = d.getMonth();
-	var year = d.getFullYear();
-	if(month != 1) return DateTools.DAYS_OF_MONTH[month];
-	var isB = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
-	return isB?29:28;
-}
-DateTools.seconds = function(n) {
-	return n * 1000.0;
-}
-DateTools.minutes = function(n) {
-	return n * 60.0 * 1000.0;
-}
-DateTools.hours = function(n) {
-	return n * 60.0 * 60.0 * 1000.0;
-}
-DateTools.days = function(n) {
-	return n * 24.0 * 60.0 * 60.0 * 1000.0;
-}
-DateTools.parse = function(t) {
-	var s = t / 1000;
-	var m = s / 60;
-	var h = m / 60;
-	return { ms : t % 1000, seconds : s % 60 | 0, minutes : m % 60 | 0, hours : h % 24 | 0, days : h / 24 | 0};
-}
-DateTools.make = function(o) {
-	return o.ms + 1000.0 * (o.seconds + 60.0 * (o.minutes + 60.0 * (o.hours + 24.0 * o.days)));
-}
 var EReg = function(r,opt) {
 	opt = opt.split("u").join("");
 	this.r = new RegExp(r,opt);
@@ -388,23 +161,8 @@ var EReg = function(r,opt) {
 $hxClasses["EReg"] = EReg;
 EReg.__name__ = ["EReg"];
 EReg.prototype = {
-	customReplace: function(s,f) {
-		var buf = new StringBuf();
-		while(true) {
-			if(!this.match(s)) break;
-			buf.b += Std.string(this.matchedLeft());
-			buf.b += Std.string(f(this));
-			s = this.matchedRight();
-		}
-		buf.b += Std.string(s);
-		return buf.b;
-	}
-	,replace: function(s,by) {
+	replace: function(s,by) {
 		return s.replace(this.r,by);
-	}
-	,split: function(s) {
-		var d = "#__delim__#";
-		return s.replace(this.r,d).split(d);
 	}
 	,matchedPos: function() {
 		if(this.r.m == null) throw "No string matched";
@@ -414,10 +172,6 @@ EReg.prototype = {
 		if(this.r.m == null) throw "No string matched";
 		var sz = this.r.m.index + this.r.m[0].length;
 		return this.r.s.substr(sz,this.r.s.length - sz);
-	}
-	,matchedLeft: function() {
-		if(this.r.m == null) throw "No string matched";
-		return this.r.s.substr(0,this.r.m.index);
 	}
 	,matched: function(n) {
 		return this.r.m != null && n >= 0 && n < this.r.m.length?this.r.m[n]:(function($this) {
@@ -432,61 +186,7 @@ EReg.prototype = {
 		this.r.s = s;
 		return this.r.m != null;
 	}
-	,r: null
 	,__class__: EReg
-}
-var Hash = function() {
-	this.h = { };
-};
-$hxClasses["Hash"] = Hash;
-Hash.__name__ = ["Hash"];
-Hash.prototype = {
-	toString: function() {
-		var s = new StringBuf();
-		s.b += Std.string("{");
-		var it = this.keys();
-		while( it.hasNext() ) {
-			var i = it.next();
-			s.b += Std.string(i);
-			s.b += Std.string(" => ");
-			s.b += Std.string(Std.string(this.get(i)));
-			if(it.hasNext()) s.b += Std.string(", ");
-		}
-		s.b += Std.string("}");
-		return s.b;
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref["$" + i];
-		}};
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) a.push(key.substr(1));
-		}
-		return HxOverrides.iter(a);
-	}
-	,remove: function(key) {
-		key = "$" + key;
-		if(!this.h.hasOwnProperty(key)) return false;
-		delete(this.h[key]);
-		return true;
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty("$" + key);
-	}
-	,get: function(key) {
-		return this.h["$" + key];
-	}
-	,set: function(key,value) {
-		this.h["$" + key] = value;
-	}
-	,h: null
-	,__class__: Hash
 }
 var HxOverrides = function() { }
 $hxClasses["HxOverrides"] = HxOverrides;
@@ -554,126 +254,13 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 }
-var IntHash = function() {
-	this.h = { };
-};
-$hxClasses["IntHash"] = IntHash;
-IntHash.__name__ = ["IntHash"];
-IntHash.prototype = {
-	toString: function() {
-		var s = new StringBuf();
-		s.b += Std.string("{");
-		var it = this.keys();
-		while( it.hasNext() ) {
-			var i = it.next();
-			s.b += Std.string(i);
-			s.b += Std.string(" => ");
-			s.b += Std.string(Std.string(this.get(i)));
-			if(it.hasNext()) s.b += Std.string(", ");
-		}
-		s.b += Std.string("}");
-		return s.b;
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref[i];
-		}};
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) a.push(key | 0);
-		}
-		return HxOverrides.iter(a);
-	}
-	,remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) return false;
-		delete(this.h[key]);
-		return true;
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty(key);
-	}
-	,get: function(key) {
-		return this.h[key];
-	}
-	,set: function(key,value) {
-		this.h[key] = value;
-	}
-	,h: null
-	,__class__: IntHash
-}
-var IntIter = function(min,max) {
-	this.min = min;
-	this.max = max;
-};
-$hxClasses["IntIter"] = IntIter;
-IntIter.__name__ = ["IntIter"];
-IntIter.prototype = {
-	next: function() {
-		return this.min++;
-	}
-	,hasNext: function() {
-		return this.min < this.max;
-	}
-	,max: null
-	,min: null
-	,__class__: IntIter
-}
 var List = function() {
 	this.length = 0;
 };
 $hxClasses["List"] = List;
 List.__name__ = ["List"];
 List.prototype = {
-	map: function(f) {
-		var b = new List();
-		var l = this.h;
-		while(l != null) {
-			var v = l[0];
-			l = l[1];
-			b.add(f(v));
-		}
-		return b;
-	}
-	,filter: function(f) {
-		var l2 = new List();
-		var l = this.h;
-		while(l != null) {
-			var v = l[0];
-			l = l[1];
-			if(f(v)) l2.add(v);
-		}
-		return l2;
-	}
-	,join: function(sep) {
-		var s = new StringBuf();
-		var first = true;
-		var l = this.h;
-		while(l != null) {
-			if(first) first = false; else s.b += Std.string(sep);
-			s.b += Std.string(l[0]);
-			l = l[1];
-		}
-		return s.b;
-	}
-	,toString: function() {
-		var s = new StringBuf();
-		var first = true;
-		var l = this.h;
-		s.b += Std.string("{");
-		while(l != null) {
-			if(first) first = false; else s.b += Std.string(", ");
-			s.b += Std.string(Std.string(l[0]));
-			l = l[1];
-		}
-		s.b += Std.string("}");
-		return s.b;
-	}
-	,iterator: function() {
+	iterator: function() {
 		return { h : this.h, hasNext : function() {
 			return this.h != null;
 		}, next : function() {
@@ -698,11 +285,6 @@ List.prototype = {
 		}
 		return false;
 	}
-	,clear: function() {
-		this.h = null;
-		this.q = null;
-		this.length = 0;
-	}
 	,isEmpty: function() {
 		return this.h == null;
 	}
@@ -713,9 +295,6 @@ List.prototype = {
 		if(this.h == null) this.q = null;
 		this.length--;
 		return x;
-	}
-	,last: function() {
-		return this.q == null?null:this.q[0];
 	}
 	,first: function() {
 		return this.h == null?null:this.h[0];
@@ -732,45 +311,30 @@ List.prototype = {
 		this.q = x;
 		this.length++;
 	}
-	,length: null
-	,q: null
-	,h: null
 	,__class__: List
 }
-var Main = function() {
-};
-$hxClasses["Main"] = Main;
-Main.__name__ = ["Main"];
-Main.main = function() {
-	var l_isDebug = false;
-	var l_factory = new demo.Factory(nme.Lib.get_current(),l_isDebug,haxe.Resource.getString("config"));
+var IMap = function() { }
+$hxClasses["IMap"] = IMap;
+IMap.__name__ = ["IMap"];
+var flash = {}
+flash.events = {}
+flash.events.IEventDispatcher = function() { }
+$hxClasses["flash.events.IEventDispatcher"] = flash.events.IEventDispatcher;
+flash.events.IEventDispatcher.__name__ = ["flash","events","IEventDispatcher"];
+flash.events.IEventDispatcher.prototype = {
+	__class__: flash.events.IEventDispatcher
 }
-Main.prototype = {
-	__class__: Main
-}
-browser.events = {}
-browser.events.IEventDispatcher = function() { }
-$hxClasses["browser.events.IEventDispatcher"] = browser.events.IEventDispatcher;
-browser.events.IEventDispatcher.__name__ = ["browser","events","IEventDispatcher"];
-browser.events.IEventDispatcher.prototype = {
-	willTrigger: null
-	,removeEventListener: null
-	,hasEventListener: null
-	,dispatchEvent: null
-	,addEventListener: null
-	,__class__: browser.events.IEventDispatcher
-}
-browser.events.EventDispatcher = function(target) {
+flash.events.EventDispatcher = function(target) {
 	if(target != null) this.nmeTarget = target; else this.nmeTarget = this;
 	this.nmeEventMap = [];
 };
-$hxClasses["browser.events.EventDispatcher"] = browser.events.EventDispatcher;
-browser.events.EventDispatcher.__name__ = ["browser","events","EventDispatcher"];
-browser.events.EventDispatcher.__interfaces__ = [browser.events.IEventDispatcher];
-browser.events.EventDispatcher.compareListeners = function(l1,l2) {
+$hxClasses["flash.events.EventDispatcher"] = flash.events.EventDispatcher;
+flash.events.EventDispatcher.__name__ = ["flash","events","EventDispatcher"];
+flash.events.EventDispatcher.__interfaces__ = [flash.events.IEventDispatcher];
+flash.events.EventDispatcher.compareListeners = function(l1,l2) {
 	return l1.mPriority == l2.mPriority?0:l1.mPriority > l2.mPriority?-1:1;
 }
-browser.events.EventDispatcher.prototype = {
+flash.events.EventDispatcher.prototype = {
 	willTrigger: function(type) {
 		return this.hasEventListener(type);
 	}
@@ -805,7 +369,7 @@ browser.events.EventDispatcher.prototype = {
 	}
 	,dispatchEvent: function(event) {
 		if(event.target == null) event.target = this.nmeTarget;
-		var capture = event.eventPhase == browser.events.EventPhase.CAPTURING_PHASE;
+		var capture = event.eventPhase == flash.events.EventPhase.CAPTURING_PHASE;
 		if(this.existList(event.type)) {
 			var list = this.getList(event.type);
 			var idx = 0;
@@ -833,26 +397,23 @@ browser.events.EventDispatcher.prototype = {
 			list = [];
 			this.setList(type,list);
 		}
-		list.push(new browser.events.Listener(inListener,capture,priority));
-		list.sort(browser.events.EventDispatcher.compareListeners);
+		list.push(new flash.events.Listener(inListener,capture,priority));
+		list.sort(flash.events.EventDispatcher.compareListeners);
 	}
-	,nmeEventMap: null
-	,nmeTarget: null
-	,__class__: browser.events.EventDispatcher
+	,__class__: flash.events.EventDispatcher
 }
-browser.display = {}
-browser.display.IBitmapDrawable = function() { }
-$hxClasses["browser.display.IBitmapDrawable"] = browser.display.IBitmapDrawable;
-browser.display.IBitmapDrawable.__name__ = ["browser","display","IBitmapDrawable"];
-browser.display.IBitmapDrawable.prototype = {
-	drawToSurface: null
-	,__class__: browser.display.IBitmapDrawable
+flash.display = {}
+flash.display.IBitmapDrawable = function() { }
+$hxClasses["flash.display.IBitmapDrawable"] = flash.display.IBitmapDrawable;
+flash.display.IBitmapDrawable.__name__ = ["flash","display","IBitmapDrawable"];
+flash.display.IBitmapDrawable.prototype = {
+	__class__: flash.display.IBitmapDrawable
 }
-browser.display.DisplayObject = function() {
-	browser.events.EventDispatcher.call(this,null);
-	this._nmeId = browser.utils.Uuid.uuid();
+flash.display.DisplayObject = function() {
+	flash.events.EventDispatcher.call(this,null);
+	this._nmeId = flash.utils.Uuid.uuid();
 	this.set_parent(null);
-	this.set_transform(new browser.geom.Transform(this));
+	this.set_transform(new flash.geom.Transform(this));
 	this.nmeX = 0.0;
 	this.nmeY = 0.0;
 	this.nmeScaleX = 1.0;
@@ -863,21 +424,65 @@ browser.display.DisplayObject = function() {
 	this.set_visible(true);
 	this.alpha = 1.0;
 	this.nmeFilters = new Array();
-	this.nmeBoundsRect = new browser.geom.Rectangle();
+	this.nmeBoundsRect = new flash.geom.Rectangle();
 	this.nmeScrollRect = null;
 	this.nmeMask = null;
 	this.nmeMaskingObj = null;
 	this.set_nmeCombinedVisible(this.get_visible());
 };
-$hxClasses["browser.display.DisplayObject"] = browser.display.DisplayObject;
-browser.display.DisplayObject.__name__ = ["browser","display","DisplayObject"];
-browser.display.DisplayObject.__interfaces__ = [browser.display.IBitmapDrawable];
-browser.display.DisplayObject.__super__ = browser.events.EventDispatcher;
-browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher.prototype,{
-	set_width: function(inValue) {
+$hxClasses["flash.display.DisplayObject"] = flash.display.DisplayObject;
+flash.display.DisplayObject.__name__ = ["flash","display","DisplayObject"];
+flash.display.DisplayObject.__interfaces__ = [flash.display.IBitmapDrawable];
+flash.display.DisplayObject.__super__ = flash.events.EventDispatcher;
+flash.display.DisplayObject.prototype = $extend(flash.events.EventDispatcher.prototype,{
+	nmeSrUpdateDivs: function() {
+		var gfx = this.nmeGetGraphics();
+		if(gfx == null || this.parent == null) return;
+		if(this.nmeScrollRect == null) {
+			if(this._srAxes != null && gfx.nmeSurface.parentNode == this._srAxes && this._srWindow.parentNode != null) this._srWindow.parentNode.replaceChild(gfx.nmeSurface,this._srWindow);
+			return;
+		}
+		if(this._srWindow == null) {
+			this._srWindow = js.Browser.document.createElement("div");
+			this._srAxes = js.Browser.document.createElement("div");
+			this._srWindow.style.setProperty("position","absolute","");
+			this._srWindow.style.setProperty("left","0px","");
+			this._srWindow.style.setProperty("top","0px","");
+			this._srWindow.style.setProperty("width","0px","");
+			this._srWindow.style.setProperty("height","0px","");
+			this._srWindow.style.setProperty("overflow","hidden","");
+			this._srAxes.style.setProperty("position","absolute","");
+			this._srAxes.style.setProperty("left","0px","");
+			this._srAxes.style.setProperty("top","0px","");
+			this._srWindow.appendChild(this._srAxes);
+		}
+		var pnt = this.parent.localToGlobal(new flash.geom.Point(this.get_x(),this.get_y()));
+		this._srWindow.style.left = pnt.x + "px";
+		this._srWindow.style.top = pnt.y + "px";
+		this._srWindow.style.width = this.nmeScrollRect.width + "px";
+		this._srWindow.style.height = this.nmeScrollRect.height + "px";
+		this._srAxes.style.left = -pnt.x - this.nmeScrollRect.x + "px";
+		this._srAxes.style.top = -pnt.y - this.nmeScrollRect.y + "px";
+		if(gfx.nmeSurface.parentNode != this._srAxes && gfx.nmeSurface.parentNode != null) {
+			gfx.nmeSurface.parentNode.insertBefore(this._srWindow,gfx.nmeSurface);
+			flash.Lib.nmeRemoveSurface(gfx.nmeSurface);
+			this._srAxes.appendChild(gfx.nmeSurface);
+		}
+	}
+	,nmeGetSrWindow: function() {
+		return this._srWindow;
+	}
+	,set_width: function(inValue) {
 		if(this.get__boundsInvalid()) this.validateBounds();
 		var w = this.nmeBoundsRect.width;
 		if(this.nmeScaleX * w != inValue) {
+			if(w == 0) {
+				this.nmeScaleX = 1;
+				this.nmeInvalidateMatrix(true);
+				this._nmeRenderFlags |= 64;
+				if(this.parent != null) this.parent._nmeRenderFlags |= 64;
+				w = this.nmeBoundsRect.width;
+			}
 			if(w <= 0) return 0;
 			this.nmeScaleX = inValue / w;
 			this.nmeInvalidateMatrix(true);
@@ -924,6 +529,8 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	}
 	,set_transform: function(inValue) {
 		this.transform = inValue;
+		this.nmeX = this.transform.get_matrix().tx;
+		this.nmeY = this.transform.get_matrix().ty;
 		this.nmeInvalidateMatrix(true);
 		return inValue;
 	}
@@ -934,11 +541,12 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	}
 	,get_stage: function() {
 		var gfx = this.nmeGetGraphics();
-		if(gfx != null) return browser.Lib.nmeGetStage();
+		if(gfx != null) return flash.Lib.nmeGetStage();
 		return null;
 	}
 	,set_scrollRect: function(inValue) {
 		this.nmeScrollRect = inValue;
+		this.nmeSrUpdateDivs();
 		return inValue;
 	}
 	,get_scrollRect: function() {
@@ -994,11 +602,11 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		}
 		if(this.parent == null && inValue != null) {
 			this.parent = inValue;
-			var evt = new browser.events.Event(browser.events.Event.ADDED,true,false);
+			var evt = new flash.events.Event(flash.events.Event.ADDED,true,false);
 			this.dispatchEvent(evt);
 		} else if(this.parent != null && inValue == null) {
 			this.parent = inValue;
-			var evt = new browser.events.Event(browser.events.Event.REMOVED,true,false);
+			var evt = new flash.events.Event(flash.events.Event.REMOVED,true,false);
 			this.dispatchEvent(evt);
 		} else this.parent = inValue;
 		return inValue;
@@ -1011,10 +619,10 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		return this.nmeCombinedVisible;
 	}
 	,get_mouseY: function() {
-		return this.globalToLocal(new browser.geom.Point(0,this.get_stage().get_mouseY())).y;
+		return this.globalToLocal(new flash.geom.Point(0,this.get_stage().get_mouseY())).y;
 	}
 	,get_mouseX: function() {
-		return this.globalToLocal(new browser.geom.Point(this.get_stage().get_mouseX(),0)).x;
+		return this.globalToLocal(new flash.geom.Point(this.get_stage().get_mouseX(),0)).x;
 	}
 	,get__matrixInvalid: function() {
 		return (this._nmeRenderFlags & 4) != 0;
@@ -1035,6 +643,13 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		if(this.get__boundsInvalid()) this.validateBounds();
 		var h = this.nmeBoundsRect.height;
 		if(this.nmeScaleY * h != inValue) {
+			if(h == 0) {
+				this.nmeScaleY = 1;
+				this.nmeInvalidateMatrix(true);
+				this._nmeRenderFlags |= 64;
+				if(this.parent != null) this.parent._nmeRenderFlags |= 64;
+				h = this.nmeBoundsRect.height;
+			}
 			if(h <= 0) return 0;
 			this.nmeScaleY = inValue / h;
 			this.nmeInvalidateMatrix(true);
@@ -1084,6 +699,9 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		if(gfx != null) return gfx.nmeSurface;
 		return null;
 	}
+	,__contains: function(child) {
+		return false;
+	}
 	,validateBounds: function() {
 		if(this.get__boundsInvalid()) {
 			var gfx = this.nmeGetGraphics();
@@ -1113,7 +731,7 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	}
 	,setSurfaceVisible: function(inValue) {
 		var gfx = this.nmeGetGraphics();
-		if(gfx != null && gfx.nmeSurface != null) browser.Lib.nmeSetSurfaceVisible(gfx.nmeSurface,inValue);
+		if(gfx != null && gfx.nmeSurface != null) flash.Lib.nmeSetSurfaceVisible(gfx.nmeSurface,inValue);
 	}
 	,nmeValidateMatrix: function() {
 		var parentMatrixInvalid = (this._nmeRenderFlags & 8) != 0 && this.parent != null;
@@ -1124,7 +742,7 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 			if((this._nmeRenderFlags & 4) != 0) {
 				m.identity();
 				m.scale(this.nmeScaleX,this.nmeScaleY);
-				var rad = this.nmeRotation * browser.geom.Transform.DEG_TO_RAD;
+				var rad = this.nmeRotation * flash.geom.Transform.DEG_TO_RAD;
 				if(rad != 0.0) m.rotate(rad);
 				m.translate(this.nmeX,this.nmeY);
 				this.transform._matrix.copy(m);
@@ -1141,11 +759,13 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 			this._nmeRenderFlags &= -29;
 		}
 	}
-	,nmeUnifyChildrenWithDOM: function(lastMoveGfx) {
+	,nmeUnifyChildrenWithDOM: function(lastMoveObj) {
 		var gfx = this.nmeGetGraphics();
-		if(gfx != null && lastMoveGfx != null && gfx != lastMoveGfx) browser.Lib.nmeSetSurfaceZIndexAfter(gfx.nmeSurface,lastMoveGfx.nmeSurface);
-		if(gfx == null) gfx = lastMoveGfx;
-		return gfx;
+		if(gfx != null && lastMoveObj != null && this != lastMoveObj) {
+			var ogfx = lastMoveObj.nmeGetGraphics();
+			if(ogfx != null) flash.Lib.nmeSetSurfaceZIndexAfter(this.nmeScrollRect == null?gfx.nmeSurface:this._srWindow,lastMoveObj.nmeScrollRect == null?ogfx.nmeSurface:lastMoveObj == this.parent?ogfx.nmeSurface:lastMoveObj._srWindow);
+		}
+		if(gfx == null) return lastMoveObj; else return this;
 	}
 	,nmeTestFlag: function(mask) {
 		return (this._nmeRenderFlags & mask) != 0;
@@ -1188,25 +808,28 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		var fullAlpha = (this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha;
 		if(inMask != null) {
 			var m = this.getSurfaceTransform(gfx);
-			browser.Lib.nmeDrawToSurface(gfx.nmeSurface,inMask,m,fullAlpha,clipRect);
+			flash.Lib.nmeDrawToSurface(gfx.nmeSurface,inMask,m,fullAlpha,clipRect);
 		} else {
 			if((this._nmeRenderFlags & 32) != 0) {
 				var m = this.getSurfaceTransform(gfx);
-				browser.Lib.nmeSetSurfaceTransform(gfx.nmeSurface,m);
+				flash.Lib.nmeSetSurfaceTransform(gfx.nmeSurface,m);
 				this._nmeRenderFlags &= -33;
+				this.nmeSrUpdateDivs();
 			}
-			browser.Lib.nmeSetSurfaceOpacity(gfx.nmeSurface,fullAlpha);
+			flash.Lib.nmeSetSurfaceOpacity(gfx.nmeSurface,fullAlpha);
 		}
 	}
 	,nmeRemoveFromStage: function() {
 		var gfx = this.nmeGetGraphics();
-		if(gfx != null && browser.Lib.nmeIsOnStage(gfx.nmeSurface)) {
-			browser.Lib.nmeRemoveSurface(gfx.nmeSurface);
-			var evt = new browser.events.Event(browser.events.Event.REMOVED_FROM_STAGE,false,false);
+		if(gfx != null && flash.Lib.nmeIsOnStage(gfx.nmeSurface)) {
+			flash.Lib.nmeRemoveSurface(gfx.nmeSurface);
+			var evt = new flash.events.Event(flash.events.Event.REMOVED_FROM_STAGE,false,false);
 			this.dispatchEvent(evt);
 		}
 	}
 	,nmeMatrixOverridden: function() {
+		this.nmeX = this.transform.get_matrix().tx;
+		this.nmeY = this.transform.get_matrix().ty;
 		this._nmeRenderFlags |= 16;
 		this._nmeRenderFlags |= 4;
 		this._nmeRenderFlags |= 64;
@@ -1214,7 +837,7 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	}
 	,nmeIsOnStage: function() {
 		var gfx = this.nmeGetGraphics();
-		if(gfx != null && browser.Lib.nmeIsOnStage(gfx.nmeSurface)) return true;
+		if(gfx != null && flash.Lib.nmeIsOnStage(gfx.nmeSurface)) return true;
 		return false;
 	}
 	,nmeInvalidateMatrix: function(local) {
@@ -1235,10 +858,11 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		if(!this.get_visible()) return null;
 		var gfx = this.nmeGetGraphics();
 		if(gfx != null) {
+			gfx.nmeRender();
 			var extX = gfx.nmeExtent.x;
 			var extY = gfx.nmeExtent.y;
 			var local = this.globalToLocal(point);
-			if(local.x - extX < 0 || local.y - extY < 0 || (local.x - extX) * this.get_scaleX() > this.get_width() || (local.y - extY) * this.get_scaleY() > this.get_height()) return null;
+			if(local.x - extX <= 0 || local.y - extY <= 0 || (local.x - extX) * this.get_scaleX() > this.get_width() || (local.y - extY) * this.get_scaleY() > this.get_height()) return null;
 			if(gfx.nmeHitTest(local.x,local.y)) return this;
 		}
 		return null;
@@ -1262,7 +886,7 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		if(this.parent != null) this.parent.nmeGetInteractiveObjectStack(stack);
 		var l = stack.length;
 		if(l > 0) {
-			event.nmeSetPhase(browser.events.EventPhase.CAPTURING_PHASE);
+			event.nmeSetPhase(flash.events.EventPhase.CAPTURING_PHASE);
 			stack.reverse();
 			var _g = 0;
 			while(_g < stack.length) {
@@ -1273,12 +897,12 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 				if(event.nmeGetIsCancelled()) return;
 			}
 		}
-		event.nmeSetPhase(browser.events.EventPhase.AT_TARGET);
+		event.nmeSetPhase(flash.events.EventPhase.AT_TARGET);
 		event.currentTarget = this;
 		this.nmeDispatchEvent(event);
 		if(event.nmeGetIsCancelled()) return;
 		if(event.bubbles) {
-			event.nmeSetPhase(browser.events.EventPhase.BUBBLING_PHASE);
+			event.nmeSetPhase(flash.events.EventPhase.BUBBLING_PHASE);
 			stack.reverse();
 			var _g = 0;
 			while(_g < stack.length) {
@@ -1293,7 +917,7 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	,nmeDispatchEvent: function(event) {
 		if(event.target == null) event.target = this;
 		event.currentTarget = this;
-		return browser.events.EventDispatcher.prototype.dispatchEvent.call(this,event);
+		return flash.events.EventDispatcher.prototype.dispatchEvent.call(this,event);
 	}
 	,nmeClearFlag: function(mask) {
 		this._nmeRenderFlags &= ~mask;
@@ -1315,8 +939,8 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		var gfx = this.nmeGetGraphics();
 		if(gfx == null) return;
 		if(newParent.nmeGetGraphics() != null) {
-			browser.Lib.nmeSetSurfaceId(gfx.nmeSurface,this._nmeId);
-			if(beforeSibling != null && beforeSibling.nmeGetGraphics() != null) browser.Lib.nmeAppendSurface(gfx.nmeSurface,beforeSibling.get__bottommostSurface()); else {
+			flash.Lib.nmeSetSurfaceId(gfx.nmeSurface,this._nmeId);
+			if(beforeSibling != null && beforeSibling.nmeGetGraphics() != null) flash.Lib.nmeAppendSurface(gfx.nmeSurface,beforeSibling.get__bottommostSurface()); else {
 				var stageChildren = [];
 				var _g = 0, _g1 = newParent.nmeChildren;
 				while(_g < _g1.length) {
@@ -1324,20 +948,21 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 					++_g;
 					if(child.get_stage() != null) stageChildren.push(child);
 				}
-				if(stageChildren.length < 1) browser.Lib.nmeAppendSurface(gfx.nmeSurface,null,newParent.get__topmostSurface()); else {
+				if(stageChildren.length < 1) flash.Lib.nmeAppendSurface(gfx.nmeSurface,null,newParent.get__topmostSurface()); else {
 					var nextSibling = stageChildren[stageChildren.length - 1];
 					var container;
-					while(js.Boot.__instanceof(nextSibling,browser.display.DisplayObjectContainer)) {
-						container = js.Boot.__cast(nextSibling , browser.display.DisplayObjectContainer);
+					while(js.Boot.__instanceof(nextSibling,flash.display.DisplayObjectContainer)) {
+						container = js.Boot.__cast(nextSibling , flash.display.DisplayObjectContainer);
 						if(container.nmeChildren.length > 0) nextSibling = container.nmeChildren[container.nmeChildren.length - 1]; else break;
 					}
-					if(nextSibling.nmeGetGraphics() != gfx) browser.Lib.nmeAppendSurface(gfx.nmeSurface,null,nextSibling.get__topmostSurface()); else browser.Lib.nmeAppendSurface(gfx.nmeSurface);
+					if(nextSibling.nmeGetGraphics() != gfx) flash.Lib.nmeAppendSurface(gfx.nmeSurface,null,nextSibling.get__topmostSurface()); else flash.Lib.nmeAppendSurface(gfx.nmeSurface);
 				}
 			}
-			browser.Lib.nmeSetSurfaceTransform(gfx.nmeSurface,this.getSurfaceTransform(gfx));
-		} else if(newParent.name == "Stage") browser.Lib.nmeAppendSurface(gfx.nmeSurface);
+			flash.Lib.nmeSetSurfaceTransform(gfx.nmeSurface,this.getSurfaceTransform(gfx));
+		} else if(newParent.name == "Stage") flash.Lib.nmeAppendSurface(gfx.nmeSurface);
 		if(this.nmeIsOnStage()) {
-			var evt = new browser.events.Event(browser.events.Event.ADDED_TO_STAGE,false,false);
+			this.nmeSrUpdateDivs();
+			var evt = new flash.events.Event(flash.events.Event.ADDED_TO_STAGE,false,false);
 			this.dispatchEvent(evt);
 		}
 	}
@@ -1355,12 +980,12 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 	,hitTestPoint: function(x,y,shapeFlag) {
 		if(shapeFlag == null) shapeFlag = false;
 		var boundingBox = shapeFlag == null?true:!shapeFlag;
-		if(!boundingBox) return this.nmeGetObjectUnderPoint(new browser.geom.Point(x,y)) != null; else {
+		if(!boundingBox) return this.nmeGetObjectUnderPoint(new flash.geom.Point(x,y)) != null; else {
 			var gfx = this.nmeGetGraphics();
 			if(gfx != null) {
 				var extX = gfx.nmeExtent.x;
 				var extY = gfx.nmeExtent.y;
-				var local = this.globalToLocal(new browser.geom.Point(x,y));
+				var local = this.globalToLocal(new flash.geom.Point(x,y));
 				if(local.x - extX < 0 || local.y - extY < 0 || (local.x - extX) * this.get_scaleX() > this.get_width() || (local.y - extY) * this.get_scaleY() > this.get_height()) return false; else return true;
 			}
 			return false;
@@ -1417,65 +1042,20 @@ browser.display.DisplayObject.prototype = $extend(browser.events.EventDispatcher
 		if(event.bubbles && this.parent != null) this.parent.dispatchEvent(event);
 		return result;
 	}
-	,_topmostSurface: null
-	,_nmeRenderFlags: null
-	,_nmeId: null
-	,_matrixInvalid: null
-	,_matrixChainInvalid: null
-	,_fullScaleY: null
-	,_fullScaleX: null
-	,_boundsInvalid: null
-	,_bottommostSurface: null
-	,nmeY: null
-	,nmeX: null
-	,nmeWidth: null
-	,nmeVisible: null
-	,nmeScrollRect: null
-	,nmeScaleY: null
-	,nmeScaleX: null
-	,nmeRotation: null
-	,nmeMaskingObj: null
-	,nmeMask: null
-	,nmeHeight: null
-	,nmeFilters: null
-	,nmeBoundsRect: null
-	,y: null
-	,x: null
-	,width: null
-	,visible: null
-	,transform: null
-	,stage: null
-	,scrollRect: null
-	,scaleY: null
-	,scaleX: null
-	,scale9Grid: null
-	,rotation: null
-	,parent: null
-	,nmeCombinedVisible: null
-	,name: null
-	,mouseY: null
-	,mouseX: null
-	,mask: null
-	,height: null
-	,filters: null
-	,cacheAsBitmap: null
-	,blendMode: null
-	,alpha: null
-	,accessibilityProperties: null
-	,__class__: browser.display.DisplayObject
+	,__class__: flash.display.DisplayObject
 	,__properties__: {set_filters:"set_filters",get_filters:"get_filters",set_height:"set_height",get_height:"get_height",set_mask:"set_mask",get_mask:"get_mask",get_mouseX:"get_mouseX",get_mouseY:"get_mouseY",set_nmeCombinedVisible:"set_nmeCombinedVisible",set_parent:"set_parent",set_rotation:"set_rotation",get_rotation:"get_rotation",set_scaleX:"set_scaleX",get_scaleX:"get_scaleX",set_scaleY:"set_scaleY",get_scaleY:"get_scaleY",set_scrollRect:"set_scrollRect",get_scrollRect:"get_scrollRect",get_stage:"get_stage",set_transform:"set_transform",set_visible:"set_visible",get_visible:"get_visible",set_width:"set_width",get_width:"get_width",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y",get__bottommostSurface:"get__bottommostSurface",get__boundsInvalid:"get__boundsInvalid",get__matrixChainInvalid:"get__matrixChainInvalid",get__matrixInvalid:"get__matrixInvalid",get__topmostSurface:"get__topmostSurface"}
 });
-browser.display.InteractiveObject = function() {
-	browser.display.DisplayObject.call(this);
+flash.display.InteractiveObject = function() {
+	flash.display.DisplayObject.call(this);
 	this.tabEnabled = false;
 	this.mouseEnabled = true;
 	this.doubleClickEnabled = true;
 	this.set_tabIndex(0);
 };
-$hxClasses["browser.display.InteractiveObject"] = browser.display.InteractiveObject;
-browser.display.InteractiveObject.__name__ = ["browser","display","InteractiveObject"];
-browser.display.InteractiveObject.__super__ = browser.display.DisplayObject;
-browser.display.InteractiveObject.prototype = $extend(browser.display.DisplayObject.prototype,{
+$hxClasses["flash.display.InteractiveObject"] = flash.display.InteractiveObject;
+flash.display.InteractiveObject.__name__ = ["flash","display","InteractiveObject"];
+flash.display.InteractiveObject.__super__ = flash.display.DisplayObject;
+flash.display.InteractiveObject.prototype = $extend(flash.display.DisplayObject.prototype,{
 	set_tabIndex: function(inIndex) {
 		return this.nmeTabIndex = inIndex;
 	}
@@ -1486,32 +1066,30 @@ browser.display.InteractiveObject.prototype = $extend(browser.display.DisplayObj
 		return "[InteractiveObject name=" + this.name + " id=" + this._nmeId + "]";
 	}
 	,nmeGetObjectUnderPoint: function(point) {
-		if(!this.mouseEnabled) return null; else return browser.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point);
+		if(!this.mouseEnabled) return null; else return flash.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point);
 	}
-	,nmeTabIndex: null
-	,nmeDoubleClickEnabled: null
-	,tabIndex: null
-	,tabEnabled: null
-	,mouseEnabled: null
-	,focusRect: null
-	,doubleClickEnabled: null
-	,__class__: browser.display.InteractiveObject
-	,__properties__: $extend(browser.display.DisplayObject.prototype.__properties__,{set_tabIndex:"set_tabIndex",get_tabIndex:"get_tabIndex"})
+	,__class__: flash.display.InteractiveObject
+	,__properties__: $extend(flash.display.DisplayObject.prototype.__properties__,{set_tabIndex:"set_tabIndex",get_tabIndex:"get_tabIndex"})
 });
-browser.display.DisplayObjectContainer = function() {
+flash.display.DisplayObjectContainer = function() {
 	this.nmeChildren = new Array();
 	this.mouseChildren = true;
 	this.tabChildren = true;
-	browser.display.InteractiveObject.call(this);
+	flash.display.InteractiveObject.call(this);
 	this.nmeCombinedAlpha = this.alpha;
 };
-$hxClasses["browser.display.DisplayObjectContainer"] = browser.display.DisplayObjectContainer;
-browser.display.DisplayObjectContainer.__name__ = ["browser","display","DisplayObjectContainer"];
-browser.display.DisplayObjectContainer.__super__ = browser.display.InteractiveObject;
-browser.display.DisplayObjectContainer.prototype = $extend(browser.display.InteractiveObject.prototype,{
-	set_visible: function(inVal) {
-		this.set_nmeCombinedVisible(inVal);
-		return browser.display.InteractiveObject.prototype.set_visible.call(this,inVal);
+$hxClasses["flash.display.DisplayObjectContainer"] = flash.display.DisplayObjectContainer;
+flash.display.DisplayObjectContainer.__name__ = ["flash","display","DisplayObjectContainer"];
+flash.display.DisplayObjectContainer.__super__ = flash.display.InteractiveObject;
+flash.display.DisplayObjectContainer.prototype = $extend(flash.display.InteractiveObject.prototype,{
+	set_scrollRect: function(inValue) {
+		inValue = flash.display.InteractiveObject.prototype.set_scrollRect.call(this,inValue);
+		this.nmeUnifyChildrenWithDOM();
+		return inValue;
+	}
+	,set_visible: function(inVal) {
+		this.set_nmeCombinedVisible(this.parent != null?this.parent.nmeCombinedVisible && inVal:inVal);
+		return flash.display.InteractiveObject.prototype.set_visible.call(this,inVal);
 	}
 	,get_numChildren: function() {
 		return this.nmeChildren.length;
@@ -1525,10 +1103,10 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 				child.set_nmeCombinedVisible(child.get_visible() && inVal);
 			}
 		}
-		return browser.display.InteractiveObject.prototype.set_nmeCombinedVisible.call(this,inVal);
+		return flash.display.InteractiveObject.prototype.set_nmeCombinedVisible.call(this,inVal);
 	}
 	,set_filters: function(filters) {
-		browser.display.InteractiveObject.prototype.set_filters.call(this,filters);
+		flash.display.InteractiveObject.prototype.set_filters.call(this,filters);
 		var _g = 0, _g1 = this.nmeChildren;
 		while(_g < _g1.length) {
 			var child = _g1[_g];
@@ -1537,9 +1115,20 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 		}
 		return filters;
 	}
+	,__contains: function(child) {
+		if(child == null) return false;
+		if(this == child) return true;
+		var _g = 0, _g1 = this.nmeChildren;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(c == child || c.__contains(child)) return true;
+		}
+		return false;
+	}
 	,validateBounds: function() {
 		if(this.get__boundsInvalid()) {
-			browser.display.InteractiveObject.prototype.validateBounds.call(this);
+			flash.display.InteractiveObject.prototype.validateBounds.call(this);
 			var _g = 0, _g1 = this.nmeChildren;
 			while(_g < _g1.length) {
 				var obj = _g1[_g];
@@ -1586,6 +1175,8 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 			this.nmeChildren[c2] = swap;
 			swap = null;
 			this.nmeSwapSurface(c1,c2);
+			child1.nmeUnifyChildrenWithDOM();
+			child2.nmeUnifyChildrenWithDOM();
 		}
 	}
 	,setChildIndex: function(child,index) {
@@ -1640,27 +1231,32 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 		}
 		throw "removeChild : none found?";
 	}
-	,nmeUnifyChildrenWithDOM: function(lastMoveGfx) {
-		var gfx = browser.display.InteractiveObject.prototype.nmeUnifyChildrenWithDOM.call(this,lastMoveGfx);
+	,nmeUnifyChildrenWithDOM: function(lastMoveObj) {
+		var obj = flash.display.InteractiveObject.prototype.nmeUnifyChildrenWithDOM.call(this,lastMoveObj);
 		var _g = 0, _g1 = this.nmeChildren;
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			gfx = child.nmeUnifyChildrenWithDOM(gfx);
+			obj = child.nmeUnifyChildrenWithDOM(obj);
+			if(child.get_scrollRect() != null) obj = child;
 		}
-		return gfx;
+		return obj;
 	}
 	,nmeSwapSurface: function(c1,c2) {
 		if(this.nmeChildren[c1] == null) throw "Null element at index " + c1 + " length " + this.nmeChildren.length;
 		if(this.nmeChildren[c2] == null) throw "Null element at index " + c2 + " length " + this.nmeChildren.length;
 		var gfx1 = this.nmeChildren[c1].nmeGetGraphics();
 		var gfx2 = this.nmeChildren[c2].nmeGetGraphics();
-		if(gfx1 != null && gfx2 != null) browser.Lib.nmeSwapSurface(gfx1.nmeSurface,gfx2.nmeSurface);
+		if(gfx1 != null && gfx2 != null) {
+			var surface1 = this.nmeChildren[c1].nmeScrollRect == null?gfx1.nmeSurface:this.nmeChildren[c1].nmeGetSrWindow();
+			var surface2 = this.nmeChildren[c2].nmeScrollRect == null?gfx2.nmeSurface:this.nmeChildren[c2].nmeGetSrWindow();
+			if(surface1 != null && surface2 != null) flash.Lib.nmeSwapSurface(surface1,surface2);
+		}
 	}
 	,nmeRender: function(inMask,clipRect) {
 		if(!this.nmeVisible) return;
 		if(clipRect == null && this.nmeScrollRect != null) clipRect = this.nmeScrollRect;
-		browser.display.InteractiveObject.prototype.nmeRender.call(this,inMask,clipRect);
+		flash.display.InteractiveObject.prototype.nmeRender.call(this,inMask,clipRect);
 		this.nmeCombinedAlpha = this.parent != null?this.parent.nmeCombinedAlpha * this.alpha:this.alpha;
 		var _g = 0, _g1 = this.nmeChildren;
 		while(_g < _g1.length) {
@@ -1679,7 +1275,7 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 		}
 	}
 	,nmeRemoveFromStage: function() {
-		browser.display.InteractiveObject.prototype.nmeRemoveFromStage.call(this);
+		flash.display.InteractiveObject.prototype.nmeRemoveFromStage.call(this);
 		var _g = 0, _g1 = this.nmeChildren;
 		while(_g < _g1.length) {
 			var child = _g1[_g];
@@ -1702,7 +1298,7 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 				child.nmeInvalidateMatrix();
 			}
 		}
-		browser.display.InteractiveObject.prototype.nmeInvalidateMatrix.call(this,local);
+		flash.display.InteractiveObject.prototype.nmeInvalidateMatrix.call(this,local);
 	}
 	,nmeGetObjectsUnderPoint: function(point,stack) {
 		var l = this.nmeChildren.length - 1;
@@ -1723,7 +1319,7 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 			if(this.mouseEnabled) result = this.nmeChildren[l - i].nmeGetObjectUnderPoint(point);
 			if(result != null) return this.mouseChildren?result:this;
 		}
-		return browser.display.InteractiveObject.prototype.nmeGetObjectUnderPoint.call(this,point);
+		return flash.display.InteractiveObject.prototype.nmeGetObjectUnderPoint.call(this,point);
 	}
 	,nmeBroadcast: function(event) {
 		var _g = 0, _g1 = this.nmeChildren;
@@ -1735,7 +1331,7 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 		this.dispatchEvent(event);
 	}
 	,nmeAddToStage: function(newParent,beforeSibling) {
-		browser.display.InteractiveObject.prototype.nmeAddToStage.call(this,newParent,beforeSibling);
+		flash.display.InteractiveObject.prototype.nmeAddToStage.call(this,newParent,beforeSibling);
 		var _g = 0, _g1 = this.nmeChildren;
 		while(_g < _g1.length) {
 			var child = _g1[_g];
@@ -1771,15 +1367,7 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 		return null;
 	}
 	,contains: function(child) {
-		if(child == null) return false;
-		if(this == child) return true;
-		var _g = 0, _g1 = this.nmeChildren;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			if(c == child) return true;
-		}
-		return false;
+		return this.__contains(child);
 	}
 	,addChildAt: function(object,index) {
 		if(index > this.nmeChildren.length || index < 0) throw "Invalid index position " + index;
@@ -1812,37 +1400,31 @@ browser.display.DisplayObjectContainer.prototype = $extend(browser.display.Inter
 	,__removeChild: function(child) {
 		HxOverrides.remove(this.nmeChildren,child);
 	}
-	,nmeAddedChildren: null
-	,tabChildren: null
-	,numChildren: null
-	,nmeCombinedAlpha: null
-	,nmeChildren: null
-	,mouseChildren: null
-	,__class__: browser.display.DisplayObjectContainer
-	,__properties__: $extend(browser.display.InteractiveObject.prototype.__properties__,{get_numChildren:"get_numChildren"})
+	,__class__: flash.display.DisplayObjectContainer
+	,__properties__: $extend(flash.display.InteractiveObject.prototype.__properties__,{get_numChildren:"get_numChildren"})
 });
-browser.display.Sprite = function() {
-	browser.display.DisplayObjectContainer.call(this);
-	this.nmeGraphics = new browser.display.Graphics();
+flash.display.Sprite = function() {
+	flash.display.DisplayObjectContainer.call(this);
+	this.nmeGraphics = new flash.display.Graphics();
 	this.buttonMode = false;
 };
-$hxClasses["browser.display.Sprite"] = browser.display.Sprite;
-browser.display.Sprite.__name__ = ["browser","display","Sprite"];
-browser.display.Sprite.__super__ = browser.display.DisplayObjectContainer;
-browser.display.Sprite.prototype = $extend(browser.display.DisplayObjectContainer.prototype,{
+$hxClasses["flash.display.Sprite"] = flash.display.Sprite;
+flash.display.Sprite.__name__ = ["flash","display","Sprite"];
+flash.display.Sprite.__super__ = flash.display.DisplayObjectContainer;
+flash.display.Sprite.prototype = $extend(flash.display.DisplayObjectContainer.prototype,{
 	set_useHandCursor: function(cursor) {
 		if(cursor == this.useHandCursor) return cursor;
-		if(this.nmeCursorCallbackOver != null) this.removeEventListener(browser.events.MouseEvent.ROLL_OVER,this.nmeCursorCallbackOver);
-		if(this.nmeCursorCallbackOut != null) this.removeEventListener(browser.events.MouseEvent.ROLL_OUT,this.nmeCursorCallbackOut);
-		if(!cursor) browser.Lib.nmeSetCursor(browser._Lib.CursorType.Default); else {
+		if(this.nmeCursorCallbackOver != null) this.removeEventListener(flash.events.MouseEvent.ROLL_OVER,this.nmeCursorCallbackOver);
+		if(this.nmeCursorCallbackOut != null) this.removeEventListener(flash.events.MouseEvent.ROLL_OUT,this.nmeCursorCallbackOut);
+		if(!cursor) flash.Lib.nmeSetCursor(flash._Lib.CursorType.Default); else {
 			this.nmeCursorCallbackOver = function(_) {
-				browser.Lib.nmeSetCursor(browser._Lib.CursorType.Pointer);
+				flash.Lib.nmeSetCursor(flash._Lib.CursorType.Pointer);
 			};
 			this.nmeCursorCallbackOut = function(_) {
-				browser.Lib.nmeSetCursor(browser._Lib.CursorType.Default);
+				flash.Lib.nmeSetCursor(flash._Lib.CursorType.Default);
 			};
-			this.addEventListener(browser.events.MouseEvent.ROLL_OVER,this.nmeCursorCallbackOver);
-			this.addEventListener(browser.events.MouseEvent.ROLL_OUT,this.nmeCursorCallbackOut);
+			this.addEventListener(flash.events.MouseEvent.ROLL_OVER,this.nmeCursorCallbackOver);
+			this.addEventListener(flash.events.MouseEvent.ROLL_OUT,this.nmeCursorCallbackOut);
 		}
 		this.useHandCursor = cursor;
 		return cursor;
@@ -1864,7 +1446,7 @@ browser.display.Sprite.prototype = $extend(browser.display.DisplayObjectContaine
 			var _g1 = 0, _g = this.parent.nmeChildren.length;
 			while(_g1 < _g) {
 				var i = _g1++;
-				var result = this.parent.nmeChildren[l - i].nmeGetObjectUnderPoint(new browser.geom.Point(this.get_stage().get_mouseX(),this.get_stage().get_mouseY()));
+				var result = this.parent.nmeChildren[l - i].nmeGetObjectUnderPoint(new flash.geom.Point(this.get_stage().get_mouseX(),this.get_stage().get_mouseY()));
 				if(result != null) obj = result;
 			}
 			if(obj != this) this.nmeDropTarget = obj; else this.nmeDropTarget = this.get_stage();
@@ -1877,19 +1459,11 @@ browser.display.Sprite.prototype = $extend(browser.display.DisplayObjectContaine
 	,nmeGetGraphics: function() {
 		return this.nmeGraphics;
 	}
-	,nmeGraphics: null
-	,nmeDropTarget: null
-	,nmeCursorCallbackOver: null
-	,nmeCursorCallbackOut: null
-	,useHandCursor: null
-	,graphics: null
-	,dropTarget: null
-	,buttonMode: null
-	,__class__: browser.display.Sprite
-	,__properties__: $extend(browser.display.DisplayObjectContainer.prototype.__properties__,{get_dropTarget:"get_dropTarget",get_graphics:"get_graphics",set_useHandCursor:"set_useHandCursor"})
+	,__class__: flash.display.Sprite
+	,__properties__: $extend(flash.display.DisplayObjectContainer.prototype.__properties__,{get_dropTarget:"get_dropTarget",get_graphics:"get_graphics",set_useHandCursor:"set_useHandCursor"})
 });
 var NMEPreloader = function() {
-	browser.display.Sprite.call(this);
+	flash.display.Sprite.call(this);
 	var backgroundColor = this.getBackgroundColor();
 	var r = backgroundColor >> 16 & 255;
 	var g = backgroundColor >> 8 & 255;
@@ -1902,13 +1476,13 @@ var NMEPreloader = function() {
 	var y = this.getHeight() / 2 - height / 2;
 	var width = this.getWidth() - x * 2;
 	var padding = 3;
-	this.outline = new browser.display.Sprite();
+	this.outline = new flash.display.Sprite();
 	this.outline.get_graphics().lineStyle(1,color,0.15,true);
 	this.outline.get_graphics().drawRoundRect(0,0,width,height,padding * 2,padding * 2);
 	this.outline.set_x(x);
 	this.outline.set_y(y);
 	this.addChild(this.outline);
-	this.progress = new browser.display.Sprite();
+	this.progress = new flash.display.Sprite();
 	this.progress.get_graphics().beginFill(color,0.35);
 	this.progress.get_graphics().drawRect(0,0,width - padding * 2,height - padding * 2);
 	this.progress.set_x(x + padding);
@@ -1918,31 +1492,29 @@ var NMEPreloader = function() {
 };
 $hxClasses["NMEPreloader"] = NMEPreloader;
 NMEPreloader.__name__ = ["NMEPreloader"];
-NMEPreloader.__super__ = browser.display.Sprite;
-NMEPreloader.prototype = $extend(browser.display.Sprite.prototype,{
+NMEPreloader.__super__ = flash.display.Sprite;
+NMEPreloader.prototype = $extend(flash.display.Sprite.prototype,{
 	onUpdate: function(bytesLoaded,bytesTotal) {
 		var percentLoaded = bytesLoaded / bytesTotal;
 		if(percentLoaded > 1) percentLoaded == 1;
 		this.progress.set_scaleX(percentLoaded);
 	}
 	,onLoaded: function() {
-		this.dispatchEvent(new browser.events.Event(browser.events.Event.COMPLETE));
+		this.dispatchEvent(new flash.events.Event(flash.events.Event.COMPLETE));
 	}
 	,onInit: function() {
 	}
 	,getWidth: function() {
 		var width = 600;
-		if(width > 0) return width; else return nme.Lib.get_current().get_stage().get_stageWidth();
+		if(width > 0) return width; else return flash.Lib.get_current().get_stage().get_stageWidth();
 	}
 	,getHeight: function() {
 		var height = 400;
-		if(height > 0) return height; else return nme.Lib.get_current().get_stage().get_stageHeight();
+		if(height > 0) return height; else return flash.Lib.get_current().get_stage().get_stageHeight();
 	}
 	,getBackgroundColor: function() {
 		return 16777215;
 	}
-	,progress: null
-	,outline: null
 	,__class__: NMEPreloader
 });
 var Reflect = function() { }
@@ -1959,26 +1531,16 @@ Reflect.field = function(o,field) {
 	}
 	return v;
 }
-Reflect.setField = function(o,field,value) {
-	o[field] = value;
-}
 Reflect.getProperty = function(o,field) {
 	var tmp;
 	return o == null?null:o.__properties__ && (tmp = o.__properties__["get_" + field])?o[tmp]():o[field];
-}
-Reflect.setProperty = function(o,field,value) {
-	var tmp;
-	if(o.__properties__ && (tmp = o.__properties__["set_" + field])) o[tmp](value); else o[field] = value;
-}
-Reflect.callMethod = function(o,func,args) {
-	return func.apply(o,args);
 }
 Reflect.fields = function(o) {
 	var a = [];
 	if(o != null) {
 		var hasOwnProperty = Object.prototype.hasOwnProperty;
 		for( var f in o ) {
-		if(hasOwnProperty.call(o,f)) a.push(f);
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
 		}
 	}
 	return a;
@@ -1994,38 +1556,14 @@ Reflect.compareMethods = function(f1,f2) {
 	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) return false;
 	return f1.scope == f2.scope && f1.method == f2.method && f1.method != null;
 }
-Reflect.isObject = function(v) {
-	if(v == null) return false;
-	var t = typeof(v);
-	return t == "string" || t == "object" && !v.__enum__ || t == "function" && (v.__name__ || v.__ename__);
-}
-Reflect.deleteField = function(o,f) {
-	if(!Reflect.hasField(o,f)) return false;
-	delete(o[f]);
+Reflect.deleteField = function(o,field) {
+	if(!Reflect.hasField(o,field)) return false;
+	delete(o[field]);
 	return true;
-}
-Reflect.copy = function(o) {
-	var o2 = { };
-	var _g = 0, _g1 = Reflect.fields(o);
-	while(_g < _g1.length) {
-		var f = _g1[_g];
-		++_g;
-		o2[f] = Reflect.field(o,f);
-	}
-	return o2;
-}
-Reflect.makeVarArgs = function(f) {
-	return function() {
-		var a = Array.prototype.slice.call(arguments);
-		return f(a);
-	};
 }
 var Std = function() { }
 $hxClasses["Std"] = Std;
 Std.__name__ = ["Std"];
-Std["is"] = function(v,t) {
-	return js.Boot.__instanceof(v,t);
-}
 Std.string = function(s) {
 	return js.Boot.__string_rec(s,"");
 }
@@ -2042,7 +1580,7 @@ Std.parseFloat = function(x) {
 	return parseFloat(x);
 }
 Std.random = function(x) {
-	return Math.floor(Math.random() * x);
+	return x <= 0?0:Math.floor(Math.random() * x);
 }
 var StringBuf = function() {
 	this.b = "";
@@ -2050,19 +1588,9 @@ var StringBuf = function() {
 $hxClasses["StringBuf"] = StringBuf;
 StringBuf.__name__ = ["StringBuf"];
 StringBuf.prototype = {
-	toString: function() {
-		return this.b;
+	addSub: function(s,pos,len) {
+		this.b += len == null?HxOverrides.substr(s,pos,null):HxOverrides.substr(s,pos,len);
 	}
-	,addSub: function(s,pos,len) {
-		this.b += HxOverrides.substr(s,pos,len);
-	}
-	,addChar: function(c) {
-		this.b += String.fromCharCode(c);
-	}
-	,add: function(x) {
-		this.b += Std.string(x);
-	}
-	,b: null
 	,__class__: StringBuf
 }
 var StringTools = function() { }
@@ -2074,23 +1602,16 @@ StringTools.urlEncode = function(s) {
 StringTools.urlDecode = function(s) {
 	return decodeURIComponent(s.split("+").join(" "));
 }
-StringTools.htmlEscape = function(s) {
-	return s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
-}
-StringTools.htmlUnescape = function(s) {
-	return s.split("&gt;").join(">").split("&lt;").join("<").split("&amp;").join("&");
+StringTools.htmlEscape = function(s,quotes) {
+	s = s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
+	return quotes?s.split("\"").join("&quot;").split("'").join("&#039;"):s;
 }
 StringTools.startsWith = function(s,start) {
 	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
 }
-StringTools.endsWith = function(s,end) {
-	var elen = end.length;
-	var slen = s.length;
-	return slen >= elen && HxOverrides.substr(s,slen - elen,elen) == end;
-}
 StringTools.isSpace = function(s,pos) {
 	var c = HxOverrides.cca(s,pos);
-	return c >= 9 && c <= 13 || c == 32;
+	return c > 8 && c < 14 || c == 32;
 }
 StringTools.ltrim = function(s) {
 	var l = s.length;
@@ -2107,32 +1628,6 @@ StringTools.rtrim = function(s) {
 StringTools.trim = function(s) {
 	return StringTools.ltrim(StringTools.rtrim(s));
 }
-StringTools.rpad = function(s,c,l) {
-	var sl = s.length;
-	var cl = c.length;
-	while(sl < l) if(l - sl < cl) {
-		s += HxOverrides.substr(c,0,l - sl);
-		sl = l;
-	} else {
-		s += c;
-		sl += cl;
-	}
-	return s;
-}
-StringTools.lpad = function(s,c,l) {
-	var ns = "";
-	var sl = s.length;
-	if(sl >= l) return s;
-	var cl = c.length;
-	while(sl < l) if(l - sl < cl) {
-		ns += HxOverrides.substr(c,0,l - sl);
-		sl = l;
-	} else {
-		ns += c;
-		sl += cl;
-	}
-	return ns + s;
-}
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 }
@@ -2145,12 +1640,6 @@ StringTools.hex = function(n,digits) {
 	} while(n > 0);
 	if(digits != null) while(s.length < digits) s = "0" + s;
 	return s;
-}
-StringTools.fastCodeAt = function(s,index) {
-	return s.charCodeAt(index);
-}
-StringTools.isEOF = function(c) {
-	return c != c;
 }
 var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] }
 ValueType.TNull = ["TNull",0];
@@ -2186,9 +1675,6 @@ Type.getClass = function(o) {
 Type.getEnum = function(o) {
 	if(o == null) return null;
 	return o.__enum__;
-}
-Type.getSuperClass = function(c) {
-	return c.__super__;
 }
 Type.getClassName = function(c) {
 	var a = c.__name__;
@@ -2252,28 +1738,13 @@ Type.createEnumIndex = function(e,index,params) {
 	if(c == null) throw index + " is not a valid enum constructor index";
 	return Type.createEnum(e,c,params);
 }
-Type.getInstanceFields = function(c) {
-	var a = [];
-	for(var i in c.prototype) a.push(i);
-	HxOverrides.remove(a,"__class__");
-	HxOverrides.remove(a,"__properties__");
-	return a;
-}
-Type.getClassFields = function(c) {
-	var a = Reflect.fields(c);
-	HxOverrides.remove(a,"__name__");
-	HxOverrides.remove(a,"__interfaces__");
-	HxOverrides.remove(a,"__properties__");
-	HxOverrides.remove(a,"__super__");
-	HxOverrides.remove(a,"prototype");
-	return a;
-}
 Type.getEnumConstructs = function(e) {
 	var a = e.__constructs__;
 	return a.slice();
 }
 Type["typeof"] = function(v) {
-	switch(typeof(v)) {
+	var _g = typeof(v);
+	switch(_g) {
 	case "boolean":
 		return ValueType.TBool;
 	case "string":
@@ -2316,35 +1787,11 @@ Type.enumEq = function(a,b) {
 Type.enumConstructor = function(e) {
 	return e[0];
 }
-Type.enumParameters = function(e) {
-	return e.slice(2);
-}
-Type.enumIndex = function(e) {
-	return e[1];
-}
-Type.allEnums = function(e) {
-	var all = [];
-	var cst = e.__constructs__;
-	var _g = 0;
-	while(_g < cst.length) {
-		var c = cst[_g];
-		++_g;
-		var v = Reflect.field(e,c);
-		if(!Reflect.isFunction(v)) all.push(v);
-	}
-	return all;
-}
+var XmlType = $hxClasses["XmlType"] = { __ename__ : ["XmlType"], __constructs__ : [] }
 var Xml = function() {
 };
 $hxClasses["Xml"] = Xml;
 Xml.__name__ = ["Xml"];
-Xml.Element = null;
-Xml.PCData = null;
-Xml.CData = null;
-Xml.Comment = null;
-Xml.DocType = null;
-Xml.Prolog = null;
-Xml.Document = null;
 Xml.parse = function(str) {
 	return haxe.xml.Parser.parse(str);
 }
@@ -2352,38 +1799,38 @@ Xml.createElement = function(name) {
 	var r = new Xml();
 	r.nodeType = Xml.Element;
 	r._children = new Array();
-	r._attributes = new Hash();
-	r.setNodeName(name);
+	r._attributes = new haxe.ds.StringMap();
+	r.set_nodeName(name);
 	return r;
 }
 Xml.createPCData = function(data) {
 	var r = new Xml();
 	r.nodeType = Xml.PCData;
-	r.setNodeValue(data);
+	r.set_nodeValue(data);
 	return r;
 }
 Xml.createCData = function(data) {
 	var r = new Xml();
 	r.nodeType = Xml.CData;
-	r.setNodeValue(data);
+	r.set_nodeValue(data);
 	return r;
 }
 Xml.createComment = function(data) {
 	var r = new Xml();
 	r.nodeType = Xml.Comment;
-	r.setNodeValue(data);
+	r.set_nodeValue(data);
 	return r;
 }
 Xml.createDocType = function(data) {
 	var r = new Xml();
 	r.nodeType = Xml.DocType;
-	r.setNodeValue(data);
+	r.set_nodeValue(data);
 	return r;
 }
-Xml.createProlog = function(data) {
+Xml.createProcessingInstruction = function(data) {
 	var r = new Xml();
-	r.nodeType = Xml.Prolog;
-	r.setNodeValue(data);
+	r.nodeType = Xml.ProcessingInstruction;
+	r.set_nodeValue(data);
 	return r;
 }
 Xml.createDocument = function() {
@@ -2394,29 +1841,29 @@ Xml.createDocument = function() {
 }
 Xml.prototype = {
 	toString: function() {
-		if(this.nodeType == Xml.PCData) return this._nodeValue;
+		if(this.nodeType == Xml.PCData) return StringTools.htmlEscape(this._nodeValue);
 		if(this.nodeType == Xml.CData) return "<![CDATA[" + this._nodeValue + "]]>";
 		if(this.nodeType == Xml.Comment) return "<!--" + this._nodeValue + "-->";
 		if(this.nodeType == Xml.DocType) return "<!DOCTYPE " + this._nodeValue + ">";
-		if(this.nodeType == Xml.Prolog) return "<?" + this._nodeValue + "?>";
+		if(this.nodeType == Xml.ProcessingInstruction) return "<?" + this._nodeValue + "?>";
 		var s = new StringBuf();
 		if(this.nodeType == Xml.Element) {
-			s.b += Std.string("<");
+			s.b += "<";
 			s.b += Std.string(this._nodeName);
 			var $it0 = this._attributes.keys();
 			while( $it0.hasNext() ) {
 				var k = $it0.next();
-				s.b += Std.string(" ");
+				s.b += " ";
 				s.b += Std.string(k);
-				s.b += Std.string("=\"");
+				s.b += "=\"";
 				s.b += Std.string(this._attributes.get(k));
-				s.b += Std.string("\"");
+				s.b += "\"";
 			}
 			if(this._children.length == 0) {
-				s.b += Std.string("/>");
+				s.b += "/>";
 				return s.b;
 			}
-			s.b += Std.string(">");
+			s.b += ">";
 		}
 		var $it1 = this.iterator();
 		while( $it1.hasNext() ) {
@@ -2424,23 +1871,11 @@ Xml.prototype = {
 			s.b += Std.string(x.toString());
 		}
 		if(this.nodeType == Xml.Element) {
-			s.b += Std.string("</");
+			s.b += "</";
 			s.b += Std.string(this._nodeName);
-			s.b += Std.string(">");
+			s.b += ">";
 		}
 		return s.b;
-	}
-	,insertChild: function(x,pos) {
-		if(this._children == null) throw "bad nodetype";
-		if(x._parent != null) HxOverrides.remove(x._parent._children,x);
-		x._parent = this;
-		this._children.splice(pos,0,x);
-	}
-	,removeChild: function(x) {
-		if(this._children == null) throw "bad nodetype";
-		var b = HxOverrides.remove(this._children,x);
-		if(b) x._parent = null;
-		return b;
 	}
 	,addChild: function(x) {
 		if(this._children == null) throw "bad nodetype";
@@ -2462,32 +1897,6 @@ Xml.prototype = {
 	,firstChild: function() {
 		if(this._children == null) throw "bad nodetype";
 		return this._children[0];
-	}
-	,elementsNamed: function(name) {
-		if(this._children == null) throw "bad nodetype";
-		return { cur : 0, x : this._children, hasNext : function() {
-			var k = this.cur;
-			var l = this.x.length;
-			while(k < l) {
-				var n = this.x[k];
-				if(n.nodeType == Xml.Element && n._nodeName == name) break;
-				k++;
-			}
-			this.cur = k;
-			return k < l;
-		}, next : function() {
-			var k = this.cur;
-			var l = this.x.length;
-			while(k < l) {
-				var n = this.x[k];
-				k++;
-				if(n.nodeType == Xml.Element && n._nodeName == name) {
-					this.cur = k;
-					return n;
-				}
-			}
-			return null;
-		}};
 	}
 	,elements: function() {
 		if(this._children == null) throw "bad nodetype";
@@ -2530,10 +1939,6 @@ Xml.prototype = {
 		if(this.nodeType != Xml.Element) throw "bad nodeType";
 		return this._attributes.exists(att);
 	}
-	,remove: function(att) {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		this._attributes.remove(att);
-	}
 	,set: function(att,value) {
 		if(this.nodeType != Xml.Element) throw "bad nodeType";
 		this._attributes.set(att,value);
@@ -2542,36 +1947,23 @@ Xml.prototype = {
 		if(this.nodeType != Xml.Element) throw "bad nodeType";
 		return this._attributes.get(att);
 	}
-	,getParent: function() {
-		return this._parent;
-	}
-	,setNodeValue: function(v) {
+	,set_nodeValue: function(v) {
 		if(this.nodeType == Xml.Element || this.nodeType == Xml.Document) throw "bad nodeType";
 		return this._nodeValue = v;
 	}
-	,getNodeValue: function() {
+	,get_nodeValue: function() {
 		if(this.nodeType == Xml.Element || this.nodeType == Xml.Document) throw "bad nodeType";
 		return this._nodeValue;
 	}
-	,setNodeName: function(n) {
+	,set_nodeName: function(n) {
 		if(this.nodeType != Xml.Element) throw "bad nodeType";
 		return this._nodeName = n;
 	}
-	,getNodeName: function() {
+	,get_nodeName: function() {
 		if(this.nodeType != Xml.Element) throw "bad nodeType";
 		return this._nodeName;
 	}
-	,_parent: null
-	,_children: null
-	,_attributes: null
-	,_nodeValue: null
-	,_nodeName: null
-	,parent: null
-	,nodeValue: null
-	,nodeName: null
-	,nodeType: null
 	,__class__: Xml
-	,__properties__: {set_nodeName:"setNodeName",get_nodeName:"getNodeName",set_nodeValue:"setNodeValue",get_nodeValue:"getNodeValue",get_parent:"getParent"}
 }
 var awe6 = {}
 awe6.interfaces = {}
@@ -2579,27 +1971,19 @@ awe6.interfaces.IPauseable = function() { }
 $hxClasses["awe6.interfaces.IPauseable"] = awe6.interfaces.IPauseable;
 awe6.interfaces.IPauseable.__name__ = ["awe6","interfaces","IPauseable"];
 awe6.interfaces.IPauseable.prototype = {
-	resume: null
-	,pause: null
-	,isActive: null
-	,__class__: awe6.interfaces.IPauseable
-	,__properties__: {set_isActive:"_set_isActive"}
+	__class__: awe6.interfaces.IPauseable
 }
 awe6.interfaces.IDisposable = function() { }
 $hxClasses["awe6.interfaces.IDisposable"] = awe6.interfaces.IDisposable;
 awe6.interfaces.IDisposable.__name__ = ["awe6","interfaces","IDisposable"];
 awe6.interfaces.IDisposable.prototype = {
-	dispose: null
-	,isDisposed: null
-	,__class__: awe6.interfaces.IDisposable
+	__class__: awe6.interfaces.IDisposable
 }
 awe6.interfaces.IUpdateable = function() { }
 $hxClasses["awe6.interfaces.IUpdateable"] = awe6.interfaces.IUpdateable;
 awe6.interfaces.IUpdateable.__name__ = ["awe6","interfaces","IUpdateable"];
 awe6.interfaces.IUpdateable.prototype = {
-	update: null
-	,getAge: null
-	,__class__: awe6.interfaces.IUpdateable
+	__class__: awe6.interfaces.IUpdateable
 }
 awe6.interfaces.IProcess = function() { }
 $hxClasses["awe6.interfaces.IProcess"] = awe6.interfaces.IProcess;
@@ -2611,7 +1995,6 @@ awe6.core.Process = function(p_kernel) {
 	this._tools = this._kernel.tools;
 	this._isEntity = js.Boot.__instanceof(this,awe6.interfaces.IEntity);
 	this._init();
-	if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.INIT,this,true,true,true);
 };
 $hxClasses["awe6.core.Process"] = awe6.core.Process;
 awe6.core.Process.__name__ = ["awe6","core","Process"];
@@ -2623,7 +2006,7 @@ awe6.core.Process.prototype = {
 		if(this.isActive || this.isDisposed) return; else {
 			this._resumer();
 			this._isIsActiveSetterBypassed = true;
-			this._set_isActive(true);
+			this.set_isActive(true);
 			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true,true,true);
 			return;
 		}
@@ -2634,11 +2017,11 @@ awe6.core.Process.prototype = {
 		if(!this.isActive || this.isDisposed) return; else {
 			this._pauser();
 			this._isIsActiveSetterBypassed = true;
-			this._set_isActive(false);
+			this.set_isActive(false);
 			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true,true,true);
 		}
 	}
-	,_set_isActive: function(p_value) {
+	,set_isActive: function(p_value) {
 		if(this.isDisposed) {
 			this.isActive = false;
 			return false;
@@ -2648,14 +2031,14 @@ awe6.core.Process.prototype = {
 				if(this.isActive || this.isDisposed) null; else {
 					this._resumer();
 					this._isIsActiveSetterBypassed = true;
-					this._set_isActive(true);
+					this.set_isActive(true);
 					if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.RESUME,this,true,true,true);
 					null;
 				}
 			} else if(!this.isActive || this.isDisposed) null; else {
 				this._pauser();
 				this._isIsActiveSetterBypassed = true;
-				this._set_isActive(false);
+				this.set_isActive(false);
 				if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.PAUSE,this,true,true,true);
 			}
 		}
@@ -2683,36 +2066,26 @@ awe6.core.Process.prototype = {
 	,dispose: function() {
 		if(this.isDisposed) return; else {
 			this.isDisposed = true;
-			this._set_isActive(false);
-			if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this,true,true,true);
+			this.set_isActive(false);
 			this._disposer();
 			return;
 		}
 	}
 	,_init: function() {
 		this._isIsActiveSetterBypassed = true;
-		this._set_isActive(true);
+		this.set_isActive(true);
 		this.isDisposed = false;
 		this._age = 0;
 		this._updates = 0;
 	}
-	,_isIsActiveSetterBypassed: null
-	,_isEntity: null
-	,_updates: null
-	,_age: null
-	,_tools: null
-	,_kernel: null
-	,isDisposed: null
-	,isActive: null
 	,__class__: awe6.core.Process
-	,__properties__: {set_isActive:"_set_isActive"}
+	,__properties__: {set_isActive:"set_isActive"}
 }
 awe6.interfaces.IAssetManager = function() { }
 $hxClasses["awe6.interfaces.IAssetManager"] = awe6.interfaces.IAssetManager;
 awe6.interfaces.IAssetManager.__name__ = ["awe6","interfaces","IAssetManager"];
 awe6.interfaces.IAssetManager.prototype = {
-	getAsset: null
-	,__class__: awe6.interfaces.IAssetManager
+	__class__: awe6.interfaces.IAssetManager
 }
 awe6.interfaces.IAssetManagerProcess = function() { }
 $hxClasses["awe6.interfaces.IAssetManagerProcess"] = awe6.interfaces.IAssetManagerProcess;
@@ -2740,52 +2113,37 @@ awe6.core.AAssetManager.prototype = $extend(awe6.core.Process.prototype,{
 		this._PACKAGE_ID = "assets";
 		awe6.core.Process.prototype._init.call(this);
 	}
-	,_PACKAGE_ID: null
 	,__class__: awe6.core.AAssetManager
 });
 awe6.interfaces.IAgendaManager = function() { }
 $hxClasses["awe6.interfaces.IAgendaManager"] = awe6.interfaces.IAgendaManager;
 awe6.interfaces.IAgendaManager.__name__ = ["awe6","interfaces","IAgendaManager"];
 awe6.interfaces.IAgendaManager.prototype = {
-	setAgenda: null
-	,agenda: null
-	,__class__: awe6.interfaces.IAgendaManager
-	,__properties__: {get_agenda:"_get_agenda"}
+	__class__: awe6.interfaces.IAgendaManager
 }
 awe6.interfaces.IEntityCollection = function() { }
 $hxClasses["awe6.interfaces.IEntityCollection"] = awe6.interfaces.IEntityCollection;
 awe6.interfaces.IEntityCollection.__name__ = ["awe6","interfaces","IEntityCollection"];
 awe6.interfaces.IEntityCollection.__interfaces__ = [awe6.interfaces.IAgendaManager];
 awe6.interfaces.IEntityCollection.prototype = {
-	getEntityById: null
-	,getEntitiesByClass: null
-	,getEntities: null
-	,removeEntity: null
-	,addEntity: null
-	,__class__: awe6.interfaces.IEntityCollection
+	__class__: awe6.interfaces.IEntityCollection
 }
 awe6.interfaces.IViewable = function() { }
 $hxClasses["awe6.interfaces.IViewable"] = awe6.interfaces.IViewable;
 awe6.interfaces.IViewable.__name__ = ["awe6","interfaces","IViewable"];
 awe6.interfaces.IViewable.prototype = {
-	view: null
-	,__class__: awe6.interfaces.IViewable
-	,__properties__: {get_view:"_get_view"}
+	__class__: awe6.interfaces.IViewable
 }
 awe6.interfaces.IEntity = function() { }
 $hxClasses["awe6.interfaces.IEntity"] = awe6.interfaces.IEntity;
 awe6.interfaces.IEntity.__name__ = ["awe6","interfaces","IEntity"];
 awe6.interfaces.IEntity.__interfaces__ = [awe6.interfaces.IEntityCollection,awe6.interfaces.IViewable,awe6.interfaces.IProcess];
 awe6.interfaces.IEntity.prototype = {
-	remove: null
-	,parent: null
-	,id: null
-	,__class__: awe6.interfaces.IEntity
-	,__properties__: {set_id:"_set_id",get_parent:"_get_parent"}
+	__class__: awe6.interfaces.IEntity
 }
 awe6.core.Entity = function(p_kernel,p_id,p_context) {
-	if(this._get_view() == null) this.view = new awe6.core.drivers.jeash.View(p_kernel,p_context,0,this);
-	this._set_id(p_id == null?p_kernel.tools.createGuid():p_id);
+	if(this.get_view() == null) this.view = new awe6.core.drivers.openfl.html5.View(p_kernel,p_context,0,this);
+	this.set_id(p_id == null?p_kernel.tools.createGuid():p_id);
 	awe6.core.Process.call(this,p_kernel);
 };
 $hxClasses["awe6.core.Entity"] = awe6.core.Entity;
@@ -2793,16 +2151,16 @@ awe6.core.Entity.__name__ = ["awe6","core","Entity"];
 awe6.core.Entity.__interfaces__ = [awe6.interfaces.IEntity];
 awe6.core.Entity.__super__ = awe6.core.Process;
 awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
-	_get_view: function() {
+	get_view: function() {
 		return this.view;
 	}
-	,_get_parent: function() {
+	,get_parent: function() {
 		return this.parent;
 	}
-	,_get_agenda: function() {
+	,get_agenda: function() {
 		return this.agenda;
 	}
-	,_set_id: function(p_value) {
+	,set_id: function(p_value) {
 		this.id = p_value;
 		return this.id;
 	}
@@ -2811,20 +2169,20 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,setAgenda: function(p_type) {
 		if(p_type == null) p_type = awe6.interfaces.EAgenda.ALWAYS;
-		if(Type.enumEq(this._get_agenda(),p_type)) return false;
+		if(Type.enumEq(this.get_agenda(),p_type)) return false;
 		this._isAgendaDirty = true;
 		var $it0 = this._entityAgendaPairs.iterator();
 		while( $it0.hasNext() ) {
 			var i = $it0.next();
-			var l_isAddedToView = Type.enumEq(this._get_agenda(),i.agenda) && i.entity._get_view()._get_parent() == this._get_view();
-			if(l_isAddedToView) i.entity._get_view().remove();
+			var l_isAddedToView = Type.enumEq(this.get_agenda(),i.agenda) && i.entity.get_view().get_parent() == this.get_view();
+			if(l_isAddedToView) i.entity.get_view().remove();
 			i.isAddedToView = i.isAddedToView || l_isAddedToView;
 		}
 		this.agenda = p_type;
 		var $it1 = this._entityAgendaPairs.iterator();
 		while( $it1.hasNext() ) {
 			var i = $it1.next();
-			if(i.isAddedToView && (Type.enumEq(awe6.interfaces.EAgenda.ALWAYS,i.agenda) || Type.enumEq(this._get_agenda(),i.agenda))) this._get_view().addChild(i.entity._get_view());
+			if(i.isAddedToView && (Type.enumEq(awe6.interfaces.EAgenda.ALWAYS,i.agenda) || Type.enumEq(this.get_agenda(),i.agenda))) this.get_view().addChild(i.entity.get_view());
 		}
 		return true;
 	}
@@ -2833,7 +2191,7 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 		if(p_isBubbleUp == null) p_isBubbleUp = false;
 		if(p_isBubbleDown == null) p_isBubbleDown = false;
 		if(this.id == p_id) return this;
-		if(p_isBubbleEverywhere && this._kernel.scenes._get_scene() != null) return this._kernel.scenes._get_scene().getEntityById(p_id,p_agenda,true);
+		if(p_isBubbleEverywhere && this._kernel.scenes.get_scene() != null) return this._kernel.scenes.get_scene().getEntityById(p_id,p_agenda,true);
 		var l_result = null;
 		var l_entities = this._getEntities(p_agenda);
 		var _g = 0;
@@ -2844,14 +2202,14 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 			if(p_isBubbleDown) l_result = i.getEntityById(p_id,p_agenda,true);
 			if(l_result != null) return l_result;
 		}
-		if(p_isBubbleUp && this._get_parent() != null) l_result = this._get_parent().getEntityById(p_id,p_agenda,false,true);
+		if(p_isBubbleUp && this.get_parent() != null) l_result = this.get_parent().getEntityById(p_id,p_agenda,false,true);
 		return l_result;
 	}
 	,getEntitiesByClass: function(p_classType,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
 		if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
 		if(p_isBubbleUp == null) p_isBubbleUp = false;
 		if(p_isBubbleDown == null) p_isBubbleDown = false;
-		if(p_isBubbleEverywhere && this._kernel.scenes._get_scene() != null) return this._kernel.scenes._get_scene().getEntitiesByClass(p_classType,p_agenda,true);
+		if(p_isBubbleEverywhere && this._kernel.scenes.get_scene() != null) return this._kernel.scenes.get_scene().getEntitiesByClass(p_classType,p_agenda,true);
 		var l_result = new Array();
 		var l_entities = this._getEntities(p_agenda);
 		var _g = 0;
@@ -2861,10 +2219,11 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 			if(js.Boot.__instanceof(i,p_classType)) l_result.push(i);
 			if(p_isBubbleDown) l_result.concat(i.getEntitiesByClass(p_classType,p_agenda,true));
 		}
-		if(p_isBubbleUp && this._get_parent() != null) l_result.concat(this._get_parent().getEntitiesByClass(p_classType,p_agenda,false,true));
+		if(p_isBubbleUp && this.get_parent() != null) l_result.concat(this.get_parent().getEntitiesByClass(p_classType,p_agenda,false,true));
 		return l_result;
 	}
 	,_getEntities: function(p_agenda) {
+		if(!this._isAgendaDirty && (p_agenda == null || Type.enumEq(p_agenda,this.get_agenda()))) return this._cachedEntities;
 		var l_result = new Array();
 		var $it0 = this._entityAgendaPairs.iterator();
 		while( $it0.hasNext() ) {
@@ -2879,11 +2238,11 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,remove: function(p_isRemovedFromView) {
 		if(p_isRemovedFromView == null) p_isRemovedFromView = false;
-		if(this._get_parent() != null) this._get_parent().removeEntity(this,null,p_isRemovedFromView);
+		if(this.get_parent() != null) this.get_parent().removeEntity(this,null,p_isRemovedFromView);
 	}
 	,removeEntity: function(p_entity,p_agenda,p_isRemovedFromView) {
 		if(p_isRemovedFromView == null) p_isRemovedFromView = false;
-		if(this.isDisposed) return;
+		if(this.isDisposed || p_entity == null) return;
 		var l_isRemoved = false;
 		var $it0 = this._entityAgendaPairs.iterator();
 		while( $it0.hasNext() ) {
@@ -2899,22 +2258,21 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 				var l_child = p_entity;
 				l_child._setParent(null);
 			}
-			if(p_isRemovedFromView) p_entity._get_view().remove();
+			if(p_isRemovedFromView) p_entity.get_view().remove();
 		}
 	}
 	,addEntity: function(p_entity,p_agenda,p_isAddedToView,p_viewPriority) {
 		if(p_viewPriority == null) p_viewPriority = 0;
 		if(p_isAddedToView == null) p_isAddedToView = false;
-		if(this.isDisposed) return;
-		if(p_entity == null) return;
+		if(this.isDisposed || p_entity == null) return null;
 		if(p_agenda == null) p_agenda = awe6.interfaces.EAgenda.ALWAYS;
 		var $it0 = this._entityAgendaPairs.iterator();
 		while( $it0.hasNext() ) {
 			var i = $it0.next();
-			if(i.entity == p_entity && Type.enumEq(i.agenda,p_agenda)) return;
+			if(i.entity == p_entity && Type.enumEq(i.agenda,p_agenda)) return p_entity;
 		}
 		this._isAgendaDirty = true;
-		if(p_entity._get_parent() != this) {
+		if(p_entity.get_parent() != this) {
 			p_entity.remove(p_isAddedToView);
 			if(js.Boot.__instanceof(p_entity,awe6.core.Entity)) {
 				var l_child = p_entity;
@@ -2924,11 +2282,12 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 		var l_helperEntityAgendaPair = new awe6.core._Entity._HelperEntityAgendaPair(p_entity,p_agenda);
 		this._entityAgendaPairs.add(l_helperEntityAgendaPair);
 		if(p_isAddedToView) {
-			if(Type.enumEq(p_agenda,this._get_agenda()) || p_agenda == awe6.interfaces.EAgenda.ALWAYS) this._get_view().addChild(p_entity._get_view(),p_viewPriority); else {
-				p_entity._get_view()._set_priority(p_viewPriority);
+			if(Type.enumEq(p_agenda,this.get_agenda()) || p_agenda == awe6.interfaces.EAgenda.ALWAYS) this.get_view().addChild(p_entity.get_view(),p_viewPriority); else {
+				p_entity.get_view().set_priority(p_viewPriority);
 				l_helperEntityAgendaPair.isAddedToView = true;
 			}
 		}
+		return p_entity;
 	}
 	,_disposer: function() {
 		this.remove();
@@ -2947,15 +2306,15 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 			var i = $it0.next();
 			this._entityAgendaPairs.remove(i);
 		}
-		this._get_view().dispose();
+		this.get_view().dispose();
 		awe6.core.Process.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
 		if(p_deltaTime == null) p_deltaTime = 0;
 		awe6.core.Process.prototype._updater.call(this,p_deltaTime);
 		if(this._isAgendaDirty) {
-			this._cachedEntities = this._getEntities(this._get_agenda());
-			if(!Type.enumEq(this._get_agenda(),awe6.interfaces.EAgenda.ALWAYS)) this._cachedEntities = this._cachedEntities.concat(this._getEntities(awe6.interfaces.EAgenda.ALWAYS));
+			this._cachedEntities = this._getEntities(this.get_agenda());
+			if(!Type.enumEq(this.get_agenda(),awe6.interfaces.EAgenda.ALWAYS)) this._cachedEntities = this._cachedEntities.concat(this._getEntities(awe6.interfaces.EAgenda.ALWAYS));
 			this._isAgendaDirty = false;
 		}
 		var _g = 0, _g1 = this._cachedEntities;
@@ -2968,29 +2327,18 @@ awe6.core.Entity.prototype = $extend(awe6.core.Process.prototype,{
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
 		this.agenda = awe6.interfaces.EAgenda.ALWAYS;
-		this._entityAgendaPairs = new haxe.FastList();
+		this._entityAgendaPairs = new haxe.ds.GenericStack();
 		this._isAgendaDirty = true;
 		this._cachedEntities = [];
 	}
-	,_cachedEntities: null
-	,_isAgendaDirty: null
-	,_entityAgendaPairs: null
-	,view: null
-	,parent: null
-	,agenda: null
-	,id: null
 	,__class__: awe6.core.Entity
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_id:"_set_id",get_agenda:"_get_agenda",get_parent:"_get_parent",get_view:"_get_view"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_id:"set_id",get_agenda:"get_agenda",get_parent:"get_parent",get_view:"get_view"})
 });
 awe6.interfaces.IPositionable = function() { }
 $hxClasses["awe6.interfaces.IPositionable"] = awe6.interfaces.IPositionable;
 awe6.interfaces.IPositionable.__name__ = ["awe6","interfaces","IPositionable"];
 awe6.interfaces.IPositionable.prototype = {
-	setPosition: null
-	,y: null
-	,x: null
-	,__class__: awe6.interfaces.IPositionable
-	,__properties__: {set_x:"_set_x",set_y:"_set_y"}
+	__class__: awe6.interfaces.IPositionable
 }
 awe6.core.BasicButton = function(p_kernel,p_up,p_over,p_width,p_height,p_x,p_y,p_keyType,p_onClickCallback,p_onRollOverCallback,p_onRollOutCallback) {
 	if(p_y == null) p_y = 0;
@@ -3001,8 +2349,8 @@ awe6.core.BasicButton = function(p_kernel,p_up,p_over,p_width,p_height,p_x,p_y,p
 	this._stateOver = new awe6.core._BasicButton._HelperState(p_kernel,p_over);
 	this.x = p_x;
 	this.y = p_y;
-	this._set_width(p_width);
-	this._set_height(p_height);
+	this.set_width(p_width);
+	this.set_height(p_height);
 	this._keyType = p_keyType;
 	this.onClickCallback = p_onClickCallback;
 	this.onRollOverCallback = p_onRollOverCallback;
@@ -3014,27 +2362,27 @@ awe6.core.BasicButton.__name__ = ["awe6","core","BasicButton"];
 awe6.core.BasicButton.__interfaces__ = [awe6.interfaces.IPositionable];
 awe6.core.BasicButton.__super__ = awe6.core.Entity;
 awe6.core.BasicButton.prototype = $extend(awe6.core.Entity.prototype,{
-	_set_height: function(p_value) {
+	set_height: function(p_value) {
 		this.height = p_value;
 		return this.height;
 	}
-	,_set_width: function(p_value) {
+	,set_width: function(p_value) {
 		this.width = p_value;
 		return this.width;
 	}
-	,_set_y: function(p_value) {
+	,set_y: function(p_value) {
 		this.y = p_value;
-		if(this._get_view() != null) this._get_view()._set_y(this.y);
+		if(this.get_view() != null) this.get_view().set_y(this.y);
 		return this.y;
 	}
-	,_set_x: function(p_value) {
+	,set_x: function(p_value) {
 		this.x = p_value;
-		if(this._get_view() != null) this._get_view()._set_x(this.x);
+		if(this.get_view() != null) this.get_view().set_x(this.x);
 		return this.x;
 	}
 	,setPosition: function(p_x,p_y) {
-		this._set_x(p_x);
-		this._set_y(p_y);
+		this.set_x(p_x);
+		this.set_y(p_y);
 	}
 	,onRollOut: function() {
 		this.setAgenda(awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.UP));
@@ -3061,11 +2409,11 @@ awe6.core.BasicButton.prototype = $extend(awe6.core.Entity.prototype,{
 		if(p_deltaTime == null) p_deltaTime = 0;
 		awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
 		var l_inputMouse = this._kernel.inputs.mouse;
-		var l_isOver = this._isPointInsideRectangle(l_inputMouse.x + this._get_view().x - this._get_view().globalX,l_inputMouse.y + this._get_view().y - this._get_view().globalY,this.x,this.y,this.width,this.height);
-		if(l_isOver) l_inputMouse._set_cursorType(awe6.interfaces.EMouseCursor.BUTTON);
+		var l_isOver = this._isPointInsideRectangle(l_inputMouse.x + this.get_view().x - this.get_view().globalX,l_inputMouse.y + this.get_view().y - this.get_view().globalY,this.x,this.y,this.width,this.height);
+		if(l_isOver) l_inputMouse.set_cursorType(awe6.interfaces.EMouseCursor.BUTTON);
 		if(l_isOver && !this.isOver) this.onRollOver();
 		if(!l_isOver && this.isOver) {
-			l_inputMouse._set_cursorType(awe6.interfaces.EMouseCursor.AUTO);
+			l_inputMouse.set_cursorType(awe6.interfaces.EMouseCursor.AUTO);
 			this.onRollOut();
 		}
 		this.isOver = l_isOver;
@@ -3074,26 +2422,15 @@ awe6.core.BasicButton.prototype = $extend(awe6.core.Entity.prototype,{
 	}
 	,_init: function() {
 		awe6.core.Entity.prototype._init.call(this);
-		this._get_view()._set_x(this.x);
-		this._get_view()._set_y(this.y);
+		this.get_view().set_x(this.x);
+		this.get_view().set_y(this.y);
 		this.isOver = false;
 		this.addEntity(this._stateUp,awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.UP),true);
 		this.addEntity(this._stateOver,awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.OVER),true);
 		this.setAgenda(awe6.interfaces.EAgenda.SUB_TYPE(awe6.core._BasicButton._HelperEState.UP));
 	}
-	,_keyType: null
-	,_stateOver: null
-	,_stateUp: null
-	,onRollOutCallback: null
-	,onRollOverCallback: null
-	,onClickCallback: null
-	,isOver: null
-	,height: null
-	,width: null
-	,y: null
-	,x: null
 	,__class__: awe6.core.BasicButton
-	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_x:"_set_x",set_y:"_set_y",set_width:"_set_width",set_height:"_set_height"})
+	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_x:"set_x",set_y:"set_y",set_width:"set_width",set_height:"set_height"})
 });
 awe6.core._BasicButton = {}
 awe6.core._BasicButton._HelperState = function(p_kernel,p_view) {
@@ -3117,9 +2454,7 @@ awe6.interfaces.IEncrypter = function() { }
 $hxClasses["awe6.interfaces.IEncrypter"] = awe6.interfaces.IEncrypter;
 awe6.interfaces.IEncrypter.__name__ = ["awe6","interfaces","IEncrypter"];
 awe6.interfaces.IEncrypter.prototype = {
-	decrypt: null
-	,encrypt: null
-	,__class__: awe6.interfaces.IEncrypter
+	__class__: awe6.interfaces.IEncrypter
 }
 awe6.core.Encrypter = function(p_defaultSecret) {
 	this._defaultSecret = p_defaultSecret;
@@ -3150,7 +2485,6 @@ awe6.core.Encrypter.prototype = {
 		var l_secret = p_secret != ""?p_secret:this._defaultSecret;
 		return haxe.io.Bytes.ofData(this._xor(p_value.b,l_secret));
 	}
-	,_defaultSecret: null
 	,__class__: awe6.core.Encrypter
 }
 awe6.core._Entity = {}
@@ -3162,21 +2496,13 @@ awe6.core._Entity._HelperEntityAgendaPair = function(p_entity,p_agenda) {
 $hxClasses["awe6.core._Entity._HelperEntityAgendaPair"] = awe6.core._Entity._HelperEntityAgendaPair;
 awe6.core._Entity._HelperEntityAgendaPair.__name__ = ["awe6","core","_Entity","_HelperEntityAgendaPair"];
 awe6.core._Entity._HelperEntityAgendaPair.prototype = {
-	isAddedToView: null
-	,agenda: null
-	,entity: null
-	,__class__: awe6.core._Entity._HelperEntityAgendaPair
+	__class__: awe6.core._Entity._HelperEntityAgendaPair
 }
 awe6.interfaces.IInputJoypad = function() { }
 $hxClasses["awe6.interfaces.IInputJoypad"] = awe6.interfaces.IInputJoypad;
 awe6.interfaces.IInputJoypad.__name__ = ["awe6","interfaces","IInputJoypad"];
 awe6.interfaces.IInputJoypad.prototype = {
-	getButtonUpDuration: null
-	,getButtonDownDuration: null
-	,getIsButtonRelease: null
-	,getIsButtonPress: null
-	,getIsButtonDown: null
-	,__class__: awe6.interfaces.IInputJoypad
+	__class__: awe6.interfaces.IInputJoypad
 }
 awe6.core.InputJoypad = function(p_kernel,p_up,p_right,p_down,p_left,p_primary,p_secondary,p_upAlt,p_rightAlt,p_downAlt,p_leftAlt,p_primaryAlt,p_secondaryAlt) {
 	this._kernel = p_kernel;
@@ -3266,38 +2592,20 @@ awe6.core.InputJoypad.prototype = {
 			return p_function(this._keySecondary) || p_function(this._keySecondaryAlt);
 		}
 	}
-	,_keySecondaryAlt: null
-	,_keyPrimaryAlt: null
-	,_keyLeftAlt: null
-	,_keyDownAlt: null
-	,_keyRightAlt: null
-	,_keyUpAlt: null
-	,_keySecondary: null
-	,_keyPrimary: null
-	,_keyLeft: null
-	,_keyDown: null
-	,_keyRight: null
-	,_keyUp: null
-	,_kernel: null
 	,__class__: awe6.core.InputJoypad
 }
 awe6.interfaces.IResettable = function() { }
 $hxClasses["awe6.interfaces.IResettable"] = awe6.interfaces.IResettable;
 awe6.interfaces.IResettable.__name__ = ["awe6","interfaces","IResettable"];
 awe6.interfaces.IResettable.prototype = {
-	reset: null
-	,__class__: awe6.interfaces.IResettable
+	__class__: awe6.interfaces.IResettable
 }
 awe6.interfaces.IInputManager = function() { }
 $hxClasses["awe6.interfaces.IInputManager"] = awe6.interfaces.IInputManager;
 awe6.interfaces.IInputManager.__name__ = ["awe6","interfaces","IInputManager"];
 awe6.interfaces.IInputManager.__interfaces__ = [awe6.interfaces.IResettable];
 awe6.interfaces.IInputManager.prototype = {
-	createJoypad: null
-	,mouse: null
-	,keyboard: null
-	,joypad: null
-	,__class__: awe6.interfaces.IInputManager
+	__class__: awe6.interfaces.IInputManager
 }
 awe6.core.InputManager = function(p_kernel) {
 	awe6.core.Process.call(this,p_kernel);
@@ -3330,14 +2638,9 @@ awe6.core.InputManager.prototype = $extend(awe6.core.Process.prototype,{
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
 		this.joypad = this.createJoypad();
-		this.keyboard = this._inputKeyboard = new awe6.core.drivers.jeash.InputKeyboard(this._kernel);
-		this.mouse = this._inputMouse = new awe6.core.drivers.jeash.InputMouse(this._kernel);
+		this.keyboard = this._inputKeyboard = new awe6.core.drivers.openfl.html5.InputKeyboard(this._kernel);
+		this.mouse = this._inputMouse = new awe6.core.drivers.openfl.html5.InputMouse(this._kernel);
 	}
-	,_inputMouse: null
-	,_inputKeyboard: null
-	,mouse: null
-	,keyboard: null
-	,joypad: null
 	,__class__: awe6.core.InputManager
 });
 awe6.interfaces.IMessageManager = function() { }
@@ -3345,11 +2648,7 @@ $hxClasses["awe6.interfaces.IMessageManager"] = awe6.interfaces.IMessageManager;
 awe6.interfaces.IMessageManager.__name__ = ["awe6","interfaces","IMessageManager"];
 awe6.interfaces.IMessageManager.__interfaces__ = [awe6.interfaces.IResettable];
 awe6.interfaces.IMessageManager.prototype = {
-	sendMessage: null
-	,removeSubscribers: null
-	,getSubscribers: null
-	,addSubscriber: null
-	,__class__: awe6.interfaces.IMessageManager
+	__class__: awe6.interfaces.IMessageManager
 }
 awe6.core.MessageManager = function(p_kernel) {
 	awe6.core.Process.call(this,p_kernel);
@@ -3361,17 +2660,21 @@ awe6.core.MessageManager.__super__ = awe6.core.Process;
 awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 	_getSubscriptions: function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType,p_isRemove) {
 		if(p_isRemove == null) p_isRemove = false;
-		var l_result = new haxe.FastList();
+		var l_result = new haxe.ds.GenericStack();
 		var $it0 = this._subscriptions.iterator();
 		while( $it0.hasNext() ) {
 			var i = $it0.next();
 			if(p_subscriber != null && i.subscriber != p_subscriber) continue;
 			if(p_message != null && !js.Boot.__instanceof(p_message,i.messageClass)) {
-				var $e = (Type["typeof"](p_message));
+				var _g = Type["typeof"](p_message);
+				var $e = (_g);
 				switch( $e[1] ) {
 				case 7:
 					var e = $e[2];
-					if(Type.getEnum(p_message) != Type.getEnum(i.message) || p_message[0] != i.message[0]) continue;
+					if(Type.getEnum(p_message) != Type.getEnum(i.message) || p_message[0] != Type.enumConstructor(i.message)) {
+						e;
+						continue;
+					}
 					break;
 				default:
 					if(p_message != i.message) continue;
@@ -3380,7 +2683,7 @@ awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 			if(p_handler != null && !Reflect.compareMethods(i.handler,p_handler)) continue;
 			if(p_sender != null && i.sender != null && i.sender != p_sender) continue;
 			if(p_sender != null && i.senderClassType != null && (p_isRemove || !js.Boot.__instanceof(p_sender,i.senderClassType))) continue;
-			l_result.head = new haxe.FastCell(i,l_result.head);
+			l_result.head = new haxe.ds.GenericCell(i,l_result.head);
 		}
 		return l_result;
 	}
@@ -3393,14 +2696,14 @@ awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 		if(p_isBubbleEverywhere == null) p_isBubbleEverywhere = false;
 		if(p_isBubbleUp == null) p_isBubbleUp = false;
 		if(p_isBubbleDown == null) p_isBubbleDown = false;
-		if(this._isVerbose) haxe.Log.trace("Sending message: " + Std.string(p_message) + " from " + p_sender.id,{ fileName : "MessageManager.hx", lineNumber : 120, className : "awe6.core.MessageManager", methodName : "_sendMessage"});
+		if(this._isVerbose) console.log("Sending message: " + Std.string(p_message) + " from " + p_sender.id);
 		if(!this._isOkToSendMessage()) {
 			this._messageQueue.push(new awe6.core._MessageManager._HelperMessage(p_message,p_sender,p_target,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere));
 			return;
 		}
 		if(p_isBubbleEverywhere) {
-			var l_entityFromScene = this._kernel.scenes._get_scene().getEntities()[0];
-			if(l_entityFromScene != null && l_entityFromScene._get_parent() != null) return this._sendMessage(p_message,p_sender,this._kernel.scenes._get_scene().getEntities()[0]._get_parent(),true);
+			var l_entityFromScene = this._kernel.scenes.get_scene().getEntities()[0];
+			if(l_entityFromScene != null && l_entityFromScene.get_parent() != null) return this._sendMessage(p_message,p_sender,this._kernel.scenes.get_scene().getEntities()[0].get_parent(),true);
 		}
 		var l_subscriptions = this._getSubscriptions(p_target,p_message,null,p_sender);
 		var l_isContinue = true;
@@ -3419,11 +2722,11 @@ awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 				this._sendMessage(p_message,p_sender,j,true);
 			}
 		}
-		if(p_isBubbleUp && p_target._get_parent() != null && js.Boot.__instanceof(p_target._get_parent(),awe6.interfaces.IEntity)) this._sendMessage(p_message,p_sender,p_target._get_parent(),false,true);
+		if(p_isBubbleUp && p_target.get_parent() != null && js.Boot.__instanceof(p_target.get_parent(),awe6.interfaces.IEntity)) this._sendMessage(p_message,p_sender,p_target.get_parent(),false,true);
 		return;
 	}
 	,_isOkToSendMessage: function() {
-		return this._kernel.scenes._get_scene() != null;
+		return this._kernel.scenes.get_scene() != null;
 	}
 	,_updater: function(p_deltaTime) {
 		if(p_deltaTime == null) p_deltaTime = 0;
@@ -3454,7 +2757,7 @@ awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 		while( $it0.hasNext() ) {
 			var i = $it0.next();
 			this._subscriptions.remove(i);
-			if(this._isVerbose) haxe.Log.trace("Removing " + Std.string(i.sender) + ":" + Std.string(i.message),{ fileName : "MessageManager.hx", lineNumber : 81, className : "awe6.core.MessageManager", methodName : "removeSubscribers"});
+			if(this._isVerbose) console.log("Removing " + Std.string(i.sender) + ":" + Std.string(i.message));
 		}
 	}
 	,getSubscribers: function(p_subscriber,p_message,p_handler,p_sender,p_senderClassType) {
@@ -3475,12 +2778,9 @@ awe6.core.MessageManager.prototype = $extend(awe6.core.Process.prototype,{
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
 		this._isVerbose = false;
-		this._subscriptions = new haxe.FastList();
+		this._subscriptions = new haxe.ds.GenericStack();
 		this._messageQueue = new List();
 	}
-	,_isVerbose: null
-	,_messageQueue: null
-	,_subscriptions: null
 	,__class__: awe6.core.MessageManager
 });
 awe6.core._MessageManager = {}
@@ -3501,13 +2801,6 @@ awe6.core._MessageManager._HelperSubscription.prototype = {
 		var l_result = "_HelperSubscription { \n" + "subscriber : " + Std.string(this.subscriber) + "\n" + "message : " + Std.string(this.message) + "\n" + "handler : " + Std.string(this.handler) + "\n" + "sender : " + Std.string(this.sender) + "\n" + "senderClassType : " + Std.string(this.senderClassType) + "\n" + "isRemovedAfterFirstSend : " + Std.string(this.isRemovedAfterFirstSend) + "\n" + "messageClass : " + Std.string(this.messageClass) + "\n }";
 		return l_result;
 	}
-	,isRemovedAfterFirstSend: null
-	,senderClassType: null
-	,sender: null
-	,handler: null
-	,messageClass: null
-	,message: null
-	,subscriber: null
 	,__class__: awe6.core._MessageManager._HelperSubscription
 }
 awe6.core._MessageManager._HelperMessage = function(p_message,p_sender,p_target,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
@@ -3524,25 +2817,14 @@ awe6.core._MessageManager._HelperMessage = function(p_message,p_sender,p_target,
 $hxClasses["awe6.core._MessageManager._HelperMessage"] = awe6.core._MessageManager._HelperMessage;
 awe6.core._MessageManager._HelperMessage.__name__ = ["awe6","core","_MessageManager","_HelperMessage"];
 awe6.core._MessageManager._HelperMessage.prototype = {
-	isBubbleEverywhere: null
-	,isBubbleUp: null
-	,isBubbleDown: null
-	,target: null
-	,sender: null
-	,message: null
-	,__class__: awe6.core._MessageManager._HelperMessage
+	__class__: awe6.core._MessageManager._HelperMessage
 }
 awe6.interfaces.IScene = function() { }
 $hxClasses["awe6.interfaces.IScene"] = awe6.interfaces.IScene;
 awe6.interfaces.IScene.__name__ = ["awe6","interfaces","IScene"];
 awe6.interfaces.IScene.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IEntityCollection,awe6.interfaces.IProcess];
 awe6.interfaces.IScene.prototype = {
-	isSessionSavedOnNext: null
-	,isMuteable: null
-	,isPauseable: null
-	,isDisposable: null
-	,type: null
-	,__class__: awe6.interfaces.IScene
+	__class__: awe6.interfaces.IScene
 }
 awe6.core.Scene = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
 	if(p_isSessionSavedOnNext == null) p_isSessionSavedOnNext = false;
@@ -3562,10 +2844,10 @@ awe6.core.Scene.prototype = $extend(awe6.core.Process.prototype,{
 	setAgenda: function(p_type) {
 		return this._entity.setAgenda(p_type);
 	}
-	,_get_agenda: function() {
-		return this._entity._get_agenda();
+	,get_agenda: function() {
+		return this._entity.get_agenda();
 	}
-	,_get_view: function() {
+	,get_view: function() {
 		return this.view;
 	}
 	,getEntityById: function(p_id,p_agenda,p_isBubbleDown,p_isBubbleUp,p_isBubbleEverywhere) {
@@ -3590,11 +2872,11 @@ awe6.core.Scene.prototype = $extend(awe6.core.Process.prototype,{
 	,addEntity: function(p_entity,p_agenda,p_isAddedToView,p_viewPriority) {
 		if(p_viewPriority == null) p_viewPriority = 0;
 		if(p_isAddedToView == null) p_isAddedToView = false;
-		this._entity.addEntity(p_entity,p_agenda,p_isAddedToView,p_viewPriority);
+		return this._entity.addEntity(p_entity,p_agenda,p_isAddedToView,p_viewPriority);
 	}
 	,_disposer: function() {
 		this._entity.dispose();
-		this._get_view().dispose();
+		this.get_view().dispose();
 		awe6.core.Process.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
@@ -3606,30 +2888,16 @@ awe6.core.Scene.prototype = $extend(awe6.core.Process.prototype,{
 		awe6.core.Process.prototype._init.call(this);
 		this.isDisposable = true;
 		this._entity = new awe6.core.Entity(this._kernel);
-		this.view = this._entity._get_view();
+		this.view = this._entity.get_view();
 	}
-	,_entity: null
-	,agenda: null
-	,isSessionSavedOnNext: null
-	,isMuteable: null
-	,isPauseable: null
-	,isDisposable: null
-	,view: null
-	,type: null
 	,__class__: awe6.core.Scene
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_view:"_get_view",get_agenda:"_get_agenda"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_view:"get_view",get_agenda:"get_agenda"})
 });
 awe6.interfaces.ISceneManager = function() { }
 $hxClasses["awe6.interfaces.ISceneManager"] = awe6.interfaces.ISceneManager;
 awe6.interfaces.ISceneManager.__name__ = ["awe6","interfaces","ISceneManager"];
 awe6.interfaces.ISceneManager.prototype = {
-	restart: null
-	,next: null
-	,back: null
-	,setScene: null
-	,scene: null
-	,__class__: awe6.interfaces.ISceneManager
-	,__properties__: {get_scene:"_get_scene"}
+	__class__: awe6.interfaces.ISceneManager
 }
 awe6.core.SceneManager = function(p_kernel) {
 	awe6.core.Process.call(this,p_kernel);
@@ -3639,45 +2907,45 @@ awe6.core.SceneManager.__name__ = ["awe6","core","SceneManager"];
 awe6.core.SceneManager.__interfaces__ = [awe6.interfaces.ISceneManager];
 awe6.core.SceneManager.__super__ = awe6.core.Process;
 awe6.core.SceneManager.prototype = $extend(awe6.core.Process.prototype,{
-	_get_scene: function() {
+	get_scene: function() {
 		return this.scene;
 	}
 	,restart: function() {
-		if(this._get_scene() == null) this.setScene(this._kernel.factory.startingSceneType); else this.setScene(this._get_scene().type);
+		if(this.get_scene() == null) this.setScene(this._kernel.factory.startingSceneType); else this.setScene(this.get_scene().type);
 	}
 	,next: function() {
-		if(this._get_scene().isSessionSavedOnNext && this._kernel._get_session() != null) this._kernel._get_session().save();
-		this.setScene(this._kernel.factory.getNextSceneType(this._get_scene().type));
+		if(this.get_scene().isSessionSavedOnNext && this._kernel.get_session() != null) this._kernel.get_session().save();
+		this.setScene(this._kernel.factory.getNextSceneType(this.get_scene().type));
 	}
 	,back: function() {
-		this.setScene(this._kernel.factory.getBackSceneType(this._get_scene().type));
+		this.setScene(this._kernel.factory.getBackSceneType(this.get_scene().type));
 	}
 	,setScene: function(p_type) {
 		var l_previousType = null;
-		if(this._get_scene() != null) {
-			l_previousType = this._get_scene().type;
+		if(this.get_scene() != null) {
+			l_previousType = this.get_scene().type;
 			var l_newSceneTransition = this._kernel.factory.createSceneTransition(p_type,l_previousType);
 			if(this._sceneTransition != null) this._sceneTransition.dispose();
 			this._sceneTransition = l_newSceneTransition;
 			this._kernel.inputs.reset();
-			if(this._get_scene().isDisposable) {
-				this._get_scene().dispose();
+			if(this.get_scene().isDisposable) {
+				this.get_scene().dispose();
 				this._kernel.messenger.reset();
 			}
 			this.scene = null;
 		}
 		this._kernel.overlay.hideButtons();
 		this.scene = this._kernel.factory.createScene(p_type);
-		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.BACK,this._kernel.factory.getBackSceneType(this._get_scene().type) != null);
-		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.MUTE,this._get_scene().isMuteable && !this._kernel.audio.isMute);
-		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNMUTE,this._get_scene().isMuteable && this._kernel.audio.isMute);
-		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.PAUSE,this._get_scene().isPauseable && this._kernel.isActive);
-		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,this._get_scene().isPauseable && !this._kernel.isActive);
-		this.view.addChild(this._get_scene()._get_view());
-		if(this._sceneTransition != null) this._get_scene()._get_view().addChild(this._sceneTransition._get_view(),this._tools.BIG_NUMBER + 1);
+		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.BACK,this._kernel.factory.getBackSceneType(this.get_scene().type) != null);
+		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.MUTE,this.get_scene().isMuteable && !this._kernel.audio.isMute);
+		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNMUTE,this.get_scene().isMuteable && this._kernel.audio.isMute);
+		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.PAUSE,this.get_scene().isPauseable && this._kernel.isActive);
+		this._kernel.overlay.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,this.get_scene().isPauseable && !this._kernel.isActive);
+		this.view.addChild(this.get_scene().get_view());
+		if(this._sceneTransition != null) this.get_scene().get_view().addChild(this._sceneTransition.get_view(),this._tools.BIG_NUMBER + 1);
 	}
 	,_disposer: function() {
-		if(this._get_scene() != null) this._get_scene().dispose();
+		if(this.get_scene() != null) this.get_scene().dispose();
 		if(this._sceneTransition != null) this._sceneTransition.dispose();
 		this.view.dispose();
 		awe6.core.Process.prototype._disposer.call(this);
@@ -3685,36 +2953,21 @@ awe6.core.SceneManager.prototype = $extend(awe6.core.Process.prototype,{
 	,_updater: function(p_deltaTime) {
 		if(p_deltaTime == null) p_deltaTime = 0;
 		awe6.core.Process.prototype._updater.call(this,p_deltaTime);
-		if(this._get_scene() != null) this._get_scene().update(p_deltaTime);
+		if(this.get_scene() != null) this.get_scene().update(p_deltaTime);
 		if(this._sceneTransition != null) this._sceneTransition.update(p_deltaTime);
 	}
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
-		this.view = new awe6.core.drivers.jeash.View(this._kernel);
+		this.view = new awe6.core.drivers.openfl.html5.View(this._kernel);
 	}
-	,_sceneTransition: null
-	,view: null
-	,scene: null
 	,__class__: awe6.core.SceneManager
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_scene:"_get_scene"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_scene:"get_scene"})
 });
 awe6.interfaces.ITextStyle = function() { }
 $hxClasses["awe6.interfaces.ITextStyle"] = awe6.interfaces.ITextStyle;
 awe6.interfaces.ITextStyle.__name__ = ["awe6","interfaces","ITextStyle"];
 awe6.interfaces.ITextStyle.prototype = {
-	clone: null
-	,toString: null
-	,filters: null
-	,thickness: null
-	,isItalic: null
-	,isBold: null
-	,spacingVertical: null
-	,spacingHorizontal: null
-	,align: null
-	,color: null
-	,size: null
-	,font: null
-	,__class__: awe6.interfaces.ITextStyle
+	__class__: awe6.interfaces.ITextStyle
 }
 awe6.core.TextStyle = function(p_font,p_size,p_color,p_isBold,p_isItalic,p_align,p_spacingHorizontal,p_spacingVertical,p_thickness,p_filters) {
 	if(p_thickness == null) p_thickness = 0;
@@ -3741,16 +2994,6 @@ awe6.core.TextStyle.prototype = {
 	,toString: function() {
 		return Std.string(this.font + "," + this.size + "," + this.color + "," + Std.string(this.isBold) + "," + Std.string(this.isItalic) + "," + Std.string(this.align) + "," + this.spacingHorizontal + "," + this.spacingVertical + "," + this.thickness + "," + Std.string(this.filters));
 	}
-	,filters: null
-	,thickness: null
-	,isItalic: null
-	,isBold: null
-	,spacingVertical: null
-	,spacingHorizontal: null
-	,align: null
-	,color: null
-	,size: null
-	,font: null
 	,__class__: awe6.core.TextStyle
 }
 awe6.interfaces.ITools = function() { }
@@ -3758,34 +3001,7 @@ $hxClasses["awe6.interfaces.ITools"] = awe6.interfaces.ITools;
 awe6.interfaces.ITools.__name__ = ["awe6","interfaces","ITools"];
 awe6.interfaces.ITools.__interfaces__ = [awe6.interfaces.IEncrypter];
 awe6.interfaces.ITools.prototype = {
-	unserialize: null
-	,serialize: null
-	,intToHex: null
-	,getRandomType: null
-	,shuffle: null
-	,convertAgeToFormattedTime: null
-	,convertUpdatesToFormattedTime: null
-	,nearestSquare: null
-	,isBool: null
-	,sgn: null
-	,isEven: null
-	,isOdd: null
-	,swap: null
-	,range: null
-	,limit: null
-	,toWords: null
-	,fromConstCase: null
-	,fromCamelCase: null
-	,toConstCase: null
-	,toCamelCase: null
-	,toUpperCaseFirst: null
-	,sortByPriority: null
-	,sortByInt: null
-	,sortByString: null
-	,ease: null
-	,createGuid: null
-	,BIG_NUMBER: null
-	,__class__: awe6.interfaces.ITools
+	__class__: awe6.interfaces.ITools
 }
 awe6.core.Tools = function(p_kernel) {
 	this._kernel = p_kernel;
@@ -3857,6 +3073,13 @@ awe6.core.Tools.prototype = {
 			var l_sqrt = Math.round(Math.sqrt(Math.abs(p_value)));
 			return l_sqrt * l_sqrt * (p_value > 0?1:p_value == 0?0:-1);
 		}
+	}
+	,distance: function(p_startX,p_startY,p_endX,p_endY,p_isSquared) {
+		if(p_isSquared == null) p_isSquared = false;
+		var l_dx = p_endX - p_startX;
+		var l_dy = p_endY - p_startY;
+		var l_distance = l_dx * l_dx + l_dy * l_dy;
+		return p_isSquared?l_distance:Math.sqrt(l_distance);
 	}
 	,isBool: function(p_value) {
 		return p_value != 0 && p_value != null && p_value != false;
@@ -3972,8 +3195,8 @@ awe6.core.Tools.prototype = {
 		return p_value.charAt(0).toUpperCase() + HxOverrides.substr(p_value,1,null).toLowerCase();
 	}
 	,sortByPriority: function(p_a,p_b) {
-		var l_ap = p_a._get_priority();
-		var l_bp = p_b._get_priority();
+		var l_ap = p_a.get_priority();
+		var l_bp = p_b.get_priority();
 		if(l_ap < l_bp) return -1;
 		if(l_ap > l_bp) return 1;
 		return 0;
@@ -3995,22 +3218,13 @@ awe6.core.Tools.prototype = {
 		if(p_isSmall == null) p_isSmall = false;
 		return p_isSmall?p_prefix + HxOverrides.substr(this._randomCharacter() + this._randomCharacter() + this._randomCharacter(),0,10):p_prefix + (this._randomCharacter() + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + "-" + this._randomCharacter() + this._randomCharacter() + this._randomCharacter());
 	}
-	,_encrypter: null
-	,_kernel: null
-	,BIG_NUMBER: null
 	,__class__: awe6.core.Tools
 }
 awe6.interfaces.IAudioManager = function() { }
 $hxClasses["awe6.interfaces.IAudioManager"] = awe6.interfaces.IAudioManager;
 awe6.interfaces.IAudioManager.__name__ = ["awe6","interfaces","IAudioManager"];
 awe6.interfaces.IAudioManager.prototype = {
-	isPlaying: null
-	,transform: null
-	,stop: null
-	,start: null
-	,isMute: null
-	,__class__: awe6.interfaces.IAudioManager
-	,__properties__: {set_isMute:"_set_isMute"}
+	__class__: awe6.interfaces.IAudioManager
 }
 awe6.core.drivers = {}
 awe6.core.drivers.AAudioManager = function(p_kernel) {
@@ -4053,7 +3267,7 @@ awe6.core.drivers.AAudioManager.prototype = $extend(awe6.core.Process.prototype,
 	}
 	,_driverSetIsMute: function(p_value) {
 	}
-	,_set_isMute: function(p_value) {
+	,set_isMute: function(p_value) {
 		if(p_value == null) p_value = !this.isMute;
 		this.isMute = p_value;
 		this._driverSetIsMute(p_value);
@@ -4107,7 +3321,7 @@ awe6.core.drivers.AAudioManager.prototype = $extend(awe6.core.Process.prototype,
 			++_g;
 			i.dispose();
 		}
-		this._set_isMute(false);
+		this.set_isMute(false);
 		awe6.core.Process.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
@@ -4126,13 +3340,10 @@ awe6.core.drivers.AAudioManager.prototype = $extend(awe6.core.Process.prototype,
 		this._packageId = this._kernel.getConfig("settings.assets.packages.audio");
 		if(this._packageId == null) this._packageId = this._kernel.getConfig("settings.assets.packages.default");
 		if(this._packageId == null) this._packageId = "assets.audio";
-		this._set_isMute(false);
+		this.set_isMute(false);
 	}
-	,_packageId: null
-	,_sounds: null
-	,isMute: null
 	,__class__: awe6.core.drivers.AAudioManager
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isMute:"_set_isMute"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isMute:"set_isMute"})
 });
 awe6.core.drivers._AHelperSound = function(p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
 	if(p_pan == null) p_pan = 0;
@@ -4186,65 +3397,20 @@ awe6.core.drivers._AHelperSound.prototype = {
 	,_init: function() {
 		this._driverInit();
 	}
-	,_kernel: null
-	,_onCompleteCallback: null
-	,_pan: null
-	,_volume: null
-	,_startTime: null
-	,_loops: null
-	,_packageId: null
-	,audioChannelType: null
-	,id: null
-	,isDisposed: null
 	,__class__: awe6.core.drivers._AHelperSound
 }
 awe6.interfaces.IFactory = function() { }
 $hxClasses["awe6.interfaces.IFactory"] = awe6.interfaces.IFactory;
 awe6.interfaces.IFactory.__name__ = ["awe6","interfaces","IFactory"];
 awe6.interfaces.IFactory.prototype = {
-	getNextSceneType: null
-	,getBackSceneType: null
-	,createTextStyle: null
-	,createSession: null
-	,createSceneTransition: null
-	,createScene: null
-	,createPreloader: null
-	,createOverlay: null
-	,createLogger: null
-	,createEntity: null
-	,createEncrypter: null
-	,createAssetManager: null
-	,onInitComplete: null
-	,keySpecial: null
-	,keyNext: null
-	,keyBack: null
-	,keyMute: null
-	,keyPause: null
-	,startingSceneType: null
-	,config: null
-	,isFixedUpdates: null
-	,targetFramerate: null
-	,secret: null
-	,fullScreenType: null
-	,bgColor: null
-	,height: null
-	,width: null
-	,isResetSessionsOptionEnabled: null
-	,isFullScreenOptionEnabled: null
-	,isEyeCandyOptionEnabled: null
-	,isDecached: null
-	,isDebug: null
-	,author: null
-	,version: null
-	,id: null
-	,__class__: awe6.interfaces.IFactory
+	__class__: awe6.interfaces.IFactory
 }
 awe6.core.drivers.AFactory = function(p_context,p_isDebug,p_config) {
 	if(p_isDebug == null) p_isDebug = false;
 	this._context = p_context;
 	this.isDebug = p_isDebug;
 	this._config = p_config;
-	this.config = new Hash();
+	this.config = new haxe.ds.StringMap();
 	this.id = "awe6";
 	this.version = "0.0.1";
 	this.author = "unknown";
@@ -4296,17 +3462,17 @@ awe6.core.drivers.AFactory.prototype = {
 		return new awe6.core.drivers.ASession(this._kernel,p_id);
 	}
 	,createSceneTransition: function(p_typeIncoming,p_typeOutgoing) {
-		return new awe6.core.drivers.jeash.SceneTransition(this._kernel);
+		return new awe6.core.drivers.openfl.html5.SceneTransition(this._kernel);
 	}
 	,createScene: function(p_type) {
 		if(p_type == null) p_type = this.startingSceneType;
 		return new awe6.core.Scene(this._kernel,p_type);
 	}
 	,createPreloader: function() {
-		return new awe6.core.drivers.jeash.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
+		return new awe6.core.drivers.openfl.html5.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
 	}
 	,createOverlay: function() {
-		return new awe6.core.drivers.jeash.Overlay(this._kernel);
+		return new awe6.core.drivers.openfl.html5.Overlay(this._kernel);
 	}
 	,createLogger: function() {
 		return null;
@@ -4341,7 +3507,7 @@ awe6.core.drivers.AFactory.prototype = {
 	,_launchKernel: function() {
 		if(this._concreteKernel != null) return;
 		this._configurer(false);
-		this._concreteKernel = new awe6.core.drivers.jeash.Kernel(this,this._context);
+		this._concreteKernel = new awe6.core.drivers.openfl.html5.Kernel(this,this._context);
 	}
 	,_configurer: function(p_isPreconfig) {
 		if(p_isPreconfig == null) p_isPreconfig = false;
@@ -4376,10 +3542,11 @@ awe6.core.drivers.AFactory.prototype = {
 		if(p_prefix.length != 0) p_prefix += ".";
 		while( p_elements.hasNext() ) {
 			var i = p_elements.next();
-			var l_name = p_prefix + i.getNodeName();
+			var l_name = p_prefix + i.get_nodeName();
 			if(i.elements().hasNext()) this._traverseElements(i.elements(),l_name);
-			if(i.firstChild() != null && HxOverrides.substr(i.firstChild().toString(),0,9) == "<![CDATA[") i.firstChild().setNodeValue(i.firstChild().toString().split("<![CDATA[").join("").split("]]>").join(""));
-			this.config.set(l_name,i.firstChild() == null?"":i.firstChild().getNodeValue());
+			if(i.firstChild() != null && HxOverrides.substr(i.firstChild().toString(),0,9) == "<![CDATA[") i.firstChild().set_nodeValue(i.firstChild().toString().split("<![CDATA[").join("").split("]]>").join(""));
+			var value = i.firstChild() == null?"":i.firstChild().get_nodeValue();
+			this.config.set(l_name,value);
 			var $it0 = i.attributes();
 			while( $it0.hasNext() ) {
 				var j = $it0.next();
@@ -4393,7 +3560,7 @@ awe6.core.drivers.AFactory.prototype = {
 		this._launchKernel();
 	}
 	,_init: function() {
-		this.config = new Hash();
+		this.config = new haxe.ds.StringMap();
 		this.id = "awe6";
 		this.version = "0.0.1";
 		this.author = "unknown";
@@ -4417,48 +3584,13 @@ awe6.core.drivers.AFactory.prototype = {
 		this._configurer(true);
 		this._driverInit();
 	}
-	,keySpecial: null
-	,keyNext: null
-	,keyBack: null
-	,keyMute: null
-	,keyPause: null
-	,startingSceneType: null
-	,config: null
-	,isFixedUpdates: null
-	,targetFramerate: null
-	,secret: null
-	,fullScreenType: null
-	,bgColor: null
-	,height: null
-	,width: null
-	,isResetSessionsOptionEnabled: null
-	,isFullScreenOptionEnabled: null
-	,isEyeCandyOptionEnabled: null
-	,isDecached: null
-	,isDebug: null
-	,author: null
-	,version: null
-	,id: null
-	,isDisposed: null
-	,_tools: null
-	,_concreteKernel: null
-	,_kernel: null
-	,_config: null
-	,_context: null
 	,__class__: awe6.core.drivers.AFactory
 }
 awe6.interfaces.IInputKeyboard = function() { }
 $hxClasses["awe6.interfaces.IInputKeyboard"] = awe6.interfaces.IInputKeyboard;
 awe6.interfaces.IInputKeyboard.__name__ = ["awe6","interfaces","IInputKeyboard"];
 awe6.interfaces.IInputKeyboard.prototype = {
-	getKey: null
-	,getKeyCode: null
-	,getKeyUpDuration: null
-	,getKeyDownDuration: null
-	,getIsKeyRelease: null
-	,getIsKeyPress: null
-	,getIsKeyDown: null
-	,__class__: awe6.interfaces.IInputKeyboard
+	__class__: awe6.interfaces.IInputKeyboard
 }
 awe6.core.drivers.AInputKeyboard = function(p_kernel) {
 	awe6.core.Process.call(this,p_kernel);
@@ -4783,8 +3915,8 @@ awe6.core.drivers.AInputKeyboard.prototype = $extend(awe6.core.Process.prototype
 				$r = 223;
 				break;
 			case 99:
-				var l_value = $e[2];
-				$r = l_value | 0;
+				var p_value = $e[2];
+				$r = Std["int"](p_value);
 				break;
 			}
 			return $r;
@@ -4857,7 +3989,7 @@ awe6.core.drivers.AInputKeyboard.prototype = $extend(awe6.core.Process.prototype
 	,_updater: function(p_deltaTime) {
 		if(p_deltaTime == null) p_deltaTime = 0;
 		awe6.core.Process.prototype._updater.call(this,p_deltaTime);
-		var l_encounteredKeyCodes = new Hash();
+		var l_encounteredKeyCodes = new haxe.ds.StringMap();
 		var l_nextBuffer = [];
 		var _g = 0, _g1 = this._buffer;
 		while(_g < _g1.length) {
@@ -4894,8 +4026,6 @@ awe6.core.drivers.AInputKeyboard.prototype = $extend(awe6.core.Process.prototype
 		this._driverInit();
 		this._reset();
 	}
-	,_buffer: null
-	,_keys: null
 	,__class__: awe6.core.drivers.AInputKeyboard
 });
 awe6.core.drivers._AInputKeyboard = {}
@@ -4913,17 +4043,7 @@ awe6.core.drivers._AInputKeyboard._HelperKey = function(p_kernel) {
 $hxClasses["awe6.core.drivers._AInputKeyboard._HelperKey"] = awe6.core.drivers._AInputKeyboard._HelperKey;
 awe6.core.drivers._AInputKeyboard._HelperKey.__name__ = ["awe6","core","drivers","_AInputKeyboard","_HelperKey"];
 awe6.core.drivers._AInputKeyboard._HelperKey.prototype = {
-	timeUpPrevious: null
-	,timeDownPrevious: null
-	,updatesUpPrevious: null
-	,updatesDownPrevious: null
-	,timeUp: null
-	,timeDown: null
-	,updatesUp: null
-	,updatesDown: null
-	,isDown: null
-	,isUsed: null
-	,__class__: awe6.core.drivers._AInputKeyboard._HelperKey
+	__class__: awe6.core.drivers._AInputKeyboard._HelperKey
 }
 awe6.core.drivers._AInputKeyboard._HelperKeyEvent = function(p_keyCode,p_isDown) {
 	this.keyCode = p_keyCode;
@@ -4932,43 +4052,13 @@ awe6.core.drivers._AInputKeyboard._HelperKeyEvent = function(p_keyCode,p_isDown)
 $hxClasses["awe6.core.drivers._AInputKeyboard._HelperKeyEvent"] = awe6.core.drivers._AInputKeyboard._HelperKeyEvent;
 awe6.core.drivers._AInputKeyboard._HelperKeyEvent.__name__ = ["awe6","core","drivers","_AInputKeyboard","_HelperKeyEvent"];
 awe6.core.drivers._AInputKeyboard._HelperKeyEvent.prototype = {
-	isDown: null
-	,keyCode: null
-	,__class__: awe6.core.drivers._AInputKeyboard._HelperKeyEvent
+	__class__: awe6.core.drivers._AInputKeyboard._HelperKeyEvent
 }
 awe6.interfaces.IInputMouse = function() { }
 $hxClasses["awe6.interfaces.IInputMouse"] = awe6.interfaces.IInputMouse;
 awe6.interfaces.IInputMouse.__name__ = ["awe6","interfaces","IInputMouse"];
 awe6.interfaces.IInputMouse.prototype = {
-	getButtonLastClickedY: null
-	,getButtonLastClickedX: null
-	,getButtonDragHeight: null
-	,getButtonDragWidth: null
-	,getButtonUpDuration: null
-	,getButtonDownDuration: null
-	,getIsButtonRelease: null
-	,getIsButtonPress: null
-	,getIsButtonDown: null
-	,getIsButtonDrag: null
-	,getIsButtonDoubleClick: null
-	,getStillDuration: null
-	,getDeltaScroll: null
-	,getSpeed: null
-	,getDeltaY: null
-	,getDeltaX: null
-	,cursorType: null
-	,scroll: null
-	,isVisible: null
-	,isMoving: null
-	,isWithinBounds: null
-	,relativeCentralisedY: null
-	,relativeCentralisedX: null
-	,relativeY: null
-	,relativeX: null
-	,y: null
-	,x: null
-	,__class__: awe6.interfaces.IInputMouse
-	,__properties__: {set_isVisible:"_set_isVisible",set_cursorType:"_set_cursorType"}
+	__class__: awe6.interfaces.IInputMouse
 }
 awe6.core.drivers.AInputMouse = function(p_kernel) {
 	awe6.core.Process.call(this,p_kernel);
@@ -4978,11 +4068,11 @@ awe6.core.drivers.AInputMouse.__name__ = ["awe6","core","drivers","AInputMouse"]
 awe6.core.drivers.AInputMouse.__interfaces__ = [awe6.interfaces.IInputMouse];
 awe6.core.drivers.AInputMouse.__super__ = awe6.core.Process;
 awe6.core.drivers.AInputMouse.prototype = $extend(awe6.core.Process.prototype,{
-	_set_cursorType: function(p_value) {
+	set_cursorType: function(p_value) {
 		this.cursorType = p_value;
 		return this.cursorType;
 	}
-	,_set_isVisible: function(p_value) {
+	,set_isVisible: function(p_value) {
 		this.isVisible = p_value;
 		return this.isVisible;
 	}
@@ -5168,40 +4258,16 @@ awe6.core.drivers.AInputMouse.prototype = $extend(awe6.core.Process.prototype,{
 		this._buffer = [];
 		this._getPosition();
 		this.isMoving = false;
-		this._set_isVisible(true);
+		this.set_isVisible(true);
 		this.scroll = 0;
-		this._set_cursorType(awe6.interfaces.EMouseCursor.AUTO);
+		this.set_cursorType(awe6.interfaces.EMouseCursor.AUTO);
 		this._scrollPrev = 0;
 		this._stillUpdates = 0;
 		this._stillDuration = 0;
 		this._reset();
 	}
-	,_buttonRight: null
-	,_buttonMiddle: null
-	,_buttonLeft: null
-	,_stillDuration: null
-	,_stillUpdates: null
-	,_scrollPrev: null
-	,_deltaScroll: null
-	,_deltaTimePrev: null
-	,_deltaY: null
-	,_deltaX: null
-	,_yPrev: null
-	,_xPrev: null
-	,_buffer: null
-	,cursorType: null
-	,scroll: null
-	,isVisible: null
-	,isMoving: null
-	,isWithinBounds: null
-	,relativeCentralisedY: null
-	,relativeCentralisedX: null
-	,relativeY: null
-	,relativeX: null
-	,y: null
-	,x: null
 	,__class__: awe6.core.drivers.AInputMouse
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isVisible:"_set_isVisible",set_cursorType:"_set_cursorType"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isVisible:"set_isVisible",set_cursorType:"set_cursorType"})
 });
 awe6.core.drivers._AInputMouse = {}
 awe6.core.drivers._AInputMouse._HelperButton = function(p_kernel) {
@@ -5218,49 +4284,20 @@ awe6.core.drivers._AInputMouse._HelperButton = function(p_kernel) {
 $hxClasses["awe6.core.drivers._AInputMouse._HelperButton"] = awe6.core.drivers._AInputMouse._HelperButton;
 awe6.core.drivers._AInputMouse._HelperButton.__name__ = ["awe6","core","drivers","_AInputMouse","_HelperButton"];
 awe6.core.drivers._AInputMouse._HelperButton.prototype = {
-	clickY: null
-	,clickX: null
-	,timeUpPrevious: null
-	,timeDownPrevious: null
-	,updatesUpPrevious: null
-	,updatesDownPrevious: null
-	,timeUp: null
-	,timeDown: null
-	,updatesUp: null
-	,updatesDown: null
-	,isDown: null
-	,__class__: awe6.core.drivers._AInputMouse._HelperButton
+	__class__: awe6.core.drivers._AInputMouse._HelperButton
 }
 awe6.interfaces.ILogger = function() { }
 $hxClasses["awe6.interfaces.ILogger"] = awe6.interfaces.ILogger;
 awe6.interfaces.ILogger.__name__ = ["awe6","interfaces","ILogger"];
 awe6.interfaces.ILogger.prototype = {
-	log: null
-	,__class__: awe6.interfaces.ILogger
+	__class__: awe6.interfaces.ILogger
 }
 awe6.interfaces.IKernel = function() { }
 $hxClasses["awe6.interfaces.IKernel"] = awe6.interfaces.IKernel;
 awe6.interfaces.IKernel.__name__ = ["awe6","interfaces","IKernel"];
 awe6.interfaces.IKernel.__interfaces__ = [awe6.interfaces.ILogger,awe6.interfaces.IPauseable];
 awe6.interfaces.IKernel.prototype = {
-	onPreloaderComplete: null
-	,getFramerate: null
-	,getConfig: null
-	,session: null
-	,factory: null
-	,tools: null
-	,messenger: null
-	,scenes: null
-	,inputs: null
-	,audio: null
-	,assets: null
-	,overlay: null
-	,isFullScreen: null
-	,isEyeCandy: null
-	,isLocal: null
-	,isDebug: null
-	,__class__: awe6.interfaces.IKernel
-	,__properties__: {set_isEyeCandy:"_set_isEyeCandy",set_isFullScreen:"_set_isFullScreen",set_session:"_set_session",get_session:"_get_session"}
+	__class__: awe6.interfaces.IKernel
 }
 awe6.core.drivers.AKernel = function(p_factory,p_context) {
 	this.factory = p_factory;
@@ -5273,24 +4310,24 @@ awe6.core.drivers.AKernel.__name__ = ["awe6","core","drivers","AKernel"];
 awe6.core.drivers.AKernel.__interfaces__ = [awe6.interfaces.IKernel];
 awe6.core.drivers.AKernel.__super__ = awe6.core.Process;
 awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
-	_set_session: function(p_value) {
+	set_session: function(p_value) {
 		this.session = p_value;
-		return this._get_session();
+		return this.get_session();
 	}
-	,_get_session: function() {
+	,get_session: function() {
 		return this.session;
 	}
 	,_resumer: function() {
 		awe6.core.Process.prototype._resumer.call(this);
-		if(this.scenes._get_scene() != null) this.scenes._get_scene().resume();
+		if(this.scenes.get_scene() != null) this.scenes.get_scene().resume();
 	}
 	,_pauser: function() {
 		awe6.core.Process.prototype._pauser.call(this);
-		if(this.scenes._get_scene() != null) this.scenes._get_scene().pause();
+		if(this.scenes.get_scene() != null) this.scenes.get_scene().pause();
 	}
 	,_driverSetIsFullScreen: function(p_value) {
 	}
-	,_set_isFullScreen: function(p_value) {
+	,set_isFullScreen: function(p_value) {
 		if(!this.factory.isFullScreenOptionEnabled || Type.enumEq(this.factory.fullScreenType,awe6.interfaces.EFullScreen.DISABLED)) {
 			this.isFullScreen = false;
 			return this.isFullScreen;
@@ -5301,7 +4338,7 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,_driverSetIsEyeCandy: function(p_value) {
 	}
-	,_set_isEyeCandy: function(p_value) {
+	,set_isEyeCandy: function(p_value) {
 		if(!this.factory.isEyeCandyOptionEnabled) {
 			this.isEyeCandy = true;
 			return this.isEyeCandy;
@@ -5312,8 +4349,8 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,_totalReset: function() {
 		if(!this._isPreloaded) return;
-		this._get_session().deleteAllSessions();
-		this._set_session(this.factory.createSession());
+		this.get_session().deleteAllSessions();
+		this.set_session(this.factory.createSession());
 		this.scenes.setScene(this.factory.startingSceneType);
 	}
 	,_removeProcess: function(p_process) {
@@ -5331,7 +4368,7 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 		return p_asActual?this._helperFramerate.framerate:this.factory.targetFramerate;
 	}
 	,log: function(p_value) {
-		if(this._logger != null) this._logger.log(p_value); else if(this.isDebug) haxe.Log.trace("LOG: " + Std.string(p_value),{ fileName : "AKernel.hx", lineNumber : 248, className : "awe6.core.drivers.AKernel", methodName : "log"});
+		if(this._logger != null) this._logger.log(p_value); else if(this.isDebug) console.log("LOG: " + Std.string(p_value));
 	}
 	,getConfig: function(p_id) {
 		return this.factory.config.exists(p_id)?this.factory.config.get(p_id):null;
@@ -5356,7 +4393,7 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 		this.tools = this._tools = null;
 		this._logger = null;
 		this._preloader = null;
-		this._set_session(null);
+		this.set_session(null);
 		awe6.core.Process.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
@@ -5384,10 +4421,10 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 		}
 		this.overlay = this._overlayProcess = this.factory.createOverlay();
 		this._addProcess(this._overlayProcess,true);
-		this._view.addChild(this._overlayProcess._get_view(),3);
+		this._view.addChild(this._overlayProcess.get_view(),3);
 		if(this.isDebug) {
-			this._addProcess(this._profiler = new awe6.core.drivers.jeash.Profiler(this));
-			this._view.addChild(this._profiler._get_view(),this._tools.BIG_NUMBER);
+			this._addProcess(this._profiler = new awe6.core.drivers.openfl.html5.Profiler(this));
+			this._view.addChild(this._profiler.get_view(),this._tools.BIG_NUMBER);
 		}
 		this.scenes.setScene(this.factory.startingSceneType);
 		this.overlay.flash();
@@ -5401,7 +4438,7 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
-		this._view = new awe6.core.drivers.jeash.View(this,this._context,0,this);
+		this._view = new awe6.core.drivers.openfl.html5.View(this,this._context,0,this);
 		this._processes = new List();
 		this._helperFramerate = new awe6.core.drivers._AKernel._HelperFramerate(this.factory.targetFramerate);
 		this._isPreloaded = false;
@@ -5409,7 +4446,7 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 		this.isLocal = this._driverGetIsLocal();
 		this._driverInit();
 		this.assets = this._assetManagerProcess = new awe6.core.AAssetManager(this._kernel);
-		this.audio = this._audioManager = new awe6.core.drivers.jeash.AudioManager(this._kernel);
+		this.audio = this._audioManager = new awe6.core.drivers.openfl.html5.AudioManager(this._kernel);
 		this.inputs = this._inputManager = new awe6.core.InputManager(this._kernel);
 		this.scenes = this._sceneManager = new awe6.core.SceneManager(this._kernel);
 		this.messenger = this._messageManager = new awe6.core.MessageManager(this._kernel);
@@ -5419,44 +4456,17 @@ awe6.core.drivers.AKernel.prototype = $extend(awe6.core.Process.prototype,{
 		this._addProcess(this._sceneManager);
 		this._addProcess(this._messageManager);
 		this._addProcess(this._audioManager);
-		this._set_isEyeCandy(true);
-		this._set_isFullScreen(false);
+		this.set_isEyeCandy(true);
+		this.set_isFullScreen(false);
 		this.factory.onInitComplete(this);
-		this._set_session(this.factory.createSession());
-		this._get_session().reset();
+		this.set_session(this.factory.createSession());
+		this.get_session().reset();
 		this._preloader = this.factory.createPreloader();
 		this._addProcess(this._preloader);
-		this._view.addChild(this._preloader._get_view(),2);
+		this._view.addChild(this._preloader.get_view(),2);
 	}
-	,_helperFramerate: null
-	,_processes: null
-	,_profiler: null
-	,_preloader: null
-	,_isPreloaded: null
-	,_logger: null
-	,_overlayProcess: null
-	,_messageManager: null
-	,_sceneManager: null
-	,_inputManager: null
-	,_audioManager: null
-	,_assetManagerProcess: null
-	,_view: null
-	,_context: null
-	,session: null
-	,messenger: null
-	,scenes: null
-	,inputs: null
-	,audio: null
-	,assets: null
-	,tools: null
-	,isFullScreen: null
-	,isEyeCandy: null
-	,isLocal: null
-	,isDebug: null
-	,factory: null
-	,overlay: null
 	,__class__: awe6.core.drivers.AKernel
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isEyeCandy:"_set_isEyeCandy",set_isFullScreen:"_set_isFullScreen",set_session:"_set_session",get_session:"_get_session"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_isEyeCandy:"set_isEyeCandy",set_isFullScreen:"set_isFullScreen",set_session:"set_session",get_session:"get_session"})
 });
 awe6.core.drivers._AKernel = {}
 awe6.core.drivers._AKernel._HelperFramerate = function(p_framerate) {
@@ -5474,24 +4484,13 @@ awe6.core.drivers._AKernel._HelperFramerate.prototype = {
 		this.framerate = 1000 / this.timeInterval;
 		this._timeAtLastUpdate = haxe.Timer.stamp() * 1000 | 0;
 	}
-	,_timeAtLastUpdate: null
-	,timeInterval: null
-	,framerate: null
 	,__class__: awe6.core.drivers._AKernel._HelperFramerate
 }
 awe6.interfaces.IOverlay = function() { }
 $hxClasses["awe6.interfaces.IOverlay"] = awe6.interfaces.IOverlay;
 awe6.interfaces.IOverlay.__name__ = ["awe6","interfaces","IOverlay"];
 awe6.interfaces.IOverlay.prototype = {
-	flash: null
-	,hideButtons: null
-	,showProgress: null
-	,activateButton: null
-	,positionButton: null
-	,showButton: null
-	,pauseEntity: null
-	,__class__: awe6.interfaces.IOverlay
-	,__properties__: {set_pauseEntity:"_set_pauseEntity",get_pauseEntity:"_get_pauseEntity"}
+	__class__: awe6.interfaces.IOverlay
 }
 awe6.interfaces.IOverlayProcess = function() { }
 $hxClasses["awe6.interfaces.IOverlayProcess"] = awe6.interfaces.IOverlayProcess;
@@ -5503,17 +4502,17 @@ awe6.core.drivers.AOverlay = function(p_kernel,p_buttonWidth,p_buttonHeight,p_bo
 	if(p_pauseBlur == null) p_pauseBlur = 8;
 	if(p_buttonHeight == null) p_buttonHeight = 30.0;
 	if(p_buttonWidth == null) p_buttonWidth = 30.0;
-	if(p_border == null) p_border = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_backUp == null) p_backUp = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_backOver == null) p_backOver = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_muteUp == null) p_muteUp = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_muteOver == null) p_muteOver = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_unmuteUp == null) p_unmuteUp = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_unmuteOver == null) p_unmuteOver = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_pauseUp == null) p_pauseUp = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_pauseOver == null) p_pauseOver = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_unpauseUp == null) p_unpauseUp = new awe6.core.drivers.jeash.View(p_kernel);
-	if(p_unpauseOver == null) p_unpauseOver = new awe6.core.drivers.jeash.View(p_kernel);
+	if(p_border == null) p_border = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_backUp == null) p_backUp = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_backOver == null) p_backOver = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_muteUp == null) p_muteUp = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_muteOver == null) p_muteOver = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_unmuteUp == null) p_unmuteUp = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_unmuteOver == null) p_unmuteOver = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_pauseUp == null) p_pauseUp = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_pauseOver == null) p_pauseOver = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_unpauseUp == null) p_unpauseUp = new awe6.core.drivers.openfl.html5.View(p_kernel);
+	if(p_unpauseOver == null) p_unpauseOver = new awe6.core.drivers.openfl.html5.View(p_kernel);
 	this._borderView = p_border;
 	this._buttonBack = new awe6.core.BasicButton(p_kernel,p_backUp,p_backOver,p_buttonWidth,p_buttonHeight);
 	this._buttonMute = new awe6.core.BasicButton(p_kernel,p_muteUp,p_muteOver,p_buttonWidth,p_buttonHeight);
@@ -5523,7 +4522,7 @@ awe6.core.drivers.AOverlay = function(p_kernel,p_buttonWidth,p_buttonHeight,p_bo
 	this._pauseBlur = p_pauseBlur;
 	this._pauseColor = p_pauseColor;
 	this._pauseAlpha = p_pauseAlpha;
-	this._context = new browser.display.Sprite();
+	this._context = new flash.display.Sprite();
 	awe6.core.Entity.call(this,p_kernel,null,this._context);
 };
 $hxClasses["awe6.core.drivers.AOverlay"] = awe6.core.drivers.AOverlay;
@@ -5531,24 +4530,24 @@ awe6.core.drivers.AOverlay.__name__ = ["awe6","core","drivers","AOverlay"];
 awe6.core.drivers.AOverlay.__interfaces__ = [awe6.interfaces.IOverlayProcess];
 awe6.core.drivers.AOverlay.__super__ = awe6.core.Entity;
 awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
-	_set_pauseEntity: function(p_value) {
-		if(this._get_pauseEntity() != null) this._get_pauseEntity()._get_view().remove();
+	set_pauseEntity: function(p_value) {
+		if(this.get_pauseEntity() != null) this.get_pauseEntity().get_view().remove();
 		this.pauseEntity = p_value;
-		this._pauseView.addChild(this._get_pauseEntity()._get_view());
-		return this._get_pauseEntity();
+		this._pauseView.addChild(this.get_pauseEntity().get_view());
+		return this.get_pauseEntity();
 	}
-	,_get_pauseEntity: function() {
+	,get_pauseEntity: function() {
 		return this.pauseEntity;
 	}
 	,_drawPause: function(p_isVisible) {
 		if(p_isVisible == null) p_isVisible = true;
-		this._pauseView._set_isVisible(p_isVisible);
+		this._pauseView.set_isVisible(p_isVisible);
 	}
 	,activateButton: function(p_type) {
 		var $e = (p_type);
 		switch( $e[1] ) {
 		case 0:
-			if(this._buttonBack._get_view()._get_isInViewStack()) {
+			if(this._buttonBack.get_view().get_isInViewStack()) {
 				if(!this._kernel.isActive) this.activateButton(awe6.interfaces.EOverlayButton.UNPAUSE);
 				this._drawPause(false);
 				this._kernel.resume();
@@ -5556,21 +4555,21 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 			}
 			break;
 		case 1:
-			if(this._buttonMute._get_view()._get_isInViewStack()) {
+			if(this._buttonMute.get_view().get_isInViewStack()) {
 				this.showButton(awe6.interfaces.EOverlayButton.MUTE,false);
 				this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,true);
-				this._kernel.audio._set_isMute(true);
+				this._kernel.audio.set_isMute(true);
 			}
 			break;
 		case 2:
-			if(this._buttonUnmute._get_view()._get_isInViewStack() && !this._buttonUnpause._get_view()._get_isInViewStack()) {
+			if(this._buttonUnmute.get_view().get_isInViewStack() && !this._buttonUnpause.get_view().get_isInViewStack()) {
 				this.showButton(awe6.interfaces.EOverlayButton.MUTE,true);
 				this.showButton(awe6.interfaces.EOverlayButton.UNMUTE,false);
-				this._kernel.audio._set_isMute(false);
+				this._kernel.audio.set_isMute(false);
 			}
 			break;
 		case 3:
-			if(this._buttonPause._get_view()._get_isInViewStack()) {
+			if(this._buttonPause.get_view().get_isInViewStack()) {
 				this._kernel.pause();
 				this._drawPause(true);
 				this._wasMute = this._kernel.audio.isMute;
@@ -5580,7 +4579,7 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 			}
 			break;
 		case 4:
-			if(this._buttonUnpause._get_view()._get_isInViewStack()) {
+			if(this._buttonUnpause.get_view().get_isInViewStack()) {
 				this.showButton(awe6.interfaces.EOverlayButton.PAUSE,true);
 				this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
 				this.activateButton(this._wasMute?awe6.interfaces.EOverlayButton.MUTE:awe6.interfaces.EOverlayButton.UNMUTE);
@@ -5589,7 +4588,8 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 			}
 			break;
 		case 5:
-			var l_value = $e[2];
+			var p_value = $e[2];
+			p_value;
 			null;
 			break;
 		}
@@ -5611,15 +4611,15 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 		this.showButton(awe6.interfaces.EOverlayButton.UNPAUSE,false);
 	}
 	,showProgress: function(p_progress,p_message) {
-		this._progressView._set_isVisible(p_progress < 1);
+		this._progressView.set_isVisible(p_progress < 1);
 	}
 	,positionButton: function(p_type,p_x,p_y,p_width,p_height) {
 		var l_button = this._getButton(p_type);
 		if(l_button == null) return;
-		l_button._set_x(p_x);
-		l_button._set_y(p_y);
-		if(p_width != null) l_button._set_width(p_width);
-		if(p_height != null) l_button._set_height(p_height);
+		l_button.set_x(p_x);
+		l_button.set_y(p_y);
+		if(p_width != null) l_button.set_width(p_width);
+		if(p_height != null) l_button.set_height(p_height);
 	}
 	,showButton: function(p_type,p_isVisible) {
 		if(p_isVisible == null) p_isVisible = true;
@@ -5648,16 +4648,21 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 				$r = $this._buttonUnpause;
 				break;
 			case 5:
-				var l_value = $e[2];
-				$r = null;
+				var p_value = $e[2];
+				$r = (function($this) {
+					var $r;
+					p_value;
+					$r = null;
+					return $r;
+				}($this));
 				break;
 			}
 			return $r;
 		}(this));
 	}
 	,_disposer: function() {
-		if(this._get_pauseEntity() != null) this._get_pauseEntity().dispose();
-		this._get_view().dispose();
+		if(this.get_pauseEntity() != null) this.get_pauseEntity().dispose();
+		this.get_view().dispose();
 		awe6.core.Entity.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
@@ -5667,31 +4672,31 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 			this._flashDuration -= this._flashAsTime?p_deltaTime:1;
 			this._flashAlpha = this._tools.limit(this._flashStartingAlpha * (this._flashDuration / this._flashStartingDuration),0,1);
 		}
-		this._flashView._set_isVisible(this._flashAlpha > 0);
+		this._flashView.set_isVisible(this._flashAlpha > 0);
 		if(this._kernel.factory.keyBack != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyBack)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.BACK:awe6.interfaces.EOverlayButton.UNPAUSE);
 		if(this._kernel.factory.keyPause != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyPause)) this.activateButton(this._kernel.isActive?awe6.interfaces.EOverlayButton.PAUSE:awe6.interfaces.EOverlayButton.UNPAUSE);
 		if(this._kernel.factory.keyMute != null && this._kernel.inputs.keyboard.getIsKeyPress(this._kernel.factory.keyMute)) this.activateButton(this._kernel.audio.isMute?awe6.interfaces.EOverlayButton.UNMUTE:awe6.interfaces.EOverlayButton.MUTE);
-		if(this._get_pauseEntity() != null && !this._kernel.isActive) {
-			this._get_pauseEntity().update(p_deltaTime);
+		if(this.get_pauseEntity() != null && !this._kernel.isActive) {
+			this.get_pauseEntity().update(p_deltaTime);
 			this._pauseView.update(p_deltaTime);
 		}
 	}
 	,_driverInit: function() {
-		this._progressContext = new browser.display.Sprite();
-		this._pauseContext = new browser.display.Sprite();
-		this._flashContext = new browser.display.Sprite();
+		this._progressContext = new flash.display.Sprite();
+		this._pauseContext = new flash.display.Sprite();
+		this._flashContext = new flash.display.Sprite();
 	}
 	,_init: function() {
 		awe6.core.Entity.prototype._init.call(this);
-		this._get_view().addChild(this._borderView,4);
+		this.get_view().addChild(this._borderView,4);
 		this._wasMute = this._kernel.audio.isMute;
 		this._driverInit();
-		this._progressView = new awe6.core.drivers.jeash.View(this._kernel,this._progressContext);
-		this._progressView._set_isVisible(false);
-		this._pauseView = new awe6.core.drivers.jeash.View(this._kernel,this._pauseContext);
-		this._pauseView._set_isVisible(false);
-		this._flashView = new awe6.core.drivers.jeash.View(this._kernel,this._flashContext);
-		this._flashView._set_isVisible(false);
+		this._progressView = new awe6.core.drivers.openfl.html5.View(this._kernel,this._progressContext);
+		this._progressView.set_isVisible(false);
+		this._pauseView = new awe6.core.drivers.openfl.html5.View(this._kernel,this._pauseContext);
+		this._pauseView.set_isVisible(false);
+		this._flashView = new awe6.core.drivers.openfl.html5.View(this._kernel,this._flashContext);
+		this._flashView.set_isVisible(false);
 		this._flashStartingAlpha = 1;
 		this._flashAsTime = true;
 		this._flashDuration = this._flashStartingDuration = 100;
@@ -5700,29 +4705,29 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 				return f(a1);
 			};
 		})($bind(this,this.activateButton),awe6.interfaces.EOverlayButton.BACK);
-		this._buttonMute.onClickCallback = (function(f,a1) {
+		this._buttonMute.onClickCallback = (function(f1,a11) {
 			return function() {
-				return f(a1);
+				return f1(a11);
 			};
 		})($bind(this,this.activateButton),awe6.interfaces.EOverlayButton.MUTE);
-		this._buttonPause.onClickCallback = (function(f,a1) {
+		this._buttonPause.onClickCallback = (function(f2,a12) {
 			return function() {
-				return f(a1);
+				return f2(a12);
 			};
 		})($bind(this,this.activateButton),awe6.interfaces.EOverlayButton.PAUSE);
-		this._buttonUnmute.onClickCallback = (function(f,a1) {
+		this._buttonUnmute.onClickCallback = (function(f3,a13) {
 			return function() {
-				return f(a1);
+				return f3(a13);
 			};
 		})($bind(this,this.activateButton),awe6.interfaces.EOverlayButton.UNMUTE);
-		this._buttonUnpause.onClickCallback = (function(f,a1) {
+		this._buttonUnpause.onClickCallback = (function(f4,a14) {
 			return function() {
-				return f(a1);
+				return f4(a14);
 			};
 		})($bind(this,this.activateButton),awe6.interfaces.EOverlayButton.UNPAUSE);
-		this._get_view().addChild(this._flashView,1);
-		this._get_view().addChild(this._pauseView,2);
-		this._get_view().addChild(this._progressView,3);
+		this.get_view().addChild(this._flashView,1);
+		this.get_view().addChild(this._pauseView,2);
+		this.get_view().addChild(this._progressView,3);
 		this.addEntity(this._buttonBack,null,true,21);
 		this.addEntity(this._buttonUnmute,null,true,22);
 		this.addEntity(this._buttonMute,null,true,23);
@@ -5738,39 +4743,14 @@ awe6.core.drivers.AOverlay.prototype = $extend(awe6.core.Entity.prototype,{
 		this.positionButton(awe6.interfaces.EOverlayButton.PAUSE,l_x += l_width,l_y);
 		this.positionButton(awe6.interfaces.EOverlayButton.UNPAUSE,l_x,l_y);
 	}
-	,_buttonUnpause: null
-	,_buttonPause: null
-	,_buttonUnmute: null
-	,_buttonMute: null
-	,_buttonBack: null
-	,_wasMute: null
-	,_flashAsTime: null
-	,_flashStartingDuration: null
-	,_flashStartingAlpha: null
-	,_flashAlpha: null
-	,_flashDuration: null
-	,_pauseBlur: null
-	,_pauseAlpha: null
-	,_pauseColor: null
-	,_context: null
-	,_flashView: null
-	,_flashContext: null
-	,_pauseView: null
-	,_pauseContext: null
-	,_progressView: null
-	,_progressContext: null
-	,_borderView: null
-	,pauseEntity: null
 	,__class__: awe6.core.drivers.AOverlay
-	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_pauseEntity:"_set_pauseEntity",get_pauseEntity:"_get_pauseEntity"})
+	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_pauseEntity:"set_pauseEntity",get_pauseEntity:"get_pauseEntity"})
 });
 awe6.interfaces.IProgress = function() { }
 $hxClasses["awe6.interfaces.IProgress"] = awe6.interfaces.IProgress;
 awe6.interfaces.IProgress.__name__ = ["awe6","interfaces","IProgress"];
 awe6.interfaces.IProgress.prototype = {
-	progress: null
-	,__class__: awe6.interfaces.IProgress
-	,__properties__: {get_progress:"_get_progress"}
+	__class__: awe6.interfaces.IProgress
 }
 awe6.interfaces.IPreloader = function() { }
 $hxClasses["awe6.interfaces.IPreloader"] = awe6.interfaces.IPreloader;
@@ -5787,16 +4767,16 @@ awe6.core.drivers.APreloader.__name__ = ["awe6","core","drivers","APreloader"];
 awe6.core.drivers.APreloader.__interfaces__ = [awe6.interfaces.IPreloader];
 awe6.core.drivers.APreloader.__super__ = awe6.core.Process;
 awe6.core.drivers.APreloader.prototype = $extend(awe6.core.Process.prototype,{
-	_get_progress: function() {
+	get_progress: function() {
 		return this.progress;
 	}
-	,_get_view: function() {
+	,get_view: function() {
 		return this.view;
 	}
 	,_driverDisposer: function() {
 	}
 	,_disposer: function() {
-		this._get_view().dispose();
+		this.get_view().dispose();
 		this._driverDisposer();
 		awe6.core.Process.prototype._disposer.call(this);
 	}
@@ -5804,7 +4784,7 @@ awe6.core.drivers.APreloader.prototype = $extend(awe6.core.Process.prototype,{
 		if(p_deltaTime == null) p_deltaTime = 0;
 		awe6.core.Process.prototype._updater.call(this,p_deltaTime);
 		if(this._assets.length == 0) this._kernel.onPreloaderComplete(this);
-		this._get_view()._set_isVisible(this._age > 100);
+		this.get_view().set_isVisible(this._age > 100);
 	}
 	,_driverLoad: function(p_url) {
 	}
@@ -5826,26 +4806,18 @@ awe6.core.drivers.APreloader.prototype = $extend(awe6.core.Process.prototype,{
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
 		this.progress = 0;
-		if(this._get_view() == null) this.view = new awe6.core.drivers.jeash.View(this._kernel);
+		if(this.get_view() == null) this.view = new awe6.core.drivers.openfl.html5.View(this._kernel);
 		this._encrypter = this._tools;
 		this._currentProgress = 0;
 		this._currentAsset = 0;
 		this._isComplete = false;
 		if(this._assets.length > 0) this._next();
 	}
-	,_isComplete: null
-	,_currentAsset: null
-	,_currentProgress: null
-	,_encrypter: null
-	,_isDecached: null
-	,_assets: null
-	,progress: null
-	,view: null
 	,__class__: awe6.core.drivers.APreloader
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_view:"_get_view",get_progress:"_get_progress"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{get_view:"get_view",get_progress:"get_progress"})
 });
 awe6.core.drivers.AProfiler = function(p_kernel) {
-	this._context = new browser.display.Sprite();
+	this._context = new flash.display.Sprite();
 	awe6.core.Entity.call(this,p_kernel,null,this._context);
 };
 $hxClasses["awe6.core.drivers.AProfiler"] = awe6.core.drivers.AProfiler;
@@ -5874,17 +4846,6 @@ awe6.core.drivers.AProfiler.prototype = $extend(awe6.core.Entity.prototype,{
 		this._height = 50;
 		this._agePrev = 0;
 	}
-	,_height: null
-	,_width: null
-	,_agePrev: null
-	,_context: null
-	,_memoryLabel: null
-	,_fpsLabel: null
-	,_memoryColor: null
-	,_fpsColor: null
-	,_backgroundColor: null
-	,_marginColor: null
-	,_marginHeight: null
 	,__class__: awe6.core.drivers.AProfiler
 });
 awe6.interfaces.ISceneTransition = function() { }
@@ -5892,13 +4853,12 @@ $hxClasses["awe6.interfaces.ISceneTransition"] = awe6.interfaces.ISceneTransitio
 awe6.interfaces.ISceneTransition.__name__ = ["awe6","interfaces","ISceneTransition"];
 awe6.interfaces.ISceneTransition.__interfaces__ = [awe6.interfaces.IViewable,awe6.interfaces.IProgress,awe6.interfaces.IProcess];
 awe6.interfaces.ISceneTransition.prototype = {
-	getDuration: null
-	,__class__: awe6.interfaces.ISceneTransition
+	__class__: awe6.interfaces.ISceneTransition
 }
 awe6.core.drivers.ASceneTransition = function(p_kernel,p_duration) {
 	if(p_duration == null) p_duration = 500;
 	this._duration = p_duration;
-	this._context = new browser.display.Sprite();
+	this._context = new flash.display.Sprite();
 	awe6.core.Entity.call(this,p_kernel,null,this._context);
 };
 $hxClasses["awe6.core.drivers.ASceneTransition"] = awe6.core.drivers.ASceneTransition;
@@ -5906,12 +4866,12 @@ awe6.core.drivers.ASceneTransition.__name__ = ["awe6","core","drivers","ASceneTr
 awe6.core.drivers.ASceneTransition.__interfaces__ = [awe6.interfaces.ISceneTransition];
 awe6.core.drivers.ASceneTransition.__super__ = awe6.core.Entity;
 awe6.core.drivers.ASceneTransition.prototype = $extend(awe6.core.Entity.prototype,{
-	_get_progress: function() {
+	get_progress: function() {
 		return this._tools.limit(this._age / this._duration,0,1);
 	}
 	,getDuration: function(p_asTime) {
 		if(p_asTime == null) p_asTime = true;
-		return p_asTime?this._duration:this._duration / (1000 / this._kernel.getFramerate());
+		return p_asTime?this._duration:this._duration / (1000 / this._kernel.getFramerate()) | 0;
 	}
 	,_updater: function(p_deltaTime) {
 		if(p_deltaTime == null) p_deltaTime = 0;
@@ -5919,8 +4879,7 @@ awe6.core.drivers.ASceneTransition.prototype = $extend(awe6.core.Entity.prototyp
 		if(this._age > this._duration) {
 			if(this.isDisposed) null; else {
 				this.isDisposed = true;
-				this._set_isActive(false);
-				if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this,true,true,true);
+				this.set_isActive(false);
 				this._disposer();
 				null;
 			}
@@ -5929,28 +4888,14 @@ awe6.core.drivers.ASceneTransition.prototype = $extend(awe6.core.Entity.prototyp
 	,_init: function() {
 		awe6.core.Entity.prototype._init.call(this);
 	}
-	,_context: null
-	,_duration: null
-	,progress: null
 	,__class__: awe6.core.drivers.ASceneTransition
-	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{get_progress:"_get_progress"})
+	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{get_progress:"get_progress"})
 });
 awe6.interfaces.ISession = function() { }
 $hxClasses["awe6.interfaces.ISession"] = awe6.interfaces.ISession;
 awe6.interfaces.ISession.__name__ = ["awe6","interfaces","ISession"];
 awe6.interfaces.ISession.prototype = {
-	deleteAllSessions: null
-	,getSessions: null
-	,getSessionIds: null
-	,getPercentageComplete: null
-	,'delete': null
-	,save: null
-	,reset: null
-	,clone: null
-	,isTester: null
-	,id: null
-	,__class__: awe6.interfaces.ISession
-	,__properties__: {get_isTester:"_get_isTester"}
+	__class__: awe6.interfaces.ISession
 }
 awe6.core.drivers.ASession = function(p_kernel,p_id) {
 	if(p_id == null) p_id = "";
@@ -5965,7 +4910,7 @@ $hxClasses["awe6.core.drivers.ASession"] = awe6.core.drivers.ASession;
 awe6.core.drivers.ASession.__name__ = ["awe6","core","drivers","ASession"];
 awe6.core.drivers.ASession.__interfaces__ = [awe6.interfaces.ISession];
 awe6.core.drivers.ASession.prototype = {
-	_get_isTester: function() {
+	get_isTester: function() {
 		return this._kernel.isDebug || this.id == "DEBUG_AWE6";
 	}
 	,toString: function() {
@@ -6067,48 +5012,26 @@ awe6.core.drivers.ASession.prototype = {
 			this.loadCount++;
 		}
 	}
-	,saveCount: null
-	,loadCount: null
-	,isTester: null
-	,id: null
-	,_version: null
-	,_savedData: null
-	,_data: null
-	,_tools: null
-	,_kernel: null
 	,__class__: awe6.core.drivers.ASession
-	,__properties__: {get_isTester:"_get_isTester"}
+	,__properties__: {get_isTester:"get_isTester"}
 }
 awe6.interfaces.IPriority = function() { }
 $hxClasses["awe6.interfaces.IPriority"] = awe6.interfaces.IPriority;
 awe6.interfaces.IPriority.__name__ = ["awe6","interfaces","IPriority"];
 awe6.interfaces.IPriority.prototype = {
-	priority: null
-	,__class__: awe6.interfaces.IPriority
-	,__properties__: {set_priority:"_set_priority",get_priority:"_get_priority"}
+	__class__: awe6.interfaces.IPriority
 }
 awe6.interfaces.IView = function() { }
 $hxClasses["awe6.interfaces.IView"] = awe6.interfaces.IView;
 awe6.interfaces.IView.__name__ = ["awe6","interfaces","IView"];
 awe6.interfaces.IView.__interfaces__ = [awe6.interfaces.IUpdateable,awe6.interfaces.IDisposable,awe6.interfaces.IPositionable,awe6.interfaces.IPriority];
 awe6.interfaces.IView.prototype = {
-	remove: null
-	,clear: null
-	,removeChild: null
-	,addChild: null
-	,globalY: null
-	,globalX: null
-	,isInViewStack: null
-	,isVisible: null
-	,parent: null
-	,owner: null
-	,__class__: awe6.interfaces.IView
-	,__properties__: {get_parent:"_get_parent",set_isVisible:"_set_isVisible",get_isInViewStack:"_get_isInViewStack"}
+	__class__: awe6.interfaces.IView
 }
 awe6.core.drivers.AView = function(p_kernel,p_context,p_priority,p_owner) {
 	if(p_priority == null) p_priority = 0;
 	this.context = p_context;
-	this._set_priority(p_priority);
+	this.set_priority(p_priority);
 	this.owner = p_owner;
 	awe6.core.Process.call(this,p_kernel);
 };
@@ -6118,47 +5041,47 @@ awe6.core.drivers.AView.__interfaces__ = [awe6.interfaces.IView];
 awe6.core.drivers.AView.__super__ = awe6.core.Process;
 awe6.core.drivers.AView.prototype = $extend(awe6.core.Process.prototype,{
 	setPosition: function(p_x,p_y) {
-		this._set_x(p_x);
-		this._set_y(p_y);
+		this.set_x(p_x);
+		this.set_y(p_y);
 	}
-	,_set_y: function(p_value) {
+	,set_y: function(p_value) {
 		this.y = p_value;
-		this.globalY = this._get_parent() == null?this.y:this.y + this._get_parent().globalY;
+		this.globalY = this.get_parent() == null?this.y:this.y + this.get_parent().globalY;
 		return this.y;
 	}
-	,_set_x: function(p_value) {
+	,set_x: function(p_value) {
 		this.x = p_value;
-		this.globalX = this._get_parent() == null?this.x:this.x + this._get_parent().globalX;
+		this.globalX = this.get_parent() == null?this.x:this.x + this.get_parent().globalX;
 		return this.x;
 	}
-	,_get_isInViewStack: function() {
+	,get_isInViewStack: function() {
 		if(!this.isVisible) return false;
 		if(this.owner == this._kernel) return true;
-		if(this._get_parent() == null) return false;
-		return this._get_parent()._get_isInViewStack();
+		if(this.get_parent() == null) return false;
+		return this.get_parent().get_isInViewStack();
 	}
-	,_get_parent: function() {
+	,get_parent: function() {
 		return this.parent;
 	}
-	,_set_isVisible: function(p_value) {
+	,set_isVisible: function(p_value) {
 		if(p_value == this.isVisible) return this.isVisible;
 		this.isVisible = p_value;
-		if(js.Boot.__instanceof(this._get_parent(),awe6.core.drivers.AView)) {
-			var l_parent = this._get_parent();
+		if(js.Boot.__instanceof(this.get_parent(),awe6.core.drivers.AView)) {
+			var l_parent = this.get_parent();
 			if(l_parent != null) l_parent._draw();
 		}
 		return this.isVisible;
 	}
-	,_set_priority: function(p_value) {
-		if(p_value == this._get_priority()) return this._get_priority();
+	,set_priority: function(p_value) {
+		if(p_value == this.get_priority()) return this.get_priority();
 		this.priority = p_value;
-		if(js.Boot.__instanceof(this._get_parent(),awe6.core.drivers.AView)) {
-			var l_parent = this._get_parent();
+		if(js.Boot.__instanceof(this.get_parent(),awe6.core.drivers.AView)) {
+			var l_parent = this.get_parent();
 			if(l_parent != null) l_parent._isDirty = true;
 		}
-		return this._get_priority();
+		return this.get_priority();
 	}
-	,_get_priority: function() {
+	,get_priority: function() {
 		return this.priority;
 	}
 	,_setParent: function(p_parent) {
@@ -6195,8 +5118,8 @@ awe6.core.drivers.AView.prototype = $extend(awe6.core.Process.prototype,{
 			}
 		}
 		if(this._isDirty) this._draw();
-		this.globalX = this._get_parent() == null?this.x:this.x + this._get_parent().globalX;
-		this.globalY = this._get_parent() == null?this.y:this.y + this._get_parent().globalY;
+		this.globalX = this.get_parent() == null?this.x:this.x + this.get_parent().globalX;
+		this.globalY = this.get_parent() == null?this.y:this.y + this.get_parent().globalY;
 	}
 	,clear: function() {
 		var _g = 0, _g1 = this._children;
@@ -6207,13 +5130,13 @@ awe6.core.drivers.AView.prototype = $extend(awe6.core.Process.prototype,{
 		}
 	}
 	,remove: function() {
-		if(this._get_parent() != null) this._get_parent().removeChild(this);
+		if(this.get_parent() != null) this.get_parent().removeChild(this);
 	}
 	,removeChild: function(p_child) {
 		if(this.isDisposed || p_child == null) return;
 		if(js.Boot.__instanceof(p_child,awe6.core.drivers.AView)) {
 			var l_child = p_child;
-			if(l_child._get_parent() != this) return;
+			if(l_child.get_parent() != this) return;
 			HxOverrides.remove(this._children,l_child);
 			l_child._setParent(null);
 		}
@@ -6221,8 +5144,8 @@ awe6.core.drivers.AView.prototype = $extend(awe6.core.Process.prototype,{
 	}
 	,addChild: function(p_child,p_priority) {
 		if(p_priority == null) p_priority = 0;
-		if(this.isDisposed || p_child == null) return;
-		if(p_child._get_parent() != this) {
+		if(this.isDisposed || p_child == null) return null;
+		if(p_child.get_parent() != this) {
 			p_child.remove();
 			if(js.Boot.__instanceof(p_child,awe6.core.drivers.AView)) {
 				var l_child = p_child;
@@ -6230,50 +5153,47 @@ awe6.core.drivers.AView.prototype = $extend(awe6.core.Process.prototype,{
 				l_child._setParent(this);
 			}
 		}
-		if(p_priority != 0) p_child._set_priority(p_priority);
+		if(p_priority != 0) p_child.set_priority(p_priority);
 		this._isDirty = true;
+		return p_child;
 	}
 	,_init: function() {
 		awe6.core.Process.prototype._init.call(this);
 		this.globalX = 0;
 		this.globalY = 0;
-		this._set_x(0);
-		this._set_y(0);
-		this._set_isVisible(true);
+		this.set_x(0);
+		this.set_y(0);
+		this.set_isVisible(true);
 		this._isDirty = true;
 		this._children = new Array();
 	}
-	,_children: null
-	,_isDirty: null
-	,globalY: null
-	,globalX: null
-	,y: null
-	,x: null
-	,isInViewStack: null
-	,isVisible: null
-	,parent: null
-	,owner: null
-	,priority: null
-	,context: null
 	,__class__: awe6.core.drivers.AView
-	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_priority:"_set_priority",get_priority:"_get_priority",get_parent:"_get_parent",set_isVisible:"_set_isVisible",get_isInViewStack:"_get_isInViewStack",set_x:"_set_x",set_y:"_set_y"})
+	,__properties__: $extend(awe6.core.Process.prototype.__properties__,{set_priority:"set_priority",get_priority:"get_priority",set_x:"set_x",set_y:"set_y",set_isVisible:"set_isVisible",get_isInViewStack:"get_isInViewStack",get_parent:"get_parent"})
 });
-awe6.core.drivers.jeash = {}
-awe6.core.drivers.jeash.AudioManager = function(p_kernel) {
+awe6.core.drivers.openfl = {}
+awe6.core.drivers.openfl.html5 = {}
+awe6.core.drivers.openfl.html5.AudioManager = function(p_kernel) {
 	awe6.core.drivers.AAudioManager.call(this,p_kernel);
 };
-$hxClasses["awe6.core.drivers.jeash.AudioManager"] = awe6.core.drivers.jeash.AudioManager;
-awe6.core.drivers.jeash.AudioManager.__name__ = ["awe6","core","drivers","jeash","AudioManager"];
-awe6.core.drivers.jeash.AudioManager.__super__ = awe6.core.drivers.AAudioManager;
-awe6.core.drivers.jeash.AudioManager.prototype = $extend(awe6.core.drivers.AAudioManager.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.AudioManager"] = awe6.core.drivers.openfl.html5.AudioManager;
+awe6.core.drivers.openfl.html5.AudioManager.__name__ = ["awe6","core","drivers","openfl","html5","AudioManager"];
+awe6.core.drivers.openfl.html5.AudioManager.__super__ = awe6.core.drivers.AAudioManager;
+awe6.core.drivers.openfl.html5.AudioManager.prototype = $extend(awe6.core.drivers.AAudioManager.prototype,{
 	_driverSetIsMute: function(p_value) {
 		var _g = 0, _g1 = this._sounds;
 		while(_g < _g1.length) {
 			var i = _g1[_g];
 			++_g;
-			if(i._soundChannel == null) continue;
-			if(i._soundChannel.nmeAudio == null) continue;
-			i._soundChannel.nmeAudio.muted = p_value;
+			var l_sound = i;
+			if(l_sound.getSoundChannel() == null) continue;
+			try {
+				l_sound.getSoundChannel().nmeAudio.muted = p_value;
+			} catch( p_error ) {
+				try {
+					l_sound.getSoundChannel().component.muted = p_value;
+				} catch( p_error1 ) {
+				}
+			}
 		}
 	}
 	,_driverSoundFactory: function(p_id,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
@@ -6281,25 +5201,28 @@ awe6.core.drivers.jeash.AudioManager.prototype = $extend(awe6.core.drivers.AAudi
 		if(p_volume == null) p_volume = 1;
 		if(p_startTime == null) p_startTime = 0;
 		if(p_loops == null) p_loops = 1;
-		return new awe6.core.drivers.jeash._HelperSound(this._kernel,p_id,this._packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
+		return new awe6.core.drivers.openfl.html5._HelperSound(this._kernel,p_id,this._packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
 	}
-	,__class__: awe6.core.drivers.jeash.AudioManager
+	,__class__: awe6.core.drivers.openfl.html5.AudioManager
 });
-awe6.core.drivers.jeash._HelperSound = function(p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
+awe6.core.drivers.openfl.html5._HelperSound = function(p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback) {
 	if(p_pan == null) p_pan = 0;
 	if(p_volume == null) p_volume = 1;
 	if(p_startTime == null) p_startTime = 0;
 	if(p_loops == null) p_loops = 1;
 	awe6.core.drivers._AHelperSound.call(this,p_kernel,p_id,p_packageId,p_audioChannelType,p_loops,p_startTime,p_volume,p_pan,p_onCompleteCallback);
 };
-$hxClasses["awe6.core.drivers.jeash._HelperSound"] = awe6.core.drivers.jeash._HelperSound;
-awe6.core.drivers.jeash._HelperSound.__name__ = ["awe6","core","drivers","jeash","_HelperSound"];
-awe6.core.drivers.jeash._HelperSound.__super__ = awe6.core.drivers._AHelperSound;
-awe6.core.drivers.jeash._HelperSound.prototype = $extend(awe6.core.drivers._AHelperSound.prototype,{
-	_driverDisposer: function() {
+$hxClasses["awe6.core.drivers.openfl.html5._HelperSound"] = awe6.core.drivers.openfl.html5._HelperSound;
+awe6.core.drivers.openfl.html5._HelperSound.__name__ = ["awe6","core","drivers","openfl","html5","_HelperSound"];
+awe6.core.drivers.openfl.html5._HelperSound.__super__ = awe6.core.drivers._AHelperSound;
+awe6.core.drivers.openfl.html5._HelperSound.prototype = $extend(awe6.core.drivers._AHelperSound.prototype,{
+	getSoundChannel: function() {
+		return this._soundChannel;
+	}
+	,_driverDisposer: function() {
 		if(this._soundChannel != null) {
 			this.stop();
-			this._soundChannel.removeEventListener(browser.events.Event.SOUND_COMPLETE,$bind(this,this._onSoundComplete));
+			this._soundChannel.removeEventListener(flash.events.Event.SOUND_COMPLETE,$bind(this,this._onSoundComplete));
 		}
 	}
 	,_onSoundComplete: function(p_event) {
@@ -6317,31 +5240,37 @@ awe6.core.drivers.jeash._HelperSound.prototype = $extend(awe6.core.drivers._AHel
 			this._volume *= this._soundChannel.soundTransform.volume;
 			this._pan *= this._soundChannel.soundTransform.pan;
 		}
-		var soundTransform = new browser.media.SoundTransform(this._volume,this._pan);
-		this._soundChannel.set_soundTransform(soundTransform);
-		this._soundChannel.nmeAudio.volume = this._volume;
+		var l_soundTransform = new flash.media.SoundTransform(this._volume,this._pan);
+		l_soundTransform.volume = this._volume;
+		l_soundTransform.pan = this._pan;
+		this._soundChannel.set_soundTransform(l_soundTransform);
 	}
 	,_driverInit: function() {
 		this._sound = this._kernel.assets.getAsset(this.id,this._packageId);
 		if(this._sound == null) return this.dispose();
 		this._soundChannel = this._sound.play(this._startTime,this._loops);
 		if(this._soundChannel == null) return this.dispose();
-		this._soundChannel.nmeAudio.muted = this._kernel.audio.isMute;
-		this._soundChannel.addEventListener(browser.events.Event.SOUND_COMPLETE,$bind(this,this._onSoundComplete));
+		try {
+			this._soundChannel.nmeAudio.muted = this._kernel.audio.isMute;
+		} catch( p_error ) {
+			try {
+				this._soundChannel.component.muted = this._kernel.audio.isMute;
+			} catch( p_error1 ) {
+			}
+		}
+		this._soundChannel.addEventListener(flash.events.Event.SOUND_COMPLETE,$bind(this,this._onSoundComplete));
 		this._driverTransform();
 		return;
 	}
-	,_soundChannel: null
-	,_sound: null
-	,__class__: awe6.core.drivers.jeash._HelperSound
+	,__class__: awe6.core.drivers.openfl.html5._HelperSound
 });
-awe6.core.drivers.jeash.Factory = function(p_context,p_isDebug,p_config) {
+awe6.core.drivers.openfl.html5.Factory = function(p_context,p_isDebug,p_config) {
 	awe6.core.drivers.AFactory.call(this,p_context,p_isDebug,p_config);
 };
-$hxClasses["awe6.core.drivers.jeash.Factory"] = awe6.core.drivers.jeash.Factory;
-awe6.core.drivers.jeash.Factory.__name__ = ["awe6","core","drivers","jeash","Factory"];
-awe6.core.drivers.jeash.Factory.__super__ = awe6.core.drivers.AFactory;
-awe6.core.drivers.jeash.Factory.prototype = $extend(awe6.core.drivers.AFactory.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.Factory"] = awe6.core.drivers.openfl.html5.Factory;
+awe6.core.drivers.openfl.html5.Factory.__name__ = ["awe6","core","drivers","openfl","html5","Factory"];
+awe6.core.drivers.openfl.html5.Factory.__super__ = awe6.core.drivers.AFactory;
+awe6.core.drivers.openfl.html5.Factory.prototype = $extend(awe6.core.drivers.AFactory.prototype,{
 	_driverDisposer: function() {
 		if(this._context.parent != null) this._context.parent.removeChild(this._context);
 	}
@@ -6349,21 +5278,21 @@ awe6.core.drivers.jeash.Factory.prototype = $extend(awe6.core.drivers.AFactory.p
 		this._traverseElements(Xml.parse(p_data).firstElement().elements(),"");
 	}
 	,_driverInit: function() {
-		var l_context = new browser.display.Sprite();
+		var l_context = new flash.display.Sprite();
 		this._context.addChild(l_context);
 		this._context = l_context;
 		if(this._config != "") this._parseXml(this._config);
 		this._launchKernel();
 	}
-	,__class__: awe6.core.drivers.jeash.Factory
+	,__class__: awe6.core.drivers.openfl.html5.Factory
 });
-awe6.core.drivers.jeash.InputKeyboard = function(p_kernel) {
+awe6.core.drivers.openfl.html5.InputKeyboard = function(p_kernel) {
 	awe6.core.drivers.AInputKeyboard.call(this,p_kernel);
 };
-$hxClasses["awe6.core.drivers.jeash.InputKeyboard"] = awe6.core.drivers.jeash.InputKeyboard;
-awe6.core.drivers.jeash.InputKeyboard.__name__ = ["awe6","core","drivers","jeash","InputKeyboard"];
-awe6.core.drivers.jeash.InputKeyboard.__super__ = awe6.core.drivers.AInputKeyboard;
-awe6.core.drivers.jeash.InputKeyboard.prototype = $extend(awe6.core.drivers.AInputKeyboard.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.InputKeyboard"] = awe6.core.drivers.openfl.html5.InputKeyboard;
+awe6.core.drivers.openfl.html5.InputKeyboard.__name__ = ["awe6","core","drivers","openfl","html5","InputKeyboard"];
+awe6.core.drivers.openfl.html5.InputKeyboard.__super__ = awe6.core.drivers.AInputKeyboard;
+awe6.core.drivers.openfl.html5.InputKeyboard.prototype = $extend(awe6.core.drivers.AInputKeyboard.prototype,{
 	_onKeyUp: function(p_event) {
 		if(!this.isActive) return;
 		this._addEvent(p_event.keyCode,false);
@@ -6375,9 +5304,9 @@ awe6.core.drivers.jeash.InputKeyboard.prototype = $extend(awe6.core.drivers.AInp
 		return;
 	}
 	,_disposer: function() {
-		this._stage.removeEventListener(browser.events.KeyboardEvent.KEY_DOWN,$bind(this,this._onKeyDown));
-		this._stage.removeEventListener(browser.events.KeyboardEvent.KEY_UP,$bind(this,this._onKeyUp));
-		this._stage.removeEventListener(browser.events.Event.DEACTIVATE,$bind(this,this._reset));
+		this._stage.removeEventListener(flash.events.KeyboardEvent.KEY_DOWN,$bind(this,this._onKeyDown));
+		this._stage.removeEventListener(flash.events.KeyboardEvent.KEY_UP,$bind(this,this._onKeyUp));
+		this._stage.removeEventListener(flash.events.Event.DEACTIVATE,$bind(this,this._reset));
 		awe6.core.drivers.AInputKeyboard.prototype._disposer.call(this);
 	}
 	,_updater: function(p_deltaTime) {
@@ -6386,32 +5315,31 @@ awe6.core.drivers.jeash.InputKeyboard.prototype = $extend(awe6.core.drivers.AInp
 		awe6.core.drivers.AInputKeyboard.prototype._updater.call(this,p_deltaTime);
 	}
 	,_driverInit: function() {
-		this._stage = browser.Lib.get_current().get_stage();
-		this._stage.addEventListener(browser.events.KeyboardEvent.KEY_DOWN,$bind(this,this._onKeyDown));
-		this._stage.addEventListener(browser.events.KeyboardEvent.KEY_UP,$bind(this,this._onKeyUp));
-		this._stage.addEventListener(browser.events.Event.DEACTIVATE,$bind(this,this._reset));
+		this._stage = flash.Lib.get_current().get_stage();
+		this._stage.addEventListener(flash.events.KeyboardEvent.KEY_DOWN,$bind(this,this._onKeyDown));
+		this._stage.addEventListener(flash.events.KeyboardEvent.KEY_UP,$bind(this,this._onKeyUp));
+		this._stage.addEventListener(flash.events.Event.DEACTIVATE,$bind(this,this._reset));
 	}
-	,_stage: null
-	,__class__: awe6.core.drivers.jeash.InputKeyboard
+	,__class__: awe6.core.drivers.openfl.html5.InputKeyboard
 });
-awe6.core.drivers.jeash.InputMouse = function(p_kernel) {
+awe6.core.drivers.openfl.html5.InputMouse = function(p_kernel) {
 	awe6.core.drivers.AInputMouse.call(this,p_kernel);
 };
-$hxClasses["awe6.core.drivers.jeash.InputMouse"] = awe6.core.drivers.jeash.InputMouse;
-awe6.core.drivers.jeash.InputMouse.__name__ = ["awe6","core","drivers","jeash","InputMouse"];
-awe6.core.drivers.jeash.InputMouse.__super__ = awe6.core.drivers.AInputMouse;
-awe6.core.drivers.jeash.InputMouse.prototype = $extend(awe6.core.drivers.AInputMouse.prototype,{
-	_set_cursorType: function(p_value) {
-		return awe6.core.drivers.AInputMouse.prototype._set_cursorType.call(this,p_value);
+$hxClasses["awe6.core.drivers.openfl.html5.InputMouse"] = awe6.core.drivers.openfl.html5.InputMouse;
+awe6.core.drivers.openfl.html5.InputMouse.__name__ = ["awe6","core","drivers","openfl","html5","InputMouse"];
+awe6.core.drivers.openfl.html5.InputMouse.__super__ = awe6.core.drivers.AInputMouse;
+awe6.core.drivers.openfl.html5.InputMouse.prototype = $extend(awe6.core.drivers.AInputMouse.prototype,{
+	set_cursorType: function(p_value) {
+		return awe6.core.drivers.AInputMouse.prototype.set_cursorType.call(this,p_value);
 	}
-	,_set_isVisible: function(p_value) {
-		if(p_value) browser.ui.Mouse.show(); else browser.ui.Mouse.hide();
-		return awe6.core.drivers.AInputMouse.prototype._set_isVisible.call(this,p_value);
+	,set_isVisible: function(p_value) {
+		if(p_value) flash.ui.Mouse.show(); else flash.ui.Mouse.hide();
+		return awe6.core.drivers.AInputMouse.prototype.set_isVisible.call(this,p_value);
 	}
 	,_onMouseWheel: function(p_event) {
 		if(!this.isActive) return;
 		this.scroll += p_event.delta;
-		haxe.Log.trace(this.scroll,{ fileName : "InputMouse.hx", lineNumber : 114, className : "awe6.core.drivers.jeash.InputMouse", methodName : "_onMouseWheel"});
+		console.log(this.scroll);
 	}
 	,_onMouseUp: function(p_event) {
 		if(!this.isActive) return;
@@ -6436,30 +5364,28 @@ awe6.core.drivers.jeash.InputMouse.prototype = $extend(awe6.core.drivers.AInputM
 		awe6.core.drivers.AInputMouse.prototype._updater.call(this,p_deltaTime);
 	}
 	,_disposer: function() {
-		this._stage.removeEventListener(browser.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onMouseDown));
-		this._stage.removeEventListener(browser.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
-		this._stage.removeEventListener(browser.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onMouseWheel));
-		this._stage.removeEventListener(browser.events.Event.DEACTIVATE,$bind(this,this._reset));
+		this._stage.removeEventListener(flash.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onMouseDown));
+		this._stage.removeEventListener(flash.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+		this._stage.removeEventListener(flash.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onMouseWheel));
+		this._stage.removeEventListener(flash.events.Event.DEACTIVATE,$bind(this,this._reset));
 		awe6.core.drivers.AInputMouse.prototype._disposer.call(this);
 	}
 	,_driverInit: function() {
-		this._stage = browser.Lib.get_current().get_stage();
-		this._stage.addEventListener(browser.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onMouseDown));
-		this._stage.addEventListener(browser.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
-		this._stage.addEventListener(browser.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onMouseWheel));
-		this._stage.addEventListener(browser.events.Event.DEACTIVATE,$bind(this,this._reset));
+		this._stage = flash.Lib.get_current().get_stage();
+		this._stage.addEventListener(flash.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onMouseDown));
+		this._stage.addEventListener(flash.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+		this._stage.addEventListener(flash.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onMouseWheel));
+		this._stage.addEventListener(flash.events.Event.DEACTIVATE,$bind(this,this._reset));
 	}
-	,_mouseClicks: null
-	,_stage: null
-	,__class__: awe6.core.drivers.jeash.InputMouse
+	,__class__: awe6.core.drivers.openfl.html5.InputMouse
 });
-awe6.core.drivers.jeash.Kernel = function(p_factory,p_context) {
+awe6.core.drivers.openfl.html5.Kernel = function(p_factory,p_context) {
 	awe6.core.drivers.AKernel.call(this,p_factory,p_context);
 };
-$hxClasses["awe6.core.drivers.jeash.Kernel"] = awe6.core.drivers.jeash.Kernel;
-awe6.core.drivers.jeash.Kernel.__name__ = ["awe6","core","drivers","jeash","Kernel"];
-awe6.core.drivers.jeash.Kernel.__super__ = awe6.core.drivers.AKernel;
-awe6.core.drivers.jeash.Kernel.prototype = $extend(awe6.core.drivers.AKernel.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.Kernel"] = awe6.core.drivers.openfl.html5.Kernel;
+awe6.core.drivers.openfl.html5.Kernel.__name__ = ["awe6","core","drivers","openfl","html5","Kernel"];
+awe6.core.drivers.openfl.html5.Kernel.__super__ = awe6.core.drivers.AKernel;
+awe6.core.drivers.openfl.html5.Kernel.prototype = $extend(awe6.core.drivers.AKernel.prototype,{
 	_driverSetIsFullScreen: function(p_value) {
 	}
 	,_driverSetIsEyeCandy: function(p_value) {
@@ -6471,25 +5397,24 @@ awe6.core.drivers.jeash.Kernel.prototype = $extend(awe6.core.drivers.AKernel.pro
 	}
 	,_driverInit: function() {
 		this._stage = this._context.get_stage();
-		browser.Lib.get_current().focusRect = false;
+		flash.Lib.get_current().focusRect = false;
 		this._stage.set_frameRate(this.factory.targetFramerate);
-		this._stage.scaleMode = browser.display.StageScaleMode.NO_SCALE;
-		this._stage.set_quality(browser.display.StageQuality.LOW);
-		this._stage.addEventListener(browser.events.Event.ENTER_FRAME,$bind(this,this._onEnterFrame));
+		this._stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+		this._stage.set_quality(flash.display.StageQuality.LOW);
+		this._stage.addEventListener(flash.events.Event.ENTER_FRAME,$bind(this,this._onEnterFrame));
 	}
 	,_driverGetIsLocal: function() {
-		return browser.system.Security.sandboxType != browser.system.Security.REMOTE;
+		return flash.system.Security.sandboxType != flash.system.Security.REMOTE;
 	}
-	,_stage: null
-	,__class__: awe6.core.drivers.jeash.Kernel
+	,__class__: awe6.core.drivers.openfl.html5.Kernel
 });
-awe6.core.drivers.jeash.Overlay = function(p_kernel,p_buttonWidth,p_buttonHeight,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha) {
+awe6.core.drivers.openfl.html5.Overlay = function(p_kernel,p_buttonWidth,p_buttonHeight,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha) {
 	awe6.core.drivers.AOverlay.call(this,p_kernel,p_buttonWidth,p_buttonHeight,p_border,p_backUp,p_backOver,p_muteUp,p_muteOver,p_unmuteUp,p_unmuteOver,p_pauseUp,p_pauseOver,p_unpauseUp,p_unpauseOver,p_pauseBlur,p_pauseColor,p_pauseAlpha);
 };
-$hxClasses["awe6.core.drivers.jeash.Overlay"] = awe6.core.drivers.jeash.Overlay;
-awe6.core.drivers.jeash.Overlay.__name__ = ["awe6","core","drivers","jeash","Overlay"];
-awe6.core.drivers.jeash.Overlay.__super__ = awe6.core.drivers.AOverlay;
-awe6.core.drivers.jeash.Overlay.prototype = $extend(awe6.core.drivers.AOverlay.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.Overlay"] = awe6.core.drivers.openfl.html5.Overlay;
+awe6.core.drivers.openfl.html5.Overlay.__name__ = ["awe6","core","drivers","openfl","html5","Overlay"];
+awe6.core.drivers.openfl.html5.Overlay.__super__ = awe6.core.drivers.AOverlay;
+awe6.core.drivers.openfl.html5.Overlay.prototype = $extend(awe6.core.drivers.AOverlay.prototype,{
 	flash: function(p_duration,p_asTime,p_startingAlpha,p_color) {
 		if(p_color == null) p_color = 16777215;
 		if(p_startingAlpha == null) p_startingAlpha = 1;
@@ -6508,33 +5433,33 @@ awe6.core.drivers.jeash.Overlay.prototype = $extend(awe6.core.drivers.AOverlay.p
 		this._flashContext.alpha = this._flashAlpha;
 	}
 	,_driverInit: function() {
-		(js.Boot.__cast(this._borderView , awe6.core.drivers.jeash.View)).context.mouseEnabled = false;
+		(js.Boot.__cast(this._borderView , awe6.core.drivers.openfl.html5.View)).context.mouseEnabled = false;
 		this._context.mouseEnabled = false;
-		this._pauseContext = new browser.display.Sprite();
+		this._pauseContext = new flash.display.Sprite();
 		this._pauseContext.mouseEnabled = false;
 		this._pauseContext.get_graphics().beginFill(this._pauseColor,this._pauseAlpha);
 		this._pauseContext.get_graphics().drawRect(0,0,this._kernel.factory.width,this._kernel.factory.height);
-		this._flashContext = new browser.display.Sprite();
+		this._flashContext = new flash.display.Sprite();
 		this._flashContext.mouseEnabled = false;
 	}
-	,__class__: awe6.core.drivers.jeash.Overlay
+	,__class__: awe6.core.drivers.openfl.html5.Overlay
 });
-awe6.core.drivers.jeash.Preloader = function(p_kernel,p_assets,p_isDecached) {
+awe6.core.drivers.openfl.html5.Preloader = function(p_kernel,p_assets,p_isDecached) {
 	awe6.core.drivers.APreloader.call(this,p_kernel,p_assets,p_isDecached);
 };
-$hxClasses["awe6.core.drivers.jeash.Preloader"] = awe6.core.drivers.jeash.Preloader;
-awe6.core.drivers.jeash.Preloader.__name__ = ["awe6","core","drivers","jeash","Preloader"];
-awe6.core.drivers.jeash.Preloader.__super__ = awe6.core.drivers.APreloader;
-awe6.core.drivers.jeash.Preloader.prototype = $extend(awe6.core.drivers.APreloader.prototype,{
-	__class__: awe6.core.drivers.jeash.Preloader
+$hxClasses["awe6.core.drivers.openfl.html5.Preloader"] = awe6.core.drivers.openfl.html5.Preloader;
+awe6.core.drivers.openfl.html5.Preloader.__name__ = ["awe6","core","drivers","openfl","html5","Preloader"];
+awe6.core.drivers.openfl.html5.Preloader.__super__ = awe6.core.drivers.APreloader;
+awe6.core.drivers.openfl.html5.Preloader.prototype = $extend(awe6.core.drivers.APreloader.prototype,{
+	__class__: awe6.core.drivers.openfl.html5.Preloader
 });
-awe6.core.drivers.jeash.Profiler = function(p_kernel) {
+awe6.core.drivers.openfl.html5.Profiler = function(p_kernel) {
 	awe6.core.drivers.AProfiler.call(this,p_kernel);
 };
-$hxClasses["awe6.core.drivers.jeash.Profiler"] = awe6.core.drivers.jeash.Profiler;
-awe6.core.drivers.jeash.Profiler.__name__ = ["awe6","core","drivers","jeash","Profiler"];
-awe6.core.drivers.jeash.Profiler.__super__ = awe6.core.drivers.AProfiler;
-awe6.core.drivers.jeash.Profiler.prototype = $extend(awe6.core.drivers.AProfiler.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.Profiler"] = awe6.core.drivers.openfl.html5.Profiler;
+awe6.core.drivers.openfl.html5.Profiler.__name__ = ["awe6","core","drivers","openfl","html5","Profiler"];
+awe6.core.drivers.openfl.html5.Profiler.__super__ = awe6.core.drivers.AProfiler;
+awe6.core.drivers.openfl.html5.Profiler.prototype = $extend(awe6.core.drivers.AProfiler.prototype,{
 	_driverUpdate: function() {
 		var l_fps = this._kernel.getFramerate(true) | 0;
 		var l_fpsValue = Math.min(this._height,this._height / this._kernel.factory.targetFramerate * l_fps) | 0;
@@ -6545,15 +5470,15 @@ awe6.core.drivers.jeash.Profiler.prototype = $extend(awe6.core.drivers.AProfiler
 		this._width = 70;
 		this._height = 0;
 		this._marginHeight = 12;
-		this._bitmapData = new browser.display.BitmapData(this._width,this._height,true,this._backgroundColor);
-		var l_bitmap = new browser.display.Bitmap(this._bitmapData);
+		this._bitmapData = new flash.display.BitmapData(this._width,this._height,true,this._backgroundColor);
+		var l_bitmap = new flash.display.Bitmap(this._bitmapData);
 		l_bitmap.set_y(this._marginHeight);
 		this._context.addChild(l_bitmap);
-		this._textFormat = new browser.text.TextFormat("_sans",10);
+		this._textFormat = new flash.text.TextFormat("_sans",10);
 		this._context.get_graphics().beginFill(this._marginColor);
 		this._context.get_graphics().drawRect(0,0,this._width,this._marginHeight);
 		this._context.get_graphics().endFill();
-		this._fpsTextField = new browser.text.TextField();
+		this._fpsTextField = new flash.text.TextField();
 		this._fpsTextField.set_defaultTextFormat(this._textFormat);
 		this._fpsTextField.set_width(this._width);
 		this._fpsTextField.selectable = false;
@@ -6561,32 +5486,28 @@ awe6.core.drivers.jeash.Profiler.prototype = $extend(awe6.core.drivers.AProfiler
 		this._fpsTextField.set_text(this._fpsLabel + ": 99 / 99");
 		this._context.addChild(this._fpsTextField);
 	}
-	,_memoryTextField: null
-	,_fpsTextField: null
-	,_textFormat: null
-	,_bitmapData: null
-	,__class__: awe6.core.drivers.jeash.Profiler
+	,__class__: awe6.core.drivers.openfl.html5.Profiler
 });
-awe6.core.drivers.jeash.SceneTransition = function(p_kernel,p_duration) {
+awe6.core.drivers.openfl.html5.SceneTransition = function(p_kernel,p_duration) {
 	awe6.core.drivers.ASceneTransition.call(this,p_kernel,p_duration);
 };
-$hxClasses["awe6.core.drivers.jeash.SceneTransition"] = awe6.core.drivers.jeash.SceneTransition;
-awe6.core.drivers.jeash.SceneTransition.__name__ = ["awe6","core","drivers","jeash","SceneTransition"];
-awe6.core.drivers.jeash.SceneTransition.__super__ = awe6.core.drivers.ASceneTransition;
-awe6.core.drivers.jeash.SceneTransition.prototype = $extend(awe6.core.drivers.ASceneTransition.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.SceneTransition"] = awe6.core.drivers.openfl.html5.SceneTransition;
+awe6.core.drivers.openfl.html5.SceneTransition.__name__ = ["awe6","core","drivers","openfl","html5","SceneTransition"];
+awe6.core.drivers.openfl.html5.SceneTransition.__super__ = awe6.core.drivers.ASceneTransition;
+awe6.core.drivers.openfl.html5.SceneTransition.prototype = $extend(awe6.core.drivers.ASceneTransition.prototype,{
 	_init: function() {
 		awe6.core.drivers.ASceneTransition.prototype._init.call(this);
 		this._kernel.overlay.flash(this._duration,true);
 	}
-	,__class__: awe6.core.drivers.jeash.SceneTransition
+	,__class__: awe6.core.drivers.openfl.html5.SceneTransition
 });
-awe6.core.drivers.jeash.Session = function(p_kernel,p_id) {
+awe6.core.drivers.openfl.html5.Session = function(p_kernel,p_id) {
 	awe6.core.drivers.ASession.call(this,p_kernel,p_id);
 };
-$hxClasses["awe6.core.drivers.jeash.Session"] = awe6.core.drivers.jeash.Session;
-awe6.core.drivers.jeash.Session.__name__ = ["awe6","core","drivers","jeash","Session"];
-awe6.core.drivers.jeash.Session.__super__ = awe6.core.drivers.ASession;
-awe6.core.drivers.jeash.Session.prototype = $extend(awe6.core.drivers.ASession.prototype,{
+$hxClasses["awe6.core.drivers.openfl.html5.Session"] = awe6.core.drivers.openfl.html5.Session;
+awe6.core.drivers.openfl.html5.Session.__name__ = ["awe6","core","drivers","openfl","html5","Session"];
+awe6.core.drivers.openfl.html5.Session.__super__ = awe6.core.drivers.ASession;
+awe6.core.drivers.openfl.html5.Session.prototype = $extend(awe6.core.drivers.ASession.prototype,{
 	_driverSave: function() {
 		js.Cookie.set(this._kernel.factory.id,this._tools.serialize(this._savedData));
 	}
@@ -6598,26 +5519,26 @@ awe6.core.drivers.jeash.Session.prototype = $extend(awe6.core.drivers.ASession.p
 		this._savedData = { };
 		if(js.Cookie.exists(this._kernel.factory.id)) this._savedData = this._tools.unserialize(js.Cookie.get(this._kernel.factory.id));
 	}
-	,__class__: awe6.core.drivers.jeash.Session
+	,__class__: awe6.core.drivers.openfl.html5.Session
 });
-awe6.core.drivers.jeash.View = function(p_kernel,p_context,p_priority,p_owner) {
+awe6.core.drivers.openfl.html5.View = function(p_kernel,p_context,p_priority,p_owner) {
 	awe6.core.drivers.AView.call(this,p_kernel,p_context,p_priority,p_owner);
 };
-$hxClasses["awe6.core.drivers.jeash.View"] = awe6.core.drivers.jeash.View;
-awe6.core.drivers.jeash.View.__name__ = ["awe6","core","drivers","jeash","View"];
-awe6.core.drivers.jeash.View.__super__ = awe6.core.drivers.AView;
-awe6.core.drivers.jeash.View.prototype = $extend(awe6.core.drivers.AView.prototype,{
-	_set_y: function(p_value) {
+$hxClasses["awe6.core.drivers.openfl.html5.View"] = awe6.core.drivers.openfl.html5.View;
+awe6.core.drivers.openfl.html5.View.__name__ = ["awe6","core","drivers","openfl","html5","View"];
+awe6.core.drivers.openfl.html5.View.__super__ = awe6.core.drivers.AView;
+awe6.core.drivers.openfl.html5.View.prototype = $extend(awe6.core.drivers.AView.prototype,{
+	set_y: function(p_value) {
 		this.context.set_y(p_value);
-		return awe6.core.drivers.AView.prototype._set_y.call(this,p_value);
+		return awe6.core.drivers.AView.prototype.set_y.call(this,p_value);
 	}
-	,_set_x: function(p_value) {
+	,set_x: function(p_value) {
 		this.context.set_x(p_value);
-		return awe6.core.drivers.AView.prototype._set_x.call(this,p_value);
+		return awe6.core.drivers.AView.prototype.set_x.call(this,p_value);
 	}
 	,_driverDraw: function() {
 		if(this._container != null && this._container.parent != null) this._container.parent.removeChild(this._container);
-		this._container = new browser.display.Sprite();
+		this._container = new flash.display.Sprite();
 		this._container.mouseEnabled = false;
 		this.context.addChild(this._container);
 		var l_children = this._children;
@@ -6635,28 +5556,28 @@ awe6.core.drivers.jeash.View.prototype = $extend(awe6.core.drivers.AView.prototy
 		}
 	}
 	,_init: function() {
-		if(this.context == null) this.context = new browser.display.Sprite();
+		if(this.context == null) this.context = new flash.display.Sprite();
 		awe6.core.drivers.AView.prototype._init.call(this);
 	}
-	,_container: null
-	,__class__: awe6.core.drivers.jeash.View
+	,__class__: awe6.core.drivers.openfl.html5.View
 });
-browser.display.BitmapData = function(width,height,transparent,inFillColor) {
+flash.display.BitmapData = function(width,height,transparent,inFillColor) {
 	if(inFillColor == null) inFillColor = -1;
 	if(transparent == null) transparent = true;
 	this.nmeLocked = false;
+	this.nmeReferenceCount = 0;
 	this.nmeLeaseNum = 0;
-	this.nmeLease = new browser.display.ImageDataLease();
+	this.nmeLease = new flash.display.ImageDataLease();
 	this.nmeLease.set(this.nmeLeaseNum++,new Date().getTime());
-	this._nmeTextureBuffer = js.Lib.document.createElement("canvas");
+	this._nmeTextureBuffer = js.Browser.document.createElement("canvas");
 	this._nmeTextureBuffer.width = width;
 	this._nmeTextureBuffer.height = height;
-	this._nmeId = browser.utils.Uuid.uuid();
-	browser.Lib.nmeSetSurfaceId(this._nmeTextureBuffer,this._nmeId);
+	this._nmeId = flash.utils.Uuid.uuid();
+	flash.Lib.nmeSetSurfaceId(this._nmeTextureBuffer,this._nmeId);
 	this.nmeTransparent = transparent;
-	this.rect = new browser.geom.Rectangle(0,0,width,height);
+	this.rect = new flash.geom.Rectangle(0,0,width,height);
 	if(this.nmeTransparent) {
-		this.nmeTransparentFiller = js.Lib.document.createElement("canvas");
+		this.nmeTransparentFiller = js.Browser.document.createElement("canvas");
 		this.nmeTransparentFiller.width = width;
 		this.nmeTransparentFiller.height = height;
 		var ctx = this.nmeTransparentFiller.getContext("2d");
@@ -6669,21 +5590,21 @@ browser.display.BitmapData = function(width,height,transparent,inFillColor) {
 		this.nmeFillRect(this.rect,inFillColor);
 	}
 };
-$hxClasses["browser.display.BitmapData"] = browser.display.BitmapData;
-browser.display.BitmapData.__name__ = ["browser","display","BitmapData"];
-browser.display.BitmapData.__interfaces__ = [browser.display.IBitmapDrawable];
-browser.display.BitmapData.getRGBAPixels = function(bitmapData) {
-	var p = bitmapData.getPixels(new browser.geom.Rectangle(0,0,bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.width:0,bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.height:0));
+$hxClasses["flash.display.BitmapData"] = flash.display.BitmapData;
+flash.display.BitmapData.__name__ = ["flash","display","BitmapData"];
+flash.display.BitmapData.__interfaces__ = [flash.display.IBitmapDrawable];
+flash.display.BitmapData.getRGBAPixels = function(bitmapData) {
+	var p = bitmapData.getPixels(new flash.geom.Rectangle(0,0,bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.width:0,bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.height:0));
 	var num = (bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.width:0) * (bitmapData._nmeTextureBuffer != null?bitmapData._nmeTextureBuffer.height:0);
 	p.position = 0;
 	var _g = 0;
 	while(_g < num) {
 		var i = _g++;
 		var pos = p.position;
-		var alpha = p.data.getUint8(p.position++);
-		var red = p.data.getUint8(p.position++);
-		var green = p.data.getUint8(p.position++);
-		var blue = p.data.getUint8(p.position++);
+		var alpha = p.readByte();
+		var red = p.readByte();
+		var green = p.readByte();
+		var blue = p.readByte();
 		p.position = pos;
 		p.writeByte(red);
 		p.writeByte(green);
@@ -6692,40 +5613,20 @@ browser.display.BitmapData.getRGBAPixels = function(bitmapData) {
 	}
 	return p;
 }
-browser.display.BitmapData.loadFromBytes = function(bytes,inRawAlpha,onload) {
-	var type = "";
-	if(browser.display.BitmapData.nmeIsPNG(bytes)) type = "image/png"; else if(browser.display.BitmapData.nmeIsJPG(bytes)) type = "image/jpeg"; else throw new browser.errors.IOError("BitmapData tried to read a PNG/JPG ByteArray, but found an invalid header.");
-	var img = js.Lib.document.createElement("img");
-	var bitmapData = new browser.display.BitmapData(0,0);
-	var canvas = bitmapData._nmeTextureBuffer;
-	var drawImage = function(_) {
-		canvas.width = img.width;
-		canvas.height = img.height;
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(img,0,0);
-		if(inRawAlpha != null) {
-			var pixels = ctx.getImageData(0,0,img.width,img.height);
-			var _g1 = 0, _g = inRawAlpha.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				pixels.data[i * 4 + 3] = inRawAlpha.data.getUint8(inRawAlpha.position++);
-			}
-			ctx.putImageData(pixels,0,0);
-		}
-		onload(bitmapData);
-	};
-	img.addEventListener("load",drawImage,false);
-	img.src = "data:" + type + ";base64," + browser.display.BitmapData.nmeBase64Encode(bytes);
+flash.display.BitmapData.loadFromBytes = function(bytes,inRawAlpha,onload) {
+	var bitmapData = new flash.display.BitmapData(0,0);
+	bitmapData.nmeLoadFromBytes(bytes,inRawAlpha,onload);
+	return bitmapData;
 }
-browser.display.BitmapData.nmeBase64Encode = function(bytes) {
+flash.display.BitmapData.nmeBase64Encode = function(bytes) {
 	var blob = "";
 	var codex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	bytes.position = 0;
 	while(bytes.position < bytes.length) {
 		var by1 = 0, by2 = 0, by3 = 0;
-		by1 = bytes.data.getUint8(bytes.position++);
-		if(bytes.position < bytes.length) by2 = bytes.data.getUint8(bytes.position++);
-		if(bytes.position < bytes.length) by3 = bytes.data.getUint8(bytes.position++);
+		by1 = bytes.readByte();
+		if(bytes.position < bytes.length) by2 = bytes.readByte();
+		if(bytes.position < bytes.length) by3 = bytes.readByte();
 		var by4 = 0, by5 = 0, by6 = 0, by7 = 0;
 		by4 = by1 >> 2;
 		by5 = (by1 & 3) << 4 | by2 >> 4;
@@ -6738,25 +5639,20 @@ browser.display.BitmapData.nmeBase64Encode = function(bytes) {
 	}
 	return blob;
 }
-browser.display.BitmapData.nmeCreateFromHandle = function(inHandle) {
-	var result = new browser.display.BitmapData(0,0);
+flash.display.BitmapData.nmeCreateFromHandle = function(inHandle) {
+	var result = new flash.display.BitmapData(0,0);
 	result._nmeTextureBuffer = inHandle;
 	return result;
 }
-browser.display.BitmapData.nmeIsJPG = function(bytes) {
+flash.display.BitmapData.nmeIsJPG = function(bytes) {
 	bytes.position = 0;
-	if(bytes.data.getUint8(bytes.position++) == 255 && bytes.data.getUint8(bytes.position++) == 216 && bytes.data.getUint8(bytes.position++) == 255 && bytes.data.getUint8(bytes.position++) == 224) {
-		bytes.data.getUint8(bytes.position++);
-		bytes.data.getUint8(bytes.position++);
-		if(bytes.data.getUint8(bytes.position++) == 74 && bytes.data.getUint8(bytes.position++) == 70 && bytes.data.getUint8(bytes.position++) == 73 && bytes.data.getUint8(bytes.position++) == 70 && bytes.data.getUint8(bytes.position++) == 0) return true;
-	}
-	return false;
+	return bytes.readByte() == 255 && bytes.readByte() == 216;
 }
-browser.display.BitmapData.nmeIsPNG = function(bytes) {
+flash.display.BitmapData.nmeIsPNG = function(bytes) {
 	bytes.position = 0;
-	return bytes.data.getUint8(bytes.position++) == 137 && bytes.data.getUint8(bytes.position++) == 80 && bytes.data.getUint8(bytes.position++) == 78 && bytes.data.getUint8(bytes.position++) == 71 && bytes.data.getUint8(bytes.position++) == 13 && bytes.data.getUint8(bytes.position++) == 10 && bytes.data.getUint8(bytes.position++) == 26 && bytes.data.getUint8(bytes.position++) == 10;
+	return bytes.readByte() == 137 && bytes.readByte() == 80 && bytes.readByte() == 78 && bytes.readByte() == 71 && bytes.readByte() == 13 && bytes.readByte() == 10 && bytes.readByte() == 26 && bytes.readByte() == 10;
 }
-browser.display.BitmapData.prototype = {
+flash.display.BitmapData.prototype = {
 	get_width: function() {
 		if(this._nmeTextureBuffer != null) return this._nmeTextureBuffer.width; else return 0;
 	}
@@ -6776,10 +5672,10 @@ browser.display.BitmapData.prototype = {
 		ctx.drawImage(data.image,0,0,width,height);
 		data.bitmapData.width = width;
 		data.bitmapData.height = height;
-		data.bitmapData.rect = new browser.geom.Rectangle(0,0,width,height);
+		data.bitmapData.rect = new flash.geom.Rectangle(0,0,width,height);
 		data.bitmapData.nmeBuildLease();
 		if(data.inLoader != null) {
-			var e1 = new browser.events.Event(browser.events.Event.COMPLETE);
+			var e1 = new flash.events.Event(flash.events.Event.COMPLETE);
 			e1.target = data.inLoader;
 			data.inLoader.dispatchEvent(e1);
 		}
@@ -6807,7 +5703,7 @@ browser.display.BitmapData.prototype = {
 		if(copySource == null) copySource = false;
 		if(mask == null) mask = -1;
 		if(color == null) color = 0;
-		haxe.Log.trace("BitmapData.threshold not implemented",{ fileName : "BitmapData.hx", lineNumber : 1254, className : "browser.display.BitmapData", methodName : "threshold"});
+		console.log("BitmapData.threshold not implemented");
 		return 0;
 	}
 	,setPixels: function(rect,byteArray) {
@@ -6820,7 +5716,7 @@ browser.display.BitmapData.prototype = {
 			var _g = 0;
 			while(_g < len) {
 				var i = _g++;
-				imageData.data[i] = byteArray.data.getUint8(byteArray.position++);
+				imageData.data[i] = byteArray.readByte();
 			}
 			ctx.putImageData(imageData,rect.x,rect.y);
 		} else {
@@ -6831,7 +5727,7 @@ browser.display.BitmapData.prototype = {
 			while(_g < len) {
 				var i = _g++;
 				if(pos % (this.nmeImageData.width * 4) > boundR - 1) pos += this.nmeImageData.width * 4 - boundR;
-				this.nmeImageData.data[pos] = byteArray.data.getUint8(byteArray.position++);
+				this.nmeImageData.data[pos] = byteArray.readByte();
 				pos++;
 			}
 			this.nmeImageDataChanged = true;
@@ -6885,7 +5781,7 @@ browser.display.BitmapData.prototype = {
 		if(channelOptions == null) channelOptions = 7;
 		if(high == null) high = 255;
 		if(low == null) low = 0;
-		var generator = new browser.display._BitmapData.MinstdGenerator(randomSeed);
+		var generator = new flash.display._BitmapData.MinstdGenerator(randomSeed);
 		var ctx = this._nmeTextureBuffer.getContext("2d");
 		var imageData = null;
 		if(this.nmeLocked) imageData = this.nmeImageData; else imageData = ctx.createImageData(this._nmeTextureBuffer.width,this._nmeTextureBuffer.height);
@@ -6903,7 +5799,7 @@ browser.display.BitmapData.prototype = {
 	}
 	,nmeLoadFromFile: function(inFilename,inLoader) {
 		var _g = this;
-		var image = js.Lib.document.createElement("img");
+		var image = js.Browser.document.createElement("img");
 		if(inLoader != null) {
 			var data = { image : image, texture : this._nmeTextureBuffer, inLoader : inLoader, bitmapData : this};
 			image.addEventListener("load",(function(f,a1) {
@@ -6925,6 +5821,32 @@ browser.display.BitmapData.prototype = {
 	,nmeGetNumRefBitmaps: function() {
 		return this.nmeAssignedBitmaps;
 	}
+	,nmeLoadFromBytes: function(bytes,inRawAlpha,onload) {
+		var _g = this;
+		var type = "";
+		if(flash.display.BitmapData.nmeIsPNG(bytes)) type = "image/png"; else if(flash.display.BitmapData.nmeIsJPG(bytes)) type = "image/jpeg"; else throw new flash.errors.IOError("BitmapData tried to read a PNG/JPG ByteArray, but found an invalid header.");
+		var img = js.Browser.document.createElement("img");
+		var canvas = this._nmeTextureBuffer;
+		var drawImage = function(_) {
+			canvas.width = img.width;
+			canvas.height = img.height;
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img,0,0);
+			if(inRawAlpha != null) {
+				var pixels = ctx.getImageData(0,0,img.width,img.height);
+				var _g1 = 0, _g2 = inRawAlpha.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					pixels.data[i * 4 + 3] = inRawAlpha.readUnsignedByte();
+				}
+				ctx.putImageData(pixels,0,0);
+			}
+			_g.rect = new flash.geom.Rectangle(0,0,canvas.width,canvas.height);
+			if(onload != null) onload(_g);
+		};
+		img.addEventListener("load",drawImage,false);
+		img.src = "data:" + type + ";base64," + flash.display.BitmapData.nmeBase64Encode(bytes);
+	}
 	,nmeGetLease: function() {
 		return this.nmeLease;
 	}
@@ -6936,11 +5858,6 @@ browser.display.BitmapData.prototype = {
 		var b = color & 255;
 		var a = this.nmeTransparent?color >>> 24:255;
 		if(!this.nmeLocked) {
-			if(this.nmeTransparent) {
-				var trpCtx = this.nmeTransparentFiller.getContext("2d");
-				var trpData = trpCtx.getImageData(rect.x,rect.y,rect.width,rect.height);
-				ctx.putImageData(trpData,rect.x,rect.y);
-			}
 			var style = "rgba(" + r + ", " + g + ", " + b + ", " + a / 255 + ")";
 			ctx.fillStyle = style;
 			ctx.fillRect(rect.x,rect.y,rect.width,rect.height);
@@ -6963,7 +5880,6 @@ browser.display.BitmapData.prototype = {
 				}
 			}
 			this.nmeImageDataChanged = true;
-			ctx.putImageData(this.nmeImageData,0,0,rect.x,rect.y,rect.width,rect.height);
 		}
 	}
 	,nmeDecrNumRefBitmaps: function() {
@@ -6990,14 +5906,15 @@ browser.display.BitmapData.prototype = {
 		var me = this;
 		var doHitTest = function(imageData) {
 			if(secondObject.__proto__ == null || secondObject.__proto__.__class__ == null || secondObject.__proto__.__class__.__name__ == null) return false;
-			switch(secondObject.__proto__.__class__.__name__[2]) {
+			var _g = secondObject.__proto__.__class__.__name__[2];
+			switch(_g) {
 			case "Rectangle":
 				var rect = secondObject;
 				rect.x -= firstPoint.x;
 				rect.y -= firstPoint.y;
 				rect = me.clipRect(me.rect);
 				if(me.rect == null) return false;
-				var boundingBox = new browser.geom.Rectangle(0,0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.width:0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.height:0);
+				var boundingBox = new flash.geom.Rectangle(0,0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.width:0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.height:0);
 				if(!rect.intersects(boundingBox)) return false;
 				var diff = rect.intersection(boundingBox);
 				var offset = 4 * (Math.round(diff.x) + Math.round(diff.y) * imageData.width) + 3;
@@ -7039,7 +5956,7 @@ browser.display.BitmapData.prototype = {
 	}
 	,getPixels: function(rect) {
 		var len = Math.round(4 * rect.width * rect.height);
-		var byteArray = new browser.utils.ByteArray();
+		var byteArray = new flash.utils.ByteArray();
 		if(byteArray.allocated < len) byteArray._nmeResizeBuffer(byteArray.allocated = Math.max(len,byteArray.allocated * 2) | 0); else if(byteArray.allocated > len) byteArray._nmeResizeBuffer(byteArray.allocated = len);
 		byteArray.length = len;
 		len;
@@ -7087,12 +6004,7 @@ browser.display.BitmapData.prototype = {
 		}
 	}
 	,getInt32: function(offset,data) {
-		var b5, b6, b7, b8, pow = Math.pow;
-		b5 = !this.nmeTransparent?255:data[offset + 3] & 255;
-		b6 = data[offset] & 255;
-		b7 = data[offset + 1] & 255;
-		b8 = data[offset + 2] & 255;
-		return parseInt(((b5 >> 7) * pow(2,31)).toString(2),2) + parseInt(((b5 & 127) << 24 | b6 << 16 | b7 << 8 | b8).toString(2),2);
+		return (this.nmeTransparent?data[offset + 3]:255) << 24 | data[offset] << 16 | data[offset + 1] << 8 | data[offset + 2];
 	}
 	,getColorBoundsRect: function(mask,color,findColor) {
 		if(findColor == null) findColor = true;
@@ -7120,7 +6032,7 @@ browser.display.BitmapData.prototype = {
 				}
 				i += 4;
 			}
-			if(minX < maxX && minY < maxY) return new browser.geom.Rectangle(minX,minY,maxX - minX + 1,maxY - minY); else return new browser.geom.Rectangle(0,0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.width:0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.height:0);
+			if(minX < maxX && minY < maxY) return new flash.geom.Rectangle(minX,minY,maxX - minX + 1,maxY - minY); else return new flash.geom.Rectangle(0,0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.width:0,me._nmeTextureBuffer != null?me._nmeTextureBuffer.height:0);
 		};
 		if(!this.nmeLocked) {
 			var ctx = this._nmeTextureBuffer.getContext("2d");
@@ -7129,7 +6041,42 @@ browser.display.BitmapData.prototype = {
 		} else return doGetColorBoundsRect(this.nmeImageData.data);
 	}
 	,floodFill: function(x,y,color) {
-		haxe.Log.trace("BitmapData.floodFill not implemented",{ fileName : "BitmapData.hx", lineNumber : 471, className : "browser.display.BitmapData", methodName : "floodFill"});
+		var wasLocked = this.nmeLocked;
+		if(!this.nmeLocked) this.lock();
+		var queue = new Array();
+		queue.push(new flash.geom.Point(x,y));
+		var old = this.getPixel32(x,y);
+		var iterations = 0;
+		var search = new Array();
+		var _g1 = 0, _g = (this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) + 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var column = new Array();
+			var _g3 = 0, _g2 = (this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) + 1;
+			while(_g3 < _g2) {
+				var i1 = _g3++;
+				column.push(false);
+			}
+			search.push(column);
+		}
+		var currPoint, newPoint;
+		while(queue.length > 0) {
+			currPoint = queue.shift();
+			++iterations;
+			var x1 = currPoint.x | 0;
+			var y1 = currPoint.y | 0;
+			if(x1 < 0 || x1 >= (this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0)) continue;
+			if(y1 < 0 || y1 >= (this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0)) continue;
+			search[x1][y1] = true;
+			if(this.getPixel32(x1,y1) == old) {
+				this.setPixel32(x1,y1,color);
+				if(!search[x1 + 1][y1]) queue.push(new flash.geom.Point(x1 + 1,y1));
+				if(!search[x1][y1 + 1]) queue.push(new flash.geom.Point(x1,y1 + 1));
+				if(x1 > 0 && !search[x1 - 1][y1]) queue.push(new flash.geom.Point(x1 - 1,y1));
+				if(y1 > 0 && !search[x1][y1 - 1]) queue.push(new flash.geom.Point(x1,y1 - 1));
+			}
+		}
+		if(!wasLocked) this.unlock();
 	}
 	,fillRect: function(rect,color) {
 		if(rect == null) return;
@@ -7141,23 +6088,26 @@ browser.display.BitmapData.prototype = {
 		}
 		return this.nmeFillRect(rect,color);
 	}
-	,drawToSurface: function(inSurface,matrix,inColorTransform,blendMode,clipRect,smothing) {
+	,drawToSurface: function(inSurface,matrix,inColorTransform,blendMode,clipRect,smoothing) {
 		this.nmeLease.set(this.nmeLeaseNum++,new Date().getTime());
 		var ctx = inSurface.getContext("2d");
 		if(matrix != null) {
 			ctx.save();
-			if(matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1) ctx.translate(matrix.tx,matrix.ty); else ctx.setTransform(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
+			if(matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1) ctx.translate(matrix.tx,matrix.ty); else {
+				flash.Lib.nmeSetImageSmoothing(ctx,smoothing);
+				ctx.setTransform(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
+			}
 			ctx.drawImage(this._nmeTextureBuffer,0,0);
 			ctx.restore();
 		} else ctx.drawImage(this._nmeTextureBuffer,0,0);
-		if(inColorTransform != null) this.colorTransform(new browser.geom.Rectangle(0,0,this._nmeTextureBuffer.width,this._nmeTextureBuffer.height),inColorTransform);
+		if(inColorTransform != null) this.colorTransform(new flash.geom.Rectangle(0,0,this._nmeTextureBuffer.width,this._nmeTextureBuffer.height),inColorTransform);
 	}
 	,draw: function(source,matrix,inColorTransform,blendMode,clipRect,smoothing) {
 		if(smoothing == null) smoothing = false;
 		this.nmeLease.set(this.nmeLeaseNum++,new Date().getTime());
 		source.drawToSurface(this._nmeTextureBuffer,matrix,inColorTransform,blendMode,clipRect,smoothing);
 		if(inColorTransform != null) {
-			var rect = new browser.geom.Rectangle();
+			var rect = new flash.geom.Rectangle();
 			var object = source;
 			rect.x = matrix != null?matrix.tx:0;
 			rect.y = matrix != null?matrix.ty:0;
@@ -7186,20 +6136,30 @@ browser.display.BitmapData.prototype = {
 		if(sourceBitmapData._nmeTextureBuffer == null || this._nmeTextureBuffer == null || sourceBitmapData._nmeTextureBuffer.width == 0 || sourceBitmapData._nmeTextureBuffer.height == 0 || sourceRect.width <= 0 || sourceRect.height <= 0) return;
 		if(sourceRect.x + sourceRect.width > sourceBitmapData._nmeTextureBuffer.width) sourceRect.width = sourceBitmapData._nmeTextureBuffer.width - sourceRect.x;
 		if(sourceRect.y + sourceRect.height > sourceBitmapData._nmeTextureBuffer.height) sourceRect.height = sourceBitmapData._nmeTextureBuffer.height - sourceRect.y;
+		if(alphaBitmapData != null && alphaBitmapData.nmeTransparent) {
+			if(alphaPoint == null) alphaPoint = new flash.geom.Point();
+			var bitmapData = new flash.display.BitmapData(sourceBitmapData._nmeTextureBuffer != null?sourceBitmapData._nmeTextureBuffer.width:0,sourceBitmapData._nmeTextureBuffer != null?sourceBitmapData._nmeTextureBuffer.height:0,true);
+			bitmapData.copyPixels(sourceBitmapData,sourceRect,new flash.geom.Point(sourceRect.x,sourceRect.y));
+			bitmapData.copyChannel(alphaBitmapData,new flash.geom.Rectangle(alphaPoint.x,alphaPoint.y,sourceRect.width,sourceRect.height),new flash.geom.Point(sourceRect.x,sourceRect.y),8,8);
+			sourceBitmapData = bitmapData;
+		}
 		if(!this.nmeLocked) {
 			this.nmeLease.set(this.nmeLeaseNum++,new Date().getTime());
 			var ctx = this._nmeTextureBuffer.getContext("2d");
-			if(this.nmeTransparent && sourceBitmapData.nmeTransparent) {
-				var trpCtx = sourceBitmapData.nmeTransparentFiller.getContext("2d");
-				var trpData = trpCtx.getImageData(sourceRect.x,sourceRect.y,sourceRect.width,sourceRect.height);
-				ctx.putImageData(trpData,destPoint.x,destPoint.y);
+			if(!mergeAlpha) {
+				if(this.nmeTransparent && sourceBitmapData.nmeTransparent) {
+					var trpCtx = sourceBitmapData.nmeTransparentFiller.getContext("2d");
+					var trpData = trpCtx.getImageData(sourceRect.x,sourceRect.y,sourceRect.width,sourceRect.height);
+					ctx.putImageData(trpData,destPoint.x,destPoint.y);
+				}
 			}
 			ctx.drawImage(sourceBitmapData._nmeTextureBuffer,sourceRect.x,sourceRect.y,sourceRect.width,sourceRect.height,destPoint.x,destPoint.y,sourceRect.width,sourceRect.height);
-		} else this.nmeCopyPixelList[this.nmeCopyPixelList.length] = { handle : sourceBitmapData._nmeTextureBuffer, transparentFiller : sourceBitmapData.nmeTransparentFiller, sourceX : sourceRect.x, sourceY : sourceRect.y, sourceWidth : sourceRect.width, sourceHeight : sourceRect.height, destX : destPoint.x, destY : destPoint.y};
+		} else this.nmeCopyPixelList[this.nmeCopyPixelList.length] = { handle : sourceBitmapData._nmeTextureBuffer, transparentFiller : mergeAlpha?null:sourceBitmapData.nmeTransparentFiller, sourceX : sourceRect.x, sourceY : sourceRect.y, sourceWidth : sourceRect.width, sourceHeight : sourceRect.height, destX : destPoint.x, destY : destPoint.y};
 	}
 	,copyChannel: function(sourceBitmapData,sourceRect,destPoint,sourceChannel,destChannel) {
 		this.rect = this.clipRect(this.rect);
 		if(this.rect == null) return;
+		if(destChannel == 8 && !this.nmeTransparent) return;
 		if(sourceBitmapData._nmeTextureBuffer == null || this._nmeTextureBuffer == null || sourceRect.width <= 0 || sourceRect.height <= 0) return;
 		if(sourceRect.x + sourceRect.width > sourceBitmapData._nmeTextureBuffer.width) sourceRect.width = sourceBitmapData._nmeTextureBuffer.width - sourceRect.x;
 		if(sourceRect.y + sourceRect.height > sourceBitmapData._nmeTextureBuffer.height) sourceRect.height = sourceBitmapData._nmeTextureBuffer.height - sourceRect.y;
@@ -7277,8 +6237,8 @@ browser.display.BitmapData.prototype = {
 		}
 	}
 	,clone: function() {
-		var bitmapData = new browser.display.BitmapData(this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0,this.nmeTransparent);
-		var rect = new browser.geom.Rectangle(0,0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0);
+		var bitmapData = new flash.display.BitmapData(this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0,this.nmeTransparent);
+		var rect = new flash.geom.Rectangle(0,0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0,this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0);
 		bitmapData.setPixels(rect,this.getPixels(rect));
 		bitmapData.nmeLease.set(bitmapData.nmeLeaseNum++,new Date().getTime());
 		return bitmapData;
@@ -7304,27 +6264,18 @@ browser.display.BitmapData.prototype = {
 		}
 		return r;
 	}
-	,applyFilter: function(sourceBitmapData,sourceRect,destPoint,filter) {
-		haxe.Log.trace("BitmapData.applyFilter not implemented",{ fileName : "BitmapData.hx", lineNumber : 91, className : "browser.display.BitmapData", methodName : "applyFilter"});
+	,clear: function(color) {
+		this.fillRect(this.rect,color);
 	}
-	,_nmeTextureBuffer: null
-	,_nmeId: null
-	,nmeTransparentFiller: null
-	,nmeTransparent: null
-	,nmeLocked: null
-	,nmeLeaseNum: null
-	,nmeLease: null
-	,nmeInitColor: null
-	,nmeImageDataChanged: null
-	,nmeGLTexture: null
-	,nmeImageData: null
-	,nmeCopyPixelList: null
-	,nmeAssignedBitmaps: null
-	,width: null
-	,transparent: null
-	,rect: null
-	,height: null
-	,__class__: browser.display.BitmapData
+	,applyFilter: function(sourceBitmapData,sourceRect,destPoint,filter) {
+		if(sourceBitmapData == this && sourceRect.x == destPoint.x && sourceRect.y == destPoint.y) filter.nmeApplyFilter(this._nmeTextureBuffer,sourceRect); else {
+			var bitmapData = new flash.display.BitmapData(sourceRect.width | 0,sourceRect.height | 0);
+			bitmapData.copyPixels(sourceBitmapData,sourceRect,new flash.geom.Point());
+			filter.nmeApplyFilter(bitmapData._nmeTextureBuffer);
+			this.copyPixels(bitmapData,bitmapData.rect,destPoint);
+		}
+	}
+	,__class__: flash.display.BitmapData
 	,__properties__: {get_height:"get_height",get_transparent:"get_transparent",get_width:"get_width"}
 }
 awe6.extras = {}
@@ -7338,15 +6289,15 @@ awe6.extras.gui.BitmapDataScale9 = function(p_source,p_topLeftX,p_topLeftY,p_bot
 	this._bottomRightX = p_bottomRightX;
 	this._bottomRightY = p_bottomRightY;
 	if(p_isTransparent && p_fillColor == -1) p_fillColor = 0;
-	browser.display.BitmapData.call(this,p_width,p_height,p_isTransparent,p_fillColor);
+	flash.display.BitmapData.call(this,p_width,p_height,p_isTransparent,p_fillColor);
 	this._init();
 };
 $hxClasses["awe6.extras.gui.BitmapDataScale9"] = awe6.extras.gui.BitmapDataScale9;
 awe6.extras.gui.BitmapDataScale9.__name__ = ["awe6","extras","gui","BitmapDataScale9"];
-awe6.extras.gui.BitmapDataScale9.__super__ = browser.display.BitmapData;
-awe6.extras.gui.BitmapDataScale9.prototype = $extend(browser.display.BitmapData.prototype,{
+awe6.extras.gui.BitmapDataScale9.__super__ = flash.display.BitmapData;
+awe6.extras.gui.BitmapDataScale9.prototype = $extend(flash.display.BitmapData.prototype,{
 	_init: function() {
-		if((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) == this._source.get_width() && (this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) == this._source.get_height()) this.copyPixels(this._source,this._source.rect,this._source.rect.get_topLeft()); else {
+		if((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) == this._source.get_width() && (this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) == this._source.get_height()) this.copyPixels(this._source,this._source.rect,new flash.geom.Point(this._source.rect.x,this._source.rect.y)); else {
 			var l_isSmoothing = true;
 			var l_leftMargin = this._topLeftX;
 			var l_rightMargin = this._source.get_width() - this._bottomRightX;
@@ -7354,47 +6305,42 @@ awe6.extras.gui.BitmapDataScale9.prototype = $extend(browser.display.BitmapData.
 			var l_bottomMargin = this._source.get_height() - this._bottomRightY;
 			var l_centerWidth = this._source.get_width() - l_leftMargin - l_rightMargin;
 			var l_centerHeight = this._source.get_height() - l_topMargin - l_bottomMargin;
-			var l_matrix = new browser.geom.Matrix();
+			var l_matrix = new flash.geom.Matrix();
 			var l_clipRect;
-			l_clipRect = new browser.geom.Rectangle(0,0,l_leftMargin,l_topMargin);
+			l_clipRect = new flash.geom.Rectangle(0,0,l_leftMargin,l_topMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.set_tx((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - this._source.get_width());
-			l_clipRect = new browser.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,0,l_rightMargin,l_topMargin);
+			l_clipRect = new flash.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,0,l_rightMargin,l_topMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.set_ty((this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - this._source.get_height());
-			l_clipRect = new browser.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_rightMargin,l_bottomMargin);
+			l_clipRect = new flash.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_rightMargin,l_bottomMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.set_tx(0);
-			l_clipRect = new browser.geom.Rectangle(0,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_leftMargin,l_bottomMargin);
+			l_clipRect = new flash.geom.Rectangle(0,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_leftMargin,l_bottomMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.identity();
 			l_matrix.a = ((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_leftMargin - l_rightMargin) / l_centerWidth;
 			l_matrix.set_tx(l_leftMargin - l_leftMargin * l_matrix.a);
-			l_clipRect = new browser.geom.Rectangle(l_leftMargin,0,l_centerWidth * l_matrix.a,l_topMargin);
+			l_clipRect = new flash.geom.Rectangle(l_leftMargin,0,l_centerWidth * l_matrix.a,l_topMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.set_ty((this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - this._source.get_height());
-			l_clipRect = new browser.geom.Rectangle(l_leftMargin,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_centerWidth * l_matrix.a,l_bottomMargin);
+			l_clipRect = new flash.geom.Rectangle(l_leftMargin,(this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_bottomMargin,l_centerWidth * l_matrix.a,l_bottomMargin);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.d = ((this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_topMargin - l_bottomMargin) / l_centerHeight;
 			l_matrix.set_ty(l_topMargin - l_topMargin * l_matrix.d);
-			l_clipRect = new browser.geom.Rectangle(l_leftMargin,l_topMargin,l_centerWidth * l_matrix.a,l_centerHeight * l_matrix.d);
+			l_clipRect = new flash.geom.Rectangle(l_leftMargin,l_topMargin,l_centerWidth * l_matrix.a,l_centerHeight * l_matrix.d);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.identity();
 			l_matrix.d = ((this._nmeTextureBuffer != null?this._nmeTextureBuffer.height:0) - l_topMargin - l_bottomMargin) / l_centerHeight;
 			l_matrix.set_ty(l_topMargin - l_topMargin * l_matrix.d);
-			l_clipRect = new browser.geom.Rectangle(0,l_topMargin,l_leftMargin,l_centerHeight * l_matrix.d);
+			l_clipRect = new flash.geom.Rectangle(0,l_topMargin,l_leftMargin,l_centerHeight * l_matrix.d);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 			l_matrix.set_tx((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - this._source.get_width());
-			l_clipRect = new browser.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,l_topMargin,l_rightMargin,l_centerHeight * l_matrix.d);
+			l_clipRect = new flash.geom.Rectangle((this._nmeTextureBuffer != null?this._nmeTextureBuffer.width:0) - l_rightMargin,l_topMargin,l_rightMargin,l_centerHeight * l_matrix.d);
 			this.draw(this._source,l_matrix,null,null,l_clipRect,l_isSmoothing);
 		}
 		this._source.dispose();
 	}
-	,_bottomRightY: null
-	,_bottomRightX: null
-	,_topLeftY: null
-	,_topLeftX: null
-	,_source: null
 	,__class__: awe6.extras.gui.BitmapDataScale9
 });
 awe6.extras.gui.GuiEntity = function(p_kernel,p_width,p_height,p_isMasked) {
@@ -7405,72 +6351,68 @@ awe6.extras.gui.GuiEntity = function(p_kernel,p_width,p_height,p_isMasked) {
 	this.isFlippedY = false;
 	this.width = p_width;
 	this.height = p_height;
-	this._sprite = new browser.display.Sprite();
+	this._context = new flash.display.Sprite();
 	if(p_isMasked) {
-		var l_mask = new browser.display.Sprite();
-		l_mask.get_graphics().beginFill(16711680);
-		l_mask.get_graphics().drawRect(0,0,p_width,p_height);
-		this._sprite.addChild(l_mask);
-		this._sprite.set_mask(l_mask);
+		var l_mask = new flash.display.Sprite();
+		try {
+			l_mask.get_graphics().beginFill(16711680);
+			l_mask.get_graphics().drawRect(0,0,p_width,p_height);
+			this._context.addChild(l_mask);
+			this._context.set_mask(l_mask);
+		} catch( p_error ) {
+		}
 	}
-	awe6.core.Entity.call(this,p_kernel,null,this._sprite);
+	awe6.core.Entity.call(this,p_kernel,null,this._context);
 };
 $hxClasses["awe6.extras.gui.GuiEntity"] = awe6.extras.gui.GuiEntity;
 awe6.extras.gui.GuiEntity.__name__ = ["awe6","extras","gui","GuiEntity"];
 awe6.extras.gui.GuiEntity.__interfaces__ = [awe6.interfaces.IPositionable];
 awe6.extras.gui.GuiEntity.__super__ = awe6.core.Entity;
 awe6.extras.gui.GuiEntity.prototype = $extend(awe6.core.Entity.prototype,{
-	_set_isFlippedY: function(p_value) {
+	set_isFlippedY: function(p_value) {
 		if(p_value == this.isFlippedY) return this.isFlippedY;
 		this.isFlippedY = p_value;
-		var _g = this._sprite;
+		var _g = this._context;
 		_g.set_scaleY(_g.get_scaleY() * -1);
 		if(this.isFlippedY) {
 			var _g = this;
-			_g._set_y(_g.y + this.height);
+			_g.set_y(_g.y + this.height);
 		} else {
 			var _g = this;
-			_g._set_y(_g.y - this.height);
+			_g.set_y(_g.y - this.height);
 		}
 		return this.isFlippedY;
 	}
-	,_set_isFlippedX: function(p_value) {
+	,set_isFlippedX: function(p_value) {
 		if(p_value == this.isFlippedX) return this.isFlippedX;
 		this.isFlippedX = p_value;
-		var _g = this._sprite;
+		var _g = this._context;
 		_g.set_scaleX(_g.get_scaleX() * -1);
 		if(this.isFlippedX) {
 			var _g = this;
-			_g._set_x(_g.x + this.width);
+			_g.set_x(_g.x + this.width);
 		} else {
 			var _g = this;
-			_g._set_x(_g.x - this.width);
+			_g.set_x(_g.x - this.width);
 		}
 		return this.isFlippedX;
 	}
-	,_set_y: function(p_value) {
+	,set_y: function(p_value) {
 		this.y = p_value;
-		this._sprite.set_y(this.y);
+		this._context.set_y(this.y);
 		return this.y;
 	}
-	,_set_x: function(p_value) {
+	,set_x: function(p_value) {
 		this.x = p_value;
-		this._sprite.set_x(this.x);
+		this._context.set_x(this.x);
 		return this.x;
 	}
 	,setPosition: function(p_x,p_y) {
-		this._set_x(p_x);
-		this._set_y(p_y);
+		this.set_x(p_x);
+		this.set_y(p_y);
 	}
-	,_sprite: null
-	,isFlippedY: null
-	,isFlippedX: null
-	,height: null
-	,width: null
-	,y: null
-	,x: null
 	,__class__: awe6.extras.gui.GuiEntity
-	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_x:"_set_x",set_y:"_set_y",set_isFlippedX:"_set_isFlippedX",set_isFlippedY:"_set_isFlippedY"})
+	,__properties__: $extend(awe6.core.Entity.prototype.__properties__,{set_x:"set_x",set_y:"set_y",set_isFlippedX:"set_isFlippedX",set_isFlippedY:"set_isFlippedY"})
 });
 awe6.extras.gui.Text = function(p_kernel,p_width,p_height,p_text,p_textStyle,p_isMultiline,p_isInput) {
 	if(p_isInput == null) p_isInput = false;
@@ -7481,13 +6423,13 @@ awe6.extras.gui.Text = function(p_kernel,p_width,p_height,p_text,p_textStyle,p_i
 	this._isInput = p_isInput;
 	this._isInput = false;
 	awe6.extras.gui.GuiEntity.call(this,p_kernel,p_width,p_height,false);
-	this._set_text(p_text);
+	this.set_text(p_text);
 };
 $hxClasses["awe6.extras.gui.Text"] = awe6.extras.gui.Text;
 awe6.extras.gui.Text.__name__ = ["awe6","extras","gui","Text"];
 awe6.extras.gui.Text.__super__ = awe6.extras.gui.GuiEntity;
 awe6.extras.gui.Text.prototype = $extend(awe6.extras.gui.GuiEntity.prototype,{
-	_set_text: function(p_value) {
+	set_text: function(p_value) {
 		if(p_value == null) p_value = "";
 		if(this.text == p_value) return this.text;
 		this.text = p_value;
@@ -7501,20 +6443,25 @@ awe6.extras.gui.Text.prototype = $extend(awe6.extras.gui.GuiEntity.prototype,{
 		if(this._prevTextStyle != this.textStyle.toString()) {
 			this._textFormat.align = (function($this) {
 				var $r;
-				switch( ($this.textStyle.align)[1] ) {
-				case 1:
-					$r = browser.text.TextFormatAlign.LEFT;
-					break;
-				case 2:
-					$r = browser.text.TextFormatAlign.CENTER;
-					break;
-				case 3:
-					$r = browser.text.TextFormatAlign.RIGHT;
-					break;
-				case 0:
-					$r = browser.text.TextFormatAlign.JUSTIFY;
-					break;
-				}
+				var _g = $this;
+				$r = (function($this) {
+					var $r;
+					switch( (_g.textStyle.align)[1] ) {
+					case 1:
+						$r = flash.text.TextFormatAlign.LEFT;
+						break;
+					case 2:
+						$r = flash.text.TextFormatAlign.CENTER;
+						break;
+					case 3:
+						$r = flash.text.TextFormatAlign.RIGHT;
+						break;
+					case 0:
+						$r = flash.text.TextFormatAlign.JUSTIFY;
+						break;
+					}
+					return $r;
+				}($this));
 				return $r;
 			}(this));
 			this._textFormat.color = this.textStyle.color;
@@ -7528,11 +6475,11 @@ awe6.extras.gui.Text.prototype = $extend(awe6.extras.gui.GuiEntity.prototype,{
 			this._textField.embedFonts = false;
 			if(this.textStyle.filters != null) {
 				var l_filters = [];
-				var _g = 0, _g1 = this.textStyle.filters;
-				while(_g < _g1.length) {
-					var i = _g1[_g];
-					++_g;
-					if(js.Boot.__instanceof(i,browser.filters.BitmapFilter)) l_filters.push(i);
+				var _g1 = 0, _g2 = this.textStyle.filters;
+				while(_g1 < _g2.length) {
+					var i = _g2[_g1];
+					++_g1;
+					if(js.Boot.__instanceof(i,flash.filters.BitmapFilter)) l_filters.push(i);
 				}
 				this._textField.set_filters(l_filters);
 			}
@@ -7549,41 +6496,39 @@ awe6.extras.gui.Text.prototype = $extend(awe6.extras.gui.GuiEntity.prototype,{
 		this._prevTextStyle = this.textStyle.toString();
 	}
 	,_stopEventPropogation: function(p_event) {
-		p_event.stopImmediatePropagation();
+		try {
+			p_event.stopImmediatePropagation();
+		} catch( p_error ) {
+		}
 	}
 	,_disposer: function() {
-		this._textField.removeEventListener(browser.events.KeyboardEvent.KEY_DOWN,$bind(this,this._stopEventPropogation));
-		this._textField.removeEventListener(browser.events.KeyboardEvent.KEY_UP,$bind(this,this._stopEventPropogation));
+		this._textField.removeEventListener(flash.events.KeyboardEvent.KEY_DOWN,$bind(this,this._stopEventPropogation));
+		this._textField.removeEventListener(flash.events.KeyboardEvent.KEY_UP,$bind(this,this._stopEventPropogation));
 		awe6.extras.gui.GuiEntity.prototype._disposer.call(this);
 	}
 	,_init: function() {
 		awe6.extras.gui.GuiEntity.prototype._init.call(this);
-		this._textField = new browser.text.TextField();
-		this._textField.addEventListener(browser.events.KeyboardEvent.KEY_DOWN,$bind(this,this._stopEventPropogation));
-		this._textField.addEventListener(browser.events.KeyboardEvent.KEY_UP,$bind(this,this._stopEventPropogation));
+		this._textField = new flash.text.TextField();
+		this._textField.addEventListener(flash.events.KeyboardEvent.KEY_DOWN,$bind(this,this._stopEventPropogation));
+		this._textField.addEventListener(flash.events.KeyboardEvent.KEY_UP,$bind(this,this._stopEventPropogation));
 		this._textField.multiline = this._isMultiline;
 		this._textField.set_wordWrap(this._isMultiline);
-		this._textField.set_type(this._isInput?browser.text.TextFieldType.INPUT:browser.text.TextFieldType.DYNAMIC);
+		this._textField.set_type(this._isInput?flash.text.TextFieldType.INPUT:flash.text.TextFieldType.DYNAMIC);
 		this._textField.set_wordWrap(true);
-		this._textFormat = new browser.text.TextFormat();
+		this._textFormat = new flash.text.TextFormat();
 		this._draw();
-		this._sprite.addChild(this._textField);
-		this._sprite.cacheAsBitmap = true;
-		this._sprite.mouseEnabled = this._isInput;
-		this._sprite.mouseChildren = this._isInput;
+		this._context.addChild(this._textField);
+		try {
+			this._context.cacheAsBitmap = true;
+		} catch( p_error ) {
+		}
+		this._context.mouseEnabled = this._isInput;
+		this._context.mouseChildren = this._isInput;
 		this._isDirty = false;
 		this._prevTextStyle = this.textStyle.toString();
 	}
-	,_prevTextStyle: null
-	,_isDirty: null
-	,_isInput: null
-	,_isMultiline: null
-	,_textFormat: null
-	,_textField: null
-	,textStyle: null
-	,text: null
 	,__class__: awe6.extras.gui.Text
-	,__properties__: $extend(awe6.extras.gui.GuiEntity.prototype.__properties__,{set_text:"_set_text"})
+	,__properties__: $extend(awe6.extras.gui.GuiEntity.prototype.__properties__,{set_text:"set_text"})
 });
 awe6.interfaces.EAgenda = $hxClasses["awe6.interfaces.EAgenda"] = { __ename__ : ["awe6","interfaces","EAgenda"], __constructs__ : ["ALWAYS","BIRTH","DEATH","STANDARD","ATTACK","DEFEND","SUB_TYPE"] }
 awe6.interfaces.EAgenda.ALWAYS = ["ALWAYS",0];
@@ -8015,41 +6960,44 @@ awe6.interfaces.EOverlayButton.UNPAUSE = ["UNPAUSE",4];
 awe6.interfaces.EOverlayButton.UNPAUSE.toString = $estr;
 awe6.interfaces.EOverlayButton.UNPAUSE.__enum__ = awe6.interfaces.EOverlayButton;
 awe6.interfaces.EOverlayButton.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",5,value]; $x.__enum__ = awe6.interfaces.EOverlayButton; $x.toString = $estr; return $x; }
-awe6.interfaces.EScene = $hxClasses["awe6.interfaces.EScene"] = { __ename__ : ["awe6","interfaces","EScene"], __constructs__ : ["INTRO","SELECT_SESSION","MENU","AVATAR","SHOP","INSTRUCTIONS","SETTINGS","GAME","RESULTS","REWARDS","TEST","SUB_TYPE"] }
+awe6.interfaces.EScene = $hxClasses["awe6.interfaces.EScene"] = { __ename__ : ["awe6","interfaces","EScene"], __constructs__ : ["INTRO","EXIT","SELECT_SESSION","MENU","AVATAR","SHOP","INSTRUCTIONS","SETTINGS","GAME","RESULTS","REWARDS","TEST","SUB_TYPE"] }
 awe6.interfaces.EScene.INTRO = ["INTRO",0];
 awe6.interfaces.EScene.INTRO.toString = $estr;
 awe6.interfaces.EScene.INTRO.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.SELECT_SESSION = ["SELECT_SESSION",1];
+awe6.interfaces.EScene.EXIT = ["EXIT",1];
+awe6.interfaces.EScene.EXIT.toString = $estr;
+awe6.interfaces.EScene.EXIT.__enum__ = awe6.interfaces.EScene;
+awe6.interfaces.EScene.SELECT_SESSION = ["SELECT_SESSION",2];
 awe6.interfaces.EScene.SELECT_SESSION.toString = $estr;
 awe6.interfaces.EScene.SELECT_SESSION.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.MENU = ["MENU",2];
+awe6.interfaces.EScene.MENU = ["MENU",3];
 awe6.interfaces.EScene.MENU.toString = $estr;
 awe6.interfaces.EScene.MENU.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.AVATAR = ["AVATAR",3];
+awe6.interfaces.EScene.AVATAR = ["AVATAR",4];
 awe6.interfaces.EScene.AVATAR.toString = $estr;
 awe6.interfaces.EScene.AVATAR.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.SHOP = ["SHOP",4];
+awe6.interfaces.EScene.SHOP = ["SHOP",5];
 awe6.interfaces.EScene.SHOP.toString = $estr;
 awe6.interfaces.EScene.SHOP.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.INSTRUCTIONS = ["INSTRUCTIONS",5];
+awe6.interfaces.EScene.INSTRUCTIONS = ["INSTRUCTIONS",6];
 awe6.interfaces.EScene.INSTRUCTIONS.toString = $estr;
 awe6.interfaces.EScene.INSTRUCTIONS.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.SETTINGS = ["SETTINGS",6];
+awe6.interfaces.EScene.SETTINGS = ["SETTINGS",7];
 awe6.interfaces.EScene.SETTINGS.toString = $estr;
 awe6.interfaces.EScene.SETTINGS.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.GAME = ["GAME",7];
+awe6.interfaces.EScene.GAME = ["GAME",8];
 awe6.interfaces.EScene.GAME.toString = $estr;
 awe6.interfaces.EScene.GAME.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.RESULTS = ["RESULTS",8];
+awe6.interfaces.EScene.RESULTS = ["RESULTS",9];
 awe6.interfaces.EScene.RESULTS.toString = $estr;
 awe6.interfaces.EScene.RESULTS.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.REWARDS = ["REWARDS",9];
+awe6.interfaces.EScene.REWARDS = ["REWARDS",10];
 awe6.interfaces.EScene.REWARDS.toString = $estr;
 awe6.interfaces.EScene.REWARDS.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.TEST = ["TEST",10];
+awe6.interfaces.EScene.TEST = ["TEST",11];
 awe6.interfaces.EScene.TEST.toString = $estr;
 awe6.interfaces.EScene.TEST.__enum__ = awe6.interfaces.EScene;
-awe6.interfaces.EScene.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",11,value]; $x.__enum__ = awe6.interfaces.EScene; $x.toString = $estr; return $x; }
+awe6.interfaces.EScene.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",12,value]; $x.__enum__ = awe6.interfaces.EScene; $x.toString = $estr; return $x; }
 awe6.interfaces.ETextAlign = $hxClasses["awe6.interfaces.ETextAlign"] = { __ename__ : ["awe6","interfaces","ETextAlign"], __constructs__ : ["JUSTIFY","LEFT","CENTER","RIGHT"] }
 awe6.interfaces.ETextAlign.JUSTIFY = ["JUSTIFY",0];
 awe6.interfaces.ETextAlign.JUSTIFY.toString = $estr;
@@ -8083,45 +7031,632 @@ awe6.interfaces.ETextStyle.OVERSIZED = ["OVERSIZED",5];
 awe6.interfaces.ETextStyle.OVERSIZED.toString = $estr;
 awe6.interfaces.ETextStyle.OVERSIZED.__enum__ = awe6.interfaces.ETextStyle;
 awe6.interfaces.ETextStyle.SUB_TYPE = function(value) { var $x = ["SUB_TYPE",6,value]; $x.__enum__ = awe6.interfaces.ETextStyle; $x.toString = $estr; return $x; }
-browser.Selection = function() { }
-$hxClasses["browser.Selection"] = browser.Selection;
-browser.Selection.__name__ = ["browser","Selection"];
-browser.Selection.prototype = {
-	stringifier: null
-	,removeAllRanges: null
-	,removeRange: null
-	,addRange: null
-	,getRangeAt: null
-	,deleteFromDocument: null
-	,selectAllChildren: null
-	,collapseToEnd: null
-	,collapseToStart: null
-	,collapse: null
-	,rangeCount: null
-	,isCollapsed: null
-	,focusOffset: null
-	,focusNode: null
-	,anchorOffset: null
-	,anchorNode: null
-	,__class__: browser.Selection
-}
-browser.MessagePortArray = function() { }
-$hxClasses["browser.MessagePortArray"] = browser.MessagePortArray;
-browser.MessagePortArray.__name__ = ["browser","MessagePortArray"];
-browser.MessagePort = function() { }
-$hxClasses["browser.MessagePort"] = browser.MessagePort;
-browser.MessagePort.__name__ = ["browser","MessagePort"];
-browser.MessagePort.prototype = {
-	onmessage: null
-	,close: null
-	,start: null
-	,postMessage: null
-	,__class__: browser.MessagePort
-}
+var demo = {}
+demo.AssetManager = function(p_kernel) {
+	awe6.core.AAssetManager.call(this,p_kernel);
+};
+$hxClasses["demo.AssetManager"] = demo.AssetManager;
+demo.AssetManager.__name__ = ["demo","AssetManager"];
+demo.AssetManager.__super__ = awe6.core.AAssetManager;
+demo.AssetManager.prototype = $extend(awe6.core.AAssetManager.prototype,{
+	_createView: function(p_type) {
+		var l_context = new flash.display.Sprite();
+		var l_bitmap = new flash.display.Bitmap();
+		l_context.addChild(l_bitmap);
+		switch( (p_type)[1] ) {
+		case 0:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/OverlayBackground.png"));
+			break;
+		case 1:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/BackUp.png"));
+			break;
+		case 2:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/BackOver.png"));
+			break;
+		case 3:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png"));
+			break;
+		case 4:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png"));
+			break;
+		case 5:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/UnmuteUp.png"));
+			break;
+		case 6:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/UnmuteOver.png"));
+			break;
+		case 7:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/PauseUp.png"));
+			break;
+		case 8:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png"));
+			break;
+		case 9:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/UnpauseUp.png"));
+			break;
+		case 10:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/overlay/buttons/UnpauseOver.png"));
+			break;
+		case 11:
+			l_bitmap.set_bitmapData(openfl.Assets.getBitmapData("assets/scenes/Background.png"));
+			break;
+		}
+		return new awe6.core.drivers.openfl.html5.View(this._kernel,l_context);
+	}
+	,getAsset: function(p_id,p_packageId,p_args) {
+		if(p_packageId == null) p_packageId = this._kernel.getConfig("settings.assets.packages.default");
+		if(p_packageId == null) p_packageId = this._PACKAGE_ID;
+		if(p_packageId == this._kernel.getConfig("settings.assets.packages.audio") || p_packageId == "assets.audio") {
+			var l_extension = ".mp3";
+			l_extension = this._html5AudioExtension;
+			p_id += l_extension;
+		}
+		if(p_packageId.length > 0 && HxOverrides.substr(p_packageId,-1,1) != ".") p_packageId += ".";
+		var l_assetName = StringTools.replace(p_packageId,".","/") + p_id;
+		var l_result = openfl.Assets.getSound(l_assetName);
+		if(l_result != null) return l_result;
+		var l_result1 = openfl.Assets.getBitmapData(l_assetName);
+		if(l_result1 != null) return l_result1;
+		var l_result2 = openfl.Assets.getFont(l_assetName);
+		if(l_result2 != null) return l_result2;
+		var l_result3 = openfl.Assets.getText(l_assetName);
+		if(l_result3 != null) return l_result3;
+		var l_result4 = openfl.Assets.getBytes(l_assetName);
+		if(l_result4 != null) return l_result4;
+		return awe6.core.AAssetManager.prototype.getAsset.call(this,p_id,p_packageId,p_args);
+	}
+	,_init: function() {
+		awe6.core.AAssetManager.prototype._init.call(this);
+		this.overlayBackground = this._createView(demo.EAsset.OVERLAY_BACKGROUND);
+		this.overlayBackUp = this._createView(demo.EAsset.OVERLAY_BACK_UP);
+		this.overlayBackOver = this._createView(demo.EAsset.OVERLAY_BACK_OVER);
+		this.overlayMuteUp = this._createView(demo.EAsset.OVERLAY_MUTE_UP);
+		this.overlayMuteOver = this._createView(demo.EAsset.OVERLAY_MUTE_OVER);
+		this.overlayUnmuteUp = this._createView(demo.EAsset.OVERLAY_UNMUTE_UP);
+		this.overlayUnmuteOver = this._createView(demo.EAsset.OVERLAY_UNMUTE_OVER);
+		this.overlayPauseUp = this._createView(demo.EAsset.OVERLAY_PAUSE_UP);
+		this.overlayPauseOver = this._createView(demo.EAsset.OVERLAY_PAUSE_OVER);
+		this.overlayUnpauseUp = this._createView(demo.EAsset.OVERLAY_UNPAUSE_UP);
+		this.overlayUnpauseOver = this._createView(demo.EAsset.OVERLAY_UNPAUSE_OVER);
+		this.background = this._createView(demo.EAsset.BACKGROUND);
+		this.buttonUp = openfl.Assets.getBitmapData("assets/ButtonUp.png");
+		this.buttonOver = openfl.Assets.getBitmapData("assets/ButtonOver.png");
+		this.sphere = openfl.Assets.getBitmapData("assets/Sphere.png");
+		this.font = openfl.Assets.getFont("assets/fonts/orbitron.ttf");
+		this._html5AudioExtension = ".mp3";
+		try {
+			this._html5AudioExtension = flash.media.Sound.nmeCanPlayType("ogg")?".ogg":".mp3";
+		} catch( p_error ) {
+			try {
+				flash.Lib.get_current().get_stage().component.style.width = Std.string(this._kernel.factory.width + "px");
+				flash.Lib.get_current().get_stage().component.style.height = Std.string(this._kernel.factory.height + "px");
+			} catch( p_error1 ) {
+			}
+		}
+	}
+	,__class__: demo.AssetManager
+});
+demo.EAsset = $hxClasses["demo.EAsset"] = { __ename__ : ["demo","EAsset"], __constructs__ : ["OVERLAY_BACKGROUND","OVERLAY_BACK_UP","OVERLAY_BACK_OVER","OVERLAY_MUTE_UP","OVERLAY_MUTE_OVER","OVERLAY_UNMUTE_UP","OVERLAY_UNMUTE_OVER","OVERLAY_PAUSE_UP","OVERLAY_PAUSE_OVER","OVERLAY_UNPAUSE_UP","OVERLAY_UNPAUSE_OVER","BACKGROUND"] }
+demo.EAsset.OVERLAY_BACKGROUND = ["OVERLAY_BACKGROUND",0];
+demo.EAsset.OVERLAY_BACKGROUND.toString = $estr;
+demo.EAsset.OVERLAY_BACKGROUND.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_BACK_UP = ["OVERLAY_BACK_UP",1];
+demo.EAsset.OVERLAY_BACK_UP.toString = $estr;
+demo.EAsset.OVERLAY_BACK_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_BACK_OVER = ["OVERLAY_BACK_OVER",2];
+demo.EAsset.OVERLAY_BACK_OVER.toString = $estr;
+demo.EAsset.OVERLAY_BACK_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_MUTE_UP = ["OVERLAY_MUTE_UP",3];
+demo.EAsset.OVERLAY_MUTE_UP.toString = $estr;
+demo.EAsset.OVERLAY_MUTE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_MUTE_OVER = ["OVERLAY_MUTE_OVER",4];
+demo.EAsset.OVERLAY_MUTE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_MUTE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNMUTE_UP = ["OVERLAY_UNMUTE_UP",5];
+demo.EAsset.OVERLAY_UNMUTE_UP.toString = $estr;
+demo.EAsset.OVERLAY_UNMUTE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNMUTE_OVER = ["OVERLAY_UNMUTE_OVER",6];
+demo.EAsset.OVERLAY_UNMUTE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_UNMUTE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_PAUSE_UP = ["OVERLAY_PAUSE_UP",7];
+demo.EAsset.OVERLAY_PAUSE_UP.toString = $estr;
+demo.EAsset.OVERLAY_PAUSE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_PAUSE_OVER = ["OVERLAY_PAUSE_OVER",8];
+demo.EAsset.OVERLAY_PAUSE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_PAUSE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNPAUSE_UP = ["OVERLAY_UNPAUSE_UP",9];
+demo.EAsset.OVERLAY_UNPAUSE_UP.toString = $estr;
+demo.EAsset.OVERLAY_UNPAUSE_UP.__enum__ = demo.EAsset;
+demo.EAsset.OVERLAY_UNPAUSE_OVER = ["OVERLAY_UNPAUSE_OVER",10];
+demo.EAsset.OVERLAY_UNPAUSE_OVER.toString = $estr;
+demo.EAsset.OVERLAY_UNPAUSE_OVER.__enum__ = demo.EAsset;
+demo.EAsset.BACKGROUND = ["BACKGROUND",11];
+demo.EAsset.BACKGROUND.toString = $estr;
+demo.EAsset.BACKGROUND.__enum__ = demo.EAsset;
+demo.Factory = function(p_context,p_isDebug,p_config) {
+	awe6.core.drivers.openfl.html5.Factory.call(this,p_context,p_isDebug,p_config);
+};
+$hxClasses["demo.Factory"] = demo.Factory;
+demo.Factory.__name__ = ["demo","Factory"];
+demo.Factory.__super__ = awe6.core.drivers.openfl.html5.Factory;
+demo.Factory.prototype = $extend(awe6.core.drivers.openfl.html5.Factory.prototype,{
+	getNextSceneType: function(p_type) {
+		switch( (p_type)[1] ) {
+		case 0:
+			return awe6.interfaces.EScene.GAME;
+		case 8:
+			return awe6.interfaces.EScene.RESULTS;
+		case 9:
+			return awe6.interfaces.EScene.INTRO;
+		default:
+			null;
+		}
+		return awe6.core.drivers.openfl.html5.Factory.prototype.getNextSceneType.call(this,p_type);
+	}
+	,getBackSceneType: function(p_type) {
+		switch( (p_type)[1] ) {
+		case 0:
+			return null;
+		case 8:
+			return awe6.interfaces.EScene.INTRO;
+		case 9:
+			return awe6.interfaces.EScene.INTRO;
+		default:
+			null;
+		}
+		return awe6.core.drivers.openfl.html5.Factory.prototype.getBackSceneType.call(this,p_type);
+	}
+	,createTextStyle: function(p_type) {
+		if(p_type == null) p_type = awe6.interfaces.ETextStyle.BODY;
+		var l_fontName = this._assetManager.font.fontName;
+		var l_result = new awe6.core.TextStyle(l_fontName,12,16777215,false,false,awe6.interfaces.ETextAlign.CENTER,0,0,0,[new flash.filters.GlowFilter(131970,1,4,4,5,2)]);
+		l_result.size = (function($this) {
+			var $r;
+			switch( (p_type)[1] ) {
+			case 2:
+				$r = 24;
+				break;
+			case 5:
+				$r = 72;
+				break;
+			case 3:
+				$r = 18;
+				break;
+			case 0:
+				$r = 12;
+				break;
+			case 4:
+				$r = 6;
+				break;
+			default:
+				$r = 12;
+			}
+			return $r;
+		}(this));
+		return l_result;
+	}
+	,createSceneTransition: function(p_typeIncoming,p_typeOutgoing) {
+		var l_sceneTransition = new demo.scenes.SceneTransition(this._kernel);
+		return l_sceneTransition;
+	}
+	,createScene: function(p_type) {
+		switch( (p_type)[1] ) {
+		case 0:
+			return new demo.scenes.Intro(this._kernel,p_type);
+		case 8:
+			return new demo.scenes.Game(this._kernel,p_type);
+		case 9:
+			return new demo.scenes.Results(this._kernel,p_type);
+		default:
+			null;
+		}
+		return awe6.core.drivers.openfl.html5.Factory.prototype.createScene.call(this,p_type);
+	}
+	,createSession: function(p_id) {
+		return new demo.Session(this._kernel,p_id);
+	}
+	,createPreloader: function() {
+		return new demo.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
+	}
+	,createOverlay: function() {
+		var l_overlay = new demo.gui.Overlay(this._kernel);
+		return l_overlay;
+	}
+	,createAssetManager: function() {
+		if(this._assetManager == null) this._assetManager = new demo.AssetManager(this._kernel);
+		return this._assetManager;
+	}
+	,_configurer: function(p_isPreconfig) {
+		if(p_isPreconfig == null) p_isPreconfig = false;
+		if(p_isPreconfig) {
+			this.id = "awe6Demo";
+			this.version = "2.1.585";
+			this.author = "Robert Fell";
+			this.isDecached = true;
+			this.width = 600;
+			this.height = 400;
+			this.bgColor = 16777215;
+			this.startingSceneType = awe6.interfaces.EScene.INTRO;
+			this.targetFramerate = 60;
+			this.isFixedUpdates = false;
+		}
+	}
+	,__class__: demo.Factory
+});
+demo.Preloader = function(p_kernel,p_assets,p_isDecached) {
+	awe6.core.drivers.openfl.html5.Preloader.call(this,p_kernel,p_assets,p_isDecached);
+};
+$hxClasses["demo.Preloader"] = demo.Preloader;
+demo.Preloader.__name__ = ["demo","Preloader"];
+demo.Preloader.__super__ = awe6.core.drivers.openfl.html5.Preloader;
+demo.Preloader.prototype = $extend(awe6.core.drivers.openfl.html5.Preloader.prototype,{
+	__class__: demo.Preloader
+});
+demo.Session = function(p_kernel,p_id) {
+	awe6.core.drivers.openfl.html5.Session.call(this,p_kernel,p_id);
+};
+$hxClasses["demo.Session"] = demo.Session;
+demo.Session.__name__ = ["demo","Session"];
+demo.Session.__super__ = awe6.core.drivers.openfl.html5.Session;
+demo.Session.prototype = $extend(awe6.core.drivers.openfl.html5.Session.prototype,{
+	getPercentageComplete: function() {
+		return this._tools.limit(100 * this.highScore / 1000 | 0,0,100);
+	}
+	,_resetter: function() {
+		awe6.core.drivers.openfl.html5.Session.prototype._resetter.call(this);
+		this.name = "???";
+		this.highScore = 0;
+	}
+	,_setter: function() {
+		awe6.core.drivers.openfl.html5.Session.prototype._setter.call(this);
+		this._data.name = this.name;
+		this._data.highScore = this.highScore;
+	}
+	,_getter: function() {
+		awe6.core.drivers.openfl.html5.Session.prototype._getter.call(this);
+		this.name = this._data.name;
+		this.highScore = this._data.highScore;
+	}
+	,_init: function() {
+		this._version = 1;
+		awe6.core.drivers.openfl.html5.Session.prototype._init.call(this);
+	}
+	,__class__: demo.Session
+});
+demo.entities = {}
+demo.entities.Bouncer = function(p_kernel,p_width,p_height) {
+	this._width = p_width;
+	this._height = p_height;
+	awe6.core.Entity.call(this,p_kernel);
+};
+$hxClasses["demo.entities.Bouncer"] = demo.entities.Bouncer;
+demo.entities.Bouncer.__name__ = ["demo","entities","Bouncer"];
+demo.entities.Bouncer.__super__ = awe6.core.Entity;
+demo.entities.Bouncer.prototype = $extend(awe6.core.Entity.prototype,{
+	_updater: function(p_deltaTime) {
+		if(p_deltaTime == null) p_deltaTime = 0;
+		awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
+		this.x += this.vx * (p_deltaTime / 1000);
+		this.y += this.vy * (p_deltaTime / 1000);
+		if(this.x > this._kernel.factory.width - this._width2) this.vx *= -1;
+		if(this.y > this._kernel.factory.height - this._height2) this.vy *= -1;
+		if(this.x < this._width2) this.vx *= -1;
+		if(this.y < this._height2) this.vy *= -1;
+		this.x = this._tools.limit(this.x,this._width2,this._kernel.factory.width - this._width2);
+		this.y = this._tools.limit(this.y,this._height2,this._kernel.factory.height - this._height2);
+	}
+	,_init: function() {
+		awe6.core.Entity.prototype._init.call(this);
+		this._width2 = this._width / 2;
+		this._height2 = this._height / 2;
+		var l_speed = Math.random() * 200 + 100;
+		this.vx = Math.random() < .5?l_speed:-l_speed;
+		l_speed /= 4;
+		this.vy = Math.random() < .5?l_speed:-l_speed;
+		this.x = this._kernel.factory.width * Math.random();
+		this.y = this._kernel.factory.height * Math.random();
+	}
+	,__class__: demo.entities.Bouncer
+});
+demo.entities.Sphere = function(p_kernel) {
+	this._context = new flash.display.Sprite();
+	this._context.mouseEnabled = false;
+	this._assetManager = p_kernel.assets;
+	awe6.core.Entity.call(this,p_kernel,null,this._context);
+};
+$hxClasses["demo.entities.Sphere"] = demo.entities.Sphere;
+demo.entities.Sphere.__name__ = ["demo","entities","Sphere"];
+demo.entities.Sphere.__super__ = awe6.core.Entity;
+demo.entities.Sphere.prototype = $extend(awe6.core.Entity.prototype,{
+	_isHit: function() {
+		if(!this._kernel.inputs.mouse.getIsButtonPress(awe6.interfaces.EMouseButton.LEFT)) return false;
+		var l_dx = this._kernel.inputs.mouse.x - this._bouncer.x;
+		var l_dy = this._kernel.inputs.mouse.y - this._bouncer.y;
+		var l_dist = l_dx * l_dx + l_dy * l_dy;
+		return l_dist < this._width2 * this._width2;
+	}
+	,_updater: function(p_deltaTime) {
+		if(p_deltaTime == null) p_deltaTime = 0;
+		awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
+		this._context.set_x(this._bouncer.x);
+		this._context.set_y(this._bouncer.y);
+		this._context.set_scaleX(this._bouncer.vx > 1?1.001:-1);
+		this.get_view().set_priority(this._bouncer.y | 0);
+		if(this._isHit()) {
+			this._kernel.audio.start("Sfx" + (Std.random(4) + 1),awe6.interfaces.EAudioChannel.EFFECTS,0,0,1,this._bouncer.x / this._kernel.factory.width);
+			this._kernel.overlay.flash(100,true,1,Std.random(16777215));
+			if(this.isDisposed) null; else {
+				this.isDisposed = true;
+				this.set_isActive(false);
+				this._disposer();
+				null;
+			}
+		}
+	}
+	,_init: function() {
+		awe6.core.Entity.prototype._init.call(this);
+		var l_scale = this._tools.range(Math.random(),.5,1);
+		this._width = 100 * l_scale;
+		this._height = 100 * l_scale;
+		this._width2 = this._width / 2;
+		this._height2 = this._height / 2;
+		this.addEntity(this._bouncer = new demo.entities.Bouncer(this._kernel,this._width,this._height));
+		var l_source = this._assetManager.sphere;
+		var l_bitmapData = new flash.display.BitmapData(this._width | 0,this._height * 1.5 | 0,true,0);
+		var l_matrix = new flash.geom.Matrix();
+		l_matrix.scale(l_scale,l_scale);
+		l_bitmapData.draw(l_source,l_matrix,null,null,null,true);
+		var l_sphere = new flash.display.Bitmap(l_bitmapData);
+		l_sphere.smoothing = true;
+		l_sphere.set_x(-this._width2);
+		l_sphere.set_y(-this._height2);
+		this._context.addChild(l_sphere);
+	}
+	,__class__: demo.entities.Sphere
+});
+demo.gui = {}
+demo.gui.Button = function(p_kernel,p_key,p_x,p_y,p_onClick,p_onRollOver,p_onRollOut,p_label) {
+	if(p_y == null) p_y = 0;
+	if(p_x == null) p_x = 0;
+	this._assetManager = p_kernel.assets;
+	this.label = p_label;
+	this._upContext = new flash.display.Sprite();
+	this._overContext = new flash.display.Sprite();
+	this._upView = new awe6.core.drivers.openfl.html5.View(p_kernel,this._upContext);
+	this._overView = new awe6.core.drivers.openfl.html5.View(p_kernel,this._overContext);
+	awe6.core.BasicButton.call(this,p_kernel,this._upView,this._overView,160,40,p_x,p_y,p_key,p_onClick,p_onRollOver,p_onRollOut);
+};
+$hxClasses["demo.gui.Button"] = demo.gui.Button;
+demo.gui.Button.__name__ = ["demo","gui","Button"];
+demo.gui.Button.__super__ = awe6.core.BasicButton;
+demo.gui.Button.prototype = $extend(awe6.core.BasicButton.prototype,{
+	onRollOver: function() {
+		this._kernel.audio.start("ButtonOver",awe6.interfaces.EAudioChannel.INTERFACE);
+		awe6.core.BasicButton.prototype.onRollOver.call(this);
+	}
+	,onClick: function() {
+		this._kernel.audio.start("ButtonDown",awe6.interfaces.EAudioChannel.INTERFACE);
+		awe6.core.BasicButton.prototype.onClick.call(this);
+	}
+	,_createButtonState: function(p_isOver) {
+		if(p_isOver == null) p_isOver = false;
+		var l_result = new flash.display.Sprite();
+		l_result.addChild(new flash.display.Bitmap(p_isOver?this._assetManager.buttonOver:this._assetManager.buttonUp));
+		var l_text = new awe6.extras.gui.Text(this._kernel,this.width - 2 * this._marginWidth,this.height - 2 * this._marginHeight,this.label,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.BUTTON));
+		l_text.setPosition(this._marginWidth,this._marginHeight);
+		l_result.addChild(l_text._context);
+		return l_result;
+	}
+	,_init: function() {
+		awe6.core.BasicButton.prototype._init.call(this);
+		this._marginWidth = 10;
+		this._marginHeight = 12;
+		this._upContext.addChild(this._createButtonState(false));
+		this._overContext.addChild(this._createButtonState(true));
+	}
+	,__class__: demo.gui.Button
+});
+demo.gui.Overlay = function(p_kernel) {
+	this._assetManager = js.Boot.__cast(p_kernel.assets , demo.AssetManager);
+	this._buttonSize = 30;
+	awe6.core.drivers.openfl.html5.Overlay.call(this,p_kernel,this._buttonSize,this._buttonSize,this._assetManager.overlayBackground,this._assetManager.overlayBackUp,this._assetManager.overlayBackOver,this._assetManager.overlayMuteUp,this._assetManager.overlayMuteOver,this._assetManager.overlayUnmuteUp,this._assetManager.overlayUnmuteOver,this._assetManager.overlayPauseUp,this._assetManager.overlayPauseOver,this._assetManager.overlayUnpauseUp,this._assetManager.overlayUnpauseOver);
+};
+$hxClasses["demo.gui.Overlay"] = demo.gui.Overlay;
+demo.gui.Overlay.__name__ = ["demo","gui","Overlay"];
+demo.gui.Overlay.__super__ = awe6.core.drivers.openfl.html5.Overlay;
+demo.gui.Overlay.prototype = $extend(awe6.core.drivers.openfl.html5.Overlay.prototype,{
+	activateButton: function(p_type) {
+		var $e = (p_type);
+		switch( $e[1] ) {
+		case 5:
+			var p_value = $e[2];
+			p_value;
+			null;
+			break;
+		default:
+			null;
+		}
+		awe6.core.drivers.openfl.html5.Overlay.prototype.activateButton.call(this,p_type);
+	}
+	,hideButtons: function() {
+		awe6.core.drivers.openfl.html5.Overlay.prototype.hideButtons.call(this);
+	}
+	,_getButton: function(p_type) {
+		return (function($this) {
+			var $r;
+			var $e = (p_type);
+			switch( $e[1] ) {
+			case 5:
+				var p_value = $e[2];
+				$r = (function($this) {
+					var $r;
+					p_value;
+					$r = null;
+					return $r;
+				}($this));
+				break;
+			default:
+				$r = awe6.core.drivers.openfl.html5.Overlay.prototype._getButton.call($this,p_type);
+			}
+			return $r;
+		}(this));
+	}
+	,_init: function() {
+		awe6.core.drivers.openfl.html5.Overlay.prototype._init.call(this);
+		var l_x = this._kernel.factory.width - 10 - 3 * this._buttonSize;
+		var l_y = this._kernel.factory.height - this._buttonSize;
+		this.positionButton(awe6.interfaces.EOverlayButton.BACK,l_x,l_y);
+		this.positionButton(awe6.interfaces.EOverlayButton.PAUSE,l_x += this._buttonSize,l_y);
+		this.positionButton(awe6.interfaces.EOverlayButton.UNPAUSE,l_x,l_y);
+		this.positionButton(awe6.interfaces.EOverlayButton.MUTE,l_x += this._buttonSize,l_y);
+		this.positionButton(awe6.interfaces.EOverlayButton.UNMUTE,l_x,l_y);
+	}
+	,__class__: demo.gui.Overlay
+});
+demo.scenes = {}
+demo.scenes.AScene = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
+	awe6.core.Scene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
+};
+$hxClasses["demo.scenes.AScene"] = demo.scenes.AScene;
+demo.scenes.AScene.__name__ = ["demo","scenes","AScene"];
+demo.scenes.AScene.__super__ = awe6.core.Scene;
+demo.scenes.AScene.prototype = $extend(awe6.core.Scene.prototype,{
+	_init: function() {
+		awe6.core.Scene.prototype._init.call(this);
+		this._assetManager = js.Boot.__cast(this._kernel.assets , demo.AssetManager);
+		this._session = js.Boot.__cast(this._kernel.get_session() , demo.Session);
+		var l_sceneType = this._tools.toCamelCase(Std.string(this.type));
+		var l_titleText = this._kernel.getConfig("gui.scenes." + l_sceneType + ".title");
+		if(l_titleText != null) {
+			this._title = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,l_titleText,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.HEADLINE));
+			this._title.set_y(40);
+			this.addEntity(this._title,null,true,100);
+		}
+		this.get_view().addChild(this._assetManager.background,0);
+		this._kernel.audio.start("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.125,0,true);
+	}
+	,__class__: demo.scenes.AScene
+});
+demo.scenes.Game = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
+	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
+};
+$hxClasses["demo.scenes.Game"] = demo.scenes.Game;
+demo.scenes.Game.__name__ = ["demo","scenes","Game"];
+demo.scenes.Game.__super__ = demo.scenes.AScene;
+demo.scenes.Game.prototype = $extend(demo.scenes.AScene.prototype,{
+	_gameOver: function() {
+		if(this._score > this._session.highScore) {
+			this._session.isWin = true;
+			this._session.highScore = this._score;
+		}
+		this._kernel.scenes.next();
+	}
+	,_disposer: function() {
+		this._kernel.audio.stop("MusicGame",awe6.interfaces.EAudioChannel.MUSIC);
+		demo.scenes.AScene.prototype._disposer.call(this);
+	}
+	,_updater: function(p_deltaTime) {
+		if(p_deltaTime == null) p_deltaTime = 0;
+		demo.scenes.AScene.prototype._updater.call(this,p_deltaTime);
+		this._score = this._tools.limit(30000 - this._age,0,this._tools.BIG_NUMBER) | 0;
+		if(this._score == 0) this._gameOver();
+		this._timer.set_text(this._tools.convertAgeToFormattedTime(this._age));
+		var l_spheres = this.getEntitiesByClass(demo.entities.Sphere);
+		if(l_spheres == null || l_spheres.length == 0) this._gameOver();
+	}
+	,handleSphere: function(p_message,p_sender) {
+		return true;
+	}
+	,_init: function() {
+		demo.scenes.AScene.prototype._init.call(this);
+		this.isPauseable = true;
+		this.isSessionSavedOnNext = true;
+		this._session.isWin = false;
+		var l_textStyle = this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD);
+		l_textStyle.filters = [];
+		l_textStyle.color = 131970;
+		this._timer = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,Std.string(this._tools.convertAgeToFormattedTime(0)),l_textStyle);
+		this._timer.set_y(70);
+		this.addEntity(this._timer,null,true,1000);
+		this._kernel.audio.stop("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC);
+		this._kernel.audio.start("MusicGame",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.5,0,true);
+		var _g = 0;
+		while(_g < 10) {
+			var i = _g++;
+			this.addEntity(new demo.entities.Sphere(this._kernel),null,true,i + 10);
+		}
+		this._kernel.messenger.addSubscriber(this._entity,awe6.interfaces.EMessage.INIT,$bind(this,this.handleSphere),null,demo.entities.Sphere);
+		this._kernel.messenger.addSubscriber(this._entity,awe6.interfaces.EMessage.DISPOSE,$bind(this,this.handleSphere),null,demo.entities.Sphere);
+	}
+	,__class__: demo.scenes.Game
+});
+demo.scenes.Intro = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
+	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
+};
+$hxClasses["demo.scenes.Intro"] = demo.scenes.Intro;
+demo.scenes.Intro.__name__ = ["demo","scenes","Intro"];
+demo.scenes.Intro.__super__ = demo.scenes.AScene;
+demo.scenes.Intro.prototype = $extend(demo.scenes.AScene.prototype,{
+	_updater: function(p_deltaTime) {
+		if(p_deltaTime == null) p_deltaTime = 0;
+		demo.scenes.AScene.prototype._updater.call(this,p_deltaTime);
+		if(this._kernel.inputs.keyboard.getIsKeyRelease(awe6.interfaces.EKey.F)) this._kernel.set_isFullScreen(!this._kernel.isFullScreen);
+	}
+	,_init: function() {
+		this._kernel.set_session(this._kernel.factory.createSession("Basic"));
+		demo.scenes.AScene.prototype._init.call(this);
+		var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,this._kernel.getConfig("gui.scenes.intro.instructions"),this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
+		l_result.set_y(70);
+		this.addEntity(l_result,null,true,2);
+		var l_button = new demo.gui.Button(this._kernel,this._kernel.factory.keyNext,0,0,($_=this._kernel.scenes,$bind($_,$_.next)),null,null,this._kernel.getConfig("gui.buttons.start"));
+		l_button.setPosition((this._kernel.factory.width - l_button.width) / 2,(this._kernel.factory.height - l_button.height) / 2);
+		this.addEntity(l_button,null,true,1);
+	}
+	,__class__: demo.scenes.Intro
+});
+demo.scenes.Results = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
+	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
+};
+$hxClasses["demo.scenes.Results"] = demo.scenes.Results;
+demo.scenes.Results.__name__ = ["demo","scenes","Results"];
+demo.scenes.Results.__super__ = demo.scenes.AScene;
+demo.scenes.Results.prototype = $extend(demo.scenes.AScene.prototype,{
+	_init: function() {
+		demo.scenes.AScene.prototype._init.call(this);
+		var l_button = new demo.gui.Button(this._kernel,this._kernel.factory.keyNext,0,0,($_=this._kernel.scenes,$bind($_,$_.next)),null,null,this._kernel.getConfig("gui.buttons.next"));
+		l_button.setPosition((this._kernel.factory.width - l_button.width) / 2,(this._kernel.factory.height - l_button.height) / 2);
+		this.addEntity(l_button,null,true,1);
+		var l_message = Std.string(this._kernel.getConfig("gui.scenes.results." + (this._session.isWin?"win":"lose"))) + this._tools.convertAgeToFormattedTime(30000 - this._session.highScore);
+		var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,l_message,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
+		l_result.set_y(70);
+		this.addEntity(l_result,null,true,2);
+	}
+	,__class__: demo.scenes.Results
+});
+demo.scenes.SceneTransition = function(p_kernel) {
+	var l_duration = 500;
+	awe6.core.drivers.openfl.html5.SceneTransition.call(this,p_kernel,l_duration);
+};
+$hxClasses["demo.scenes.SceneTransition"] = demo.scenes.SceneTransition;
+demo.scenes.SceneTransition.__name__ = ["demo","scenes","SceneTransition"];
+demo.scenes.SceneTransition.__super__ = awe6.core.drivers.openfl.html5.SceneTransition;
+demo.scenes.SceneTransition.prototype = $extend(awe6.core.drivers.openfl.html5.SceneTransition.prototype,{
+	_disposer: function() {
+		awe6.core.drivers.openfl.html5.SceneTransition.prototype._disposer.call(this);
+	}
+	,_updater: function(p_deltaTime) {
+		if(p_deltaTime == null) p_deltaTime = 0;
+		awe6.core.drivers.openfl.html5.SceneTransition.prototype._updater.call(this,p_deltaTime);
+	}
+	,_init: function() {
+		awe6.core.drivers.openfl.html5.SceneTransition.prototype._init.call(this);
+	}
+	,__class__: demo.scenes.SceneTransition
+});
 var haxe = {}
 haxe.Timer = function(time_ms) {
 	var me = this;
-	this.id = window.setInterval(function() {
+	this.id = setInterval(function() {
 		me.run();
 	},time_ms);
 };
@@ -8135,27 +7670,21 @@ haxe.Timer.delay = function(f,time_ms) {
 	};
 	return t;
 }
-haxe.Timer.measure = function(f,pos) {
-	var t0 = haxe.Timer.stamp();
-	var r = f();
-	haxe.Log.trace(haxe.Timer.stamp() - t0 + "s",pos);
-	return r;
-}
 haxe.Timer.stamp = function() {
 	return new Date().getTime() / 1000;
 }
 haxe.Timer.prototype = {
 	run: function() {
+		console.log("run");
 	}
 	,stop: function() {
 		if(this.id == null) return;
-		window.clearInterval(this.id);
+		clearInterval(this.id);
 		this.id = null;
 	}
-	,id: null
 	,__class__: haxe.Timer
 }
-browser.Lib = function(rootElement,width,height) {
+flash.Lib = function(rootElement,width,height) {
 	this.mKilled = false;
 	this.__scr = rootElement;
 	if(this.__scr == null) throw "Root element not found";
@@ -8164,38 +7693,23 @@ browser.Lib = function(rootElement,width,height) {
 	if(this.__scr.style.getPropertyValue("width") != "100%") this.__scr.style.width = width + "px";
 	if(this.__scr.style.getPropertyValue("height") != "100%") this.__scr.style.height = height + "px";
 };
-$hxClasses["browser.Lib"] = browser.Lib;
-browser.Lib.__name__ = ["browser","Lib"];
-browser.Lib.__properties__ = {get_window:"get_window",get_document:"get_document",get_current:"get_current"}
-browser.Lib.current = null;
-browser.Lib.document = null;
-browser.Lib.window = null;
-browser.Lib.mCurrent = null;
-browser.Lib.mForce2DTransform = null;
-browser.Lib.mMainClassRoot = null;
-browser.Lib.mMe = null;
-browser.Lib.mStage = null;
-browser.Lib["as"] = function(v,c) {
+$hxClasses["flash.Lib"] = flash.Lib;
+flash.Lib.__name__ = ["flash","Lib"];
+flash.Lib.__properties__ = {get_current:"get_current"}
+flash.Lib["as"] = function(v,c) {
 	return js.Boot.__instanceof(v,c)?v:null;
 }
-browser.Lib.getTimer = function() {
-	return (haxe.Timer.stamp() - browser.Lib.starttime) * 1000 | 0;
+flash.Lib.attach = function(name) {
+	return new flash.display.MovieClip();
 }
-browser.Lib.getURL = function(request,target) {
-	if(target == null || target == "_self") js.Lib.document.open(request.url); else switch(target) {
-	case "_blank":
-		js.Lib.window.open(request.url);
-		break;
-	case "_parent":
-		js.Lib.window.parent.open(request.url);
-		break;
-	case "_top":
-		js.Lib.window.top.open(request.url);
-		break;
-	}
+flash.Lib.getTimer = function() {
+	return (haxe.Timer.stamp() - flash.Lib.starttime) * 1000 | 0;
 }
-browser.Lib.nmeAppendSurface = function(surface,before,after) {
-	if(browser.Lib.mMe.__scr != null) {
+flash.Lib.getURL = function(request,target) {
+	window.open(request.url);
+}
+flash.Lib.nmeAppendSurface = function(surface,before,after) {
+	if(flash.Lib.mMe.__scr != null) {
 		surface.style.setProperty("position","absolute","");
 		surface.style.setProperty("left","0px","");
 		surface.style.setProperty("top","0px","");
@@ -8210,39 +7724,35 @@ browser.Lib.nmeAppendSurface = function(surface,before,after) {
 			};
 		} catch( e ) {
 		}
-		var rootNode = browser.Lib.mMe.__scr;
-		if(before != null) rootNode.insertBefore(surface,before); else if(after != null && after.nextSibling != null) rootNode.insertBefore(surface,after.nextSibling); else rootNode.appendChild(surface);
+		if(before != null) before.parentNode.insertBefore(surface,before); else if(after != null && after.nextSibling != null) after.parentNode.insertBefore(surface,after.nextSibling); else flash.Lib.mMe.__scr.appendChild(surface);
 	}
 }
-browser.Lib.nmeAppendText = function(surface,container,text,wrap,isHtml) {
+flash.Lib.nmeAppendText = function(surface,container,text,wrap,isHtml) {
 	var _g1 = 0, _g = surface.childNodes.length;
 	while(_g1 < _g) {
 		var i = _g1++;
 		surface.removeChild(surface.childNodes[i]);
 	}
-	if(isHtml) container.innerHTML = text; else container.appendChild(js.Lib.document.createTextNode(text));
+	if(isHtml) container.innerHTML = text; else container.appendChild(js.Browser.document.createTextNode(text));
 	container.style.setProperty("position","relative","");
 	container.style.setProperty("cursor","default","");
 	if(!wrap) container.style.setProperty("white-space","nowrap","");
 	surface.appendChild(container);
 }
-browser.Lib.nmeBootstrap = function() {
-	if(browser.Lib.mMe == null) {
-		var target = js.Lib.document.getElementById("haxe:jeash");
-		if(target == null) {
-			haxe.Log.trace("Error: Cannot find element ID \"" + "haxe:jeash" + "\"",{ fileName : "Lib.hx", lineNumber : 201, className : "browser.Lib", methodName : "nmeBootstrap"});
-			target.id; // throw error;
-		}
+flash.Lib.nmeBootstrap = function() {
+	if(flash.Lib.mMe == null) {
+		var target = js.Browser.document.getElementById("haxe:jeash");
+		if(target == null) target = js.Browser.document.createElement("div");
 		var agent = navigator.userAgent;
 		if(agent.indexOf("BlackBerry") > -1 && target.style.height == "100%") target.style.height = screen.height + "px";
 		if(agent.indexOf("Android") > -1) {
 			var version = Std.parseFloat(HxOverrides.substr(agent,agent.indexOf("Android") + 8,3));
-			if(version <= 2.3) browser.Lib.mForce2DTransform = true;
+			if(version <= 2.3) flash.Lib.mForce2DTransform = true;
 		}
-		browser.Lib.Run(target,browser.Lib.nmeGetWidth(),browser.Lib.nmeGetHeight());
+		flash.Lib.Run(target,flash.Lib.nmeGetWidth(),flash.Lib.nmeGetHeight());
 	}
 }
-browser.Lib.nmeCopyStyle = function(src,tgt) {
+flash.Lib.nmeCopyStyle = function(src,tgt) {
 	tgt.id = src.id;
 	var _g = 0, _g1 = ["left","top","transform","transform-origin","-moz-transform","-moz-transform-origin","-webkit-transform","-webkit-transform-origin","-o-transform","-o-transform-origin","opacity","display"];
 	while(_g < _g1.length) {
@@ -8251,17 +7761,17 @@ browser.Lib.nmeCopyStyle = function(src,tgt) {
 		tgt.style.setProperty(prop,src.style.getPropertyValue(prop),"");
 	}
 }
-browser.Lib.nmeCreateSurfaceAnimationCSS = function(surface,data,template,templateFunc,fps,discrete,infinite) {
+flash.Lib.nmeCreateSurfaceAnimationCSS = function(surface,data,template,templateFunc,fps,discrete,infinite) {
 	if(infinite == null) infinite = false;
 	if(discrete == null) discrete = false;
 	if(fps == null) fps = 25;
 	if(surface.id == null || surface.id == "") {
-		browser.Lib.trace("Failed to create a CSS Style tag for a surface without an id attribute");
+		flash.Lib.trace("Failed to create a CSS Style tag for a surface without an id attribute");
 		return null;
 	}
 	var style = null;
-	if(surface.getAttribute("data-nme-anim") != null) style = js.Lib.document.getElementById(surface.getAttribute("data-nme-anim")); else {
-		style = browser.Lib.mMe.__scr.appendChild(js.Lib.document.createElement("style"));
+	if(surface.getAttribute("data-nme-anim") != null) style = js.Browser.document.getElementById(surface.getAttribute("data-nme-anim")); else {
+		style = flash.Lib.mMe.__scr.appendChild(js.Browser.document.createElement("style"));
 		style.sheet.id = "__nme_anim_" + surface.id + "__";
 		surface.setAttribute("data-nme-anim",style.sheet.id);
 	}
@@ -8296,21 +7806,21 @@ browser.Lib.nmeCreateSurfaceAnimationCSS = function(surface,data,template,templa
 	style.sheet.insertRule("#" + surface.id + " { " + animationStylesheetRule + " } ",rules.length);
 	return style;
 }
-browser.Lib.nmeDesignMode = function(mode) {
-	js.Lib.document.designMode = mode?"on":"off";
+flash.Lib.nmeDesignMode = function(mode) {
+	js.Browser.document.designMode = mode?"on":"off";
 }
-browser.Lib.nmeDisableFullScreen = function() {
+flash.Lib.nmeDisableFullScreen = function() {
 }
-browser.Lib.nmeDisableRightClick = function() {
-	if(browser.Lib.mMe != null) try {
-		browser.Lib.mMe.__scr.oncontextmenu = function() {
+flash.Lib.nmeDisableRightClick = function() {
+	if(flash.Lib.mMe != null) try {
+		flash.Lib.mMe.__scr.oncontextmenu = function() {
 			return false;
 		};
 	} catch( e ) {
-		browser.Lib.trace("Disable right click not supported in this browser.");
+		flash.Lib.trace("Disable right click not supported in this browser.");
 	}
 }
-browser.Lib.nmeDrawClippedImage = function(surface,tgtCtx,clipRect) {
+flash.Lib.nmeDrawClippedImage = function(surface,tgtCtx,clipRect) {
 	if(clipRect != null) {
 		if(clipRect.x < 0) {
 			clipRect.width += clipRect.x;
@@ -8325,7 +7835,7 @@ browser.Lib.nmeDrawClippedImage = function(surface,tgtCtx,clipRect) {
 		tgtCtx.drawImage(surface,clipRect.x,clipRect.y,clipRect.width,clipRect.height,clipRect.x,clipRect.y,clipRect.width,clipRect.height);
 	} else tgtCtx.drawImage(surface,0,0);
 }
-browser.Lib.nmeDrawSurfaceRect = function(surface,tgt,x,y,rect) {
+flash.Lib.nmeDrawSurfaceRect = function(surface,tgt,x,y,rect) {
 	var tgtCtx = tgt.getContext("2d");
 	tgt.width = rect.width;
 	tgt.height = rect.height;
@@ -8333,75 +7843,69 @@ browser.Lib.nmeDrawSurfaceRect = function(surface,tgt,x,y,rect) {
 	tgt.style.left = x + "px";
 	tgt.style.top = y + "px";
 }
-browser.Lib.nmeDrawToSurface = function(surface,tgt,matrix,alpha,clipRect) {
+flash.Lib.nmeDrawToSurface = function(surface,tgt,matrix,alpha,clipRect,smoothing) {
+	if(smoothing == null) smoothing = true;
 	if(alpha == null) alpha = 1.0;
 	var srcCtx = surface.getContext("2d");
 	var tgtCtx = tgt.getContext("2d");
-	if(alpha != 1.0) tgtCtx.globalAlpha = alpha;
+	tgtCtx.globalAlpha = alpha;
+	flash.Lib.nmeSetImageSmoothing(tgtCtx,smoothing);
 	if(surface.width > 0 && surface.height > 0) {
 		if(matrix != null) {
 			tgtCtx.save();
 			if(matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1) tgtCtx.translate(matrix.tx,matrix.ty); else tgtCtx.setTransform(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
-			browser.Lib.nmeDrawClippedImage(surface,tgtCtx,clipRect);
+			flash.Lib.nmeDrawClippedImage(surface,tgtCtx,clipRect);
 			tgtCtx.restore();
-		} else browser.Lib.nmeDrawClippedImage(surface,tgtCtx,clipRect);
+		} else flash.Lib.nmeDrawClippedImage(surface,tgtCtx,clipRect);
 	}
 }
-browser.Lib.nmeEnableFullScreen = function() {
-	if(browser.Lib.mMe != null) {
-		var origWidth = browser.Lib.mMe.__scr.style.getPropertyValue("width");
-		var origHeight = browser.Lib.mMe.__scr.style.getPropertyValue("height");
-		browser.Lib.mMe.__scr.style.setProperty("width","100%","");
-		browser.Lib.mMe.__scr.style.setProperty("height","100%","");
-		browser.Lib.nmeDisableFullScreen = function() {
-			browser.Lib.mMe.__scr.style.setProperty("width",origWidth,"");
-			browser.Lib.mMe.__scr.style.setProperty("height",origHeight,"");
+flash.Lib.nmeEnableFullScreen = function() {
+	if(flash.Lib.mMe != null) {
+		var origWidth = flash.Lib.mMe.__scr.style.getPropertyValue("width");
+		var origHeight = flash.Lib.mMe.__scr.style.getPropertyValue("height");
+		flash.Lib.mMe.__scr.style.setProperty("width","100%","");
+		flash.Lib.mMe.__scr.style.setProperty("height","100%","");
+		flash.Lib.nmeDisableFullScreen = function() {
+			flash.Lib.mMe.__scr.style.setProperty("width",origWidth,"");
+			flash.Lib.mMe.__scr.style.setProperty("height",origHeight,"");
 		};
 	}
 }
-browser.Lib.nmeEnableRightClick = function() {
-	if(browser.Lib.mMe != null) try {
-		browser.Lib.mMe.__scr.oncontextmenu = null;
+flash.Lib.nmeEnableRightClick = function() {
+	if(flash.Lib.mMe != null) try {
+		flash.Lib.mMe.__scr.oncontextmenu = null;
 	} catch( e ) {
-		browser.Lib.trace("Enable right click not supported in this browser.");
+		flash.Lib.trace("Enable right click not supported in this browser.");
 	}
 }
-browser.Lib.nmeFullScreenHeight = function() {
-	return js.Lib.window.innerHeight;
+flash.Lib.nmeFullScreenHeight = function() {
+	return js.Browser.window.innerHeight;
 }
-browser.Lib.nmeFullScreenWidth = function() {
-	return js.Lib.window.innerWidth;
+flash.Lib.nmeFullScreenWidth = function() {
+	return js.Browser.window.innerWidth;
 }
-browser.Lib.nmeGetHeight = function() {
-	var tgt = browser.Lib.mMe != null?browser.Lib.mMe.__scr:js.Lib.document.getElementById("haxe:jeash");
+flash.Lib.nmeGetHeight = function() {
+	var tgt = flash.Lib.mMe != null?flash.Lib.mMe.__scr:js.Browser.document.getElementById("haxe:jeash");
 	return tgt != null && tgt.clientHeight > 0?tgt.clientHeight:500;
 }
-browser.Lib.nmeGetStage = function() {
-	if(browser.Lib.mStage == null) {
-		var width = browser.Lib.nmeGetWidth();
-		var height = browser.Lib.nmeGetHeight();
-		browser.Lib.mStage = new browser.display.Stage(width,height);
+flash.Lib.nmeGetStage = function() {
+	if(flash.Lib.mStage == null) {
+		var width = flash.Lib.nmeGetWidth();
+		var height = flash.Lib.nmeGetHeight();
+		flash.Lib.mStage = new flash.display.Stage(width,height);
 	}
-	return browser.Lib.mStage;
+	return flash.Lib.mStage;
 }
-browser.Lib.nmeGetWidth = function() {
-	var tgt = browser.Lib.mMe != null?browser.Lib.mMe.__scr:js.Lib.document.getElementById("haxe:jeash");
+flash.Lib.nmeGetWidth = function() {
+	var tgt = flash.Lib.mMe != null?flash.Lib.mMe.__scr:js.Browser.document.getElementById("haxe:jeash");
 	return tgt != null && tgt.clientWidth > 0?tgt.clientWidth:500;
 }
-browser.Lib.nmeIsOnStage = function(surface) {
-	var success = false;
-	var nodes = browser.Lib.mMe.__scr.childNodes;
-	var _g1 = 0, _g = nodes.length;
-	while(_g1 < _g) {
-		var i = _g1++;
-		if(nodes[i] == surface) {
-			success = true;
-			break;
-		}
-	}
-	return success;
+flash.Lib.nmeIsOnStage = function(surface) {
+	var p = surface;
+	while(p != null && p != flash.Lib.mMe.__scr) p = p.parentNode;
+	return p == flash.Lib.mMe.__scr;
 }
-browser.Lib.nmeParseColor = function(str,cb) {
+flash.Lib.nmeParseColor = function(str,cb) {
 	var re = new EReg("rgb\\(([0-9]*), ?([0-9]*), ?([0-9]*)\\)","");
 	var hex = new EReg("#([0-9a-zA-Z][0-9a-zA-Z])([0-9a-zA-Z][0-9a-zA-Z])([0-9a-zA-Z][0-9a-zA-Z])","");
 	if(re.match(str)) {
@@ -8424,26 +7928,26 @@ browser.Lib.nmeParseColor = function(str,cb) {
 		return col;
 	} else throw "Cannot parse color '" + str + "'.";
 }
-browser.Lib.nmeRemoveSurface = function(surface) {
-	if(browser.Lib.mMe.__scr != null) {
+flash.Lib.nmeRemoveSurface = function(surface) {
+	if(flash.Lib.mMe.__scr != null) {
 		var anim = surface.getAttribute("data-nme-anim");
 		if(anim != null) {
-			var style = js.Lib.document.getElementById(anim);
-			if(style != null) browser.Lib.mMe.__scr.removeChild(style);
+			var style = js.Browser.document.getElementById(anim);
+			if(style != null) flash.Lib.mMe.__scr.removeChild(style);
 		}
-		browser.Lib.mMe.__scr.removeChild(surface);
+		if(surface.parentNode != null) surface.parentNode.removeChild(surface);
 	}
 	return surface;
 }
-browser.Lib.nmeSetSurfaceBorder = function(surface,color,size) {
+flash.Lib.nmeSetSurfaceBorder = function(surface,color,size) {
 	surface.style.setProperty("border-color","#" + StringTools.hex(color),"");
 	surface.style.setProperty("border-style","solid","");
 	surface.style.setProperty("border-width",size + "px","");
 	surface.style.setProperty("border-collapse","collapse","");
 }
-browser.Lib.nmeSetSurfaceClipping = function(surface,rect) {
+flash.Lib.nmeSetSurfaceClipping = function(surface,rect) {
 }
-browser.Lib.nmeSetSurfaceFont = function(surface,font,bold,size,color,align,lineHeight) {
+flash.Lib.nmeSetSurfaceFont = function(surface,font,bold,size,color,align,lineHeight) {
 	surface.style.setProperty("font-family",font,"");
 	surface.style.setProperty("font-weight",Std.string(bold),"");
 	surface.style.setProperty("color","#" + StringTools.hex(color),"");
@@ -8451,10 +7955,10 @@ browser.Lib.nmeSetSurfaceFont = function(surface,font,bold,size,color,align,line
 	surface.style.setProperty("text-align",align,"");
 	surface.style.setProperty("line-height",lineHeight + "px","");
 }
-browser.Lib.nmeSetSurfaceOpacity = function(surface,alpha) {
+flash.Lib.nmeSetSurfaceOpacity = function(surface,alpha) {
 	surface.style.setProperty("opacity",Std.string(alpha),"");
 }
-browser.Lib.nmeSetSurfacePadding = function(surface,padding,margin,display) {
+flash.Lib.nmeSetSurfacePadding = function(surface,padding,margin,display) {
 	surface.style.setProperty("padding",padding + "px","");
 	surface.style.setProperty("margin",margin + "px","");
 	surface.style.setProperty("top",padding + 2 + "px","");
@@ -8463,7 +7967,7 @@ browser.Lib.nmeSetSurfacePadding = function(surface,padding,margin,display) {
 	surface.style.setProperty("bottom",padding + 1 + "px","");
 	surface.style.setProperty("display",display?"inline":"block","");
 }
-browser.Lib.nmeSetSurfaceTransform = function(surface,matrix) {
+flash.Lib.nmeSetSurfaceTransform = function(surface,matrix) {
 	if(matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && surface.getAttribute("data-nme-anim") == null) {
 		surface.style.left = matrix.tx + "px";
 		surface.style.top = matrix.ty + "px";
@@ -8477,44 +7981,47 @@ browser.Lib.nmeSetSurfaceTransform = function(surface,matrix) {
 		surface.style.top = "0px";
 		surface.style.setProperty("transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + ", " + matrix.ty + ")","");
 		surface.style.setProperty("-moz-transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + "px, " + matrix.ty + "px)","");
-		if(!browser.Lib.mForce2DTransform) surface.style.setProperty("-webkit-transform","matrix3d(" + matrix.a + ", " + matrix.b + ", " + "0, 0, " + matrix.c + ", " + matrix.d + ", " + "0, 0, 0, 0, 1, 0, " + matrix.tx + ", " + matrix.ty + ", " + "0, 1" + ")",""); else surface.style.setProperty("-webkit-transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + ", " + matrix.ty + ")","");
+		if(!flash.Lib.mForce2DTransform) surface.style.setProperty("-webkit-transform","matrix3d(" + matrix.a + ", " + matrix.b + ", " + "0, 0, " + matrix.c + ", " + matrix.d + ", " + "0, 0, 0, 0, 1, 0, " + matrix.tx + ", " + matrix.ty + ", " + "0, 1" + ")",""); else surface.style.setProperty("-webkit-transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + ", " + matrix.ty + ")","");
 		surface.style.setProperty("-o-transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + ", " + matrix.ty + ")","");
 		surface.style.setProperty("-ms-transform","matrix(" + matrix.a + ", " + matrix.b + ", " + matrix.c + ", " + matrix.d + ", " + matrix.tx + ", " + matrix.ty + ")","");
 	}
 }
-browser.Lib.nmeSetSurfaceZIndexAfter = function(surface1,surface2) {
-	if(surface1.parentNode == browser.Lib.mMe.__scr && surface2.parentNode == browser.Lib.mMe.__scr) {
-		var nextSibling = surface2.nextSibling;
-		if(surface1.previousSibling != surface2) {
-			var swap = browser.Lib.nmeRemoveSurface(surface1);
-			if(nextSibling == null) browser.Lib.mMe.__scr.appendChild(swap); else browser.Lib.mMe.__scr.insertBefore(swap,nextSibling);
+flash.Lib.nmeSetSurfaceZIndexAfter = function(surface1,surface2) {
+	if(surface1 != null && surface2 != null) {
+		if(surface1.parentNode != surface2.parentNode && surface2.parentNode != null) surface2.parentNode.appendChild(surface1);
+		if(surface2.parentNode != null) {
+			var nextSibling = surface2.nextSibling;
+			if(surface1.previousSibling != surface2) {
+				var swap = flash.Lib.nmeRemoveSurface(surface1);
+				if(nextSibling == null) surface2.parentNode.appendChild(swap); else surface2.parentNode.insertBefore(swap,nextSibling);
+			}
 		}
 	}
 }
-browser.Lib.nmeSwapSurface = function(surface1,surface2) {
-	var c1 = -1;
-	var c2 = -1;
-	var swap;
-	var _g1 = 0, _g = browser.Lib.mMe.__scr.childNodes.length;
-	while(_g1 < _g) {
-		var i = _g1++;
-		if(browser.Lib.mMe.__scr.childNodes[i] == surface1) c1 = i; else if(browser.Lib.mMe.__scr.childNodes[i] == surface2) c2 = i;
-	}
-	if(c1 != -1 && c2 != -1) {
-		swap = browser.Lib.nmeRemoveSurface(browser.Lib.mMe.__scr.childNodes[c1]);
-		if(c2 > c1) c2--;
-		if(c2 < browser.Lib.mMe.__scr.childNodes.length - 1) browser.Lib.mMe.__scr.insertBefore(swap,browser.Lib.mMe.__scr.childNodes[c2++]); else browser.Lib.mMe.__scr.appendChild(swap);
-		swap = browser.Lib.nmeRemoveSurface(browser.Lib.mMe.__scr.childNodes[c2]);
-		if(c1 > c2) c1--;
-		if(c1 < browser.Lib.mMe.__scr.childNodes.length - 1) browser.Lib.mMe.__scr.insertBefore(swap,browser.Lib.mMe.__scr.childNodes[c1++]); else browser.Lib.mMe.__scr.appendChild(swap);
+flash.Lib.nmeSwapSurface = function(surface1,surface2) {
+	var parent1 = surface1.parentNode;
+	var parent2 = surface2.parentNode;
+	if(parent1 != null && parent2 != null) {
+		if(parent1 == parent2) {
+			var next1 = surface1.nextSibling;
+			var next2 = surface2.nextSibling;
+			if(next1 == surface2) parent1.insertBefore(surface2,surface1); else if(next2 == surface1) parent1.insertBefore(surface1,surface2); else {
+				parent1.replaceChild(surface2,surface1);
+				if(next2 != null) parent1.insertBefore(surface1,next2); else parent1.appendChild(surface1);
+			}
+		} else {
+			var next2 = surface2.nextSibling;
+			parent1.replaceChild(surface2,surface1);
+			if(next2 != null) parent2.insertBefore(surface1,next2); else parent2.appendChild(surface1);
+		}
 	}
 }
-browser.Lib.nmeSetContentEditable = function(surface,contentEditable) {
+flash.Lib.nmeSetContentEditable = function(surface,contentEditable) {
 	if(contentEditable == null) contentEditable = true;
 	surface.setAttribute("contentEditable",contentEditable?"true":"false");
 }
-browser.Lib.nmeSetCursor = function(type) {
-	if(browser.Lib.mMe != null) browser.Lib.mMe.__scr.style.cursor = (function($this) {
+flash.Lib.nmeSetCursor = function(type) {
+	if(flash.Lib.mMe != null) flash.Lib.mMe.__scr.style.cursor = (function($this) {
 		var $r;
 		switch( (type)[1] ) {
 		case 0:
@@ -8529,55 +8036,63 @@ browser.Lib.nmeSetCursor = function(type) {
 		return $r;
 	}(this));
 }
-browser.Lib.nmeSetSurfaceAlign = function(surface,align) {
+flash.Lib.nmeSetImageSmoothing = function(context,enabled) {
+	var _g = 0, _g1 = ["imageSmoothingEnabled","mozImageSmoothingEnabled","webkitImageSmoothingEnabled"];
+	while(_g < _g1.length) {
+		var variant = _g1[_g];
+		++_g;
+		context[variant] = enabled;
+	}
+}
+flash.Lib.nmeSetSurfaceAlign = function(surface,align) {
 	surface.style.setProperty("text-align",align,"");
 }
-browser.Lib.nmeSetSurfaceId = function(surface,name) {
+flash.Lib.nmeSetSurfaceId = function(surface,name) {
 	var regex = new EReg("[^a-zA-Z0-9\\-]","g");
 	surface.id = regex.replace(name,"_");
 }
-browser.Lib.nmeSetSurfaceRotation = function(surface,rotate) {
+flash.Lib.nmeSetSurfaceRotation = function(surface,rotate) {
 	surface.style.setProperty("transform","rotate(" + rotate + "deg)","");
 	surface.style.setProperty("-moz-transform","rotate(" + rotate + "deg)","");
 	surface.style.setProperty("-webkit-transform","rotate(" + rotate + "deg)","");
 	surface.style.setProperty("-o-transform","rotate(" + rotate + "deg)","");
 	surface.style.setProperty("-ms-transform","rotate(" + rotate + "deg)","");
 }
-browser.Lib.nmeSetSurfaceScale = function(surface,scale) {
+flash.Lib.nmeSetSurfaceScale = function(surface,scale) {
 	surface.style.setProperty("transform","scale(" + scale + ")","");
 	surface.style.setProperty("-moz-transform","scale(" + scale + ")","");
 	surface.style.setProperty("-webkit-transform","scale(" + scale + ")","");
 	surface.style.setProperty("-o-transform","scale(" + scale + ")","");
 	surface.style.setProperty("-ms-transform","scale(" + scale + ")","");
 }
-browser.Lib.nmeSetSurfaceSpritesheetAnimation = function(surface,spec,fps) {
+flash.Lib.nmeSetSurfaceSpritesheetAnimation = function(surface,spec,fps) {
 	if(spec.length == 0) return surface;
-	var div = js.Lib.document.createElement("div");
-	div.style.backgroundImage = "url(" + surface.toDataURL("image/png",{ }) + ")";
+	var div = js.Browser.document.createElement("div");
+	div.style.backgroundImage = "url(" + surface.toDataURL("image/png") + ")";
 	div.id = surface.id;
 	var keyframeTpl = new haxe.Template("background-position: ::left::px ::top::px; width: ::width::px; height: ::height::px; ");
 	var templateFunc = function(frame) {
 		return { left : -frame.x, top : -frame.y, width : frame.width, height : frame.height};
 	};
-	browser.Lib.nmeCreateSurfaceAnimationCSS(div,spec,keyframeTpl,templateFunc,fps,true,true);
-	if(browser.Lib.nmeIsOnStage(surface)) {
-		browser.Lib.nmeAppendSurface(div);
-		browser.Lib.nmeCopyStyle(surface,div);
-		browser.Lib.nmeSwapSurface(surface,div);
-		browser.Lib.nmeRemoveSurface(surface);
-	} else browser.Lib.nmeCopyStyle(surface,div);
+	flash.Lib.nmeCreateSurfaceAnimationCSS(div,spec,keyframeTpl,templateFunc,fps,true,true);
+	if(flash.Lib.nmeIsOnStage(surface)) {
+		flash.Lib.nmeAppendSurface(div);
+		flash.Lib.nmeCopyStyle(surface,div);
+		flash.Lib.nmeSwapSurface(surface,div);
+		flash.Lib.nmeRemoveSurface(surface);
+	} else flash.Lib.nmeCopyStyle(surface,div);
 	return div;
 }
-browser.Lib.nmeSetSurfaceVisible = function(surface,visible) {
+flash.Lib.nmeSetSurfaceVisible = function(surface,visible) {
 	if(visible) surface.style.setProperty("display","block",""); else surface.style.setProperty("display","none","");
 }
-browser.Lib.nmeSetTextDimensions = function(surface,width,height,align) {
+flash.Lib.nmeSetTextDimensions = function(surface,width,height,align) {
 	surface.style.setProperty("width",width + "px","");
 	surface.style.setProperty("height",height + "px","");
 	surface.style.setProperty("overflow","hidden","");
 	surface.style.setProperty("text-align",align,"");
 }
-browser.Lib.nmeSurfaceHitTest = function(surface,x,y) {
+flash.Lib.nmeSurfaceHitTest = function(surface,x,y) {
 	var _g1 = 0, _g = surface.childNodes.length;
 	while(_g1 < _g) {
 		var i = _g1++;
@@ -8586,115 +8101,187 @@ browser.Lib.nmeSurfaceHitTest = function(surface,x,y) {
 	}
 	return false;
 }
-browser.Lib.preventDefaultTouchMove = function() {
-	js.Lib.document.addEventListener("touchmove",function(evt) {
+flash.Lib.preventDefaultTouchMove = function() {
+	js.Browser.document.addEventListener("touchmove",function(evt) {
 		evt.preventDefault();
 	},false);
 }
-browser.Lib.Run = function(tgt,width,height) {
-	browser.Lib.mMe = new browser.Lib(tgt,width,height);
+flash.Lib.Run = function(tgt,width,height) {
+	flash.Lib.mMe = new flash.Lib(tgt,width,height);
 	var _g1 = 0, _g = tgt.attributes.length;
 	while(_g1 < _g) {
 		var i = _g1++;
 		var attr = tgt.attributes.item(i);
 		if(StringTools.startsWith(attr.name,"data-")) {
-			if(attr.name == "data-" + "framerate") browser.Lib.nmeGetStage().set_frameRate(Std.parseFloat(attr.value));
+			if(attr.name == "data-" + "framerate") flash.Lib.nmeGetStage().set_frameRate(Std.parseFloat(attr.value));
 		}
 	}
-	if(Reflect.hasField(tgt,"on" + browser.Lib.HTML_TOUCH_EVENT_TYPES[0])) {
-		var _g = 0, _g1 = browser.Lib.HTML_TOUCH_EVENT_TYPES;
-		while(_g < _g1.length) {
-			var type = _g1[_g];
-			++_g;
-			tgt.addEventListener(type,($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
-		}
-	} else {
-		var _g = 0, _g1 = browser.Lib.HTML_TOUCH_ALT_EVENT_TYPES;
-		while(_g < _g1.length) {
-			var type = _g1[_g];
-			++_g;
-			tgt.addEventListener(type,($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
-		}
-	}
-	var _g = 0, _g1 = browser.Lib.HTML_DIV_EVENT_TYPES;
+	var _g = 0, _g1 = flash.Lib.HTML_TOUCH_EVENT_TYPES;
 	while(_g < _g1.length) {
 		var type = _g1[_g];
 		++_g;
-		tgt.addEventListener(type,($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
+		tgt.addEventListener(type,($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
 	}
-	if(Reflect.hasField(js.Lib.window,"on" + "devicemotion")) js.Lib.window.addEventListener("devicemotion",($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
-	if(Reflect.hasField(js.Lib.window,"on" + "orientationchange")) js.Lib.window.addEventListener("orientationchange",($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
-	var _g = 0, _g1 = browser.Lib.HTML_WINDOW_EVENT_TYPES;
+	var _g = 0, _g1 = flash.Lib.HTML_TOUCH_ALT_EVENT_TYPES;
 	while(_g < _g1.length) {
 		var type = _g1[_g];
 		++_g;
-		js.Lib.window.addEventListener(type,($_=browser.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),false);
+		tgt.addEventListener(type,($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
 	}
-	if(tgt.style.backgroundColor != null && tgt.style.backgroundColor != "") browser.Lib.nmeGetStage().set_backgroundColor(browser.Lib.nmeParseColor(tgt.style.backgroundColor,function(res,pos,cur) {
+	var _g = 0, _g1 = flash.Lib.HTML_DIV_EVENT_TYPES;
+	while(_g < _g1.length) {
+		var type = _g1[_g];
+		++_g;
+		tgt.addEventListener(type,($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
+	}
+	if(Reflect.hasField(js.Browser.window,"on" + "devicemotion")) js.Browser.window.addEventListener("devicemotion",($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
+	if(Reflect.hasField(js.Browser.window,"on" + "orientationchange")) js.Browser.window.addEventListener("orientationchange",($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),true);
+	var _g = 0, _g1 = flash.Lib.HTML_WINDOW_EVENT_TYPES;
+	while(_g < _g1.length) {
+		var type = _g1[_g];
+		++_g;
+		js.Browser.window.addEventListener(type,($_=flash.Lib.nmeGetStage(),$bind($_,$_.nmeQueueStageEvent)),false);
+	}
+	if(tgt.style.backgroundColor != null && tgt.style.backgroundColor != "") flash.Lib.nmeGetStage().set_backgroundColor(flash.Lib.nmeParseColor(tgt.style.backgroundColor,function(res,pos,cur) {
 		return pos == 0?res | cur << 16:pos == 1?res | cur << 8:pos == 2?res | cur:(function($this) {
 			var $r;
 			throw "pos should be 0-2";
 			return $r;
 		}(this));
-	})); else browser.Lib.nmeGetStage().set_backgroundColor(16777215);
-	browser.Lib.get_current().get_graphics().beginFill(browser.Lib.nmeGetStage().get_backgroundColor());
-	browser.Lib.get_current().get_graphics().drawRect(0,0,width,height);
-	browser.Lib.nmeSetSurfaceId(browser.Lib.get_current().get_graphics().nmeSurface,"Root MovieClip");
-	browser.Lib.nmeGetStage().nmeUpdateNextWake();
-	try {
-		var winParameters = js.Lib.window.winParameters();
-		var _g = 0, _g1 = Reflect.fields(winParameters);
-		while(_g < _g1.length) {
-			var prop = _g1[_g];
-			++_g;
-			browser.Lib.get_current().loaderInfo.parameters[prop] = Reflect.field(winParameters,prop);
-		}
-	} catch( e ) {
-	}
-	return browser.Lib.mMe;
+	})); else flash.Lib.nmeGetStage().set_backgroundColor(16777215);
+	flash.Lib.get_current().get_graphics().beginFill(flash.Lib.nmeGetStage().get_backgroundColor());
+	flash.Lib.get_current().get_graphics().drawRect(0,0,width,height);
+	flash.Lib.nmeSetSurfaceId(flash.Lib.get_current().get_graphics().nmeSurface,"Root MovieClip");
+	flash.Lib.nmeGetStage().nmeUpdateNextWake();
+	return flash.Lib.mMe;
 }
-browser.Lib.setUserScalable = function(isScalable) {
+flash.Lib.setUserScalable = function(isScalable) {
 	if(isScalable == null) isScalable = true;
-	var meta = js.Lib.document.createElement("meta");
+	var meta = js.Browser.document.createElement("meta");
 	meta.name = "viewport";
 	meta.content = "user-scalable=" + (isScalable?"yes":"no");
 }
-browser.Lib.trace = function(arg) {
-	if(js.Lib.window.console != null) js.Lib.window.console.log(arg);
+flash.Lib.trace = function(arg) {
+	if(window.console != null) window.console.log(arg);
 }
-browser.Lib.get_current = function() {
-	if(browser.Lib.mMainClassRoot == null) {
-		browser.Lib.mMainClassRoot = new browser.display.MovieClip();
-		browser.Lib.mCurrent = browser.Lib.mMainClassRoot;
-		browser.Lib.nmeGetStage().addChild(browser.Lib.mCurrent);
+flash.Lib.addCallback = function(functionName,closure) {
+	flash.Lib.mMe.__scr[functionName] = closure;
+}
+flash.Lib.get_current = function() {
+	if(flash.Lib.mMainClassRoot == null) {
+		flash.Lib.mMainClassRoot = new flash.display.MovieClip();
+		flash.Lib.mCurrent = flash.Lib.mMainClassRoot;
+		flash.Lib.nmeGetStage().addChild(flash.Lib.mCurrent);
 	}
-	return browser.Lib.mMainClassRoot;
+	return flash.Lib.mMainClassRoot;
 }
-browser.Lib.get_document = function() {
-	return js.Lib.document;
+flash.Lib.prototype = {
+	__class__: flash.Lib
 }
-browser.Lib.get_window = function() {
-	return js.Lib.window;
+flash._Lib = {}
+flash._Lib.CursorType = $hxClasses["flash._Lib.CursorType"] = { __ename__ : ["flash","_Lib","CursorType"], __constructs__ : ["Pointer","Text","Default"] }
+flash._Lib.CursorType.Pointer = ["Pointer",0];
+flash._Lib.CursorType.Pointer.toString = $estr;
+flash._Lib.CursorType.Pointer.__enum__ = flash._Lib.CursorType;
+flash._Lib.CursorType.Text = ["Text",1];
+flash._Lib.CursorType.Text.toString = $estr;
+flash._Lib.CursorType.Text.__enum__ = flash._Lib.CursorType;
+flash._Lib.CursorType.Default = ["Default",2];
+flash._Lib.CursorType.Default.toString = $estr;
+flash._Lib.CursorType.Default.__enum__ = flash._Lib.CursorType;
+flash._Vector = {}
+flash._Vector.Vector_Impl_ = function() { }
+$hxClasses["flash._Vector.Vector_Impl_"] = flash._Vector.Vector_Impl_;
+flash._Vector.Vector_Impl_.__name__ = ["flash","_Vector","Vector_Impl_"];
+flash._Vector.Vector_Impl_.__properties__ = {set_fixed:"set_fixed",get_fixed:"get_fixed",set_length:"set_length",get_length:"get_length"}
+flash._Vector.Vector_Impl_._new = function(length,fixed) {
+	return new Array();
 }
-browser.Lib.prototype = {
-	__scr: null
-	,mKilled: null
-	,mArgs: null
-	,__class__: browser.Lib
+flash._Vector.Vector_Impl_.concat = function(this1,a) {
+	return this1.concat(a);
 }
-browser._Lib = {}
-browser._Lib.CursorType = $hxClasses["browser._Lib.CursorType"] = { __ename__ : ["browser","_Lib","CursorType"], __constructs__ : ["Pointer","Text","Default"] }
-browser._Lib.CursorType.Pointer = ["Pointer",0];
-browser._Lib.CursorType.Pointer.toString = $estr;
-browser._Lib.CursorType.Pointer.__enum__ = browser._Lib.CursorType;
-browser._Lib.CursorType.Text = ["Text",1];
-browser._Lib.CursorType.Text.toString = $estr;
-browser._Lib.CursorType.Text.__enum__ = browser._Lib.CursorType;
-browser._Lib.CursorType.Default = ["Default",2];
-browser._Lib.CursorType.Default.toString = $estr;
-browser._Lib.CursorType.Default.__enum__ = browser._Lib.CursorType;
-browser.accessibility = {}
-browser.accessibility.AccessibilityProperties = function() {
+flash._Vector.Vector_Impl_.copy = function(this1) {
+	return this1.slice();
+}
+flash._Vector.Vector_Impl_.iterator = function(this1) {
+	return HxOverrides.iter(this1);
+}
+flash._Vector.Vector_Impl_.join = function(this1,sep) {
+	return this1.join(sep);
+}
+flash._Vector.Vector_Impl_.pop = function(this1) {
+	return this1.pop();
+}
+flash._Vector.Vector_Impl_.push = function(this1,x) {
+	return this1.push(x);
+}
+flash._Vector.Vector_Impl_.reverse = function(this1) {
+	this1.reverse();
+}
+flash._Vector.Vector_Impl_.shift = function(this1) {
+	return this1.shift();
+}
+flash._Vector.Vector_Impl_.unshift = function(this1,x) {
+	this1.unshift(x);
+}
+flash._Vector.Vector_Impl_.slice = function(this1,pos,end) {
+	return this1.slice(pos,end);
+}
+flash._Vector.Vector_Impl_.sort = function(this1,f) {
+	this1.sort(f);
+}
+flash._Vector.Vector_Impl_.splice = function(this1,pos,len) {
+	return this1.splice(pos,len);
+}
+flash._Vector.Vector_Impl_.toString = function(this1) {
+	return this1.toString();
+}
+flash._Vector.Vector_Impl_.indexOf = function(this1,x,from) {
+	if(from == null) from = 0;
+	var _g1 = from, _g = this1.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		if(this1[i] == x) return i;
+	}
+	return -1;
+}
+flash._Vector.Vector_Impl_.lastIndexOf = function(this1,x,from) {
+	if(from == null) from = 0;
+	var i = this1.length - 1;
+	while(i >= from) {
+		if(this1[i] == x) return i;
+		i--;
+	}
+	return -1;
+}
+flash._Vector.Vector_Impl_.ofArray = function(a) {
+	return flash._Vector.Vector_Impl_.concat(flash._Vector.Vector_Impl_._new(),a);
+}
+flash._Vector.Vector_Impl_.convert = function(v) {
+	return v;
+}
+flash._Vector.Vector_Impl_.fromArray = function(a) {
+	return a;
+}
+flash._Vector.Vector_Impl_.toArray = function(this1) {
+	return this1;
+}
+flash._Vector.Vector_Impl_.get_length = function(this1) {
+	return this1.length;
+}
+flash._Vector.Vector_Impl_.set_length = function(this1,value) {
+	if(value < this1.length) this1 = this1.slice(0,value);
+	while(value > this1.length) this1.push(null);
+	return value;
+}
+flash._Vector.Vector_Impl_.get_fixed = function(this1) {
+	return false;
+}
+flash._Vector.Vector_Impl_.set_fixed = function(this1,value) {
+	return value;
+}
+flash.accessibility = {}
+flash.accessibility.AccessibilityProperties = function() {
 	this.description = "";
 	this.forceSimple = false;
 	this.name = "";
@@ -8702,33 +8289,37 @@ browser.accessibility.AccessibilityProperties = function() {
 	this.shortcut = "";
 	this.silent = false;
 };
-$hxClasses["browser.accessibility.AccessibilityProperties"] = browser.accessibility.AccessibilityProperties;
-browser.accessibility.AccessibilityProperties.__name__ = ["browser","accessibility","AccessibilityProperties"];
-browser.accessibility.AccessibilityProperties.prototype = {
-	silent: null
-	,shortcut: null
-	,noAutoLabeling: null
-	,name: null
-	,forceSimple: null
-	,description: null
-	,__class__: browser.accessibility.AccessibilityProperties
+$hxClasses["flash.accessibility.AccessibilityProperties"] = flash.accessibility.AccessibilityProperties;
+flash.accessibility.AccessibilityProperties.__name__ = ["flash","accessibility","AccessibilityProperties"];
+flash.accessibility.AccessibilityProperties.prototype = {
+	__class__: flash.accessibility.AccessibilityProperties
 }
-browser.display.Bitmap = function(inBitmapData,inPixelSnapping,inSmoothing) {
+flash.display.Bitmap = function(inBitmapData,inPixelSnapping,inSmoothing) {
 	if(inSmoothing == null) inSmoothing = false;
-	browser.display.DisplayObject.call(this);
+	flash.display.DisplayObject.call(this);
 	this.pixelSnapping = inPixelSnapping;
 	this.smoothing = inSmoothing;
-	this.nmeGraphics = new browser.display.Graphics();
 	if(inBitmapData != null) {
 		this.set_bitmapData(inBitmapData);
-		this.nmeRender();
+		this.bitmapData.nmeReferenceCount++;
+		if(this.bitmapData.nmeReferenceCount == 1) this.nmeGraphics = new flash.display.Graphics(this.bitmapData._nmeTextureBuffer);
 	}
+	if(this.pixelSnapping == null) this.pixelSnapping = flash.display.PixelSnapping.AUTO;
+	if(this.nmeGraphics == null) this.nmeGraphics = new flash.display.Graphics();
+	if(this.bitmapData != null) this.nmeRender();
 };
-$hxClasses["browser.display.Bitmap"] = browser.display.Bitmap;
-browser.display.Bitmap.__name__ = ["browser","display","Bitmap"];
-browser.display.Bitmap.__super__ = browser.display.DisplayObject;
-browser.display.Bitmap.prototype = $extend(browser.display.DisplayObject.prototype,{
+$hxClasses["flash.display.Bitmap"] = flash.display.Bitmap;
+flash.display.Bitmap.__name__ = ["flash","display","Bitmap"];
+flash.display.Bitmap.__super__ = flash.display.DisplayObject;
+flash.display.Bitmap.prototype = $extend(flash.display.DisplayObject.prototype,{
 	set_bitmapData: function(inBitmapData) {
+		if(inBitmapData != this.bitmapData) {
+			if(this.bitmapData != null) {
+				this.bitmapData.nmeReferenceCount--;
+				if(this.nmeGraphics.nmeSurface == this.bitmapData._nmeTextureBuffer) flash.Lib.nmeSetSurfaceOpacity(this.bitmapData._nmeTextureBuffer,0);
+			}
+			if(inBitmapData != null) inBitmapData.nmeReferenceCount++;
+		}
 		this._nmeRenderFlags |= 64;
 		if(this.parent != null) this.parent._nmeRenderFlags |= 64;
 		this.bitmapData = inBitmapData;
@@ -8736,9 +8327,9 @@ browser.display.Bitmap.prototype = $extend(browser.display.DisplayObject.prototy
 	}
 	,validateBounds: function() {
 		if(this.get__boundsInvalid()) {
-			browser.display.DisplayObject.prototype.validateBounds.call(this);
+			flash.display.DisplayObject.prototype.validateBounds.call(this);
 			if(this.bitmapData != null) {
-				var r = new browser.geom.Rectangle(0,0,this.bitmapData.get_width(),this.bitmapData.get_height());
+				var r = new flash.geom.Rectangle(0,0,this.bitmapData.get_width(),this.bitmapData.get_height());
 				if(r.width != 0 || r.height != 0) {
 					if(this.nmeBoundsRect.width == 0 && this.nmeBoundsRect.height == 0) this.nmeBoundsRect = r.clone(); else this.nmeBoundsRect.extendBounds(r);
 				}
@@ -8761,40 +8352,42 @@ browser.display.Bitmap.prototype = $extend(browser.display.DisplayObject.prototy
 		if(!this.nmeCombinedVisible) return;
 		if(this.bitmapData == null) return;
 		if((this._nmeRenderFlags & 4) != 0 || (this._nmeRenderFlags & 8) != 0) this.nmeValidateMatrix();
-		var imageDataLease = this.bitmapData.nmeLease;
-		if(imageDataLease != null && (this.nmeCurrentLease == null || imageDataLease.seed != this.nmeCurrentLease.seed || imageDataLease.time != this.nmeCurrentLease.time)) {
-			var srcCanvas = this.bitmapData._nmeTextureBuffer;
-			this.nmeGraphics.nmeSurface.width = srcCanvas.width;
-			this.nmeGraphics.nmeSurface.height = srcCanvas.height;
-			this.nmeGraphics.clear();
-			browser.Lib.nmeDrawToSurface(srcCanvas,this.nmeGraphics.nmeSurface);
-			this.nmeCurrentLease = imageDataLease.clone();
-			this._nmeRenderFlags |= 64;
-			if(this.parent != null) this.parent._nmeRenderFlags |= 64;
-			this.nmeApplyFilters(this.nmeGraphics.nmeSurface);
-			this._nmeRenderFlags |= 32;
+		if(this.bitmapData._nmeTextureBuffer != this.nmeGraphics.nmeSurface) {
+			var imageDataLease = this.bitmapData.nmeLease;
+			if(imageDataLease != null && (this.nmeCurrentLease == null || imageDataLease.seed != this.nmeCurrentLease.seed || imageDataLease.time != this.nmeCurrentLease.time)) {
+				var srcCanvas = this.bitmapData._nmeTextureBuffer;
+				this.nmeGraphics.nmeSurface.width = srcCanvas.width;
+				this.nmeGraphics.nmeSurface.height = srcCanvas.height;
+				this.nmeGraphics.clear();
+				flash.Lib.nmeDrawToSurface(srcCanvas,this.nmeGraphics.nmeSurface);
+				this.nmeCurrentLease = imageDataLease.clone();
+				this._nmeRenderFlags |= 64;
+				if(this.parent != null) this.parent._nmeRenderFlags |= 64;
+				this.nmeApplyFilters(this.nmeGraphics.nmeSurface);
+				this._nmeRenderFlags |= 32;
+			}
 		}
 		if(inMask != null) {
 			this.nmeApplyFilters(this.nmeGraphics.nmeSurface);
 			var m = this.getBitmapSurfaceTransform(this.nmeGraphics);
-			browser.Lib.nmeDrawToSurface(this.nmeGraphics.nmeSurface,inMask,m,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha,clipRect);
+			flash.Lib.nmeDrawToSurface(this.nmeGraphics.nmeSurface,inMask,m,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha,clipRect,this.smoothing);
 		} else {
 			if((this._nmeRenderFlags & 32) != 0) {
 				var m = this.getBitmapSurfaceTransform(this.nmeGraphics);
-				browser.Lib.nmeSetSurfaceTransform(this.nmeGraphics.nmeSurface,m);
+				flash.Lib.nmeSetSurfaceTransform(this.nmeGraphics.nmeSurface,m);
 				this._nmeRenderFlags &= -33;
 			}
 			if(!this.nmeInit) {
-				browser.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,0);
+				flash.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,0);
 				this.nmeInit = true;
-			} else browser.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha);
+			} else flash.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha);
 		}
 	}
 	,nmeGetObjectUnderPoint: function(point) {
 		if(!this.get_visible()) return null; else if(this.bitmapData != null) {
 			var local = this.globalToLocal(point);
 			if(local.x < 0 || local.y < 0 || local.x > this.get_width() || local.y > this.get_height()) return null; else return this;
-		} else return browser.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point);
+		} else return flash.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point);
 	}
 	,nmeGetGraphics: function() {
 		return this.nmeGraphics;
@@ -8805,41 +8398,33 @@ browser.display.Bitmap.prototype = $extend(browser.display.DisplayObject.prototy
 		fm.nmeTranslateTransformed(extent.get_topLeft());
 		return fm;
 	}
-	,nmeInit: null
-	,nmeCurrentLease: null
-	,nmeGraphics: null
-	,smoothing: null
-	,pixelSnapping: null
-	,bitmapData: null
-	,__class__: browser.display.Bitmap
-	,__properties__: $extend(browser.display.DisplayObject.prototype.__properties__,{set_bitmapData:"set_bitmapData"})
+	,__class__: flash.display.Bitmap
+	,__properties__: $extend(flash.display.DisplayObject.prototype.__properties__,{set_bitmapData:"set_bitmapData"})
 });
-browser.display.ImageDataLease = function() {
+flash.display.ImageDataLease = function() {
 };
-$hxClasses["browser.display.ImageDataLease"] = browser.display.ImageDataLease;
-browser.display.ImageDataLease.__name__ = ["browser","display","ImageDataLease"];
-browser.display.ImageDataLease.prototype = {
+$hxClasses["flash.display.ImageDataLease"] = flash.display.ImageDataLease;
+flash.display.ImageDataLease.__name__ = ["flash","display","ImageDataLease"];
+flash.display.ImageDataLease.prototype = {
 	set: function(s,t) {
 		this.seed = s;
 		this.time = t;
 	}
 	,clone: function() {
-		var leaseClone = new browser.display.ImageDataLease();
+		var leaseClone = new flash.display.ImageDataLease();
 		leaseClone.seed = this.seed;
 		leaseClone.time = this.time;
 		return leaseClone;
 	}
-	,time: null
-	,seed: null
-	,__class__: browser.display.ImageDataLease
+	,__class__: flash.display.ImageDataLease
 }
-browser.display._BitmapData = {}
-browser.display._BitmapData.MinstdGenerator = function(seed) {
+flash.display._BitmapData = {}
+flash.display._BitmapData.MinstdGenerator = function(seed) {
 	if(seed == 0) this.value = 1; else this.value = seed;
 };
-$hxClasses["browser.display._BitmapData.MinstdGenerator"] = browser.display._BitmapData.MinstdGenerator;
-browser.display._BitmapData.MinstdGenerator.__name__ = ["browser","display","_BitmapData","MinstdGenerator"];
-browser.display._BitmapData.MinstdGenerator.prototype = {
+$hxClasses["flash.display._BitmapData.MinstdGenerator"] = flash.display._BitmapData.MinstdGenerator;
+flash.display._BitmapData.MinstdGenerator.__name__ = ["flash","display","_BitmapData","MinstdGenerator"];
+flash.display._BitmapData.MinstdGenerator.prototype = {
 	nextValue: function() {
 		var lo = 16807 * (this.value & 65535);
 		var hi = 16807 * (this.value >>> 16);
@@ -8855,76 +8440,75 @@ browser.display._BitmapData.MinstdGenerator.prototype = {
 		}
 		return this.value = lo;
 	}
-	,value: null
-	,__class__: browser.display._BitmapData.MinstdGenerator
+	,__class__: flash.display._BitmapData.MinstdGenerator
 }
-browser.display.BitmapDataChannel = function() { }
-$hxClasses["browser.display.BitmapDataChannel"] = browser.display.BitmapDataChannel;
-browser.display.BitmapDataChannel.__name__ = ["browser","display","BitmapDataChannel"];
-browser.display.BlendMode = $hxClasses["browser.display.BlendMode"] = { __ename__ : ["browser","display","BlendMode"], __constructs__ : ["ADD","ALPHA","DARKEN","DIFFERENCE","ERASE","HARDLIGHT","INVERT","LAYER","LIGHTEN","MULTIPLY","NORMAL","OVERLAY","SCREEN","SUBTRACT"] }
-browser.display.BlendMode.ADD = ["ADD",0];
-browser.display.BlendMode.ADD.toString = $estr;
-browser.display.BlendMode.ADD.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.ALPHA = ["ALPHA",1];
-browser.display.BlendMode.ALPHA.toString = $estr;
-browser.display.BlendMode.ALPHA.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.DARKEN = ["DARKEN",2];
-browser.display.BlendMode.DARKEN.toString = $estr;
-browser.display.BlendMode.DARKEN.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.DIFFERENCE = ["DIFFERENCE",3];
-browser.display.BlendMode.DIFFERENCE.toString = $estr;
-browser.display.BlendMode.DIFFERENCE.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.ERASE = ["ERASE",4];
-browser.display.BlendMode.ERASE.toString = $estr;
-browser.display.BlendMode.ERASE.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.HARDLIGHT = ["HARDLIGHT",5];
-browser.display.BlendMode.HARDLIGHT.toString = $estr;
-browser.display.BlendMode.HARDLIGHT.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.INVERT = ["INVERT",6];
-browser.display.BlendMode.INVERT.toString = $estr;
-browser.display.BlendMode.INVERT.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.LAYER = ["LAYER",7];
-browser.display.BlendMode.LAYER.toString = $estr;
-browser.display.BlendMode.LAYER.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.LIGHTEN = ["LIGHTEN",8];
-browser.display.BlendMode.LIGHTEN.toString = $estr;
-browser.display.BlendMode.LIGHTEN.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.MULTIPLY = ["MULTIPLY",9];
-browser.display.BlendMode.MULTIPLY.toString = $estr;
-browser.display.BlendMode.MULTIPLY.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.NORMAL = ["NORMAL",10];
-browser.display.BlendMode.NORMAL.toString = $estr;
-browser.display.BlendMode.NORMAL.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.OVERLAY = ["OVERLAY",11];
-browser.display.BlendMode.OVERLAY.toString = $estr;
-browser.display.BlendMode.OVERLAY.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.SCREEN = ["SCREEN",12];
-browser.display.BlendMode.SCREEN.toString = $estr;
-browser.display.BlendMode.SCREEN.__enum__ = browser.display.BlendMode;
-browser.display.BlendMode.SUBTRACT = ["SUBTRACT",13];
-browser.display.BlendMode.SUBTRACT.toString = $estr;
-browser.display.BlendMode.SUBTRACT.__enum__ = browser.display.BlendMode;
-browser.display.CapsStyle = $hxClasses["browser.display.CapsStyle"] = { __ename__ : ["browser","display","CapsStyle"], __constructs__ : ["NONE","ROUND","SQUARE"] }
-browser.display.CapsStyle.NONE = ["NONE",0];
-browser.display.CapsStyle.NONE.toString = $estr;
-browser.display.CapsStyle.NONE.__enum__ = browser.display.CapsStyle;
-browser.display.CapsStyle.ROUND = ["ROUND",1];
-browser.display.CapsStyle.ROUND.toString = $estr;
-browser.display.CapsStyle.ROUND.__enum__ = browser.display.CapsStyle;
-browser.display.CapsStyle.SQUARE = ["SQUARE",2];
-browser.display.CapsStyle.SQUARE.toString = $estr;
-browser.display.CapsStyle.SQUARE.__enum__ = browser.display.CapsStyle;
-browser.display.GradientType = $hxClasses["browser.display.GradientType"] = { __ename__ : ["browser","display","GradientType"], __constructs__ : ["RADIAL","LINEAR"] }
-browser.display.GradientType.RADIAL = ["RADIAL",0];
-browser.display.GradientType.RADIAL.toString = $estr;
-browser.display.GradientType.RADIAL.__enum__ = browser.display.GradientType;
-browser.display.GradientType.LINEAR = ["LINEAR",1];
-browser.display.GradientType.LINEAR.toString = $estr;
-browser.display.GradientType.LINEAR.__enum__ = browser.display.GradientType;
-browser.display.Graphics = function(inSurface) {
-	browser.Lib.nmeBootstrap();
+flash.display.BitmapDataChannel = function() { }
+$hxClasses["flash.display.BitmapDataChannel"] = flash.display.BitmapDataChannel;
+flash.display.BitmapDataChannel.__name__ = ["flash","display","BitmapDataChannel"];
+flash.display.BlendMode = $hxClasses["flash.display.BlendMode"] = { __ename__ : ["flash","display","BlendMode"], __constructs__ : ["ADD","ALPHA","DARKEN","DIFFERENCE","ERASE","HARDLIGHT","INVERT","LAYER","LIGHTEN","MULTIPLY","NORMAL","OVERLAY","SCREEN","SUBTRACT"] }
+flash.display.BlendMode.ADD = ["ADD",0];
+flash.display.BlendMode.ADD.toString = $estr;
+flash.display.BlendMode.ADD.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.ALPHA = ["ALPHA",1];
+flash.display.BlendMode.ALPHA.toString = $estr;
+flash.display.BlendMode.ALPHA.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.DARKEN = ["DARKEN",2];
+flash.display.BlendMode.DARKEN.toString = $estr;
+flash.display.BlendMode.DARKEN.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.DIFFERENCE = ["DIFFERENCE",3];
+flash.display.BlendMode.DIFFERENCE.toString = $estr;
+flash.display.BlendMode.DIFFERENCE.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.ERASE = ["ERASE",4];
+flash.display.BlendMode.ERASE.toString = $estr;
+flash.display.BlendMode.ERASE.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.HARDLIGHT = ["HARDLIGHT",5];
+flash.display.BlendMode.HARDLIGHT.toString = $estr;
+flash.display.BlendMode.HARDLIGHT.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.INVERT = ["INVERT",6];
+flash.display.BlendMode.INVERT.toString = $estr;
+flash.display.BlendMode.INVERT.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.LAYER = ["LAYER",7];
+flash.display.BlendMode.LAYER.toString = $estr;
+flash.display.BlendMode.LAYER.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.LIGHTEN = ["LIGHTEN",8];
+flash.display.BlendMode.LIGHTEN.toString = $estr;
+flash.display.BlendMode.LIGHTEN.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.MULTIPLY = ["MULTIPLY",9];
+flash.display.BlendMode.MULTIPLY.toString = $estr;
+flash.display.BlendMode.MULTIPLY.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.NORMAL = ["NORMAL",10];
+flash.display.BlendMode.NORMAL.toString = $estr;
+flash.display.BlendMode.NORMAL.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.OVERLAY = ["OVERLAY",11];
+flash.display.BlendMode.OVERLAY.toString = $estr;
+flash.display.BlendMode.OVERLAY.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.SCREEN = ["SCREEN",12];
+flash.display.BlendMode.SCREEN.toString = $estr;
+flash.display.BlendMode.SCREEN.__enum__ = flash.display.BlendMode;
+flash.display.BlendMode.SUBTRACT = ["SUBTRACT",13];
+flash.display.BlendMode.SUBTRACT.toString = $estr;
+flash.display.BlendMode.SUBTRACT.__enum__ = flash.display.BlendMode;
+flash.display.CapsStyle = $hxClasses["flash.display.CapsStyle"] = { __ename__ : ["flash","display","CapsStyle"], __constructs__ : ["NONE","ROUND","SQUARE"] }
+flash.display.CapsStyle.NONE = ["NONE",0];
+flash.display.CapsStyle.NONE.toString = $estr;
+flash.display.CapsStyle.NONE.__enum__ = flash.display.CapsStyle;
+flash.display.CapsStyle.ROUND = ["ROUND",1];
+flash.display.CapsStyle.ROUND.toString = $estr;
+flash.display.CapsStyle.ROUND.__enum__ = flash.display.CapsStyle;
+flash.display.CapsStyle.SQUARE = ["SQUARE",2];
+flash.display.CapsStyle.SQUARE.toString = $estr;
+flash.display.CapsStyle.SQUARE.__enum__ = flash.display.CapsStyle;
+flash.display.GradientType = $hxClasses["flash.display.GradientType"] = { __ename__ : ["flash","display","GradientType"], __constructs__ : ["RADIAL","LINEAR"] }
+flash.display.GradientType.RADIAL = ["RADIAL",0];
+flash.display.GradientType.RADIAL.toString = $estr;
+flash.display.GradientType.RADIAL.__enum__ = flash.display.GradientType;
+flash.display.GradientType.LINEAR = ["LINEAR",1];
+flash.display.GradientType.LINEAR.toString = $estr;
+flash.display.GradientType.LINEAR.__enum__ = flash.display.GradientType;
+flash.display.Graphics = function(inSurface) {
+	flash.Lib.nmeBootstrap();
 	if(inSurface == null) {
-		this.nmeSurface = js.Lib.document.createElement("canvas");
+		this.nmeSurface = js.Browser.document.createElement("canvas");
 		this.nmeSurface.width = 0;
 		this.nmeSurface.height = 0;
 	} else this.nmeSurface = inSurface;
@@ -8944,26 +8528,26 @@ browser.display.Graphics = function(inSurface) {
 	this.mLineJobs = [];
 	this.nmeChanged = true;
 	this.nextDrawIndex = 0;
-	this.nmeExtent = new browser.geom.Rectangle();
-	this.nmeExtentWithFilters = new browser.geom.Rectangle();
+	this.nmeExtent = new flash.geom.Rectangle();
+	this.nmeExtentWithFilters = new flash.geom.Rectangle();
 	this._padding = 0.0;
 	this.nmeClearNextCycle = true;
 };
-$hxClasses["browser.display.Graphics"] = browser.display.Graphics;
-browser.display.Graphics.__name__ = ["browser","display","Graphics"];
-browser.display.Graphics.nmeDetectIsPointInPathMode = function() {
-	var canvas = js.Lib.document.createElement("canvas");
+$hxClasses["flash.display.Graphics"] = flash.display.Graphics;
+flash.display.Graphics.__name__ = ["flash","display","Graphics"];
+flash.display.Graphics.nmeDetectIsPointInPathMode = function() {
+	var canvas = js.Browser.document.createElement("canvas");
 	var ctx = canvas.getContext("2d");
-	if(ctx.isPointInPath == null) return browser.display.PointInPathMode.USER_SPACE;
+	if(ctx.isPointInPath == null) return flash.display.PointInPathMode.USER_SPACE;
 	ctx.save();
 	ctx.translate(1,0);
 	ctx.beginPath();
 	ctx.rect(0,0,1,1);
-	var rv = ctx.isPointInPath(0.3,0.3)?browser.display.PointInPathMode.USER_SPACE:browser.display.PointInPathMode.DEVICE_SPACE;
+	var rv = ctx.isPointInPath(0.3,0.3)?flash.display.PointInPathMode.USER_SPACE:flash.display.PointInPathMode.DEVICE_SPACE;
 	ctx.restore();
 	return rv;
 }
-browser.display.Graphics.prototype = {
+flash.display.Graphics.prototype = {
 	nmeRender: function(maskHandle,filters,sx,sy,clip0,clip1,clip2,clip3) {
 		if(sy == null) sy = 1.0;
 		if(sx == null) sx = 1.0;
@@ -9009,7 +8593,7 @@ browser.display.Graphics.prototype = {
 			while(_g < filters.length) {
 				var filter = filters[_g];
 				++_g;
-				if(js.Boot.__instanceof(filter,browser.filters.DropShadowFilter)) filter.nmeApplyFilter(this.nmeSurface,true);
+				if(js.Boot.__instanceof(filter,flash.filters.DropShadowFilter)) filter.nmeApplyFilter(this.nmeSurface,null,true);
 			}
 		}
 		var len = this.mDrawList.length;
@@ -9107,6 +8691,7 @@ browser.display.Graphics.prototype = {
 				if(doStroke) ctx.stroke();
 				ctx.save();
 				if(bitmap != null && (bitmap.flags & 16) == 0) {
+					ctx.clip();
 					var img = bitmap.texture_buffer;
 					var m = bitmap.matrix;
 					if(m != null) ctx.transform(m.a,m.b,m.c,m.d,m.tx,m.ty);
@@ -9117,7 +8702,7 @@ browser.display.Graphics.prototype = {
 		}
 		ctx.restore();
 		this.nmeChanged = false;
-		this.nextDrawIndex = len;
+		this.nextDrawIndex = len > 0?len - 1:0;
 		this.mDrawList = [];
 		return true;
 	}
@@ -9242,7 +8827,7 @@ browser.display.Graphics.prototype = {
 			if(rect != null && center != null) {
 				ctx.save();
 				ctx.translate(tileData[index],tileData[index + 1]);
-				if(useRotation) ctx.rotate(-tileData[index + rotationIndex]);
+				if(useRotation) ctx.rotate(tileData[index + rotationIndex]);
 				var scale = 1.0;
 				if(useScale) scale = tileData[index + scaleIndex];
 				if(useTransform) ctx.transform(tileData[index + transformIndex],tileData[index + transformIndex + 1],tileData[index + transformIndex + 2],tileData[index + transformIndex + 3],0,0);
@@ -9265,7 +8850,7 @@ browser.display.Graphics.prototype = {
 		this.curveTo(rx + x,0.4142 * ry + y,rx + x,y);
 	}
 	,nmeClearLine: function() {
-		this.mCurrentLine = new browser.display.LineJob(null,-1,-1,0.0,0.0,0,1,0,256,3,3.0);
+		this.mCurrentLine = new flash.display.LineJob(null,-1,-1,0.0,0.0,0,1,0,256,3,3.0);
 	}
 	,nmeClearCanvas: function() {
 		if(this.nmeSurface != null) {
@@ -9288,16 +8873,16 @@ browser.display.Graphics.prototype = {
 			var width = Math.ceil((this.nmeExtentWithFilters.width - this.nmeExtentWithFilters.x) * sx);
 			var height = Math.ceil((this.nmeExtentWithFilters.height - this.nmeExtentWithFilters.y) * sy);
 			if(width <= 5000 && height <= 5000) {
-				var dstCanvas = js.Lib.document.createElement("canvas");
+				var dstCanvas = js.Browser.document.createElement("canvas");
 				dstCanvas.width = width;
 				dstCanvas.height = height;
-				browser.Lib.nmeDrawToSurface(this.nmeSurface,dstCanvas);
-				if(browser.Lib.nmeIsOnStage(this.nmeSurface)) {
-					browser.Lib.nmeAppendSurface(dstCanvas);
-					browser.Lib.nmeCopyStyle(this.nmeSurface,dstCanvas);
-					browser.Lib.nmeSwapSurface(this.nmeSurface,dstCanvas);
-					browser.Lib.nmeRemoveSurface(this.nmeSurface);
-					if(this.nmeSurface.id != null) browser.Lib.nmeSetSurfaceId(dstCanvas,this.nmeSurface.id);
+				flash.Lib.nmeDrawToSurface(this.nmeSurface,dstCanvas);
+				if(flash.Lib.nmeIsOnStage(this.nmeSurface)) {
+					flash.Lib.nmeAppendSurface(dstCanvas);
+					flash.Lib.nmeCopyStyle(this.nmeSurface,dstCanvas);
+					flash.Lib.nmeSwapSurface(this.nmeSurface,dstCanvas);
+					flash.Lib.nmeRemoveSurface(this.nmeSurface);
+					if(this.nmeSurface.id != null) flash.Lib.nmeSetSurfaceId(dstCanvas,this.nmeSurface.id);
 				}
 				this.nmeSurface = dstCanvas;
 			}
@@ -9310,19 +8895,19 @@ browser.display.Graphics.prototype = {
 		if(!this.mFilling) this.closePolygon(false); else {
 			this.addLineSegment();
 			this.mLastMoveID = this.mPoints.length;
-			this.mPoints.push(new browser.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
+			this.mPoints.push(new flash.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
 		}
 	}
 	,lineTo: function(inX,inY) {
 		var pid = this.mPoints.length;
 		if(pid == 0) {
-			this.mPoints.push(new browser.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
+			this.mPoints.push(new flash.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
 			pid++;
 		}
 		this.mPenX = inX;
 		this.mPenY = inY;
 		this.nmeExpandStandardExtent(inX,inY,this.mCurrentLine.thickness);
-		this.mPoints.push(new browser.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,1));
+		this.mPoints.push(new flash.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,1));
 		if(this.mCurrentLine.grad != null || this.mCurrentLine.alpha > 0) {
 			if(this.mCurrentLine.point_idx0 < 0) this.mCurrentLine.point_idx0 = pid - 1;
 			this.mCurrentLine.point_idx1 = pid;
@@ -9406,11 +8991,13 @@ browser.display.Graphics.prototype = {
 	,drawTiles: function(sheet,tileData,smooth,flags) {
 		if(flags == null) flags = 0;
 		if(smooth == null) smooth = false;
-		this.nmeExpandStandardExtent(browser.Lib.get_current().get_stage().get_stageWidth(),browser.Lib.get_current().get_stage().get_stageHeight());
-		this.addDrawable(new browser.display.Drawable(null,null,null,null,null,null,new browser.display.TileJob(sheet,tileData,flags)));
+		this.nmeExpandStandardExtent(flash.Lib.get_current().get_stage().get_stageWidth(),flash.Lib.get_current().get_stage().get_stageHeight());
+		this.addDrawable(new flash.display.Drawable(null,null,null,null,null,null,new flash.display.TileJob(sheet,tileData,flags)));
 		this.nmeChanged = true;
 	}
 	,drawRoundRect: function(x,y,width,height,rx,ry) {
+		if(ry == null) ry = -1;
+		if(ry == -1) ry = rx;
 		rx *= 0.5;
 		ry *= 0.5;
 		var w = width * 0.5;
@@ -9451,30 +9038,33 @@ browser.display.Graphics.prototype = {
 		this.closePolygon(false);
 	}
 	,drawGraphicsData: function(points) {
-		var _g = 0;
-		while(_g < points.length) {
-			var data = points[_g];
-			++_g;
+		var $it0 = ((function(_e) {
+			return function() {
+				return $iterator(flash._Vector.Vector_Impl_)(_e);
+			};
+		})(points))();
+		while( $it0.hasNext() ) {
+			var data = $it0.next();
 			if(data == null) this.mFilling = true; else switch(data.nmeGraphicsDataType) {
-			case browser.display.GraphicsDataType.STROKE:
+			case flash.display.GraphicsDataType.STROKE:
 				var stroke = data;
 				if(stroke.fill == null) this.lineStyle(stroke.thickness,0,1.,stroke.pixelHinting,stroke.scaleMode,stroke.caps,stroke.joints,stroke.miterLimit); else switch(stroke.fill.nmeGraphicsFillType) {
-				case browser.display.GraphicsFillType.SOLID_FILL:
+				case flash.display.GraphicsFillType.SOLID_FILL:
 					var fill = stroke.fill;
 					this.lineStyle(stroke.thickness,fill.color,fill.alpha,stroke.pixelHinting,stroke.scaleMode,stroke.caps,stroke.joints,stroke.miterLimit);
 					break;
-				case browser.display.GraphicsFillType.GRADIENT_FILL:
+				case flash.display.GraphicsFillType.GRADIENT_FILL:
 					var fill = stroke.fill;
 					this.lineGradientStyle(fill.type,fill.colors,fill.alphas,fill.ratios,fill.matrix,fill.spreadMethod,fill.interpolationMethod,fill.focalPointRatio);
 					break;
 				}
 				break;
-			case browser.display.GraphicsDataType.PATH:
+			case flash.display.GraphicsDataType.PATH:
 				var path = data;
 				var j = 0;
-				var _g2 = 0, _g1 = path.commands.length;
-				while(_g2 < _g1) {
-					var i = _g2++;
+				var _g1 = 0, _g = flash._Vector.Vector_Impl_.get_length(path.commands);
+				while(_g1 < _g) {
+					var i = _g1++;
 					var command = path.commands[i];
 					switch(command) {
 					case 1:
@@ -9492,11 +9082,11 @@ browser.display.Graphics.prototype = {
 					}
 				}
 				break;
-			case browser.display.GraphicsDataType.SOLID:
+			case flash.display.GraphicsDataType.SOLID:
 				var fill = data;
 				this.beginFill(fill.color,fill.alpha);
 				break;
-			case browser.display.GraphicsDataType.GRADIENT:
+			case flash.display.GraphicsDataType.GRADIENT:
 				var fill = data;
 				this.beginGradientFill(fill.type,fill.colors,fill.alphas,fill.ratios,fill.matrix,fill.spreadMethod,fill.interpolationMethod,fill.focalPointRatio);
 				break;
@@ -9518,13 +9108,13 @@ browser.display.Graphics.prototype = {
 	,curveTo: function(inCX,inCY,inX,inY) {
 		var pid = this.mPoints.length;
 		if(pid == 0) {
-			this.mPoints.push(new browser.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
+			this.mPoints.push(new flash.display.GfxPoint(this.mPenX,this.mPenY,0.0,0.0,0));
 			pid++;
 		}
 		this.mPenX = inX;
 		this.mPenY = inY;
 		this.nmeExpandStandardExtent(inX,inY,this.mCurrentLine.thickness);
-		this.mPoints.push(new browser.display.GfxPoint(inX,inY,inCX,inCY,2));
+		this.mPoints.push(new flash.display.GfxPoint(inX,inY,inCX,inCY,2));
 		if(this.mCurrentLine.grad != null || this.mCurrentLine.alpha > 0) {
 			if(this.mCurrentLine.point_idx0 < 0) this.mCurrentLine.point_idx0 = pid - 1;
 			this.mCurrentLine.point_idx1 = pid;
@@ -9535,28 +9125,28 @@ browser.display.Graphics.prototype = {
 		var _g1 = 0, _g = colors.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			points.push(new browser.display.GradPoint(colors[i],alphas[i],ratios[i]));
+			points.push(new flash.display.GradPoint(colors[i],alphas[i],ratios[i]));
 		}
 		var flags = 0;
-		if(type == browser.display.GradientType.RADIAL) flags |= 1;
-		if(spreadMethod == browser.display.SpreadMethod.REPEAT) flags |= 2; else if(spreadMethod == browser.display.SpreadMethod.REFLECT) flags |= 4;
+		if(type == flash.display.GradientType.RADIAL) flags |= 1;
+		if(spreadMethod == flash.display.SpreadMethod.REPEAT) flags |= 2; else if(spreadMethod == flash.display.SpreadMethod.REFLECT) flags |= 4;
 		if(matrix == null) {
-			matrix = new browser.geom.Matrix();
+			matrix = new flash.geom.Matrix();
 			matrix.createGradientBox(25,25);
 		} else matrix = matrix.clone();
 		var focal = focalPointRatio == null?0:focalPointRatio;
-		return new browser.display.Grad(points,matrix,flags,focal);
+		return new flash.display.Grad(points,matrix,flags,focal);
 	}
 	,createCanvasGradient: function(ctx,g) {
 		var gradient;
 		var matrix = g.matrix;
 		if((g.flags & 1) == 0) {
-			var p1 = matrix.transformPoint(new browser.geom.Point(-819.2,0));
-			var p2 = matrix.transformPoint(new browser.geom.Point(819.2,0));
+			var p1 = matrix.transformPoint(new flash.geom.Point(-819.2,0));
+			var p2 = matrix.transformPoint(new flash.geom.Point(819.2,0));
 			gradient = ctx.createLinearGradient(p1.x,p1.y,p2.x,p2.y);
 		} else {
-			var p1 = matrix.transformPoint(new browser.geom.Point(g.focal * 819.2,0));
-			var p2 = matrix.transformPoint(new browser.geom.Point(0,819.2));
+			var p1 = matrix.transformPoint(new flash.geom.Point(g.focal * 819.2,0));
+			var p2 = matrix.transformPoint(new flash.geom.Point(0,819.2));
 			gradient = ctx.createRadialGradient(p1.x,p1.y,0,p2.x,p1.y,p2.y);
 		}
 		var _g = 0, _g1 = g.points;
@@ -9583,7 +9173,7 @@ browser.display.Graphics.prototype = {
 					if(this.mPoints[this.mLastMoveID].x != this.mPoints[l - 1].x || this.mPoints[this.mLastMoveID].y != this.mPoints[l - 1].y) this.lineTo(this.mPoints[this.mLastMoveID].x,this.mPoints[this.mLastMoveID].y);
 				}
 				this.addLineSegment();
-				var drawable = new browser.display.Drawable(this.mPoints,this.mFillColour,this.mFillAlpha,this.mSolidGradient,this.mBitmap,this.mLineJobs,null);
+				var drawable = new flash.display.Drawable(this.mPoints,this.mFillColour,this.mFillAlpha,this.mSolidGradient,this.mBitmap,this.mLineJobs,null);
 				this.addDrawable(drawable);
 			}
 			this.mLineJobs = [];
@@ -9657,37 +9247,16 @@ browser.display.Graphics.prototype = {
 		this.mBitmap = { texture_buffer : bitmap._nmeTextureBuffer, matrix : matrix == null?matrix:matrix.clone(), flags : (repeat?16:0) | (smooth?65536:0)};
 	}
 	,addLineSegment: function() {
-		if(this.mCurrentLine.point_idx1 > 0) this.mLineJobs.push(new browser.display.LineJob(this.mCurrentLine.grad,this.mCurrentLine.point_idx0,this.mCurrentLine.point_idx1,this.mCurrentLine.thickness,this.mCurrentLine.alpha,this.mCurrentLine.colour,this.mCurrentLine.pixel_hinting,this.mCurrentLine.joints,this.mCurrentLine.caps,this.mCurrentLine.scale_mode,this.mCurrentLine.miter_limit));
+		if(this.mCurrentLine.point_idx1 > 0) this.mLineJobs.push(new flash.display.LineJob(this.mCurrentLine.grad,this.mCurrentLine.point_idx0,this.mCurrentLine.point_idx1,this.mCurrentLine.thickness,this.mCurrentLine.alpha,this.mCurrentLine.colour,this.mCurrentLine.pixel_hinting,this.mCurrentLine.joints,this.mCurrentLine.caps,this.mCurrentLine.scale_mode,this.mCurrentLine.miter_limit));
 		this.mCurrentLine.point_idx0 = this.mCurrentLine.point_idx1 = -1;
 	}
 	,addDrawable: function(inDrawable) {
 		if(inDrawable == null) return;
 		this.mDrawList.unshift(inDrawable);
 	}
-	,_padding: null
-	,nmeClearNextCycle: null
-	,nmeChanged: null
-	,nextDrawIndex: null
-	,mSolidGradient: null
-	,mPoints: null
-	,mPenY: null
-	,mPenX: null
-	,mLineJobs: null
-	,mLineDraws: null
-	,mLastMoveID: null
-	,mFilling: null
-	,mFillAlpha: null
-	,mFillColour: null
-	,mDrawList: null
-	,mCurrentLine: null
-	,mBitmap: null
-	,nmeSurface: null
-	,nmeExtentWithFilters: null
-	,nmeExtent: null
-	,boundsDirty: null
-	,__class__: browser.display.Graphics
+	,__class__: flash.display.Graphics
 }
-browser.display.Drawable = function(inPoints,inFillColour,inFillAlpha,inSolidGradient,inBitmap,inLineJobs,inTileJob) {
+flash.display.Drawable = function(inPoints,inFillColour,inFillAlpha,inSolidGradient,inBitmap,inLineJobs,inTileJob) {
 	this.points = inPoints;
 	this.fillColour = inFillColour;
 	this.fillAlpha = inFillAlpha;
@@ -9696,64 +9265,45 @@ browser.display.Drawable = function(inPoints,inFillColour,inFillAlpha,inSolidGra
 	this.lineJobs = inLineJobs;
 	this.tileJob = inTileJob;
 };
-$hxClasses["browser.display.Drawable"] = browser.display.Drawable;
-browser.display.Drawable.__name__ = ["browser","display","Drawable"];
-browser.display.Drawable.prototype = {
-	tileJob: null
-	,solidGradient: null
-	,points: null
-	,lineJobs: null
-	,fillColour: null
-	,fillAlpha: null
-	,bitmap: null
-	,__class__: browser.display.Drawable
+$hxClasses["flash.display.Drawable"] = flash.display.Drawable;
+flash.display.Drawable.__name__ = ["flash","display","Drawable"];
+flash.display.Drawable.prototype = {
+	__class__: flash.display.Drawable
 }
-browser.display.GfxPoint = function(inX,inY,inCX,inCY,inType) {
+flash.display.GfxPoint = function(inX,inY,inCX,inCY,inType) {
 	this.x = inX;
 	this.y = inY;
 	this.cx = inCX;
 	this.cy = inCY;
 	this.type = inType;
 };
-$hxClasses["browser.display.GfxPoint"] = browser.display.GfxPoint;
-browser.display.GfxPoint.__name__ = ["browser","display","GfxPoint"];
-browser.display.GfxPoint.prototype = {
-	y: null
-	,x: null
-	,type: null
-	,cy: null
-	,cx: null
-	,__class__: browser.display.GfxPoint
+$hxClasses["flash.display.GfxPoint"] = flash.display.GfxPoint;
+flash.display.GfxPoint.__name__ = ["flash","display","GfxPoint"];
+flash.display.GfxPoint.prototype = {
+	__class__: flash.display.GfxPoint
 }
-browser.display.Grad = function(inPoints,inMatrix,inFlags,inFocal) {
+flash.display.Grad = function(inPoints,inMatrix,inFlags,inFocal) {
 	this.points = inPoints;
 	this.matrix = inMatrix;
 	this.flags = inFlags;
 	this.focal = inFocal;
 };
-$hxClasses["browser.display.Grad"] = browser.display.Grad;
-browser.display.Grad.__name__ = ["browser","display","Grad"];
-browser.display.Grad.prototype = {
-	points: null
-	,matrix: null
-	,focal: null
-	,flags: null
-	,__class__: browser.display.Grad
+$hxClasses["flash.display.Grad"] = flash.display.Grad;
+flash.display.Grad.__name__ = ["flash","display","Grad"];
+flash.display.Grad.prototype = {
+	__class__: flash.display.Grad
 }
-browser.display.GradPoint = function(inCol,inAlpha,inRatio) {
+flash.display.GradPoint = function(inCol,inAlpha,inRatio) {
 	this.col = inCol;
 	this.alpha = inAlpha;
 	this.ratio = inRatio;
 };
-$hxClasses["browser.display.GradPoint"] = browser.display.GradPoint;
-browser.display.GradPoint.__name__ = ["browser","display","GradPoint"];
-browser.display.GradPoint.prototype = {
-	ratio: null
-	,col: null
-	,alpha: null
-	,__class__: browser.display.GradPoint
+$hxClasses["flash.display.GradPoint"] = flash.display.GradPoint;
+flash.display.GradPoint.__name__ = ["flash","display","GradPoint"];
+flash.display.GradPoint.prototype = {
+	__class__: flash.display.GradPoint
 }
-browser.display.LineJob = function(inGrad,inPoint_idx0,inPoint_idx1,inThickness,inAlpha,inColour,inPixel_hinting,inJoints,inCaps,inScale_mode,inMiter_limit) {
+flash.display.LineJob = function(inGrad,inPoint_idx0,inPoint_idx1,inThickness,inAlpha,inColour,inPixel_hinting,inJoints,inCaps,inScale_mode,inMiter_limit) {
 	this.grad = inGrad;
 	this.point_idx0 = inPoint_idx0;
 	this.point_idx1 = inPoint_idx1;
@@ -9766,57 +9316,41 @@ browser.display.LineJob = function(inGrad,inPoint_idx0,inPoint_idx1,inThickness,
 	this.scale_mode = inScale_mode;
 	this.miter_limit = inMiter_limit;
 };
-$hxClasses["browser.display.LineJob"] = browser.display.LineJob;
-browser.display.LineJob.__name__ = ["browser","display","LineJob"];
-browser.display.LineJob.prototype = {
-	thickness: null
-	,scale_mode: null
-	,point_idx1: null
-	,point_idx0: null
-	,pixel_hinting: null
-	,miter_limit: null
-	,joints: null
-	,grad: null
-	,colour: null
-	,caps: null
-	,alpha: null
-	,__class__: browser.display.LineJob
+$hxClasses["flash.display.LineJob"] = flash.display.LineJob;
+flash.display.LineJob.__name__ = ["flash","display","LineJob"];
+flash.display.LineJob.prototype = {
+	__class__: flash.display.LineJob
 }
-browser.display.PointInPathMode = $hxClasses["browser.display.PointInPathMode"] = { __ename__ : ["browser","display","PointInPathMode"], __constructs__ : ["USER_SPACE","DEVICE_SPACE"] }
-browser.display.PointInPathMode.USER_SPACE = ["USER_SPACE",0];
-browser.display.PointInPathMode.USER_SPACE.toString = $estr;
-browser.display.PointInPathMode.USER_SPACE.__enum__ = browser.display.PointInPathMode;
-browser.display.PointInPathMode.DEVICE_SPACE = ["DEVICE_SPACE",1];
-browser.display.PointInPathMode.DEVICE_SPACE.toString = $estr;
-browser.display.PointInPathMode.DEVICE_SPACE.__enum__ = browser.display.PointInPathMode;
-browser.display.TileJob = function(sheet,drawList,flags) {
+flash.display.PointInPathMode = $hxClasses["flash.display.PointInPathMode"] = { __ename__ : ["flash","display","PointInPathMode"], __constructs__ : ["USER_SPACE","DEVICE_SPACE"] }
+flash.display.PointInPathMode.USER_SPACE = ["USER_SPACE",0];
+flash.display.PointInPathMode.USER_SPACE.toString = $estr;
+flash.display.PointInPathMode.USER_SPACE.__enum__ = flash.display.PointInPathMode;
+flash.display.PointInPathMode.DEVICE_SPACE = ["DEVICE_SPACE",1];
+flash.display.PointInPathMode.DEVICE_SPACE.toString = $estr;
+flash.display.PointInPathMode.DEVICE_SPACE.__enum__ = flash.display.PointInPathMode;
+flash.display.TileJob = function(sheet,drawList,flags) {
 	this.sheet = sheet;
 	this.drawList = drawList;
 	this.flags = flags;
 };
-$hxClasses["browser.display.TileJob"] = browser.display.TileJob;
-browser.display.TileJob.__name__ = ["browser","display","TileJob"];
-browser.display.TileJob.prototype = {
-	sheet: null
-	,flags: null
-	,drawList: null
-	,__class__: browser.display.TileJob
+$hxClasses["flash.display.TileJob"] = flash.display.TileJob;
+flash.display.TileJob.__name__ = ["flash","display","TileJob"];
+flash.display.TileJob.prototype = {
+	__class__: flash.display.TileJob
 }
-browser.display.IGraphicsFill = function() { }
-$hxClasses["browser.display.IGraphicsFill"] = browser.display.IGraphicsFill;
-browser.display.IGraphicsFill.__name__ = ["browser","display","IGraphicsFill"];
-browser.display.IGraphicsFill.prototype = {
-	nmeGraphicsFillType: null
-	,__class__: browser.display.IGraphicsFill
+flash.display.IGraphicsFill = function() { }
+$hxClasses["flash.display.IGraphicsFill"] = flash.display.IGraphicsFill;
+flash.display.IGraphicsFill.__name__ = ["flash","display","IGraphicsFill"];
+flash.display.IGraphicsFill.prototype = {
+	__class__: flash.display.IGraphicsFill
 }
-browser.display.IGraphicsData = function() { }
-$hxClasses["browser.display.IGraphicsData"] = browser.display.IGraphicsData;
-browser.display.IGraphicsData.__name__ = ["browser","display","IGraphicsData"];
-browser.display.IGraphicsData.prototype = {
-	nmeGraphicsDataType: null
-	,__class__: browser.display.IGraphicsData
+flash.display.IGraphicsData = function() { }
+$hxClasses["flash.display.IGraphicsData"] = flash.display.IGraphicsData;
+flash.display.IGraphicsData.__name__ = ["flash","display","IGraphicsData"];
+flash.display.IGraphicsData.prototype = {
+	__class__: flash.display.IGraphicsData
 }
-browser.display.GraphicsGradientFill = function(type,colors,alphas,ratios,matrix,spreadMethod,interpolationMethod,focalPointRatio) {
+flash.display.GraphicsGradientFill = function(type,colors,alphas,ratios,matrix,spreadMethod,interpolationMethod,focalPointRatio) {
 	if(focalPointRatio == null) focalPointRatio = 0;
 	this.type = type;
 	this.colors = colors;
@@ -9826,99 +9360,81 @@ browser.display.GraphicsGradientFill = function(type,colors,alphas,ratios,matrix
 	this.spreadMethod = spreadMethod;
 	this.interpolationMethod = interpolationMethod;
 	this.focalPointRatio = focalPointRatio;
-	this.nmeGraphicsDataType = browser.display.GraphicsDataType.GRADIENT;
-	this.nmeGraphicsFillType = browser.display.GraphicsFillType.GRADIENT_FILL;
+	this.nmeGraphicsDataType = flash.display.GraphicsDataType.GRADIENT;
+	this.nmeGraphicsFillType = flash.display.GraphicsFillType.GRADIENT_FILL;
 };
-$hxClasses["browser.display.GraphicsGradientFill"] = browser.display.GraphicsGradientFill;
-browser.display.GraphicsGradientFill.__name__ = ["browser","display","GraphicsGradientFill"];
-browser.display.GraphicsGradientFill.__interfaces__ = [browser.display.IGraphicsFill,browser.display.IGraphicsData];
-browser.display.GraphicsGradientFill.prototype = {
-	type: null
-	,spreadMethod: null
-	,ratios: null
-	,nmeGraphicsFillType: null
-	,nmeGraphicsDataType: null
-	,matrix: null
-	,interpolationMethod: null
-	,focalPointRatio: null
-	,colors: null
-	,alphas: null
-	,__class__: browser.display.GraphicsGradientFill
+$hxClasses["flash.display.GraphicsGradientFill"] = flash.display.GraphicsGradientFill;
+flash.display.GraphicsGradientFill.__name__ = ["flash","display","GraphicsGradientFill"];
+flash.display.GraphicsGradientFill.__interfaces__ = [flash.display.IGraphicsFill,flash.display.IGraphicsData];
+flash.display.GraphicsGradientFill.prototype = {
+	__class__: flash.display.GraphicsGradientFill
 }
-browser.display.IGraphicsPath = function() { }
-$hxClasses["browser.display.IGraphicsPath"] = browser.display.IGraphicsPath;
-browser.display.IGraphicsPath.__name__ = ["browser","display","IGraphicsPath"];
-browser.display.GraphicsPath = function(commands,data,winding) {
+flash.display.IGraphicsPath = function() { }
+$hxClasses["flash.display.IGraphicsPath"] = flash.display.IGraphicsPath;
+flash.display.IGraphicsPath.__name__ = ["flash","display","IGraphicsPath"];
+flash.display.GraphicsPath = function(commands,data,winding) {
 	this.commands = commands;
 	this.data = data;
 	this.winding = winding;
-	this.nmeGraphicsDataType = browser.display.GraphicsDataType.PATH;
+	this.nmeGraphicsDataType = flash.display.GraphicsDataType.PATH;
 };
-$hxClasses["browser.display.GraphicsPath"] = browser.display.GraphicsPath;
-browser.display.GraphicsPath.__name__ = ["browser","display","GraphicsPath"];
-browser.display.GraphicsPath.__interfaces__ = [browser.display.IGraphicsPath,browser.display.IGraphicsData];
-browser.display.GraphicsPath.prototype = {
+$hxClasses["flash.display.GraphicsPath"] = flash.display.GraphicsPath;
+flash.display.GraphicsPath.__name__ = ["flash","display","GraphicsPath"];
+flash.display.GraphicsPath.__interfaces__ = [flash.display.IGraphicsPath,flash.display.IGraphicsData];
+flash.display.GraphicsPath.prototype = {
 	moveTo: function(x,y) {
 		if(this.commands != null && this.data != null) {
-			this.commands.push(1);
-			this.data.push(x);
-			this.data.push(y);
+			flash._Vector.Vector_Impl_.push(this.commands,1);
+			flash._Vector.Vector_Impl_.push(this.data,x);
+			flash._Vector.Vector_Impl_.push(this.data,y);
 		}
 	}
 	,lineTo: function(x,y) {
 		if(this.commands != null && this.data != null) {
-			this.commands.push(2);
-			this.data.push(x);
-			this.data.push(y);
+			flash._Vector.Vector_Impl_.push(this.commands,2);
+			flash._Vector.Vector_Impl_.push(this.data,x);
+			flash._Vector.Vector_Impl_.push(this.data,y);
 		}
 	}
 	,curveTo: function(controlX,controlY,anchorX,anchorY) {
 		if(this.commands != null && this.data != null) {
-			this.commands.push(3);
-			this.data.push(anchorX);
-			this.data.push(anchorY);
-			this.data.push(controlX);
-			this.data.push(controlY);
+			flash._Vector.Vector_Impl_.push(this.commands,3);
+			flash._Vector.Vector_Impl_.push(this.data,anchorX);
+			flash._Vector.Vector_Impl_.push(this.data,anchorY);
+			flash._Vector.Vector_Impl_.push(this.data,controlX);
+			flash._Vector.Vector_Impl_.push(this.data,controlY);
 		}
 	}
-	,winding: null
-	,nmeGraphicsDataType: null
-	,data: null
-	,commands: null
-	,__class__: browser.display.GraphicsPath
+	,__class__: flash.display.GraphicsPath
 }
-browser.display.GraphicsPathCommand = function() { }
-$hxClasses["browser.display.GraphicsPathCommand"] = browser.display.GraphicsPathCommand;
-browser.display.GraphicsPathCommand.__name__ = ["browser","display","GraphicsPathCommand"];
-browser.display.GraphicsPathWinding = $hxClasses["browser.display.GraphicsPathWinding"] = { __ename__ : ["browser","display","GraphicsPathWinding"], __constructs__ : ["EVEN_ODD","NON_ZERO"] }
-browser.display.GraphicsPathWinding.EVEN_ODD = ["EVEN_ODD",0];
-browser.display.GraphicsPathWinding.EVEN_ODD.toString = $estr;
-browser.display.GraphicsPathWinding.EVEN_ODD.__enum__ = browser.display.GraphicsPathWinding;
-browser.display.GraphicsPathWinding.NON_ZERO = ["NON_ZERO",1];
-browser.display.GraphicsPathWinding.NON_ZERO.toString = $estr;
-browser.display.GraphicsPathWinding.NON_ZERO.__enum__ = browser.display.GraphicsPathWinding;
-browser.display.GraphicsSolidFill = function(color,alpha) {
+flash.display.GraphicsPathCommand = function() { }
+$hxClasses["flash.display.GraphicsPathCommand"] = flash.display.GraphicsPathCommand;
+flash.display.GraphicsPathCommand.__name__ = ["flash","display","GraphicsPathCommand"];
+flash.display.GraphicsPathWinding = $hxClasses["flash.display.GraphicsPathWinding"] = { __ename__ : ["flash","display","GraphicsPathWinding"], __constructs__ : ["EVEN_ODD","NON_ZERO"] }
+flash.display.GraphicsPathWinding.EVEN_ODD = ["EVEN_ODD",0];
+flash.display.GraphicsPathWinding.EVEN_ODD.toString = $estr;
+flash.display.GraphicsPathWinding.EVEN_ODD.__enum__ = flash.display.GraphicsPathWinding;
+flash.display.GraphicsPathWinding.NON_ZERO = ["NON_ZERO",1];
+flash.display.GraphicsPathWinding.NON_ZERO.toString = $estr;
+flash.display.GraphicsPathWinding.NON_ZERO.__enum__ = flash.display.GraphicsPathWinding;
+flash.display.GraphicsSolidFill = function(color,alpha) {
 	if(alpha == null) alpha = 1;
 	if(color == null) color = 0;
 	this.alpha = alpha;
 	this.color = color;
-	this.nmeGraphicsDataType = browser.display.GraphicsDataType.SOLID;
-	this.nmeGraphicsFillType = browser.display.GraphicsFillType.SOLID_FILL;
+	this.nmeGraphicsDataType = flash.display.GraphicsDataType.SOLID;
+	this.nmeGraphicsFillType = flash.display.GraphicsFillType.SOLID_FILL;
 };
-$hxClasses["browser.display.GraphicsSolidFill"] = browser.display.GraphicsSolidFill;
-browser.display.GraphicsSolidFill.__name__ = ["browser","display","GraphicsSolidFill"];
-browser.display.GraphicsSolidFill.__interfaces__ = [browser.display.IGraphicsFill,browser.display.IGraphicsData];
-browser.display.GraphicsSolidFill.prototype = {
-	nmeGraphicsFillType: null
-	,nmeGraphicsDataType: null
-	,color: null
-	,alpha: null
-	,__class__: browser.display.GraphicsSolidFill
+$hxClasses["flash.display.GraphicsSolidFill"] = flash.display.GraphicsSolidFill;
+flash.display.GraphicsSolidFill.__name__ = ["flash","display","GraphicsSolidFill"];
+flash.display.GraphicsSolidFill.__interfaces__ = [flash.display.IGraphicsFill,flash.display.IGraphicsData];
+flash.display.GraphicsSolidFill.prototype = {
+	__class__: flash.display.GraphicsSolidFill
 }
-browser.display.IGraphicsStroke = function() { }
-$hxClasses["browser.display.IGraphicsStroke"] = browser.display.IGraphicsStroke;
-browser.display.IGraphicsStroke.__name__ = ["browser","display","IGraphicsStroke"];
-browser.display.GraphicsStroke = function(thickness,pixelHinting,scaleMode,caps,joints,miterLimit,fill) {
+flash.display.IGraphicsStroke = function() { }
+$hxClasses["flash.display.IGraphicsStroke"] = flash.display.IGraphicsStroke;
+flash.display.IGraphicsStroke.__name__ = ["flash","display","IGraphicsStroke"];
+flash.display.GraphicsStroke = function(thickness,pixelHinting,scaleMode,caps,joints,miterLimit,fill) {
 	if(miterLimit == null) miterLimit = 3;
 	if(pixelHinting == null) pixelHinting = false;
 	if(thickness == null) thickness = 0.0;
@@ -9929,90 +9445,83 @@ browser.display.GraphicsStroke = function(thickness,pixelHinting,scaleMode,caps,
 	this.pixelHinting = pixelHinting;
 	this.scaleMode = scaleMode != null?scaleMode:null;
 	this.thickness = thickness;
-	this.nmeGraphicsDataType = browser.display.GraphicsDataType.STROKE;
+	this.nmeGraphicsDataType = flash.display.GraphicsDataType.STROKE;
 };
-$hxClasses["browser.display.GraphicsStroke"] = browser.display.GraphicsStroke;
-browser.display.GraphicsStroke.__name__ = ["browser","display","GraphicsStroke"];
-browser.display.GraphicsStroke.__interfaces__ = [browser.display.IGraphicsStroke,browser.display.IGraphicsData];
-browser.display.GraphicsStroke.prototype = {
-	thickness: null
-	,scaleMode: null
-	,pixelHinting: null
-	,nmeGraphicsDataType: null
-	,miterLimit: null
-	,joints: null
-	,fill: null
-	,caps: null
-	,__class__: browser.display.GraphicsStroke
+$hxClasses["flash.display.GraphicsStroke"] = flash.display.GraphicsStroke;
+flash.display.GraphicsStroke.__name__ = ["flash","display","GraphicsStroke"];
+flash.display.GraphicsStroke.__interfaces__ = [flash.display.IGraphicsStroke,flash.display.IGraphicsData];
+flash.display.GraphicsStroke.prototype = {
+	__class__: flash.display.GraphicsStroke
 }
-browser.display.GraphicsDataType = $hxClasses["browser.display.GraphicsDataType"] = { __ename__ : ["browser","display","GraphicsDataType"], __constructs__ : ["STROKE","SOLID","GRADIENT","PATH"] }
-browser.display.GraphicsDataType.STROKE = ["STROKE",0];
-browser.display.GraphicsDataType.STROKE.toString = $estr;
-browser.display.GraphicsDataType.STROKE.__enum__ = browser.display.GraphicsDataType;
-browser.display.GraphicsDataType.SOLID = ["SOLID",1];
-browser.display.GraphicsDataType.SOLID.toString = $estr;
-browser.display.GraphicsDataType.SOLID.__enum__ = browser.display.GraphicsDataType;
-browser.display.GraphicsDataType.GRADIENT = ["GRADIENT",2];
-browser.display.GraphicsDataType.GRADIENT.toString = $estr;
-browser.display.GraphicsDataType.GRADIENT.__enum__ = browser.display.GraphicsDataType;
-browser.display.GraphicsDataType.PATH = ["PATH",3];
-browser.display.GraphicsDataType.PATH.toString = $estr;
-browser.display.GraphicsDataType.PATH.__enum__ = browser.display.GraphicsDataType;
-browser.display.GraphicsFillType = $hxClasses["browser.display.GraphicsFillType"] = { __ename__ : ["browser","display","GraphicsFillType"], __constructs__ : ["SOLID_FILL","GRADIENT_FILL"] }
-browser.display.GraphicsFillType.SOLID_FILL = ["SOLID_FILL",0];
-browser.display.GraphicsFillType.SOLID_FILL.toString = $estr;
-browser.display.GraphicsFillType.SOLID_FILL.__enum__ = browser.display.GraphicsFillType;
-browser.display.GraphicsFillType.GRADIENT_FILL = ["GRADIENT_FILL",1];
-browser.display.GraphicsFillType.GRADIENT_FILL.toString = $estr;
-browser.display.GraphicsFillType.GRADIENT_FILL.__enum__ = browser.display.GraphicsFillType;
-browser.display.InterpolationMethod = $hxClasses["browser.display.InterpolationMethod"] = { __ename__ : ["browser","display","InterpolationMethod"], __constructs__ : ["RGB","LINEAR_RGB"] }
-browser.display.InterpolationMethod.RGB = ["RGB",0];
-browser.display.InterpolationMethod.RGB.toString = $estr;
-browser.display.InterpolationMethod.RGB.__enum__ = browser.display.InterpolationMethod;
-browser.display.InterpolationMethod.LINEAR_RGB = ["LINEAR_RGB",1];
-browser.display.InterpolationMethod.LINEAR_RGB.toString = $estr;
-browser.display.InterpolationMethod.LINEAR_RGB.__enum__ = browser.display.InterpolationMethod;
-browser.display.JointStyle = $hxClasses["browser.display.JointStyle"] = { __ename__ : ["browser","display","JointStyle"], __constructs__ : ["MITER","ROUND","BEVEL"] }
-browser.display.JointStyle.MITER = ["MITER",0];
-browser.display.JointStyle.MITER.toString = $estr;
-browser.display.JointStyle.MITER.__enum__ = browser.display.JointStyle;
-browser.display.JointStyle.ROUND = ["ROUND",1];
-browser.display.JointStyle.ROUND.toString = $estr;
-browser.display.JointStyle.ROUND.__enum__ = browser.display.JointStyle;
-browser.display.JointStyle.BEVEL = ["BEVEL",2];
-browser.display.JointStyle.BEVEL.toString = $estr;
-browser.display.JointStyle.BEVEL.__enum__ = browser.display.JointStyle;
-browser.display.LineScaleMode = $hxClasses["browser.display.LineScaleMode"] = { __ename__ : ["browser","display","LineScaleMode"], __constructs__ : ["HORIZONTAL","NONE","NORMAL","VERTICAL"] }
-browser.display.LineScaleMode.HORIZONTAL = ["HORIZONTAL",0];
-browser.display.LineScaleMode.HORIZONTAL.toString = $estr;
-browser.display.LineScaleMode.HORIZONTAL.__enum__ = browser.display.LineScaleMode;
-browser.display.LineScaleMode.NONE = ["NONE",1];
-browser.display.LineScaleMode.NONE.toString = $estr;
-browser.display.LineScaleMode.NONE.__enum__ = browser.display.LineScaleMode;
-browser.display.LineScaleMode.NORMAL = ["NORMAL",2];
-browser.display.LineScaleMode.NORMAL.toString = $estr;
-browser.display.LineScaleMode.NORMAL.__enum__ = browser.display.LineScaleMode;
-browser.display.LineScaleMode.VERTICAL = ["VERTICAL",3];
-browser.display.LineScaleMode.VERTICAL.toString = $estr;
-browser.display.LineScaleMode.VERTICAL.__enum__ = browser.display.LineScaleMode;
-browser.display.Loader = function() {
-	browser.display.DisplayObjectContainer.call(this);
-	this.contentLoaderInfo = browser.display.LoaderInfo.create(this);
+flash.display.GraphicsDataType = $hxClasses["flash.display.GraphicsDataType"] = { __ename__ : ["flash","display","GraphicsDataType"], __constructs__ : ["STROKE","SOLID","GRADIENT","PATH"] }
+flash.display.GraphicsDataType.STROKE = ["STROKE",0];
+flash.display.GraphicsDataType.STROKE.toString = $estr;
+flash.display.GraphicsDataType.STROKE.__enum__ = flash.display.GraphicsDataType;
+flash.display.GraphicsDataType.SOLID = ["SOLID",1];
+flash.display.GraphicsDataType.SOLID.toString = $estr;
+flash.display.GraphicsDataType.SOLID.__enum__ = flash.display.GraphicsDataType;
+flash.display.GraphicsDataType.GRADIENT = ["GRADIENT",2];
+flash.display.GraphicsDataType.GRADIENT.toString = $estr;
+flash.display.GraphicsDataType.GRADIENT.__enum__ = flash.display.GraphicsDataType;
+flash.display.GraphicsDataType.PATH = ["PATH",3];
+flash.display.GraphicsDataType.PATH.toString = $estr;
+flash.display.GraphicsDataType.PATH.__enum__ = flash.display.GraphicsDataType;
+flash.display.GraphicsFillType = $hxClasses["flash.display.GraphicsFillType"] = { __ename__ : ["flash","display","GraphicsFillType"], __constructs__ : ["SOLID_FILL","GRADIENT_FILL"] }
+flash.display.GraphicsFillType.SOLID_FILL = ["SOLID_FILL",0];
+flash.display.GraphicsFillType.SOLID_FILL.toString = $estr;
+flash.display.GraphicsFillType.SOLID_FILL.__enum__ = flash.display.GraphicsFillType;
+flash.display.GraphicsFillType.GRADIENT_FILL = ["GRADIENT_FILL",1];
+flash.display.GraphicsFillType.GRADIENT_FILL.toString = $estr;
+flash.display.GraphicsFillType.GRADIENT_FILL.__enum__ = flash.display.GraphicsFillType;
+flash.display.InterpolationMethod = $hxClasses["flash.display.InterpolationMethod"] = { __ename__ : ["flash","display","InterpolationMethod"], __constructs__ : ["RGB","LINEAR_RGB"] }
+flash.display.InterpolationMethod.RGB = ["RGB",0];
+flash.display.InterpolationMethod.RGB.toString = $estr;
+flash.display.InterpolationMethod.RGB.__enum__ = flash.display.InterpolationMethod;
+flash.display.InterpolationMethod.LINEAR_RGB = ["LINEAR_RGB",1];
+flash.display.InterpolationMethod.LINEAR_RGB.toString = $estr;
+flash.display.InterpolationMethod.LINEAR_RGB.__enum__ = flash.display.InterpolationMethod;
+flash.display.JointStyle = $hxClasses["flash.display.JointStyle"] = { __ename__ : ["flash","display","JointStyle"], __constructs__ : ["MITER","ROUND","BEVEL"] }
+flash.display.JointStyle.MITER = ["MITER",0];
+flash.display.JointStyle.MITER.toString = $estr;
+flash.display.JointStyle.MITER.__enum__ = flash.display.JointStyle;
+flash.display.JointStyle.ROUND = ["ROUND",1];
+flash.display.JointStyle.ROUND.toString = $estr;
+flash.display.JointStyle.ROUND.__enum__ = flash.display.JointStyle;
+flash.display.JointStyle.BEVEL = ["BEVEL",2];
+flash.display.JointStyle.BEVEL.toString = $estr;
+flash.display.JointStyle.BEVEL.__enum__ = flash.display.JointStyle;
+flash.display.LineScaleMode = $hxClasses["flash.display.LineScaleMode"] = { __ename__ : ["flash","display","LineScaleMode"], __constructs__ : ["HORIZONTAL","NONE","NORMAL","VERTICAL"] }
+flash.display.LineScaleMode.HORIZONTAL = ["HORIZONTAL",0];
+flash.display.LineScaleMode.HORIZONTAL.toString = $estr;
+flash.display.LineScaleMode.HORIZONTAL.__enum__ = flash.display.LineScaleMode;
+flash.display.LineScaleMode.NONE = ["NONE",1];
+flash.display.LineScaleMode.NONE.toString = $estr;
+flash.display.LineScaleMode.NONE.__enum__ = flash.display.LineScaleMode;
+flash.display.LineScaleMode.NORMAL = ["NORMAL",2];
+flash.display.LineScaleMode.NORMAL.toString = $estr;
+flash.display.LineScaleMode.NORMAL.__enum__ = flash.display.LineScaleMode;
+flash.display.LineScaleMode.VERTICAL = ["VERTICAL",3];
+flash.display.LineScaleMode.VERTICAL.toString = $estr;
+flash.display.LineScaleMode.VERTICAL.__enum__ = flash.display.LineScaleMode;
+flash.display.Loader = function() {
+	flash.display.Sprite.call(this);
+	this.contentLoaderInfo = flash.display.LoaderInfo.create(this);
 };
-$hxClasses["browser.display.Loader"] = browser.display.Loader;
-browser.display.Loader.__name__ = ["browser","display","Loader"];
-browser.display.Loader.__super__ = browser.display.DisplayObjectContainer;
-browser.display.Loader.prototype = $extend(browser.display.DisplayObjectContainer.prototype,{
+$hxClasses["flash.display.Loader"] = flash.display.Loader;
+flash.display.Loader.__name__ = ["flash","display","Loader"];
+flash.display.Loader.__super__ = flash.display.Sprite;
+flash.display.Loader.prototype = $extend(flash.display.Sprite.prototype,{
 	handleLoad: function(e) {
+		e.currentTarget = this;
 		this.content.nmeInvalidateBounds();
 		this.content.nmeRender(null,null);
-		this.contentLoaderInfo.removeEventListener(browser.events.Event.COMPLETE,$bind(this,this.handleLoad));
+		this.contentLoaderInfo.removeEventListener(flash.events.Event.COMPLETE,$bind(this,this.handleLoad));
 	}
 	,validateBounds: function() {
 		if(this.get__boundsInvalid()) {
-			browser.display.DisplayObjectContainer.prototype.validateBounds.call(this);
+			flash.display.Sprite.prototype.validateBounds.call(this);
 			if(this.mImage != null) {
-				var r = new browser.geom.Rectangle(0,0,this.mImage.get_width(),this.mImage.get_height());
+				var r = new flash.geom.Rectangle(0,0,this.mImage.get_width(),this.mImage.get_height());
 				if(r.width != 0 || r.height != 0) {
 					if(this.nmeBoundsRect.width == 0 && this.nmeBoundsRect.height == 0) this.nmeBoundsRect = r.clone(); else this.nmeBoundsRect.extendBounds(r);
 				}
@@ -10034,16 +9543,19 @@ browser.display.Loader.prototype = $extend(browser.display.DisplayObjectContaine
 	,loadBytes: function(buffer) {
 		var _g = this;
 		try {
-			this.contentLoaderInfo.addEventListener(browser.events.Event.COMPLETE,$bind(this,this.handleLoad),false,2147483647);
-			browser.display.BitmapData.loadFromBytes(buffer,null,function(bmd) {
-				_g.content = new browser.display.Bitmap(bmd);
+			this.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE,$bind(this,this.handleLoad),false,2147483647);
+			flash.display.BitmapData.loadFromBytes(buffer,null,function(bmd) {
+				_g.content = new flash.display.Bitmap(bmd);
 				_g.contentLoaderInfo.content = _g.content;
 				_g.addChild(_g.content);
-				_g.contentLoaderInfo.dispatchEvent(new browser.events.Event(browser.events.Event.COMPLETE));
+				var evt = new flash.events.Event(flash.events.Event.COMPLETE);
+				evt.currentTarget = _g;
+				_g.contentLoaderInfo.dispatchEvent(evt);
 			});
 		} catch( e ) {
-			haxe.Log.trace("Error " + Std.string(e),{ fileName : "Loader.hx", lineNumber : 112, className : "browser.display.Loader", methodName : "loadBytes"});
-			var evt = new browser.events.IOErrorEvent(browser.events.IOErrorEvent.IO_ERROR);
+			console.log("Error " + Std.string(e));
+			var evt = new flash.events.IOErrorEvent(flash.events.IOErrorEvent.IO_ERROR);
+			evt.currentTarget = this;
 			this.contentLoaderInfo.dispatchEvent(evt);
 		}
 	}
@@ -10082,90 +9594,76 @@ browser.display.Loader.prototype = $extend(browser.display.DisplayObjectContaine
 			}
 			return $r;
 		}(this));
-		this.mImage = new browser.display.BitmapData(0,0,transparent);
+		this.mImage = new flash.display.BitmapData(0,0,transparent);
 		try {
-			this.contentLoaderInfo.addEventListener(browser.events.Event.COMPLETE,$bind(this,this.handleLoad),false,2147483647);
+			this.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE,$bind(this,this.handleLoad),false,2147483647);
 			this.mImage.nmeLoadFromFile(request.url,this.contentLoaderInfo);
-			this.content = new browser.display.Bitmap(this.mImage);
+			this.content = new flash.display.Bitmap(this.mImage);
 			this.contentLoaderInfo.content = this.content;
 			this.addChild(this.content);
 		} catch( e ) {
-			haxe.Log.trace("Error " + Std.string(e),{ fileName : "Loader.hx", lineNumber : 78, className : "browser.display.Loader", methodName : "load"});
-			var evt = new browser.events.IOErrorEvent(browser.events.IOErrorEvent.IO_ERROR);
+			console.log("Error " + Std.string(e));
+			var evt = new flash.events.IOErrorEvent(flash.events.IOErrorEvent.IO_ERROR);
+			evt.currentTarget = this;
 			this.contentLoaderInfo.dispatchEvent(evt);
 			return;
 		}
 		if(this.mShape == null) {
-			this.mShape = new browser.display.Shape();
+			this.mShape = new flash.display.Shape();
 			this.addChild(this.mShape);
 		}
 	}
-	,mShape: null
-	,mImage: null
-	,contentLoaderInfo: null
-	,content: null
-	,__class__: browser.display.Loader
+	,__class__: flash.display.Loader
 });
-browser.display.LoaderInfo = function() {
-	browser.events.EventDispatcher.call(this);
+flash.display.LoaderInfo = function() {
+	flash.events.EventDispatcher.call(this);
+	this.applicationDomain = flash.system.ApplicationDomain.currentDomain;
 	this.bytesLoaded = 0;
 	this.bytesTotal = 0;
 	this.childAllowsParent = true;
 	this.parameters = { };
 };
-$hxClasses["browser.display.LoaderInfo"] = browser.display.LoaderInfo;
-browser.display.LoaderInfo.__name__ = ["browser","display","LoaderInfo"];
-browser.display.LoaderInfo.create = function(ldr) {
-	var li = new browser.display.LoaderInfo();
-	if(ldr != null) li.loader = ldr;
+$hxClasses["flash.display.LoaderInfo"] = flash.display.LoaderInfo;
+flash.display.LoaderInfo.__name__ = ["flash","display","LoaderInfo"];
+flash.display.LoaderInfo.create = function(ldr) {
+	var li = new flash.display.LoaderInfo();
+	if(ldr != null) li.loader = ldr; else li.url = "";
 	return li;
 }
-browser.display.LoaderInfo.__super__ = browser.events.EventDispatcher;
-browser.display.LoaderInfo.prototype = $extend(browser.events.EventDispatcher.prototype,{
-	width: null
-	,url: null
-	,sharedEvents: null
-	,sameDomain: null
-	,parentAllowsChild: null
-	,parameters: null
-	,loaderURL: null
-	,loader: null
-	,height: null
-	,frameRate: null
-	,contentType: null
-	,content: null
-	,childAllowsParent: null
-	,bytesTotal: null
-	,bytesLoaded: null
-	,bytes: null
-	,__class__: browser.display.LoaderInfo
+flash.display.LoaderInfo.__super__ = flash.events.EventDispatcher;
+flash.display.LoaderInfo.prototype = $extend(flash.events.EventDispatcher.prototype,{
+	__class__: flash.display.LoaderInfo
 });
-browser.display.MovieClip = function() {
-	browser.display.Sprite.call(this);
+flash.display.MovieClip = function() {
+	flash.display.Sprite.call(this);
 	this.enabled = true;
-	this.mCurrentFrame = 0;
-	this.mTotalFrames = 0;
-	this.loaderInfo = browser.display.LoaderInfo.create(null);
+	this.__currentFrame = 0;
+	this.__totalFrames = 0;
+	this.loaderInfo = flash.display.LoaderInfo.create(null);
 };
-$hxClasses["browser.display.MovieClip"] = browser.display.MovieClip;
-browser.display.MovieClip.__name__ = ["browser","display","MovieClip"];
-browser.display.MovieClip.__super__ = browser.display.Sprite;
-browser.display.MovieClip.prototype = $extend(browser.display.Sprite.prototype,{
+$hxClasses["flash.display.MovieClip"] = flash.display.MovieClip;
+flash.display.MovieClip.__name__ = ["flash","display","MovieClip"];
+flash.display.MovieClip.__super__ = flash.display.Sprite;
+flash.display.MovieClip.prototype = $extend(flash.display.Sprite.prototype,{
 	get_totalFrames: function() {
-		return this.mTotalFrames;
+		return this.__totalFrames;
 	}
 	,get_framesLoaded: function() {
-		return this.mTotalFrames;
+		return this.__totalFrames;
 	}
 	,get_currentFrame: function() {
-		return this.mCurrentFrame;
+		return this.__currentFrame;
 	}
 	,toString: function() {
 		return "[MovieClip name=" + this.name + " id=" + this._nmeId + "]";
 	}
 	,stop: function() {
 	}
+	,prevFrame: function() {
+	}
 	,play: function() {
+	}
+	,nextFrame: function() {
 	}
 	,gotoAndStop: function(frame,scene) {
 		if(scene == null) scene = "";
@@ -10173,34 +9671,27 @@ browser.display.MovieClip.prototype = $extend(browser.display.Sprite.prototype,{
 	,gotoAndPlay: function(frame,scene) {
 		if(scene == null) scene = "";
 	}
-	,mTotalFrames: null
-	,mCurrentFrame: null
-	,totalFrames: null
-	,loaderInfo: null
-	,framesLoaded: null
-	,enabled: null
-	,currentFrame: null
-	,__class__: browser.display.MovieClip
-	,__properties__: $extend(browser.display.Sprite.prototype.__properties__,{get_currentFrame:"get_currentFrame",get_framesLoaded:"get_framesLoaded",get_totalFrames:"get_totalFrames"})
+	,__class__: flash.display.MovieClip
+	,__properties__: $extend(flash.display.Sprite.prototype.__properties__,{get_currentFrame:"get_currentFrame",get_framesLoaded:"get_framesLoaded",get_totalFrames:"get_totalFrames"})
 });
-browser.display.PixelSnapping = $hxClasses["browser.display.PixelSnapping"] = { __ename__ : ["browser","display","PixelSnapping"], __constructs__ : ["NEVER","AUTO","ALWAYS"] }
-browser.display.PixelSnapping.NEVER = ["NEVER",0];
-browser.display.PixelSnapping.NEVER.toString = $estr;
-browser.display.PixelSnapping.NEVER.__enum__ = browser.display.PixelSnapping;
-browser.display.PixelSnapping.AUTO = ["AUTO",1];
-browser.display.PixelSnapping.AUTO.toString = $estr;
-browser.display.PixelSnapping.AUTO.__enum__ = browser.display.PixelSnapping;
-browser.display.PixelSnapping.ALWAYS = ["ALWAYS",2];
-browser.display.PixelSnapping.ALWAYS.toString = $estr;
-browser.display.PixelSnapping.ALWAYS.__enum__ = browser.display.PixelSnapping;
-browser.display.Shape = function() {
-	browser.display.DisplayObject.call(this);
-	this.nmeGraphics = new browser.display.Graphics();
+flash.display.PixelSnapping = $hxClasses["flash.display.PixelSnapping"] = { __ename__ : ["flash","display","PixelSnapping"], __constructs__ : ["NEVER","AUTO","ALWAYS"] }
+flash.display.PixelSnapping.NEVER = ["NEVER",0];
+flash.display.PixelSnapping.NEVER.toString = $estr;
+flash.display.PixelSnapping.NEVER.__enum__ = flash.display.PixelSnapping;
+flash.display.PixelSnapping.AUTO = ["AUTO",1];
+flash.display.PixelSnapping.AUTO.toString = $estr;
+flash.display.PixelSnapping.AUTO.__enum__ = flash.display.PixelSnapping;
+flash.display.PixelSnapping.ALWAYS = ["ALWAYS",2];
+flash.display.PixelSnapping.ALWAYS.toString = $estr;
+flash.display.PixelSnapping.ALWAYS.__enum__ = flash.display.PixelSnapping;
+flash.display.Shape = function() {
+	flash.display.DisplayObject.call(this);
+	this.nmeGraphics = new flash.display.Graphics();
 };
-$hxClasses["browser.display.Shape"] = browser.display.Shape;
-browser.display.Shape.__name__ = ["browser","display","Shape"];
-browser.display.Shape.__super__ = browser.display.DisplayObject;
-browser.display.Shape.prototype = $extend(browser.display.DisplayObject.prototype,{
+$hxClasses["flash.display.Shape"] = flash.display.Shape;
+flash.display.Shape.__name__ = ["flash","display","Shape"];
+flash.display.Shape.__super__ = flash.display.DisplayObject;
+flash.display.Shape.prototype = $extend(flash.display.DisplayObject.prototype,{
 	get_graphics: function() {
 		return this.nmeGraphics;
 	}
@@ -10209,27 +9700,25 @@ browser.display.Shape.prototype = $extend(browser.display.DisplayObject.prototyp
 	}
 	,nmeGetObjectUnderPoint: function(point) {
 		if(this.parent == null) return null;
-		if(this.parent.mouseEnabled && browser.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point) == this) return this.parent; else return null;
+		if(this.parent.mouseEnabled && flash.display.DisplayObject.prototype.nmeGetObjectUnderPoint.call(this,point) == this) return this.parent; else return null;
 	}
 	,nmeGetGraphics: function() {
 		return this.nmeGraphics;
 	}
-	,nmeGraphics: null
-	,graphics: null
-	,__class__: browser.display.Shape
-	,__properties__: $extend(browser.display.DisplayObject.prototype.__properties__,{get_graphics:"get_graphics"})
+	,__class__: flash.display.Shape
+	,__properties__: $extend(flash.display.DisplayObject.prototype.__properties__,{get_graphics:"get_graphics"})
 });
-browser.display.SpreadMethod = $hxClasses["browser.display.SpreadMethod"] = { __ename__ : ["browser","display","SpreadMethod"], __constructs__ : ["REPEAT","REFLECT","PAD"] }
-browser.display.SpreadMethod.REPEAT = ["REPEAT",0];
-browser.display.SpreadMethod.REPEAT.toString = $estr;
-browser.display.SpreadMethod.REPEAT.__enum__ = browser.display.SpreadMethod;
-browser.display.SpreadMethod.REFLECT = ["REFLECT",1];
-browser.display.SpreadMethod.REFLECT.toString = $estr;
-browser.display.SpreadMethod.REFLECT.__enum__ = browser.display.SpreadMethod;
-browser.display.SpreadMethod.PAD = ["PAD",2];
-browser.display.SpreadMethod.PAD.toString = $estr;
-browser.display.SpreadMethod.PAD.__enum__ = browser.display.SpreadMethod;
-browser.events.Event = function(inType,inBubbles,inCancelable) {
+flash.display.SpreadMethod = $hxClasses["flash.display.SpreadMethod"] = { __ename__ : ["flash","display","SpreadMethod"], __constructs__ : ["REPEAT","REFLECT","PAD"] }
+flash.display.SpreadMethod.REPEAT = ["REPEAT",0];
+flash.display.SpreadMethod.REPEAT.toString = $estr;
+flash.display.SpreadMethod.REPEAT.__enum__ = flash.display.SpreadMethod;
+flash.display.SpreadMethod.REFLECT = ["REFLECT",1];
+flash.display.SpreadMethod.REFLECT.toString = $estr;
+flash.display.SpreadMethod.REFLECT.__enum__ = flash.display.SpreadMethod;
+flash.display.SpreadMethod.PAD = ["PAD",2];
+flash.display.SpreadMethod.PAD.toString = $estr;
+flash.display.SpreadMethod.PAD.__enum__ = flash.display.SpreadMethod;
+flash.events.Event = function(inType,inBubbles,inCancelable) {
 	if(inCancelable == null) inCancelable = false;
 	if(inBubbles == null) inBubbles = false;
 	this.type = inType;
@@ -10239,11 +9728,11 @@ browser.events.Event = function(inType,inBubbles,inCancelable) {
 	this.nmeIsCancelledNow = false;
 	this.target = null;
 	this.currentTarget = null;
-	this.eventPhase = browser.events.EventPhase.AT_TARGET;
+	this.eventPhase = flash.events.EventPhase.AT_TARGET;
 };
-$hxClasses["browser.events.Event"] = browser.events.Event;
-browser.events.Event.__name__ = ["browser","events","Event"];
-browser.events.Event.prototype = {
+$hxClasses["flash.events.Event"] = flash.events.Event;
+flash.events.Event.__name__ = ["flash","events","Event"];
+flash.events.Event.prototype = {
 	toString: function() {
 		return "[Event type=" + this.type + " bubbles=" + Std.string(this.bubbles) + " cancelable=" + Std.string(this.cancelable) + "]";
 	}
@@ -10264,24 +9753,16 @@ browser.events.Event.prototype = {
 		return this.nmeIsCancelled;
 	}
 	,nmeCreateSimilar: function(type,related,targ) {
-		var result = new browser.events.Event(type,this.bubbles,this.cancelable);
+		var result = new flash.events.Event(type,this.bubbles,this.cancelable);
 		if(targ != null) result.target = targ;
 		return result;
 	}
 	,clone: function() {
-		return new browser.events.Event(this.type,this.bubbles,this.cancelable);
+		return new flash.events.Event(this.type,this.bubbles,this.cancelable);
 	}
-	,nmeIsCancelledNow: null
-	,nmeIsCancelled: null
-	,type: null
-	,target: null
-	,eventPhase: null
-	,currentTarget: null
-	,cancelable: null
-	,bubbles: null
-	,__class__: browser.events.Event
+	,__class__: flash.events.Event
 }
-browser.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
+flash.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
 	if(clickCount == null) clickCount = 0;
 	if(commandKey == null) commandKey = false;
 	if(delta == null) delta = 0;
@@ -10293,7 +9774,7 @@ browser.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relat
 	if(localX == null) localX = 0;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = true;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 	this.shiftKey = shiftKey;
 	this.altKey = altKey;
 	this.ctrlKey = ctrlKey;
@@ -10306,96 +9787,84 @@ browser.events.MouseEvent = function(type,bubbles,cancelable,localX,localY,relat
 	this.commandKey = commandKey;
 	this.clickCount = clickCount;
 };
-$hxClasses["browser.events.MouseEvent"] = browser.events.MouseEvent;
-browser.events.MouseEvent.__name__ = ["browser","events","MouseEvent"];
-browser.events.MouseEvent.nmeCreate = function(type,event,local,target) {
+$hxClasses["flash.events.MouseEvent"] = flash.events.MouseEvent;
+flash.events.MouseEvent.__name__ = ["flash","events","MouseEvent"];
+flash.events.MouseEvent.nmeCreate = function(type,event,local,target) {
 	var nmeMouseDown = false;
 	var delta = 2;
-	if(type == browser.events.MouseEvent.MOUSE_WHEEL) {
+	if(type == flash.events.MouseEvent.MOUSE_WHEEL) {
 		var mouseEvent = event;
 		if(mouseEvent.wheelDelta) delta = mouseEvent.wheelDelta / 120 | 0; else if(mouseEvent.detail) -mouseEvent.detail | 0;
 	}
-	if(type == browser.events.MouseEvent.MOUSE_DOWN) nmeMouseDown = event.which != null?event.which == 1:event.button != null?event.button == 0:false; else if(type == browser.events.MouseEvent.MOUSE_UP) {
+	if(type == flash.events.MouseEvent.MOUSE_DOWN) nmeMouseDown = event.which != null?event.which == 1:event.button != null?event.button == 0:false; else if(type == flash.events.MouseEvent.MOUSE_UP) {
 		if(event.which != null) {
 			if(event.which == 1) nmeMouseDown = false; else if(event.button != null) {
 				if(event.button == 0) nmeMouseDown = false; else nmeMouseDown = false;
 			}
 		}
 	}
-	var pseudoEvent = new browser.events.MouseEvent(type,true,false,local.x,local.y,null,event.ctrlKey,event.altKey,event.shiftKey,nmeMouseDown,delta);
-	pseudoEvent.stageX = browser.Lib.get_current().get_stage().get_mouseX();
-	pseudoEvent.stageY = browser.Lib.get_current().get_stage().get_mouseY();
+	var pseudoEvent = new flash.events.MouseEvent(type,true,false,local.x,local.y,null,event.ctrlKey,event.altKey,event.shiftKey,nmeMouseDown,delta);
+	pseudoEvent.stageX = flash.Lib.get_current().get_stage().get_mouseX();
+	pseudoEvent.stageY = flash.Lib.get_current().get_stage().get_mouseY();
 	pseudoEvent.target = target;
 	return pseudoEvent;
 }
-browser.events.MouseEvent.__super__ = browser.events.Event;
-browser.events.MouseEvent.prototype = $extend(browser.events.Event.prototype,{
+flash.events.MouseEvent.__super__ = flash.events.Event;
+flash.events.MouseEvent.prototype = $extend(flash.events.Event.prototype,{
 	updateAfterEvent: function() {
 	}
 	,nmeCreateSimilar: function(type,related,targ) {
-		var result = new browser.events.MouseEvent(type,this.bubbles,this.cancelable,this.localX,this.localY,related == null?this.relatedObject:related,this.ctrlKey,this.altKey,this.shiftKey,this.buttonDown,this.delta,this.commandKey,this.clickCount);
+		var result = new flash.events.MouseEvent(type,this.bubbles,this.cancelable,this.localX,this.localY,related == null?this.relatedObject:related,this.ctrlKey,this.altKey,this.shiftKey,this.buttonDown,this.delta,this.commandKey,this.clickCount);
 		if(targ != null) result.target = targ;
 		return result;
 	}
-	,stageY: null
-	,stageX: null
-	,shiftKey: null
-	,relatedObject: null
-	,localY: null
-	,localX: null
-	,delta: null
-	,ctrlKey: null
-	,clickCount: null
-	,commandKey: null
-	,buttonDown: null
-	,altKey: null
-	,__class__: browser.events.MouseEvent
+	,__class__: flash.events.MouseEvent
 });
-browser.display.Stage = function(width,height) {
-	browser.display.DisplayObjectContainer.call(this);
+flash.display.Stage = function(width,height) {
+	flash.display.DisplayObjectContainer.call(this);
 	this.nmeFocusObject = null;
+	this.nmeFocusObjectActivated = false;
 	this.nmeWindowWidth = width;
 	this.nmeWindowHeight = height;
 	this.stageFocusRect = false;
-	this.scaleMode = browser.display.StageScaleMode.SHOW_ALL;
-	this.nmeStageMatrix = new browser.geom.Matrix();
+	this.scaleMode = flash.display.StageScaleMode.SHOW_ALL;
+	this.nmeStageMatrix = new flash.geom.Matrix();
 	this.tabEnabled = true;
 	this.set_frameRate(0.0);
 	this.set_backgroundColor(16777215);
 	this.name = "Stage";
-	this.loaderInfo = browser.display.LoaderInfo.create(null);
+	this.loaderInfo = flash.display.LoaderInfo.create(null);
 	this.loaderInfo.parameters.width = Std.string(this.nmeWindowWidth);
 	this.loaderInfo.parameters.height = Std.string(this.nmeWindowHeight);
-	this.nmePointInPathMode = browser.display.Graphics.nmeDetectIsPointInPathMode();
+	this.nmePointInPathMode = flash.display.Graphics.nmeDetectIsPointInPathMode();
 	this.nmeMouseOverObjects = [];
 	this.set_showDefaultContextMenu(true);
 	this.nmeTouchInfo = [];
-	this.nmeFocusOverObjects = [];
 	this.nmeUIEventsQueue = new Array(1000);
 	this.nmeUIEventsQueueIndex = 0;
 };
-$hxClasses["browser.display.Stage"] = browser.display.Stage;
-browser.display.Stage.__name__ = ["browser","display","Stage"];
-browser.display.Stage.getOrientation = function() {
+$hxClasses["flash.display.Stage"] = flash.display.Stage;
+flash.display.Stage.__name__ = ["flash","display","Stage"];
+flash.display.Stage.getOrientation = function() {
 	var rotation = window.orientation;
-	var orientation = browser.display.Stage.OrientationPortrait;
+	var orientation = flash.display.Stage.OrientationPortrait;
 	switch(rotation) {
 	case -90:
-		orientation = browser.display.Stage.OrientationLandscapeLeft;
+		orientation = flash.display.Stage.OrientationLandscapeLeft;
 		break;
 	case 180:
-		orientation = browser.display.Stage.OrientationPortraitUpsideDown;
+		orientation = flash.display.Stage.OrientationPortraitUpsideDown;
 		break;
 	case 90:
-		orientation = browser.display.Stage.OrientationLandscapeRight;
+		orientation = flash.display.Stage.OrientationLandscapeRight;
 		break;
 	default:
-		orientation = browser.display.Stage.OrientationPortrait;
+		orientation = flash.display.Stage.OrientationPortrait;
 	}
 	return orientation;
 }
-browser.display.Stage.__super__ = browser.display.DisplayObjectContainer;
-browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer.prototype,{
+flash.display.Stage.__super__ = flash.display.DisplayObjectContainer;
+flash.display.Stage.prototype = $extend(flash.display.DisplayObjectContainer.prototype,{
 	get_stageWidth: function() {
 		return this.nmeWindowWidth;
 	}
@@ -10403,11 +9872,11 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		return this.nmeWindowHeight;
 	}
 	,get_stage: function() {
-		return browser.Lib.nmeGetStage();
+		return flash.Lib.nmeGetStage();
 	}
 	,set_showDefaultContextMenu: function(showDefaultContextMenu) {
 		if(showDefaultContextMenu != this.nmeShowDefaultContextMenu && this.nmeShowDefaultContextMenu != null) {
-			if(!showDefaultContextMenu) browser.Lib.nmeDisableRightClick(); else browser.Lib.nmeEnableRightClick();
+			if(!showDefaultContextMenu) flash.Lib.nmeDisableRightClick(); else flash.Lib.nmeEnableRightClick();
 		}
 		this.nmeShowDefaultContextMenu = showDefaultContextMenu;
 		return showDefaultContextMenu;
@@ -10419,7 +9888,7 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		return this.quality = inQuality;
 	}
 	,get_quality: function() {
-		return this.quality != null?this.quality:browser.display.StageQuality.BEST;
+		return this.quality != null?this.quality:flash.display.StageQuality.BEST;
 	}
 	,get_mouseY: function() {
 		return this._mouseY;
@@ -10428,21 +9897,18 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		return this._mouseX;
 	}
 	,get_fullScreenHeight: function() {
-		return js.Lib.window.innerHeight;
+		return js.Browser.window.innerHeight;
 	}
 	,get_fullScreenWidth: function() {
-		return js.Lib.window.innerWidth;
+		return js.Browser.window.innerWidth;
 	}
 	,set_frameRate: function(speed) {
 		if(speed == 0) {
-			var window = js.Lib.window;
+			var window = js.Browser.window;
 			var nmeRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame;
 			if(nmeRequestAnimationFrame == null) speed = 60;
 		}
-		if(speed != 0) {
-			var window = js.Lib.window;
-			this.nmeInterval = 1000.0 / speed | 0;
-		}
+		if(speed != 0) this.nmeInterval = 1000.0 / speed | 0;
 		this.nmeFrameRate = speed;
 		this.nmeUpdateNextWake();
 		return speed;
@@ -10451,7 +9917,8 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		return this.nmeFrameRate;
 	}
 	,set_focus: function(inObj) {
-		return this.nmeFocusObject = inObj;
+		this.nmeOnFocus(inObj);
+		return this.nmeFocusObject;
 	}
 	,get_focus: function() {
 		return this.nmeFocusObject;
@@ -10459,11 +9926,12 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 	,set_displayState: function(displayState) {
 		if(displayState != this.displayState && this.displayState != null) {
 			switch( (displayState)[1] ) {
-			case 1:
-				browser.Lib.nmeDisableFullScreen();
-				break;
 			case 0:
-				browser.Lib.nmeEnableFullScreen();
+				flash.Lib.nmeDisableFullScreen();
+				break;
+			case 1:
+			case 2:
+				flash.Lib.nmeEnableFullScreen();
 				break;
 			}
 		}
@@ -10480,7 +9948,8 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		return this.nmeBackgroundColour;
 	}
 	,nmeOnTouch: function(event,touch,type,touchInfo,isPrimaryTouchPoint) {
-		var point = new browser.geom.Point(touch.pageX - browser.Lib.mMe.__scr.offsetLeft + window.pageXOffset,touch.pageY - browser.Lib.mMe.__scr.offsetTop + window.pageYOffset);
+		var rect = flash.Lib.mMe.__scr.getBoundingClientRect();
+		var point = new flash.geom.Point(touch.pageX - rect.left,touch.pageY - rect.top);
 		var obj = this.nmeGetObjectUnderPoint(point);
 		this._mouseX = point.x;
 		this._mouseY = point.y;
@@ -10489,7 +9958,7 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		if(stack.length > 0) {
 			stack.reverse();
 			var local = obj.globalToLocal(point);
-			var evt = browser.events.TouchEvent.nmeCreate(type,event,touch,local,obj);
+			var evt = flash.events.TouchEvent.nmeCreate(type,event,touch,local,obj);
 			evt.touchPointID = touch.identifier;
 			evt.isPrimaryTouchPoint = isPrimaryTouchPoint;
 			this.nmeCheckInOuts(evt,stack,touchInfo);
@@ -10498,24 +9967,24 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 				var $r;
 				switch(type) {
 				case "touchBegin":
-					$r = browser.events.MouseEvent.MOUSE_DOWN;
+					$r = flash.events.MouseEvent.MOUSE_DOWN;
 					break;
 				case "touchEnd":
-					$r = browser.events.MouseEvent.MOUSE_UP;
+					$r = flash.events.MouseEvent.MOUSE_UP;
 					break;
 				default:
 					$r = (function($this) {
 						var $r;
 						if($this.nmeDragObject != null) $this.nmeDrag(point);
-						$r = browser.events.MouseEvent.MOUSE_MOVE;
+						$r = flash.events.MouseEvent.MOUSE_MOVE;
 						return $r;
 					}($this));
 				}
 				return $r;
 			}(this));
-			obj.nmeFireEvent(browser.events.MouseEvent.nmeCreate(mouseType,evt,local,obj));
+			obj.nmeFireEvent(flash.events.MouseEvent.nmeCreate(mouseType,evt,local,obj));
 		} else {
-			var evt = browser.events.TouchEvent.nmeCreate(type,event,touch,point,null);
+			var evt = flash.events.TouchEvent.nmeCreate(type,event,touch,point,null);
 			evt.touchPointID = touch.identifier;
 			evt.isPrimaryTouchPoint = isPrimaryTouchPoint;
 			this.nmeCheckInOuts(evt,stack,touchInfo);
@@ -10524,12 +9993,13 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 	,nmeOnResize: function(inW,inH) {
 		this.nmeWindowWidth = inW;
 		this.nmeWindowHeight = inH;
-		var event = new browser.events.Event(browser.events.Event.RESIZE);
+		var event = new flash.events.Event(flash.events.Event.RESIZE);
 		event.target = this;
 		this.nmeBroadcast(event);
 	}
 	,nmeOnMouse: function(event,type) {
-		var point = new browser.geom.Point(event.clientX - browser.Lib.mMe.__scr.offsetLeft + window.pageXOffset,event.clientY - browser.Lib.mMe.__scr.offsetTop + window.pageYOffset);
+		var rect = flash.Lib.mMe.__scr.getBoundingClientRect();
+		var point = new flash.geom.Point(event.clientX - rect.left,event.clientY - rect.top);
 		if(this.nmeDragObject != null) this.nmeDrag(point);
 		var obj = this.nmeGetObjectUnderPoint(point);
 		this._mouseX = point.x;
@@ -10539,49 +10009,49 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		if(stack.length > 0) {
 			stack.reverse();
 			var local = obj.globalToLocal(point);
-			var evt = browser.events.MouseEvent.nmeCreate(type,event,local,obj);
+			var evt = flash.events.MouseEvent.nmeCreate(type,event,local,obj);
 			this.nmeCheckInOuts(evt,stack);
-			if(type == browser.events.MouseEvent.MOUSE_DOWN) this.nmeCheckFocusInOuts(evt,stack);
+			if(type == flash.events.MouseEvent.MOUSE_DOWN) this.nmeOnFocus(stack[stack.length - 1]);
 			obj.nmeFireEvent(evt);
 		} else {
-			var evt = browser.events.MouseEvent.nmeCreate(type,event,point,null);
+			var evt = flash.events.MouseEvent.nmeCreate(type,event,point,null);
 			this.nmeCheckInOuts(evt,stack);
-			if(type == browser.events.MouseEvent.MOUSE_DOWN) this.nmeCheckFocusInOuts(evt,stack);
 		}
 	}
-	,nmeOnFocus: function(event,hasFocus) {
-		if(hasFocus) {
-			this.dispatchEvent(new browser.events.FocusEvent(browser.events.FocusEvent.FOCUS_IN));
-			this.nmeBroadcast(new browser.events.Event(browser.events.Event.ACTIVATE));
-		} else {
-			this.dispatchEvent(new browser.events.FocusEvent(browser.events.FocusEvent.FOCUS_OUT));
-			this.nmeBroadcast(new browser.events.Event(browser.events.Event.DEACTIVATE));
+	,nmeOnFocus: function(target) {
+		if(target != this.nmeFocusObject) {
+			if(this.nmeFocusObject != null) this.nmeFocusObject.nmeFireEvent(new flash.events.FocusEvent(flash.events.FocusEvent.FOCUS_OUT,true,false,this.nmeFocusObject,false,0));
+			target.nmeFireEvent(new flash.events.FocusEvent(flash.events.FocusEvent.FOCUS_IN,true,false,target,false,0));
+			this.nmeFocusObject = target;
 		}
 	}
 	,nmeOnKey: function(code,pressed,inChar,ctrl,alt,shift,keyLocation) {
-		var event = new browser.events.KeyboardEvent(pressed?browser.events.KeyboardEvent.KEY_DOWN:browser.events.KeyboardEvent.KEY_UP,true,false,inChar,code,keyLocation,ctrl,alt,shift);
-		this.dispatchEvent(event);
+		var stack = new Array();
+		if(this.nmeFocusObject == null) this.nmeGetInteractiveObjectStack(stack); else this.nmeFocusObject.nmeGetInteractiveObjectStack(stack);
+		if(stack.length > 0) {
+			var obj = stack[0];
+			var evt = new flash.events.KeyboardEvent(pressed?flash.events.KeyboardEvent.KEY_DOWN:flash.events.KeyboardEvent.KEY_UP,true,false,inChar,code,keyLocation,ctrl,alt,shift);
+			obj.nmeFireEvent(evt);
+		}
 	}
 	,nmeHandleOrientationChange: function() {
 	}
 	,nmeHandleAccelerometer: function(evt) {
-		browser.display.Stage.nmeAcceleration.x = evt.accelerationIncludingGravity.x;
-		browser.display.Stage.nmeAcceleration.y = evt.accelerationIncludingGravity.y;
-		browser.display.Stage.nmeAcceleration.z = evt.accelerationIncludingGravity.z;
+		flash.display.Stage.nmeAcceleration.x = evt.accelerationIncludingGravity.x;
+		flash.display.Stage.nmeAcceleration.y = evt.accelerationIncludingGravity.y;
+		flash.display.Stage.nmeAcceleration.z = evt.accelerationIncludingGravity.z;
 	}
 	,toString: function() {
 		return "[Stage id=" + this._nmeId + "]";
 	}
 	,nmeUpdateNextWake: function() {
 		if(this.nmeFrameRate == 0) {
-			var window = js.Lib.window;
 			var nmeRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame;
 			nmeRequestAnimationFrame($bind(this,this.nmeUpdateNextWake));
 			this.nmeStageRender();
 		} else {
-			var window = js.Lib.window;
-			window.clearInterval(this.nmeTimer);
-			this.nmeTimer = window.setInterval($bind(this,this.nmeStageRender),this.nmeInterval,[]);
+			js.Browser.window.clearInterval(this.nmeTimer);
+			this.nmeTimer = js.Browser.window.setInterval($bind(this,this.nmeStageRender),this.nmeInterval);
 		}
 	}
 	,nmeStopDrag: function(sprite) {
@@ -10593,7 +10063,7 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		this.nmeDragBounds = bounds == null?null:bounds.clone();
 		this.nmeDragObject = sprite;
 		if(this.nmeDragObject != null) {
-			var mouse = new browser.geom.Point(this._mouseX,this._mouseY);
+			var mouse = new flash.geom.Point(this._mouseX,this._mouseY);
 			var p = this.nmeDragObject.parent;
 			if(p != null) mouse = p.globalToLocal(mouse);
 			if(lockCenter) {
@@ -10609,7 +10079,7 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 	,nmeStageRender: function(_) {
 		if(!this.nmeStageActive) {
 			this.nmeOnResize(this.nmeWindowWidth,this.nmeWindowHeight);
-			var event = new browser.events.Event(browser.events.Event.ACTIVATE);
+			var event = new flash.events.Event(flash.events.Event.ACTIVATE);
 			event.target = this;
 			this.nmeBroadcast(event);
 			this.nmeStageActive = true;
@@ -10620,10 +10090,10 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 			if(this.nmeUIEventsQueue[i] != null) this.nmeProcessStageEvent(this.nmeUIEventsQueue[i]);
 		}
 		this.nmeUIEventsQueueIndex = 0;
-		var event = new browser.events.Event(browser.events.Event.ENTER_FRAME);
+		var event = new flash.events.Event(flash.events.Event.ENTER_FRAME);
 		this.nmeBroadcast(event);
 		if(this.nmeInvalid) {
-			var event1 = new browser.events.Event(browser.events.Event.RENDER);
+			var event1 = new flash.events.Event(flash.events.Event.RENDER);
 			this.nmeBroadcast(event1);
 		}
 		this.nmeRenderAll();
@@ -10642,58 +10112,67 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 		evt.stopPropagation();
 		switch(evt.type) {
 		case "resize":
-			this.nmeOnResize(browser.Lib.nmeGetWidth(),browser.Lib.nmeGetHeight());
+			this.nmeOnResize(flash.Lib.nmeGetWidth(),flash.Lib.nmeGetHeight());
 			break;
 		case "focus":
-			this.nmeOnFocus(evt,true);
+			this.nmeOnFocus(this);
+			if(!this.nmeFocusObjectActivated) {
+				this.nmeFocusObjectActivated = true;
+				this.dispatchEvent(new flash.events.Event(flash.events.Event.ACTIVATE));
+			}
 			break;
 		case "blur":
-			this.nmeOnFocus(evt,false);
+			if(this.nmeFocusObjectActivated) {
+				this.nmeFocusObjectActivated = false;
+				this.dispatchEvent(new flash.events.Event(flash.events.Event.DEACTIVATE));
+			}
 			break;
 		case "mousemove":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.MOUSE_MOVE);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.MOUSE_MOVE);
 			break;
 		case "mousedown":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.MOUSE_DOWN);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.MOUSE_DOWN);
 			break;
 		case "mouseup":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.MOUSE_UP);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.MOUSE_UP);
 			break;
 		case "click":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.CLICK);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.CLICK);
 			break;
 		case "mousewheel":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.MOUSE_WHEEL);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.MOUSE_WHEEL);
 			break;
 		case "dblclick":
-			this.nmeOnMouse(evt,browser.events.MouseEvent.DOUBLE_CLICK);
+			this.nmeOnMouse(evt,flash.events.MouseEvent.DOUBLE_CLICK);
 			break;
 		case "keydown":
 			var evt1 = evt;
 			var keyCode = evt1.keyCode != null?evt1.keyCode:evt1.which;
-			keyCode = browser.ui.Keyboard.nmeConvertMozillaCode(keyCode);
+			keyCode = flash.ui.Keyboard.nmeConvertMozillaCode(keyCode);
 			this.nmeOnKey(keyCode,true,evt1.charCode,evt1.ctrlKey,evt1.altKey,evt1.shiftKey,evt1.keyLocation);
 			break;
 		case "keyup":
 			var evt1 = evt;
 			var keyCode = evt1.keyCode != null?evt1.keyCode:evt1.which;
-			keyCode = browser.ui.Keyboard.nmeConvertMozillaCode(keyCode);
+			keyCode = flash.ui.Keyboard.nmeConvertMozillaCode(keyCode);
 			this.nmeOnKey(keyCode,false,evt1.charCode,evt1.ctrlKey,evt1.altKey,evt1.shiftKey,evt1.keyLocation);
 			break;
 		case "touchstart":
 			var evt1 = evt;
 			evt1.preventDefault();
-			var touchInfo = new browser.display._Stage.TouchInfo();
+			var touchInfo = new flash.display._Stage.TouchInfo();
 			this.nmeTouchInfo[evt1.changedTouches[0].identifier] = touchInfo;
 			this.nmeOnTouch(evt1,evt1.changedTouches[0],"touchBegin",touchInfo,false);
 			break;
 		case "touchmove":
 			var evt1 = evt;
+			evt1.preventDefault();
 			var touchInfo = this.nmeTouchInfo[evt1.changedTouches[0].identifier];
 			this.nmeOnTouch(evt1,evt1.changedTouches[0],"touchMove",touchInfo,true);
 			break;
 		case "touchend":
 			var evt1 = evt;
+			evt1.preventDefault();
 			var touchInfo = this.nmeTouchInfo[evt1.changedTouches[0].identifier];
 			this.nmeOnTouch(evt1,evt1.changedTouches[0],"touchEnd",touchInfo,true);
 			this.nmeTouchInfo[evt1.changedTouches[0].identifier] = null;
@@ -10725,7 +10204,7 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 	}
 	,nmeCheckInOuts: function(event,stack,touchInfo) {
 		var prev = touchInfo == null?this.nmeMouseOverObjects:touchInfo.touchOverObjects;
-		var changeEvents = touchInfo == null?browser.display.Stage.nmeMouseChanges:browser.display.Stage.nmeTouchChanges;
+		var changeEvents = touchInfo == null?flash.display.Stage.nmeMouseChanges:flash.display.Stage.nmeTouchChanges;
 		var new_n = stack.length;
 		var new_obj = new_n > 0?stack[new_n - 1]:null;
 		var old_n = prev.length;
@@ -10750,259 +10229,188 @@ browser.display.Stage.prototype = $extend(browser.display.DisplayObjectContainer
 			if(touchInfo == null) this.nmeMouseOverObjects = stack; else touchInfo.touchOverObjects = stack;
 		}
 	}
-	,nmeCheckFocusInOuts: function(event,inStack) {
-		var new_n = inStack.length;
-		var new_obj = new_n > 0?inStack[new_n - 1]:null;
-		var old_n = this.nmeFocusOverObjects.length;
-		var old_obj = old_n > 0?this.nmeFocusOverObjects[old_n - 1]:null;
-		if(new_obj != old_obj) {
-			var common = 0;
-			while(common < new_n && common < old_n && inStack[common] == this.nmeFocusOverObjects[common]) common++;
-			var focusOut = new browser.events.FocusEvent(browser.events.FocusEvent.FOCUS_OUT,false,false,new_obj,false,0);
-			var i = old_n - 1;
-			while(i >= common) {
-				this.nmeFocusOverObjects[i].dispatchEvent(focusOut);
-				i--;
-			}
-			var focusIn = new browser.events.FocusEvent(browser.events.FocusEvent.FOCUS_IN,false,false,old_obj,false,0);
-			var i1 = new_n - 1;
-			while(i1 >= common) {
-				inStack[i1].dispatchEvent(focusIn);
-				i1--;
-			}
-			this.nmeFocusOverObjects = inStack;
-			this.set_focus(new_obj);
-		}
-	}
 	,invalidate: function() {
 		this.nmeInvalid = true;
 	}
-	,_mouseY: null
-	,_mouseX: null
-	,nmeWindowHeight: null
-	,nmeWindowWidth: null
-	,nmeUIEventsQueueIndex: null
-	,nmeUIEventsQueue: null
-	,nmeTouchInfo: null
-	,nmeTimer: null
-	,nmeStageMatrix: null
-	,nmeStageActive: null
-	,nmeShowDefaultContextMenu: null
-	,nmeMouseOverObjects: null
-	,nmeInvalid: null
-	,nmeInterval: null
-	,nmeFrameRate: null
-	,nmeFocusOverObjects: null
-	,nmeFocusObject: null
-	,nmeDragOffsetY: null
-	,nmeDragOffsetX: null
-	,nmeDragObject: null
-	,nmeDragBounds: null
-	,nmeBackgroundColour: null
-	,stageWidth: null
-	,stageHeight: null
-	,stageFocusRect: null
-	,showDefaultContextMenu: null
-	,scaleMode: null
-	,quality: null
-	,nmePointInPathMode: null
-	,loaderInfo: null
-	,fullScreenWidth: null
-	,fullScreenHeight: null
-	,frameRate: null
-	,focus: null
-	,displayState: null
-	,backgroundColor: null
-	,align: null
-	,__class__: browser.display.Stage
-	,__properties__: $extend(browser.display.DisplayObjectContainer.prototype.__properties__,{set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_displayState:"set_displayState",get_displayState:"get_displayState",set_focus:"set_focus",get_focus:"get_focus",set_frameRate:"set_frameRate",get_frameRate:"get_frameRate",get_fullScreenHeight:"get_fullScreenHeight",get_fullScreenWidth:"get_fullScreenWidth",set_quality:"set_quality",get_quality:"get_quality",set_showDefaultContextMenu:"set_showDefaultContextMenu",get_showDefaultContextMenu:"get_showDefaultContextMenu",get_stageHeight:"get_stageHeight",get_stageWidth:"get_stageWidth"})
+	,__class__: flash.display.Stage
+	,__properties__: $extend(flash.display.DisplayObjectContainer.prototype.__properties__,{set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_displayState:"set_displayState",get_displayState:"get_displayState",set_focus:"set_focus",get_focus:"get_focus",set_frameRate:"set_frameRate",get_frameRate:"get_frameRate",get_fullScreenHeight:"get_fullScreenHeight",get_fullScreenWidth:"get_fullScreenWidth",set_quality:"set_quality",get_quality:"get_quality",set_showDefaultContextMenu:"set_showDefaultContextMenu",get_showDefaultContextMenu:"get_showDefaultContextMenu",get_stageHeight:"get_stageHeight",get_stageWidth:"get_stageWidth"})
 });
-browser.display._Stage = {}
-browser.display._Stage.TouchInfo = function() {
+flash.display._Stage = {}
+flash.display._Stage.TouchInfo = function() {
 	this.touchOverObjects = [];
 };
-$hxClasses["browser.display._Stage.TouchInfo"] = browser.display._Stage.TouchInfo;
-browser.display._Stage.TouchInfo.__name__ = ["browser","display","_Stage","TouchInfo"];
-browser.display._Stage.TouchInfo.prototype = {
-	touchOverObjects: null
-	,__class__: browser.display._Stage.TouchInfo
+$hxClasses["flash.display._Stage.TouchInfo"] = flash.display._Stage.TouchInfo;
+flash.display._Stage.TouchInfo.__name__ = ["flash","display","_Stage","TouchInfo"];
+flash.display._Stage.TouchInfo.prototype = {
+	__class__: flash.display._Stage.TouchInfo
 }
-browser.display.StageAlign = $hxClasses["browser.display.StageAlign"] = { __ename__ : ["browser","display","StageAlign"], __constructs__ : ["TOP_RIGHT","TOP_LEFT","TOP","RIGHT","LEFT","BOTTOM_RIGHT","BOTTOM_LEFT","BOTTOM"] }
-browser.display.StageAlign.TOP_RIGHT = ["TOP_RIGHT",0];
-browser.display.StageAlign.TOP_RIGHT.toString = $estr;
-browser.display.StageAlign.TOP_RIGHT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.TOP_LEFT = ["TOP_LEFT",1];
-browser.display.StageAlign.TOP_LEFT.toString = $estr;
-browser.display.StageAlign.TOP_LEFT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.TOP = ["TOP",2];
-browser.display.StageAlign.TOP.toString = $estr;
-browser.display.StageAlign.TOP.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.RIGHT = ["RIGHT",3];
-browser.display.StageAlign.RIGHT.toString = $estr;
-browser.display.StageAlign.RIGHT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.LEFT = ["LEFT",4];
-browser.display.StageAlign.LEFT.toString = $estr;
-browser.display.StageAlign.LEFT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.BOTTOM_RIGHT = ["BOTTOM_RIGHT",5];
-browser.display.StageAlign.BOTTOM_RIGHT.toString = $estr;
-browser.display.StageAlign.BOTTOM_RIGHT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.BOTTOM_LEFT = ["BOTTOM_LEFT",6];
-browser.display.StageAlign.BOTTOM_LEFT.toString = $estr;
-browser.display.StageAlign.BOTTOM_LEFT.__enum__ = browser.display.StageAlign;
-browser.display.StageAlign.BOTTOM = ["BOTTOM",7];
-browser.display.StageAlign.BOTTOM.toString = $estr;
-browser.display.StageAlign.BOTTOM.__enum__ = browser.display.StageAlign;
-browser.display.StageDisplayState = $hxClasses["browser.display.StageDisplayState"] = { __ename__ : ["browser","display","StageDisplayState"], __constructs__ : ["FULL_SCREEN","NORMAL"] }
-browser.display.StageDisplayState.FULL_SCREEN = ["FULL_SCREEN",0];
-browser.display.StageDisplayState.FULL_SCREEN.toString = $estr;
-browser.display.StageDisplayState.FULL_SCREEN.__enum__ = browser.display.StageDisplayState;
-browser.display.StageDisplayState.NORMAL = ["NORMAL",1];
-browser.display.StageDisplayState.NORMAL.toString = $estr;
-browser.display.StageDisplayState.NORMAL.__enum__ = browser.display.StageDisplayState;
-browser.display.StageQuality = function() { }
-$hxClasses["browser.display.StageQuality"] = browser.display.StageQuality;
-browser.display.StageQuality.__name__ = ["browser","display","StageQuality"];
-browser.display.StageScaleMode = $hxClasses["browser.display.StageScaleMode"] = { __ename__ : ["browser","display","StageScaleMode"], __constructs__ : ["SHOW_ALL","NO_SCALE","NO_BORDER","EXACT_FIT"] }
-browser.display.StageScaleMode.SHOW_ALL = ["SHOW_ALL",0];
-browser.display.StageScaleMode.SHOW_ALL.toString = $estr;
-browser.display.StageScaleMode.SHOW_ALL.__enum__ = browser.display.StageScaleMode;
-browser.display.StageScaleMode.NO_SCALE = ["NO_SCALE",1];
-browser.display.StageScaleMode.NO_SCALE.toString = $estr;
-browser.display.StageScaleMode.NO_SCALE.__enum__ = browser.display.StageScaleMode;
-browser.display.StageScaleMode.NO_BORDER = ["NO_BORDER",2];
-browser.display.StageScaleMode.NO_BORDER.toString = $estr;
-browser.display.StageScaleMode.NO_BORDER.__enum__ = browser.display.StageScaleMode;
-browser.display.StageScaleMode.EXACT_FIT = ["EXACT_FIT",3];
-browser.display.StageScaleMode.EXACT_FIT.toString = $estr;
-browser.display.StageScaleMode.EXACT_FIT.__enum__ = browser.display.StageScaleMode;
-browser.display.Tilesheet = function(image) {
-	this.nmeBitmap = image;
-	this.nmeCenterPoints = new Array();
-	this.nmeTileRects = new Array();
-};
-$hxClasses["browser.display.Tilesheet"] = browser.display.Tilesheet;
-browser.display.Tilesheet.__name__ = ["browser","display","Tilesheet"];
-browser.display.Tilesheet.prototype = {
-	drawTiles: function(graphics,tileData,smooth,flags) {
-		if(flags == null) flags = 0;
-		if(smooth == null) smooth = false;
-		graphics.drawTiles(this,tileData,smooth,flags);
-	}
-	,addTileRect: function(rectangle,centerPoint) {
-		this.nmeTileRects.push(rectangle);
-		if(centerPoint == null) centerPoint = new browser.geom.Point();
-		this.nmeCenterPoints.push(centerPoint);
-	}
-	,nmeTileRects: null
-	,nmeCenterPoints: null
-	,nmeBitmap: null
-	,__class__: browser.display.Tilesheet
-}
-browser.errors = {}
-browser.errors.Error = function(message,id) {
+flash.display.StageAlign = $hxClasses["flash.display.StageAlign"] = { __ename__ : ["flash","display","StageAlign"], __constructs__ : ["TOP_RIGHT","TOP_LEFT","TOP","RIGHT","LEFT","BOTTOM_RIGHT","BOTTOM_LEFT","BOTTOM"] }
+flash.display.StageAlign.TOP_RIGHT = ["TOP_RIGHT",0];
+flash.display.StageAlign.TOP_RIGHT.toString = $estr;
+flash.display.StageAlign.TOP_RIGHT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.TOP_LEFT = ["TOP_LEFT",1];
+flash.display.StageAlign.TOP_LEFT.toString = $estr;
+flash.display.StageAlign.TOP_LEFT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.TOP = ["TOP",2];
+flash.display.StageAlign.TOP.toString = $estr;
+flash.display.StageAlign.TOP.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.RIGHT = ["RIGHT",3];
+flash.display.StageAlign.RIGHT.toString = $estr;
+flash.display.StageAlign.RIGHT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.LEFT = ["LEFT",4];
+flash.display.StageAlign.LEFT.toString = $estr;
+flash.display.StageAlign.LEFT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.BOTTOM_RIGHT = ["BOTTOM_RIGHT",5];
+flash.display.StageAlign.BOTTOM_RIGHT.toString = $estr;
+flash.display.StageAlign.BOTTOM_RIGHT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.BOTTOM_LEFT = ["BOTTOM_LEFT",6];
+flash.display.StageAlign.BOTTOM_LEFT.toString = $estr;
+flash.display.StageAlign.BOTTOM_LEFT.__enum__ = flash.display.StageAlign;
+flash.display.StageAlign.BOTTOM = ["BOTTOM",7];
+flash.display.StageAlign.BOTTOM.toString = $estr;
+flash.display.StageAlign.BOTTOM.__enum__ = flash.display.StageAlign;
+flash.display.StageDisplayState = $hxClasses["flash.display.StageDisplayState"] = { __ename__ : ["flash","display","StageDisplayState"], __constructs__ : ["NORMAL","FULL_SCREEN","FULL_SCREEN_INTERACTIVE"] }
+flash.display.StageDisplayState.NORMAL = ["NORMAL",0];
+flash.display.StageDisplayState.NORMAL.toString = $estr;
+flash.display.StageDisplayState.NORMAL.__enum__ = flash.display.StageDisplayState;
+flash.display.StageDisplayState.FULL_SCREEN = ["FULL_SCREEN",1];
+flash.display.StageDisplayState.FULL_SCREEN.toString = $estr;
+flash.display.StageDisplayState.FULL_SCREEN.__enum__ = flash.display.StageDisplayState;
+flash.display.StageDisplayState.FULL_SCREEN_INTERACTIVE = ["FULL_SCREEN_INTERACTIVE",2];
+flash.display.StageDisplayState.FULL_SCREEN_INTERACTIVE.toString = $estr;
+flash.display.StageDisplayState.FULL_SCREEN_INTERACTIVE.__enum__ = flash.display.StageDisplayState;
+flash.display.StageQuality = function() { }
+$hxClasses["flash.display.StageQuality"] = flash.display.StageQuality;
+flash.display.StageQuality.__name__ = ["flash","display","StageQuality"];
+flash.display.StageScaleMode = $hxClasses["flash.display.StageScaleMode"] = { __ename__ : ["flash","display","StageScaleMode"], __constructs__ : ["SHOW_ALL","NO_SCALE","NO_BORDER","EXACT_FIT"] }
+flash.display.StageScaleMode.SHOW_ALL = ["SHOW_ALL",0];
+flash.display.StageScaleMode.SHOW_ALL.toString = $estr;
+flash.display.StageScaleMode.SHOW_ALL.__enum__ = flash.display.StageScaleMode;
+flash.display.StageScaleMode.NO_SCALE = ["NO_SCALE",1];
+flash.display.StageScaleMode.NO_SCALE.toString = $estr;
+flash.display.StageScaleMode.NO_SCALE.__enum__ = flash.display.StageScaleMode;
+flash.display.StageScaleMode.NO_BORDER = ["NO_BORDER",2];
+flash.display.StageScaleMode.NO_BORDER.toString = $estr;
+flash.display.StageScaleMode.NO_BORDER.__enum__ = flash.display.StageScaleMode;
+flash.display.StageScaleMode.EXACT_FIT = ["EXACT_FIT",3];
+flash.display.StageScaleMode.EXACT_FIT.toString = $estr;
+flash.display.StageScaleMode.EXACT_FIT.__enum__ = flash.display.StageScaleMode;
+flash.errors = {}
+flash.errors.Error = function(message,id) {
 	if(id == null) id = 0;
 	if(message == null) message = "";
 	this.message = message;
 	this.errorID = id;
 };
-$hxClasses["browser.errors.Error"] = browser.errors.Error;
-browser.errors.Error.__name__ = ["browser","errors","Error"];
-browser.errors.Error.prototype = {
+$hxClasses["flash.errors.Error"] = flash.errors.Error;
+flash.errors.Error.__name__ = ["flash","errors","Error"];
+flash.errors.Error.prototype = {
 	toString: function() {
 		if(this.message != null) return this.message; else return "Error";
 	}
 	,getStackTrace: function() {
-		return haxe.Stack.toString(haxe.Stack.exceptionStack());
+		return haxe.CallStack.toString(haxe.CallStack.exceptionStack());
 	}
-	,name: null
-	,message: null
-	,errorID: null
-	,__class__: browser.errors.Error
+	,__class__: flash.errors.Error
 }
-browser.errors.IOError = function(message) {
+flash.errors.IOError = function(message) {
 	if(message == null) message = "";
-	browser.errors.Error.call(this,message);
+	flash.errors.Error.call(this,message);
 };
-$hxClasses["browser.errors.IOError"] = browser.errors.IOError;
-browser.errors.IOError.__name__ = ["browser","errors","IOError"];
-browser.errors.IOError.__super__ = browser.errors.Error;
-browser.errors.IOError.prototype = $extend(browser.errors.Error.prototype,{
-	__class__: browser.errors.IOError
+$hxClasses["flash.errors.IOError"] = flash.errors.IOError;
+flash.errors.IOError.__name__ = ["flash","errors","IOError"];
+flash.errors.IOError.__super__ = flash.errors.Error;
+flash.errors.IOError.prototype = $extend(flash.errors.Error.prototype,{
+	__class__: flash.errors.IOError
 });
-browser.events.Listener = function(inListener,inUseCapture,inPriority) {
+flash.events.TextEvent = function(type,bubbles,cancelable,text) {
+	if(text == null) text = "";
+	if(cancelable == null) cancelable = false;
+	if(bubbles == null) bubbles = false;
+	flash.events.Event.call(this,type,bubbles,cancelable);
+	this.text = text;
+};
+$hxClasses["flash.events.TextEvent"] = flash.events.TextEvent;
+flash.events.TextEvent.__name__ = ["flash","events","TextEvent"];
+flash.events.TextEvent.__super__ = flash.events.Event;
+flash.events.TextEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.TextEvent
+});
+flash.events.ErrorEvent = function(type,bubbles,cancelable,text) {
+	flash.events.TextEvent.call(this,type,bubbles,cancelable);
+	this.text = text;
+};
+$hxClasses["flash.events.ErrorEvent"] = flash.events.ErrorEvent;
+flash.events.ErrorEvent.__name__ = ["flash","events","ErrorEvent"];
+flash.events.ErrorEvent.__super__ = flash.events.TextEvent;
+flash.events.ErrorEvent.prototype = $extend(flash.events.TextEvent.prototype,{
+	__class__: flash.events.ErrorEvent
+});
+flash.events.Listener = function(inListener,inUseCapture,inPriority) {
 	this.mListner = inListener;
 	this.mUseCapture = inUseCapture;
 	this.mPriority = inPriority;
-	this.mID = browser.events.Listener.sIDs++;
+	this.mID = flash.events.Listener.sIDs++;
 };
-$hxClasses["browser.events.Listener"] = browser.events.Listener;
-browser.events.Listener.__name__ = ["browser","events","Listener"];
-browser.events.Listener.prototype = {
+$hxClasses["flash.events.Listener"] = flash.events.Listener;
+flash.events.Listener.__name__ = ["flash","events","Listener"];
+flash.events.Listener.prototype = {
 	Is: function(inListener,inCapture) {
 		return Reflect.compareMethods(this.mListner,inListener) && this.mUseCapture == inCapture;
 	}
 	,dispatchEvent: function(event) {
 		this.mListner(event);
 	}
-	,mUseCapture: null
-	,mPriority: null
-	,mListner: null
-	,mID: null
-	,__class__: browser.events.Listener
+	,__class__: flash.events.Listener
 }
-browser.events.EventPhase = function() { }
-$hxClasses["browser.events.EventPhase"] = browser.events.EventPhase;
-browser.events.EventPhase.__name__ = ["browser","events","EventPhase"];
-browser.events.FocusEvent = function(type,bubbles,cancelable,inObject,inShiftKey,inKeyCode) {
+flash.events.EventPhase = function() { }
+$hxClasses["flash.events.EventPhase"] = flash.events.EventPhase;
+flash.events.EventPhase.__name__ = ["flash","events","EventPhase"];
+flash.events.FocusEvent = function(type,bubbles,cancelable,inObject,inShiftKey,inKeyCode) {
 	if(inKeyCode == null) inKeyCode = 0;
 	if(inShiftKey == null) inShiftKey = false;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = false;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 	this.keyCode = inKeyCode;
 	this.shiftKey = inShiftKey == null?false:inShiftKey;
 	this.target = inObject;
 };
-$hxClasses["browser.events.FocusEvent"] = browser.events.FocusEvent;
-browser.events.FocusEvent.__name__ = ["browser","events","FocusEvent"];
-browser.events.FocusEvent.__super__ = browser.events.Event;
-browser.events.FocusEvent.prototype = $extend(browser.events.Event.prototype,{
-	shiftKey: null
-	,relatedObject: null
-	,keyCode: null
-	,__class__: browser.events.FocusEvent
+$hxClasses["flash.events.FocusEvent"] = flash.events.FocusEvent;
+flash.events.FocusEvent.__name__ = ["flash","events","FocusEvent"];
+flash.events.FocusEvent.__super__ = flash.events.Event;
+flash.events.FocusEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.FocusEvent
 });
-browser.events.HTTPStatusEvent = function(type,bubbles,cancelable,status) {
+flash.events.HTTPStatusEvent = function(type,bubbles,cancelable,status) {
 	if(status == null) status = 0;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = false;
 	this.status = status;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 };
-$hxClasses["browser.events.HTTPStatusEvent"] = browser.events.HTTPStatusEvent;
-browser.events.HTTPStatusEvent.__name__ = ["browser","events","HTTPStatusEvent"];
-browser.events.HTTPStatusEvent.__super__ = browser.events.Event;
-browser.events.HTTPStatusEvent.prototype = $extend(browser.events.Event.prototype,{
-	status: null
-	,responseURL: null
-	,responseHeaders: null
-	,__class__: browser.events.HTTPStatusEvent
+$hxClasses["flash.events.HTTPStatusEvent"] = flash.events.HTTPStatusEvent;
+flash.events.HTTPStatusEvent.__name__ = ["flash","events","HTTPStatusEvent"];
+flash.events.HTTPStatusEvent.__super__ = flash.events.Event;
+flash.events.HTTPStatusEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.HTTPStatusEvent
 });
-browser.events.IOErrorEvent = function(type,bubbles,cancelable,inText) {
+flash.events.IOErrorEvent = function(type,bubbles,cancelable,inText) {
 	if(inText == null) inText = "";
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = false;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 	this.text = inText;
 };
-$hxClasses["browser.events.IOErrorEvent"] = browser.events.IOErrorEvent;
-browser.events.IOErrorEvent.__name__ = ["browser","events","IOErrorEvent"];
-browser.events.IOErrorEvent.__super__ = browser.events.Event;
-browser.events.IOErrorEvent.prototype = $extend(browser.events.Event.prototype,{
-	text: null
-	,__class__: browser.events.IOErrorEvent
+$hxClasses["flash.events.IOErrorEvent"] = flash.events.IOErrorEvent;
+flash.events.IOErrorEvent.__name__ = ["flash","events","IOErrorEvent"];
+flash.events.IOErrorEvent.__super__ = flash.events.Event;
+flash.events.IOErrorEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.IOErrorEvent
 });
-browser.events.KeyboardEvent = function(type,bubbles,cancelable,inCharCode,inKeyCode,inKeyLocation,inCtrlKey,inAltKey,inShiftKey) {
+flash.events.KeyboardEvent = function(type,bubbles,cancelable,inCharCode,inKeyCode,inKeyLocation,inCtrlKey,inAltKey,inShiftKey,controlKeyValue,commandKeyValue) {
+	if(commandKeyValue == null) commandKeyValue = false;
+	if(controlKeyValue == null) controlKeyValue = false;
 	if(inShiftKey == null) inShiftKey = false;
 	if(inAltKey == null) inAltKey = false;
 	if(inCtrlKey == null) inCtrlKey = false;
@@ -11011,44 +10419,51 @@ browser.events.KeyboardEvent = function(type,bubbles,cancelable,inCharCode,inKey
 	if(inCharCode == null) inCharCode = 0;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = false;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
+	this.altKey = inAltKey == null?false:inAltKey;
+	this.charCode = inCharCode == null?0:inCharCode;
+	this.ctrlKey = inCtrlKey == null?false:inCtrlKey;
+	this.commandKey = commandKeyValue;
+	this.controlKey = controlKeyValue;
 	this.keyCode = inKeyCode;
 	this.keyLocation = inKeyLocation == null?0:inKeyLocation;
-	this.charCode = inCharCode == null?0:inCharCode;
 	this.shiftKey = inShiftKey == null?false:inShiftKey;
-	this.altKey = inAltKey == null?false:inAltKey;
-	this.ctrlKey = inCtrlKey == null?false:inCtrlKey;
 };
-$hxClasses["browser.events.KeyboardEvent"] = browser.events.KeyboardEvent;
-browser.events.KeyboardEvent.__name__ = ["browser","events","KeyboardEvent"];
-browser.events.KeyboardEvent.__super__ = browser.events.Event;
-browser.events.KeyboardEvent.prototype = $extend(browser.events.Event.prototype,{
-	keyLocation: null
-	,shiftKey: null
-	,ctrlKey: null
-	,charCode: null
-	,keyCode: null
-	,altKey: null
-	,__class__: browser.events.KeyboardEvent
+$hxClasses["flash.events.KeyboardEvent"] = flash.events.KeyboardEvent;
+flash.events.KeyboardEvent.__name__ = ["flash","events","KeyboardEvent"];
+flash.events.KeyboardEvent.__super__ = flash.events.Event;
+flash.events.KeyboardEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.KeyboardEvent
 });
-browser.events.ProgressEvent = function(type,bubbles,cancelable,bytesLoaded,bytesTotal) {
+flash.events.ProgressEvent = function(type,bubbles,cancelable,bytesLoaded,bytesTotal) {
 	if(bytesTotal == null) bytesTotal = 0;
 	if(bytesLoaded == null) bytesLoaded = 0;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = false;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 	this.bytesLoaded = bytesLoaded;
 	this.bytesTotal = bytesTotal;
 };
-$hxClasses["browser.events.ProgressEvent"] = browser.events.ProgressEvent;
-browser.events.ProgressEvent.__name__ = ["browser","events","ProgressEvent"];
-browser.events.ProgressEvent.__super__ = browser.events.Event;
-browser.events.ProgressEvent.prototype = $extend(browser.events.Event.prototype,{
-	bytesTotal: null
-	,bytesLoaded: null
-	,__class__: browser.events.ProgressEvent
+$hxClasses["flash.events.ProgressEvent"] = flash.events.ProgressEvent;
+flash.events.ProgressEvent.__name__ = ["flash","events","ProgressEvent"];
+flash.events.ProgressEvent.__super__ = flash.events.Event;
+flash.events.ProgressEvent.prototype = $extend(flash.events.Event.prototype,{
+	__class__: flash.events.ProgressEvent
 });
-browser.events.TouchEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
+flash.events.SecurityErrorEvent = function(type,bubbles,cancelable,text) {
+	if(text == null) text = "";
+	if(cancelable == null) cancelable = false;
+	if(bubbles == null) bubbles = false;
+	flash.events.ErrorEvent.call(this,type,bubbles,cancelable);
+	this.text = text;
+};
+$hxClasses["flash.events.SecurityErrorEvent"] = flash.events.SecurityErrorEvent;
+flash.events.SecurityErrorEvent.__name__ = ["flash","events","SecurityErrorEvent"];
+flash.events.SecurityErrorEvent.__super__ = flash.events.ErrorEvent;
+flash.events.SecurityErrorEvent.prototype = $extend(flash.events.ErrorEvent.prototype,{
+	__class__: flash.events.SecurityErrorEvent
+});
+flash.events.TouchEvent = function(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown,delta,commandKey,clickCount) {
 	if(clickCount == null) clickCount = 0;
 	if(commandKey == null) commandKey = false;
 	if(delta == null) delta = 0;
@@ -11060,7 +10475,7 @@ browser.events.TouchEvent = function(type,bubbles,cancelable,localX,localY,relat
 	if(localX == null) localX = 0;
 	if(cancelable == null) cancelable = false;
 	if(bubbles == null) bubbles = true;
-	browser.events.Event.call(this,type,bubbles,cancelable);
+	flash.events.Event.call(this,type,bubbles,cancelable);
 	this.shiftKey = shiftKey;
 	this.altKey = altKey;
 	this.ctrlKey = ctrlKey;
@@ -11074,47 +10489,34 @@ browser.events.TouchEvent = function(type,bubbles,cancelable,localX,localY,relat
 	this.touchPointID = 0;
 	this.isPrimaryTouchPoint = true;
 };
-$hxClasses["browser.events.TouchEvent"] = browser.events.TouchEvent;
-browser.events.TouchEvent.__name__ = ["browser","events","TouchEvent"];
-browser.events.TouchEvent.nmeCreate = function(type,event,touch,local,target) {
-	var evt = new browser.events.TouchEvent(type,true,false,local.x,local.y,null,event.ctrlKey,event.altKey,event.shiftKey,false,0,null,0);
-	evt.stageX = browser.Lib.get_current().get_stage().get_mouseX();
-	evt.stageY = browser.Lib.get_current().get_stage().get_mouseY();
+$hxClasses["flash.events.TouchEvent"] = flash.events.TouchEvent;
+flash.events.TouchEvent.__name__ = ["flash","events","TouchEvent"];
+flash.events.TouchEvent.nmeCreate = function(type,event,touch,local,target) {
+	var evt = new flash.events.TouchEvent(type,true,false,local.x,local.y,null,event.ctrlKey,event.altKey,event.shiftKey,false,0,null,0);
+	evt.stageX = flash.Lib.get_current().get_stage().get_mouseX();
+	evt.stageY = flash.Lib.get_current().get_stage().get_mouseY();
 	evt.target = target;
 	return evt;
 }
-browser.events.TouchEvent.__super__ = browser.events.Event;
-browser.events.TouchEvent.prototype = $extend(browser.events.Event.prototype,{
+flash.events.TouchEvent.__super__ = flash.events.Event;
+flash.events.TouchEvent.prototype = $extend(flash.events.Event.prototype,{
 	nmeCreateSimilar: function(type,related,targ) {
-		var result = new browser.events.TouchEvent(type,this.bubbles,this.cancelable,this.localX,this.localY,related == null?this.relatedObject:related,this.ctrlKey,this.altKey,this.shiftKey,this.buttonDown,this.delta,this.commandKey);
+		var result = new flash.events.TouchEvent(type,this.bubbles,this.cancelable,this.localX,this.localY,related == null?this.relatedObject:related,this.ctrlKey,this.altKey,this.shiftKey,this.buttonDown,this.delta,this.commandKey);
 		result.touchPointID = this.touchPointID;
 		result.isPrimaryTouchPoint = this.isPrimaryTouchPoint;
 		if(targ != null) result.target = targ;
 		return result;
 	}
-	,touchPointID: null
-	,stageY: null
-	,stageX: null
-	,shiftKey: null
-	,relatedObject: null
-	,localY: null
-	,localX: null
-	,isPrimaryTouchPoint: null
-	,delta: null
-	,ctrlKey: null
-	,commandKey: null
-	,buttonDown: null
-	,altKey: null
-	,__class__: browser.events.TouchEvent
+	,__class__: flash.events.TouchEvent
 });
-browser.filters = {}
-browser.filters.BitmapFilter = function(inType) {
+flash.filters = {}
+flash.filters.BitmapFilter = function(inType) {
 	this._mType = inType;
 };
-$hxClasses["browser.filters.BitmapFilter"] = browser.filters.BitmapFilter;
-browser.filters.BitmapFilter.__name__ = ["browser","filters","BitmapFilter"];
-browser.filters.BitmapFilter.prototype = {
-	nmeApplyFilter: function(surface,refreshCache) {
+$hxClasses["flash.filters.BitmapFilter"] = flash.filters.BitmapFilter;
+flash.filters.BitmapFilter.__name__ = ["flash","filters","BitmapFilter"];
+flash.filters.BitmapFilter.prototype = {
+	nmeApplyFilter: function(surface,rect,refreshCache) {
 		if(refreshCache == null) refreshCache = false;
 	}
 	,nmePreFilter: function(surface) {
@@ -11123,11 +10525,9 @@ browser.filters.BitmapFilter.prototype = {
 		throw "Implement in subclass. BitmapFilter::clone";
 		return null;
 	}
-	,_nmeCached: null
-	,_mType: null
-	,__class__: browser.filters.BitmapFilter
+	,__class__: flash.filters.BitmapFilter
 }
-browser.filters.DropShadowFilter = function(in_distance,in_angle,in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout,in_hideObject) {
+flash.filters.DropShadowFilter = function(in_distance,in_angle,in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout,in_hideObject) {
 	if(in_hideObject == null) in_hideObject = false;
 	if(in_knockout == null) in_knockout = false;
 	if(in_inner == null) in_inner = false;
@@ -11139,7 +10539,7 @@ browser.filters.DropShadowFilter = function(in_distance,in_angle,in_color,in_alp
 	if(in_color == null) in_color = 0;
 	if(in_angle == null) in_angle = 45.0;
 	if(in_distance == null) in_distance = 4.0;
-	browser.filters.BitmapFilter.call(this,"DropShadowFilter");
+	flash.filters.BitmapFilter.call(this,"DropShadowFilter");
 	this.distance = in_distance;
 	this.angle = in_angle;
 	this.color = in_color;
@@ -11153,11 +10553,11 @@ browser.filters.DropShadowFilter = function(in_distance,in_angle,in_color,in_alp
 	this.hideObject = in_hideObject;
 	this._nmeCached = false;
 };
-$hxClasses["browser.filters.DropShadowFilter"] = browser.filters.DropShadowFilter;
-browser.filters.DropShadowFilter.__name__ = ["browser","filters","DropShadowFilter"];
-browser.filters.DropShadowFilter.__super__ = browser.filters.BitmapFilter;
-browser.filters.DropShadowFilter.prototype = $extend(browser.filters.BitmapFilter.prototype,{
-	nmeApplyFilter: function(surface,refreshCache) {
+$hxClasses["flash.filters.DropShadowFilter"] = flash.filters.DropShadowFilter;
+flash.filters.DropShadowFilter.__name__ = ["flash","filters","DropShadowFilter"];
+flash.filters.DropShadowFilter.__super__ = flash.filters.BitmapFilter;
+flash.filters.DropShadowFilter.prototype = $extend(flash.filters.BitmapFilter.prototype,{
+	nmeApplyFilter: function(surface,rect,refreshCache) {
 		if(refreshCache == null) refreshCache = false;
 		if(!this._nmeCached || refreshCache) {
 			var distanceX = this.distance * Math.sin(2 * Math.PI * this.angle / 360.0);
@@ -11167,27 +10567,16 @@ browser.filters.DropShadowFilter.prototype = $extend(browser.filters.BitmapFilte
 			context.shadowOffsetX = distanceX;
 			context.shadowOffsetY = distanceY;
 			context.shadowBlur = blurRadius;
-			context.shadowColor = "#" + StringTools.hex(this.color,6);
+			context.shadowColor = "rgba(" + (this.color >> 16 & 255) + "," + (this.color >> 8 & 255) + "," + (this.color & 255) + "," + this.alpha + ")";
 			this._nmeCached = true;
 		}
 	}
 	,clone: function() {
-		return new browser.filters.DropShadowFilter(this.distance,this.angle,this.color,this.alpha,this.blurX,this.blurY,this.strength,this.quality,this.inner,this.knockout,this.hideObject);
+		return new flash.filters.DropShadowFilter(this.distance,this.angle,this.color,this.alpha,this.blurX,this.blurY,this.strength,this.quality,this.inner,this.knockout,this.hideObject);
 	}
-	,strength: null
-	,quality: null
-	,knockout: null
-	,inner: null
-	,hideObject: null
-	,distance: null
-	,color: null
-	,blurY: null
-	,blurX: null
-	,angle: null
-	,alpha: null
-	,__class__: browser.filters.DropShadowFilter
+	,__class__: flash.filters.DropShadowFilter
 });
-browser.filters.GlowFilter = function(in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout) {
+flash.filters.GlowFilter = function(in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout) {
 	if(in_knockout == null) in_knockout = false;
 	if(in_inner == null) in_inner = false;
 	if(in_quality == null) in_quality = 1;
@@ -11196,16 +10585,16 @@ browser.filters.GlowFilter = function(in_color,in_alpha,in_blurX,in_blurY,in_str
 	if(in_blurX == null) in_blurX = 6.0;
 	if(in_alpha == null) in_alpha = 1.0;
 	if(in_color == null) in_color = 0;
-	browser.filters.DropShadowFilter.call(this,0,0,in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout,false);
+	flash.filters.DropShadowFilter.call(this,0,0,in_color,in_alpha,in_blurX,in_blurY,in_strength,in_quality,in_inner,in_knockout,false);
 };
-$hxClasses["browser.filters.GlowFilter"] = browser.filters.GlowFilter;
-browser.filters.GlowFilter.__name__ = ["browser","filters","GlowFilter"];
-browser.filters.GlowFilter.__super__ = browser.filters.DropShadowFilter;
-browser.filters.GlowFilter.prototype = $extend(browser.filters.DropShadowFilter.prototype,{
-	__class__: browser.filters.GlowFilter
+$hxClasses["flash.filters.GlowFilter"] = flash.filters.GlowFilter;
+flash.filters.GlowFilter.__name__ = ["flash","filters","GlowFilter"];
+flash.filters.GlowFilter.__super__ = flash.filters.DropShadowFilter;
+flash.filters.GlowFilter.prototype = $extend(flash.filters.DropShadowFilter.prototype,{
+	__class__: flash.filters.GlowFilter
 });
-browser.geom = {}
-browser.geom.ColorTransform = function(inRedMultiplier,inGreenMultiplier,inBlueMultiplier,inAlphaMultiplier,inRedOffset,inGreenOffset,inBlueOffset,inAlphaOffset) {
+flash.geom = {}
+flash.geom.ColorTransform = function(inRedMultiplier,inGreenMultiplier,inBlueMultiplier,inAlphaMultiplier,inRedOffset,inGreenOffset,inBlueOffset,inAlphaOffset) {
 	if(inAlphaOffset == null) inAlphaOffset = 0;
 	if(inBlueOffset == null) inBlueOffset = 0;
 	if(inGreenOffset == null) inGreenOffset = 0;
@@ -11223,9 +10612,9 @@ browser.geom.ColorTransform = function(inRedMultiplier,inGreenMultiplier,inBlueM
 	this.blueOffset = inBlueOffset == null?0.0:inBlueOffset;
 	this.alphaOffset = inAlphaOffset == null?0.0:inAlphaOffset;
 };
-$hxClasses["browser.geom.ColorTransform"] = browser.geom.ColorTransform;
-browser.geom.ColorTransform.__name__ = ["browser","geom","ColorTransform"];
-browser.geom.ColorTransform.prototype = {
+$hxClasses["flash.geom.ColorTransform"] = flash.geom.ColorTransform;
+flash.geom.ColorTransform.__name__ = ["flash","geom","ColorTransform"];
+flash.geom.ColorTransform.prototype = {
 	set_color: function(value) {
 		this.redOffset = value >> 16 & 255;
 		this.greenOffset = value >> 8 & 255;
@@ -11244,19 +10633,10 @@ browser.geom.ColorTransform.prototype = {
 		this.blueMultiplier += second.blueMultiplier;
 		this.alphaMultiplier += second.alphaMultiplier;
 	}
-	,redOffset: null
-	,redMultiplier: null
-	,greenOffset: null
-	,greenMultiplier: null
-	,color: null
-	,blueOffset: null
-	,blueMultiplier: null
-	,alphaOffset: null
-	,alphaMultiplier: null
-	,__class__: browser.geom.ColorTransform
+	,__class__: flash.geom.ColorTransform
 	,__properties__: {set_color:"set_color",get_color:"get_color"}
 }
-browser.geom.Matrix = function(in_a,in_b,in_c,in_d,in_tx,in_ty) {
+flash.geom.Matrix = function(in_a,in_b,in_c,in_d,in_tx,in_ty) {
 	if(in_ty == null) in_ty = 0;
 	if(in_tx == null) in_tx = 0;
 	if(in_d == null) in_d = 1;
@@ -11272,9 +10652,9 @@ browser.geom.Matrix = function(in_a,in_b,in_c,in_d,in_tx,in_ty) {
 	this._sx = 1.0;
 	this._sy = 1.0;
 };
-$hxClasses["browser.geom.Matrix"] = browser.geom.Matrix;
-browser.geom.Matrix.__name__ = ["browser","geom","Matrix"];
-browser.geom.Matrix.prototype = {
+$hxClasses["flash.geom.Matrix"] = flash.geom.Matrix;
+flash.geom.Matrix.__name__ = ["flash","geom","Matrix"];
+flash.geom.Matrix.prototype = {
 	set_ty: function(inValue) {
 		this.ty = inValue;
 		return this.ty;
@@ -11284,13 +10664,13 @@ browser.geom.Matrix.prototype = {
 		return this.tx;
 	}
 	,translate: function(inDX,inDY) {
-		var m = new browser.geom.Matrix();
+		var m = new flash.geom.Matrix();
 		m.set_tx(inDX);
 		m.set_ty(inDY);
 		this.concat(m);
 	}
 	,transformPoint: function(inPos) {
-		return new browser.geom.Point(inPos.x * this.a + inPos.y * this.c + this.tx,inPos.x * this.b + inPos.y * this.d + this.ty);
+		return new flash.geom.Point(inPos.x * this.a + inPos.y * this.c + this.tx,inPos.x * this.b + inPos.y * this.d + this.ty);
 	}
 	,toString: function() {
 		return "matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
@@ -11460,7 +10840,7 @@ browser.geom.Matrix.prototype = {
 		this.set_ty(Math.round(this.ty * 10) / 10);
 	}
 	,clone: function() {
-		var m = new browser.geom.Matrix(this.a,this.b,this.c,this.d,this.tx,this.ty);
+		var m = new flash.geom.Matrix(this.a,this.b,this.c,this.d,this.tx,this.ty);
 		m._sx = this._sx;
 		m._sy = this._sy;
 		return m;
@@ -11473,49 +10853,41 @@ browser.geom.Matrix.prototype = {
 		this.set_tx(Math.round(this.tx * 10) / 10);
 		this.set_ty(Math.round(this.ty * 10) / 10);
 	}
-	,_sy: null
-	,_sx: null
-	,ty: null
-	,tx: null
-	,d: null
-	,c: null
-	,b: null
-	,a: null
-	,__class__: browser.geom.Matrix
+	,__class__: flash.geom.Matrix
 	,__properties__: {set_tx:"set_tx",set_ty:"set_ty"}
 }
-browser.geom.Point = function(inX,inY) {
+flash.geom.Point = function(inX,inY) {
 	if(inY == null) inY = 0;
 	if(inX == null) inX = 0;
 	this.x = inX;
 	this.y = inY;
 };
-$hxClasses["browser.geom.Point"] = browser.geom.Point;
-browser.geom.Point.__name__ = ["browser","geom","Point"];
-browser.geom.Point.distance = function(pt1,pt2) {
+$hxClasses["flash.geom.Point"] = flash.geom.Point;
+flash.geom.Point.__name__ = ["flash","geom","Point"];
+flash.geom.Point.distance = function(pt1,pt2) {
 	var dx = pt1.x - pt2.x;
 	var dy = pt1.y - pt2.y;
 	return Math.sqrt(dx * dx + dy * dy);
 }
-browser.geom.Point.interpolate = function(pt1,pt2,f) {
-	return new browser.geom.Point(pt2.x + f * (pt1.x - pt2.x),pt2.y + f * (pt1.y - pt2.y));
+flash.geom.Point.interpolate = function(pt1,pt2,f) {
+	return new flash.geom.Point(pt2.x + f * (pt1.x - pt2.x),pt2.y + f * (pt1.y - pt2.y));
 }
-browser.geom.Point.polar = function(len,angle) {
-	return new browser.geom.Point(len * Math.cos(angle),len * Math.sin(angle));
+flash.geom.Point.polar = function(len,angle) {
+	return new flash.geom.Point(len * Math.cos(angle),len * Math.sin(angle));
 }
-browser.geom.Point.prototype = {
+flash.geom.Point.prototype = {
 	get_length: function() {
 		return Math.sqrt(this.x * this.x + this.y * this.y);
 	}
 	,subtract: function(v) {
-		return new browser.geom.Point(this.x - v.x,this.y - v.y);
+		return new flash.geom.Point(this.x - v.x,this.y - v.y);
 	}
 	,offset: function(dx,dy) {
 		this.x += dx;
 		this.y += dy;
 	}
 	,normalize: function(thickness) {
-		if(this.x == 0 && this.y == 0) this.x = thickness; else {
+		if(this.x == 0 && this.y == 0) return; else {
 			var norm = thickness / Math.sqrt(this.x * this.x + this.y * this.y);
 			this.x *= norm;
 			this.y *= norm;
@@ -11525,18 +10897,15 @@ browser.geom.Point.prototype = {
 		return toCompare.x == this.x && toCompare.y == this.y;
 	}
 	,clone: function() {
-		return new browser.geom.Point(this.x,this.y);
+		return new flash.geom.Point(this.x,this.y);
 	}
 	,add: function(v) {
-		return new browser.geom.Point(v.x + this.x,v.y + this.y);
+		return new flash.geom.Point(v.x + this.x,v.y + this.y);
 	}
-	,y: null
-	,x: null
-	,length: null
-	,__class__: browser.geom.Point
+	,__class__: flash.geom.Point
 	,__properties__: {get_length:"get_length"}
 }
-browser.geom.Rectangle = function(inX,inY,inWidth,inHeight) {
+flash.geom.Rectangle = function(inX,inY,inWidth,inHeight) {
 	if(inHeight == null) inHeight = 0;
 	if(inWidth == null) inWidth = 0;
 	if(inY == null) inY = 0;
@@ -11546,16 +10915,16 @@ browser.geom.Rectangle = function(inX,inY,inWidth,inHeight) {
 	this.width = inWidth;
 	this.height = inHeight;
 };
-$hxClasses["browser.geom.Rectangle"] = browser.geom.Rectangle;
-browser.geom.Rectangle.__name__ = ["browser","geom","Rectangle"];
-browser.geom.Rectangle.prototype = {
+$hxClasses["flash.geom.Rectangle"] = flash.geom.Rectangle;
+flash.geom.Rectangle.__name__ = ["flash","geom","Rectangle"];
+flash.geom.Rectangle.prototype = {
 	set_topLeft: function(p) {
 		this.x = p.x;
 		this.y = p.y;
 		return p.clone();
 	}
 	,get_topLeft: function() {
-		return new browser.geom.Point(this.x,this.y);
+		return new flash.geom.Point(this.x,this.y);
 	}
 	,set_top: function(t) {
 		this.height -= t - this.y;
@@ -11571,7 +10940,7 @@ browser.geom.Rectangle.prototype = {
 		return p.clone();
 	}
 	,get_size: function() {
-		return new browser.geom.Point(this.width,this.height);
+		return new flash.geom.Point(this.width,this.height);
 	}
 	,set_right: function(r) {
 		this.width = r - this.x;
@@ -11594,7 +10963,7 @@ browser.geom.Rectangle.prototype = {
 		return p.clone();
 	}
 	,get_bottomRight: function() {
-		return new browser.geom.Point(this.x + this.width,this.y + this.height);
+		return new flash.geom.Point(this.x + this.width,this.y + this.height);
 	}
 	,set_bottom: function(b) {
 		this.height = b - this.y;
@@ -11608,7 +10977,7 @@ browser.geom.Rectangle.prototype = {
 		var x1 = this.get_right() < toUnion.get_right()?toUnion.get_right():this.get_right();
 		var y0 = this.y > toUnion.y?toUnion.y:this.y;
 		var y1 = this.get_bottom() < toUnion.get_bottom()?toUnion.get_bottom():this.get_bottom();
-		return new browser.geom.Rectangle(x0,y0,x1 - x0,y1 - y0);
+		return new flash.geom.Rectangle(x0,y0,x1 - x0,y1 - y0);
 	}
 	,transform: function(m) {
 		var tx0 = m.a * this.x + m.c * this.y;
@@ -11633,7 +11002,7 @@ browser.geom.Rectangle.prototype = {
 		if(ty < ty0) ty0 = ty;
 		if(tx > tx1) tx1 = tx;
 		if(ty > ty1) ty1 = ty;
-		return new browser.geom.Rectangle(tx0 + m.tx,ty0 + m.ty,tx1 - tx0,ty1 - ty0);
+		return new flash.geom.Rectangle(tx0 + m.tx,ty0 + m.ty,tx1 - tx0,ty1 - ty0);
 	}
 	,setEmpty: function() {
 		this.x = this.y = this.width = this.height = 0;
@@ -11647,7 +11016,7 @@ browser.geom.Rectangle.prototype = {
 		this.y += dy;
 	}
 	,isEmpty: function() {
-		return this.width == 0 && this.height == 0;
+		return this.width <= 0 || this.height <= 0;
 	}
 	,intersects: function(toIntersect) {
 		var x0 = this.x < toIntersect.x?toIntersect.x:this.x;
@@ -11660,11 +11029,11 @@ browser.geom.Rectangle.prototype = {
 	,intersection: function(toIntersect) {
 		var x0 = this.x < toIntersect.x?toIntersect.x:this.x;
 		var x1 = this.get_right() > toIntersect.get_right()?toIntersect.get_right():this.get_right();
-		if(x1 <= x0) return new browser.geom.Rectangle();
+		if(x1 <= x0) return new flash.geom.Rectangle();
 		var y0 = this.y < toIntersect.y?toIntersect.y:this.y;
 		var y1 = this.get_bottom() > toIntersect.get_bottom()?toIntersect.get_bottom():this.get_bottom();
-		if(y1 <= y0) return new browser.geom.Rectangle();
-		return new browser.geom.Rectangle(x0,y0,x1 - x0,y1 - y0);
+		if(y1 <= y0) return new flash.geom.Rectangle();
+		return new flash.geom.Rectangle(x0,y0,x1 - x0,y1 - y0);
 	}
 	,inflatePoint: function(point) {
 		this.inflate(point.x,point.y);
@@ -11693,7 +11062,7 @@ browser.geom.Rectangle.prototype = {
 		return this.x == toCompare.x && this.y == toCompare.y && this.width == toCompare.width && this.height == toCompare.height;
 	}
 	,containsRect: function(rect) {
-		return this.contains(rect.x,rect.y) && this.containsPoint(rect.get_bottomRight());
+		if(rect.width <= 0 || rect.height <= 0) return rect.x > this.x && rect.y > this.y && rect.get_right() < this.get_right() && rect.get_bottom() < this.get_bottom(); else return rect.x >= this.x && rect.y >= this.y && rect.get_right() <= this.get_right() && rect.get_bottom() <= this.get_bottom();
 	}
 	,containsPoint: function(point) {
 		return this.contains(point.x,point.y);
@@ -11702,32 +11071,21 @@ browser.geom.Rectangle.prototype = {
 		return inX >= this.x && inY >= this.y && inX < this.get_right() && inY < this.get_bottom();
 	}
 	,clone: function() {
-		return new browser.geom.Rectangle(this.x,this.y,this.width,this.height);
+		return new flash.geom.Rectangle(this.x,this.y,this.width,this.height);
 	}
-	,y: null
-	,x: null
-	,width: null
-	,topLeft: null
-	,top: null
-	,size: null
-	,right: null
-	,left: null
-	,height: null
-	,bottomRight: null
-	,bottom: null
-	,__class__: browser.geom.Rectangle
+	,__class__: flash.geom.Rectangle
 	,__properties__: {set_bottom:"set_bottom",get_bottom:"get_bottom",set_bottomRight:"set_bottomRight",get_bottomRight:"get_bottomRight",set_left:"set_left",get_left:"get_left",set_right:"set_right",get_right:"get_right",set_size:"set_size",get_size:"get_size",set_top:"set_top",get_top:"get_top",set_topLeft:"set_topLeft",get_topLeft:"get_topLeft"}
 }
-browser.geom.Transform = function(displayObject) {
+flash.geom.Transform = function(displayObject) {
 	if(displayObject == null) throw "Cannot create Transform with no DisplayObject.";
 	this._displayObject = displayObject;
-	this._matrix = new browser.geom.Matrix();
-	this._fullMatrix = new browser.geom.Matrix();
-	this.set_colorTransform(new browser.geom.ColorTransform());
+	this._matrix = new flash.geom.Matrix();
+	this._fullMatrix = new flash.geom.Matrix();
+	this.set_colorTransform(new flash.geom.ColorTransform());
 };
-$hxClasses["browser.geom.Transform"] = browser.geom.Transform;
-browser.geom.Transform.__name__ = ["browser","geom","Transform"];
-browser.geom.Transform.prototype = {
+$hxClasses["flash.geom.Transform"] = flash.geom.Transform;
+flash.geom.Transform.__name__ = ["flash","geom","Transform"];
+flash.geom.Transform.prototype = {
 	get_pixelBounds: function() {
 		return this._displayObject.getBounds(null);
 	}
@@ -11738,6 +11096,9 @@ browser.geom.Transform.prototype = {
 	}
 	,get_matrix: function() {
 		return this._matrix.clone();
+	}
+	,get_concatenatedMatrix: function() {
+		return this.nmeGetFullMatrix(this._matrix);
 	}
 	,set_colorTransform: function(inValue) {
 		this.colorTransform = inValue;
@@ -11755,43 +11116,37 @@ browser.geom.Transform.prototype = {
 		if(localMatrix != null) m = localMatrix.mult(this._fullMatrix); else m = this._fullMatrix.clone();
 		return m;
 	}
-	,_matrix: null
-	,_fullMatrix: null
-	,_displayObject: null
-	,pixelBounds: null
-	,matrix: null
-	,colorTransform: null
-	,__class__: browser.geom.Transform
-	,__properties__: {set_colorTransform:"set_colorTransform",set_matrix:"set_matrix",get_matrix:"get_matrix",get_pixelBounds:"get_pixelBounds"}
+	,__class__: flash.geom.Transform
+	,__properties__: {set_colorTransform:"set_colorTransform",get_concatenatedMatrix:"get_concatenatedMatrix",set_matrix:"set_matrix",get_matrix:"get_matrix",get_pixelBounds:"get_pixelBounds"}
 }
-browser.media = {}
-browser.media.Sound = function(stream,context) {
-	browser.events.EventDispatcher.call(this,this);
+flash.media = {}
+flash.media.Sound = function(stream,context) {
+	flash.events.EventDispatcher.call(this,this);
 	this.bytesLoaded = 0;
 	this.bytesTotal = 0;
 	this.id3 = null;
 	this.isBuffering = false;
 	this.length = 0;
 	this.url = null;
-	this.nmeSoundChannels = new IntHash();
+	this.nmeSoundChannels = new haxe.ds.IntMap();
 	this.nmeSoundIdx = 0;
 	if(stream != null) this.load(stream,context);
 };
-$hxClasses["browser.media.Sound"] = browser.media.Sound;
-browser.media.Sound.__name__ = ["browser","media","Sound"];
-browser.media.Sound.nmeCanPlayMime = function(mime) {
-	var audio = js.Lib.document.createElement("audio");
+$hxClasses["flash.media.Sound"] = flash.media.Sound;
+flash.media.Sound.__name__ = ["flash","media","Sound"];
+flash.media.Sound.nmeCanPlayMime = function(mime) {
+	var audio = js.Browser.document.createElement("audio");
 	var playable = function(ok) {
 		if(ok != "" && ok != "no") return true; else return false;
 	};
-	return playable(audio.canPlayType(mime));
+	return playable(audio.canPlayType(mime,null));
 }
-browser.media.Sound.nmeCanPlayType = function(extension) {
-	var mime = browser.media.Sound.nmeMimeForExtension(extension);
+flash.media.Sound.nmeCanPlayType = function(extension) {
+	var mime = flash.media.Sound.nmeMimeForExtension(extension);
 	if(mime == null) return false;
-	return browser.media.Sound.nmeCanPlayMime(mime);
+	return flash.media.Sound.nmeCanPlayMime(mime);
 }
-browser.media.Sound.nmeMimeForExtension = function(extension) {
+flash.media.Sound.nmeMimeForExtension = function(extension) {
 	var mime = null;
 	switch(extension) {
 	case "mp3":
@@ -11811,16 +11166,16 @@ browser.media.Sound.nmeMimeForExtension = function(extension) {
 	}
 	return mime;
 }
-browser.media.Sound.__super__ = browser.events.EventDispatcher;
-browser.media.Sound.prototype = $extend(browser.events.EventDispatcher.prototype,{
+flash.media.Sound.__super__ = flash.events.EventDispatcher;
+flash.media.Sound.prototype = $extend(flash.events.EventDispatcher.prototype,{
 	nmeOnSoundLoaded: function(evt) {
 		this.nmeRemoveEventListeners();
-		var evt1 = new browser.events.Event(browser.events.Event.COMPLETE);
+		var evt1 = new flash.events.Event(flash.events.Event.COMPLETE);
 		this.dispatchEvent(evt1);
 	}
 	,nmeOnSoundLoadError: function(evt) {
 		this.nmeRemoveEventListeners();
-		var evt1 = new browser.events.IOErrorEvent(browser.events.IOErrorEvent.IO_ERROR);
+		var evt1 = new flash.events.IOErrorEvent(flash.events.IOErrorEvent.IO_ERROR);
 		this.dispatchEvent(evt1);
 	}
 	,play: function(startTime,loops,sndTransform) {
@@ -11832,49 +11187,39 @@ browser.media.Sound.prototype = $extend(browser.events.EventDispatcher.prototype
 		var removeRef = function() {
 			self.nmeSoundChannels.remove(curIdx);
 		};
-		var channel = browser.media.SoundChannel.nmeCreate(this.nmeStreamUrl,startTime,loops,sndTransform,removeRef);
+		var channel = flash.media.SoundChannel.nmeCreate(this.nmeStreamUrl,startTime,loops,sndTransform,removeRef);
 		this.nmeSoundChannels.set(curIdx,channel);
 		this.nmeSoundIdx++;
 		var audio = channel.nmeAudio;
 		return channel;
 	}
 	,nmeRemoveEventListeners: function() {
-		this.nmeSoundCache.removeEventListener(browser.events.Event.COMPLETE,$bind(this,this.nmeOnSoundLoaded),false);
-		this.nmeSoundCache.removeEventListener(browser.events.IOErrorEvent.IO_ERROR,$bind(this,this.nmeOnSoundLoadError),false);
+		this.nmeSoundCache.removeEventListener(flash.events.Event.COMPLETE,$bind(this,this.nmeOnSoundLoaded),false);
+		this.nmeSoundCache.removeEventListener(flash.events.IOErrorEvent.IO_ERROR,$bind(this,this.nmeOnSoundLoadError),false);
 	}
 	,nmeLoad: function(stream,context,mime) {
 		if(mime == null) mime = "";
 		this.nmeStreamUrl = stream.url;
 		try {
-			this.nmeSoundCache = new browser.net.URLLoader();
+			this.nmeSoundCache = new flash.net.URLLoader();
 			this.nmeAddEventListeners();
 			this.nmeSoundCache.load(stream);
 		} catch( e ) {
 		}
 	}
 	,nmeAddEventListeners: function() {
-		this.nmeSoundCache.addEventListener(browser.events.Event.COMPLETE,$bind(this,this.nmeOnSoundLoaded));
-		this.nmeSoundCache.addEventListener(browser.events.IOErrorEvent.IO_ERROR,$bind(this,this.nmeOnSoundLoadError));
+		this.nmeSoundCache.addEventListener(flash.events.Event.COMPLETE,$bind(this,this.nmeOnSoundLoaded));
+		this.nmeSoundCache.addEventListener(flash.events.IOErrorEvent.IO_ERROR,$bind(this,this.nmeOnSoundLoadError));
 	}
 	,load: function(stream,context) {
 		this.nmeLoad(stream,context);
 	}
 	,close: function() {
 	}
-	,nmeStreamUrl: null
-	,nmeSoundIdx: null
-	,nmeSoundChannels: null
-	,nmeSoundCache: null
-	,url: null
-	,length: null
-	,isBuffering: null
-	,id3: null
-	,bytesTotal: null
-	,bytesLoaded: null
-	,__class__: browser.media.Sound
+	,__class__: flash.media.Sound
 });
-browser.media.SoundChannel = function() {
-	browser.events.EventDispatcher.call(this,this);
+flash.media.SoundChannel = function() {
+	flash.events.EventDispatcher.call(this,this);
 	this.ChannelId = -1;
 	this.leftPeak = 0.;
 	this.position = 0.;
@@ -11882,13 +11227,13 @@ browser.media.SoundChannel = function() {
 	this.nmeAudioCurrentLoop = 1;
 	this.nmeAudioTotalLoops = 1;
 };
-$hxClasses["browser.media.SoundChannel"] = browser.media.SoundChannel;
-browser.media.SoundChannel.__name__ = ["browser","media","SoundChannel"];
-browser.media.SoundChannel.nmeCreate = function(src,startTime,loops,sndTransform,removeRef) {
+$hxClasses["flash.media.SoundChannel"] = flash.media.SoundChannel;
+flash.media.SoundChannel.__name__ = ["flash","media","SoundChannel"];
+flash.media.SoundChannel.nmeCreate = function(src,startTime,loops,sndTransform,removeRef) {
 	if(loops == null) loops = 0;
 	if(startTime == null) startTime = 0.0;
-	var channel = new browser.media.SoundChannel();
-	channel.nmeAudio = js.Lib.document.createElement("audio");
+	var channel = new flash.media.SoundChannel();
+	channel.nmeAudio = js.Browser.document.createElement("audio");
 	channel.nmeRemoveRef = removeRef;
 	channel.nmeAudio.addEventListener("ended",$bind(channel,channel.__onSoundChannelFinished),false);
 	channel.nmeAudio.addEventListener("seeked",$bind(channel,channel.__onSoundSeeked),false);
@@ -11911,14 +11256,13 @@ browser.media.SoundChannel.nmeCreate = function(src,startTime,loops,sndTransform
 	channel.nmeAudio.src = src;
 	return channel;
 }
-browser.media.SoundChannel.__super__ = browser.events.EventDispatcher;
-browser.media.SoundChannel.prototype = $extend(browser.events.EventDispatcher.prototype,{
+flash.media.SoundChannel.__super__ = flash.events.EventDispatcher;
+flash.media.SoundChannel.prototype = $extend(flash.events.EventDispatcher.prototype,{
 	set_soundTransform: function(v) {
 		this.nmeAudio.volume = v.volume;
 		return this.soundTransform = v;
 	}
 	,__onStalled: function(evt) {
-		haxe.Log.trace("sound stalled",{ fileName : "SoundChannel.hx", lineNumber : 170, className : "browser.media.SoundChannel", methodName : "__onStalled"});
 		if(this.nmeAudio != null) this.nmeAudio.load();
 	}
 	,__onSoundSeeked: function(evt) {
@@ -11934,7 +11278,7 @@ browser.media.SoundChannel.prototype = $extend(browser.events.EventDispatcher.pr
 			this.nmeAudio.removeEventListener("stalled",$bind(this,this.__onStalled),false);
 			this.nmeAudio.removeEventListener("progress",$bind(this,this.__onProgress),false);
 			this.nmeAudio = null;
-			var evt1 = new browser.events.Event(browser.events.Event.COMPLETE);
+			var evt1 = new flash.events.Event(flash.events.Event.COMPLETE);
 			evt1.target = this;
 			this.dispatchEvent(evt1);
 			if(this.nmeRemoveRef != null) this.nmeRemoveRef();
@@ -11944,7 +11288,6 @@ browser.media.SoundChannel.prototype = $extend(browser.events.EventDispatcher.pr
 		}
 	}
 	,__onProgress: function(evt) {
-		haxe.Log.trace("sound progress: " + Std.string(evt),{ fileName : "SoundChannel.hx", lineNumber : 116, className : "browser.media.SoundChannel", methodName : "__onProgress"});
 	}
 	,stop: function() {
 		if(this.nmeAudio != null) {
@@ -11953,92 +11296,87 @@ browser.media.SoundChannel.prototype = $extend(browser.events.EventDispatcher.pr
 			if(this.nmeRemoveRef != null) this.nmeRemoveRef();
 		}
 	}
-	,nmeStartTime: null
-	,nmeRemoveRef: null
-	,nmeAudioTotalLoops: null
-	,nmeAudioCurrentLoop: null
-	,soundTransform: null
-	,rightPeak: null
-	,position: null
-	,nmeAudio: null
-	,leftPeak: null
-	,ChannelId: null
-	,__class__: browser.media.SoundChannel
+	,__class__: flash.media.SoundChannel
 	,__properties__: {set_soundTransform:"set_soundTransform"}
 });
-browser.media.SoundLoaderContext = function(bufferTime,checkPolicyFile) {
+flash.media.SoundLoaderContext = function(bufferTime,checkPolicyFile) {
 	if(checkPolicyFile == null) checkPolicyFile = false;
 	if(bufferTime == null) bufferTime = 0;
 	this.bufferTime = bufferTime;
 	this.checkPolicyFile = checkPolicyFile;
 };
-$hxClasses["browser.media.SoundLoaderContext"] = browser.media.SoundLoaderContext;
-browser.media.SoundLoaderContext.__name__ = ["browser","media","SoundLoaderContext"];
-browser.media.SoundLoaderContext.prototype = {
-	checkPolicyFile: null
-	,bufferTime: null
-	,__class__: browser.media.SoundLoaderContext
+$hxClasses["flash.media.SoundLoaderContext"] = flash.media.SoundLoaderContext;
+flash.media.SoundLoaderContext.__name__ = ["flash","media","SoundLoaderContext"];
+flash.media.SoundLoaderContext.prototype = {
+	__class__: flash.media.SoundLoaderContext
 }
-browser.media.SoundTransform = function(vol,panning) {
+flash.media.SoundTransform = function(vol,panning) {
 	if(panning == null) panning = 0;
 	if(vol == null) vol = 1;
+	this.volume = vol;
+	this.pan = panning;
+	this.leftToLeft = 0;
+	this.leftToRight = 0;
+	this.rightToLeft = 0;
+	this.rightToRight = 0;
 };
-$hxClasses["browser.media.SoundTransform"] = browser.media.SoundTransform;
-browser.media.SoundTransform.__name__ = ["browser","media","SoundTransform"];
-browser.media.SoundTransform.prototype = {
-	volume: null
-	,rightToRight: null
-	,rightToLeft: null
-	,pan: null
-	,leftToRight: null
-	,leftToLeft: null
-	,__class__: browser.media.SoundTransform
+$hxClasses["flash.media.SoundTransform"] = flash.media.SoundTransform;
+flash.media.SoundTransform.__name__ = ["flash","media","SoundTransform"];
+flash.media.SoundTransform.prototype = {
+	__class__: flash.media.SoundTransform
 }
-browser.net = {}
-browser.net.URLLoader = function(request) {
-	browser.events.EventDispatcher.call(this);
+flash.net = {}
+flash.net.URLLoader = function(request) {
+	flash.events.EventDispatcher.call(this);
 	this.bytesLoaded = 0;
 	this.bytesTotal = 0;
-	this.dataFormat = browser.net.URLLoaderDataFormat.TEXT;
+	this.set_dataFormat(flash.net.URLLoaderDataFormat.TEXT);
 	if(request != null) this.load(request);
 };
-$hxClasses["browser.net.URLLoader"] = browser.net.URLLoader;
-browser.net.URLLoader.__name__ = ["browser","net","URLLoader"];
-browser.net.URLLoader.__super__ = browser.events.EventDispatcher;
-browser.net.URLLoader.prototype = $extend(browser.events.EventDispatcher.prototype,{
+$hxClasses["flash.net.URLLoader"] = flash.net.URLLoader;
+flash.net.URLLoader.__name__ = ["flash","net","URLLoader"];
+flash.net.URLLoader.__super__ = flash.events.EventDispatcher;
+flash.net.URLLoader.prototype = $extend(flash.events.EventDispatcher.prototype,{
 	onStatus: function(status) {
-		var evt = new browser.events.HTTPStatusEvent(browser.events.HTTPStatusEvent.HTTP_STATUS,false,false,status);
+		var evt = new flash.events.HTTPStatusEvent(flash.events.HTTPStatusEvent.HTTP_STATUS,false,false,status);
+		evt.currentTarget = this;
+		this.dispatchEvent(evt);
+	}
+	,onSecurityError: function(msg) {
+		var evt = new flash.events.SecurityErrorEvent(flash.events.SecurityErrorEvent.SECURITY_ERROR);
+		evt.text = msg;
 		evt.currentTarget = this;
 		this.dispatchEvent(evt);
 	}
 	,onProgress: function(event) {
-		var evt = new browser.events.ProgressEvent(browser.events.ProgressEvent.PROGRESS);
+		var evt = new flash.events.ProgressEvent(flash.events.ProgressEvent.PROGRESS);
 		evt.currentTarget = this;
 		evt.bytesLoaded = event.loaded;
 		evt.bytesTotal = event.total;
 		this.dispatchEvent(evt);
 	}
 	,onOpen: function() {
-		var evt = new browser.events.Event(browser.events.Event.OPEN);
+		var evt = new flash.events.Event(flash.events.Event.OPEN);
 		evt.currentTarget = this;
 		this.dispatchEvent(evt);
 	}
 	,onError: function(msg) {
-		var evt = new browser.events.IOErrorEvent(browser.events.IOErrorEvent.IO_ERROR);
+		var evt = new flash.events.IOErrorEvent(flash.events.IOErrorEvent.IO_ERROR);
 		evt.text = msg;
 		evt.currentTarget = this;
 		this.dispatchEvent(evt);
 	}
 	,onData: function(_) {
 		var content = this.getData();
-		switch( (this.dataFormat)[1] ) {
+		var _g = this;
+		switch( (_g.dataFormat)[1] ) {
 		case 0:
-			this.data = browser.utils.ByteArray.nmeOfBuffer(content);
+			this.data = flash.utils.ByteArray.nmeOfBuffer(content);
 			break;
 		default:
 			this.data = Std.string(content);
 		}
-		var evt = new browser.events.Event(browser.events.Event.COMPLETE);
+		var evt = new flash.events.Event(flash.events.Event.COMPLETE);
 		evt.currentTarget = this;
 		this.dispatchEvent(evt);
 	}
@@ -12046,16 +11384,17 @@ browser.net.URLLoader.prototype = $extend(browser.events.EventDispatcher.prototy
 		var xmlHttpRequest = new XMLHttpRequest();
 		this.registerEvents(xmlHttpRequest);
 		var uri = "";
-		if(js.Boot.__instanceof(data,browser.utils.ByteArray)) {
+		if(js.Boot.__instanceof(data,flash.utils.ByteArray)) {
 			var data1 = data;
-			switch( (this.dataFormat)[1] ) {
+			var _g = this;
+			switch( (_g.dataFormat)[1] ) {
 			case 0:
 				uri = data1.data.buffer;
 				break;
 			default:
 				uri = data1.readUTFBytes(data1.length);
 			}
-		} else if(js.Boot.__instanceof(data,browser.net.URLVariables)) {
+		} else if(js.Boot.__instanceof(data,flash.net.URLVariables)) {
 			var data1 = data;
 			var _g = 0, _g1 = Reflect.fields(data1);
 			while(_g < _g1.length) {
@@ -12075,16 +11414,17 @@ browser.net.URLLoader.prototype = $extend(browser.events.EventDispatcher.prototy
 			this.onError(e.toString());
 			return;
 		}
-		switch( (this.dataFormat)[1] ) {
+		var _g = this;
+		switch( (_g.dataFormat)[1] ) {
 		case 0:
 			xmlHttpRequest.responseType = "arraybuffer";
 			break;
 		default:
 		}
-		var _g = 0;
-		while(_g < requestHeaders.length) {
-			var header = requestHeaders[_g];
-			++_g;
+		var _g1 = 0;
+		while(_g1 < requestHeaders.length) {
+			var header = requestHeaders[_g1];
+			++_g1;
 			xmlHttpRequest.setRequestHeader(header.name,header.value);
 		}
 		xmlHttpRequest.send(uri);
@@ -12109,78 +11449,78 @@ browser.net.URLLoader.prototype = $extend(browser.events.EventDispatcher.prototy
 			}(this));
 			if(s == undefined) s = null;
 			if(s != null) self.onStatus(s);
-			if(s != null && s >= 200 && s < 400) self.onData(subject.response); else if(s == null) self.onError("Failed to connect or resolve host"); else if(s == 12029) self.onError("Failed to connect to host"); else if(s == 12007) self.onError("Unknown host"); else self.onError("Http Error #" + subject.status);
+			if(s != null && s >= 200 && s < 400) self.onData(subject.response); else if(s == null) self.onError("Failed to connect or resolve host"); else if(s == 12029) self.onError("Failed to connect to host"); else if(s == 12007) self.onError("Unknown host"); else if(s == 0) {
+				self.onError("Unable to make request (may be blocked due to cross-domain permissions)");
+				self.onSecurityError("Unable to make request (may be blocked due to cross-domain permissions)");
+			} else self.onError("Http Error #" + subject.status);
 		};
 	}
 	,load: function(request) {
-		switch( (this.dataFormat)[1] ) {
-		case 0:
-			request.requestHeaders.push(new browser.net.URLRequestHeader("Content-Type","application/octet-stream"));
-			break;
-		default:
-			if(request.method != "GET") request.requestHeaders.push(new browser.net.URLRequestHeader("Content-Type","application/x-www-form-urlencoded"));
-		}
-		this.requestUrl(request.url,request.method,request.data,request.requestHeaders);
+		this.requestUrl(request.url,request.method,request.data,request.formatRequestHeaders());
 	}
 	,getData: function() {
 		return null;
 	}
 	,close: function() {
 	}
-	,dataFormat: null
-	,data: null
-	,bytesTotal: null
-	,bytesLoaded: null
-	,__class__: browser.net.URLLoader
+	,set_dataFormat: function(inputVal) {
+		if(inputVal == flash.net.URLLoaderDataFormat.BINARY && !Reflect.hasField(js.Browser.window,"ArrayBuffer")) this.dataFormat = flash.net.URLLoaderDataFormat.TEXT; else this.dataFormat = inputVal;
+		return this.dataFormat;
+	}
+	,__class__: flash.net.URLLoader
+	,__properties__: {set_dataFormat:"set_dataFormat"}
 });
-browser.net.URLLoaderDataFormat = $hxClasses["browser.net.URLLoaderDataFormat"] = { __ename__ : ["browser","net","URLLoaderDataFormat"], __constructs__ : ["BINARY","TEXT","VARIABLES"] }
-browser.net.URLLoaderDataFormat.BINARY = ["BINARY",0];
-browser.net.URLLoaderDataFormat.BINARY.toString = $estr;
-browser.net.URLLoaderDataFormat.BINARY.__enum__ = browser.net.URLLoaderDataFormat;
-browser.net.URLLoaderDataFormat.TEXT = ["TEXT",1];
-browser.net.URLLoaderDataFormat.TEXT.toString = $estr;
-browser.net.URLLoaderDataFormat.TEXT.__enum__ = browser.net.URLLoaderDataFormat;
-browser.net.URLLoaderDataFormat.VARIABLES = ["VARIABLES",2];
-browser.net.URLLoaderDataFormat.VARIABLES.toString = $estr;
-browser.net.URLLoaderDataFormat.VARIABLES.__enum__ = browser.net.URLLoaderDataFormat;
-browser.net.URLRequest = function(inURL) {
+flash.net.URLLoaderDataFormat = $hxClasses["flash.net.URLLoaderDataFormat"] = { __ename__ : ["flash","net","URLLoaderDataFormat"], __constructs__ : ["BINARY","TEXT","VARIABLES"] }
+flash.net.URLLoaderDataFormat.BINARY = ["BINARY",0];
+flash.net.URLLoaderDataFormat.BINARY.toString = $estr;
+flash.net.URLLoaderDataFormat.BINARY.__enum__ = flash.net.URLLoaderDataFormat;
+flash.net.URLLoaderDataFormat.TEXT = ["TEXT",1];
+flash.net.URLLoaderDataFormat.TEXT.toString = $estr;
+flash.net.URLLoaderDataFormat.TEXT.__enum__ = flash.net.URLLoaderDataFormat;
+flash.net.URLLoaderDataFormat.VARIABLES = ["VARIABLES",2];
+flash.net.URLLoaderDataFormat.VARIABLES.toString = $estr;
+flash.net.URLLoaderDataFormat.VARIABLES.__enum__ = flash.net.URLLoaderDataFormat;
+flash.net.URLRequest = function(inURL) {
 	if(inURL != null) this.url = inURL;
 	this.requestHeaders = [];
-	this.method = browser.net.URLRequestMethod.GET;
-	this.contentType = "application/x-www-form-urlencoded";
+	this.method = flash.net.URLRequestMethod.GET;
+	this.contentType = null;
 };
-$hxClasses["browser.net.URLRequest"] = browser.net.URLRequest;
-browser.net.URLRequest.__name__ = ["browser","net","URLRequest"];
-browser.net.URLRequest.prototype = {
-	url: null
-	,requestHeaders: null
-	,method: null
-	,data: null
-	,contentType: null
-	,__class__: browser.net.URLRequest
+$hxClasses["flash.net.URLRequest"] = flash.net.URLRequest;
+flash.net.URLRequest.__name__ = ["flash","net","URLRequest"];
+flash.net.URLRequest.prototype = {
+	formatRequestHeaders: function() {
+		var res = this.requestHeaders;
+		if(res == null) res = [];
+		if(this.method == flash.net.URLRequestMethod.GET || this.data == null) return res;
+		if(js.Boot.__instanceof(this.data,String) || js.Boot.__instanceof(this.data,flash.utils.ByteArray)) {
+			res = res.slice();
+			res.push(new flash.net.URLRequestHeader("Content-Type",this.contentType != null?this.contentType:"application/x-www-form-urlencoded"));
+		}
+		return res;
+	}
+	,__class__: flash.net.URLRequest
 }
-browser.net.URLRequestHeader = function(name,value) {
+flash.net.URLRequestHeader = function(name,value) {
 	if(value == null) value = "";
 	if(name == null) name = "";
 	this.name = name;
 	this.value = value;
 };
-$hxClasses["browser.net.URLRequestHeader"] = browser.net.URLRequestHeader;
-browser.net.URLRequestHeader.__name__ = ["browser","net","URLRequestHeader"];
-browser.net.URLRequestHeader.prototype = {
-	value: null
-	,name: null
-	,__class__: browser.net.URLRequestHeader
+$hxClasses["flash.net.URLRequestHeader"] = flash.net.URLRequestHeader;
+flash.net.URLRequestHeader.__name__ = ["flash","net","URLRequestHeader"];
+flash.net.URLRequestHeader.prototype = {
+	__class__: flash.net.URLRequestHeader
 }
-browser.net.URLRequestMethod = function() { }
-$hxClasses["browser.net.URLRequestMethod"] = browser.net.URLRequestMethod;
-browser.net.URLRequestMethod.__name__ = ["browser","net","URLRequestMethod"];
-browser.net.URLVariables = function(inEncoded) {
+flash.net.URLRequestMethod = function() { }
+$hxClasses["flash.net.URLRequestMethod"] = flash.net.URLRequestMethod;
+flash.net.URLRequestMethod.__name__ = ["flash","net","URLRequestMethod"];
+flash.net.URLVariables = function(inEncoded) {
 	if(inEncoded != null) this.decode(inEncoded);
 };
-$hxClasses["browser.net.URLVariables"] = browser.net.URLVariables;
-browser.net.URLVariables.__name__ = ["browser","net","URLVariables"];
-browser.net.URLVariables.prototype = {
+$hxClasses["flash.net.URLVariables"] = flash.net.URLVariables;
+flash.net.URLVariables.__name__ = ["flash","net","URLVariables"];
+flash.net.URLVariables.prototype = {
 	toString: function() {
 		var result = new Array();
 		var fields = Reflect.fields(this);
@@ -12209,98 +11549,214 @@ browser.net.URLVariables.prototype = {
 			if(eq > 0) this[StringTools.urlDecode(HxOverrides.substr(f,0,eq))] = StringTools.urlDecode(HxOverrides.substr(f,eq + 1,null)); else if(eq != 0) this[StringTools.urlDecode(f)] = "";
 		}
 	}
-	,__class__: browser.net.URLVariables
+	,__class__: flash.net.URLVariables
 }
-browser.system = {}
-browser.system.LoaderContext = function(checkPolicyFile,applicationDomain,securityDomain) {
+flash.system = {}
+flash.system.ApplicationDomain = function(parentDomain) {
+	if(parentDomain != null) this.parentDomain = parentDomain; else this.parentDomain = flash.system.ApplicationDomain.currentDomain;
+};
+$hxClasses["flash.system.ApplicationDomain"] = flash.system.ApplicationDomain;
+flash.system.ApplicationDomain.__name__ = ["flash","system","ApplicationDomain"];
+flash.system.ApplicationDomain.prototype = {
+	hasDefinition: function(name) {
+		return Type.resolveClass(name) != null;
+	}
+	,getDefinition: function(name) {
+		return Type.resolveClass(name);
+	}
+	,__class__: flash.system.ApplicationDomain
+}
+flash.system.LoaderContext = function(checkPolicyFile,applicationDomain,securityDomain) {
 	if(checkPolicyFile == null) checkPolicyFile = false;
 	this.checkPolicyFile = checkPolicyFile;
+	this.securityDomain = securityDomain;
+	if(applicationDomain != null) this.applicationDomain = applicationDomain; else this.applicationDomain = flash.system.ApplicationDomain.currentDomain;
 };
-$hxClasses["browser.system.LoaderContext"] = browser.system.LoaderContext;
-browser.system.LoaderContext.__name__ = ["browser","system","LoaderContext"];
-browser.system.LoaderContext.prototype = {
-	securityDomain: null
-	,applicationDomain: null
-	,checkPolicyFile: null
-	,__class__: browser.system.LoaderContext
+$hxClasses["flash.system.LoaderContext"] = flash.system.LoaderContext;
+flash.system.LoaderContext.__name__ = ["flash","system","LoaderContext"];
+flash.system.LoaderContext.prototype = {
+	__class__: flash.system.LoaderContext
 }
-browser.system.Security = function() { }
-$hxClasses["browser.system.Security"] = browser.system.Security;
-browser.system.Security.__name__ = ["browser","system","Security"];
-browser.system.Security.LOCAL_TRUSTED = null;
-browser.system.Security.LOCAL_WITH_FILE = null;
-browser.system.Security.LOCAL_WITH_NETWORK = null;
-browser.system.Security.REMOTE = null;
-browser.system.Security.disableAVM1Loading = null;
-browser.system.Security.exactSettings = null;
-browser.system.Security.sandboxType = null;
-browser.system.Security.allowDomain = function(p1,p2,p3,p4,p5) {
+flash.system.Security = function() { }
+$hxClasses["flash.system.Security"] = flash.system.Security;
+flash.system.Security.__name__ = ["flash","system","Security"];
+flash.system.Security.allowDomain = function(p1,p2,p3,p4,p5) {
 }
-browser.system.Security.allowInsecureDomain = function(p1,p2,p3,p4,p5) {
+flash.system.Security.allowInsecureDomain = function(p1,p2,p3,p4,p5) {
 }
-browser.system.Security.loadPolicyFile = function(url) {
+flash.system.Security.loadPolicyFile = function(url) {
 }
-browser.system.System = function() { }
-$hxClasses["browser.system.System"] = browser.system.System;
-browser.system.System.__name__ = ["browser","system","System"];
-browser.system.System.__properties__ = {get_vmVersion:"get_vmVersion",get_totalMemory:"get_totalMemory"}
-browser.system.System.totalMemory = null;
-browser.system.System.vmVersion = null;
-browser.system.System.exit = function(code) {
+flash.system.SecurityDomain = function() {
+};
+$hxClasses["flash.system.SecurityDomain"] = flash.system.SecurityDomain;
+flash.system.SecurityDomain.__name__ = ["flash","system","SecurityDomain"];
+flash.system.SecurityDomain.prototype = {
+	__class__: flash.system.SecurityDomain
+}
+flash.system.System = function() { }
+$hxClasses["flash.system.System"] = flash.system.System;
+flash.system.System.__name__ = ["flash","system","System"];
+flash.system.System.__properties__ = {get_vmVersion:"get_vmVersion",get_totalMemory:"get_totalMemory"}
+flash.system.System.exit = function(code) {
 	throw "System.exit is currently not supported for HTML5";
 }
-browser.system.System.gc = function() {
+flash.system.System.gc = function() {
 }
-browser.system.System.pause = function() {
+flash.system.System.pause = function() {
 	throw "System.pause is currently not supported for HTML5";
 }
-browser.system.System.resume = function() {
+flash.system.System.resume = function() {
 	throw "System.resume is currently not supported for HTML5";
 }
-browser.system.System.setClipboard = function(string) {
+flash.system.System.setClipboard = function(string) {
 	throw "System.setClipboard is currently not supported for HTML5";
 }
-browser.system.System.get_totalMemory = function() {
+flash.system.System.get_totalMemory = function() {
 	return 0;
 }
-browser.system.System.get_vmVersion = function() {
+flash.system.System.get_vmVersion = function() {
 	return "nme - tip";
 }
-browser.text.FontStyle = $hxClasses["browser.text.FontStyle"] = { __ename__ : ["browser","text","FontStyle"], __constructs__ : ["REGULAR","ITALIC","BOLD_ITALIC","BOLD"] }
-browser.text.FontStyle.REGULAR = ["REGULAR",0];
-browser.text.FontStyle.REGULAR.toString = $estr;
-browser.text.FontStyle.REGULAR.__enum__ = browser.text.FontStyle;
-browser.text.FontStyle.ITALIC = ["ITALIC",1];
-browser.text.FontStyle.ITALIC.toString = $estr;
-browser.text.FontStyle.ITALIC.__enum__ = browser.text.FontStyle;
-browser.text.FontStyle.BOLD_ITALIC = ["BOLD_ITALIC",2];
-browser.text.FontStyle.BOLD_ITALIC.toString = $estr;
-browser.text.FontStyle.BOLD_ITALIC.__enum__ = browser.text.FontStyle;
-browser.text.FontStyle.BOLD = ["BOLD",3];
-browser.text.FontStyle.BOLD.toString = $estr;
-browser.text.FontStyle.BOLD.__enum__ = browser.text.FontStyle;
-browser.text.FontType = $hxClasses["browser.text.FontType"] = { __ename__ : ["browser","text","FontType"], __constructs__ : ["EMBEDDED","DEVICE"] }
-browser.text.FontType.EMBEDDED = ["EMBEDDED",0];
-browser.text.FontType.EMBEDDED.toString = $estr;
-browser.text.FontType.EMBEDDED.__enum__ = browser.text.FontType;
-browser.text.FontType.DEVICE = ["DEVICE",1];
-browser.text.FontType.DEVICE.toString = $estr;
-browser.text.FontType.DEVICE.__enum__ = browser.text.FontType;
-browser.text.TextField = function() {
-	browser.display.InteractiveObject.call(this);
+flash.text = {}
+flash.text.Font = function() {
+	this.nmeMetrics = [];
+	this.nmeFontScale = 9.0;
+	var className = Type.getClassName(Type.getClass(this));
+	if(flash.text.Font.nmeFontData == null) {
+		flash.text.Font.nmeFontData = [];
+		flash.text.Font.nmeFontData["Bitstream_Vera_Sans"] = haxe.Unserializer.run(flash.text.Font.DEFAULT_FONT_DATA);
+	}
+	if(className == "flash.text.Font") this.set_fontName("Bitstream_Vera_Sans"); else this.set_fontName(className.split(".").pop());
+};
+$hxClasses["flash.text.Font"] = flash.text.Font;
+flash.text.Font.__name__ = ["flash","text","Font"];
+flash.text.Font.enumerateFonts = function(enumerateDeviceFonts) {
+	if(enumerateDeviceFonts == null) enumerateDeviceFonts = false;
+	return flash.text.Font.nmeRegisteredFonts.slice();
+}
+flash.text.Font.nmeOfResource = function(resourceName,fontName) {
+	if(fontName == null) fontName = "";
+	var data = haxe.Unserializer.run(haxe.Resource.getString(resourceName));
+	if(data == null) {
+	} else {
+		if(fontName == "") {
+			flash.text.Font.nmeFontData[resourceName] = data.hash;
+			fontName = data.fontName;
+		}
+		flash.text.Font.nmeFontData[data.fontName] = data.hash;
+	}
+	return fontName;
+}
+flash.text.Font.registerFont = function(font) {
+	var instance = js.Boot.__cast(Type.createInstance(font,[]) , flash.text.Font);
+	if(instance != null) {
+		if(Reflect.hasField(font,"resourceName")) instance.set_fontName(flash.text.Font.nmeOfResource(Reflect.field(font,"resourceName")));
+		flash.text.Font.nmeRegisteredFonts.push(instance);
+	}
+}
+flash.text.Font.prototype = {
+	set_fontName: function(name) {
+		if(name == "_sans" || name == "_serif" || name == "_typewriter") name = "Bitstream_Vera_Sans";
+		this.fontName = name;
+		if(flash.text.Font.nmeFontData[this.fontName] == null) try {
+			flash.text.Font.nmeOfResource(name);
+		} catch( e ) {
+			this.fontName = "Bitstream_Vera_Sans";
+		}
+		if(flash.text.Font.nmeFontData[this.fontName] != null) try {
+			this.nmeGlyphData = flash.text.Font.nmeFontData[this.fontName];
+		} catch( e ) {
+			this.fontName = "Bitstream_Vera_Sans";
+		}
+		return name;
+	}
+	,nmeSetScale: function(scale) {
+		this.nmeFontScale = scale / 1024;
+	}
+	,nmeRender: function(graphics,inChar,inX,inY,inOutline) {
+		var index = 0;
+		var glyph = this.nmeGlyphData.get(inChar);
+		if(glyph == null) return;
+		var commands = glyph.commands;
+		var data = glyph.data;
+		var _g = 0;
+		while(_g < commands.length) {
+			var c = commands[_g];
+			++_g;
+			switch(c) {
+			case 1:
+				graphics.moveTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
+				break;
+			case 2:
+				graphics.lineTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
+				break;
+			case 3:
+				graphics.curveTo(inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale,inX + data[index++] * this.nmeFontScale,inY + data[index++] * this.nmeFontScale);
+				break;
+			}
+		}
+	}
+	,nmeGetAdvance: function(inGlyph,height) {
+		var m = this.nmeMetrics[inGlyph];
+		if(m == null) {
+			var glyph = this.nmeGlyphData.get(inGlyph);
+			if(glyph == null) return 0;
+			this.nmeMetrics[inGlyph] = m = glyph._width * this.nmeFontScale | 0;
+		}
+		if(m == null) return 0;
+		return m;
+	}
+	,hasGlyph: function(str) {
+		return this.nmeGlyphData.exists(HxOverrides.cca(str,0));
+	}
+	,__class__: flash.text.Font
+	,__properties__: {set_fontName:"set_fontName"}
+}
+flash.text.FontStyle = $hxClasses["flash.text.FontStyle"] = { __ename__ : ["flash","text","FontStyle"], __constructs__ : ["REGULAR","ITALIC","BOLD_ITALIC","BOLD"] }
+flash.text.FontStyle.REGULAR = ["REGULAR",0];
+flash.text.FontStyle.REGULAR.toString = $estr;
+flash.text.FontStyle.REGULAR.__enum__ = flash.text.FontStyle;
+flash.text.FontStyle.ITALIC = ["ITALIC",1];
+flash.text.FontStyle.ITALIC.toString = $estr;
+flash.text.FontStyle.ITALIC.__enum__ = flash.text.FontStyle;
+flash.text.FontStyle.BOLD_ITALIC = ["BOLD_ITALIC",2];
+flash.text.FontStyle.BOLD_ITALIC.toString = $estr;
+flash.text.FontStyle.BOLD_ITALIC.__enum__ = flash.text.FontStyle;
+flash.text.FontStyle.BOLD = ["BOLD",3];
+flash.text.FontStyle.BOLD.toString = $estr;
+flash.text.FontStyle.BOLD.__enum__ = flash.text.FontStyle;
+flash.text.FontType = $hxClasses["flash.text.FontType"] = { __ename__ : ["flash","text","FontType"], __constructs__ : ["EMBEDDED","DEVICE"] }
+flash.text.FontType.EMBEDDED = ["EMBEDDED",0];
+flash.text.FontType.EMBEDDED.toString = $estr;
+flash.text.FontType.EMBEDDED.__enum__ = flash.text.FontType;
+flash.text.FontType.DEVICE = ["DEVICE",1];
+flash.text.FontType.DEVICE.toString = $estr;
+flash.text.FontType.DEVICE.__enum__ = flash.text.FontType;
+flash.text.GridFitType = $hxClasses["flash.text.GridFitType"] = { __ename__ : ["flash","text","GridFitType"], __constructs__ : ["NONE","PIXEL","SUBPIXEL"] }
+flash.text.GridFitType.NONE = ["NONE",0];
+flash.text.GridFitType.NONE.toString = $estr;
+flash.text.GridFitType.NONE.__enum__ = flash.text.GridFitType;
+flash.text.GridFitType.PIXEL = ["PIXEL",1];
+flash.text.GridFitType.PIXEL.toString = $estr;
+flash.text.GridFitType.PIXEL.__enum__ = flash.text.GridFitType;
+flash.text.GridFitType.SUBPIXEL = ["SUBPIXEL",2];
+flash.text.GridFitType.SUBPIXEL.toString = $estr;
+flash.text.GridFitType.SUBPIXEL.__enum__ = flash.text.GridFitType;
+flash.text.TextField = function() {
+	flash.display.InteractiveObject.call(this);
 	this.mWidth = 100;
 	this.mHeight = 20;
 	this.mHTMLMode = false;
 	this.multiline = false;
-	this.nmeGraphics = new browser.display.Graphics();
-	this.mFace = browser.text.TextField.mDefaultFont;
-	this.mAlign = browser.text.TextFormatAlign.LEFT;
+	this.nmeGraphics = new flash.display.Graphics();
+	this.mFace = flash.text.TextField.mDefaultFont;
+	this.mAlign = flash.text.TextFormatAlign.LEFT;
 	this.mParagraphs = new Array();
 	this.mSelStart = -1;
 	this.mSelEnd = -1;
-	this.mScrollH = 0;
-	this.mScrollV = 1;
-	this.mType = browser.text.TextFieldType.DYNAMIC;
+	this.scrollH = 0;
+	this.scrollV = 1;
+	this.mType = flash.text.TextFieldType.DYNAMIC;
 	this.set_autoSize("NONE");
 	this.mTextHeight = 12;
 	this.mMaxHeight = this.mTextHeight;
@@ -12315,19 +11771,24 @@ browser.text.TextField = function() {
 	this.mDownChar = 0;
 	this.mSelectDrag = -1;
 	this.mLineInfo = [];
-	this.set_defaultTextFormat(new browser.text.TextFormat());
+	this.set_defaultTextFormat(new flash.text.TextFormat());
 	this.set_borderColor(0);
 	this.set_border(false);
 	this.set_backgroundColor(16777215);
 	this.set_background(false);
+	this.gridFitType = flash.text.GridFitType.PIXEL;
+	this.sharpness = 0;
 };
-$hxClasses["browser.text.TextField"] = browser.text.TextField;
-browser.text.TextField.__name__ = ["browser","text","TextField"];
-browser.text.TextField.__super__ = browser.display.InteractiveObject;
-browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.prototype,{
+$hxClasses["flash.text.TextField"] = flash.text.TextField;
+flash.text.TextField.__name__ = ["flash","text","TextField"];
+flash.text.TextField.__super__ = flash.display.InteractiveObject;
+flash.text.TextField.prototype = $extend(flash.display.InteractiveObject.prototype,{
 	set_wordWrap: function(inWordWrap) {
 		this.wordWrap = inWordWrap;
 		this.Rebuild();
+		return this.get_wordWrap();
+	}
+	,get_wordWrap: function() {
 		return this.wordWrap;
 	}
 	,set_width: function(inValue) {
@@ -12344,14 +11805,14 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 	}
 	,set_type: function(inType) {
 		this.mType = inType;
-		this.nmeInputEnabled = this.mType == browser.text.TextFieldType.INPUT;
+		this.nmeInputEnabled = this.mType == flash.text.TextFieldType.INPUT;
 		if(this.mHTMLMode) {
-			if(this.nmeInputEnabled) browser.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,true); else browser.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,false);
+			if(this.nmeInputEnabled) flash.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,true); else flash.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,false);
 		} else if(this.nmeInputEnabled) {
 			this.set_htmlText(StringTools.replace(this.mText,"\n","<BR />"));
-			browser.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,true);
+			flash.Lib.nmeSetContentEditable(this.nmeGraphics.nmeSurface,true);
 		}
-		this.tabEnabled = this.get_type() == browser.text.TextFieldType.INPUT;
+		this.tabEnabled = this.get_type() == flash.text.TextFieldType.INPUT;
 		this.Rebuild();
 		return inType;
 	}
@@ -12384,26 +11845,57 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		if(this.mHTMLMode) this.ConvertHTMLToText(false);
 		return this.mText;
 	}
+	,set_scrollV: function(value) {
+		return this.scrollV = value;
+	}
+	,get_scrollV: function() {
+		return this.scrollV;
+	}
+	,set_scrollH: function(value) {
+		return this.scrollH = value;
+	}
+	,get_scrollH: function() {
+		return this.scrollH;
+	}
+	,get_numLines: function() {
+		return 0;
+	}
+	,set_multiline: function(value) {
+		return this.multiline = value;
+	}
+	,get_multiline: function() {
+		return this.multiline;
+	}
+	,get_maxScrollV: function() {
+		return 0;
+	}
+	,get_maxScrollH: function() {
+		return 0;
+	}
 	,set_htmlText: function(inHTMLText) {
 		this.mParagraphs = new Array();
 		this.mHTMLText = inHTMLText;
 		if(!this.mHTMLMode) {
-			var domElement = js.Lib.document.createElement("div");
+			var domElement = js.Browser.document.createElement("div");
 			if(this.background || this.border) {
 				domElement.style.width = this.mWidth + "px";
 				domElement.style.height = this.mHeight + "px";
 			}
 			if(this.background) domElement.style.backgroundColor = "#" + StringTools.hex(this.backgroundColor,6);
 			if(this.border) domElement.style.border = "1px solid #" + StringTools.hex(this.borderColor,6);
+			domElement.style.color = "#" + StringTools.hex(this.mTextColour,6);
+			domElement.style.fontFamily = this.mFace;
+			domElement.style.fontSize = this.mTextHeight + "px";
+			domElement.style.textAlign = Std.string(this.mAlign);
 			var wrapper = domElement;
 			wrapper.innerHTML = inHTMLText;
-			var destination = new browser.display.Graphics(wrapper);
+			var destination = new flash.display.Graphics(wrapper);
 			var nmeSurface = this.nmeGraphics.nmeSurface;
-			if(browser.Lib.nmeIsOnStage(nmeSurface)) {
-				browser.Lib.nmeAppendSurface(wrapper);
-				browser.Lib.nmeCopyStyle(nmeSurface,wrapper);
-				browser.Lib.nmeSwapSurface(nmeSurface,wrapper);
-				browser.Lib.nmeRemoveSurface(nmeSurface);
+			if(flash.Lib.nmeIsOnStage(nmeSurface)) {
+				flash.Lib.nmeAppendSurface(wrapper);
+				flash.Lib.nmeCopyStyle(nmeSurface,wrapper);
+				flash.Lib.nmeSwapSurface(nmeSurface,wrapper);
+				flash.Lib.nmeRemoveSurface(nmeSurface);
 			}
 			this.nmeGraphics = destination;
 			this.nmeGraphics.nmeExtent.width = wrapper.width;
@@ -12441,6 +11933,9 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 	,get_caretPos: function() {
 		return this.mInsertPos;
 	}
+	,get_bottomScrollV: function() {
+		return 0;
+	}
 	,set_borderColor: function(inBorderCol) {
 		this.borderColor = inBorderCol;
 		this.Rebuild();
@@ -12465,6 +11960,9 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		this.autoSize = inAutoSize;
 		this.Rebuild();
 		return inAutoSize;
+	}
+	,get_autoSize: function() {
+		return this.autoSize;
 	}
 	,toString: function() {
 		return "[TextField name=" + this.name + " id=" + this._nmeId + "]";
@@ -12500,22 +11998,22 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		var insert_x = 0;
 		if(inInsert != null) {
 			if(this.autoSize != "NONE") {
-				this.mScrollH = 0;
+				this.scrollH = 0;
 				insert_x = inInsert;
 			} else {
-				insert_x = inInsert - this.mScrollH;
-				if(insert_x < 0) this.mScrollH -= (this.mLimitRenderX * 3 >> 2) - insert_x; else if(insert_x > this.mLimitRenderX) this.mScrollH += insert_x - (this.mLimitRenderX * 3 >> 2);
-				if(this.mScrollH < 0) this.mScrollH = 0;
+				insert_x = inInsert - this.scrollH;
+				if(insert_x < 0) this.scrollH -= (this.mLimitRenderX * 3 >> 2) - insert_x; else if(insert_x > this.mLimitRenderX) this.scrollH += insert_x - (this.mLimitRenderX * 3 >> 2);
+				if(this.scrollH < 0) this.scrollH = 0;
 			}
 		}
 		if(this.autoSize == "NONE" && w <= this.mLimitRenderX) {
-			if(inAlign == browser.text.TextFormatAlign.CENTER) align_x = Math.round(this.mWidth) - w >> 1; else if(inAlign == browser.text.TextFormatAlign.RIGHT) align_x = Math.round(this.mWidth) - w;
+			if(inAlign == flash.text.TextFormatAlign.CENTER) align_x = Math.round(this.mWidth) - w >> 1; else if(inAlign == flash.text.TextFormatAlign.RIGHT) align_x = Math.round(this.mWidth) - w;
 		}
 		var x_list = new Array();
 		this.mLineInfo.push({ mY0 : inY, mIndex : inCharIdx - 1, mX : x_list});
 		var cache_sel_font = null;
 		var cache_normal_font = null;
-		var x = align_x - this.mScrollH;
+		var x = align_x - this.scrollH;
 		var x0 = x;
 		var _g = 0;
 		while(_g < inRow.length) {
@@ -12532,7 +12030,7 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 					this.nmeGraphics.drawRect(x,inY,adv,full_height);
 					this.nmeGraphics.endFill();
 					if(cache_normal_font == chr.font) font = cache_sel_font; else {
-						font = browser.text.FontInstance.CreateSolid(chr.font.GetFace(),chr.fh,16777215,1.0);
+						font = flash.text.FontInstance.CreateSolid(chr.font.GetFace(),chr.fh,16777215,1.0);
 						cache_sel_font = font;
 						cache_normal_font = chr.font;
 					}
@@ -12541,13 +12039,13 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 			}
 			x += adv;
 		}
-		x += this.mScrollH;
+		x += this.scrollH;
 		return full_height;
 	}
 	,RebuildText: function() {
 		this.mParagraphs = [];
 		if(!this.mHTMLMode) {
-			var font = browser.text.FontInstance.CreateSolid(this.mFace,this.mTextHeight,this.mTextColour,1.0);
+			var font = flash.text.FontInstance.CreateSolid(this.mFace,this.mTextHeight,this.mTextColour,1.0);
 			var paras = this.mText.split("\n");
 			var _g = 0;
 			while(_g < paras.length) {
@@ -12570,7 +12068,7 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		this.nmeGraphics.lineStyle(this.mTextColour);
 		var insert_x = null;
 		this.mMaxWidth = 0;
-		var wrap = this.mLimitRenderX = this.wordWrap && !this.nmeInputEnabled?this.mWidth | 0:999999;
+		var wrap = this.mLimitRenderX = this.get_wordWrap() && !this.nmeInputEnabled?this.mWidth | 0:999999;
 		var char_idx = 0;
 		var h = 0;
 		var s0 = this.mSelStart;
@@ -12640,7 +12138,8 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		var w = this.mMaxWidth;
 		if(h < this.mTextHeight) h = this.mTextHeight;
 		this.mMaxHeight = h;
-		switch(this.autoSize) {
+		var _g = this;
+		switch(_g.autoSize) {
 		case "LEFT":
 			break;
 		case "RIGHT":
@@ -12652,7 +12151,7 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 			this.set_x(this.mWidth / 2 - x0);
 			break;
 		default:
-			if(this.wordWrap) this.set_height(h);
+			if(this.get_wordWrap()) this.set_height(h);
 		}
 		if(this.border) {
 			this.nmeGraphics.endFill();
@@ -12671,21 +12170,21 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		}
 		if(!this.mHTMLMode && inMask != null) {
 			var m = this.getSurfaceTransform(this.nmeGraphics);
-			browser.Lib.nmeDrawToSurface(this.nmeGraphics.nmeSurface,inMask,m,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha,clipRect);
+			flash.Lib.nmeDrawToSurface(this.nmeGraphics.nmeSurface,inMask,m,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha,clipRect,this.gridFitType != flash.text.GridFitType.PIXEL);
 		} else {
 			if((this._nmeRenderFlags & 32) != 0) {
 				var m = this.getSurfaceTransform(this.nmeGraphics);
-				browser.Lib.nmeSetSurfaceTransform(this.nmeGraphics.nmeSurface,m);
+				flash.Lib.nmeSetSurfaceTransform(this.nmeGraphics.nmeSurface,m);
 				this._nmeRenderFlags &= -33;
 			}
-			browser.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha);
+			flash.Lib.nmeSetSurfaceOpacity(this.nmeGraphics.nmeSurface,(this.parent != null?this.parent.nmeCombinedAlpha:1) * this.alpha);
 		}
 	}
 	,nmeGetObjectUnderPoint: function(point) {
 		if(!this.get_visible()) return null; else if(this.mText.length > 1) {
 			var local = this.globalToLocal(point);
 			if(local.x < 0 || local.y < 0 || local.x > this.mMaxWidth || local.y > this.mMaxHeight) return null; else return this;
-		} else return browser.display.InteractiveObject.prototype.nmeGetObjectUnderPoint.call(this,point);
+		} else return flash.display.InteractiveObject.prototype.nmeGetObjectUnderPoint.call(this,point);
 	}
 	,nmeGetGraphics: function() {
 		return this.nmeGraphics;
@@ -12693,7 +12192,7 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 	,getTextFormat: function(beginIndex,endIndex) {
 		if(endIndex == null) endIndex = 0;
 		if(beginIndex == null) beginIndex = 0;
-		return new browser.text.TextFormat();
+		return new flash.text.TextFormat(this.mFace,this.mTextHeight,this.mTextColour);
 	}
 	,getLineIndexAtPoint: function(inX,inY) {
 		if(this.mLineInfo.length < 1) return -1;
@@ -12747,91 +12246,36 @@ browser.text.TextField.prototype = $extend(browser.display.InteractiveObject.pro
 		var _g = this;
 		_g.set_text(_g.get_text() + newText);
 	}
-	,_defaultTextFormat: null
-	,nmeInputEnabled: null
-	,nmeGraphics: null
-	,mWidth: null
-	,mType: null
-	,mTextColour: null
-	,mText: null
-	,mSelectDrag: null
-	,mSelStart: null
-	,mSelEnd: null
-	,mSelectionAnchored: null
-	,mSelectionAnchor: null
-	,mScrollV: null
-	,mScrollH: null
-	,mMaxWidth: null
-	,mMaxHeight: null
-	,mLineInfo: null
-	,mLimitRenderX: null
-	,mInsertPos: null
-	,mHTMLMode: null
-	,mHTMLText: null
-	,mHeight: null
-	,mAlign: null
-	,wordWrap: null
-	,type: null
-	,textWidth: null
-	,textHeight: null
-	,textColor: null
-	,text: null
-	,sharpness: null
-	,selectionEndIndex: null
-	,selectionBeginIndex: null
-	,selectable: null
-	,restrict: null
-	,multiline: null
-	,mTryFreeType: null
-	,mTextHeight: null
-	,mParagraphs: null
-	,mFace: null
-	,mDownChar: null
-	,maxChars: null
-	,length: null
-	,htmlText: null
-	,gridFitType: null
-	,embedFonts: null
-	,displayAsPassword: null
-	,defaultTextFormat: null
-	,caretPos: null
-	,caretIndex: null
-	,borderColor: null
-	,border: null
-	,backgroundColor: null
-	,background: null
-	,autoSize: null
-	,antiAliasType: null
-	,__class__: browser.text.TextField
-	,__properties__: $extend(browser.display.InteractiveObject.prototype.__properties__,{set_autoSize:"set_autoSize",set_background:"set_background",set_backgroundColor:"set_backgroundColor",set_border:"set_border",set_borderColor:"set_borderColor",get_caretPos:"get_caretPos",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",set_text:"set_text",get_text:"get_text",set_textColor:"set_textColor",get_textColor:"get_textColor",get_textHeight:"get_textHeight",get_textWidth:"get_textWidth",set_type:"set_type",get_type:"get_type",set_wordWrap:"set_wordWrap"})
+	,__class__: flash.text.TextField
+	,__properties__: $extend(flash.display.InteractiveObject.prototype.__properties__,{set_autoSize:"set_autoSize",set_background:"set_background",set_backgroundColor:"set_backgroundColor",set_border:"set_border",set_borderColor:"set_borderColor",get_bottomScrollV:"get_bottomScrollV",get_caretPos:"get_caretPos",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",get_maxScrollH:"get_maxScrollH",get_maxScrollV:"get_maxScrollV",get_numLines:"get_numLines",set_text:"set_text",get_text:"get_text",set_textColor:"set_textColor",get_textColor:"get_textColor",get_textHeight:"get_textHeight",get_textWidth:"get_textWidth",set_type:"set_type",get_type:"get_type",set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap"})
 });
-browser.text.FontInstanceMode = $hxClasses["browser.text.FontInstanceMode"] = { __ename__ : ["browser","text","FontInstanceMode"], __constructs__ : ["fimSolid"] }
-browser.text.FontInstanceMode.fimSolid = ["fimSolid",0];
-browser.text.FontInstanceMode.fimSolid.toString = $estr;
-browser.text.FontInstanceMode.fimSolid.__enum__ = browser.text.FontInstanceMode;
-browser.text.FontInstance = function(inFont,inHeight) {
+flash.text.FontInstanceMode = $hxClasses["flash.text.FontInstanceMode"] = { __ename__ : ["flash","text","FontInstanceMode"], __constructs__ : ["fimSolid"] }
+flash.text.FontInstanceMode.fimSolid = ["fimSolid",0];
+flash.text.FontInstanceMode.fimSolid.toString = $estr;
+flash.text.FontInstanceMode.fimSolid.__enum__ = flash.text.FontInstanceMode;
+flash.text.FontInstance = function(inFont,inHeight) {
 	this.mFont = inFont;
 	this.mHeight = inHeight;
 	this.mTryFreeType = true;
 	this.mGlyphs = [];
 	this.mCacheAsBitmap = false;
 };
-$hxClasses["browser.text.FontInstance"] = browser.text.FontInstance;
-browser.text.FontInstance.__name__ = ["browser","text","FontInstance"];
-browser.text.FontInstance.CreateSolid = function(inFace,inHeight,inColour,inAlpha) {
+$hxClasses["flash.text.FontInstance"] = flash.text.FontInstance;
+flash.text.FontInstance.__name__ = ["flash","text","FontInstance"];
+flash.text.FontInstance.CreateSolid = function(inFace,inHeight,inColour,inAlpha) {
 	var id = "SOLID:" + inFace + ":" + inHeight + ":" + inColour + ":" + inAlpha;
-	var f = browser.text.FontInstance.mSolidFonts.get(id);
+	var f = flash.text.FontInstance.mSolidFonts.get(id);
 	if(f != null) return f;
-	var font = new browser.text.Font();
+	var font = new flash.text.Font();
 	font.nmeSetScale(inHeight);
 	font.set_fontName(inFace);
 	if(font == null) return null;
-	f = new browser.text.FontInstance(font,inHeight);
+	f = new flash.text.FontInstance(font,inHeight);
 	f.SetSolid(inColour,inAlpha);
-	browser.text.FontInstance.mSolidFonts.set(id,f);
+	flash.text.FontInstance.mSolidFonts.set(id,f);
 	return f;
 }
-browser.text.FontInstance.prototype = {
+flash.text.FontInstance.prototype = {
 	get_height: function() {
 		return this.mHeight;
 	}
@@ -12847,7 +12291,7 @@ browser.text.FontInstance.prototype = {
 	,SetSolid: function(inCol,inAlpha) {
 		this.mColour = inCol;
 		this.mAlpha = inAlpha;
-		this.mMode = browser.text.FontInstanceMode.fimSolid;
+		this.mMode = flash.text.FontInstanceMode.fimSolid;
 	}
 	,nmeGetAdvance: function(inChar) {
 		if(this.mFont == null) return 0;
@@ -12856,33 +12300,24 @@ browser.text.FontInstance.prototype = {
 	,GetFace: function() {
 		return this.mFont.fontName;
 	}
-	,mCacheAsBitmap: null
-	,mGlyphs: null
-	,mHeight: null
-	,mFont: null
-	,mAlpha: null
-	,mColour: null
-	,mMode: null
-	,mTryFreeType: null
-	,height: null
-	,__class__: browser.text.FontInstance
+	,__class__: flash.text.FontInstance
 	,__properties__: {get_height:"get_height"}
 }
-browser.text.TextFieldAutoSize = function() {
+flash.text.TextFieldAutoSize = function() {
 };
-$hxClasses["browser.text.TextFieldAutoSize"] = browser.text.TextFieldAutoSize;
-browser.text.TextFieldAutoSize.__name__ = ["browser","text","TextFieldAutoSize"];
-browser.text.TextFieldAutoSize.prototype = {
-	__class__: browser.text.TextFieldAutoSize
+$hxClasses["flash.text.TextFieldAutoSize"] = flash.text.TextFieldAutoSize;
+flash.text.TextFieldAutoSize.__name__ = ["flash","text","TextFieldAutoSize"];
+flash.text.TextFieldAutoSize.prototype = {
+	__class__: flash.text.TextFieldAutoSize
 }
-browser.text.TextFieldType = function() {
+flash.text.TextFieldType = function() {
 };
-$hxClasses["browser.text.TextFieldType"] = browser.text.TextFieldType;
-browser.text.TextFieldType.__name__ = ["browser","text","TextFieldType"];
-browser.text.TextFieldType.prototype = {
-	__class__: browser.text.TextFieldType
+$hxClasses["flash.text.TextFieldType"] = flash.text.TextFieldType;
+flash.text.TextFieldType.__name__ = ["flash","text","TextFieldType"];
+flash.text.TextFieldType.prototype = {
+	__class__: flash.text.TextFieldType
 }
-browser.text.TextFormat = function(in_font,in_size,in_color,in_bold,in_italic,in_underline,in_url,in_target,in_align,in_leftMargin,in_rightMargin,in_indent,in_leading) {
+flash.text.TextFormat = function(in_font,in_size,in_color,in_bold,in_italic,in_underline,in_url,in_target,in_align,in_leftMargin,in_rightMargin,in_indent,in_leading) {
 	this.font = in_font;
 	this.size = in_size;
 	this.color = in_color;
@@ -12897,11 +12332,11 @@ browser.text.TextFormat = function(in_font,in_size,in_color,in_bold,in_italic,in
 	this.indent = in_indent;
 	this.leading = in_leading;
 };
-$hxClasses["browser.text.TextFormat"] = browser.text.TextFormat;
-browser.text.TextFormat.__name__ = ["browser","text","TextFormat"];
-browser.text.TextFormat.prototype = {
+$hxClasses["flash.text.TextFormat"] = flash.text.TextFormat;
+flash.text.TextFormat.__name__ = ["flash","text","TextFormat"];
+flash.text.TextFormat.prototype = {
 	clone: function() {
-		var newFormat = new browser.text.TextFormat(this.font,this.size,this.color,this.bold,this.italic,this.underline,this.url,this.target);
+		var newFormat = new flash.text.TextFormat(this.font,this.size,this.color,this.bold,this.italic,this.underline,this.url,this.target);
 		newFormat.align = this.align;
 		newFormat.leftMargin = this.leftMargin;
 		newFormat.rightMargin = this.rightMargin;
@@ -12915,50 +12350,29 @@ browser.text.TextFormat.prototype = {
 		newFormat.tabStops = this.tabStops;
 		return newFormat;
 	}
-	,url: null
-	,underline: null
-	,target: null
-	,tabStops: null
-	,size: null
-	,rightMargin: null
-	,letterSpacing: null
-	,leftMargin: null
-	,leading: null
-	,kerning: null
-	,italic: null
-	,indent: null
-	,font: null
-	,display: null
-	,color: null
-	,bullet: null
-	,bold: null
-	,blockIndent: null
-	,align: null
-	,__class__: browser.text.TextFormat
+	,__class__: flash.text.TextFormat
 }
-browser.text.TextFormatAlign = $hxClasses["browser.text.TextFormatAlign"] = { __ename__ : ["browser","text","TextFormatAlign"], __constructs__ : ["LEFT","RIGHT","JUSTIFY","CENTER"] }
-browser.text.TextFormatAlign.LEFT = ["LEFT",0];
-browser.text.TextFormatAlign.LEFT.toString = $estr;
-browser.text.TextFormatAlign.LEFT.__enum__ = browser.text.TextFormatAlign;
-browser.text.TextFormatAlign.RIGHT = ["RIGHT",1];
-browser.text.TextFormatAlign.RIGHT.toString = $estr;
-browser.text.TextFormatAlign.RIGHT.__enum__ = browser.text.TextFormatAlign;
-browser.text.TextFormatAlign.JUSTIFY = ["JUSTIFY",2];
-browser.text.TextFormatAlign.JUSTIFY.toString = $estr;
-browser.text.TextFormatAlign.JUSTIFY.__enum__ = browser.text.TextFormatAlign;
-browser.text.TextFormatAlign.CENTER = ["CENTER",3];
-browser.text.TextFormatAlign.CENTER.toString = $estr;
-browser.text.TextFormatAlign.CENTER.__enum__ = browser.text.TextFormatAlign;
-browser.ui = {}
-browser.ui.Keyboard = function() { }
-$hxClasses["browser.ui.Keyboard"] = browser.ui.Keyboard;
-browser.ui.Keyboard.__name__ = ["browser","ui","Keyboard"];
-browser.ui.Keyboard.capsLock = null;
-browser.ui.Keyboard.numLock = null;
-browser.ui.Keyboard.isAccessible = function() {
+flash.text.TextFormatAlign = $hxClasses["flash.text.TextFormatAlign"] = { __ename__ : ["flash","text","TextFormatAlign"], __constructs__ : ["LEFT","RIGHT","JUSTIFY","CENTER"] }
+flash.text.TextFormatAlign.LEFT = ["LEFT",0];
+flash.text.TextFormatAlign.LEFT.toString = $estr;
+flash.text.TextFormatAlign.LEFT.__enum__ = flash.text.TextFormatAlign;
+flash.text.TextFormatAlign.RIGHT = ["RIGHT",1];
+flash.text.TextFormatAlign.RIGHT.toString = $estr;
+flash.text.TextFormatAlign.RIGHT.__enum__ = flash.text.TextFormatAlign;
+flash.text.TextFormatAlign.JUSTIFY = ["JUSTIFY",2];
+flash.text.TextFormatAlign.JUSTIFY.toString = $estr;
+flash.text.TextFormatAlign.JUSTIFY.__enum__ = flash.text.TextFormatAlign;
+flash.text.TextFormatAlign.CENTER = ["CENTER",3];
+flash.text.TextFormatAlign.CENTER.toString = $estr;
+flash.text.TextFormatAlign.CENTER.__enum__ = flash.text.TextFormatAlign;
+flash.ui = {}
+flash.ui.Keyboard = function() { }
+$hxClasses["flash.ui.Keyboard"] = flash.ui.Keyboard;
+flash.ui.Keyboard.__name__ = ["flash","ui","Keyboard"];
+flash.ui.Keyboard.isAccessible = function() {
 	return false;
 }
-browser.ui.Keyboard.nmeConvertMozillaCode = function(code) {
+flash.ui.Keyboard.nmeConvertMozillaCode = function(code) {
 	switch(code) {
 	case 8:
 		return 8;
@@ -13004,8 +12418,9 @@ browser.ui.Keyboard.nmeConvertMozillaCode = function(code) {
 		return code;
 	}
 }
-browser.ui.Keyboard.nmeConvertWebkitCode = function(code) {
-	switch(code.toLowerCase()) {
+flash.ui.Keyboard.nmeConvertWebkitCode = function(code) {
+	var _g = code.toLowerCase();
+	switch(_g) {
 	case "backspace":
 		return 8;
 	case "tab":
@@ -13051,35 +12466,42 @@ browser.ui.Keyboard.nmeConvertWebkitCode = function(code) {
 	throw "Unrecognized key code: " + code;
 	return 0;
 }
-browser.ui.Mouse = function() {
+flash.ui.Mouse = function() {
 };
-$hxClasses["browser.ui.Mouse"] = browser.ui.Mouse;
-browser.ui.Mouse.__name__ = ["browser","ui","Mouse"];
-browser.ui.Mouse.hide = function() {
+$hxClasses["flash.ui.Mouse"] = flash.ui.Mouse;
+flash.ui.Mouse.__name__ = ["flash","ui","Mouse"];
+flash.ui.Mouse.hide = function() {
 }
-browser.ui.Mouse.show = function() {
+flash.ui.Mouse.show = function() {
 }
-browser.ui.Mouse.prototype = {
-	__class__: browser.ui.Mouse
+flash.ui.Mouse.prototype = {
+	__class__: flash.ui.Mouse
 }
-browser.utils = {}
-browser.utils.ByteArray = function() {
+flash.utils = {}
+flash.utils.ByteArray = function() {
 	this.littleEndian = false;
 	this.allocated = 0;
 	this.position = 0;
 	this.length = 0;
 	this._nmeResizeBuffer(this.allocated);
 };
-$hxClasses["browser.utils.ByteArray"] = browser.utils.ByteArray;
-browser.utils.ByteArray.__name__ = ["browser","utils","ByteArray"];
-browser.utils.ByteArray.nmeOfBuffer = function(buffer) {
-	var bytes = new browser.utils.ByteArray();
+$hxClasses["flash.utils.ByteArray"] = flash.utils.ByteArray;
+flash.utils.ByteArray.__name__ = ["flash","utils","ByteArray"];
+flash.utils.ByteArray.fromBytes = function(inBytes) {
+	var result = new flash.utils.ByteArray();
+	result.byteView = new Uint8Array(inBytes.b);
+	result.set_length(result.byteView.length);
+	result.allocated = result.length;
+	return result;
+}
+flash.utils.ByteArray.nmeOfBuffer = function(buffer) {
+	var bytes = new flash.utils.ByteArray();
 	bytes.set_length(bytes.allocated = buffer.byteLength);
 	bytes.data = new DataView(buffer);
 	bytes.byteView = new Uint8Array(buffer);
 	return bytes;
 }
-browser.utils.ByteArray.prototype = {
+flash.utils.ByteArray.prototype = {
 	set_length: function(value) {
 		if(this.allocated < value) this._nmeResizeBuffer(this.allocated = Math.max(value,this.allocated * 2) | 0); else if(this.allocated > value) this._nmeResizeBuffer(this.allocated = value);
 		this.length = value;
@@ -13180,7 +12602,7 @@ browser.utils.ByteArray.prototype = {
 		this.position += 8;
 	}
 	,writeBytes: function(bytes,offset,length) {
-		if(offset < 0 || length < 0) throw new browser.errors.IOError("Write error - Out of bounds");
+		if(offset < 0 || length < 0) throw new flash.errors.IOError("Write error - Out of bounds");
 		var lengthToEnsure = this.position + length;
 		if(this.length < lengthToEnsure) {
 			if(this.allocated < lengthToEnsure) this._nmeResizeBuffer(this.allocated = Math.max(lengthToEnsure,this.allocated * 2) | 0); else if(this.allocated > lengthToEnsure) this._nmeResizeBuffer(this.allocated = lengthToEnsure);
@@ -13197,27 +12619,36 @@ browser.utils.ByteArray.prototype = {
 			this.length = lengthToEnsure;
 			lengthToEnsure;
 		}
-		this.data.setInt8(this.position,value);
+		var data = this.data;
+		data.setInt8(this.position,value);
 		this.position += 1;
 	}
 	,writeBoolean: function(value) {
 		this.writeByte(value?1:0);
 	}
+	,toString: function() {
+		var cachePosition = this.position;
+		this.position = 0;
+		var value = this.readUTFBytes(this.length);
+		this.position = cachePosition;
+		return value;
+	}
 	,readUTFBytes: function(len) {
 		var value = "";
 		var max = this.position + len;
 		while(this.position < max) {
-			var c = this.data.getUint8(this.position++);
+			var data = this.data;
+			var c = data.getUint8(this.position++);
 			if(c < 128) {
 				if(c == 0) break;
 				value += String.fromCharCode(c);
-			} else if(c < 224) value += String.fromCharCode((c & 63) << 6 | this.data.getUint8(this.position++) & 127); else if(c < 240) {
-				var c2 = this.data.getUint8(this.position++);
-				value += String.fromCharCode((c & 31) << 12 | (c2 & 127) << 6 | this.data.getUint8(this.position++) & 127);
+			} else if(c < 224) value += String.fromCharCode((c & 63) << 6 | data.getUint8(this.position++) & 127); else if(c < 240) {
+				var c2 = data.getUint8(this.position++);
+				value += String.fromCharCode((c & 31) << 12 | (c2 & 127) << 6 | data.getUint8(this.position++) & 127);
 			} else {
-				var c2 = this.data.getUint8(this.position++);
-				var c3 = this.data.getUint8(this.position++);
-				value += String.fromCharCode((c & 15) << 18 | (c2 & 127) << 12 | c3 << 6 & 127 | this.data.getUint8(this.position++) & 127);
+				var c2 = data.getUint8(this.position++);
+				var c3 = data.getUint8(this.position++);
+				value += String.fromCharCode((c & 15) << 18 | (c2 & 127) << 12 | c3 << 6 & 127 | data.getUint8(this.position++) & 127);
 			}
 		}
 		return value;
@@ -13237,7 +12668,8 @@ browser.utils.ByteArray.prototype = {
 		return uInt;
 	}
 	,readUnsignedByte: function() {
-		return this.data.getUint8(this.position++);
+		var data = this.data;
+		return data.getUint8(this.position++);
 	}
 	,readShort: function() {
 		var $short = this.data.getInt16(this.position,this.littleEndian);
@@ -13258,7 +12690,8 @@ browser.utils.ByteArray.prototype = {
 		var _g1 = pos, _g = pos + len;
 		while(_g1 < _g) {
 			var i = _g1++;
-			this.data.setInt8(this.position++,bytes.b[i]);
+			var data = this.data;
+			data.setInt8(this.position++,bytes.b[i]);
 		}
 	}
 	,readFloat: function() {
@@ -13272,7 +12705,7 @@ browser.utils.ByteArray.prototype = {
 		return $double;
 	}
 	,readBytes: function(bytes,offset,length) {
-		if(offset < 0 || length < 0) throw new browser.errors.IOError("Read error - Out of bounds");
+		if(offset < 0 || length < 0) throw new flash.errors.IOError("Read error - Out of bounds");
 		if(offset == null) offset = 0;
 		if(length == null) length = this.length;
 		var lengthToEnsure = offset + length;
@@ -13287,19 +12720,32 @@ browser.utils.ByteArray.prototype = {
 		if(bytes.position + length > bytes.length) bytes.set_length(bytes.position + length);
 	}
 	,readByte: function() {
-		return this.data.getUint8(this.position++);
+		var data = this.data;
+		return data.getUint8(this.position++);
 	}
 	,readBoolean: function() {
-		return this.data.getUint8(this.position++) != 0;
+		return this.readByte() != 0;
 	}
 	,nmeSet: function(pos,v) {
-		this.data.setUint8(pos,v);
+		var data = this.data;
+		data.setUint8(pos,v);
 	}
 	,nmeGetBuffer: function() {
 		return this.data.buffer;
 	}
 	,nmeGet: function(pos) {
-		return this.data.getUint8(pos);
+		var data = this.data;
+		return data.getUint8(pos);
+	}
+	,nmeFromBytes: function(inBytes) {
+		this.byteView = new Uint8Array(inBytes.b);
+		this.set_length(this.byteView.length);
+		this.allocated = this.length;
+	}
+	,clear: function() {
+		if(this.allocated < 0) this._nmeResizeBuffer(this.allocated = Math.max(0,this.allocated * 2) | 0); else if(this.allocated > 0) this._nmeResizeBuffer(this.allocated = 0);
+		this.length = 0;
+		0;
 	}
 	,_nmeResizeBuffer: function(len) {
 		var oldByteView = this.byteView;
@@ -13320,25 +12766,22 @@ browser.utils.ByteArray.prototype = {
 		}
 		return count;
 	}
-	,littleEndian: null
-	,data: null
-	,byteView: null
-	,allocated: null
-	,position: null
-	,objectEncoding: null
-	,length: null
-	,endian: null
-	,bytesAvailable: null
-	,__class__: browser.utils.ByteArray
+	,__set: function(pos,v) {
+		this.data.setUint8(pos,v);
+	}
+	,__get: function(pos) {
+		return this.data.getUint8(pos);
+	}
+	,__class__: flash.utils.ByteArray
 	,__properties__: {get_bytesAvailable:"get_bytesAvailable",set_endian:"set_endian",get_endian:"get_endian",set_length:"set_length"}
 }
-browser.utils.Endian = function() { }
-$hxClasses["browser.utils.Endian"] = browser.utils.Endian;
-browser.utils.Endian.__name__ = ["browser","utils","Endian"];
-browser.utils.Uuid = function() { }
-$hxClasses["browser.utils.Uuid"] = browser.utils.Uuid;
-browser.utils.Uuid.__name__ = ["browser","utils","Uuid"];
-browser.utils.Uuid.random = function(size) {
+flash.utils.Endian = function() { }
+$hxClasses["flash.utils.Endian"] = flash.utils.Endian;
+flash.utils.Endian.__name__ = ["flash","utils","Endian"];
+flash.utils.Uuid = function() { }
+$hxClasses["flash.utils.Uuid"] = flash.utils.Uuid;
+flash.utils.Uuid.__name__ = ["flash","utils","Uuid"];
+flash.utils.Uuid.random = function(size) {
 	if(size == null) size = 32;
 	var nchars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".length;
 	var uid = new StringBuf();
@@ -13349,869 +12792,72 @@ browser.utils.Uuid.random = function(size) {
 	}
 	return uid.b;
 }
-browser.utils.Uuid.uuid = function() {
-	return browser.utils.Uuid.random(8) + "-" + browser.utils.Uuid.random(4) + "-" + browser.utils.Uuid.random(4) + "-" + browser.utils.Uuid.random(4) + "-" + browser.utils.Uuid.random(12);
+flash.utils.Uuid.uuid = function() {
+	return flash.utils.Uuid.random(8) + "-" + flash.utils.Uuid.random(4) + "-" + flash.utils.Uuid.random(4) + "-" + flash.utils.Uuid.random(4) + "-" + flash.utils.Uuid.random(12);
 }
-var demo = {}
-demo.AssetManager = function(p_kernel) {
-	awe6.core.AAssetManager.call(this,p_kernel);
-};
-$hxClasses["demo.AssetManager"] = demo.AssetManager;
-demo.AssetManager.__name__ = ["demo","AssetManager"];
-demo.AssetManager.__super__ = awe6.core.AAssetManager;
-demo.AssetManager.prototype = $extend(awe6.core.AAssetManager.prototype,{
-	_createView: function(p_type) {
-		var l_context = new browser.display.Sprite();
-		var l_bitmap = new browser.display.Bitmap();
-		l_context.addChild(l_bitmap);
-		switch( (p_type)[1] ) {
-		case 0:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/OverlayBackground.png"));
-			break;
-		case 1:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackUp.png"));
-			break;
-		case 2:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/BackOver.png"));
-			break;
-		case 3:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteUp.png"));
-			break;
-		case 4:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/MuteOver.png"));
-			break;
-		case 5:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteUp.png"));
-			break;
-		case 6:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnmuteOver.png"));
-			break;
-		case 7:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseUp.png"));
-			break;
-		case 8:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/PauseOver.png"));
-			break;
-		case 9:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseUp.png"));
-			break;
-		case 10:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/overlay/buttons/UnpauseOver.png"));
-			break;
-		case 11:
-			l_bitmap.set_bitmapData(nme.installer.Assets.getBitmapData("assets/scenes/Background.png"));
-			break;
+haxe.StackItem = $hxClasses["haxe.StackItem"] = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","Lambda"] }
+haxe.StackItem.CFunction = ["CFunction",0];
+haxe.StackItem.CFunction.toString = $estr;
+haxe.StackItem.CFunction.__enum__ = haxe.StackItem;
+haxe.StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
+haxe.StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
+haxe.StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
+haxe.StackItem.Lambda = function(v) { var $x = ["Lambda",4,v]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
+haxe.CallStack = function() { }
+$hxClasses["haxe.CallStack"] = haxe.CallStack;
+haxe.CallStack.__name__ = ["haxe","CallStack"];
+haxe.CallStack.exceptionStack = function() {
+	return [];
+}
+haxe.CallStack.toString = function(stack) {
+	var b = new StringBuf();
+	var _g = 0;
+	while(_g < stack.length) {
+		var s = stack[_g];
+		++_g;
+		b.b += "\nCalled from ";
+		haxe.CallStack.itemToString(b,s);
+	}
+	return b.b;
+}
+haxe.CallStack.itemToString = function(b,s) {
+	var $e = (s);
+	switch( $e[1] ) {
+	case 0:
+		b.b += "a C function";
+		break;
+	case 1:
+		var m = $e[2];
+		b.b += "module ";
+		b.b += Std.string(m);
+		break;
+	case 2:
+		var line = $e[4], file = $e[3], s1 = $e[2];
+		if(s1 != null) {
+			haxe.CallStack.itemToString(b,s1);
+			b.b += " (";
 		}
-		return new awe6.core.drivers.jeash.View(this._kernel,l_context);
+		b.b += Std.string(file);
+		b.b += " line ";
+		b.b += Std.string(line);
+		if(s1 != null) b.b += ")";
+		break;
+	case 3:
+		var meth = $e[3], cname = $e[2];
+		b.b += Std.string(cname);
+		b.b += ".";
+		b.b += Std.string(meth);
+		break;
+	case 4:
+		var n = $e[2];
+		b.b += "local function #";
+		b.b += Std.string(n);
+		break;
 	}
-	,getAsset: function(p_id,p_packageId,p_args) {
-		if(p_packageId == null) p_packageId = this._kernel.getConfig("settings.assets.packages.default");
-		if(p_packageId == null) p_packageId = this._PACKAGE_ID;
-		if(p_packageId == this._kernel.getConfig("settings.assets.packages.audio") || p_packageId == "assets.audio") {
-			var l_extension = ".mp3";
-			l_extension = browser.media.Sound.nmeCanPlayType("ogg")?".ogg":".mp3";
-			p_id += l_extension;
-		}
-		if(p_packageId.length > 0 && HxOverrides.substr(p_packageId,-1,1) != ".") p_packageId += ".";
-		var l_assetName = StringTools.replace(p_packageId,".","/") + p_id;
-		var l_result = nme.installer.Assets.getSound(l_assetName);
-		if(l_result != null) return l_result;
-		var l_result1 = nme.installer.Assets.getBitmapData(l_assetName);
-		if(l_result1 != null) return l_result1;
-		var l_result2 = nme.installer.Assets.getFont(l_assetName);
-		if(l_result2 != null) return l_result2;
-		var l_result3 = nme.installer.Assets.getText(l_assetName);
-		if(l_result3 != null) return l_result3;
-		var l_result4 = nme.installer.Assets.getBytes(l_assetName);
-		if(l_result4 != null) return l_result4;
-		return awe6.core.AAssetManager.prototype.getAsset.call(this,p_id,p_packageId,p_args);
-	}
-	,_init: function() {
-		awe6.core.AAssetManager.prototype._init.call(this);
-		this.overlayBackground = this._createView(demo.EAsset.OVERLAY_BACKGROUND);
-		this.overlayBackUp = this._createView(demo.EAsset.OVERLAY_BACK_UP);
-		this.overlayBackOver = this._createView(demo.EAsset.OVERLAY_BACK_OVER);
-		this.overlayMuteUp = this._createView(demo.EAsset.OVERLAY_MUTE_UP);
-		this.overlayMuteOver = this._createView(demo.EAsset.OVERLAY_MUTE_OVER);
-		this.overlayUnmuteUp = this._createView(demo.EAsset.OVERLAY_UNMUTE_UP);
-		this.overlayUnmuteOver = this._createView(demo.EAsset.OVERLAY_UNMUTE_OVER);
-		this.overlayPauseUp = this._createView(demo.EAsset.OVERLAY_PAUSE_UP);
-		this.overlayPauseOver = this._createView(demo.EAsset.OVERLAY_PAUSE_OVER);
-		this.overlayUnpauseUp = this._createView(demo.EAsset.OVERLAY_UNPAUSE_UP);
-		this.overlayUnpauseOver = this._createView(demo.EAsset.OVERLAY_UNPAUSE_OVER);
-		this.background = this._createView(demo.EAsset.BACKGROUND);
-		this.buttonUp = nme.installer.Assets.getBitmapData("assets/ButtonUp.png");
-		this.buttonOver = nme.installer.Assets.getBitmapData("assets/ButtonOver.png");
-		this.sphere = nme.installer.Assets.getBitmapData("assets/Sphere.png");
-		this.font = nme.installer.Assets.getFont("assets/fonts/orbitron.ttf");
-	}
-	,font: null
-	,sphere: null
-	,buttonOver: null
-	,buttonUp: null
-	,background: null
-	,overlayUnpauseUp: null
-	,overlayUnpauseOver: null
-	,overlayUnmuteUp: null
-	,overlayUnmuteOver: null
-	,overlayPauseUp: null
-	,overlayPauseOver: null
-	,overlayMuteUp: null
-	,overlayMuteOver: null
-	,overlayBackUp: null
-	,overlayBackOver: null
-	,overlayBackground: null
-	,__class__: demo.AssetManager
-});
-demo.EAsset = $hxClasses["demo.EAsset"] = { __ename__ : ["demo","EAsset"], __constructs__ : ["OVERLAY_BACKGROUND","OVERLAY_BACK_UP","OVERLAY_BACK_OVER","OVERLAY_MUTE_UP","OVERLAY_MUTE_OVER","OVERLAY_UNMUTE_UP","OVERLAY_UNMUTE_OVER","OVERLAY_PAUSE_UP","OVERLAY_PAUSE_OVER","OVERLAY_UNPAUSE_UP","OVERLAY_UNPAUSE_OVER","BACKGROUND"] }
-demo.EAsset.OVERLAY_BACKGROUND = ["OVERLAY_BACKGROUND",0];
-demo.EAsset.OVERLAY_BACKGROUND.toString = $estr;
-demo.EAsset.OVERLAY_BACKGROUND.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_BACK_UP = ["OVERLAY_BACK_UP",1];
-demo.EAsset.OVERLAY_BACK_UP.toString = $estr;
-demo.EAsset.OVERLAY_BACK_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_BACK_OVER = ["OVERLAY_BACK_OVER",2];
-demo.EAsset.OVERLAY_BACK_OVER.toString = $estr;
-demo.EAsset.OVERLAY_BACK_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_MUTE_UP = ["OVERLAY_MUTE_UP",3];
-demo.EAsset.OVERLAY_MUTE_UP.toString = $estr;
-demo.EAsset.OVERLAY_MUTE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_MUTE_OVER = ["OVERLAY_MUTE_OVER",4];
-demo.EAsset.OVERLAY_MUTE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_MUTE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNMUTE_UP = ["OVERLAY_UNMUTE_UP",5];
-demo.EAsset.OVERLAY_UNMUTE_UP.toString = $estr;
-demo.EAsset.OVERLAY_UNMUTE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNMUTE_OVER = ["OVERLAY_UNMUTE_OVER",6];
-demo.EAsset.OVERLAY_UNMUTE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_UNMUTE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_PAUSE_UP = ["OVERLAY_PAUSE_UP",7];
-demo.EAsset.OVERLAY_PAUSE_UP.toString = $estr;
-demo.EAsset.OVERLAY_PAUSE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_PAUSE_OVER = ["OVERLAY_PAUSE_OVER",8];
-demo.EAsset.OVERLAY_PAUSE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_PAUSE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNPAUSE_UP = ["OVERLAY_UNPAUSE_UP",9];
-demo.EAsset.OVERLAY_UNPAUSE_UP.toString = $estr;
-demo.EAsset.OVERLAY_UNPAUSE_UP.__enum__ = demo.EAsset;
-demo.EAsset.OVERLAY_UNPAUSE_OVER = ["OVERLAY_UNPAUSE_OVER",10];
-demo.EAsset.OVERLAY_UNPAUSE_OVER.toString = $estr;
-demo.EAsset.OVERLAY_UNPAUSE_OVER.__enum__ = demo.EAsset;
-demo.EAsset.BACKGROUND = ["BACKGROUND",11];
-demo.EAsset.BACKGROUND.toString = $estr;
-demo.EAsset.BACKGROUND.__enum__ = demo.EAsset;
-demo.Factory = function(p_context,p_isDebug,p_config) {
-	awe6.core.drivers.jeash.Factory.call(this,p_context,p_isDebug,p_config);
-};
-$hxClasses["demo.Factory"] = demo.Factory;
-demo.Factory.__name__ = ["demo","Factory"];
-demo.Factory.__super__ = awe6.core.drivers.jeash.Factory;
-demo.Factory.prototype = $extend(awe6.core.drivers.jeash.Factory.prototype,{
-	getNextSceneType: function(p_type) {
-		switch( (p_type)[1] ) {
-		case 0:
-			return awe6.interfaces.EScene.GAME;
-		case 7:
-			return awe6.interfaces.EScene.RESULTS;
-		case 8:
-			return awe6.interfaces.EScene.INTRO;
-		default:
-			null;
-		}
-		return awe6.core.drivers.jeash.Factory.prototype.getNextSceneType.call(this,p_type);
-	}
-	,getBackSceneType: function(p_type) {
-		switch( (p_type)[1] ) {
-		case 0:
-			return null;
-		case 7:
-			return awe6.interfaces.EScene.INTRO;
-		case 8:
-			return awe6.interfaces.EScene.INTRO;
-		default:
-			null;
-		}
-		return awe6.core.drivers.jeash.Factory.prototype.getBackSceneType.call(this,p_type);
-	}
-	,createTextStyle: function(p_type) {
-		if(p_type == null) p_type = awe6.interfaces.ETextStyle.BODY;
-		var l_fontName = this._assetManager.font.fontName;
-		var l_result = new awe6.core.TextStyle(l_fontName,12,16777215,false,false,awe6.interfaces.ETextAlign.CENTER,0,0,0,[new browser.filters.GlowFilter(131970,1,4,4,5,2)]);
-		l_result.size = (function($this) {
-			var $r;
-			switch( (p_type)[1] ) {
-			case 2:
-				$r = 24;
-				break;
-			case 5:
-				$r = 72;
-				break;
-			case 3:
-				$r = 18;
-				break;
-			case 0:
-				$r = 12;
-				break;
-			case 4:
-				$r = 6;
-				break;
-			default:
-				$r = 12;
-			}
-			return $r;
-		}(this));
-		return l_result;
-	}
-	,createSceneTransition: function(p_typeIncoming,p_typeOutgoing) {
-		var l_sceneTransition = new demo.scenes.SceneTransition(this._kernel);
-		return l_sceneTransition;
-	}
-	,createScene: function(p_type) {
-		switch( (p_type)[1] ) {
-		case 0:
-			return new demo.scenes.Intro(this._kernel,p_type);
-		case 7:
-			return new demo.scenes.Game(this._kernel,p_type);
-		case 8:
-			return new demo.scenes.Results(this._kernel,p_type);
-		default:
-			null;
-		}
-		return awe6.core.drivers.jeash.Factory.prototype.createScene.call(this,p_type);
-	}
-	,createSession: function(p_id) {
-		return new demo.Session(this._kernel,p_id);
-	}
-	,createPreloader: function() {
-		return new demo.Preloader(this._kernel,this._getAssetUrls(),this.isDecached);
-	}
-	,createOverlay: function() {
-		var l_overlay = new demo.gui.Overlay(this._kernel);
-		return l_overlay;
-	}
-	,createAssetManager: function() {
-		if(this._assetManager == null) this._assetManager = new demo.AssetManager(this._kernel);
-		return this._assetManager;
-	}
-	,_configurer: function(p_isPreconfig) {
-		if(p_isPreconfig == null) p_isPreconfig = false;
-		if(p_isPreconfig) {
-			this.id = "awe6Demo";
-			this.version = "0.6.380";
-			this.author = "Robert Fell";
-			this.isDecached = true;
-			this.width = 600;
-			this.height = 400;
-			this.bgColor = 16777215;
-			this.startingSceneType = awe6.interfaces.EScene.INTRO;
-			this.targetFramerate = 60;
-			this.isFixedUpdates = false;
-		}
-	}
-	,_assetManager: null
-	,__class__: demo.Factory
-});
-demo.Preloader = function(p_kernel,p_assets,p_isDecached) {
-	awe6.core.drivers.jeash.Preloader.call(this,p_kernel,p_assets,p_isDecached);
-};
-$hxClasses["demo.Preloader"] = demo.Preloader;
-demo.Preloader.__name__ = ["demo","Preloader"];
-demo.Preloader.__super__ = awe6.core.drivers.jeash.Preloader;
-demo.Preloader.prototype = $extend(awe6.core.drivers.jeash.Preloader.prototype,{
-	__class__: demo.Preloader
-});
-demo.Session = function(p_kernel,p_id) {
-	awe6.core.drivers.jeash.Session.call(this,p_kernel,p_id);
-};
-$hxClasses["demo.Session"] = demo.Session;
-demo.Session.__name__ = ["demo","Session"];
-demo.Session.__super__ = awe6.core.drivers.jeash.Session;
-demo.Session.prototype = $extend(awe6.core.drivers.jeash.Session.prototype,{
-	getPercentageComplete: function() {
-		return this._tools.limit(100 * this.highScore / 1000 | 0,0,100);
-	}
-	,_resetter: function() {
-		awe6.core.drivers.jeash.Session.prototype._resetter.call(this);
-		this.name = "???";
-		this.highScore = 0;
-	}
-	,_setter: function() {
-		awe6.core.drivers.jeash.Session.prototype._setter.call(this);
-		this._data.name = this.name;
-		this._data.highScore = this.highScore;
-	}
-	,_getter: function() {
-		awe6.core.drivers.jeash.Session.prototype._getter.call(this);
-		this.name = this._data.name;
-		this.highScore = this._data.highScore;
-	}
-	,_init: function() {
-		this._version = 1;
-		awe6.core.drivers.jeash.Session.prototype._init.call(this);
-	}
-	,isWin: null
-	,highScore: null
-	,name: null
-	,__class__: demo.Session
-});
-demo.entities = {}
-demo.entities.Bouncer = function(p_kernel,p_width,p_height) {
-	this._width = p_width;
-	this._height = p_height;
-	awe6.core.Entity.call(this,p_kernel);
-};
-$hxClasses["demo.entities.Bouncer"] = demo.entities.Bouncer;
-demo.entities.Bouncer.__name__ = ["demo","entities","Bouncer"];
-demo.entities.Bouncer.__super__ = awe6.core.Entity;
-demo.entities.Bouncer.prototype = $extend(awe6.core.Entity.prototype,{
-	_updater: function(p_deltaTime) {
-		if(p_deltaTime == null) p_deltaTime = 0;
-		awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
-		this.x += this.vx * (p_deltaTime / 1000);
-		this.y += this.vy * (p_deltaTime / 1000);
-		if(this.x > this._kernel.factory.width - this._width2) this.vx *= -1;
-		if(this.y > this._kernel.factory.height - this._height2) this.vy *= -1;
-		if(this.x < this._width2) this.vx *= -1;
-		if(this.y < this._height2) this.vy *= -1;
-		this.x = this._tools.limit(this.x,this._width2,this._kernel.factory.width - this._width2);
-		this.y = this._tools.limit(this.y,this._height2,this._kernel.factory.height - this._height2);
-	}
-	,_init: function() {
-		awe6.core.Entity.prototype._init.call(this);
-		this._width2 = this._width / 2;
-		this._height2 = this._height / 2;
-		var l_speed = Math.random() * 200 + 100;
-		this.vx = Math.random() < .5?l_speed:-l_speed;
-		l_speed /= 4;
-		this.vy = Math.random() < .5?l_speed:-l_speed;
-		this.x = this._kernel.factory.width * Math.random();
-		this.y = this._kernel.factory.height * Math.random();
-	}
-	,_height2: null
-	,_width2: null
-	,_height: null
-	,_width: null
-	,vy: null
-	,vx: null
-	,y: null
-	,x: null
-	,__class__: demo.entities.Bouncer
-});
-demo.entities.Sphere = function(p_kernel) {
-	this._sprite = new browser.display.Sprite();
-	this._sprite.mouseEnabled = false;
-	this._assetManager = p_kernel.assets;
-	awe6.core.Entity.call(this,p_kernel,null,this._sprite);
-};
-$hxClasses["demo.entities.Sphere"] = demo.entities.Sphere;
-demo.entities.Sphere.__name__ = ["demo","entities","Sphere"];
-demo.entities.Sphere.__super__ = awe6.core.Entity;
-demo.entities.Sphere.prototype = $extend(awe6.core.Entity.prototype,{
-	_isHit: function() {
-		if(!this._kernel.inputs.mouse.getIsButtonPress(awe6.interfaces.EMouseButton.LEFT)) return false;
-		var l_dx = this._kernel.inputs.mouse.x - this._bouncer.x;
-		var l_dy = this._kernel.inputs.mouse.y - this._bouncer.y;
-		var l_dist = l_dx * l_dx + l_dy * l_dy;
-		return l_dist < this._width2 * this._width2;
-	}
-	,_updater: function(p_deltaTime) {
-		if(p_deltaTime == null) p_deltaTime = 0;
-		awe6.core.Entity.prototype._updater.call(this,p_deltaTime);
-		this._sprite.set_x(this._bouncer.x);
-		this._sprite.set_y(this._bouncer.y);
-		this._sprite.set_scaleX(this._bouncer.vx > 1?1.001:-1);
-		this._get_view()._set_priority(this._bouncer.y | 0);
-		if(this._isHit()) {
-			this._kernel.audio.start("Sfx" + (Std.random(4) + 1),awe6.interfaces.EAudioChannel.EFFECTS,0,0,1,this._bouncer.x / this._kernel.factory.width);
-			this._kernel.overlay.flash(100,true,1,Std.random(16777215));
-			if(this.isDisposed) null; else {
-				this.isDisposed = true;
-				this._set_isActive(false);
-				if(this._isEntity) this._kernel.messenger.sendMessage(awe6.interfaces.EMessage.DISPOSE,this,true,true,true);
-				this._disposer();
-				null;
-			}
-		}
-	}
-	,_init: function() {
-		awe6.core.Entity.prototype._init.call(this);
-		var l_scale = this._tools.range(Math.random(),.5,1);
-		this._width = 100 * l_scale;
-		this._height = 100 * l_scale;
-		this._width2 = this._width / 2;
-		this._height2 = this._height / 2;
-		this.addEntity(this._bouncer = new demo.entities.Bouncer(this._kernel,this._width,this._height));
-		var l_source = this._assetManager.sphere;
-		var l_bitmapData = new browser.display.BitmapData(this._width | 0,this._height * 1.5 | 0,true,0);
-		var l_matrix = new browser.geom.Matrix();
-		l_matrix.scale(l_scale,l_scale);
-		l_bitmapData.draw(l_source,l_matrix,null,null,null,true);
-		var l_sphere = new browser.display.Bitmap(l_bitmapData);
-		l_sphere.smoothing = true;
-		l_sphere.set_x(-this._width2);
-		l_sphere.set_y(-this._height2);
-		this._sprite.addChild(l_sphere);
-	}
-	,_bouncer: null
-	,_height2: null
-	,_width2: null
-	,_height: null
-	,_width: null
-	,_sprite: null
-	,_assetManager: null
-	,__class__: demo.entities.Sphere
-});
-demo.gui = {}
-demo.gui.Button = function(p_kernel,p_key,p_x,p_y,p_onClick,p_onRollOver,p_onRollOut,p_label) {
-	if(p_y == null) p_y = 0;
-	if(p_x == null) p_x = 0;
-	this._assetManager = p_kernel.assets;
-	this.label = p_label;
-	this._upContext = new browser.display.Sprite();
-	this._overContext = new browser.display.Sprite();
-	this._upView = new awe6.core.drivers.jeash.View(p_kernel,this._upContext);
-	this._overView = new awe6.core.drivers.jeash.View(p_kernel,this._overContext);
-	awe6.core.BasicButton.call(this,p_kernel,this._upView,this._overView,160,40,p_x,p_y,p_key,p_onClick,p_onRollOver,p_onRollOut);
-};
-$hxClasses["demo.gui.Button"] = demo.gui.Button;
-demo.gui.Button.__name__ = ["demo","gui","Button"];
-demo.gui.Button.__super__ = awe6.core.BasicButton;
-demo.gui.Button.prototype = $extend(awe6.core.BasicButton.prototype,{
-	onRollOver: function() {
-		this._kernel.audio.start("ButtonOver",awe6.interfaces.EAudioChannel.INTERFACE);
-		awe6.core.BasicButton.prototype.onRollOver.call(this);
-	}
-	,onClick: function() {
-		this._kernel.audio.start("ButtonDown",awe6.interfaces.EAudioChannel.INTERFACE);
-		awe6.core.BasicButton.prototype.onClick.call(this);
-	}
-	,_createButtonState: function(p_isOver) {
-		if(p_isOver == null) p_isOver = false;
-		var l_result = new browser.display.Sprite();
-		l_result.addChild(new browser.display.Bitmap(p_isOver?this._assetManager.buttonOver:this._assetManager.buttonUp));
-		var l_text = new awe6.extras.gui.Text(this._kernel,this.width - 2 * this._marginWidth,this.height - 2 * this._marginHeight,this.label,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.BUTTON));
-		l_text.setPosition(this._marginWidth,this._marginHeight);
-		l_result.addChild(l_text._sprite);
-		return l_result;
-	}
-	,_init: function() {
-		awe6.core.BasicButton.prototype._init.call(this);
-		this._marginWidth = 10;
-		this._marginHeight = 12;
-		this._upContext.addChild(this._createButtonState(false));
-		this._overContext.addChild(this._createButtonState(true));
-	}
-	,_overContext: null
-	,_upContext: null
-	,_overView: null
-	,_upView: null
-	,_marginHeight: null
-	,_marginWidth: null
-	,_assetManager: null
-	,label: null
-	,__class__: demo.gui.Button
-});
-demo.gui.Overlay = function(p_kernel) {
-	this._assetManager = js.Boot.__cast(p_kernel.assets , demo.AssetManager);
-	this._buttonSize = 30;
-	awe6.core.drivers.jeash.Overlay.call(this,p_kernel,this._buttonSize,this._buttonSize,this._assetManager.overlayBackground,this._assetManager.overlayBackUp,this._assetManager.overlayBackOver,this._assetManager.overlayMuteUp,this._assetManager.overlayMuteOver,this._assetManager.overlayUnmuteUp,this._assetManager.overlayUnmuteOver,this._assetManager.overlayPauseUp,this._assetManager.overlayPauseOver,this._assetManager.overlayUnpauseUp,this._assetManager.overlayUnpauseOver);
-};
-$hxClasses["demo.gui.Overlay"] = demo.gui.Overlay;
-demo.gui.Overlay.__name__ = ["demo","gui","Overlay"];
-demo.gui.Overlay.__super__ = awe6.core.drivers.jeash.Overlay;
-demo.gui.Overlay.prototype = $extend(awe6.core.drivers.jeash.Overlay.prototype,{
-	activateButton: function(p_type) {
-		var $e = (p_type);
-		switch( $e[1] ) {
-		case 5:
-			var value = $e[2];
-			switch(value) {
-			}
-			break;
-		default:
-			null;
-		}
-		awe6.core.drivers.jeash.Overlay.prototype.activateButton.call(this,p_type);
-	}
-	,hideButtons: function() {
-		awe6.core.drivers.jeash.Overlay.prototype.hideButtons.call(this);
-	}
-	,_getButton: function(p_type) {
-		return (function($this) {
-			var $r;
-			var $e = (p_type);
-			switch( $e[1] ) {
-			case 5:
-				var value = $e[2];
-				$r = (function($this) {
-					var $r;
-					switch(value) {
-					}
-					return $r;
-				}($this));
-				break;
-			default:
-				$r = awe6.core.drivers.jeash.Overlay.prototype._getButton.call($this,p_type);
-			}
-			return $r;
-		}(this));
-	}
-	,_init: function() {
-		awe6.core.drivers.jeash.Overlay.prototype._init.call(this);
-		var l_x = this._kernel.factory.width - 10 - 3 * this._buttonSize;
-		var l_y = this._kernel.factory.height - this._buttonSize;
-		this.positionButton(awe6.interfaces.EOverlayButton.BACK,l_x,l_y);
-		this.positionButton(awe6.interfaces.EOverlayButton.PAUSE,l_x += this._buttonSize,l_y);
-		this.positionButton(awe6.interfaces.EOverlayButton.UNPAUSE,l_x,l_y);
-		this.positionButton(awe6.interfaces.EOverlayButton.MUTE,l_x += this._buttonSize,l_y);
-		this.positionButton(awe6.interfaces.EOverlayButton.UNMUTE,l_x,l_y);
-	}
-	,_buttonSize: null
-	,_assetManager: null
-	,__class__: demo.gui.Overlay
-});
-demo.scenes = {}
-demo.scenes.AScene = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
-	awe6.core.Scene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
-};
-$hxClasses["demo.scenes.AScene"] = demo.scenes.AScene;
-demo.scenes.AScene.__name__ = ["demo","scenes","AScene"];
-demo.scenes.AScene.__super__ = awe6.core.Scene;
-demo.scenes.AScene.prototype = $extend(awe6.core.Scene.prototype,{
-	_init: function() {
-		awe6.core.Scene.prototype._init.call(this);
-		this._assetManager = js.Boot.__cast(this._kernel.assets , demo.AssetManager);
-		this._session = js.Boot.__cast(this._kernel._get_session() , demo.Session);
-		var l_sceneType = this._tools.toCamelCase(Std.string(this.type));
-		var l_titleText = this._kernel.getConfig("gui.scenes." + l_sceneType + ".title");
-		if(l_titleText != null) {
-			this._title = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,l_titleText,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.HEADLINE));
-			this._title._set_y(40);
-			this.addEntity(this._title,null,true,100);
-		}
-		this._get_view().addChild(this._assetManager.background,0);
-		this._kernel.audio.start("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.125,0,true);
-	}
-	,_isMusic: null
-	,_title: null
-	,_session: null
-	,_assetManager: null
-	,__class__: demo.scenes.AScene
-});
-demo.scenes.Game = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
-	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
-};
-$hxClasses["demo.scenes.Game"] = demo.scenes.Game;
-demo.scenes.Game.__name__ = ["demo","scenes","Game"];
-demo.scenes.Game.__super__ = demo.scenes.AScene;
-demo.scenes.Game.prototype = $extend(demo.scenes.AScene.prototype,{
-	_gameOver: function() {
-		if(this._score > this._session.highScore) {
-			this._session.isWin = true;
-			this._session.highScore = this._score;
-		}
-		this._kernel.scenes.next();
-	}
-	,_disposer: function() {
-		this._kernel.audio.stop("MusicGame",awe6.interfaces.EAudioChannel.MUSIC);
-		demo.scenes.AScene.prototype._disposer.call(this);
-	}
-	,_updater: function(p_deltaTime) {
-		if(p_deltaTime == null) p_deltaTime = 0;
-		demo.scenes.AScene.prototype._updater.call(this,p_deltaTime);
-		this._score = this._tools.limit(30000 - this._age,0,this._tools.BIG_NUMBER) | 0;
-		if(this._score == 0) this._gameOver();
-		this._timer._set_text(this._tools.convertAgeToFormattedTime(this._age));
-		var l_spheres = this.getEntitiesByClass(demo.entities.Sphere);
-		if(l_spheres == null || l_spheres.length == 0) this._gameOver();
-	}
-	,handleSphereDispose: function(p_message,p_entity) {
-		return true;
-	}
-	,_init: function() {
-		demo.scenes.AScene.prototype._init.call(this);
-		this.isPauseable = true;
-		this._session.isWin = false;
-		var l_textStyle = this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD);
-		l_textStyle.filters = [];
-		l_textStyle.color = 131970;
-		this._timer = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,Std.string(this._tools.convertAgeToFormattedTime(0)),l_textStyle);
-		this._timer._set_y(70);
-		this.addEntity(this._timer,null,true,1000);
-		this._kernel.audio.stop("MusicMenu",awe6.interfaces.EAudioChannel.MUSIC);
-		this._kernel.audio.start("MusicGame",awe6.interfaces.EAudioChannel.MUSIC,-1,0,.5,0,true);
-		var _g = 0;
-		while(_g < 10) {
-			var i = _g++;
-			this.addEntity(new demo.entities.Sphere(this._kernel),null,true,i + 10);
-		}
-		this._kernel.messenger.addSubscriber(this._entity,awe6.interfaces.EMessage.INIT,$bind(this,this.handleSphereDispose),null,demo.entities.Sphere);
-		this._kernel.messenger.addSubscriber(this._entity,awe6.interfaces.EMessage.DISPOSE,$bind(this,this.handleSphereDispose),null,demo.entities.Sphere);
-	}
-	,_score: null
-	,_timer: null
-	,__class__: demo.scenes.Game
-});
-demo.scenes.Intro = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
-	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
-};
-$hxClasses["demo.scenes.Intro"] = demo.scenes.Intro;
-demo.scenes.Intro.__name__ = ["demo","scenes","Intro"];
-demo.scenes.Intro.__super__ = demo.scenes.AScene;
-demo.scenes.Intro.prototype = $extend(demo.scenes.AScene.prototype,{
-	_updater: function(p_deltaTime) {
-		if(p_deltaTime == null) p_deltaTime = 0;
-		demo.scenes.AScene.prototype._updater.call(this,p_deltaTime);
-		if(this._kernel.inputs.keyboard.getIsKeyRelease(awe6.interfaces.EKey.F)) this._kernel._set_isFullScreen(!this._kernel.isFullScreen);
-	}
-	,_init: function() {
-		demo.scenes.AScene.prototype._init.call(this);
-		this._kernel._set_session(this._kernel.factory.createSession("Basic"));
-		var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,this._kernel.getConfig("gui.scenes.intro.instructions"),this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
-		l_result._set_y(70);
-		this.addEntity(l_result,null,true,2);
-		var l_button = new demo.gui.Button(this._kernel,this._kernel.factory.keyNext,0,0,($_=this._kernel.scenes,$bind($_,$_.next)),null,null,this._kernel.getConfig("gui.buttons.start"));
-		l_button.setPosition((this._kernel.factory.width - l_button.width) / 2,(this._kernel.factory.height - l_button.height) / 2);
-		this.addEntity(l_button,null,true,1);
-	}
-	,__class__: demo.scenes.Intro
-});
-demo.scenes.Results = function(p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext) {
-	demo.scenes.AScene.call(this,p_kernel,p_type,p_isPauseable,p_isMuteable,p_isSessionSavedOnNext);
-};
-$hxClasses["demo.scenes.Results"] = demo.scenes.Results;
-demo.scenes.Results.__name__ = ["demo","scenes","Results"];
-demo.scenes.Results.__super__ = demo.scenes.AScene;
-demo.scenes.Results.prototype = $extend(demo.scenes.AScene.prototype,{
-	_init: function() {
-		demo.scenes.AScene.prototype._init.call(this);
-		var l_button = new demo.gui.Button(this._kernel,this._kernel.factory.keyNext,0,0,($_=this._kernel.scenes,$bind($_,$_.next)),null,null,this._kernel.getConfig("gui.buttons.next"));
-		l_button.setPosition((this._kernel.factory.width - l_button.width) / 2,(this._kernel.factory.height - l_button.height) / 2);
-		this.addEntity(l_button,null,true,1);
-		var l_message = Std.string(this._kernel.getConfig("gui.scenes.results." + (this._session.isWin?"win":"lose"))) + this._tools.convertAgeToFormattedTime(30000 - this._session.highScore);
-		var l_result = new awe6.extras.gui.Text(this._kernel,this._kernel.factory.width,50,l_message,this._kernel.factory.createTextStyle(awe6.interfaces.ETextStyle.SUBHEAD));
-		l_result._set_y(70);
-		this.addEntity(l_result,null,true,2);
-	}
-	,__class__: demo.scenes.Results
-});
-demo.scenes.SceneTransition = function(p_kernel) {
-	var l_duration = 500;
-	awe6.core.drivers.jeash.SceneTransition.call(this,p_kernel,l_duration);
-};
-$hxClasses["demo.scenes.SceneTransition"] = demo.scenes.SceneTransition;
-demo.scenes.SceneTransition.__name__ = ["demo","scenes","SceneTransition"];
-demo.scenes.SceneTransition.__super__ = awe6.core.drivers.jeash.SceneTransition;
-demo.scenes.SceneTransition.prototype = $extend(awe6.core.drivers.jeash.SceneTransition.prototype,{
-	_disposer: function() {
-		awe6.core.drivers.jeash.SceneTransition.prototype._disposer.call(this);
-	}
-	,_updater: function(p_deltaTime) {
-		if(p_deltaTime == null) p_deltaTime = 0;
-		awe6.core.drivers.jeash.SceneTransition.prototype._updater.call(this,p_deltaTime);
-	}
-	,_init: function() {
-		awe6.core.drivers.jeash.SceneTransition.prototype._init.call(this);
-	}
-	,__class__: demo.scenes.SceneTransition
-});
-var format = {}
-format.display = {}
-format.display.FrameLabel = function(frame,name) {
-	this.frame = frame;
-	this.name = name;
-};
-$hxClasses["format.display.FrameLabel"] = format.display.FrameLabel;
-format.display.FrameLabel.__name__ = ["format","display","FrameLabel"];
-format.display.FrameLabel.prototype = {
-	name: null
-	,frame: null
-	,__class__: format.display.FrameLabel
-}
-format.display.MovieClip = function() {
-	browser.display.Sprite.call(this);
-};
-$hxClasses["format.display.MovieClip"] = format.display.MovieClip;
-format.display.MovieClip.__name__ = ["format","display","MovieClip"];
-format.display.MovieClip.__super__ = browser.display.Sprite;
-format.display.MovieClip.prototype = $extend(browser.display.Sprite.prototype,{
-	unflatten: function() {
-	}
-	,stop: function() {
-	}
-	,prevFrame: function() {
-	}
-	,play: function() {
-	}
-	,nextFrame: function() {
-	}
-	,gotoAndStop: function(frame,scene) {
-	}
-	,gotoAndPlay: function(frame,scene) {
-	}
-	,flatten: function() {
-	}
-	,trackAsMenu: null
-	,totalFrames: null
-	,framesLoaded: null
-	,enabled: null
-	,currentLabels: null
-	,currentLabel: null
-	,currentFrameLabel: null
-	,currentFrame: null
-	,__class__: format.display.MovieClip
-});
-haxe.FastCell = function(elt,next) {
-	this.elt = elt;
-	this.next = next;
-};
-$hxClasses["haxe.FastCell"] = haxe.FastCell;
-haxe.FastCell.__name__ = ["haxe","FastCell"];
-haxe.FastCell.prototype = {
-	next: null
-	,elt: null
-	,__class__: haxe.FastCell
-}
-haxe.FastList = function() {
-};
-$hxClasses["haxe.FastList"] = haxe.FastList;
-haxe.FastList.__name__ = ["haxe","FastList"];
-haxe.FastList.prototype = {
-	toString: function() {
-		var a = new Array();
-		var l = this.head;
-		while(l != null) {
-			a.push(l.elt);
-			l = l.next;
-		}
-		return "{" + a.join(",") + "}";
-	}
-	,iterator: function() {
-		var l = this.head;
-		return { hasNext : function() {
-			return l != null;
-		}, next : function() {
-			var k = l;
-			l = k.next;
-			return k.elt;
-		}};
-	}
-	,remove: function(v) {
-		var prev = null;
-		var l = this.head;
-		while(l != null) {
-			if(l.elt == v) {
-				if(prev == null) this.head = l.next; else prev.next = l.next;
-				break;
-			}
-			prev = l;
-			l = l.next;
-		}
-		return l != null;
-	}
-	,isEmpty: function() {
-		return this.head == null;
-	}
-	,pop: function() {
-		var k = this.head;
-		if(k == null) return null; else {
-			this.head = k.next;
-			return k.elt;
-		}
-	}
-	,first: function() {
-		return this.head == null?null:this.head.elt;
-	}
-	,add: function(item) {
-		this.head = new haxe.FastCell(item,this.head);
-	}
-	,head: null
-	,__class__: haxe.FastList
-}
-haxe.Int32 = function() { }
-$hxClasses["haxe.Int32"] = haxe.Int32;
-haxe.Int32.__name__ = ["haxe","Int32"];
-haxe.Int32.make = function(a,b) {
-	return a << 16 | b;
-}
-haxe.Int32.ofInt = function(x) {
-	return x | 0;
-}
-haxe.Int32.clamp = function(x) {
-	return x | 0;
-}
-haxe.Int32.toInt = function(x) {
-	if((x >> 30 & 1) != x >>> 31) throw "Overflow " + Std.string(x);
-	return x;
-}
-haxe.Int32.toNativeInt = function(x) {
-	return x;
-}
-haxe.Int32.add = function(a,b) {
-	return a + b | 0;
-}
-haxe.Int32.sub = function(a,b) {
-	return a - b | 0;
-}
-haxe.Int32.mul = function(a,b) {
-	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
-}
-haxe.Int32.div = function(a,b) {
-	return a / b | 0;
-}
-haxe.Int32.mod = function(a,b) {
-	return a % b;
-}
-haxe.Int32.shl = function(a,b) {
-	return a << b;
-}
-haxe.Int32.shr = function(a,b) {
-	return a >> b;
-}
-haxe.Int32.ushr = function(a,b) {
-	return a >>> b;
-}
-haxe.Int32.and = function(a,b) {
-	return a & b;
-}
-haxe.Int32.or = function(a,b) {
-	return a | b;
-}
-haxe.Int32.xor = function(a,b) {
-	return a ^ b;
-}
-haxe.Int32.neg = function(a) {
-	return -a;
-}
-haxe.Int32.isNeg = function(a) {
-	return a < 0;
-}
-haxe.Int32.isZero = function(a) {
-	return a == 0;
-}
-haxe.Int32.complement = function(a) {
-	return ~a;
-}
-haxe.Int32.compare = function(a,b) {
-	return a - b;
-}
-haxe.Int32.ucompare = function(a,b) {
-	if(a < 0) return b < 0?~b - ~a:1;
-	return b < 0?-1:a - b;
-}
-haxe.Log = function() { }
-$hxClasses["haxe.Log"] = haxe.Log;
-haxe.Log.__name__ = ["haxe","Log"];
-haxe.Log.trace = function(v,infos) {
-	js.Boot.__trace(v,infos);
-}
-haxe.Log.clear = function() {
-	js.Boot.__clear_trace();
 }
 haxe.Resource = function() { }
 $hxClasses["haxe.Resource"] = haxe.Resource;
 haxe.Resource.__name__ = ["haxe","Resource"];
-haxe.Resource.content = null;
 haxe.Resource.listNames = function() {
 	var names = new Array();
 	var _g = 0, _g1 = haxe.Resource.content;
@@ -14235,24 +12881,12 @@ haxe.Resource.getString = function(name) {
 	}
 	return null;
 }
-haxe.Resource.getBytes = function(name) {
-	var _g = 0, _g1 = haxe.Resource.content;
-	while(_g < _g1.length) {
-		var x = _g1[_g];
-		++_g;
-		if(x.name == name) {
-			if(x.str != null) return haxe.io.Bytes.ofString(x.str);
-			return haxe.Unserializer.run(x.data);
-		}
-	}
-	return null;
-}
 haxe.Serializer = function() {
 	this.buf = new StringBuf();
 	this.cache = new Array();
 	this.useCache = haxe.Serializer.USE_CACHE;
 	this.useEnumIndex = haxe.Serializer.USE_ENUM_INDEX;
-	this.shash = new Hash();
+	this.shash = new haxe.ds.StringMap();
 	this.scount = 0;
 };
 $hxClasses["haxe.Serializer"] = haxe.Serializer;
@@ -14263,27 +12897,24 @@ haxe.Serializer.run = function(v) {
 	return s.toString();
 }
 haxe.Serializer.prototype = {
-	serializeException: function(e) {
-		this.buf.b += Std.string("x");
-		this.serialize(e);
-	}
-	,serialize: function(v) {
-		var $e = (Type["typeof"](v));
+	serialize: function(v) {
+		var _g = Type["typeof"](v);
+		var $e = (_g);
 		switch( $e[1] ) {
 		case 0:
-			this.buf.b += Std.string("n");
+			this.buf.b += "n";
 			break;
 		case 1:
 			if(v == 0) {
-				this.buf.b += Std.string("z");
+				this.buf.b += "z";
 				return;
 			}
-			this.buf.b += Std.string("i");
+			this.buf.b += "i";
 			this.buf.b += Std.string(v);
 			break;
 		case 2:
-			if(Math.isNaN(v)) this.buf.b += Std.string("k"); else if(!Math.isFinite(v)) this.buf.b += Std.string(v < 0?"m":"p"); else {
-				this.buf.b += Std.string("d");
+			if(Math.isNaN(v)) this.buf.b += "k"; else if(!Math.isFinite(v)) this.buf.b += Std.string(v < 0?"m":"p"); else {
+				this.buf.b += "d";
 				this.buf.b += Std.string(v);
 			}
 			break;
@@ -14300,15 +12931,15 @@ haxe.Serializer.prototype = {
 			switch(c) {
 			case Array:
 				var ucount = 0;
-				this.buf.b += Std.string("a");
+				this.buf.b += "a";
 				var l = v.length;
-				var _g = 0;
-				while(_g < l) {
-					var i = _g++;
+				var _g1 = 0;
+				while(_g1 < l) {
+					var i = _g1++;
 					if(v[i] == null) ucount++; else {
 						if(ucount > 0) {
-							if(ucount == 1) this.buf.b += Std.string("n"); else {
-								this.buf.b += Std.string("u");
+							if(ucount == 1) this.buf.b += "n"; else {
+								this.buf.b += "u";
 								this.buf.b += Std.string(ucount);
 							}
 							ucount = 0;
@@ -14317,30 +12948,30 @@ haxe.Serializer.prototype = {
 					}
 				}
 				if(ucount > 0) {
-					if(ucount == 1) this.buf.b += Std.string("n"); else {
-						this.buf.b += Std.string("u");
+					if(ucount == 1) this.buf.b += "n"; else {
+						this.buf.b += "u";
 						this.buf.b += Std.string(ucount);
 					}
 				}
-				this.buf.b += Std.string("h");
+				this.buf.b += "h";
 				break;
 			case List:
-				this.buf.b += Std.string("l");
+				this.buf.b += "l";
 				var v1 = v;
 				var $it0 = v1.iterator();
 				while( $it0.hasNext() ) {
 					var i = $it0.next();
 					this.serialize(i);
 				}
-				this.buf.b += Std.string("h");
+				this.buf.b += "h";
 				break;
 			case Date:
 				var d = v;
-				this.buf.b += Std.string("v");
+				this.buf.b += "v";
 				this.buf.b += Std.string(HxOverrides.dateStr(d));
 				break;
-			case Hash:
-				this.buf.b += Std.string("b");
+			case haxe.ds.StringMap:
+				this.buf.b += "b";
 				var v1 = v;
 				var $it1 = v1.keys();
 				while( $it1.hasNext() ) {
@@ -14348,19 +12979,33 @@ haxe.Serializer.prototype = {
 					this.serializeString(k);
 					this.serialize(v1.get(k));
 				}
-				this.buf.b += Std.string("h");
+				this.buf.b += "h";
 				break;
-			case IntHash:
-				this.buf.b += Std.string("q");
+			case haxe.ds.IntMap:
+				this.buf.b += "q";
 				var v1 = v;
 				var $it2 = v1.keys();
 				while( $it2.hasNext() ) {
 					var k = $it2.next();
-					this.buf.b += Std.string(":");
+					this.buf.b += ":";
 					this.buf.b += Std.string(k);
 					this.serialize(v1.get(k));
 				}
-				this.buf.b += Std.string("h");
+				this.buf.b += "h";
+				break;
+			case haxe.ds.ObjectMap:
+				this.buf.b += "M";
+				var v1 = v;
+				var $it3 = v1.keys();
+				while( $it3.hasNext() ) {
+					var k = $it3.next();
+					var id = Reflect.field(k,"__id__");
+					Reflect.deleteField(k,"__id__");
+					this.serialize(k);
+					k.__id__ = id;
+					this.serialize(v1.h[k.__id__]);
+				}
+				this.buf.b += "h";
 				break;
 			case haxe.io.Bytes:
 				var v1 = v;
@@ -14389,21 +13034,21 @@ haxe.Serializer.prototype = {
 					charsBuf.b += Std.string(b64.charAt(b1 << 4 & 63));
 				}
 				var chars = charsBuf.b;
-				this.buf.b += Std.string("s");
+				this.buf.b += "s";
 				this.buf.b += Std.string(chars.length);
-				this.buf.b += Std.string(":");
+				this.buf.b += ":";
 				this.buf.b += Std.string(chars);
 				break;
 			default:
 				this.cache.pop();
 				if(v.hxSerialize != null) {
-					this.buf.b += Std.string("C");
+					this.buf.b += "C";
 					this.serializeString(Type.getClassName(c));
 					this.cache.push(v);
 					v.hxSerialize(this);
-					this.buf.b += Std.string("g");
+					this.buf.b += "g";
 				} else {
-					this.buf.b += Std.string("c");
+					this.buf.b += "c";
 					this.serializeString(Type.getClassName(c));
 					this.cache.push(v);
 					this.serializeFields(v);
@@ -14412,7 +13057,7 @@ haxe.Serializer.prototype = {
 			break;
 		case 4:
 			if(this.useCache && this.serializeRef(v)) return;
-			this.buf.b += Std.string("o");
+			this.buf.b += "o";
 			this.serializeFields(v);
 			break;
 		case 7:
@@ -14422,15 +13067,15 @@ haxe.Serializer.prototype = {
 			this.buf.b += Std.string(this.useEnumIndex?"j":"w");
 			this.serializeString(Type.getEnumName(e));
 			if(this.useEnumIndex) {
-				this.buf.b += Std.string(":");
+				this.buf.b += ":";
 				this.buf.b += Std.string(v[1]);
 			} else this.serializeString(v[0]);
-			this.buf.b += Std.string(":");
+			this.buf.b += ":";
 			var l = v.length;
 			this.buf.b += Std.string(l - 2);
-			var _g = 2;
-			while(_g < l) {
-				var i = _g++;
+			var _g1 = 2;
+			while(_g1 < l) {
+				var i = _g1++;
 				this.serialize(v[i]);
 			}
 			this.cache.push(v);
@@ -14450,7 +13095,7 @@ haxe.Serializer.prototype = {
 			this.serializeString(f);
 			this.serialize(Reflect.field(v,f));
 		}
-		this.buf.b += Std.string("g");
+		this.buf.b += "g";
 	}
 	,serializeRef: function(v) {
 		var vt = typeof(v);
@@ -14459,7 +13104,7 @@ haxe.Serializer.prototype = {
 			var i = _g1++;
 			var ci = this.cache[i];
 			if(typeof(ci) == vt && ci == v) {
-				this.buf.b += Std.string("r");
+				this.buf.b += "r";
 				this.buf.b += Std.string(i);
 				return true;
 			}
@@ -14470,127 +13115,21 @@ haxe.Serializer.prototype = {
 	,serializeString: function(s) {
 		var x = this.shash.get(s);
 		if(x != null) {
-			this.buf.b += Std.string("R");
+			this.buf.b += "R";
 			this.buf.b += Std.string(x);
 			return;
 		}
 		this.shash.set(s,this.scount++);
-		this.buf.b += Std.string("y");
+		this.buf.b += "y";
 		s = StringTools.urlEncode(s);
 		this.buf.b += Std.string(s.length);
-		this.buf.b += Std.string(":");
+		this.buf.b += ":";
 		this.buf.b += Std.string(s);
 	}
 	,toString: function() {
 		return this.buf.b;
 	}
-	,useEnumIndex: null
-	,useCache: null
-	,scount: null
-	,shash: null
-	,cache: null
-	,buf: null
 	,__class__: haxe.Serializer
-}
-haxe.StackItem = $hxClasses["haxe.StackItem"] = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","Lambda"] }
-haxe.StackItem.CFunction = ["CFunction",0];
-haxe.StackItem.CFunction.toString = $estr;
-haxe.StackItem.CFunction.__enum__ = haxe.StackItem;
-haxe.StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
-haxe.StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
-haxe.StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
-haxe.StackItem.Lambda = function(v) { var $x = ["Lambda",4,v]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; }
-haxe.Stack = function() { }
-$hxClasses["haxe.Stack"] = haxe.Stack;
-haxe.Stack.__name__ = ["haxe","Stack"];
-haxe.Stack.callStack = function() {
-	var oldValue = Error.prepareStackTrace;
-	Error.prepareStackTrace = function(error,callsites) {
-		var stack = [];
-		var _g = 0;
-		while(_g < callsites.length) {
-			var site = callsites[_g];
-			++_g;
-			var method = null;
-			var fullName = site.getFunctionName();
-			if(fullName != null) {
-				var idx = fullName.lastIndexOf(".");
-				if(idx >= 0) {
-					var className = HxOverrides.substr(fullName,0,idx);
-					var methodName = HxOverrides.substr(fullName,idx + 1,null);
-					method = haxe.StackItem.Method(className,methodName);
-				}
-			}
-			stack.push(haxe.StackItem.FilePos(method,site.getFileName(),site.getLineNumber()));
-		}
-		return stack;
-	};
-	var a = haxe.Stack.makeStack(new Error().stack);
-	a.shift();
-	Error.prepareStackTrace = oldValue;
-	return a;
-}
-haxe.Stack.exceptionStack = function() {
-	return [];
-}
-haxe.Stack.toString = function(stack) {
-	var b = new StringBuf();
-	var _g = 0;
-	while(_g < stack.length) {
-		var s = stack[_g];
-		++_g;
-		b.b += Std.string("\nCalled from ");
-		haxe.Stack.itemToString(b,s);
-	}
-	return b.b;
-}
-haxe.Stack.itemToString = function(b,s) {
-	var $e = (s);
-	switch( $e[1] ) {
-	case 0:
-		b.b += Std.string("a C function");
-		break;
-	case 1:
-		var m = $e[2];
-		b.b += Std.string("module ");
-		b.b += Std.string(m);
-		break;
-	case 2:
-		var line = $e[4], file = $e[3], s1 = $e[2];
-		if(s1 != null) {
-			haxe.Stack.itemToString(b,s1);
-			b.b += Std.string(" (");
-		}
-		b.b += Std.string(file);
-		b.b += Std.string(" line ");
-		b.b += Std.string(line);
-		if(s1 != null) b.b += Std.string(")");
-		break;
-	case 3:
-		var meth = $e[3], cname = $e[2];
-		b.b += Std.string(cname);
-		b.b += Std.string(".");
-		b.b += Std.string(meth);
-		break;
-	case 4:
-		var n = $e[2];
-		b.b += Std.string("local function #");
-		b.b += Std.string(n);
-		break;
-	}
-}
-haxe.Stack.makeStack = function(s) {
-	if(typeof(s) == "string") {
-		var stack = s.split("\n");
-		var m = [];
-		var _g = 0;
-		while(_g < stack.length) {
-			var line = stack[_g];
-			++_g;
-			m.push(haxe.StackItem.Module(line));
-		}
-		return m;
-	} else return s;
 }
 haxe._Template = {}
 haxe._Template.TemplateExpr = $hxClasses["haxe._Template.TemplateExpr"] = { __ename__ : ["haxe","_Template","TemplateExpr"], __constructs__ : ["OpVar","OpExpr","OpIf","OpStr","OpBlock","OpForeach","OpMacro"] }
@@ -14794,9 +13333,9 @@ haxe.Template.prototype = {
 				return v == null || v == false;
 			};
 		case "-":
-			var e = this.makeExpr(l);
+			var e3 = this.makeExpr(l);
 			return function() {
-				return -e();
+				return -e3();
 			};
 		}
 		throw p.p;
@@ -14971,11 +13510,6 @@ haxe.Template.prototype = {
 		this.run(this.expr);
 		return this.buf.b;
 	}
-	,buf: null
-	,stack: null
-	,macros: null
-	,context: null
-	,expr: null
 	,__class__: haxe.Template
 }
 haxe.Unserializer = function(buf) {
@@ -15007,7 +13541,8 @@ haxe.Unserializer.run = function(v) {
 }
 haxe.Unserializer.prototype = {
 	unserialize: function() {
-		switch(this.buf.charCodeAt(this.pos++)) {
+		var _g = this.buf.charCodeAt(this.pos++);
+		switch(_g) {
 		case 110:
 			return null;
 		case 116:
@@ -15106,7 +13641,7 @@ haxe.Unserializer.prototype = {
 			this.pos++;
 			return l;
 		case 98:
-			var h = new Hash();
+			var h = new haxe.ds.StringMap();
 			this.cache.push(h);
 			var buf = this.buf;
 			while(this.buf.charCodeAt(this.pos) != 104) {
@@ -15116,7 +13651,7 @@ haxe.Unserializer.prototype = {
 			this.pos++;
 			return h;
 		case 113:
-			var h = new IntHash();
+			var h = new haxe.ds.IntMap();
 			this.cache.push(h);
 			var buf = this.buf;
 			var c = this.buf.charCodeAt(this.pos++);
@@ -15125,7 +13660,17 @@ haxe.Unserializer.prototype = {
 				h.set(i,this.unserialize());
 				c = this.buf.charCodeAt(this.pos++);
 			}
-			if(c != 104) throw "Invalid IntHash format";
+			if(c != 104) throw "Invalid IntMap format";
+			return h;
+		case 77:
+			var h = new haxe.ds.ObjectMap();
+			this.cache.push(h);
+			var buf = this.buf;
+			while(this.buf.charCodeAt(this.pos) != 104) {
+				var s = this.unserialize();
+				h.set(s,this.unserialize());
+			}
+			this.pos++;
 			return h;
 		case 118:
 			var d = HxOverrides.strDate(HxOverrides.substr(this.buf,this.pos,19));
@@ -15221,12 +13766,6 @@ haxe.Unserializer.prototype = {
 		if(s) k *= -1;
 		return k;
 	}
-	,get: function(p) {
-		return this.buf.charCodeAt(p);
-	}
-	,getResolver: function() {
-		return this.resolver;
-	}
 	,setResolver: function(r) {
 		if(r == null) this.resolver = { resolveClass : function(_) {
 			return null;
@@ -15234,13 +13773,127 @@ haxe.Unserializer.prototype = {
 			return null;
 		}}; else this.resolver = r;
 	}
-	,resolver: null
-	,scache: null
-	,cache: null
-	,length: null
-	,pos: null
-	,buf: null
 	,__class__: haxe.Unserializer
+}
+haxe.ds = {}
+haxe.ds.GenericCell = function(elt,next) {
+	this.elt = elt;
+	this.next = next;
+};
+$hxClasses["haxe.ds.GenericCell"] = haxe.ds.GenericCell;
+haxe.ds.GenericCell.__name__ = ["haxe","ds","GenericCell"];
+haxe.ds.GenericCell.prototype = {
+	__class__: haxe.ds.GenericCell
+}
+haxe.ds.GenericStack = function() {
+};
+$hxClasses["haxe.ds.GenericStack"] = haxe.ds.GenericStack;
+haxe.ds.GenericStack.__name__ = ["haxe","ds","GenericStack"];
+haxe.ds.GenericStack.prototype = {
+	iterator: function() {
+		var l = this.head;
+		return { hasNext : function() {
+			return l != null;
+		}, next : function() {
+			var k = l;
+			l = k.next;
+			return k.elt;
+		}};
+	}
+	,remove: function(v) {
+		var prev = null;
+		var l = this.head;
+		while(l != null) {
+			if(l.elt == v) {
+				if(prev == null) this.head = l.next; else prev.next = l.next;
+				break;
+			}
+			prev = l;
+			l = l.next;
+		}
+		return l != null;
+	}
+	,add: function(item) {
+		this.head = new haxe.ds.GenericCell(item,this.head);
+	}
+	,__class__: haxe.ds.GenericStack
+}
+haxe.ds.IntMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.IntMap"] = haxe.ds.IntMap;
+haxe.ds.IntMap.__name__ = ["haxe","ds","IntMap"];
+haxe.ds.IntMap.__interfaces__ = [IMap];
+haxe.ds.IntMap.prototype = {
+	keys: function() {
+		var a = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) a.push(key | 0);
+		}
+		return HxOverrides.iter(a);
+	}
+	,remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) return false;
+		delete(this.h[key]);
+		return true;
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty(key);
+	}
+	,get: function(key) {
+		return this.h[key];
+	}
+	,set: function(key,value) {
+		this.h[key] = value;
+	}
+	,__class__: haxe.ds.IntMap
+}
+haxe.ds.ObjectMap = function() {
+	this.h = { };
+	this.h.__keys__ = { };
+};
+$hxClasses["haxe.ds.ObjectMap"] = haxe.ds.ObjectMap;
+haxe.ds.ObjectMap.__name__ = ["haxe","ds","ObjectMap"];
+haxe.ds.ObjectMap.__interfaces__ = [IMap];
+haxe.ds.ObjectMap.prototype = {
+	keys: function() {
+		var a = [];
+		for( var key in this.h.__keys__ ) {
+		if(this.h.hasOwnProperty(key)) a.push(this.h.__keys__[key]);
+		}
+		return HxOverrides.iter(a);
+	}
+	,set: function(key,value) {
+		var id = key.__id__ != null?key.__id__:key.__id__ = ++haxe.ds.ObjectMap.count;
+		this.h[id] = value;
+		this.h.__keys__[id] = key;
+	}
+	,__class__: haxe.ds.ObjectMap
+}
+haxe.ds.StringMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.StringMap"] = haxe.ds.StringMap;
+haxe.ds.StringMap.__name__ = ["haxe","ds","StringMap"];
+haxe.ds.StringMap.__interfaces__ = [IMap];
+haxe.ds.StringMap.prototype = {
+	keys: function() {
+		var a = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) a.push(key.substr(1));
+		}
+		return HxOverrides.iter(a);
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty("$" + key);
+	}
+	,get: function(key) {
+		return this.h["$" + key];
+	}
+	,set: function(key,value) {
+		this.h["$" + key] = value;
+	}
+	,__class__: haxe.ds.StringMap
 }
 haxe.io = {}
 haxe.io.Bytes = function(length,b) {
@@ -15258,54 +13911,11 @@ haxe.io.Bytes.alloc = function(length) {
 	}
 	return new haxe.io.Bytes(length,a);
 }
-haxe.io.Bytes.ofString = function(s) {
-	var a = new Array();
-	var _g1 = 0, _g = s.length;
-	while(_g1 < _g) {
-		var i = _g1++;
-		var c = s.charCodeAt(i);
-		if(c <= 127) a.push(c); else if(c <= 2047) {
-			a.push(192 | c >> 6);
-			a.push(128 | c & 63);
-		} else if(c <= 65535) {
-			a.push(224 | c >> 12);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		} else {
-			a.push(240 | c >> 18);
-			a.push(128 | c >> 12 & 63);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		}
-	}
-	return new haxe.io.Bytes(a.length,a);
-}
 haxe.io.Bytes.ofData = function(b) {
 	return new haxe.io.Bytes(b.length,b);
 }
 haxe.io.Bytes.prototype = {
-	getData: function() {
-		return this.b;
-	}
-	,toHex: function() {
-		var s = new StringBuf();
-		var chars = [];
-		var str = "0123456789abcdef";
-		var _g1 = 0, _g = str.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			chars.push(HxOverrides.cca(str,i));
-		}
-		var _g1 = 0, _g = this.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var c = this.b[i];
-			s.b += String.fromCharCode(chars[c >> 4]);
-			s.b += String.fromCharCode(chars[c & 15]);
-		}
-		return s.b;
-	}
-	,toString: function() {
+	toString: function() {
 		return this.readString(0,this.length);
 	}
 	,readString: function(pos,len) {
@@ -15331,87 +13941,9 @@ haxe.io.Bytes.prototype = {
 		}
 		return s;
 	}
-	,compare: function(other) {
-		var b1 = this.b;
-		var b2 = other.b;
-		var len = this.length < other.length?this.length:other.length;
-		var _g = 0;
-		while(_g < len) {
-			var i = _g++;
-			if(b1[i] != b2[i]) return b1[i] - b2[i];
-		}
-		return this.length - other.length;
-	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
-		return new haxe.io.Bytes(len,this.b.slice(pos,pos + len));
-	}
-	,blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) throw haxe.io.Error.OutsideBounds;
-		var b1 = this.b;
-		var b2 = src.b;
-		if(b1 == b2 && pos > srcpos) {
-			var i = len;
-			while(i > 0) {
-				i--;
-				b1[i + pos] = b2[i + srcpos];
-			}
-			return;
-		}
-		var _g = 0;
-		while(_g < len) {
-			var i = _g++;
-			b1[i + pos] = b2[i + srcpos];
-		}
-	}
-	,set: function(pos,v) {
-		this.b[pos] = v & 255;
-	}
-	,get: function(pos) {
-		return this.b[pos];
-	}
-	,b: null
-	,length: null
 	,__class__: haxe.io.Bytes
 }
-haxe.io.BytesBuffer = function() {
-	this.b = new Array();
-};
-$hxClasses["haxe.io.BytesBuffer"] = haxe.io.BytesBuffer;
-haxe.io.BytesBuffer.__name__ = ["haxe","io","BytesBuffer"];
-haxe.io.BytesBuffer.prototype = {
-	getBytes: function() {
-		var bytes = new haxe.io.Bytes(this.b.length,this.b);
-		this.b = null;
-		return bytes;
-	}
-	,addBytes: function(src,pos,len) {
-		if(pos < 0 || len < 0 || pos + len > src.length) throw haxe.io.Error.OutsideBounds;
-		var b1 = this.b;
-		var b2 = src.b;
-		var _g1 = pos, _g = pos + len;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.b.push(b2[i]);
-		}
-	}
-	,add: function(src) {
-		var b1 = this.b;
-		var b2 = src.b;
-		var _g1 = 0, _g = src.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.b.push(b2[i]);
-		}
-	}
-	,addByte: function($byte) {
-		this.b.push($byte);
-	}
-	,b: null
-	,__class__: haxe.io.BytesBuffer
-}
-haxe.io.Eof = function() {
-};
+haxe.io.Eof = function() { }
 $hxClasses["haxe.io.Eof"] = haxe.io.Eof;
 haxe.io.Eof.__name__ = ["haxe","io","Eof"];
 haxe.io.Eof.prototype = {
@@ -15431,539 +13963,7 @@ haxe.io.Error.OutsideBounds = ["OutsideBounds",2];
 haxe.io.Error.OutsideBounds.toString = $estr;
 haxe.io.Error.OutsideBounds.__enum__ = haxe.io.Error;
 haxe.io.Error.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe.io.Error; $x.toString = $estr; return $x; }
-haxe.io.Input = function() { }
-$hxClasses["haxe.io.Input"] = haxe.io.Input;
-haxe.io.Input.__name__ = ["haxe","io","Input"];
-haxe.io.Input.prototype = {
-	getDoubleSig: function(bytes) {
-		return Std.parseInt((((bytes[1] & 15) << 16 | bytes[2] << 8 | bytes[3]) * Math.pow(2,32)).toString()) + Std.parseInt(((bytes[4] >> 7) * Math.pow(2,31)).toString()) + Std.parseInt(((bytes[4] & 127) << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7]).toString());
-	}
-	,readString: function(len) {
-		var b = haxe.io.Bytes.alloc(len);
-		this.readFullBytes(b,0,len);
-		return b.toString();
-	}
-	,readInt32: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		var ch4 = this.readByte();
-		return this.bigEndian?(ch1 << 8 | ch2) << 16 | (ch3 << 8 | ch4):(ch4 << 8 | ch3) << 16 | (ch2 << 8 | ch1);
-	}
-	,readUInt30: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		var ch4 = this.readByte();
-		if((this.bigEndian?ch1:ch4) >= 64) throw haxe.io.Error.Overflow;
-		return this.bigEndian?ch4 | ch3 << 8 | ch2 << 16 | ch1 << 24:ch1 | ch2 << 8 | ch3 << 16 | ch4 << 24;
-	}
-	,readInt31: function() {
-		var ch1, ch2, ch3, ch4;
-		if(this.bigEndian) {
-			ch4 = this.readByte();
-			ch3 = this.readByte();
-			ch2 = this.readByte();
-			ch1 = this.readByte();
-		} else {
-			ch1 = this.readByte();
-			ch2 = this.readByte();
-			ch3 = this.readByte();
-			ch4 = this.readByte();
-		}
-		if((ch4 & 128) == 0 != ((ch4 & 64) == 0)) throw haxe.io.Error.Overflow;
-		return ch1 | ch2 << 8 | ch3 << 16 | ch4 << 24;
-	}
-	,readUInt24: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		return this.bigEndian?ch3 | ch2 << 8 | ch1 << 16:ch1 | ch2 << 8 | ch3 << 16;
-	}
-	,readInt24: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		var n = this.bigEndian?ch3 | ch2 << 8 | ch1 << 16:ch1 | ch2 << 8 | ch3 << 16;
-		if((n & 8388608) != 0) return n - 16777216;
-		return n;
-	}
-	,readUInt16: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		return this.bigEndian?ch2 | ch1 << 8:ch1 | ch2 << 8;
-	}
-	,readInt16: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var n = this.bigEndian?ch2 | ch1 << 8:ch1 | ch2 << 8;
-		if((n & 32768) != 0) return n - 65536;
-		return n;
-	}
-	,readInt8: function() {
-		var n = this.readByte();
-		if(n >= 128) return n - 256;
-		return n;
-	}
-	,readDouble: function() {
-		var bytes = [];
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		if(this.bigEndian) bytes.reverse();
-		var sign = 1 - (bytes[0] >> 7 << 1);
-		var exp = (bytes[0] << 4 & 2047 | bytes[1] >> 4) - 1023;
-		var sig = this.getDoubleSig(bytes);
-		if(sig == 0 && exp == -1023) return 0.0;
-		return sign * (1.0 + Math.pow(2,-52) * sig) * Math.pow(2,exp);
-	}
-	,readFloat: function() {
-		var bytes = [];
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		bytes.push(this.readByte());
-		if(this.bigEndian) bytes.reverse();
-		var sign = 1 - (bytes[0] >> 7 << 1);
-		var exp = (bytes[0] << 1 & 255 | bytes[1] >> 7) - 127;
-		var sig = (bytes[1] & 127) << 16 | bytes[2] << 8 | bytes[3];
-		if(sig == 0 && exp == -127) return 0.0;
-		return sign * (1 + Math.pow(2,-23) * sig) * Math.pow(2,exp);
-	}
-	,readLine: function() {
-		var buf = new StringBuf();
-		var last;
-		var s;
-		try {
-			while((last = this.readByte()) != 10) buf.b += String.fromCharCode(last);
-			s = buf.b;
-			if(HxOverrides.cca(s,s.length - 1) == 13) s = HxOverrides.substr(s,0,-1);
-		} catch( e ) {
-			if( js.Boot.__instanceof(e,haxe.io.Eof) ) {
-				s = buf.b;
-				if(s.length == 0) throw e;
-			} else throw(e);
-		}
-		return s;
-	}
-	,readUntil: function(end) {
-		var buf = new StringBuf();
-		var last;
-		while((last = this.readByte()) != end) buf.b += String.fromCharCode(last);
-		return buf.b;
-	}
-	,read: function(nbytes) {
-		var s = haxe.io.Bytes.alloc(nbytes);
-		var p = 0;
-		while(nbytes > 0) {
-			var k = this.readBytes(s,p,nbytes);
-			if(k == 0) throw haxe.io.Error.Blocked;
-			p += k;
-			nbytes -= k;
-		}
-		return s;
-	}
-	,readFullBytes: function(s,pos,len) {
-		while(len > 0) {
-			var k = this.readBytes(s,pos,len);
-			pos += k;
-			len -= k;
-		}
-	}
-	,readAll: function(bufsize) {
-		if(bufsize == null) bufsize = 16384;
-		var buf = haxe.io.Bytes.alloc(bufsize);
-		var total = new haxe.io.BytesBuffer();
-		try {
-			while(true) {
-				var len = this.readBytes(buf,0,bufsize);
-				if(len == 0) throw haxe.io.Error.Blocked;
-				total.addBytes(buf,0,len);
-			}
-		} catch( e ) {
-			if( js.Boot.__instanceof(e,haxe.io.Eof) ) {
-			} else throw(e);
-		}
-		return total.getBytes();
-	}
-	,setEndian: function(b) {
-		this.bigEndian = b;
-		return b;
-	}
-	,close: function() {
-	}
-	,readBytes: function(s,pos,len) {
-		var k = len;
-		var b = s.b;
-		if(pos < 0 || len < 0 || pos + len > s.length) throw haxe.io.Error.OutsideBounds;
-		while(k > 0) {
-			b[pos] = this.readByte();
-			pos++;
-			k--;
-		}
-		return len;
-	}
-	,readByte: function() {
-		return (function($this) {
-			var $r;
-			throw "Not implemented";
-			return $r;
-		}(this));
-	}
-	,bigEndian: null
-	,__class__: haxe.io.Input
-	,__properties__: {set_bigEndian:"setEndian"}
-}
 haxe.xml = {}
-haxe.xml.Filter = $hxClasses["haxe.xml.Filter"] = { __ename__ : ["haxe","xml","Filter"], __constructs__ : ["FInt","FBool","FEnum","FReg"] }
-haxe.xml.Filter.FInt = ["FInt",0];
-haxe.xml.Filter.FInt.toString = $estr;
-haxe.xml.Filter.FInt.__enum__ = haxe.xml.Filter;
-haxe.xml.Filter.FBool = ["FBool",1];
-haxe.xml.Filter.FBool.toString = $estr;
-haxe.xml.Filter.FBool.__enum__ = haxe.xml.Filter;
-haxe.xml.Filter.FEnum = function(values) { var $x = ["FEnum",2,values]; $x.__enum__ = haxe.xml.Filter; $x.toString = $estr; return $x; }
-haxe.xml.Filter.FReg = function(matcher) { var $x = ["FReg",3,matcher]; $x.__enum__ = haxe.xml.Filter; $x.toString = $estr; return $x; }
-haxe.xml.Attrib = $hxClasses["haxe.xml.Attrib"] = { __ename__ : ["haxe","xml","Attrib"], __constructs__ : ["Att"] }
-haxe.xml.Attrib.Att = function(name,filter,defvalue) { var $x = ["Att",0,name,filter,defvalue]; $x.__enum__ = haxe.xml.Attrib; $x.toString = $estr; return $x; }
-haxe.xml.Rule = $hxClasses["haxe.xml.Rule"] = { __ename__ : ["haxe","xml","Rule"], __constructs__ : ["RNode","RData","RMulti","RList","RChoice","ROptional"] }
-haxe.xml.Rule.RNode = function(name,attribs,childs) { var $x = ["RNode",0,name,attribs,childs]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml.Rule.RData = function(filter) { var $x = ["RData",1,filter]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml.Rule.RMulti = function(rule,atLeastOne) { var $x = ["RMulti",2,rule,atLeastOne]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml.Rule.RList = function(rules,ordered) { var $x = ["RList",3,rules,ordered]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml.Rule.RChoice = function(choices) { var $x = ["RChoice",4,choices]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml.Rule.ROptional = function(rule) { var $x = ["ROptional",5,rule]; $x.__enum__ = haxe.xml.Rule; $x.toString = $estr; return $x; }
-haxe.xml._Check = {}
-haxe.xml._Check.CheckResult = $hxClasses["haxe.xml._Check.CheckResult"] = { __ename__ : ["haxe","xml","_Check","CheckResult"], __constructs__ : ["CMatch","CMissing","CExtra","CElementExpected","CDataExpected","CExtraAttrib","CMissingAttrib","CInvalidAttrib","CInvalidData","CInElement"] }
-haxe.xml._Check.CheckResult.CMatch = ["CMatch",0];
-haxe.xml._Check.CheckResult.CMatch.toString = $estr;
-haxe.xml._Check.CheckResult.CMatch.__enum__ = haxe.xml._Check.CheckResult;
-haxe.xml._Check.CheckResult.CMissing = function(r) { var $x = ["CMissing",1,r]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CExtra = function(x) { var $x = ["CExtra",2,x]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CElementExpected = function(name,x) { var $x = ["CElementExpected",3,name,x]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CDataExpected = function(x) { var $x = ["CDataExpected",4,x]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CExtraAttrib = function(att,x) { var $x = ["CExtraAttrib",5,att,x]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CMissingAttrib = function(att,x) { var $x = ["CMissingAttrib",6,att,x]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CInvalidAttrib = function(att,x,f) { var $x = ["CInvalidAttrib",7,att,x,f]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CInvalidData = function(x,f) { var $x = ["CInvalidData",8,x,f]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml._Check.CheckResult.CInElement = function(x,r) { var $x = ["CInElement",9,x,r]; $x.__enum__ = haxe.xml._Check.CheckResult; $x.toString = $estr; return $x; }
-haxe.xml.Check = function() { }
-$hxClasses["haxe.xml.Check"] = haxe.xml.Check;
-haxe.xml.Check.__name__ = ["haxe","xml","Check"];
-haxe.xml.Check.isBlank = function(x) {
-	return x.nodeType == Xml.PCData && haxe.xml.Check.blanks.match(x.getNodeValue()) || x.nodeType == Xml.Comment;
-}
-haxe.xml.Check.filterMatch = function(s,f) {
-	var $e = (f);
-	switch( $e[1] ) {
-	case 0:
-		return haxe.xml.Check.filterMatch(s,haxe.xml.Filter.FReg(new EReg("[0-9]+","")));
-	case 1:
-		return haxe.xml.Check.filterMatch(s,haxe.xml.Filter.FEnum(["true","false","0","1"]));
-	case 2:
-		var values = $e[2];
-		var _g = 0;
-		while(_g < values.length) {
-			var v = values[_g];
-			++_g;
-			if(s == v) return true;
-		}
-		return false;
-	case 3:
-		var r = $e[2];
-		return r.match(s);
-	}
-}
-haxe.xml.Check.isNullable = function(r) {
-	var $e = (r);
-	switch( $e[1] ) {
-	case 2:
-		var one = $e[3], r1 = $e[2];
-		return one != true || haxe.xml.Check.isNullable(r1);
-	case 3:
-		var rl = $e[2];
-		var _g = 0;
-		while(_g < rl.length) {
-			var r1 = rl[_g];
-			++_g;
-			if(!haxe.xml.Check.isNullable(r1)) return false;
-		}
-		return true;
-	case 4:
-		var rl = $e[2];
-		var _g = 0;
-		while(_g < rl.length) {
-			var r1 = rl[_g];
-			++_g;
-			if(haxe.xml.Check.isNullable(r1)) return true;
-		}
-		return false;
-	case 1:
-		return false;
-	case 0:
-		return false;
-	case 5:
-		return true;
-	}
-}
-haxe.xml.Check.check = function(x,r) {
-	var $e = (r);
-	switch( $e[1] ) {
-	case 0:
-		var childs = $e[4], attribs = $e[3], name = $e[2];
-		if(x.nodeType != Xml.Element || x.getNodeName() != name) return haxe.xml._Check.CheckResult.CElementExpected(name,x);
-		var attribs1 = attribs == null?new Array():attribs.slice();
-		var $it0 = x.attributes();
-		while( $it0.hasNext() ) {
-			var xatt = $it0.next();
-			var found = false;
-			var _g = 0;
-			while(_g < attribs1.length) {
-				var att = attribs1[_g];
-				++_g;
-				var $e = (att);
-				switch( $e[1] ) {
-				case 0:
-					var defvalue = $e[4], filter = $e[3], name1 = $e[2];
-					if(xatt != name1) continue;
-					if(filter != null && !haxe.xml.Check.filterMatch(x.get(xatt),filter)) return haxe.xml._Check.CheckResult.CInvalidAttrib(name1,x,filter);
-					HxOverrides.remove(attribs1,att);
-					found = true;
-					break;
-				}
-			}
-			if(!found) return haxe.xml._Check.CheckResult.CExtraAttrib(xatt,x);
-		}
-		var _g = 0;
-		while(_g < attribs1.length) {
-			var att = attribs1[_g];
-			++_g;
-			var $e = (att);
-			switch( $e[1] ) {
-			case 0:
-				var defvalue = $e[4], name1 = $e[2];
-				if(defvalue == null) return haxe.xml._Check.CheckResult.CMissingAttrib(name1,x);
-				break;
-			}
-		}
-		if(childs == null) childs = haxe.xml.Rule.RList([]);
-		var m = haxe.xml.Check.checkList(x.iterator(),childs);
-		if(m != haxe.xml._Check.CheckResult.CMatch) return haxe.xml._Check.CheckResult.CInElement(x,m);
-		var _g = 0;
-		while(_g < attribs1.length) {
-			var att = attribs1[_g];
-			++_g;
-			var $e = (att);
-			switch( $e[1] ) {
-			case 0:
-				var defvalue = $e[4], name1 = $e[2];
-				x.set(name1,defvalue);
-				break;
-			}
-		}
-		return haxe.xml._Check.CheckResult.CMatch;
-	case 1:
-		var filter = $e[2];
-		if(x.nodeType != Xml.PCData && x.nodeType != Xml.CData) return haxe.xml._Check.CheckResult.CDataExpected(x);
-		if(filter != null && !haxe.xml.Check.filterMatch(x.getNodeValue(),filter)) return haxe.xml._Check.CheckResult.CInvalidData(x,filter);
-		return haxe.xml._Check.CheckResult.CMatch;
-	case 4:
-		var choices = $e[2];
-		if(choices.length == 0) throw "No choice possible";
-		var _g = 0;
-		while(_g < choices.length) {
-			var c = choices[_g];
-			++_g;
-			if(haxe.xml.Check.check(x,c) == haxe.xml._Check.CheckResult.CMatch) return haxe.xml._Check.CheckResult.CMatch;
-		}
-		return haxe.xml.Check.check(x,choices[0]);
-	case 5:
-		var r1 = $e[2];
-		return haxe.xml.Check.check(x,r1);
-	default:
-		throw "Unexpected " + Std.string(r);
-	}
-}
-haxe.xml.Check.checkList = function(it,r) {
-	var $e = (r);
-	switch( $e[1] ) {
-	case 3:
-		var ordered = $e[3], rules = $e[2];
-		var rules1 = rules.slice();
-		while( it.hasNext() ) {
-			var x = it.next();
-			if(haxe.xml.Check.isBlank(x)) continue;
-			var found = false;
-			var _g = 0;
-			while(_g < rules1.length) {
-				var r1 = rules1[_g];
-				++_g;
-				var m = haxe.xml.Check.checkList(HxOverrides.iter([x]),r1);
-				if(m == haxe.xml._Check.CheckResult.CMatch) {
-					found = true;
-					var $e = (r1);
-					switch( $e[1] ) {
-					case 2:
-						var one = $e[3], rsub = $e[2];
-						if(one) {
-							var i;
-							var _g2 = 0, _g1 = rules1.length;
-							while(_g2 < _g1) {
-								var i1 = _g2++;
-								if(rules1[i1] == r1) rules1[i1] = haxe.xml.Rule.RMulti(rsub);
-							}
-						}
-						break;
-					default:
-						HxOverrides.remove(rules1,r1);
-					}
-					break;
-				} else if(ordered && !haxe.xml.Check.isNullable(r1)) return m;
-			}
-			if(!found) return haxe.xml._Check.CheckResult.CExtra(x);
-		}
-		var _g = 0;
-		while(_g < rules1.length) {
-			var r1 = rules1[_g];
-			++_g;
-			if(!haxe.xml.Check.isNullable(r1)) return haxe.xml._Check.CheckResult.CMissing(r1);
-		}
-		return haxe.xml._Check.CheckResult.CMatch;
-	case 2:
-		var one = $e[3], r1 = $e[2];
-		var found = false;
-		while( it.hasNext() ) {
-			var x = it.next();
-			if(haxe.xml.Check.isBlank(x)) continue;
-			var m = haxe.xml.Check.checkList(HxOverrides.iter([x]),r1);
-			if(m != haxe.xml._Check.CheckResult.CMatch) return m;
-			found = true;
-		}
-		if(one && !found) return haxe.xml._Check.CheckResult.CMissing(r1);
-		return haxe.xml._Check.CheckResult.CMatch;
-	default:
-		var found = false;
-		while( it.hasNext() ) {
-			var x = it.next();
-			if(haxe.xml.Check.isBlank(x)) continue;
-			var m = haxe.xml.Check.check(x,r);
-			if(m != haxe.xml._Check.CheckResult.CMatch) return m;
-			found = true;
-			break;
-		}
-		if(!found) {
-			switch( (r)[1] ) {
-			case 5:
-				break;
-			default:
-				return haxe.xml._Check.CheckResult.CMissing(r);
-			}
-		}
-		while( it.hasNext() ) {
-			var x = it.next();
-			if(haxe.xml.Check.isBlank(x)) continue;
-			return haxe.xml._Check.CheckResult.CExtra(x);
-		}
-		return haxe.xml._Check.CheckResult.CMatch;
-	}
-}
-haxe.xml.Check.makeWhere = function(path) {
-	if(path.length == 0) return "";
-	var s = "In ";
-	var first = true;
-	var _g = 0;
-	while(_g < path.length) {
-		var x = path[_g];
-		++_g;
-		if(first) first = false; else s += ".";
-		s += x.getNodeName();
-	}
-	return s + ": ";
-}
-haxe.xml.Check.makeString = function(x) {
-	if(x.nodeType == Xml.Element) return "element " + x.getNodeName();
-	var s = x.getNodeValue().split("\r").join("\\r").split("\n").join("\\n").split("\t").join("\\t");
-	if(s.length > 20) return HxOverrides.substr(s,0,17) + "...";
-	return s;
-}
-haxe.xml.Check.makeRule = function(r) {
-	var $e = (r);
-	switch( $e[1] ) {
-	case 0:
-		var name = $e[2];
-		return "element " + name;
-	case 1:
-		return "data";
-	case 2:
-		var r1 = $e[2];
-		return haxe.xml.Check.makeRule(r1);
-	case 3:
-		var rules = $e[2];
-		return haxe.xml.Check.makeRule(rules[0]);
-	case 4:
-		var choices = $e[2];
-		return haxe.xml.Check.makeRule(choices[0]);
-	case 5:
-		var r1 = $e[2];
-		return haxe.xml.Check.makeRule(r1);
-	}
-}
-haxe.xml.Check.makeError = function(m,path) {
-	if(path == null) path = new Array();
-	var $e = (m);
-	switch( $e[1] ) {
-	case 0:
-		throw "assert";
-		break;
-	case 1:
-		var r = $e[2];
-		return haxe.xml.Check.makeWhere(path) + "Missing " + haxe.xml.Check.makeRule(r);
-	case 2:
-		var x = $e[2];
-		return haxe.xml.Check.makeWhere(path) + "Unexpected " + haxe.xml.Check.makeString(x);
-	case 3:
-		var x = $e[3], name = $e[2];
-		return haxe.xml.Check.makeWhere(path) + haxe.xml.Check.makeString(x) + " while expected element " + name;
-	case 4:
-		var x = $e[2];
-		return haxe.xml.Check.makeWhere(path) + haxe.xml.Check.makeString(x) + " while data expected";
-	case 5:
-		var x = $e[3], att = $e[2];
-		path.push(x);
-		return haxe.xml.Check.makeWhere(path) + "unexpected attribute " + att;
-	case 6:
-		var x = $e[3], att = $e[2];
-		path.push(x);
-		return haxe.xml.Check.makeWhere(path) + "missing required attribute " + att;
-	case 7:
-		var f = $e[4], x = $e[3], att = $e[2];
-		path.push(x);
-		return haxe.xml.Check.makeWhere(path) + "invalid attribute value for " + att;
-	case 8:
-		var f = $e[3], x = $e[2];
-		return haxe.xml.Check.makeWhere(path) + "invalid data format for " + haxe.xml.Check.makeString(x);
-	case 9:
-		var m1 = $e[3], x = $e[2];
-		path.push(x);
-		return haxe.xml.Check.makeError(m1,path);
-	}
-}
-haxe.xml.Check.checkNode = function(x,r) {
-	var m = haxe.xml.Check.checkList(HxOverrides.iter([x]),r);
-	if(m == haxe.xml._Check.CheckResult.CMatch) return;
-	throw haxe.xml.Check.makeError(m);
-}
-haxe.xml.Check.checkDocument = function(x,r) {
-	if(x.nodeType != Xml.Document) throw "Document expected";
-	var m = haxe.xml.Check.checkList(x.iterator(),r);
-	if(m == haxe.xml._Check.CheckResult.CMatch) return;
-	throw haxe.xml.Check.makeError(m);
-}
 haxe.xml.Parser = function() { }
 $hxClasses["haxe.xml.Parser"] = haxe.xml.Parser;
 haxe.xml.Parser.__name__ = ["haxe","xml","Parser"];
@@ -15982,6 +13982,7 @@ haxe.xml.Parser.doParse = function(str,p,parent) {
 	var nsubs = 0;
 	var nbrackets = 0;
 	var c = str.charCodeAt(p);
+	var buf = new StringBuf();
 	while(!(c != c)) {
 		switch(state) {
 		case 0:
@@ -16007,11 +14008,17 @@ haxe.xml.Parser.doParse = function(str,p,parent) {
 			break;
 		case 13:
 			if(c == 60) {
-				var child = Xml.createPCData(HxOverrides.substr(str,start,p - start));
+				var child = Xml.createPCData(buf.b + HxOverrides.substr(str,start,p - start));
+				buf = new StringBuf();
 				parent.addChild(child);
 				nsubs++;
 				state = 0;
 				next = 2;
+			} else if(c == 38) {
+				buf.addSub(str,start,p - start);
+				state = 18;
+				next = 13;
+				start = p + 1;
 			}
 			break;
 		case 17:
@@ -16152,7 +14159,7 @@ haxe.xml.Parser.doParse = function(str,p,parent) {
 			if(!(c >= 97 && c <= 122 || c >= 65 && c <= 90 || c >= 48 && c <= 57 || c == 58 || c == 46 || c == 95 || c == 45)) {
 				if(start == p) throw "Expected node name";
 				var v = HxOverrides.substr(str,start,p - start);
-				if(v != parent.getNodeName()) throw "Expected </" + parent.getNodeName() + ">";
+				if(v != parent.get_nodeName()) throw "Expected </" + parent.get_nodeName() + ">";
 				state = 0;
 				next = 12;
 				continue;
@@ -16175,8 +14182,19 @@ haxe.xml.Parser.doParse = function(str,p,parent) {
 			if(c == 63 && str.charCodeAt(p + 1) == 62) {
 				p++;
 				var str1 = HxOverrides.substr(str,start + 1,p - start - 2);
-				parent.addChild(Xml.createProlog(str1));
+				parent.addChild(Xml.createProcessingInstruction(str1));
 				state = 1;
+			}
+			break;
+		case 18:
+			if(c == 59) {
+				var s = HxOverrides.substr(str,start,p - start);
+				if(s.charCodeAt(0) == 35) {
+					var i = s.charCodeAt(1) == 120?Std.parseInt("0" + HxOverrides.substr(s,1,s.length - 1)):Std.parseInt(HxOverrides.substr(s,1,s.length - 1));
+					buf.b += Std.string(String.fromCharCode(i));
+				} else if(!haxe.xml.Parser.escapes.exists(s)) buf.b += Std.string("&" + s + ";"); else buf.b += Std.string(haxe.xml.Parser.escapes.get(s));
+				start = p + 1;
+				state = next;
 			}
 			break;
 		}
@@ -16187,40 +14205,15 @@ haxe.xml.Parser.doParse = function(str,p,parent) {
 		state = 13;
 	}
 	if(state == 13) {
-		if(p != start || nsubs == 0) parent.addChild(Xml.createPCData(HxOverrides.substr(str,start,p - start)));
+		if(p != start || nsubs == 0) parent.addChild(Xml.createPCData(buf.b + HxOverrides.substr(str,start,p - start)));
 		return p;
 	}
 	throw "Unexpected end";
-}
-haxe.xml.Parser.isValidChar = function(c) {
-	return c >= 97 && c <= 122 || c >= 65 && c <= 90 || c >= 48 && c <= 57 || c == 58 || c == 46 || c == 95 || c == 45;
 }
 var js = {}
 js.Boot = function() { }
 $hxClasses["js.Boot"] = js.Boot;
 js.Boot.__name__ = ["js","Boot"];
-js.Boot.__unhtml = function(s) {
-	return s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
-}
-js.Boot.__trace = function(v,i) {
-	var msg = i != null?i.fileName + ":" + i.lineNumber + ": ":"";
-	msg += js.Boot.__string_rec(v,"");
-	var d;
-	if(typeof(document) != "undefined" && (d = document.getElementById("haxe:trace")) != null) d.innerHTML += js.Boot.__unhtml(msg) + "<br/>"; else if(typeof(console) != "undefined" && console.log != null) console.log(msg);
-}
-js.Boot.__clear_trace = function() {
-	var d = document.getElementById("haxe:trace");
-	if(d != null) d.innerHTML = "";
-}
-js.Boot.isClass = function(o) {
-	return o.__name__;
-}
-js.Boot.isEnum = function(e) {
-	return e.__ename__;
-}
-js.Boot.getClass = function(o) {
-	return o.__class__;
-}
 js.Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
@@ -16302,36 +14295,39 @@ js.Boot.__interfLoop = function(cc,cl) {
 	return js.Boot.__interfLoop(cc.__super__,cl);
 }
 js.Boot.__instanceof = function(o,cl) {
-	try {
-		if(o instanceof cl) {
-			if(cl == Array) return o.__enum__ == null;
-			return true;
-		}
-		if(js.Boot.__interfLoop(o.__class__,cl)) return true;
-	} catch( e ) {
-		if(cl == null) return false;
-	}
+	if(cl == null) return false;
 	switch(cl) {
 	case Int:
-		return Math.ceil(o%2147483648.0) === o;
+		return (o|0) === o;
 	case Float:
 		return typeof(o) == "number";
 	case Bool:
-		return o === true || o === false;
+		return typeof(o) == "boolean";
 	case String:
 		return typeof(o) == "string";
 	case Dynamic:
 		return true;
 	default:
-		if(o == null) return false;
-		if(cl == Class && o.__name__ != null) return true; else null;
-		if(cl == Enum && o.__ename__ != null) return true; else null;
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(o instanceof cl) {
+					if(cl == Array) return o.__enum__ == null;
+					return true;
+				}
+				if(js.Boot.__interfLoop(o.__class__,cl)) return true;
+			}
+		} else return false;
+		if(cl == Class && o.__name__ != null) return true;
+		if(cl == Enum && o.__ename__ != null) return true;
 		return o.__enum__ == cl;
 	}
 }
 js.Boot.__cast = function(o,t) {
 	if(js.Boot.__instanceof(o,t)) return o; else throw "Cannot cast " + Std.string(o) + " to " + Std.string(t);
 }
+js.Browser = function() { }
+$hxClasses["js.Browser"] = js.Browser;
+js.Browser.__name__ = ["js","Browser"];
 js.Cookie = function() { }
 $hxClasses["js.Cookie"] = js.Cookie;
 js.Cookie.__name__ = ["js","Cookie"];
@@ -16343,11 +14339,11 @@ js.Cookie.set = function(name,value,expireDelay,path,domain) {
 	}
 	if(path != null) s += ";path=" + path;
 	if(domain != null) s += ";domain=" + domain;
-	js.Lib.document.cookie = s;
+	js.Browser.document.cookie = s;
 }
 js.Cookie.all = function() {
-	var h = new Hash();
-	var a = js.Lib.document.cookie.split(";");
+	var h = new haxe.ds.StringMap();
+	var a = js.Browser.document.cookie.split(";");
 	var _g = 0;
 	while(_g < a.length) {
 		var e = a[_g];
@@ -16368,243 +14364,274 @@ js.Cookie.exists = function(name) {
 js.Cookie.remove = function(name,path,domain) {
 	js.Cookie.set(name,"",-10,path,domain);
 }
-js.Lib = function() { }
-$hxClasses["js.Lib"] = js.Lib;
-js.Lib.__name__ = ["js","Lib"];
-js.Lib.document = null;
-js.Lib.window = null;
-js.Lib.debug = function() {
-	debugger;
-}
-js.Lib.alert = function(v) {
-	alert(js.Boot.__string_rec(v,""));
-}
-js.Lib["eval"] = function(code) {
-	return eval(code);
-}
-js.Lib.setErrorHandler = function(f) {
-	js.Lib.onerror = f;
-}
 var nme = {}
-nme.Lib = function() { }
-$hxClasses["nme.Lib"] = nme.Lib;
-nme.Lib.__name__ = ["nme","Lib"];
-nme.Lib.__properties__ = {get_version:"get_version",get_stage:"get_stage",get_packageName:"get_packageName",get_initWidth:"get_initWidth",get_initHeight:"get_initHeight",get_file:"get_file",get_current:"get_current",get_company:"get_company"}
-nme.Lib.company = null;
-nme.Lib.current = null;
-nme.Lib.file = null;
-nme.Lib.initHeight = null;
-nme.Lib.initWidth = null;
-nme.Lib.packageName = null;
-nme.Lib.stage = null;
-nme.Lib.version = null;
-nme.Lib.close = function() {
-}
-nme.Lib.create = function(onLoaded,width,height,frameRate,color,flags,title,icon) {
-	if(title == null) title = "NME";
-	if(flags == null) flags = 15;
-	if(color == null) color = 16777215;
-	if(frameRate == null) frameRate = 60.0;
-}
-nme.Lib.createManagedStage = function(width,height) {
-	return null;
-}
-nme.Lib.exit = function() {
-}
-nme.Lib.forceClose = function() {
-}
-nme.Lib.getTimer = function() {
-	return browser.Lib.getTimer();
-}
-nme.Lib.getURL = function(url,target) {
-	browser.Lib.getURL(url,target);
-}
-nme.Lib.pause = function() {
-}
-nme.Lib.postUICallback = function(handler) {
-	handler();
-}
-nme.Lib.resume = function() {
-}
-nme.Lib.setPackage = function(company,file,packageName,version) {
-}
-nme.Lib.trace = function(arg) {
-	browser.Lib.trace(arg);
-}
-nme.Lib.get_company = function() {
-	return "";
-}
-nme.Lib.get_current = function() {
-	return browser.Lib.get_current();
-}
-nme.Lib.get_file = function() {
-	return "";
-}
-nme.Lib.get_initHeight = function() {
-	return 0;
-}
-nme.Lib.get_initWidth = function() {
-	return 0;
-}
-nme.Lib.get_packageName = function() {
-	return "";
-}
-nme.Lib.get_stage = function() {
-	return nme.Lib.get_current().get_stage();
-}
-nme.Lib.get_version = function() {
-	return "";
-}
-nme.installer = {}
-nme.installer.Assets = function() { }
-$hxClasses["nme.installer.Assets"] = nme.installer.Assets;
-nme.installer.Assets.__name__ = ["nme","installer","Assets"];
-nme.installer.Assets.initialize = function() {
-	if(!nme.installer.Assets.initialized) {
-		nme.installer.Assets.resourceNames.set("assets/audio/ButtonDown.mp3","assets/audio/ButtonDown.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/ButtonDown.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/ButtonDown.ogg","assets/audio/ButtonDown.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/ButtonDown.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/ButtonOver.mp3","assets/audio/ButtonOver.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/ButtonOver.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/ButtonOver.ogg","assets/audio/ButtonOver.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/ButtonOver.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/MusicGame.mp3","assets/audio/MusicGame.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/MusicGame.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/MusicGame.ogg","assets/audio/MusicGame.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/MusicGame.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/MusicMenu.mp3","assets/audio/MusicMenu.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/MusicMenu.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/MusicMenu.ogg","assets/audio/MusicMenu.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/MusicMenu.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx1.mp3","assets/audio/Sfx1.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx1.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx1.ogg","assets/audio/Sfx1.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx1.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx2.mp3","assets/audio/Sfx2.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx2.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx2.ogg","assets/audio/Sfx2.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx2.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx3.mp3","assets/audio/Sfx3.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx3.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx3.ogg","assets/audio/Sfx3.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx3.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx4.mp3","assets/audio/Sfx4.mp3");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx4.mp3","music");
-		nme.installer.Assets.resourceNames.set("assets/audio/Sfx4.ogg","assets/audio/Sfx4.ogg");
-		nme.installer.Assets.resourceTypes.set("assets/audio/Sfx4.ogg","sound");
-		nme.installer.Assets.resourceNames.set("assets/ButtonOver.png","assets/ButtonOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/ButtonOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/ButtonUp.png","assets/ButtonUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/ButtonUp.png","image");
-		nme.installer.Assets.resourceClasses.set("assets/fonts/orbitron.ttf",NME_assets_fonts_orbitron_ttf);
-		nme.installer.Assets.resourceNames.set("assets/fonts/orbitron.ttf","assets/fonts/orbitron.ttf");
-		nme.installer.Assets.resourceTypes.set("assets/fonts/orbitron.ttf","font");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/BackOver.png","assets/overlay/buttons/BackOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/BackOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/BackUp.png","assets/overlay/buttons/BackUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/BackUp.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/MuteOver.png","assets/overlay/buttons/MuteOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/MuteOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/MuteUp.png","assets/overlay/buttons/MuteUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/MuteUp.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/PauseOver.png","assets/overlay/buttons/PauseOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/PauseOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/PauseUp.png","assets/overlay/buttons/PauseUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/PauseUp.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/UnmuteOver.png","assets/overlay/buttons/UnmuteOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/UnmuteOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/UnmuteUp.png","assets/overlay/buttons/UnmuteUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/UnmuteUp.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/UnpauseOver.png","assets/overlay/buttons/UnpauseOver.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/UnpauseOver.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/buttons/UnpauseUp.png","assets/overlay/buttons/UnpauseUp.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/buttons/UnpauseUp.png","image");
-		nme.installer.Assets.resourceNames.set("assets/overlay/OverlayBackground.png","assets/overlay/OverlayBackground.png");
-		nme.installer.Assets.resourceTypes.set("assets/overlay/OverlayBackground.png","image");
-		nme.installer.Assets.resourceNames.set("assets/scenes/Background.png","assets/scenes/Background.png");
-		nme.installer.Assets.resourceTypes.set("assets/scenes/Background.png","image");
-		nme.installer.Assets.resourceNames.set("assets/Sphere.png","assets/Sphere.png");
-		nme.installer.Assets.resourceTypes.set("assets/Sphere.png","image");
-		nme.installer.Assets.initialized = true;
+nme.AssetData = function() { }
+$hxClasses["nme.AssetData"] = nme.AssetData;
+nme.AssetData.__name__ = ["nme","AssetData"];
+nme.AssetData.initialize = function() {
+	if(!nme.AssetData.initialized) {
+		nme.AssetData.path.set("assets/audio/ButtonDown.mp3","assets/audio/ButtonDown.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/ButtonDown.mp3",value);
+		nme.AssetData.path.set("assets/audio/ButtonDown.ogg","assets/audio/ButtonDown.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/ButtonDown.ogg",value);
+		nme.AssetData.path.set("assets/audio/ButtonOver.mp3","assets/audio/ButtonOver.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/ButtonOver.mp3",value);
+		nme.AssetData.path.set("assets/audio/ButtonOver.ogg","assets/audio/ButtonOver.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/ButtonOver.ogg",value);
+		nme.AssetData.path.set("assets/audio/MusicGame.mp3","assets/audio/MusicGame.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/MusicGame.mp3",value);
+		nme.AssetData.path.set("assets/audio/MusicGame.ogg","assets/audio/MusicGame.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/MusicGame.ogg",value);
+		nme.AssetData.path.set("assets/audio/MusicMenu.mp3","assets/audio/MusicMenu.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/MusicMenu.mp3",value);
+		nme.AssetData.path.set("assets/audio/MusicMenu.ogg","assets/audio/MusicMenu.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/MusicMenu.ogg",value);
+		nme.AssetData.path.set("assets/audio/Sfx1.mp3","assets/audio/Sfx1.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx1.mp3",value);
+		nme.AssetData.path.set("assets/audio/Sfx1.ogg","assets/audio/Sfx1.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx1.ogg",value);
+		nme.AssetData.path.set("assets/audio/Sfx2.mp3","assets/audio/Sfx2.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx2.mp3",value);
+		nme.AssetData.path.set("assets/audio/Sfx2.ogg","assets/audio/Sfx2.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx2.ogg",value);
+		nme.AssetData.path.set("assets/audio/Sfx3.mp3","assets/audio/Sfx3.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx3.mp3",value);
+		nme.AssetData.path.set("assets/audio/Sfx3.ogg","assets/audio/Sfx3.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx3.ogg",value);
+		nme.AssetData.path.set("assets/audio/Sfx4.mp3","assets/audio/Sfx4.mp3");
+		var value = Reflect.field(openfl.AssetType,"music".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx4.mp3",value);
+		nme.AssetData.path.set("assets/audio/Sfx4.ogg","assets/audio/Sfx4.ogg");
+		var value = Reflect.field(openfl.AssetType,"sound".toUpperCase());
+		nme.AssetData.type.set("assets/audio/Sfx4.ogg",value);
+		nme.AssetData.path.set("assets/ButtonOver.png","assets/ButtonOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/ButtonOver.png",value);
+		nme.AssetData.path.set("assets/ButtonUp.png","assets/ButtonUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/ButtonUp.png",value);
+		nme.AssetData.className.set("assets/fonts/orbitron.ttf",nme.NME_assets_fonts_orbitron_ttf);
+		var value = Reflect.field(openfl.AssetType,"font".toUpperCase());
+		nme.AssetData.type.set("assets/fonts/orbitron.ttf",value);
+		nme.AssetData.path.set("assets/overlay/buttons/BackOver.png","assets/overlay/buttons/BackOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/BackOver.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/BackUp.png","assets/overlay/buttons/BackUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/BackUp.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/MuteOver.png","assets/overlay/buttons/MuteOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/MuteOver.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/MuteUp.png","assets/overlay/buttons/MuteUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/MuteUp.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/PauseOver.png","assets/overlay/buttons/PauseOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/PauseOver.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/PauseUp.png","assets/overlay/buttons/PauseUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/PauseUp.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/UnmuteOver.png","assets/overlay/buttons/UnmuteOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/UnmuteOver.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/UnmuteUp.png","assets/overlay/buttons/UnmuteUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/UnmuteUp.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/UnpauseOver.png","assets/overlay/buttons/UnpauseOver.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/UnpauseOver.png",value);
+		nme.AssetData.path.set("assets/overlay/buttons/UnpauseUp.png","assets/overlay/buttons/UnpauseUp.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/buttons/UnpauseUp.png",value);
+		nme.AssetData.path.set("assets/overlay/OverlayBackground.png","assets/overlay/OverlayBackground.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/overlay/OverlayBackground.png",value);
+		nme.AssetData.path.set("assets/scenes/Background.png","assets/scenes/Background.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/scenes/Background.png",value);
+		nme.AssetData.path.set("assets/Sphere.png","assets/Sphere.png");
+		var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
+		nme.AssetData.type.set("assets/Sphere.png",value);
+		nme.AssetData.initialized = true;
 	}
 }
-nme.installer.Assets.getBitmapData = function(id,useCache) {
+nme.NME_assets_fonts_orbitron_ttf = function() {
+	flash.text.Font.call(this);
+};
+$hxClasses["nme.NME_assets_fonts_orbitron_ttf"] = nme.NME_assets_fonts_orbitron_ttf;
+nme.NME_assets_fonts_orbitron_ttf.__name__ = ["nme","NME_assets_fonts_orbitron_ttf"];
+nme.NME_assets_fonts_orbitron_ttf.__super__ = flash.text.Font;
+nme.NME_assets_fonts_orbitron_ttf.prototype = $extend(flash.text.Font.prototype,{
+	__class__: nme.NME_assets_fonts_orbitron_ttf
+});
+var openfl = {}
+openfl.Assets = function() { }
+$hxClasses["openfl.Assets"] = openfl.Assets;
+openfl.Assets.__name__ = ["openfl","Assets"];
+openfl.Assets.__properties__ = {get_type:"get_type",get_path:"get_path",get_library:"get_library",get_id:"get_id"}
+openfl.Assets.initialize = function() {
+	if(!openfl.Assets.initialized) {
+		nme.AssetData.initialize();
+		openfl.Assets.initialized = true;
+	}
+}
+openfl.Assets.getBitmapData = function(id,useCache) {
 	if(useCache == null) useCache = true;
-	nme.installer.Assets.initialize();
-	if(nme.installer.Assets.resourceNames.exists(id) && nme.installer.Assets.resourceTypes.exists(id) && nme.installer.Assets.resourceTypes.get(id).toLowerCase() == "image") {
-		if(useCache && nme.installer.Assets.cachedBitmapData.exists(id)) return nme.installer.Assets.cachedBitmapData.get(id); else {
-			var data = (js.Boot.__cast(ApplicationMain.loaders.get(nme.installer.Assets.resourceNames.get(id)).contentLoaderInfo.content , browser.display.Bitmap)).bitmapData;
-			if(useCache) nme.installer.Assets.cachedBitmapData.set(id,data);
+	openfl.Assets.initialize();
+	if(nme.AssetData.type.exists(id) && nme.AssetData.type.get(id) == openfl.AssetType.IMAGE) {
+		if(useCache && openfl.Assets.cachedBitmapData.exists(id)) return openfl.Assets.cachedBitmapData.get(id); else {
+			var data = (js.Boot.__cast(ApplicationMain.loaders.get(nme.AssetData.path.get(id)).contentLoaderInfo.content , flash.display.Bitmap)).bitmapData;
+			if(useCache) openfl.Assets.cachedBitmapData.set(id,data);
 			return data;
 		}
 	} else if(id.indexOf(":") > -1) {
 		var libraryName = HxOverrides.substr(id,0,id.indexOf(":"));
 		var symbolName = HxOverrides.substr(id,id.indexOf(":") + 1,null);
-		if(nme.installer.Assets.libraryTypes.exists(libraryName)) {
-		} else haxe.Log.trace("[nme.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 253, className : "nme.installer.Assets", methodName : "getBitmapData"});
-	} else haxe.Log.trace("[nme.Assets] There is no BitmapData asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 259, className : "nme.installer.Assets", methodName : "getBitmapData"});
+		if(nme.AssetData.library.exists(libraryName)) {
+		} else console.log("[openfl.Assets] There is no asset library named \"" + libraryName + "\"");
+	} else console.log("[openfl.Assets] There is no BitmapData asset with an ID of \"" + id + "\"");
 	return null;
 }
-nme.installer.Assets.getBytes = function(id) {
-	nme.installer.Assets.initialize();
-	if(nme.installer.Assets.resourceNames.exists(id)) return ApplicationMain.urlLoaders.get(nme.installer.Assets.getResourceName(id)).data;
-	haxe.Log.trace("[nme.Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 278, className : "nme.installer.Assets", methodName : "getBytes"});
+openfl.Assets.getBytes = function(id) {
+	openfl.Assets.initialize();
+	if(nme.AssetData.type.exists(id)) {
+		var bytes = null;
+		var data = ApplicationMain.urlLoaders.get(nme.AssetData.path.get(id)).data;
+		if(js.Boot.__instanceof(data,String)) {
+			var bytes1 = new flash.utils.ByteArray();
+			bytes1.writeUTFBytes(data);
+		} else if(js.Boot.__instanceof(data,flash.utils.ByteArray)) bytes = data; else bytes = null;
+		if(bytes != null) {
+			bytes.position = 0;
+			return bytes;
+		} else return null;
+	} else console.log("[openfl.Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"");
 	return null;
 }
-nme.installer.Assets.getFont = function(id) {
-	nme.installer.Assets.initialize();
-	if(nme.installer.Assets.resourceNames.exists(id) && nme.installer.Assets.resourceTypes.exists(id)) {
-		if(nme.installer.Assets.resourceTypes.get(id).toLowerCase() == "font") return js.Boot.__cast(Type.createInstance(nme.installer.Assets.resourceClasses.get(id),[]) , browser.text.Font);
+openfl.Assets.getFont = function(id) {
+	openfl.Assets.initialize();
+	if(nme.AssetData.type.exists(id) && nme.AssetData.type.get(id) == openfl.AssetType.FONT) return js.Boot.__cast(Type.createInstance(nme.AssetData.className.get(id),[]) , flash.text.Font); else console.log("[openfl.Assets] There is no Font asset with an ID of \"" + id + "\"");
+	return null;
+}
+openfl.Assets.getSound = function(id) {
+	openfl.Assets.initialize();
+	if(nme.AssetData.type.exists(id)) {
+		var type = nme.AssetData.type.get(id);
+		if(type == openfl.AssetType.SOUND || type == openfl.AssetType.MUSIC) return new flash.media.Sound(new flash.net.URLRequest(nme.AssetData.path.get(id)));
 	}
-	haxe.Log.trace("[nme.Assets] There is no Font asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 299, className : "nme.installer.Assets", methodName : "getFont"});
+	console.log("[openfl.Assets] There is no Sound asset with an ID of \"" + id + "\"");
 	return null;
 }
-nme.installer.Assets.getMovieClip = function(id) {
-	nme.installer.Assets.initialize();
-	var libraryName = HxOverrides.substr(id,0,id.indexOf(":"));
-	var symbolName = HxOverrides.substr(id,id.indexOf(":") + 1,null);
-	if(nme.installer.Assets.libraryTypes.exists(libraryName)) {
-	} else haxe.Log.trace("[nme.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 351, className : "nme.installer.Assets", methodName : "getMovieClip"});
-	return null;
+openfl.Assets.getText = function(id) {
+	var bytes = openfl.Assets.getBytes(id);
+	if(bytes == null) return null; else return bytes.readUTFBytes(bytes.length);
 }
-nme.installer.Assets.getResourceName = function(id) {
-	nme.installer.Assets.initialize();
-	return nme.installer.Assets.resourceNames.get(id);
-}
-nme.installer.Assets.getSound = function(id) {
-	nme.installer.Assets.initialize();
-	if(nme.installer.Assets.resourceNames.exists(id) && nme.installer.Assets.resourceTypes.exists(id)) {
-		if(nme.installer.Assets.resourceTypes.get(id).toLowerCase() == "sound") return new browser.media.Sound(new browser.net.URLRequest(nme.installer.Assets.resourceNames.get(id))); else if(nme.installer.Assets.resourceTypes.get(id).toLowerCase() == "music") return new browser.media.Sound(new browser.net.URLRequest(nme.installer.Assets.resourceNames.get(id)));
-	}
-	haxe.Log.trace("[nme.Assets] There is no Sound asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 387, className : "nme.installer.Assets", methodName : "getSound"});
-	return null;
-}
-nme.installer.Assets.getText = function(id) {
-	nme.installer.Assets.initialize();
-	if(nme.installer.Assets.resourceNames.exists(id) && nme.installer.Assets.resourceTypes.exists(id)) {
-		if(nme.installer.Assets.resourceTypes.get(id).toLowerCase() == "text") return ApplicationMain.urlLoaders.get(nme.installer.Assets.resourceNames.get(id)).data;
-	}
-	var bytes = nme.installer.Assets.getBytes(id);
-	return null;
-}
-nme.installer.Assets.resolveClass = function(name) {
-	name = StringTools.replace(name,"native.","browser.");
+openfl.Assets.resolveClass = function(name) {
+	name = StringTools.replace(name,"native.","flash.");
+	name = StringTools.replace(name,"browser.","flash.");
 	return Type.resolveClass(name);
 }
-nme.installer.Assets.resolveEnum = function(name) {
-	name = StringTools.replace(name,"native.","browser.");
+openfl.Assets.resolveEnum = function(name) {
+	name = StringTools.replace(name,"native.","flash.");
+	name = StringTools.replace(name,"browser.","flash.");
 	return Type.resolveEnum(name);
 }
+openfl.Assets.get_id = function() {
+	openfl.Assets.initialize();
+	var ids = [];
+	var $it0 = nme.AssetData.type.keys();
+	while( $it0.hasNext() ) {
+		var key = $it0.next();
+		ids.push(key);
+	}
+	return ids;
+}
+openfl.Assets.get_library = function() {
+	openfl.Assets.initialize();
+	return nme.AssetData.library;
+}
+openfl.Assets.get_path = function() {
+	openfl.Assets.initialize();
+	return nme.AssetData.path;
+}
+openfl.Assets.get_type = function() {
+	openfl.Assets.initialize();
+	return nme.AssetData.type;
+}
+openfl.AssetType = $hxClasses["openfl.AssetType"] = { __ename__ : ["openfl","AssetType"], __constructs__ : ["BINARY","FONT","IMAGE","MUSIC","SOUND","TEXT"] }
+openfl.AssetType.BINARY = ["BINARY",0];
+openfl.AssetType.BINARY.toString = $estr;
+openfl.AssetType.BINARY.__enum__ = openfl.AssetType;
+openfl.AssetType.FONT = ["FONT",1];
+openfl.AssetType.FONT.toString = $estr;
+openfl.AssetType.FONT.__enum__ = openfl.AssetType;
+openfl.AssetType.IMAGE = ["IMAGE",2];
+openfl.AssetType.IMAGE.toString = $estr;
+openfl.AssetType.IMAGE.__enum__ = openfl.AssetType;
+openfl.AssetType.MUSIC = ["MUSIC",3];
+openfl.AssetType.MUSIC.toString = $estr;
+openfl.AssetType.MUSIC.__enum__ = openfl.AssetType;
+openfl.AssetType.SOUND = ["SOUND",4];
+openfl.AssetType.SOUND.toString = $estr;
+openfl.AssetType.SOUND.__enum__ = openfl.AssetType;
+openfl.AssetType.TEXT = ["TEXT",5];
+openfl.AssetType.TEXT.toString = $estr;
+openfl.AssetType.TEXT.__enum__ = openfl.AssetType;
+openfl.LibraryType = $hxClasses["openfl.LibraryType"] = { __ename__ : ["openfl","LibraryType"], __constructs__ : ["SWF","SWF_LITE","XFL"] }
+openfl.LibraryType.SWF = ["SWF",0];
+openfl.LibraryType.SWF.toString = $estr;
+openfl.LibraryType.SWF.__enum__ = openfl.LibraryType;
+openfl.LibraryType.SWF_LITE = ["SWF_LITE",1];
+openfl.LibraryType.SWF_LITE.toString = $estr;
+openfl.LibraryType.SWF_LITE.__enum__ = openfl.LibraryType;
+openfl.LibraryType.XFL = ["XFL",2];
+openfl.LibraryType.XFL.toString = $estr;
+openfl.LibraryType.XFL.__enum__ = openfl.LibraryType;
+openfl.display = {}
+openfl.display.Tilesheet = function(image) {
+	this.nmeBitmap = image;
+	this.nmeCenterPoints = new Array();
+	this.nmeTileRects = new Array();
+};
+$hxClasses["openfl.display.Tilesheet"] = openfl.display.Tilesheet;
+openfl.display.Tilesheet.__name__ = ["openfl","display","Tilesheet"];
+openfl.display.Tilesheet.prototype = {
+	drawTiles: function(graphics,tileData,smooth,flags) {
+		if(flags == null) flags = 0;
+		if(smooth == null) smooth = false;
+		graphics.drawTiles(this,tileData,smooth,flags);
+	}
+	,addTileRect: function(rectangle,centerPoint) {
+		this.nmeTileRects.push(rectangle);
+		if(centerPoint == null) centerPoint = new flash.geom.Point();
+		this.nmeCenterPoints.push(centerPoint);
+		return this.nmeTileRects.length - 1;
+	}
+	,__class__: openfl.display.Tilesheet
+}
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; };
-var $_;
-function $bind(o,m) { var f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; return f; };
+var $_, $fid = 0;
+function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; };
 if(Array.prototype.indexOf) HxOverrides.remove = function(a,o) {
 	var i = a.indexOf(o);
 	if(i == -1) return false;
 	a.splice(i,1);
 	return true;
-}; else null;
+};
 Math.__name__ = ["Math"];
 Math.NaN = Number.NaN;
 Math.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
@@ -16630,37 +14657,22 @@ var Bool = $hxClasses.Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = $hxClasses.Class = { __name__ : ["Class"]};
 var Enum = { };
-var Void = $hxClasses.Void = { __ename__ : ["Void"]};
 Xml.Element = "element";
 Xml.PCData = "pcdata";
 Xml.CData = "cdata";
 Xml.Comment = "comment";
 Xml.DocType = "doctype";
-Xml.Prolog = "prolog";
+Xml.ProcessingInstruction = "processingInstruction";
 Xml.Document = "document";
-haxe.Resource.content = [{ name : "config", data : "s683:PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxkYXRhPg0KCTxzZXR0aW5ncz4NCgkJPGFzc2V0cz4NCgkJCTxwYWNrYWdlcyBkZWZhdWx0PSJhc3NldHMiIGF1ZGlvPSJhc3NldHMuYXVkaW8iIC8%DQoJCTwvYXNzZXRzPg0KCQk8Zm9udCBuYW1lPSJhc3NldHNfZm9udHNfb3JiaXRyb25fdHRmIiAvPg0KCTwvc2V0dGluZ3M%DQoJPGd1aT4NCgkJPGJ1dHRvbnMgbmV4dD0iTkVYVCIgc3RhcnQ9IlNUQVJUIiAvPg0KCQk8c2NlbmVzPg0KCQkJPGludHJvIHRpdGxlPSJJTlRST0RVQ1RJT04iIGluc3RydWN0aW9ucz0iQ2xpY2sgb24gYWxsIHRoZSBpbnZhZGVycyBhcyBmYXN0IGFzIHBvc3NpYmxlISIgLz4NCgkJCTxnYW1lIC8%DQoJCQk8cmVzdWx0cyB0aXRsZT0iR0FNRSBPVkVSIiB3aW49IkEgbmV3IHBlcnNvbmFsIGJlc3Qgb2YgIiBsb3NlPSJZb3UgZGlkbid0IGJlYXQgeW91ciBwcmV2aW91cyB0aW1lIG9mICIgLz4NCgkJPC9zY2VuZXM%DQoJPC9ndWk%DQo8L2RhdGE%DQo"},{ name : "NME_assets_fonts_orbitron_ttf", data : "s111559:cToxMTFveTY6YXNjZW50ZDk5Ni4zNTJ5NDpkYXRhYWQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQ1NjcuMjk2ZDQzMC4wOGQ2MTAuODE2ZDQ3NC4xMTFkNjU0LjMzNmQ1MTguMTQ0ZDY1NC4zMzZkNTc4LjU2ZDY1NC4zMzZkODc1LjUyZDY1NC4zMzZkOTM1LjkzNmQ2MTAuODE2ZDk3OS45NjhkNTY3LjI5NmQxMDI0ZDUwNS44NTZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ4NjcuMzI4ZDQ5Ny42NjRkODY3LjMyOGQ0OTcuNjY0ZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyaHk2Ol93aWR0aGQ3MDguNjA4eTQ6eE1heGQ2NTQuMzM2eTQ6eE1pbmQ1Mi4yMjR5NDp5TWF4ZDU5My45Mnk0OnlNaW5kMHk3Ol9oZWlnaHRkNTQxLjY5Nnk3OmxlYWRpbmdkMjA3Ljg3Mnk3OmRlc2NlbnRkMjM1LjUyeTg6Y2hhckNvZGVpMTExeTE1OmxlZnRzaWRlQmVhcmluZ2Q1Mi4yMjR5MTI6YWR2YW5jZVdpZHRoZDcwOC42MDh5ODpjb21tYW5kc2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoyMjNvUjBkOTk2LjM1MlIxYWQ3ODIuMzM2ZDQyMi45MTJkNzgyLjMzNmQ1ODIuNjU2ZDc4Mi4zMzZkNjIwLjU0NGQ3NjQuOTI4ZDY1My4zMTJkNzgyLjMzNmQ2ODUuMDU2ZDc4Mi4zMzZkNzIyLjk0NGQ3ODIuMzM2ZDg3NS41MmQ3ODIuMzM2ZDkzNS45MzZkNzM4LjMwNGQ5NzkuOTY4ZDY5NC4yNzJkMTAyNGQ2MzIuODMyZDEwMjRkMjc5LjU1MmQxMDI0ZDI3OS41NTJkODY3LjMyOGQ2MjUuNjY0ZDg2Ny4zMjhkNjI1LjY2NGQ3MzIuMTZkMjc5LjU1MmQ3MzIuMTZkMjc5LjU1MmQ1ODQuNzA0ZDYyNS42NjRkNTg0LjcwNGQ2MjUuNjY0ZDQ1OC43NTFkMjE1LjA0ZDQ1OC43NTFkMjE1LjA0ZDEwMjRkNTguMzY4ZDEwMjRkNTguMzY4ZDQ0OS41MzVkNTguMzY4ZDM4OC4wOTZkMTAyLjRkMzQ0LjU3NmQxNDYuNDMyZDMwMS4wNTZkMjA3Ljg3MmQzMDEuMDU2ZDYzMi44MzJkMzAxLjA1NmQ2ODguMTI4ZDMwMS4wNTZkNzMwLjYyNGQzMzUuODcxZDc3My4xMmQzNzAuNjg4ZDc4Mi4zMzZkNDIyLjkxMmhSMmQ4NTIuOTkyUjNkNzgyLjMzNlI0ZDU4LjM2OFI1ZDcyMi45NDRSNmQwUjdkNjY0LjU3NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjIzUjExZDU4LjM2OFIxMmQ4NTIuOTkyUjEzYWkxaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2hnOjExMG9SMGQ5OTYuMzUyUjFhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQxMDI0ZDUwMC43MzZkMTAyNGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkNDMwLjA4ZDUwOC45MjhkNDMwLjA4aFIyZDcxMi43MDRSM2Q2NTcuNDA4UjRkNTUuMjk2UjVkNTkzLjkyUjZkMFI3ZDUzOC42MjRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTExMFIxMWQ1NS4yOTZSMTJkNzEyLjcwNFIxM2FpMWkzaTNpMmkyaTJpMmkyaTJpMmkyaGc6MjIyb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMjJSMTFkMFIxMmQwUjEzYWhnOjEwOW9SMGQ5OTYuMzUyUjFhZDc3MC4wNDhkNDMwLjA4ZDgzMS40ODhkNDMwLjA4ZDg3NS4wMDhkNDc0LjExMWQ5MTguNTI4ZDUxOC4xNDRkOTE4LjUyOGQ1NzguNTZkOTE4LjUyOGQxMDI0ZDc2Mi44OGQxMDI0ZDc2Mi44OGQ1ODYuNzUyZDU2Ni4yNzJkNTg2Ljc1MmQ1NjYuMjcyZDEwMjRkNDA4LjU3NmQxMDI0ZDQwOC41NzZkNTg2Ljc1MmQyMTEuOTY4ZDU4Ni43NTJkMjExLjk2OGQxMDI0ZDU1LjI5NmQxMDI0ZDU1LjI5NmQ0MzAuMDhkNzcwLjA0OGQ0MzAuMDhoUjJkMTAwMS40NzJSM2Q5MTguNTI4UjRkNTUuMjk2UjVkNTkzLjkyUjZkMFI3ZDUzOC42MjRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEwOVIxMWQ1NS4yOTZSMTJkMTAwMS40NzJSMTNhaTFpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjIxb1IwZDk5Ni4zNTJSMWFkNjY4LjY3MmQyODYuNzJkODYwLjE2ZDI4Ni43MmQ1MTguMTQ0ZDc0OS41NjhkNTE4LjE0NGQxMDI0ZDM1OC40ZDEwMjRkMzU4LjRkNzQ4LjU0NGQyMjQuMjU2ZDU2OC4zMTlkMTcuNDA4ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQ0MzguMjcyZDU3Ny41MzZkNjY4LjY3MmQyODYuNzJkMzM2Ljg5NmQyMzUuNTE5ZDM4OS4xMmQyNy42NDhkNTQ5Ljg4OGQyNy42NDhkNDk3LjY2NGQyMzUuNTE5ZDMzNi44OTZkMjM1LjUxOWhSMmQ4MjUuMzQ0UjNkODYwLjE2UjRkMTcuNDA4UjVkOTk2LjM1MlI2ZDBSN2Q5NzguOTQ0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMjFSMTFkMTcuNDA4UjEyZDgyNS4zNDRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMDhvUjBkOTk2LjM1MlIxYWQ1My4yNDhkMjM0LjQ5NWQyMTAuOTQ0ZDIzNC40OTVkMjEwLjk0NGQ4NjcuMzI4ZDMzMC43NTJkODY3LjMyOGQzMzAuNzUyZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny4yOGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDIzNC40OTVoUjJkMzQ1LjA4OFIzZDMzMC43NTJSNGQ1My4yNDhSNWQ3ODkuNTA0UjZkMFI3ZDczNi4yNTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEwOFIxMWQ1My4yNDhSMTJkMzQ1LjA4OFIxM2FpMWkyaTJpMmkyaTJpM2kzaTJoZzoyMjBvUjBkOTk2LjM1MlIxYWQyMTQuMDE2ZDI4Ni43MmQyMTQuMDE2ZDg2NC4yNTZkNjMxLjgwOGQ4NjQuMjU2ZDYzMS44MDhkMjg2LjcyZDc5Mi41NzZkMjg2LjcyZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQyODYuNzJkMjE0LjAxNmQyODYuNzJkNjE2LjQ0OGQ3Ny44MjNkNjE2LjQ0OGQyMzUuNTE5ZDQ1OC43NTJkMjM1LjUxOWQ0NTguNzUyZDc3LjgyM2Q2MTYuNDQ4ZDc3LjgyM2QzOTcuMzEyZDc3LjgyM2QzOTcuMzEyZDIzNS41MTlkMjQwLjY0ZDIzNS41MTlkMjQwLjY0ZDc3LjgyM2QzOTcuMzEyZDc3LjgyM2hSMmQ4NDcuODcyUjNkNzkyLjU3NlI0ZDU1LjI5NlI1ZDk0Ni4xNzZSNmQwUjdkODkwLjg4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMjBSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEwN29SMGQ5OTYuMzUyUjFhZDQ5My41NjhkNDMwLjA4ZDY1MS4yNjRkNDMwLjA4ZDY1MS4yNjRkNDgzLjMyOGQ0MzAuMDhkNzI3LjA0ZDY1MS4yNjRkOTcwLjc1MmQ2NTEuMjY0ZDEwMjRkNDkzLjU2OGQxMDI0ZDI5MS44NGQ4MDUuODg4ZDIxMS45NjhkODA1Ljg4OGQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDIzNS41MTlkMjExLjk2OGQyMzUuNTE5ZDIxMS45NjhkNjQ4LjE5MmQyOTEuODRkNjQ4LjE5MmQ0OTMuNTY4ZDQzMC4wOGhSMmQ2NjEuNTA0UjNkNjUxLjI2NFI0ZDU1LjI5NlI1ZDc4OC40OFI2ZDBSN2Q3MzMuMTg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMDdSMTFkNTUuMjk2UjEyZDY2MS41MDRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoyMTlvUjBkOTk2LjM1MlIxYWQyMTQuMDE2ZDI4Ni43MmQyMTQuMDE2ZDg2NC4yNTZkNjMxLjgwOGQ4NjQuMjU2ZDYzMS44MDhkMjg2LjcyZDc5Mi41NzZkMjg2LjcyZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQyODYuNzJkMjE0LjAxNmQyODYuNzJkNDA0LjQ4ZDIzNi41NDNkMjY4LjI4OGQyMzYuNTQzZDM4MC45MjhkNDguMTI3ZDQ4My4zMjhkNDguMTI3ZDU5NS45NjhkMjM2LjU0M2Q0NTguNzUyZDIzNi41NDNkNDMwLjA4ZDE5MS40ODdkNDA0LjQ4ZDIzNi41NDNoUjJkODQ3Ljg3MlIzZDc5Mi41NzZSNGQ1NS4yOTZSNWQ5NzUuODcyUjZkMFI3ZDkyMC41NzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIxOVIxMWQ1NS4yOTZSMTJkODQ3Ljg3MlIxM2FpMWkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzoxMDZvUjBkOTk2LjM1MlIxYWQ1OS4zOTJkMjM1LjUxOWQyMTYuMDY0ZDIzNS41MTlkMjE2LjA2NGQzOTMuMjE2ZDU5LjM5MmQzOTMuMjE2ZDU5LjM5MmQyMzUuNTE5ZDIxNi4wNjRkNDMwLjA4ZDIxNi4wNjRkMTA4OC41MTJkMjE2LjA2NGQxMTQ5Ljk1MmQxNzIuMDMyZDExOTMuNDcyZDEyOGQxMjM2Ljk5MmQ2Ni41NmQxMjM2Ljk5MmQtMTkxLjQ4OGQxMjM2Ljk5MmQtMTkxLjQ4OGQxMDc5LjI5NmQ1OS4zOTJkMTA3OS4yOTZkNTkuMzkyZDQzMC4wOGQyMTYuMDY0ZDQzMC4wOGhSMmQyNDQuNzM2UjNkMjE2LjA2NFI0ZC0xOTEuNDg4UjVkNzg4LjQ4UjZkLTIxMi45OTJSN2Q5NzkuOTY4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMDZSMTFkLTE5MS40ODhSMTJkMjQ0LjczNlIxM2FpMWkyaTJpMmkyaTFpMmkzaTNpMmkyaTJpMmkyaGc6MjE4b1IwZDk5Ni4zNTJSMWFkMjE0LjAxNmQyODYuNzJkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDI4Ni43MmQ3OTIuNTc2ZDI4Ni43MmQ3OTIuNTc2ZDg3Mi40NDhkNzkyLjU3NmQ5MzQuOTEyZDc0OC4wMzJkOTc5LjQ1NmQ3MDMuNDg4ZDEwMjRkNjQxLjAyNGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkMjg2LjcyZDIxNC4wMTZkMjg2LjcyZDMyNy42OGQyMzUuNTE5ZDM3OS45MDRkMjcuNjQ4ZDU0MC42NzJkMjcuNjQ4ZDQ4OC40NDhkMjM1LjUxOWQzMjcuNjhkMjM1LjUxOWhSMmQ4NDcuODcyUjNkNzkyLjU3NlI0ZDU1LjI5NlI1ZDk5Ni4zNTJSNmQwUjdkOTQxLjA1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjE4UjExZDU1LjI5NlIxMmQ4NDcuODcyUjEzYWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTFpMmkyaTJpMmhnOjEwNW9SMGQ5OTYuMzUyUjFhZDUzLjI0OGQxMDI0ZDUzLjI0OGQ0MzAuMDhkMjA5LjkyZDQzMC4wOGQyMDkuOTJkMTAyNGQ1My4yNDhkMTAyNGQ1My4yNDhkMjM1LjUxOWQyMDkuOTJkMjM1LjUxOWQyMDkuOTJkMzkzLjIxNmQ1My4yNDhkMzkzLjIxNmQ1My4yNDhkMjM1LjUxOWhSMmQyMzQuNDk2UjNkMjA5LjkyUjRkNTMuMjQ4UjVkNzg4LjQ4UjZkMFI3ZDczNS4yMzJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEwNVIxMWQ1My4yNDhSMTJkMjM0LjQ5NlIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjIxN29SMGQ5OTYuMzUyUjFhZDIxNC4wMTZkMjg2LjcyZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQyODYuNzJkNzkyLjU3NmQyODYuNzJkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDI4Ni43MmQyMTQuMDE2ZDI4Ni43MmQ0NjcuOTY4ZDI3LjY0OGQ1MjAuMTkyZDIzNS41MTlkMzU5LjQyNGQyMzUuNTE5ZDMwNy4yZDI3LjY0OGQ0NjcuOTY4ZDI3LjY0OGhSMmQ4NDcuODcyUjNkNzkyLjU3NlI0ZDU1LjI5NlI1ZDk5Ni4zNTJSNmQwUjdkOTQxLjA1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjE3UjExZDU1LjI5NlIxMmQ4NDcuODcyUjEzYWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTFpMmkyaTJpMmhnOjEwNG9SMGQ5OTYuMzUyUjFhZDUwOC45MjhkNDMwLjA4ZDU2OS4zNDRkNDMwLjA4ZDYxMy4zNzZkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQxMDI0ZDUwMC43MzZkMTAyNGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkMjM1LjUxOWQyMTEuOTY4ZDIzNS41MTlkMjExLjk2OGQ0MzAuMDhkNTA4LjkyOGQ0MzAuMDhoUjJkNjg0LjAzMlIzZDY1Ny40MDhSNGQ1NS4yOTZSNWQ3ODguNDhSNmQwUjdkNzMzLjE4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTA0UjExZDU1LjI5NlIxMmQ2ODQuMDMyUjEzYWkxaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjE2b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMTZSMTFkMFIxMmQwUjEzYWhnOjEwM29SMGQ5OTYuMzUyUjFhZDY0NS4xMmQxMTEwLjAxNmQ2NDUuMTJkMTE3MS40NTZkNjAxLjZkMTIxNC45NzZkNTU4LjA4ZDEyNTguNDk2ZDQ5Ni42NGQxMjU4LjQ5NmQxMzYuMTkyZDEyNTguNDk2ZDEzNi4xOTJkMTEwMC44ZDQ4OC40NDhkMTEwMC44ZDQ4OC40NDhkMTAyNGQxOTEuNDg4ZDEwMjRkMTMwLjA0OGQxMDI0ZDg2LjAxNmQ5NzkuOTY4ZDQxLjk4NGQ5MzUuOTM2ZDQxLjk4NGQ4NzUuNTJkNDEuOTg0ZDU3OC41NmQ0MS45ODRkNTE4LjE0NGQ4Ni4wMTZkNDc0LjExMWQxMzAuMDQ4ZDQzMC4wOGQxOTEuNDg4ZDQzMC4wOGQ0OTYuNjRkNDMwLjA4ZDU1OC4wOGQ0MzAuMDhkNjAxLjZkNDc0LjExMWQ2NDUuMTJkNTE4LjE0NGQ2NDUuMTJkNTc4LjU2ZDY0NS4xMmQxMTEwLjAxNmQxOTguNjU2ZDU4Ni43NTJkMTk4LjY1NmQ4NjcuMzI4ZDQ4OC40NDhkODY3LjMyOGQ0ODguNDQ4ZDU4Ni43NTJkMTk4LjY1NmQ1ODYuNzUyaFIyZDY5OS4zOTJSM2Q2NDUuMTJSNGQ0MS45ODRSNWQ1OTMuOTJSNmQtMjM0LjQ5NlI3ZDU1MS45MzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEwM1IxMWQ0MS45ODRSMTJkNjk5LjM5MlIxM2FpMWkzaTNpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmhnOjIxNW9SMGQ5OTYuMzUyUjFhZDUxOS4xNjhkNDk1LjYxNmQ1MTkuMTY4ZDU0Ni44MTZkMzg2LjA0OGQ3MTYuOGQ1MTkuMTY4ZDg4OC44MzJkNTE5LjE2OGQ5NDAuMDMyZDM1Ni4zNTJkOTQwLjAzMmQyODUuNjk2ZDg0NC44ZDI3NS40NTZkODYxLjE4NGQyNDkuODU2ZDg5My40NGQyMjQuMjU2ZDkyNS42OTZkMjE1LjA0ZDk0MC4wMzJkNTQuMjcyZDk0MC4wMzJkNTQuMjcyZDg4OC44MzJkMTg2LjM2OGQ3MTYuOGQ1NC4yNzJkNTQ2LjgxNmQ1NC4yNzJkNDk1LjYxNmQyMTYuMDY0ZDQ5NS42MTZkMjg1LjY5NmQ1OTEuODcyZDM1Ni4zNTJkNDk1LjYxNmQ1MTkuMTY4ZDQ5NS42MTZoUjJkNTU5LjEwNFIzZDUxOS4xNjhSNGQ1NC4yNzJSNWQ1MjguMzg0UjZkODMuOTY4UjdkNDc0LjExMlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjE1UjExZDU0LjI3MlIxMmQ1NTkuMTA0UjEzYWkxaTJpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmhnOjEwMm9SMGQ5OTYuMzUyUjFhZDQzMS4xMDRkMzkzLjIxNmQyMTAuOTQ0ZDM5My4yMTZkMjEwLjk0NGQ0MzAuMDhkNDMxLjEwNGQ0MzAuMDhkNDMxLjEwNGQ1ODYuNzUyZDIxMC45NDRkNTg2Ljc1MmQyMTAuOTQ0ZDEwMjRkNTQuMjcyZDEwMjRkNTQuMjcyZDM4NGQ1NC4yNzJkMzIzLjU4M2Q5Ny43OTJkMjc5LjU1MmQxNDEuMzEyZDIzNS41MTlkMjAzLjc3NmQyMzUuNTE5ZDQzMS4xMDRkMjM1LjUxOWQ0MzEuMTA0ZDM5My4yMTZoUjJkNDUwLjU2UjNkNDMxLjEwNFI0ZDU0LjI3MlI1ZDc4OC40OFI2ZDBSN2Q3MzQuMjA4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMDJSMTFkNTQuMjcyUjEyZDQ1MC41NlIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpM2kzaTJpMmhnOjIxNG9SMGQ5OTYuMzUyUjFhZDIwNi44NDhkMjg2LjcyZDY0MS4wMjRkMjg2LjcyZDcwMy40ODhkMjg2LjcyZDc0OC4wMzJkMzMxLjI2NGQ3OTIuNTc2ZDM3NS44MDhkNzkyLjU3NmQ0MzguMjcxZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQ0MzguMjcxZDU1LjI5NmQzNzQuNzg0ZDk5LjMyOGQzMzAuNzUxZDE0My4zNmQyODYuNzJkMjA2Ljg0OGQyODYuNzJkMjE0LjAxNmQ0NDYuNDYzZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQ0NDYuNDYzZDIxNC4wMTZkNDQ2LjQ2M2Q2MTYuNDQ4ZDc3LjgyM2Q2MTYuNDQ4ZDIzNS41MTlkNDU4Ljc1MmQyMzUuNTE5ZDQ1OC43NTJkNzcuODIzZDYxNi40NDhkNzcuODIzZDM5Ny4zMTJkNzcuODIzZDM5Ny4zMTJkMjM1LjUxOWQyNDAuNjRkMjM1LjUxOWQyNDAuNjRkNzcuODIzZDM5Ny4zMTJkNzcuODIzaFIyZDg0Ny44NzJSM2Q3OTIuNTc2UjRkNTUuMjk2UjVkOTQ2LjE3NlI2ZDBSN2Q4OTAuODhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIxNFIxMWQ1NS4yOTZSMTJkODQ3Ljg3MlIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEwMW9SMGQ5OTYuMzUyUjFhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyaFIyZDcwOC42MDhSM2Q2NTQuMzM2UjRkNTIuMjI0UjVkNTkzLjkyUjZkMFI3ZDU0MS42OTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEwMVIxMWQ1Mi4yMjRSMTJkNzA4LjYwOFIxM2FpMWkzaTNpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMWkyaTJpMmkyaGc6MjEzb1IwZDk5Ni4zNTJSMWFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDQ5OC42ODhkMTEzLjY2M2Q1MzguNjI0ZDExMy42NjNkNTk2Ljk5MmQ3NS43NzVkNTk2Ljk5MmQyMDQuNzk5ZDUzMy41MDRkMjMxLjQyM2Q0OTUuNjE2ZDIzMS40MjNkNDU3LjcyOGQyMzEuNDIzZDM5OC44NDhkMTk5LjY3OWQzMzkuOTY4ZDE2Ny45MzZkMzEwLjI3MmQxNjcuOTM2ZDI5OS4wMDhkMTY3LjkzNmQyNTZkMTY3LjkzNmQyMTIuOTkyZDIwNC43OTlkMjEyLjk5MmQ3Ny44MjNkMjgyLjYyNGQ1MC4xNzVkMzEwLjI3MmQ1MC4xNzVkMzQ4LjE2ZDUwLjE3NWQ0MDcuNTUyZDc5Ljg3MWQ0NjYuOTQ0ZDEwOS41NjdkNDk4LjY4OGQxMTMuNjYzaFIyZDg0Ny44NzJSM2Q3OTIuNTc2UjRkNTUuMjk2UjVkOTczLjgyNFI2ZDBSN2Q5MTguNTI4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMTNSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpM2kyaTNpM2kzaTJpM2kyaTNpM2kzaGc6MTAwb1IwZDk5Ni4zNTJSMWFkNDcwLjAxNmQyMzUuNTE5ZDYyNi42ODhkMjM1LjUxOWQ2MjYuNjg4ZDEwMjRkMTcyLjAzMmQxMDI0ZDExMC41OTJkMTAyNGQ2Ny4wNzJkOTc5Ljk2OGQyMy41NTJkOTM1LjkzNmQyMy41NTJkODc1LjUyZDIzLjU1MmQ1NzguNTZkMjMuNTUyZDUxOC4xNDRkNjcuMDcyZDQ3NC4xMTFkMTEwLjU5MmQ0MzAuMDhkMTcyLjAzMmQ0MzAuMDhkNDcwLjAxNmQ0MzAuMDhkNDcwLjAxNmQyMzUuNTE5ZDE4MS4yNDhkNTg2Ljc1MmQxODEuMjQ4ZDg2Ny4zMjhkNDcwLjAxNmQ4NjcuMzI4ZDQ3MC4wMTZkNTg2Ljc1MmQxODEuMjQ4ZDU4Ni43NTJoUjJkNjgzLjAwOFIzZDYyNi42ODhSNGQyMy41NTJSNWQ3ODguNDhSNmQwUjdkNzY0LjkyOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTAwUjExZDIzLjU1MlIxMmQ2ODMuMDA4UjEzYWkxaTJpMmkyaTNpM2kyaTNpM2kyaTJpMWkyaTJpMmkyaGc6MjEyb1IwZDk5Ni4zNTJSMWFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDQwNC40OGQyMzYuNTQzZDI2OC4yODhkMjM2LjU0M2QzODAuOTI4ZDQ4LjEyN2Q0ODMuMzI4ZDQ4LjEyN2Q1OTUuOTY4ZDIzNi41NDNkNDU4Ljc1MmQyMzYuNTQzZDQzMC4wOGQxOTEuNDg3ZDQwNC40OGQyMzYuNTQzaFIyZDg0Ny44NzJSM2Q3OTIuNTc2UjRkNTUuMjk2UjVkOTc1Ljg3MlI2ZDBSN2Q5MjAuNTc2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMTJSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjk5b1IwZDk5Ni4zNTJSMWFkNjUzLjMxMmQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ2NTMuMzEyZDQzMC4wOGQ2NTMuMzEyZDU4Ni43NTJoUjJkNzExLjY4UjNkNjU0LjMzNlI0ZDUyLjIyNFI1ZDU5My45MlI2ZDBSN2Q1NDEuNjk2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk5OVIxMWQ1Mi4yMjRSMTJkNzExLjY4UjEzYWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaGc6MjExb1IwZDk5Ni4zNTJSMWFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDM0OC4xNmQyMzUuNTE5ZDQwMC4zODRkMjcuNjQ4ZDU2MS4xNTJkMjcuNjQ4ZDUwOC45MjhkMjM1LjUxOWQzNDguMTZkMjM1LjUxOWhSMmQ4NDcuODcyUjNkNzkyLjU3NlI0ZDU1LjI5NlI1ZDk5Ni4zNTJSNmQwUjdkOTQxLjA1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjExUjExZDU1LjI5NlIxMmQ4NDcuODcyUjEzYWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo5OG9SMGQ5OTYuMzUyUjFhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQ4NzUuNTJkNjU3LjQwOGQ5MzUuOTM2ZDYxMy44ODhkOTc5Ljk2OGQ1NzAuMzY4ZDEwMjRkNTA4LjkyOGQxMDI0ZDU1LjI5NmQxMDI0ZDU1LjI5NmQyMzUuNTE5ZDIxMS45NjhkMjM1LjUxOWQyMTEuOTY4ZDQzMC4wOGQ1MDguOTI4ZDQzMC4wOGQyMTEuOTY4ZDU4Ni43NTJkMjExLjk2OGQ4NjcuMzI4ZDUwMC43MzZkODY3LjMyOGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyaFIyZDY4My4wMDhSM2Q2NTcuNDA4UjRkNTUuMjk2UjVkNzg4LjQ4UjZkMFI3ZDczMy4xODRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTk4UjExZDU1LjI5NlIxMmQ2ODMuMDA4UjEzYWkxaTNpM2kyaTNpM2kyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MjEwb1IwZDk5Ni4zNTJSMWFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDQ2Ny45NjhkMjcuNjQ4ZDUyMC4xOTJkMjM1LjUxOWQzNTkuNDI0ZDIzNS41MTlkMzA3LjJkMjcuNjQ4ZDQ2Ny45NjhkMjcuNjQ4aFIyZDg0Ny44NzJSM2Q3OTIuNTc2UjRkNTUuMjk2UjVkOTk2LjM1MlI2ZDBSN2Q5NDEuMDU2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMTBSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjk3b1IwZDk5Ni4zNTJSMWFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4aFIyZDcxMC42NTZSM2Q2NTUuMzZSNGQ1My4yNDhSNWQ1OTMuOTJSNmQwUjdkNTQwLjY3MlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpOTdSMTFkNTMuMjQ4UjEyZDcxMC42NTZSMTNhaTFpM2kzaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MjA5b1IwZDk5Ni4zNTJSMWFkNjMzLjg1NmQ3NzguMjRkNjMzLjg1NmQyODYuNzJkNzk0LjYyNGQyODYuNzJkNzk0LjYyNGQxMDI0ZDYzMC43ODRkMTAyNGQyMTYuMDY0ZDUzMC40MzJkMjE2LjA2NGQxMDI0ZDU3LjM0NGQxMDI0ZDU3LjM0NGQyODYuNzJkMjIxLjE4NGQyODYuNzJkNjMzLjg1NmQ3NzguMjRkNTEwLjk3NmQxMTMuNjYzZDU1MC45MTJkMTEzLjY2M2Q2MDkuMjhkNzUuNzc1ZDYwOS4yOGQyMDQuNzk5ZDU0NS43OTJkMjMxLjQyM2Q1MDcuOTA0ZDIzMS40MjNkNDcwLjAxNmQyMzEuNDIzZDQxMS4xMzZkMTk5LjY3OWQzNTIuMjU2ZDE2Ny45MzZkMzIyLjU2ZDE2Ny45MzZkMzExLjI5NmQxNjcuOTM2ZDI2OC4yODhkMTY3LjkzNmQyMjUuMjhkMjA0Ljc5OWQyMjUuMjhkNzcuODIzZDI5NC45MTJkNTAuMTc1ZDMyMi41NmQ1MC4xNzVkMzYwLjQ0OGQ1MC4xNzVkNDE5Ljg0ZDc5Ljg3MWQ0NzkuMjMyZDEwOS41NjdkNTEwLjk3NmQxMTMuNjYzaFIyZDg1MS45NjhSM2Q3OTQuNjI0UjRkNTcuMzQ0UjVkOTczLjgyNFI2ZDBSN2Q5MTYuNDhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIwOVIxMWQ1Ny4zNDRSMTJkODUxLjk2OFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpM2kyaTNpM2kzaTJpM2kyaTNpM2kzaGc6OTZvUjBkOTk2LjM1MlIxYWQxOTMuNTM2ZDUxLjE5OWQyNDUuNzZkMjU5LjA3MmQ4NC45OTJkMjU5LjA3MmQzMi43NjhkNTEuMTk5ZDE5My41MzZkNTEuMTk5aFIyZDI3OC41MjhSM2QyNDUuNzZSNGQzMi43NjhSNWQ5NzIuOFI2ZDc2NC45MjhSN2Q5NDAuMDMyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk5NlIxMWQzMi43NjhSMTJkMjc4LjUyOFIxM2FpMWkyaTJpMmkyaGc6MjA4b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMDhSMTFkMFIxMmQwUjEzYWhnOjk1b1IwZDk5Ni4zNTJSMWFkNzc5LjI2NGQxMDI2LjA0OGQ3NzkuMjY0ZDExODIuNzJkNTUuMjk2ZDExODIuNzJkNTUuMjk2ZDEwMjYuMDQ4ZDc3OS4yNjRkMTAyNi4wNDhoUjJkODQ3Ljg3MlIzZDc3OS4yNjRSNGQ1NS4yOTZSNWQtMi4wNDhSNmQtMTU4LjcyUjdkLTU3LjM0NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpOTVSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkyaTJpMmhnOjIwN29SMGQ5OTYuMzUyUjFhZDc1Ljc3NmQxMDI0ZDc1Ljc3NmQyODYuNzJkMjM1LjUyZDI4Ni43MmQyMzUuNTJkMTAyNGQ3NS43NzZkMTAyNGQzNDYuMTEyZDc3LjgyM2QzNDYuMTEyZDIzNS41MTlkMTg4LjQxNmQyMzUuNTE5ZDE4OC40MTZkNzcuODIzZDM0Ni4xMTJkNzcuODIzZDEyNi45NzZkNzcuODIzZDEyNi45NzZkMjM1LjUxOWQtMjkuNjk2ZDIzNS41MTlkLTI5LjY5NmQ3Ny44MjNkMTI2Ljk3NmQ3Ny44MjNoUjJkMjI1LjI4UjNkMzQ2LjExMlI0ZC0yOS42OTZSNWQ5NDYuMTc2UjZkMFI3ZDk3NS44NzJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIwN1IxMWQtMjkuNjk2UjEyZDIyNS4yOFIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo5NG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpOTRSMTFkMFIxMmQwUjEzYWhnOjIwNm9SMGQ5OTYuMzUyUjFhZDYzLjQ4OGQxMDI0ZDYzLjQ4OGQyODYuNzJkMjIzLjIzMmQyODYuNzJkMjIzLjIzMmQxMDI0ZDYzLjQ4OGQxMDI0ZDEyMy45MDRkMjM2LjU0M2QtMTIuMjg4ZDIzNi41NDNkMTAwLjM1MmQ0OC4xMjdkMjAyLjc1MmQ0OC4xMjdkMzE1LjM5MmQyMzYuNTQzZDE3OC4xNzZkMjM2LjU0M2QxNDkuNTA0ZDE5MS40ODdkMTIzLjkwNGQyMzYuNTQzaFIyZDIyNS4yOFIzZDMxNS4zOTJSNGQtMTIuMjg4UjVkOTc1Ljg3MlI2ZDBSN2Q5ODguMTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIwNlIxMWQtMTIuMjg4UjEyZDIyNS4yOFIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjkzb1IwZDk5Ni4zNTJSMWFkNTIuMjI0ZDQ0My4zOTFkNTIuMjI0ZDI4Ni43MmQyNjguMjg4ZDI4Ni43MmQyNjguMjg4ZDEwMjRkNTIuMjI0ZDEwMjRkNTIuMjI0ZDg2Ny4zMjhkMTEwLjU5MmQ4NjcuMzI4ZDExMC41OTJkNDQzLjM5MWQ1Mi4yMjRkNDQzLjM5MWhSMmQyODIuNjI0UjNkMjY4LjI4OFI0ZDUyLjIyNFI1ZDczNy4yOFI2ZDBSN2Q2ODUuMDU2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk5M1IxMWQ1Mi4yMjRSMTJkMjgyLjYyNFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJoZzoyMDVvUjBkOTk2LjM1MlIxYWQ0My4wMDhkMTAyNGQ0My4wMDhkMjg2LjcyZDIwMi43NTJkMjg2LjcyZDIwMi43NTJkMTAyNGQ0My4wMDhkMTAyNGQzNi44NjRkMjM1LjUxOWQ4OS4wODhkMjcuNjQ4ZDI0OS44NTZkMjcuNjQ4ZDE5Ny42MzJkMjM1LjUxOWQzNi44NjRkMjM1LjUxOWhSMmQyMjUuMjhSM2QyNDkuODU2UjRkMzYuODY0UjVkOTk2LjM1MlI2ZDBSN2Q5NTkuNDg4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMDVSMTFkMzYuODY0UjEyZDIyNS4yOFIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjkyb1IwZDk5Ni4zNTJSMWFkNS4xMmQyODYuNzJkNjEuNDRkMjg2LjcyZDUzMy41MDRkODY2LjMwNGQ1MzMuNTA0ZDEwMjRkNDc3LjE4NGQxMDI0ZDUuMTJkNDQ0LjQxNWQ1LjEyZDI4Ni43MmhSMmQ1MzIuNDhSM2Q1MzMuNTA0UjRkNS4xMlI1ZDczNy4yOFI2ZDBSN2Q3MzIuMTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTkyUjExZDUuMTJSMTJkNTMyLjQ4UjEzYWkxaTJpMmkyaTJpMmkyaGc6MjA0b1IwZDk5Ni4zNTJSMWFkOTcuMjhkMTAyNGQ5Ny4yOGQyODYuNzJkMjU3LjAyNGQyODYuNzJkMjU3LjAyNGQxMDI0ZDk3LjI4ZDEwMjRkMTk3LjYzMmQyNy42NDhkMjQ5Ljg1NmQyMzUuNTE5ZDg5LjA4OGQyMzUuNTE5ZDM2Ljg2NGQyNy42NDhkMTk3LjYzMmQyNy42NDhoUjJkMjI1LjI4UjNkMjU3LjAyNFI0ZDM2Ljg2NFI1ZDk5Ni4zNTJSNmQwUjdkOTU5LjQ4OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjA0UjExZDM2Ljg2NFIxMmQyMjUuMjhSMTNhaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo5MW9SMGQ5OTYuMzUyUjFhZDU1LjI5NmQxMDI0ZDU1LjI5NmQyODYuNzJkMjcxLjM2ZDI4Ni43MmQyNzEuMzZkNDQzLjM5MWQyMTEuOTY4ZDQ0My4zOTFkMjExLjk2OGQ4NjcuMzI4ZDI3MS4zNmQ4NjcuMzI4ZDI3MS4zNmQxMDI0ZDU1LjI5NmQxMDI0aFIyZDI4MS42UjNkMjcxLjM2UjRkNTUuMjk2UjVkNzM3LjI4UjZkMFI3ZDY4MS45ODRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTkxUjExZDU1LjI5NlIxMmQyODEuNlIxM2FpMWkyaTJpMmkyaTJpMmkyaTJoZzoyMDNvUjBkOTk2LjM1MlIxYWQ3NDAuMzUyZDI4Ni43MmQ3NDAuMzUyZDQ0Ni40NjNkMjIwLjE2ZDQ0Ni40NjNkMjIwLjE2ZDU3NS40ODhkNjM4Ljk3NmQ1NzUuNDg4ZDYzOC45NzZkNzM1LjIzMmQyMjAuMTZkNzM1LjIzMmQyMjAuMTZkODY0LjI1NmQ3NDAuMzUyZDg2NC4yNTZkNzQwLjM1MmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQyODYuNzJkNzQwLjM1MmQyODYuNzJkNTk0Ljk0NGQ3Ny44MjNkNTk0Ljk0NGQyMzUuNTE5ZDQzNy4yNDhkMjM1LjUxOWQ0MzcuMjQ4ZDc3LjgyM2Q1OTQuOTQ0ZDc3LjgyM2QzNzUuODA4ZDc3LjgyM2QzNzUuODA4ZDIzNS41MTlkMjE5LjEzNmQyMzUuNTE5ZDIxOS4xMzZkNzcuODIzZDM3NS44MDhkNzcuODIzaFIyZDc4NC4zODRSM2Q3NDAuMzUyUjRkNTkuMzkyUjVkOTQ2LjE3NlI2ZDBSN2Q4ODYuNzg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMDNSMTFkNTkuMzkyUjEyZDc4NC4zODRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjkwb1IwZDk5Ni4zNTJSMWFkNTIuMjI0ZDQ0Ni40NjNkNTIuMjI0ZDI4Ni43MmQ3ODkuNTA0ZDI4Ni43MmQ3ODkuNTA0ZDQ0OS41MzVkMjk1LjkzNmQ4NjQuMjU2ZDc4OS41MDRkODY0LjI1NmQ3ODkuNTA0ZDEwMjRkNTIuMjI0ZDEwMjRkNTIuMjI0ZDg2MS4xODRkNTQ1Ljc5MmQ0NDYuNDYzZDUyLjIyNGQ0NDYuNDYzaFIyZDg0MC43MDRSM2Q3ODkuNTA0UjRkNTIuMjI0UjVkNzM3LjI4UjZkMFI3ZDY4NS4wNTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTkwUjExZDUyLjIyNFIxMmQ4NDAuNzA0UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoyMDJvUjBkOTk2LjM1MlIxYWQ3NDAuMzUyZDI4Ni43MmQ3NDAuMzUyZDQ0Ni40NjNkMjIwLjE2ZDQ0Ni40NjNkMjIwLjE2ZDU3NS40ODhkNjM4Ljk3NmQ1NzUuNDg4ZDYzOC45NzZkNzM1LjIzMmQyMjAuMTZkNzM1LjIzMmQyMjAuMTZkODY0LjI1NmQ3NDAuMzUyZDg2NC4yNTZkNzQwLjM1MmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQyODYuNzJkNzQwLjM1MmQyODYuNzJkMzcyLjczNmQyMzYuNTQzZDIzNi41NDRkMjM2LjU0M2QzNDkuMTg0ZDQ4LjEyN2Q0NTEuNTg0ZDQ4LjEyN2Q1NjQuMjI0ZDIzNi41NDNkNDI3LjAwOGQyMzYuNTQzZDM5OC4zMzZkMTkxLjQ4N2QzNzIuNzM2ZDIzNi41NDNoUjJkNzg0LjM4NFIzZDc0MC4zNTJSNGQ1OS4zOTJSNWQ5NzUuODcyUjZkMFI3ZDkxNi40OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjAyUjExZDU5LjM5MlIxMmQ3ODQuMzg0UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjg5b1IwZDk5Ni4zNTJSMWFkNjY4LjY3MmQyODYuNzJkODYwLjE2ZDI4Ni43MmQ1MTguMTQ0ZDc0OS41NjhkNTE4LjE0NGQxMDI0ZDM1OC40ZDEwMjRkMzU4LjRkNzQ4LjU0NGQyMjQuMjU2ZDU2OC4zMTlkMTcuNDA4ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQ0MzguMjcyZDU3Ny41MzZkNjY4LjY3MmQyODYuNzJoUjJkODI1LjM0NFIzZDg2MC4xNlI0ZDE3LjQwOFI1ZDczNy4yOFI2ZDBSN2Q3MTkuODcyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk4OVIxMWQxNy40MDhSMTJkODI1LjM0NFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjAxb1IwZDk5Ni4zNTJSMWFkNzQwLjM1MmQyODYuNzJkNzQwLjM1MmQ0NDYuNDYzZDIyMC4xNmQ0NDYuNDYzZDIyMC4xNmQ1NzUuNDg4ZDYzOC45NzZkNTc1LjQ4OGQ2MzguOTc2ZDczNS4yMzJkMjIwLjE2ZDczNS4yMzJkMjIwLjE2ZDg2NC4yNTZkNzQwLjM1MmQ4NjQuMjU2ZDc0MC4zNTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkMjg2LjcyZDc0MC4zNTJkMjg2LjcyZDMxNi40MTZkMjM1LjUxOWQzNjguNjRkMjcuNjQ4ZDUyOS40MDhkMjcuNjQ4ZDQ3Ny4xODRkMjM1LjUxOWQzMTYuNDE2ZDIzNS41MTloUjJkNzg0LjM4NFIzZDc0MC4zNTJSNGQ1OS4zOTJSNWQ5OTYuMzUyUjZkMFI3ZDkzNi45NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjAxUjExZDU5LjM5MlIxMmQ3ODQuMzg0UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjg4b1IwZDk5Ni4zNTJSMWFkNjE5LjUyZDI4Ni43MmQ3ODQuMzg0ZDI4Ni43MmQ3ODQuMzg0ZDM0MC45OTFkNTIwLjE5MmQ2NTUuMzZkNzg0LjM4NGQ5NjguNzA0ZDc4NC4zODRkMTAyNGQ2MTkuNTJkMTAyNGQ0MTQuNzJkNzgyLjMzNmQyMTEuOTY4ZDEwMjRkNDcuMTA0ZDEwMjRkNDcuMTA0ZDk2OS43MjhkMzEwLjI3MmQ2NTUuMzZkNDcuMTA0ZDM0MC45OTFkNDcuMTA0ZDI4Ni43MmQyMTEuOTY4ZDI4Ni43MmQ0MTYuNzY4ZDUyOS40MDhkNDQ2LjQ2NGQ0OTEuNTJkNTE5LjE2OGQ0MDYuMDE1ZDU5MS44NzJkMzIwLjUxMWQ2MTkuNTJkMjg2LjcyaFIyZDgzMS40ODhSM2Q3ODQuMzg0UjRkNDcuMTA0UjVkNzM3LjI4UjZkMFI3ZDY5MC4xNzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTg4UjExZDQ3LjEwNFIxMmQ4MzEuNDg4UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2hnOjIwMG9SMGQ5OTYuMzUyUjFhZDc0MC4zNTJkMjg2LjcyZDc0MC4zNTJkNDQ2LjQ2M2QyMjAuMTZkNDQ2LjQ2M2QyMjAuMTZkNTc1LjQ4OGQ2MzguOTc2ZDU3NS40ODhkNjM4Ljk3NmQ3MzUuMjMyZDIyMC4xNmQ3MzUuMjMyZDIyMC4xNmQ4NjQuMjU2ZDc0MC4zNTJkODY0LjI1NmQ3NDAuMzUyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQ3NDAuMzUyZDI4Ni43MmQ0NDYuNDY0ZDI3LjY0OGQ0OTguNjg4ZDIzNS41MTlkMzM3LjkyZDIzNS41MTlkMjg1LjY5NmQyNy42NDhkNDQ2LjQ2NGQyNy42NDhoUjJkNzg0LjM4NFIzZDc0MC4zNTJSNGQ1OS4zOTJSNWQ5OTYuMzUyUjZkMFI3ZDkzNi45NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjAwUjExZDU5LjM5MlIxMmQ3ODQuMzg0UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjg3b1IwZDk5Ni4zNTJSMWFkOTk1LjMyOGQyODYuNzJkMTE2My4yNjRkMjg2LjcyZDg5NC45NzZkMTAyNGQ3NzMuMTJkMTAyNGQ1OTkuMDRkNTQ5Ljg4N2Q1MzMuNTA0ZDczMC4xMTJkNDI1Ljk4NGQxMDI0ZDMwNC4xMjhkMTAyNGQzNS44NGQyODYuNzJkMjA0LjhkMjg2LjcyZDM2NS41NjhkNzI2LjAxNmQzOTEuMTY4ZDY1Ny40MDhkNTI2LjMzNmQyODYuNzJkNjcyLjc2OGQyODYuNzJkODM0LjU2ZDcyNi4wMTZkODYwLjE2ZDY1Ny40MDhkOTk1LjMyOGQyODYuNzJoUjJkMTIwNy4yOTZSM2QxMTYzLjI2NFI0ZDM1Ljg0UjVkNzM3LjI4UjZkMFI3ZDcwMS40NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODdSMTFkMzUuODRSMTJkMTIwNy4yOTZSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE5OW9SMGQ5OTYuMzUyUjFhZDc5Mi41NzZkNDQ2LjQ2M2QyMTYuMDY0ZDQ0Ni40NjNkMjE2LjA2NGQ4NjQuMjU2ZDc5Mi41NzZkODY0LjI1NmQ3OTIuNTc2ZDEwMjRkNTQzLjc0NGQxMDI0ZDQ5NS42MTZkMTE4My43NDRkMzM0Ljg0OGQxMTgzLjc0NGQzODIuOTc2ZDEwMjRkMjA4Ljg5NmQxMDI0ZDE0NS40MDhkMTAyNGQxMDEuMzc2ZDk3OS45NjhkNTcuMzQ0ZDkzNS45MzZkNTcuMzQ0ZDg3Mi40NDhkNTcuMzQ0ZDQzOC4yNzFkNTcuMzQ0ZDM3NC43ODRkMTAxLjM3NmQzMzAuNzUxZDE0NS40MDhkMjg2LjcyZDIwOC44OTZkMjg2LjcyZDc5Mi41NzZkMjg2LjcyZDc5Mi41NzZkNDQ2LjQ2M2hSMmQ4NDEuNzI4UjNkNzkyLjU3NlI0ZDU3LjM0NFI1ZDczNy4yOFI2ZC0xNTkuNzQ0UjdkNjc5LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTk5UjExZDU3LjM0NFIxMmQ4NDEuNzI4UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzo4Nm9SMGQ5OTYuMzUyUjFhZDUyOS40MDhkODIyLjI3MWQ4MzguNjU2ZDI4Ni43MmQxMDIxLjk1MmQyODYuNzJkNTk0Ljk0NGQxMDI0ZDQ2Mi44NDhkMTAyNGQzNS44NGQyODYuNzJkMjIwLjE2ZDI4Ni43MmQ1MjkuNDA4ZDgyMi4yNzFoUjJkMTAyNy4wNzJSM2QxMDIxLjk1MlI0ZDM1Ljg0UjVkNzM3LjI4UjZkMFI3ZDcwMS40NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODZSMTFkMzUuODRSMTJkMTAyNy4wNzJSMTNhaTFpMmkyaTJpMmkyaTJpMmhnOjE5OG9SMGQ5OTYuMzUyUjFhZDc5Mi41NzZkNDQ2LjQ2M2Q3OTIuNTc2ZDU3NS40ODhkMTIxMS4zOTJkNTc1LjQ4OGQxMjExLjM5MmQ3MzUuMjMyZDc5Mi41NzZkNzM1LjIzMmQ3OTIuNTc2ZDg2NC4yNTZkMTMxMy43OTJkODY0LjI1NmQxMzEzLjc5MmQxMDI0ZDYzMy44NTZkMTAyNGQ2MzMuODU2ZDc4Ni40MzJkMjE2LjA2NGQ3ODYuNDMyZDIxNi4wNjRkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkNDM4LjI3MWQ1NS4yOTZkMzc1LjgwOGQ5OS44NGQzMzEuMjY0ZDE0NC4zODRkMjg2LjcyZDIwNi44NDhkMjg2LjcyZDEzMTMuNzkyZDI4Ni43MmQxMzEzLjc5MmQ0NDYuNDYzZDc5Mi41NzZkNDQ2LjQ2M2Q2MzMuODU2ZDYyNi42ODhkNjMzLjg1NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2QyMTYuMDY0ZDYyNi42ODhkNjMzLjg1NmQ2MjYuNjg4aFIyZDE0MDhSM2QxMzEzLjc5MlI0ZDU1LjI5NlI1ZDczNy4yOFI2ZDBSN2Q2ODEuOTg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxOThSMTFkNTUuMjk2UjEyZDE0MDhSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMWkyaTJpMmkyaGc6ODVvUjBkOTk2LjM1MlIxYWQyMTQuMDE2ZDI4Ni43MmQyMTQuMDE2ZDg2NC4yNTZkNjMxLjgwOGQ4NjQuMjU2ZDYzMS44MDhkMjg2LjcyZDc5Mi41NzZkMjg2LjcyZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQyODYuNzJkMjE0LjAxNmQyODYuNzJoUjJkODQ3Ljg3MlIzZDc5Mi41NzZSNGQ1NS4yOTZSNWQ3MzcuMjhSNmQwUjdkNjgxLjk4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODVSMTFkNTUuMjk2UjEyZDg0Ny44NzJSMTNhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzoxOTdvUjBkOTk2LjM1MlIxYWQyMTAuOTQ0ZDI4Ni43MmQ2NDQuMDk2ZDI4Ni43MmQ3MDcuNTg0ZDI4Ni43MmQ3NTIuMTI4ZDMzMS4yNjRkNzk2LjY3MmQzNzUuODA4ZDc5Ni42NzJkNDM4LjI3MWQ3OTYuNjcyZDEwMjRkNjM1LjkwNGQxMDI0ZDYzNS45MDRkNzg2LjQzMmQyMTguMTEyZDc4Ni40MzJkMjE4LjExMmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQ0MzguMjcxZDU5LjM5MmQzNzQuNzg0ZDEwMy40MjRkMzMwLjc1MWQxNDcuNDU2ZDI4Ni43MmQyMTAuOTQ0ZDI4Ni43MmQyMTguMTEyZDYyNi42ODhkNjM1LjkwNGQ2MjYuNjg4ZDYzNS45MDRkNDQ2LjQ2M2QyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ2MjYuNjg4ZDM4Ni4wNDhkMjguNjcyZDQzOC4yNzJkMjguNjcyZDQ3MC4wMTZkMjguNjcyZDQ5My4wNTZkNTEuNzExZDUxNi4wOTZkNzQuNzUxZDUxNi4wOTZkMTA2LjQ5NWQ1MTYuMDk2ZDE1Ni42NzJkNTE2LjA5NmQxODguNDE1ZDQ5My4wNTZkMjExLjQ1NmQ0NzAuMDE2ZDIzNC40OTVkNDM4LjI3MmQyMzQuNDk1ZDM4Ni4wNDhkMjM0LjQ5NWQzNTQuMzA0ZDIzNC40OTVkMzMwLjc1MmQyMTEuNDU2ZDMwNy4yZDE4OC40MTVkMzA3LjJkMTU2LjY3MmQzMDcuMmQxMDYuNDk1ZDMwNy4yZDc0Ljc1MWQzMzAuNzUyZDUxLjcxMWQzNTQuMzA0ZDI4LjY3MmQzODYuMDQ4ZDI4LjY3MmQzODYuMDQ4ZDEwOC41NDNkMzg2LjA0OGQxNjMuODRkNDM4LjI3MmQxNjMuODRkNDM4LjI3MmQxMDguNTQzZDM4Ni4wNDhkMTA4LjU0M2hSMmQ4NTYuMDY0UjNkNzk2LjY3MlI0ZDU5LjM5MlI1ZDk5NS4zMjhSNmQwUjdkOTM1LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTk3UjExZDU5LjM5MlIxMmQ4NTYuMDY0UjEzYWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmhnOjg0b1IwZDk5Ni4zNTJSMWFkMjAuNDhkMjg2LjcyZDc1Ny43NmQyODYuNzJkNzU3Ljc2ZDQ0Ni40NjNkNDY4Ljk5MmQ0NDYuNDYzZDQ2OC45OTJkMTAyNGQzMDkuMjQ4ZDEwMjRkMzA5LjI0OGQ0NDYuNDYzZDIwLjQ4ZDQ0Ni40NjNkMjAuNDhkMjg2LjcyaFIyZDc3Ny4yMTZSM2Q3NTcuNzZSNGQyMC40OFI1ZDczNy4yOFI2ZDBSN2Q3MTYuOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODRSMTFkMjAuNDhSMTJkNzc3LjIxNlIxM2FpMWkyaTJpMmkyaTJpMmkyaTJoZzoxOTZvUjBkOTk2LjM1MlIxYWQyMTAuOTQ0ZDI4Ni43MmQ2NDQuMDk2ZDI4Ni43MmQ3MDcuNTg0ZDI4Ni43MmQ3NTIuMTI4ZDMzMS4yNjRkNzk2LjY3MmQzNzUuODA4ZDc5Ni42NzJkNDM4LjI3MWQ3OTYuNjcyZDEwMjRkNjM1LjkwNGQxMDI0ZDYzNS45MDRkNzg2LjQzMmQyMTguMTEyZDc4Ni40MzJkMjE4LjExMmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQ0MzguMjcxZDU5LjM5MmQzNzQuNzg0ZDEwMy40MjRkMzMwLjc1MWQxNDcuNDU2ZDI4Ni43MmQyMTAuOTQ0ZDI4Ni43MmQyMTguMTEyZDYyNi42ODhkNjM1LjkwNGQ2MjYuNjg4ZDYzNS45MDRkNDQ2LjQ2M2QyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ2MjYuNjg4ZDYyMC41NDRkNzcuODIzZDYyMC41NDRkMjM1LjUxOWQ0NjIuODQ4ZDIzNS41MTlkNDYyLjg0OGQ3Ny44MjNkNjIwLjU0NGQ3Ny44MjNkNDAxLjQwOGQ3Ny44MjNkNDAxLjQwOGQyMzUuNTE5ZDI0NC43MzZkMjM1LjUxOWQyNDQuNzM2ZDc3LjgyM2Q0MDEuNDA4ZDc3LjgyM2hSMmQ4NTYuMDY0UjNkNzk2LjY3MlI0ZDU5LjM5MlI1ZDk0Ni4xNzZSNmQwUjdkODg2Ljc4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTk2UjExZDU5LjM5MlIxMmQ4NTYuMDY0UjEzYWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6ODNvUjBkOTk2LjM1MlIxYWQ3ODkuNTA0ZDQzOC4yNzFkNzg5LjUwNGQ1MDYuODhkNjI4LjczNmQ1MDYuODhkNjI4LjczNmQ0NDYuNDYzZDIxMC45NDRkNDQ2LjQ2M2QyMTAuOTQ0ZDU3NS40ODhkNjM3Ljk1MmQ1NzUuNDg4ZDcwMC40MTZkNTc1LjQ4OGQ3NDQuOTZkNjIwLjAzMWQ3ODkuNTA0ZDY2NC41NzZkNzg5LjUwNGQ3MjcuMDRkNzg5LjUwNGQ4NzIuNDQ4ZDc4OS41MDRkOTM0LjkxMmQ3NDQuOTZkOTc5LjQ1NmQ3MDAuNDE2ZDEwMjRkNjM3Ljk1MmQxMDI0ZDIwMy43NzZkMTAyNGQxNDEuMzEyZDEwMjRkOTYuNzY4ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3Mi40NDhkNTIuMjI0ZDgwMy44NGQyMTAuOTQ0ZDgwMy44NGQyMTAuOTQ0ZDg2NC4yNTZkNjI4LjczNmQ4NjQuMjU2ZDYyOC43MzZkNzM1LjIzMmQyMDMuNzc2ZDczNS4yMzJkMTQxLjMxMmQ3MzUuMjMyZDk2Ljc2OGQ2OTEuMmQ1Mi4yMjRkNjQ3LjE2OGQ1Mi4yMjRkNTgzLjY4ZDUyLjIyNGQ0MzguMjcxZDUyLjIyNGQzNzQuNzg0ZDk2Ljc2OGQzMzAuNzUxZDE0MS4zMTJkMjg2LjcyZDIwMy43NzZkMjg2LjcyZDYzNy45NTJkMjg2LjcyZDcwMC40MTZkMjg2LjcyZDc0NC45NmQzMzEuMjY0ZDc4OS41MDRkMzc1LjgwOGQ3ODkuNTA0ZDQzOC4yNzFoUjJkODQxLjcyOFIzZDc4OS41MDRSNGQ1Mi4yMjRSNWQ3MzcuMjhSNmQwUjdkNjg1LjA1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODNSMTFkNTIuMjI0UjEyZDg0MS43MjhSMTNhaTFpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2hnOjE5NW9SMGQ5OTYuMzUyUjFhZDIxMC45NDRkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkMTAyNGQ2MzUuOTA0ZDEwMjRkNjM1LjkwNGQ3ODYuNDMyZDIxOC4xMTJkNzg2LjQzMmQyMTguMTEyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDQzOC4yNzFkNTkuMzkyZDM3NC43ODRkMTAzLjQyNGQzMzAuNzUxZDE0Ny40NTZkMjg2LjcyZDIxMC45NDRkMjg2LjcyZDIxOC4xMTJkNjI2LjY4OGQ2MzUuOTA0ZDYyNi42ODhkNjM1LjkwNGQ0NDYuNDYzZDIxOC4xMTJkNDQ2LjQ2M2QyMTguMTEyZDYyNi42ODhkNDkyLjU0NGQxMTMuNjYzZDUzMi40OGQxMTMuNjYzZDU5MC44NDhkNzUuNzc1ZDU5MC44NDhkMjA0Ljc5OWQ1MjcuMzZkMjMxLjQyM2Q0ODkuNDcyZDIzMS40MjNkNDUxLjU4NGQyMzEuNDIzZDM5Mi43MDRkMTk5LjY3OWQzMzMuODI0ZDE2Ny45MzZkMzA0LjEyOGQxNjcuOTM2ZDI5Mi44NjRkMTY3LjkzNmQyNDkuODU2ZDE2Ny45MzZkMjA2Ljg0OGQyMDQuNzk5ZDIwNi44NDhkNzcuODIzZDI3NS40NTZkNTAuMTc1ZDMwNC4xMjhkNTAuMTc1ZDM0Mi4wMTZkNTAuMTc1ZDQwMS40MDhkNzkuODcxZDQ2MC44ZDEwOS41NjdkNDkyLjU0NGQxMTMuNjYzaFIyZDg1Ni4wNjRSM2Q3OTYuNjcyUjRkNTkuMzkyUjVkOTczLjgyNFI2ZDBSN2Q5MTQuNDMyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxOTVSMTFkNTkuMzkyUjEyZDg1Ni4wNjRSMTNhaTFpMmkzaTNpMmkyaTJpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaTFpM2kyaTNpM2kzaTJpM2kyaTNpM2kzaGc6ODJvUjBkOTk2LjM1MlIxYWQ3OTMuNmQ0MzkuMjk1ZDc5My42ZDYyOS43NmQ3OTMuNmQ2OTIuMjIzZDc0OC41NDRkNzM2Ljc2OGQ3MDMuNDg4ZDc4MS4zMTJkNjQxLjAyNGQ3ODEuMzEyZDYzMy44NTZkNzgxLjMxMmQ3OTMuNmQ5NjkuNzI4ZDc5My42ZDEwMjRkNjI5Ljc2ZDEwMjRkNDI1Ljk4NGQ3ODEuMzEyZDIxNS4wNGQ3ODIuMzM2ZDIxOC4xMTJkNzgyLjMzNmQyMTguMTEyZDc4OC40OGQyMTYuMDY0ZDc4OC40OGQyMTUuMDRkNzg3LjQ1NmQyMTUuMDRkMTAyNGQ1Ni4zMmQxMDI0ZDU2LjMyZDI4Ny43NDRkNjQxLjAyNGQyODcuNzQ0ZDcwMy40ODhkMjg3Ljc0NGQ3NDguNTQ0ZDMzMi4yODhkNzkzLjZkMzc2LjgzMmQ3OTMuNmQ0MzkuMjk1ZDIxNS4wNGQ0NDYuNDYzZDIxNS4wNGQ2MjEuNTY4ZDYzMi44MzJkNjIxLjU2OGQ2MzIuODMyZDQ0Ni40NjNkMjE1LjA0ZDQ0Ni40NjNoUjJkODQ0LjhSM2Q3OTMuNlI0ZDU2LjMyUjVkNzM2LjI1NlI2ZDBSN2Q2NzkuOTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk4MlIxMWQ1Ni4zMlIxMmQ4NDQuOFIxM2FpMWkyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaGc6MTk0b1IwZDk5Ni4zNTJSMWFkMjEwLjk0NGQyODYuNzJkNjQ0LjA5NmQyODYuNzJkNzA3LjU4NGQyODYuNzJkNzUyLjEyOGQzMzEuMjY0ZDc5Ni42NzJkMzc1LjgwOGQ3OTYuNjcyZDQzOC4yNzFkNzk2LjY3MmQxMDI0ZDYzNS45MDRkMTAyNGQ2MzUuOTA0ZDc4Ni40MzJkMjE4LjExMmQ3ODYuNDMyZDIxOC4xMTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkNDM4LjI3MWQ1OS4zOTJkMzc0Ljc4NGQxMDMuNDI0ZDMzMC43NTFkMTQ3LjQ1NmQyODYuNzJkMjEwLjk0NGQyODYuNzJkMjE4LjExMmQ2MjYuNjg4ZDYzNS45MDRkNjI2LjY4OGQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzZDIxOC4xMTJkNjI2LjY4OGQ0MDguNTc2ZDIzNi41NDNkMjcyLjM4NGQyMzYuNTQzZDM4NS4wMjRkNDguMTI3ZDQ4Ny40MjRkNDguMTI3ZDYwMC4wNjRkMjM2LjU0M2Q0NjIuODQ4ZDIzNi41NDNkNDM0LjE3NmQxOTEuNDg3ZDQwOC41NzZkMjM2LjU0M2hSMmQ4NTYuMDY0UjNkNzk2LjY3MlI0ZDU5LjM5MlI1ZDk3NS44NzJSNmQwUjdkOTE2LjQ4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxOTRSMTFkNTkuMzkyUjEyZDg1Ni4wNjRSMTNhaTFpMmkzaTNpMmkyaTJpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjgxb1IwZDk5Ni4zNTJSMWFkNzkyLjU3NmQ0MzguMjcxZDc5Mi41NzZkODY0LjI1NmQ4NzYuNTQ0ZDg2NC4yNTZkODc2LjU0NGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkNDM4LjI3MWQ1NS4yOTZkMzc0Ljc4NGQ5OS4zMjhkMzMwLjc1MWQxNDMuMzZkMjg2LjcyZDIwNi44NDhkMjg2LjcyZDY0MGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkMjE0LjAxNmQ0NDYuNDYzZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQ0NDYuNDYzZDIxNC4wMTZkNDQ2LjQ2M2hSMmQ5MDUuMjE2UjNkODc2LjU0NFI0ZDU1LjI5NlI1ZDczNy4yOFI2ZDBSN2Q2ODEuOTg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk4MVIxMWQ1NS4yOTZSMTJkOTA1LjIxNlIxM2FpMWkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxOTNvUjBkOTk2LjM1MlIxYWQyMTAuOTQ0ZDI4Ni43MmQ2NDQuMDk2ZDI4Ni43MmQ3MDcuNTg0ZDI4Ni43MmQ3NTIuMTI4ZDMzMS4yNjRkNzk2LjY3MmQzNzUuODA4ZDc5Ni42NzJkNDM4LjI3MWQ3OTYuNjcyZDEwMjRkNjM1LjkwNGQxMDI0ZDYzNS45MDRkNzg2LjQzMmQyMTguMTEyZDc4Ni40MzJkMjE4LjExMmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQ0MzguMjcxZDU5LjM5MmQzNzQuNzg0ZDEwMy40MjRkMzMwLjc1MWQxNDcuNDU2ZDI4Ni43MmQyMTAuOTQ0ZDI4Ni43MmQyMTguMTEyZDYyNi42ODhkNjM1LjkwNGQ2MjYuNjg4ZDYzNS45MDRkNDQ2LjQ2M2QyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ2MjYuNjg4ZDM0Mi4wMTZkMjM2LjU0M2QzOTQuMjRkMjguNjcyZDU1NS4wMDhkMjguNjcyZDUwMi43ODRkMjM2LjU0M2QzNDIuMDE2ZDIzNi41NDNoUjJkODU2LjA2NFIzZDc5Ni42NzJSNGQ1OS4zOTJSNWQ5OTUuMzI4UjZkMFI3ZDkzNS45MzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE5M1IxMWQ1OS4zOTJSMTJkODU2LjA2NFIxM2FpMWkyaTNpM2kyaTJpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6ODBvUjBkOTk2LjM1MlIxYWQ1Ny4zNDRkMjg3Ljc0NGQ2NDIuMDQ4ZDI4Ny43NDRkNzA0LjUxMmQyODcuNzQ0ZDc0OS41NjhkMzMyLjI4OGQ3OTQuNjI0ZDM3Ni44MzJkNzk0LjYyNGQ0MzkuMjk1ZDc5NC42MjRkNjI5Ljc2ZDc5NC42MjRkNjkyLjIyM2Q3NDkuNTY4ZDczNi43NjhkNzA0LjUxMmQ3ODEuMzEyZDY0Mi4wNDhkNzgxLjMxMmQyMTYuMDY0ZDc4Mi4zMzZkMjE5LjEzNmQ3ODIuMzM2ZDIxOS4xMzZkNzg4LjQ4ZDIxNy4wODhkNzg4LjQ4ZDIxNi4wNjRkNzg3LjQ1NmQyMTYuMDY0ZDEwMjRkNTcuMzQ0ZDEwMjRkNTcuMzQ0ZDI4Ny43NDRkMjE2LjA2NGQ0NDYuNDYzZDIxNi4wNjRkNjIxLjU2OGQ2MzMuODU2ZDYyMS41NjhkNjMzLjg1NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2hSMmQ4MDkuOTg0UjNkNzk0LjYyNFI0ZDU3LjM0NFI1ZDczNi4yNTZSNmQwUjdkNjc4LjkxMlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpODBSMTFkNTcuMzQ0UjEyZDgwOS45ODRSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTJpMWkyaTJpMmkyaGc6MTkyb1IwZDk5Ni4zNTJSMWFkMjEwLjk0NGQyODYuNzJkNjQ0LjA5NmQyODYuNzJkNzA3LjU4NGQyODYuNzJkNzUyLjEyOGQzMzEuMjY0ZDc5Ni42NzJkMzc1LjgwOGQ3OTYuNjcyZDQzOC4yNzFkNzk2LjY3MmQxMDI0ZDYzNS45MDRkMTAyNGQ2MzUuOTA0ZDc4Ni40MzJkMjE4LjExMmQ3ODYuNDMyZDIxOC4xMTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkNDM4LjI3MWQ1OS4zOTJkMzc0Ljc4NGQxMDMuNDI0ZDMzMC43NTFkMTQ3LjQ1NmQyODYuNzJkMjEwLjk0NGQyODYuNzJkMjE4LjExMmQ2MjYuNjg4ZDYzNS45MDRkNjI2LjY4OGQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzZDIxOC4xMTJkNjI2LjY4OGQ0NjEuODI0ZDI3LjY0OGQ1MTQuMDQ4ZDIzNS41MTlkMzUzLjI4ZDIzNS41MTlkMzAxLjA1NmQyNy42NDhkNDYxLjgyNGQyNy42NDhoUjJkODU2LjA2NFIzZDc5Ni42NzJSNGQ1OS4zOTJSNWQ5OTYuMzUyUjZkMFI3ZDkzNi45NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTkyUjExZDU5LjM5MlIxMmQ4NTYuMDY0UjEzYWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo3OW9SMGQ5OTYuMzUyUjFhZDIwNi44NDhkMjg2LjcyZDY0MS4wMjRkMjg2LjcyZDcwMy40ODhkMjg2LjcyZDc0OC4wMzJkMzMxLjI2NGQ3OTIuNTc2ZDM3NS44MDhkNzkyLjU3NmQ0MzguMjcxZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQ0MzguMjcxZDU1LjI5NmQzNzQuNzg0ZDk5LjMyOGQzMzAuNzUxZDE0My4zNmQyODYuNzJkMjA2Ljg0OGQyODYuNzJkMjE0LjAxNmQ0NDYuNDYzZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQ0NDYuNDYzZDIxNC4wMTZkNDQ2LjQ2M2hSMmQ4NDcuODcyUjNkNzkyLjU3NlI0ZDU1LjI5NlI1ZDczNy4yOFI2ZDBSN2Q2ODEuOTg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk3OVIxMWQ1NS4yOTZSMTJkODQ3Ljg3MlIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxOTFvUjBkOTk2LjM1MlIxYWQ2NTcuNDA4ZDEwMjRkMTY4Ljk2ZDEwMjRkMTA3LjUyZDEwMjRkNjMuNDg4ZDk3OS45NjhkMTkuNDU2ZDkzNS45MzZkMTkuNDU2ZDg3NS41MmQxOS40NTZkNzA0LjUxMmQxOS40NTZkNjQzLjA3MmQ2My40ODhkNTk5LjU1MWQxMDcuNTJkNTU2LjAzMWQxNjguOTZkNTU2LjAzMWQ0MDAuMzg0ZDU1Ni4wMzFkNDAwLjM4NGQ0NzkuMjMyZDU1Ny4wNTZkNDc5LjIzMmQ1NTcuMDU2ZDU2NC4yMjNkNTU3LjA1NmQ2MjUuNjY0ZDUxMy4wMjRkNjY5LjY5NWQ0NjguOTkyZDcxMy43MjhkNDA3LjU1MmQ3MTMuNzI4ZDE3Ni4xMjhkNzEzLjcyOGQxNzYuMTI4ZDg2Ny4zMjhkNjU3LjQwOGQ4NjcuMzI4ZDY1Ny40MDhkMTAyNGQ1NTcuMDU2ZDMwMS4wNTZkNTU3LjA1NmQ0NTcuNzI3ZDQwMC4zODRkNDU3LjcyN2Q0MDAuMzg0ZDMwMS4wNTZkNTU3LjA1NmQzMDEuMDU2aFIyZDY5MS4yUjNkNjU3LjQwOFI0ZDE5LjQ1NlI1ZDcyMi45NDRSNmQwUjdkNzAzLjQ4OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTkxUjExZDE5LjQ1NlIxMmQ2OTEuMlIxM2FpMWkyaTNpM2kyaTNpM2kyaTJpMmkyaTNpM2kyaTJpMmkyaTFpMmkyaTJpMmhnOjc4b1IwZDk5Ni4zNTJSMWFkNjMzLjg1NmQ3NzguMjRkNjMzLjg1NmQyODYuNzJkNzk0LjYyNGQyODYuNzJkNzk0LjYyNGQxMDI0ZDYzMC43ODRkMTAyNGQyMTYuMDY0ZDUzMC40MzJkMjE2LjA2NGQxMDI0ZDU3LjM0NGQxMDI0ZDU3LjM0NGQyODYuNzJkMjIxLjE4NGQyODYuNzJkNjMzLjg1NmQ3NzguMjRoUjJkODUxLjk2OFIzZDc5NC42MjRSNGQ1Ny4zNDRSNWQ3MzcuMjhSNmQwUjdkNjc5LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNzhSMTFkNTcuMzQ0UjEyZDg1MS45NjhSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE5MG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTkwUjExZDBSMTJkMFIxM2FoZzo3N29SMGQ5OTYuMzUyUjFhZDQ3MS4wNGQ1ODQuNzA0ZDcxOS44NzJkMjg2LjcyZDg4NC43MzZkMjg2LjcyZDg4NC43MzZkMTAyNGQ3MjQuOTkyZDEwMjRkNzI0Ljk5MmQ1MjkuNDA4ZDQ3MS4wNGQ4MzIuNTEyZDIxNi4wNjRkNTMwLjQzMmQyMTYuMDY0ZDEwMjRkNTcuMzQ0ZDEwMjRkNTcuMzQ0ZDI4Ni43MmQyMjEuMTg0ZDI4Ni43MmQ0NzEuMDRkNTg0LjcwNGhSMmQ5NTAuMjcyUjNkODg0LjczNlI0ZDU3LjM0NFI1ZDczNy4yOFI2ZDBSN2Q2NzkuOTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk3N1IxMWQ1Ny4zNDRSMTJkOTUwLjI3MlIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE4OW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTg5UjExZDBSMTJkMFIxM2FoZzo3Nm9SMGQ5OTYuMzUyUjFhZDU4LjM2OGQxMDI0ZDU4LjM2OGQyODUuNjk2ZDIxNy4wODhkMjg1LjY5NmQyMTcuMDg4ZDg2NC4yNTZkNzk1LjY0OGQ4NjQuMjU2ZDc5NS42NDhkMTAyNGQ1OC4zNjhkMTAyNGhSMmQ3OTcuNjk2UjNkNzk1LjY0OFI0ZDU4LjM2OFI1ZDczOC4zMDRSNmQwUjdkNjc5LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNzZSMTFkNTguMzY4UjEyZDc5Ny42OTZSMTNhaTFpMmkyaTJpMmkyaTJoZzoxODhvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE4OFIxMWQwUjEyZDBSMTNhaGc6NzVvUjBkOTk2LjM1MlIxYWQ2MDQuMTZkMjg2LjcyZDc3MC4wNDhkMjg2LjcyZDc3MC4wNDhkMzQyLjAxNWQ1MDYuODhkNjU1LjM2ZDc3MC4wNDhkOTY4LjcwNGQ3NzAuMDQ4ZDEwMjRkNjA0LjE2ZDEwMjRkMzYyLjQ5NmQ3MzUuMjMyZDIxOC4xMTJkNzM1LjIzMmQyMTguMTEyZDEwMjRkNTguMzY4ZDEwMjRkNTguMzY4ZDI4Ni43MmQyMTguMTEyZDI4Ni43MmQyMTguMTEyZDU3NS40ODhkMzYyLjQ5NmQ1NzUuNDg4ZDQ1NC42NTZkNDY1LjkxOWQ2MDQuMTZkMjg2LjcyaFIyZDgxNi4xMjhSM2Q3NzAuMDQ4UjRkNTguMzY4UjVkNzM3LjI4UjZkMFI3ZDY3OC45MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTc1UjExZDU4LjM2OFIxMmQ4MTYuMTI4UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxODdvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE4N1IxMWQwUjEyZDBSMTNhaGc6NzRvUjBkOTk2LjM1MlIxYWQxNjIuODE2ZDc3Ny4yMTZkMTYyLjgxNmQ4NjQuMjU2ZDU4MC42MDhkODY0LjI1NmQ1ODAuNjA4ZDI4Ni43MmQ3NDEuMzc2ZDI4Ni43MmQ3NDEuMzc2ZDg3Mi40NDhkNzQxLjM3NmQ5MzQuOTEyZDY5Ni44MzJkOTc5LjQ1NmQ2NTIuMjg4ZDEwMjRkNTg5LjgyNGQxMDI0ZDE1NS42NDhkMTAyNGQ5Mi4xNmQxMDI0ZDQ4LjEyOGQ5NzkuOTY4ZDQuMDk2ZDkzNS45MzZkNC4wOTZkODcyLjQ0OGQ0LjA5NmQ3NzcuMjE2ZDE2Mi44MTZkNzc3LjIxNmhSMmQ3OTguNzJSM2Q3NDEuMzc2UjRkNC4wOTZSNWQ3MzcuMjhSNmQwUjdkNzMzLjE4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNzRSMTFkNC4wOTZSMTJkNzk4LjcyUjEzYWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaGc6MTg2b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxODZSMTFkMFIxMmQwUjEzYWhnOjczb1IwZDk5Ni4zNTJSMWFkNTguMzY4ZDEwMjRkNTguMzY4ZDI4Ni43MmQyMTguMTEyZDI4Ni43MmQyMTguMTEyZDEwMjRkNTguMzY4ZDEwMjRoUjJkMjI1LjI4UjNkMjE4LjExMlI0ZDU4LjM2OFI1ZDczNy4yOFI2ZDBSN2Q2NzguOTEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk3M1IxMWQ1OC4zNjhSMTJkMjI1LjI4UjEzYWkxaTJpMmkyaTJoZzoxODVvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE4NVIxMWQwUjEyZDBSMTNhaGc6NzJvUjBkOTk2LjM1MlIxYWQ2NTIuMjg4ZDI4Ni43MmQ4MTEuMDA4ZDI4Ni43MmQ4MTEuMDA4ZDEwMjRkNjUyLjI4OGQxMDI0ZDY1Mi4yODhkNzM1LjIzMmQyMTcuMDg4ZDczNS4yMzJkMjE3LjA4OGQxMDI0ZDU4LjM2OGQxMDI0ZDU4LjM2OGQyODYuNzJkMjE3LjA4OGQyODYuNzJkMjE3LjA4OGQ1NzUuNDg4ZDY1Mi4yODhkNTc1LjQ4OGQ2NTIuMjg4ZDI4Ni43MmhSMmQ4NzEuNDI0UjNkODExLjAwOFI0ZDU4LjM2OFI1ZDczNy4yOFI2ZDBSN2Q2NzguOTEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk3MlIxMWQ1OC4zNjhSMTJkODcxLjQyNFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE4NG9SMGQ5OTYuMzUyUjFhZDMzLjc5MmQxMTczLjUwNGQ4Ni4wMTZkOTY2LjY1NmQyNDYuNzg0ZDk2Ni42NTZkMTk0LjU2ZDExNzMuNTA0ZDMzLjc5MmQxMTczLjUwNGhSMmQyMTguMTEyUjNkMjQ2Ljc4NFI0ZDMzLjc5MlI1ZDU3LjM0NFI2ZC0xNDkuNTA0UjdkMjMuNTUyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxODRSMTFkMzMuNzkyUjEyZDIxOC4xMTJSMTNhaTFpMmkyaTJpMmhnOjcxb1IwZDk5Ni4zNTJSMWFkNzk0LjYyNGQ0MzguMjcxZDc5NC42MjRkNTA3LjkwNGQ2MzMuODU2ZDUwNy45MDRkNjMzLjg1NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2QyMTYuMDY0ZDg2NC4yNTZkNjMzLjg1NmQ4NjQuMjU2ZDYzMy44NTZkNzUzLjY2NGQ0NzQuMTEyZDc1My42NjRkNDc0LjExMmQ1OTMuOTJkNzk0LjYyNGQ1OTMuOTJkNzk0LjYyNGQ4NzIuNDQ4ZDc5NC42MjRkOTM0LjkxMmQ3NTAuMDhkOTc5LjQ1NmQ3MDUuNTM2ZDEwMjRkNjQyLjA0OGQxMDI0ZDIwOC44OTZkMTAyNGQxNDUuNDA4ZDEwMjRkMTAxLjM3NmQ5NzkuOTY4ZDU3LjM0NGQ5MzUuOTM2ZDU3LjM0NGQ4NzIuNDQ4ZDU3LjM0NGQ0MzguMjcxZDU3LjM0NGQzNzQuNzg0ZDEwMS4zNzZkMzMwLjc1MWQxNDUuNDA4ZDI4Ni43MmQyMDguODk2ZDI4Ni43MmQ2NDIuMDQ4ZDI4Ni43MmQ3MDUuNTM2ZDI4Ni43MmQ3NTAuMDhkMzMxLjI2NGQ3OTQuNjI0ZDM3NS44MDhkNzk0LjYyNGQ0MzguMjcxaFIyZDg0OS45MlIzZDc5NC42MjRSNGQ1Ny4zNDRSNWQ3MzcuMjhSNmQwUjdkNjc5LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNzFSMTFkNTcuMzQ0UjEyZDg0OS45MlIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaGc6MTgzb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxODNSMTFkMFIxMmQwUjEzYWhnOjcwb1IwZDk5Ni4zNTJSMWFkNTkuMzkyZDI4Ni43MmQ3NDAuMzUyZDI4Ni43MmQ3NDAuMzUyZDQ0Ni40NjNkMjIwLjE2ZDQ0Ni40NjNkMjIwLjE2ZDU3NS40ODhkNjM4Ljk3NmQ1NzUuNDg4ZDYzOC45NzZkNzM1LjIzMmQyMjAuMTZkNzM1LjIzMmQyMjAuMTZkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkMjg2LjcyaFIyZDc0MC4zNTJSM2Q3NDAuMzUyUjRkNTkuMzkyUjVkNzM3LjI4UjZkMFI3ZDY3Ny44ODhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTcwUjExZDU5LjM5MlIxMmQ3NDAuMzUyUjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxODJvUjBkOTk2LjM1MlIxYWQ1Ny4zNDRkNDUwLjU1OWQ1Ny4zNDRkMzkwLjE0NGQxMDEuMzc2ZDM0NS42ZDE0NS40MDhkMzAxLjA1NmQyMDYuODQ4ZDMwMS4wNTZkODAxLjc5MmQzMDEuMDU2ZDgwMS43OTJkMTAyNGQ2NDUuMTJkMTAyNGQ2NDUuMTJkNzg2LjQzMmQ1NzcuNTM2ZDc4Ni40MzJkNTc3LjUzNmQxMDI0ZDQxOS44NGQxMDI0ZDQxOS44NGQ3ODYuNDMyZDIwNi44NDhkNzg2LjQzMmQxNDUuNDA4ZDc4Ni40MzJkMTAxLjM3NmQ3NDIuNGQ1Ny4zNDRkNjk4LjM2N2Q1Ny4zNDRkNjM3Ljk1MmQ1Ny4zNDRkNDUwLjU1OWQ0MTkuODRkNDU4Ljc1MWQyMTQuMDE2ZDQ1OC43NTFkMjE0LjAxNmQ2MjguNzM2ZDQxOS44NGQ2MjguNzM2ZDQxOS44NGQ0NTguNzUxZDU3Ny41MzZkNDU4Ljc1MWQ1NzcuNTM2ZDYyOC43MzZkNjQ1LjEyZDYyOC43MzZkNjQ1LjEyZDQ1OC43NTFkNTc3LjUzNmQ0NTguNzUxaFIyZDg1Mi45OTJSM2Q4MDEuNzkyUjRkNTcuMzQ0UjVkNzIyLjk0NFI2ZDBSN2Q2NjUuNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTgyUjExZDU3LjM0NFIxMmQ4NTIuOTkyUjEzYWkxaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6NjlvUjBkOTk2LjM1MlIxYWQ3NDAuMzUyZDI4Ni43MmQ3NDAuMzUyZDQ0Ni40NjNkMjIwLjE2ZDQ0Ni40NjNkMjIwLjE2ZDU3NS40ODhkNjM4Ljk3NmQ1NzUuNDg4ZDYzOC45NzZkNzM1LjIzMmQyMjAuMTZkNzM1LjIzMmQyMjAuMTZkODY0LjI1NmQ3NDAuMzUyZDg2NC4yNTZkNzQwLjM1MmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQyODYuNzJkNzQwLjM1MmQyODYuNzJoUjJkNzg0LjM4NFIzZDc0MC4zNTJSNGQ1OS4zOTJSNWQ3MzcuMjhSNmQwUjdkNjc3Ljg4OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNjlSMTFkNTkuMzkyUjEyZDc4NC4zODRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxODFvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE4MVIxMWQwUjEyZDBSMTNhaGc6NjhvUjBkOTk2LjM1MlIxYWQ1OS4zOTJkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkODcyLjQ0OGQ3OTYuNjcyZDkzNC45MTJkNzUyLjEyOGQ5NzkuNDU2ZDcwNy41ODRkMTAyNGQ2NDQuMDk2ZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ4NjQuMjU2ZDYzNS45MDRkODY0LjI1NmQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzaFIyZDg1NC4wMTZSM2Q3OTYuNjcyUjRkNTkuMzkyUjVkNzM3LjI4UjZkMFI3ZDY3Ny44ODhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTY4UjExZDU5LjM5MlIxMmQ4NTQuMDE2UjEzYWkxaTJpM2kzaTJpM2kzaTJpMmkxaTJpMmkyaTJoZzoxODBvUjBkOTk2LjM1MlIxYWQzMy43OTJkMjU5LjA3MmQ4Ni4wMTZkNTEuMTk5ZDI0Ni43ODRkNTEuMTk5ZDE5NC41NmQyNTkuMDcyZDMzLjc5MmQyNTkuMDcyaFIyZDIxOC4xMTJSM2QyNDYuNzg0UjRkMzMuNzkyUjVkOTcyLjhSNmQ3NjQuOTI4UjdkOTM5LjAwOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTgwUjExZDMzLjc5MlIxMmQyMTguMTEyUjEzYWkxaTJpMmkyaTJoZzo2N29SMGQ5OTYuMzUyUjFhZDc5Mi41NzZkNDQ2LjQ2M2QyMTYuMDY0ZDQ0Ni40NjNkMjE2LjA2NGQ4NjQuMjU2ZDc5Mi41NzZkODY0LjI1NmQ3OTIuNTc2ZDEwMjRkMjA4Ljg5NmQxMDI0ZDE0NS40MDhkMTAyNGQxMDEuMzc2ZDk3OS45NjhkNTcuMzQ0ZDkzNS45MzZkNTcuMzQ0ZDg3Mi40NDhkNTcuMzQ0ZDQzOC4yNzFkNTcuMzQ0ZDM3NC43ODRkMTAxLjM3NmQzMzAuNzUxZDE0NS40MDhkMjg2LjcyZDIwOC44OTZkMjg2LjcyZDc5Mi41NzZkMjg2LjcyZDc5Mi41NzZkNDQ2LjQ2M2hSMmQ4NDEuNzI4UjNkNzkyLjU3NlI0ZDU3LjM0NFI1ZDczNy4yOFI2ZDBSN2Q2NzkuOTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk2N1IxMWQ1Ny4zNDRSMTJkODQxLjcyOFIxM2FpMWkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmhnOjE3OW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTc5UjExZDBSMTJkMFIxM2FoZzo2Nm9SMGQ5OTYuMzUyUjFhZDc2OS4wMjRkNDM4LjI3MWQ3NjkuMDI0ZDU3Ni41MTJkNzY5LjAyNGQ2MDUuMTg0ZDc2MS44NTZkNjIzLjYxNmQ3OTcuNjk2ZDY2OC42NzJkNzk3LjY5NmQ3MTkuODcyZDc5Ny42OTZkODcyLjQ0OGQ3OTcuNjk2ZDkzNC45MTJkNzUzLjE1MmQ5NzkuNDU2ZDcwOC42MDhkMTAyNGQ2NDUuMTJkMTAyNGQ2MC40MTZkMTAyNGQ2MC40MTZkMjg2LjcyZDYxNy40NzJkMjg2LjcyZDY3OS45MzZkMjg2LjcyZDcyNC40OGQzMzEuMjY0ZDc2OS4wMjRkMzc1LjgwOGQ3NjkuMDI0ZDQzOC4yNzFkMjE5LjEzNmQ3MjkuMDg4ZDIxOS4xMzZkODY0LjI1NmQ2MzYuOTI4ZDg2NC4yNTZkNjM2LjkyOGQ3MjkuMDg4ZDIxOS4xMzZkNzI5LjA4OGQyMTkuMTM2ZDQ0Ni40NjNkMjE5LjEzNmQ1NjkuMzQ0ZDYwOC4yNTZkNTY5LjM0NGQ2MDguMjU2ZDQ0Ni40NjNkMjE5LjEzNmQ0NDYuNDYzaFIyZDg1MS45NjhSM2Q3OTcuNjk2UjRkNjAuNDE2UjVkNzM3LjI4UjZkMFI3ZDY3Ni44NjRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTY2UjExZDYwLjQxNlIxMmQ4NTEuOTY4UjEzYWkxaTJpM2kzaTJpM2kzaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTc4b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNzhSMTFkMFIxMmQwUjEzYWhnOjY1b1IwZDk5Ni4zNTJSMWFkMjEwLjk0NGQyODYuNzJkNjQ0LjA5NmQyODYuNzJkNzA3LjU4NGQyODYuNzJkNzUyLjEyOGQzMzEuMjY0ZDc5Ni42NzJkMzc1LjgwOGQ3OTYuNjcyZDQzOC4yNzFkNzk2LjY3MmQxMDI0ZDYzNS45MDRkMTAyNGQ2MzUuOTA0ZDc4Ni40MzJkMjE4LjExMmQ3ODYuNDMyZDIxOC4xMTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkNDM4LjI3MWQ1OS4zOTJkMzc0Ljc4NGQxMDMuNDI0ZDMzMC43NTFkMTQ3LjQ1NmQyODYuNzJkMjEwLjk0NGQyODYuNzJkMjE4LjExMmQ2MjYuNjg4ZDYzNS45MDRkNjI2LjY4OGQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzZDIxOC4xMTJkNjI2LjY4OGhSMmQ4NTYuMDY0UjNkNzk2LjY3MlI0ZDU5LjM5MlI1ZDczNy4yOFI2ZDBSN2Q2NzcuODg4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk2NVIxMWQ1OS4zOTJSMTJkODU2LjA2NFIxM2FpMWkyaTNpM2kyaTJpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJoZzoxNzdvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE3N1IxMWQwUjEyZDBSMTNhaGc6NjRvUjBkOTk2LjM1MlIxYWQzODkuMTJkNDkyLjU0NGQ0NTIuNjA4ZDQ5Mi41NDRkNTE0LjA0OGQ0OTIuNTQ0ZDU0Ny4zMjhkNTI1LjgyNGQ1ODAuNjA4ZDU1OS4xMDRkNTgwLjYwOGQ2MjAuNTQ0ZDU4MC42MDhkNjg1LjA1NmQ2MjUuNjY0ZDY4NS4wNTZkNjI1LjY2NGQ0NDMuMzkxZDIxNS4wNGQ0NDMuMzkxZDIxNS4wNGQ4NjcuMzI4ZDc4Mi4zMzZkODY3LjMyOGQ3ODIuMzM2ZDEwMjRkMjA3Ljg3MmQxMDI0ZDE0Ni40MzJkMTAyNGQxMDIuNGQ5NzkuOTY4ZDU4LjM2OGQ5MzUuOTM2ZDU4LjM2OGQ4NzUuNTJkNTguMzY4ZDQzNS4xOTlkNTguMzY4ZDM3My43NmQxMDIuNGQzMzAuMjRkMTQ2LjQzMmQyODYuNzJkMjA3Ljg3MmQyODYuNzJkNjMyLjgzMmQyODYuNzJkNjk0LjI3MmQyODYuNzJkNzM4LjMwNGQzMzAuMjRkNzgyLjMzNmQzNzMuNzZkNzgyLjMzNmQ0MzUuMTk5ZDc4Mi4zMzZkODAyLjgxNmQzODkuMTJkODAyLjgxNmQzMjcuNjhkODAyLjgxNmQyOTMuODg4ZDc2OS41MzZkMjYwLjA5NmQ3MzYuMjU2ZDI2MC4wOTZkNjc0LjgxNmQyNjAuMDk2ZDYyMC41NDRkMjYwLjA5NmQ1NTkuMTA0ZDI5My44ODhkNTI1LjgyNGQzMjcuNjhkNDkyLjU0NGQzODkuMTJkNDkyLjU0NGQzNjguNjRkNjg1LjA1NmQ0NzIuMDY0ZDY4NS4wNTZkNDcyLjA2NGQ2MDEuMDg4ZDM2OC42NGQ2MDEuMDg4ZDM2OC42NGQ2ODUuMDU2aFIyZDg1MC45NDRSM2Q3ODIuMzM2UjRkNTguMzY4UjVkNzM3LjI4UjZkMFI3ZDY3OC45MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTY0UjExZDU4LjM2OFIxMmQ4NTAuOTQ0UjEzYWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxNzZvUjBkOTk2LjM1MlIxYWQxOTUuNTg0ZDMwMS4wNTZkMjc4LjUyOGQzMDEuMDU2ZDMzOC45NDRkMzAxLjA1NmQzODIuOTc2ZDM0NC41NzZkNDI3LjAwOGQzODguMDk2ZDQyNy4wMDhkNDQ5LjUzNWQ0MjcuMDA4ZDUyMy4yNjRkNDI3LjAwOGQ1ODQuNzA0ZDM4Mi45NzZkNjI4LjczNmQzMzguOTQ0ZDY3Mi43NjhkMjc4LjUyOGQ2NzIuNzY4ZDE5NS41ODRkNjcyLjc2OGQxMzQuMTQ0ZDY3Mi43NjhkOTAuMTEyZDYyOC43MzZkNDYuMDhkNTg0LjcwNGQ0Ni4wOGQ1MjMuMjY0ZDQ2LjA4ZDQ0OS41MzVkNDYuMDhkMzg4LjA5NmQ5MC4xMTJkMzQ0LjU3NmQxMzQuMTQ0ZDMwMS4wNTZkMTk1LjU4NGQzMDEuMDU2ZDE4NC4zMmQ0MzkuMjk1ZDE4NC4zMmQ1MzMuNTAzZDI4OC43NjhkNTMzLjUwM2QyODguNzY4ZDQzOS4yOTVkMTg0LjMyZDQzOS4yOTVoUjJkNDQ5LjUzNlIzZDQyNy4wMDhSNGQ0Ni4wOFI1ZDcyMi45NDRSNmQzNTEuMjMyUjdkNjc2Ljg2NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTc2UjExZDQ2LjA4UjEyZDQ0OS41MzZSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaGc6NjNvUjBkOTk2LjM1MlIxYWQzMS43NDRkMjg2LjcyZDUxOS4xNjhkMjg2LjcyZDU4MS42MzJkMjg2LjcyZDYyNS4xNTJkMzMwLjI0ZDY2OC42NzJkMzczLjc2ZDY2OC42NzJkNDM1LjE5OWQ2NjguNjcyZDYwNS4xODRkNjY4LjY3MmQ2NjYuNjI0ZDYyNS4xNTJkNzEwLjY1NmQ1ODEuNjMyZDc1NC42ODhkNTE5LjE2OGQ3NTQuNjg4ZDI4OC43NjhkNzU0LjY4OGQyODguNzY4ZDgyNS4zNDRkMTMxLjA3MmQ4MjUuMzQ0ZDEzMS4wNzJkNzQ1LjQ3MmQxMzEuMDcyZDY4NC4wMzFkMTc0LjU5MmQ2NDAuNTEyZDIxOC4xMTJkNTk2Ljk5MmQyNzkuNTUyZDU5Ni45OTJkNTEyZDU5Ni45OTJkNTEyZDQ0My4zOTFkMzEuNzQ0ZDQ0My4zOTFkMzEuNzQ0ZDI4Ni43MmQyODguNzY4ZDEwMjRkMTMxLjA3MmQxMDI0ZDEzMS4wNzJkODY3LjMyOGQyODguNzY4ZDg2Ny4zMjhkMjg4Ljc2OGQxMDI0aFIyZDY5NC4yNzJSM2Q2NjguNjcyUjRkMzEuNzQ0UjVkNzM3LjI4UjZkMFI3ZDcwNS41MzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTYzUjExZDMxLjc0NFIxMmQ2OTQuMjcyUjEzYWkxaTJpM2kzaTJpM2kzaTJpMmkyaTJpM2kzaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTc1b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNzVSMTFkMFIxMmQwUjEzYWhnOjYyb1IwZDk5Ni4zNTJSMWFkNjAuNDE2ZDEwNDMuNDU1ZDYwLjQxNmQ4NjEuMTg0ZDI5OS4wMDhkNzIyLjk0NGQxNjcuOTM2ZDY0OS4yMTZkMTUyLjU3NmQ2NDEuMDI0ZDExNS4yZDYxNy45ODNkNzcuODI0ZDU5NC45NDRkNjAuNDE2ZDU4NS43MjhkNjAuNDE2ZDQwNC40OGQ0OTguNjg4ZDY1Ny40MDhkNDk4LjY4OGQ3ODkuNTA0ZDYwLjQxNmQxMDQzLjQ1NWhSMmQ0ODYuNFIzZDQ5OC42ODhSNGQ2MC40MTZSNWQ2MTkuNTJSNmQtMTkuNDU2UjdkNTU5LjEwNFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNjJSMTFkNjAuNDE2UjEyZDQ4Ni40UjEzYWkxaTJpMmkyaTNpM2kyaTJpMmkyaGc6MTc0b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNzRSMTFkMFIxMmQwUjEzYWhnOjYxb1IwZDk5Ni4zNTJSMWFkNTk5LjA0ZDczNS4yMzJkNTk5LjA0ZDg5MS45MDRkNjAuNDE2ZDg5MS45MDRkNjAuNDE2ZDczNS4yMzJkNTk5LjA0ZDczNS4yMzJkNTk5LjA0ZDUyOC4zODRkNTk5LjA0ZDY4NS4wNTZkNjAuNDE2ZDY4NS4wNTZkNjAuNDE2ZDUyOC4zODRkNTk5LjA0ZDUyOC4zODRoUjJkNjUzLjMxMlIzZDU5OS4wNFI0ZDYwLjQxNlI1ZDQ5NS42MTZSNmQxMzIuMDk2UjdkNDM1LjJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTYxUjExZDYwLjQxNlIxMmQ2NTMuMzEyUjEzYWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTczb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNzNSMTFkMFIxMmQwUjEzYWhnOjYwb1IwZDk5Ni4zNTJSMWFkMjAyLjc1MmQ3MjAuODk2ZDQ0Mi4zNjhkODYwLjE2ZDQ0Mi4zNjhkMTA0MS40MDdkNS4xMmQ3ODcuNDU2ZDUuMTJkNjU2LjM4NGQ0NDIuMzY4ZDQwMi40MzJkNDQyLjM2OGQ1ODIuNjU2ZDIwMi43NTJkNzIwLjg5NmhSMmQ0ODQuMzUyUjNkNDQyLjM2OFI0ZDUuMTJSNWQ2MjEuNTY4UjZkLTE3LjQwOFI3ZDYxNi40NDhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTYwUjExZDUuMTJSMTJkNDg0LjM1MlIxM2FpMWkyaTJpMmkyaTJpMmkyaGc6MTcyb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNzJSMTFkMFIxMmQwUjEzYWhnOjU5b1IwZDk5Ni4zNTJSMWFkMjA5LjkyZDQzMC4wOGQyMDkuOTJkNTg3Ljc3NmQ1Mi4yMjRkNTg3Ljc3NmQ1Mi4yMjRkNDMwLjA4ZDIwOS45MmQ0MzAuMDhkNTMuMjQ4ZDg3OC41OTJkMjA5LjkyZDg3OC41OTJkMjA5LjkyZDEwMDcuNjE2ZDIwOS45MmQxMDYyLjkxMmQxNjUuMzc2ZDExMDUuOTJkMTIwLjgzMmQxMTQ4LjkyOGQ1My4yNDhkMTE2MC4xOTJkNTMuMjQ4ZDg3OC41OTJoUjJkMjcyLjM4NFIzZDIwOS45MlI0ZDUyLjIyNFI1ZDU5My45MlI2ZC0xMzYuMTkyUjdkNTQxLjY5NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNTlSMTFkNTIuMjI0UjEyZDI3Mi4zODRSMTNhaTFpMmkyaTJpMmkxaTJpMmkzaTNpMmhnOjE3MW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTcxUjExZDBSMTJkMFIxM2FoZzo1OG9SMGQ5OTYuMzUyUjFhZDU1LjI5NmQ4NjcuMzI4ZDIxMS45NjhkODY3LjMyOGQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDg2Ny4zMjhkMjExLjk2OGQ0MzAuMDhkMjExLjk2OGQ1ODcuNzc2ZDU1LjI5NmQ1ODcuNzc2ZDU1LjI5NmQ0MzAuMDhkMjExLjk2OGQ0MzAuMDhoUjJkMjUyLjkyOFIzZDIxMS45NjhSNGQ1NS4yOTZSNWQ1OTMuOTJSNmQwUjdkNTM4LjYyNFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNThSMTFkNTUuMjk2UjEyZDI1Mi45MjhSMTNhaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNzBvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE3MFIxMWQwUjEyZDBSMTNhaGc6NTdvUjBkOTk2LjM1MlIxYWQ2MzAuNzg0ZDEwMjRkMjA0LjhkMTAyNGQxNTAuNTI4ZDEwMjRkMTA3LjAwOGQ5NzguOTQ0ZDYzLjQ4OGQ5MzMuODg4ZDUyLjIyNGQ4NjcuMzI4ZDYyMi41OTJkODY3LjMyOGQ2MjIuNTkyZDczNi4yNTZkMjA0LjhkNzM2LjI1NmQxNDMuMzZkNzM2LjI1NmQ5OS4zMjhkNjkyLjIyM2Q1NS4yOTZkNjQ4LjE5MmQ1NS4yOTZkNTg2Ljc1MmQ1NS4yOTZkNDM1LjE5OWQ1NS4yOTZkMzczLjc2ZDk5LjMyOGQzMzAuMjRkMTQzLjM2ZDI4Ni43MmQyMDQuOGQyODYuNzJkNjMwLjc4NGQyODYuNzJkNjkyLjIyNGQyODYuNzJkNzM1Ljc0NGQzMzAuMjRkNzc5LjI2NGQzNzMuNzZkNzc5LjI2NGQ0MzUuMTk5ZDc3OS4yNjRkODc1LjUyZDc3OS4yNjRkOTM1LjkzNmQ3MzUuNzQ0ZDk3OS45NjhkNjkyLjIyNGQxMDI0ZDYzMC43ODRkMTAyNGQyMTIuOTkyZDU3OC41NmQ2MjIuNTkyZDU3OC41NmQ2MjIuNTkyZDQ0My4zOTFkMjEyLjk5MmQ0NDMuMzkxZDIxMi45OTJkNTc4LjU2aFIyZDg0Ny44NzJSM2Q3NzkuMjY0UjRkNTIuMjI0UjVkNzM3LjI4UjZkMFI3ZDY4NS4wNTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTU3UjExZDUyLjIyNFIxMmQ4NDcuODcyUjEzYWkxaTJpM2kzaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxNjlvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2OVIxMWQwUjEyZDBSMTNhaGc6NTZvUjBkOTk2LjM1MlIxYWQ3ODIuMzM2ZDQwOC41NzZkNzgyLjMzNmQ1NzkuNTg0ZDc4Mi4zMzZkNjE3LjQ3MmQ3NjQuOTI4ZDY1MC4yNGQ3ODIuMzM2ZDY4MS45ODNkNzgyLjMzNmQ3MTkuODcyZDc4Mi4zMzZkODc1LjUyZDc4Mi4zMzZkOTM1LjkzNmQ3MzguMzA0ZDk3OS45NjhkNjk0LjI3MmQxMDI0ZDYzMi44MzJkMTAyNGQyMDcuODcyZDEwMjRkMTQ2LjQzMmQxMDI0ZDEwMi40ZDk3OS45NjhkNTguMzY4ZDkzNS45MzZkNTguMzY4ZDg3NS41MmQ1OC4zNjhkNzE5Ljg3MmQ1OC4zNjhkNjg3LjEwNGQ3NS43NzZkNjUwLjI0ZDU4LjM2OGQ2MTMuMzc2ZDU4LjM2OGQ1NzkuNTg0ZDU4LjM2OGQ0MzUuMTk5ZDU4LjM2OGQzNzMuNzZkMTAyLjRkMzMwLjI0ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyZDYzMi44MzJkMjg2LjcyZDY4OC4xMjhkMjg2LjcyZDczMC42MjRkMzIxLjUzNWQ3NzMuMTJkMzU2LjM1MmQ3ODIuMzM2ZDQwOC41NzZkMjE1LjA0ZDcyOS4wODhkMjE1LjA0ZDg2Ny4zMjhkNjI1LjY2NGQ4NjcuMzI4ZDYyNS42NjRkNzI5LjA4OGQyMTUuMDRkNzI5LjA4OGQyMTUuMDRkNDQ0LjQxNWQyMTUuMDRkNTgxLjYzMmQ2MjUuNjY0ZDU4MS42MzJkNjI1LjY2NGQ0NDQuNDE1ZDIxNS4wNGQ0NDQuNDE1aFIyZDg1NC4wMTZSM2Q3ODIuMzM2UjRkNTguMzY4UjVkNzM3LjI4UjZkMFI3ZDY3OC45MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTU2UjExZDU4LjM2OFIxMmQ4NTQuMDE2UjEzYWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNjhvUjBkOTk2LjM1MlIxYWQ0MzEuMTA0ZDEwMS4zNzVkNDMxLjEwNGQyNTkuMDcyZDI3My40MDhkMjU5LjA3MmQyNzMuNDA4ZDEwMS4zNzVkNDMxLjEwNGQxMDEuMzc1ZDIxMS45NjhkMTAxLjM3NWQyMTEuOTY4ZDI1OS4wNzJkNTUuMjk2ZDI1OS4wNzJkNTUuMjk2ZDEwMS4zNzVkMjExLjk2OGQxMDEuMzc1aFIyZDM5NC4yNFIzZDQzMS4xMDRSNGQ1NS4yOTZSNWQ5MjIuNjI0UjZkNzY0LjkyOFI3ZDg2Ny4zMjhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2OFIxMWQ1NS4yOTZSMTJkMzk0LjI0UjEzYWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6NTVvUjBkOTk2LjM1MlIxYWQzLjA3MmQyODUuNjk2ZDQ2Ni45NDRkMjg1LjY5NmQ1MjguMzg0ZDI4NS42OTZkNTcxLjkwNGQzMjkuMjE2ZDYxNS40MjRkMzcyLjczNmQ2MTUuNDI0ZDQzNC4xNzVkNjE1LjQyNGQxMDI0ZDQ1OC43NTJkMTAyNGQ0NTguNzUyZDQ0Mi4zNjdkMy4wNzJkNDQyLjM2N2QzLjA3MmQyODUuNjk2aFIyZDY3NS44NFIzZDYxNS40MjRSNGQzLjA3MlI1ZDczOC4zMDRSNmQwUjdkNzM1LjIzMlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNTVSMTFkMy4wNzJSMTJkNjc1Ljg0UjEzYWkxaTJpM2kzaTJpMmkyaTJpMmhnOjE2N29SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTY3UjExZDBSMTJkMFIxM2FoZzo1NG9SMGQ5OTYuMzUyUjFhZDY3MC43MmQ0NDMuMzkxZDIxNS4wNGQ0NDMuMzkxZDIxNS4wNGQ1NzEuMzkyZDYzMi44MzJkNTcxLjM5MmQ2OTQuMjcyZDU3MS4zOTJkNzM4LjMwNGQ2MTQuOTEyZDc4Mi4zMzZkNjU4LjQzMmQ3ODIuMzM2ZDcxOS44NzJkNzgyLjMzNmQ4NzUuNTJkNzgyLjMzNmQ5MzUuOTM2ZDczOC4zMDRkOTc5Ljk2OGQ2OTQuMjcyZDEwMjRkNjMyLjgzMmQxMDI0ZDIwNy44NzJkMTAyNGQxNDYuNDMyZDEwMjRkMTAyLjRkOTc5Ljk2OGQ1OC4zNjhkOTM1LjkzNmQ1OC4zNjhkODc1LjUyZDU4LjM2OGQ0MzUuMTk5ZDU4LjM2OGQzNzMuNzZkMTAyLjRkMzMwLjI0ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyZDY3MC43MmQyODYuNzJkNjcwLjcyZDQ0My4zOTFkMjE1LjA0ZDcyOS4wODhkMjE1LjA0ZDg2Ny4zMjhkNjI1LjY2NGQ4NjcuMzI4ZDYyNS42NjRkNzI5LjA4OGQyMTUuMDRkNzI5LjA4OGhSMmQ4MzkuNjhSM2Q3ODIuMzM2UjRkNTguMzY4UjVkNzM3LjI4UjZkMFI3ZDY3OC45MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTU0UjExZDU4LjM2OFIxMmQ4MzkuNjhSMTNhaTFpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTJpMmkxaTJpMmkyaTJoZzoxNjZvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2NlIxMWQwUjEyZDBSMTNhaGc6NTNvUjBkOTk2LjM1MlIxYWQ3ODIuMzM2ZDQ0My4zOTFkMjE1LjA0ZDQ0My4zOTFkMjE1LjA0ZDU3MS4zOTJkNjMyLjgzMmQ1NzEuMzkyZDY5NC4yNzJkNTcxLjM5MmQ3MzguMzA0ZDYxNC45MTJkNzgyLjMzNmQ2NTguNDMyZDc4Mi4zMzZkNzE5Ljg3MmQ3ODIuMzM2ZDg3NS41MmQ3ODIuMzM2ZDkzNS45MzZkNzM4LjMwNGQ5NzkuOTY4ZDY5NC4yNzJkMTAyNGQ2MzIuODMyZDEwMjRkMjA3Ljg3MmQxMDI0ZDE0Ni40MzJkMTAyNGQxMDIuNGQ5NzkuOTY4ZDU4LjM2OGQ5MzUuOTM2ZDU4LjM2OGQ4NzUuNTJkNTguMzY4ZDgxOC4xNzVkMjE1LjA0ZDgxOC4xNzVkMjE1LjA0ZDg2Ny4zMjhkNjI1LjY2NGQ4NjcuMzI4ZDYyNS42NjRkNzI5LjA4OGQ1OC4zNjhkNzI5LjA4OGQ1OC4zNjhkMjg2LjcyZDc4Mi4zMzZkMjg2LjcyZDc4Mi4zMzZkNDQzLjM5MWhSMmQ4NDkuOTJSM2Q3ODIuMzM2UjRkNTguMzY4UjVkNzM3LjI4UjZkMFI3ZDY3OC45MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTUzUjExZDU4LjM2OFIxMmQ4NDkuOTJSMTNhaTFpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaGc6MTY1b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNjVSMTFkMFIxMmQwUjEzYWhnOjUyb1IwZDk5Ni4zNTJSMWFkNjA0LjE2ZDY4My4wMDhkNzAyLjQ2NGQ2ODMuMDA4ZDcwMi40NjRkODQwLjcwNGQ2MDQuMTZkODQwLjcwNGQ2MDQuMTZkMTAyNGQ0NDcuNDg4ZDEwMjRkNDQ3LjQ4OGQ4NDAuNzA0ZDYuMTQ0ZDg0MC43MDRkNi4xNDRkNzAwLjQxNWQ0NjMuODcyZDI4Ni43MmQ2MDQuMTZkMjg2LjcyZDYwNC4xNmQ2ODMuMDA4ZDQ0Ny40ODhkNTMxLjQ1NmQyNjEuMTJkNjgzLjAwOGQ0NDcuNDg4ZDY4My4wMDhkNDQ3LjQ4OGQ1MzEuNDU2aFIyZDc0Ny41MlIzZDcwMi40NjRSNGQ2LjE0NFI1ZDczNy4yOFI2ZDBSN2Q3MzEuMTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk1MlIxMWQ2LjE0NFIxMmQ3NDcuNTJSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJoZzoxNjRvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2NFIxMWQwUjEyZDBSMTNhaGc6NTFvUjBkOTk2LjM1MlIxYWQ3NTAuNTkyZDQzNS4xOTlkNzUwLjU5MmQ1ODIuNjU2ZDc1MC41OTJkNjA4LjI1NmQ3NDQuNDQ4ZDYyOS43NmQ3NzguMjRkNjcwLjcyZDc3OC4yNGQ3MjIuOTQ0ZDc3OC4yNGQ4NzUuNTJkNzc4LjI0ZDkzNS45MzZkNzM0LjcyZDk3OS45NjhkNjkxLjJkMTAyNGQ2MjkuNzZkMTAyNGQyMDMuNzc2ZDEwMjRkMTQyLjMzNmQxMDI0ZDk4LjMwNGQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDgxOC4xNzVkMjEwLjk0NGQ4MTguMTc1ZDIxMC45NDRkODY3LjMyOGQ2MjEuNTY4ZDg2Ny4zMjhkNjIxLjU2OGQ3MzEuMTM2ZDE3NS4xMDRkNzMxLjEzNmQxNzUuMTA0ZDU3NC40NjRkNTkzLjkyZDU3NC40NjRkNTkzLjkyZDQ0My4zOTFkMjEwLjk0NGQ0NDMuMzkxZDIxMC45NDRkNTAwLjczNmQ1NC4yNzJkNTAwLjczNmQ1NC4yNzJkNDM1LjE5OWQ1NC4yNzJkMzczLjc2ZDk4LjMwNGQzMzAuMjRkMTQyLjMzNmQyODYuNzJkMjAzLjc3NmQyODYuNzJkNjAyLjExMmQyODYuNzJkNjYzLjU1MmQyODYuNzJkNzA3LjA3MmQzMzAuMjRkNzUwLjU5MmQzNzMuNzZkNzUwLjU5MmQ0MzUuMTk5aFIyZDg0NS44MjRSM2Q3NzguMjRSNGQ1NC4yNzJSNWQ3MzcuMjhSNmQwUjdkNjgzLjAwOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNTFSMTFkNTQuMjcyUjEyZDg0NS44MjRSMTNhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkzaTNoZzoxNjNvUjBkOTk2LjM1MlIxYWQ2OTYuMzJkNDkyLjU0NGQ1MzguNjI0ZDQ5Mi41NDRkNTM4LjYyNGQ0NDMuMzkxZDI4OC43NjhkNDQzLjM5MWQyODguNzY4ZDU4My42OGQ1OTguMDE2ZDU4My42OGQ1OTguMDE2ZDc0MC4zNTJkMjg4Ljc2OGQ3NDAuMzUyZDI4OC43NjhkODY3LjMyOGQ2OTYuMzJkODY3LjMyOGQ2OTYuMzJkMTAyNGQzOS45MzZkMTAyNGQzOS45MzZkODY3LjMyOGQxMzIuMDk2ZDg2Ny4zMjhkMTMyLjA5NmQ3NDAuMzUyZDM5LjkzNmQ3NDAuMzUyZDM5LjkzNmQ1ODMuNjhkMTMyLjA5NmQ1ODMuNjhkMTMyLjA5NmQ0MzUuMTk5ZDEzMi4wOTZkMzczLjc2ZDE3Ni4xMjhkMzMwLjI0ZDIyMC4xNmQyODYuNzJkMjgwLjU3NmQyODYuNzJkNTQ3Ljg0ZDI4Ni43MmQ2MDkuMjhkMjg2LjcyZDY1Mi44ZDMzMC4yNGQ2OTYuMzJkMzczLjc2ZDY5Ni4zMmQ0MzUuMTk5ZDY5Ni4zMmQ0OTIuNTQ0aFIyZDc1MS42MTZSM2Q2OTYuMzJSNGQzOS45MzZSNWQ3MzcuMjhSNmQwUjdkNjk3LjM0NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTYzUjExZDM5LjkzNlIxMmQ3NTEuNjE2UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaGc6NTBvUjBkOTk2LjM1MlIxYWQyMDcuODcyZDI4Ni43MmQ2MzIuODMyZDI4Ni43MmQ2OTQuMjcyZDI4Ni43MmQ3MzguMzA0ZDMzMC4yNGQ3ODIuMzM2ZDM3My43NmQ3ODIuMzM2ZDQzNS4xOTlkNzgyLjMzNmQ1OTguMDE2ZDc4Mi4zMzZkNjU5LjQ1NmQ3MzguMzA0ZDcwMy40ODhkNjk0LjI3MmQ3NDcuNTJkNjMyLjgzMmQ3NDcuNTJkMjE1LjA0ZDc0Ny41MmQyMTUuMDRkODY3LjMyOGQ3ODIuMzM2ZDg2Ny4zMjhkNzgyLjMzNmQxMDI0ZDU4LjM2OGQxMDI0ZDU4LjM2OGQ3MzguMzA0ZDU4LjM2OGQ2NzYuODY0ZDEwMi40ZDYzMy4zNDRkMTQ2LjQzMmQ1ODkuODI0ZDIwNy44NzJkNTg5LjgyNGQ2MjUuNjY0ZDU4OS44MjRkNjI1LjY2NGQ0NDMuMzkxZDIxNS4wNGQ0NDMuMzkxZDIxNS4wNGQ1MDIuNzg0ZDU4LjM2OGQ1MDIuNzg0ZDU4LjM2OGQ0MzUuMTk5ZDU4LjM2OGQzNzMuNzZkMTAyLjRkMzMwLjI0ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyaFIyZDg0OS45MlIzZDc4Mi4zMzZSNGQ1OC4zNjhSNWQ3MzcuMjhSNmQwUjdkNjc4LjkxMlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNTBSMTFkNTguMzY4UjEyZDg0OS45MlIxM2FpMWkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpM2kzaGc6MTYyb1IwZDk5Ni4zNTJSMWFkNjM1LjkwNGQ1NzguNTZkNDU1LjY4ZDU3OC41NmQ0NTUuNjhkODY3LjMyOGQ2MzUuOTA0ZDg2Ny4zMjhkNjM1LjkwNGQxMDI0ZDQ1NS42OGQxMDI0ZDQ1NS42OGQxMTI1LjM3NmQyOTcuOTg0ZDExMjUuMzc2ZDI5Ny45ODRkMTAyNGQxODMuMjk2ZDEwMjRkMTIxLjg1NmQxMDI0ZDc3LjgyNGQ5NzkuOTY4ZDMzLjc5MmQ5MzUuOTM2ZDMzLjc5MmQ4NzUuNTJkMzMuNzkyZDU2OS4zNDRkMzMuNzkyZDUwNy45MDRkNzcuODI0ZDQ2My44NzFkMTIxLjg1NmQ0MTkuODRkMTgzLjI5NmQ0MTkuODRkMjk3Ljk4NGQ0MTkuODRkMjk3Ljk4NGQzMDIuMDhkNDU1LjY4ZDMwMi4wOGQ0NTUuNjhkNDE5Ljg0ZDYzNS45MDRkNDE5Ljg0ZDYzNS45MDRkNTc4LjU2ZDI5Ny45ODRkODY3LjMyOGQyOTcuOTg0ZDU3OC41NmQxOTAuNDY0ZDU3OC41NmQxOTAuNDY0ZDg2Ny4zMjhkMjk3Ljk4NGQ4NjcuMzI4aFIyZDY1MS4yNjRSM2Q2MzUuOTA0UjRkMzMuNzkyUjVkNzIxLjkyUjZkLTEwMS4zNzZSN2Q2ODguMTI4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNjJSMTFkMzMuNzkyUjEyZDY1MS4yNjRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjQ5b1IwZDk5Ni4zNTJSMWFkMS4wMjRkNTY3LjI5NmQyMzYuNTQ0ZDI4Ni43MmQzOTkuMzZkMjg2LjcyZDM5OS4zNmQxMDI0ZDI0Mi42ODhkMTAyNGQyNDIuNjg4ZDUyNS4zMTJkMjQwLjY0ZDUyNy4zNmQyNDEuNjY0ZDUyNy4zNmQyMDguODk2ZDU2Ny4yOTZkMS4wMjRkNTY3LjI5NmhSMmQ0MDAuMzg0UjNkMzk5LjM2UjRkMS4wMjRSNWQ3MzcuMjhSNmQwUjdkNzM2LjI1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNDlSMTFkMS4wMjRSMTJkNDAwLjM4NFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmhnOjE2MW9SMGQ5OTYuMzUyUjFhZDIxMC45NDRkMzAxLjA1NmQyMTAuOTQ0ZDQ1Ny43MjdkNTQuMjcyZDQ1Ny43MjdkNTQuMjcyZDMwMS4wNTZkMjEwLjk0NGQzMDEuMDU2ZDIxMC45NDRkMTAyNGQ1NC4yNzJkMTAyNGQ1NC4yNzJkNDg1LjM3NmQyMTAuOTQ0ZDQ4NS4zNzZkMjEwLjk0NGQxMDI0aFIyZDIxNS4wNFIzZDIxMC45NDRSNGQ1NC4yNzJSNWQ3MjIuOTQ0UjZkMFI3ZDY2OC42NzJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2MVIxMWQ1NC4yNzJSMTJkMjE1LjA0UjEzYWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6NDhvUjBkOTk2LjM1MlIxYWQyMDcuODcyZDI4Ni43MmQ2MzIuODMyZDI4Ni43MmQ2OTQuMjcyZDI4Ni43MmQ3MzguMzA0ZDMzMi4yODhkNzgyLjMzNmQzNzcuODU2ZDc4Mi4zMzZkNDM5LjI5NWQ3ODIuMzM2ZDg2NS4yOGQ3ODIuMzM2ZDkyNi43MmQ3MzcuNzkyZDk3NS4zNmQ2OTMuMjQ4ZDEwMjRkNjMyLjgzMmQxMDI0ZDIwNy44NzJkMTAyNGQxNDcuNDU2ZDEwMjRkMTAyLjkxMmQ5NzUuMzZkNTguMzY4ZDkyNi43MmQ1OC4zNjhkODY1LjI4ZDU4LjM2OGQ0MzkuMjk1ZDU4LjM2OGQzNzcuODU2ZDEwMi40ZDMzMi4yODhkMTQ2LjQzMmQyODYuNzJkMjA3Ljg3MmQyODYuNzJkMjk5LjAwOGQ4NTcuMDg4ZDYyNS42NjRkODU3LjA4OGQ2MjUuNjY0ZDU4Mi42NTZkMjk5LjAwOGQ4NTcuMDg4ZDU0MS42OTZkNDQ3LjQ4N2QyMTUuMDRkNDQ3LjQ4N2QyMTUuMDRkNzIxLjkyZDU0MS42OTZkNDQ3LjQ4N2hSMmQ4NTQuMDE2UjNkNzgyLjMzNlI0ZDU4LjM2OFI1ZDczNy4yOFI2ZDBSN2Q2NzguOTEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk0OFIxMWQ1OC4zNjhSMTJkODU0LjAxNlIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTFpMmkyaTJoZzoxNjBvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE2MFIxMWQwUjEyZDBSMTNhaGc6NDdvUjBkOTk2LjM1MlIxYWQ2LjE0NGQ4NjUuMjhkNDc4LjIwOGQyODYuNzJkNTM0LjUyOGQyODYuNzJkNTM0LjUyOGQ0NDQuNDE1ZDYyLjQ2NGQxMDI0ZDYuMTQ0ZDEwMjRkNi4xNDRkODY1LjI4aFIyZDUzMy41MDRSM2Q1MzQuNTI4UjRkNi4xNDRSNWQ3MzcuMjhSNmQwUjdkNzMxLjEzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNDdSMTFkNi4xNDRSMTJkNTMzLjUwNFIxM2FpMWkyaTJpMmkyaTJpMmhnOjE1OW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTU5UjExZDBSMTJkMFIxM2FoZzo0Nm9SMGQ5OTYuMzUyUjFhZDIxMS45NjhkODY3LjMyOGQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDg2Ny4zMjhkMjExLjk2OGQ4NjcuMzI4aFIyZDIzOC41OTJSM2QyMTEuOTY4UjRkNTUuMjk2UjVkMTU2LjY3MlI2ZDBSN2QxMDEuMzc2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk0NlIxMWQ1NS4yOTZSMTJkMjM4LjU5MlIxM2FpMWkyaTJpMmkyaGc6MTU4b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNThSMTFkMFIxMmQwUjEzYWhnOjQ1b1IwZDk5Ni4zNTJSMWFkNDg3LjQyNGQ2NDMuMDcyZDQ4Ny40MjRkNzk5Ljc0NGQ2MC40MTZkNzk5Ljc0NGQ2MC40MTZkNjQzLjA3MmQ0ODcuNDI0ZDY0My4wNzJoUjJkNTI5LjQwOFIzZDQ4Ny40MjRSNGQ2MC40MTZSNWQzODAuOTI4UjZkMjI0LjI1NlI3ZDMyMC41MTJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTQ1UjExZDYwLjQxNlIxMmQ1MjkuNDA4UjEzYWkxaTJpMmkyaTJoZzoxNTdvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE1N1IxMWQwUjEyZDBSMTNhaGc6NDRvUjBkOTk2LjM1MlIxYWQ1NS4yOTZkODc4LjU5MmQyMTEuOTY4ZDg3OC41OTJkMjExLjk2OGQxMDA3LjYxNmQyMTEuOTY4ZDEwNjIuOTEyZDE2Ny40MjRkMTEwNS45MmQxMjIuODhkMTE0OC45MjhkNTUuMjk2ZDExNjAuMTkyZDU1LjI5NmQ4NzguNTkyaFIyZDI0OC44MzJSM2QyMTEuOTY4UjRkNTUuMjk2UjVkMTQ1LjQwOFI2ZC0xMzYuMTkyUjdkOTAuMTEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk0NFIxMWQ1NS4yOTZSMTJkMjQ4LjgzMlIxM2FpMWkyaTJpM2kzaTJoZzoxNTZvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE1NlIxMWQwUjEyZDBSMTNhaGc6NDNvUjBkOTk2LjM1MlIxYWQxNTAuNTI4ZDUwOC45MjhkMzA3LjJkNTA4LjkyOGQzMDcuMmQ2NDMuMDcyZDQ0NC40MTZkNjQzLjA3MmQ0NDQuNDE2ZDc5OS43NDRkMzA3LjJkNzk5Ljc0NGQzMDcuMmQ5MzUuOTM2ZDE1MC41MjhkOTM1LjkzNmQxNTAuNTI4ZDc5OS43NDRkMTcuNDA4ZDc5OS43NDRkMTcuNDA4ZDY0My4wNzJkMTUwLjUyOGQ2NDMuMDcyZDE1MC41MjhkNTA4LjkyOGhSMmQ0NjUuOTJSM2Q0NDQuNDE2UjRkMTcuNDA4UjVkNTE1LjA3MlI2ZDg4LjA2NFI3ZDQ5Ny42NjRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTQzUjExZDE3LjQwOFIxMmQ0NjUuOTJSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxNTVvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE1NVIxMWQwUjEyZDBSMTNhaGc6NDJvUjBkOTk2LjM1MlIxYWQ0NTUuNjhkMzgxLjk1MmQ1MDMuODA4ZDUzMy41MDNkMzkxLjE2OGQ1NjkuMzQ0ZDQ2MS44MjRkNjY0LjU3NmQzMzUuODcyZDc1Ni43MzZkMjYzLjE2OGQ2NjEuNTA0ZDE5NS41ODRkNzU2LjczNmQ2Ny41ODRkNjY0LjU3NmQxMzguMjRkNTY5LjM0NGQyNS42ZDUzMy41MDNkNzMuNzI4ZDM4MS45NTJkMTg1LjM0NGQ0MTkuODRkMTg1LjM0NGQzMDEuMDU2ZDM0My4wNGQzMDEuMDU2ZDM0My4wNGQ0MTkuODRkMzUzLjI4ZDQxNi43NjhkNDU1LjY4ZDM4MS45NTJoUjJkNTI4LjM4NFIzZDUwMy44MDhSNGQyNS42UjVkNzIyLjk0NFI2ZDI2Ny4yNjRSN2Q2OTcuMzQ0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGk0MlIxMWQyNS42UjEyZDUyOC4zODRSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNoZzoxNTRvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE1NFIxMWQwUjEyZDBSMTNhaGc6NDFvUjBkOTk2LjM1MlIxYWQ1Ny4zNDRkMTAyNGQ1Ny4zNDRkODY3LjMyOGQxMTYuNzM2ZDg2Ny4zMjhkMTE2LjczNmQ0NDMuMzkxZDU3LjM0NGQ0NDMuMzkxZDU3LjM0NGQyODYuNzJkMTI1Ljk1MmQyODYuNzJkMTg2LjM2OGQyODYuNzJkMjMwLjRkMzMwLjI0ZDI3NC40MzJkMzczLjc2ZDI3NC40MzJkNDM1LjE5OWQyNzQuNDMyZDg3NS41MmQyNzQuNDMyZDkzNS45MzZkMjMwLjRkOTc5Ljk2OGQxODYuMzY4ZDEwMjRkMTI1Ljk1MmQxMDI0ZDU3LjM0NGQxMDI0aFIyZDMwNC4xMjhSM2QyNzQuNDMyUjRkNTcuMzQ0UjVkNzM3LjI4UjZkMFI3ZDY3OS45MzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTQxUjExZDU3LjM0NFIxMmQzMDQuMTI4UjEzYWkxaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaGc6MTUzb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNTNSMTFkMFIxMmQwUjEzYWhnOjQwb1IwZDk5Ni4zNTJSMWFkMjY5LjMxMmQ0NDMuMzkxZDIwOS45MmQ0NDMuMzkxZDIwOS45MmQ4NjcuMzI4ZDI2OS4zMTJkODY3LjMyOGQyNjkuMzEyZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ0MzUuMTk5ZDUzLjI0OGQzNzMuNzZkOTYuNzY4ZDMzMC4yNGQxNDAuMjg4ZDI4Ni43MmQyMDEuNzI4ZDI4Ni43MmQyNjkuMzEyZDI4Ni43MmQyNjkuMzEyZDQ0My4zOTFoUjJkMzAxLjA1NlIzZDI2OS4zMTJSNGQ1My4yNDhSNWQ3MzcuMjhSNmQwUjdkNjg0LjAzMlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpNDBSMTFkNTMuMjQ4UjEyZDMwMS4wNTZSMTNhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzoxNTJvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE1MlIxMWQwUjEyZDBSMTNhaGc6MzlvUjBkOTk2LjM1MlIxYWQyMTcuMDg4ZDMwMS4wNTZkMjE3LjA4OGQ1MDcuOTA0ZDYwLjQxNmQ1MDcuOTA0ZDYwLjQxNmQzMDEuMDU2ZDIxNy4wODhkMzAxLjA1NmhSMmQyNTcuMDI0UjNkMjE3LjA4OFI0ZDYwLjQxNlI1ZDcyMi45NDRSNmQ1MTYuMDk2UjdkNjYyLjUyOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMzlSMTFkNjAuNDE2UjEyZDI1Ny4wMjRSMTNhaTFpMmkyaTJpMmhnOjE1MW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTUxUjExZDBSMTJkMFIxM2FoZzozOG9SMGQ5OTYuMzUyUjFhZDc3Ny4yMTZkODExLjAwOGQ4OTQuOTc2ZDg4MC42NGQ4OTQuOTc2ZDEwNDIuNDMyZDc1MS42MTZkOTYwLjUxMmQ3MDUuNTM2ZDEwMjRkNjI4LjczNmQxMDI0ZDIwMi43NTJkMTAyNGQxNDEuMzEyZDEwMjRkOTcuNzkyZDk3OS45NjhkNTQuMjcyZDkzNS45MzZkNTQuMjcyZDg3NS41MmQ1NC4yNzJkNjg2LjA3OWQ1NC4yNzJkNjYzLjU1MmQ2NS41MzZkNjM4Ljk3NmQ3Ni44ZDYxNC40ZDk4LjMwNGQ2MDAuMDY0ZDkxLjEzNmQ1ODIuNjU2ZDkxLjEzNmQ1NDUuNzkxZDkxLjEzNmQ0MzYuMjIzZDkxLjEzNmQzNzQuNzg0ZDEzNS4xNjhkMzMxLjI2NGQxNzkuMmQyODcuNzQ0ZDIzOS42MTZkMjg3Ljc0NGQ2MDEuMDg4ZDI4Ny43NDRkNjU1LjM2ZDI4Ny43NDRkNjk3Ljg1NmQzMjIuNTU5ZDc0MC4zNTJkMzU3LjM3NmQ3NDkuNTY4ZDQwOS42ZDc0OS41NjhkNDk5LjcxMmQ1OTIuODk2ZDQ5OS43MTJkNTkyLjg5NmQ0NDUuNDM5ZDI0Ny44MDhkNDQ1LjQzOWQyNDcuODA4ZDU1Ni4wMzFkNjIwLjU0NGQ3NDMuNDI0ZDYyMC41NDRkNjQ2LjE0NGQ3NzcuMjE2ZDY0Ni4xNDRkNzc3LjIxNmQ4MTEuMDA4ZDQ0Mi4zNjhkODE0LjA3OWQyMTAuOTQ0ZDY5Ny4zNDRkMjEwLjk0NGQ4NjcuMzI4ZDU0OC44NjRkODY3LjMyOGQ1MzMuNTA0ZDg1OS4xMzZkNDk3LjY2NGQ4NDEuNzI4ZDQ2MS44MjRkODI0LjMxOWQ0NDIuMzY4ZDgxNC4wNzloUjJkOTYwLjUxMlIzZDg5NC45NzZSNGQ1NC4yNzJSNWQ3MzYuMjU2UjZkLTE4LjQzMlI3ZDY4MS45ODRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTM4UjExZDU0LjI3MlIxMmQ5NjAuNTEyUjEzYWkxaTJpMmkyaTNpMmkzaTNpMmkzaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmkxaTJpMmkyaTNpM2hnOjE1MG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTUwUjExZDBSMTJkMFIxM2FoZzozN29SMGQ5OTYuMzUyUjFhZDgwOC45NmQyODcuNzQ0ZDg2MS4xODRkMjg3Ljc0NGQ4NjEuMTg0ZDQ0Ny40ODdkMTg5LjQ0ZDEwMjRkMTM3LjIxNmQxMDI0ZDEzNy4yMTZkODYzLjIzMmQ4MDguOTZkMjg3Ljc0NGQxODguNDE2ZDI5NC45MTJkMjcxLjM2ZDI5NC45MTJkMzMyLjhkMjk0LjkxMmQzNzEuNzEyZDMzMy4zMTJkNDEwLjYyNGQzNzEuNzEyZDQxMC42MjRkNDMzLjE1MmQ0MTAuNjI0ZDUwNi44OGQ0MTAuNjI0ZDU2OC4zMTlkMzcxLjcxMmQ2MDcuMjMyZDMzMi44ZDY0Ni4xNDRkMjcxLjM2ZDY0Ni4xNDRkMTg4LjQxNmQ2NDYuMTQ0ZDEyNi45NzZkNjQ2LjE0NGQ4OC4wNjRkNjA3LjIzMmQ0OS4xNTJkNTY4LjMxOWQ0OS4xNTJkNTA2Ljg4ZDQ5LjE1MmQ0MzMuMTUyZDQ5LjE1MmQzNzEuNzEyZDg4LjA2NGQzMzMuMzEyZDEyNi45NzZkMjk0LjkxMmQxODguNDE2ZDI5NC45MTJkNzA4LjYwOGQ2NjMuNTUyZDc5MS41NTJkNjYzLjU1MmQ4NTIuOTkyZDY2My41NTJkODkxLjkwNGQ3MDEuOTUyZDkzMC44MTZkNzQwLjM1MmQ5MzAuODE2ZDgwMS43OTJkOTMwLjgxNmQ4NzUuNTJkOTMwLjgxNmQ5MzYuOTZkODkxLjkwNGQ5NzUuODcyZDg1Mi45OTJkMTAxNC43ODRkNzkxLjU1MmQxMDE0Ljc4NGQ3MDguNjA4ZDEwMTQuNzg0ZDY0OC4xOTJkMTAxNC43ODRkNjA5LjI4ZDk3NS44NzJkNTcwLjM2OGQ5MzYuOTZkNTcwLjM2OGQ4NzUuNTJkNTcwLjM2OGQ4MDEuNzkyZDU3MC4zNjhkNzQwLjM1MmQ2MDkuMjhkNzAxLjk1MmQ2NDguMTkyZDY2My41NTJkNzA4LjYwOGQ2NjMuNTUyZDY5OC4zNjhkNzkxLjU1MmQ2OTguMzY4ZDg4Ni43ODRkODAyLjgxNmQ4ODYuNzg0ZDgwMi44MTZkNzkxLjU1MmQ2OTguMzY4ZDc5MS41NTJkMTc3LjE1MmQ0MjIuOTEyZDE3Ny4xNTJkNTE3LjEyZDI4MS42ZDUxNy4xMmQyODEuNmQ0MjIuOTEyZDE3Ny4xNTJkNDIyLjkxMmhSMmQ5ODkuMTg0UjNkOTMwLjgxNlI0ZDQ5LjE1MlI1ZDczNi4yNTZSNmQwUjdkNjg3LjEwNFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMzdSMTFkNDkuMTUyUjEyZDk4OS4xODRSMTNhaTFpMmkyaTJpMmkyaTJpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNDlvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE0OVIxMWQwUjEyZDBSMTNhaGc6MzZvUjBkOTk2LjM1MlIxYWQ3NTcuNzZkNDM1LjE5OWQ3NTcuNzZkNTAyLjc4NGQ2MDEuMDg4ZDUwMi43ODRkNjAxLjA4OGQ0NDMuMzkxZDQ3NS4xMzZkNDQzLjM5MWQ0NzUuMTM2ZDU4MC42MDhkNjA5LjI4ZDU4MC42MDhkNjcwLjcyZDU4MC42MDhkNzE0LjI0ZDYyNC42NGQ3NTcuNzZkNjY4LjY3MmQ3NTcuNzZkNzMwLjExMmQ3NTcuNzZkODc1LjUyZDc1Ny43NmQ5MzUuOTM2ZDcxNC4yNGQ5NzkuOTY4ZDY3MC43MmQxMDI0ZDYwOS4yOGQxMDI0ZDQ3NS4xMzZkMTAyNGQ0NzUuMTM2ZDExMjQuMzUyZDMxNy40NGQxMTI0LjM1MmQzMTcuNDRkMTAyNGQxODMuMjk2ZDEwMjRkMTIxLjg1NmQxMDI0ZDc4LjMzNmQ5NzkuOTY4ZDM0LjgxNmQ5MzUuOTM2ZDM0LjgxNmQ4NzUuNTJkMzQuODE2ZDgwNy45MzZkMTkxLjQ4OGQ4MDcuOTM2ZDE5MS40ODhkODY3LjMyOGQzMTcuNDRkODY3LjMyOGQzMTcuNDRkNzM3LjI4ZDE4My4yOTZkNzM3LjI4ZDEyMS44NTZkNzM3LjI4ZDc4LjMzNmQ2OTMuNzZkMzQuODE2ZDY1MC4yNGQzNC44MTZkNTg4LjhkMzQuODE2ZDQzNS4xOTlkMzQuODE2ZDM3My43NmQ3OC4zMzZkMzMwLjI0ZDEyMS44NTZkMjg2LjcyZDE4My4yOTZkMjg2LjcyZDMxNy40NGQyODYuNzJkMzE3LjQ0ZDE4Ni4zNjdkNDc1LjEzNmQxODYuMzY3ZDQ3NS4xMzZkMjg2LjcyZDYwOS4yOGQyODYuNzJkNjcwLjcyZDI4Ni43MmQ3MTQuMjRkMzMwLjI0ZDc1Ny43NmQzNzMuNzZkNzU3Ljc2ZDQzNS4xOTlkMzE3LjQ0ZDU4MC42MDhkMzE3LjQ0ZDQ0My4zOTFkMTkxLjQ4OGQ0NDMuMzkxZDE5MS40ODhkNTgwLjYwOGQzMTcuNDRkNTgwLjYwOGQ0NzUuMTM2ZDczNy4yOGQ0NzUuMTM2ZDg2Ny4zMjhkNjAxLjA4OGQ4NjcuMzI4ZDYwMS4wODhkNzM3LjI4ZDQ3NS4xMzZkNzM3LjI4aFIyZDgwNi45MTJSM2Q3NTcuNzZSNGQzNC44MTZSNWQ4MzcuNjMyUjZkLTEwMC4zNTJSN2Q4MDIuODE2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkzNlIxMWQzNC44MTZSMTJkODA2LjkxMlIxM2FpMWkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTQ4b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNDhSMTFkMFIxMmQwUjEzYWhnOjM1b1IwZDk5Ni4zNTJSMWFkNzY4ZDQ0MC4zMTlkNzY4ZDU5Ni45OTJkNjUwLjI0ZDU5Ni45OTJkNjE1LjQyNGQ3MDUuNTM2ZDczOS4zMjhkNzA1LjUzNmQ3MzkuMzI4ZDg2Mi4yMDhkNTY0LjIyNGQ4NjIuMjA4ZDU1Ni4wMzJkODg2Ljc4NGQ1NDAuNjcyZDk0My4xMDRkNTI1LjMxMmQ5OTkuNDI0ZDUxOC4xNDRkMTAyNGQzNTkuNDI0ZDEwMjRkNDA4LjU3NmQ4NjIuMjA4ZDI2NS4yMTZkODYyLjIwOGQyNTcuMDI0ZDg4OS44NTZkMjQxLjE1MmQ5NDcuMmQyMjUuMjhkMTAwNC41NDRkMjIwLjE2ZDEwMjRkNjEuNDRkMTAyNGQxMDkuNTY4ZDg2Mi4yMDhkMzIuNzY4ZDg2Mi4yMDhkMzIuNzY4ZDcwNS41MzZkMTU2LjY3MmQ3MDUuNTM2ZDE5MS40ODhkNTk2Ljk5MmQ2MS40NGQ1OTYuOTkyZDYxLjQ0ZDQ0MC4zMTlkMjQxLjY2NGQ0NDAuMzE5ZDI1NC45NzZkNDAzLjQ1NmQyOTAuODE2ZDI4Ni43MmQ0NTIuNjA4ZDI4Ni43MmQ0MDAuMzg0ZDQ0MC4zMTlkNTQxLjY5NmQ0NDAuMzE5ZDU5MC44NDhkMjg2LjcyZDc1MS42MTZkMjg2LjcyZDY5OS4zOTJkNDQwLjMxOWQ3NjhkNDQwLjMxOWQzMTYuNDE2ZDcwNS41MzZkNDU1LjY4ZDcwNS41MzZkNDkwLjQ5NmQ1OTYuOTkyZDM1MS4yMzJkNTk2Ljk5MmQzMTYuNDE2ZDcwNS41MzZoUjJkODE2LjEyOFIzZDc2OFI0ZDMyLjc2OFI1ZDczNy4yOFI2ZDBSN2Q3MDQuNTEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkzNVIxMWQzMi43NjhSMTJkODE2LjEyOFIxM2FpMWkyaTJpMmkyaTJpMmkzaTNpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaTNpMmkyaTJpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNDdvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE0N1IxMWQwUjEyZDBSMTNhaGc6MzRvUjBkOTk2LjM1MlIxYWQxOTIuNTEyZDMwMS4wNTZkMTkyLjUxMmQ1MDYuODhkMzYuODY0ZDUwNi44OGQzNi44NjRkMzAxLjA1NmQxOTIuNTEyZDMwMS4wNTZkMzc3Ljg1NmQzMDEuMDU2ZDM3Ny44NTZkNTA2Ljg4ZDIyMi4yMDhkNTA2Ljg4ZDIyMi4yMDhkMzAxLjA1NmQzNzcuODU2ZDMwMS4wNTZoUjJkNDA1LjUwNFIzZDM3Ny44NTZSNGQzNi44NjRSNWQ3MjIuOTQ0UjZkNTE3LjEyUjdkNjg2LjA4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkzNFIxMWQzNi44NjRSMTJkNDA1LjUwNFIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjE0Nm9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTQ2UjExZDBSMTJkMFIxM2FoZzozM29SMGQ5OTYuMzUyUjFhZDIxNi4wNjRkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkODY3LjMyOGQyMTYuMDY0ZDg2Ny4zMjhkMjE2LjA2NGQxMDI0ZDU5LjM5MmQ4MTguMTc1ZDU5LjM5MmQyODYuNzJkMjE2LjA2NGQyODYuNzJkMjE2LjA2NGQ4MTguMTc1ZDU5LjM5MmQ4MTguMTc1aFIyZDIyNS4yOFIzZDIxNi4wNjRSNGQ1OS4zOTJSNWQ3MzcuMjhSNmQwUjdkNjc3Ljg4OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMzNSMTFkNTkuMzkyUjEyZDIyNS4yOFIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjE0NW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTQ1UjExZDBSMTJkMFIxM2FoZzozMm9SMGQ5OTYuMzUyUjFhaFIyZDMyOS43MjhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMzJSMTFkMFIxMmQzMjkuNzI4UjEzYWhnOjE0NG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTQ0UjExZDBSMTJkMFIxM2FoZzoxNDNvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE0M1IxMWQwUjEyZDBSMTNhaGc6MjU1b1IwZDk5Ni4zNTJSMWFkNjQ2LjE0NGQxMDg4LjUxMmQ2NDYuMTQ0ZDExNDkuOTUyZDYwMi42MjRkMTE5My40NzJkNTU5LjEwNGQxMjM2Ljk5MmQ0OTcuNjY0ZDEyMzYuOTkyZDEzNy4yMTZkMTIzNi45OTJkMTM3LjIxNmQxMDc5LjI5NmQ0ODkuNDcyZDEwNzkuMjk2ZDQ4OS40NzJkMTAyNGQxOTIuNTEyZDEwMjRkMTMxLjA3MmQxMDI0ZDg3LjA0ZDk3OS45NjhkNDMuMDA4ZDkzNS45MzZkNDMuMDA4ZDg3NS41MmQ0My4wMDhkNDMyLjEyOGQxOTkuNjhkNDMyLjEyOGQxOTkuNjhkODY3LjMyOGQ0ODkuNDcyZDg2Ny4zMjhkNDg5LjQ3MmQ0MzIuMTI4ZDY0Ni4xNDRkNDMyLjEyOGQ2NDYuMTQ0ZDEwODguNTEyZDU1NS4wMDhkMjEwLjk0M2Q1NTUuMDA4ZDM2OC42NGQzOTcuMzEyZDM2OC42NGQzOTcuMzEyZDIxMC45NDNkNTU1LjAwOGQyMTAuOTQzZDMzNS44NzJkMjEwLjk0M2QzMzUuODcyZDM2OC42NGQxNzkuMmQzNjguNjRkMTc5LjJkMjEwLjk0M2QzMzUuODcyZDIxMC45NDNoUjJkNzA0LjUxMlIzZDY0Ni4xNDRSNGQ0My4wMDhSNWQ4MTMuMDU2UjZkLTIxMi45OTJSN2Q3NzAuMDQ4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNTVSMTFkNDMuMDA4UjEyZDcwNC41MTJSMTNhaTFpM2kzaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTQyb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxNDJSMTFkMFIxMmQwUjEzYWhnOjI1NG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjU0UjExZDBSMTJkMFIxM2FoZzoxNDFvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTE0MVIxMWQwUjEyZDBSMTNhaGc6MjUzb1IwZDk5Ni4zNTJSMWFkNjQ2LjE0NGQxMDg4LjUxMmQ2NDYuMTQ0ZDExNDkuOTUyZDYwMi42MjRkMTE5My40NzJkNTU5LjEwNGQxMjM2Ljk5MmQ0OTcuNjY0ZDEyMzYuOTkyZDEzNy4yMTZkMTIzNi45OTJkMTM3LjIxNmQxMDc5LjI5NmQ0ODkuNDcyZDEwNzkuMjk2ZDQ4OS40NzJkMTAyNGQxOTIuNTEyZDEwMjRkMTMxLjA3MmQxMDI0ZDg3LjA0ZDk3OS45NjhkNDMuMDA4ZDkzNS45MzZkNDMuMDA4ZDg3NS41MmQ0My4wMDhkNDMyLjEyOGQxOTkuNjhkNDMyLjEyOGQxOTkuNjhkODY3LjMyOGQ0ODkuNDcyZDg2Ny4zMjhkNDg5LjQ3MmQ0MzIuMTI4ZDY0Ni4xNDRkNDMyLjEyOGQ2NDYuMTQ0ZDEwODguNTEyZDI3Ni40OGQzNjkuNjY0ZDMyOC43MDRkMTYxLjc5MmQ0ODkuNDcyZDE2MS43OTJkNDM3LjI0OGQzNjkuNjY0ZDI3Ni40OGQzNjkuNjY0aFIyZDcwNC41MTJSM2Q2NDYuMTQ0UjRkNDMuMDA4UjVkODYyLjIwOFI2ZC0yMTIuOTkyUjdkODE5LjJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI1M1IxMWQ0My4wMDhSMTJkNzA0LjUxMlIxM2FpMWkzaTNpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjE0MG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTQwUjExZDBSMTJkMFIxM2FoZzoyNTJvUjBkOTk2LjM1MlIxYWQ0OTkuNzEyZDQzMC4wOGQ2NTYuMzg0ZDQzMC4wOGQ2NTYuMzg0ZDg3NS41MmQ2NTYuMzg0ZDkzNS45MzZkNjEyLjg2NGQ5NzkuOTY4ZDU2OS4zNDRkMTAyNGQ1MDcuOTA0ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ0MzAuMDhkMjEwLjk0NGQ0MzAuMDhkMjEwLjk0NGQ4NjcuMzI4ZDQ5OS43MTJkODY3LjMyOGQ0OTkuNzEyZDQzMC4wOGQ1NTguMDhkMjEyLjk5MWQ1NTguMDhkMzcwLjY4OGQ0MDAuMzg0ZDM3MC42ODhkNDAwLjM4NGQyMTIuOTkxZDU1OC4wOGQyMTIuOTkxZDMzOC45NDRkMjEyLjk5MWQzMzguOTQ0ZDM3MC42ODhkMTgyLjI3MmQzNzAuNjg4ZDE4Mi4yNzJkMjEyLjk5MWQzMzguOTQ0ZDIxMi45OTFoUjJkNzExLjY4UjNkNjU2LjM4NFI0ZDU0LjI3MlI1ZDgxMS4wMDhSNmQwUjdkNzU2LjczNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjUyUjExZDU0LjI3MlIxMmQ3MTEuNjhSMTNhaTFpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEzOW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTM5UjExZDBSMTJkMFIxM2FoZzoyNTFvUjBkOTk2LjM1MlIxYWQ0OTkuNzEyZDQzMC4wOGQ2NTYuMzg0ZDQzMC4wOGQ2NTYuMzg0ZDg3NS41MmQ2NTYuMzg0ZDkzNS45MzZkNjEyLjg2NGQ5NzkuOTY4ZDU2OS4zNDRkMTAyNGQ1MDcuOTA0ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ0MzAuMDhkMjEwLjk0NGQ0MzAuMDhkMjEwLjk0NGQ4NjcuMzI4ZDQ5OS43MTJkODY3LjMyOGQ0OTkuNzEyZDQzMC4wOGQzMjUuNjMyZDM2OS42NjRkMTg5LjQ0ZDM2OS42NjRkMzAyLjA4ZDE4MS4yNDdkNDA0LjQ4ZDE4MS4yNDdkNTE3LjEyZDM2OS42NjRkMzc5LjkwNGQzNjkuNjY0ZDM1MS4yMzJkMzI0LjYwN2QzMjUuNjMyZDM2OS42NjRoUjJkNzExLjY4UjNkNjU2LjM4NFI0ZDU0LjI3MlI1ZDg0Mi43NTJSNmQwUjdkNzg4LjQ4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNTFSMTFkNTQuMjcyUjEyZDcxMS42OFIxM2FpMWkyaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzoxMzhvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEzOFIxMWQwUjEyZDBSMTNhaGc6MjUwb1IwZDk5Ni4zNTJSMWFkNDk5LjcxMmQ0MzAuMDhkNjU2LjM4NGQ0MzAuMDhkNjU2LjM4NGQ4NzUuNTJkNjU2LjM4NGQ5MzUuOTM2ZDYxMi44NjRkOTc5Ljk2OGQ1NjkuMzQ0ZDEwMjRkNTA3LjkwNGQxMDI0ZDIwMi43NTJkMTAyNGQxNDEuMzEyZDEwMjRkOTcuNzkyZDk3OS45NjhkNTQuMjcyZDkzNS45MzZkNTQuMjcyZDg3NS41MmQ1NC4yNzJkNDMwLjA4ZDIxMC45NDRkNDMwLjA4ZDIxMC45NDRkODY3LjMyOGQ0OTkuNzEyZDg2Ny4zMjhkNDk5LjcxMmQ0MzAuMDhkMjc5LjU1MmQzNjkuNjY0ZDMzMS43NzZkMTYxLjc5MmQ0OTIuNTQ0ZDE2MS43OTJkNDQwLjMyZDM2OS42NjRkMjc5LjU1MmQzNjkuNjY0aFIyZDcxMS42OFIzZDY1Ni4zODRSNGQ1NC4yNzJSNWQ4NjIuMjA4UjZkMFI3ZDgwNy45MzZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI1MFIxMWQ1NC4yNzJSMTJkNzExLjY4UjEzYWkxaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjEzN29SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTM3UjExZDBSMTJkMFIxM2FoZzoyNDlvUjBkOTk2LjM1MlIxYWQ0OTkuNzEyZDQzMC4wOGQ2NTYuMzg0ZDQzMC4wOGQ2NTYuMzg0ZDg3NS41MmQ2NTYuMzg0ZDkzNS45MzZkNjEyLjg2NGQ5NzkuOTY4ZDU2OS4zNDRkMTAyNGQ1MDcuOTA0ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ0MzAuMDhkMjEwLjk0NGQ0MzAuMDhkMjEwLjk0NGQ4NjcuMzI4ZDQ5OS43MTJkODY3LjMyOGQ0OTkuNzEyZDQzMC4wOGQzOTkuMzZkMTYxLjc5MmQ0NTEuNTg0ZDM2OS42NjRkMjkwLjgxNmQzNjkuNjY0ZDIzOC41OTJkMTYxLjc5MmQzOTkuMzZkMTYxLjc5MmhSMmQ3MTEuNjhSM2Q2NTYuMzg0UjRkNTQuMjcyUjVkODYyLjIwOFI2ZDBSN2Q4MDcuOTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNDlSMTFkNTQuMjcyUjEyZDcxMS42OFIxM2FpMWkyaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMzZvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEzNlIxMWQwUjEyZDBSMTNhaGc6MjQ4b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNDhSMTFkMFIxMmQwUjEzYWhnOjEzNW9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTM1UjExZDBSMTJkMFIxM2FoZzoyNDdvUjBkOTk2LjM1MlIxYWQ1MDguOTI4ZDYyMS41NjhkNTA4LjkyOGQ3NzguMjRkNy4xNjhkNzc4LjI0ZDcuMTY4ZDYyMS41NjhkNTA4LjkyOGQ2MjEuNTY4ZDE4Ny4zOTJkODY3LjMyOGQzNDQuMDY0ZDg2Ny4zMjhkMzQ0LjA2NGQxMDI0ZDE4Ny4zOTJkMTAyNGQxODcuMzkyZDg2Ny4zMjhkMzQ0LjA2NGQzOTMuMjE2ZDM0NC4wNjRkNTUwLjkxMmQxODcuMzkyZDU1MC45MTJkMTg3LjM5MmQzOTMuMjE2ZDM0NC4wNjRkMzkzLjIxNmhSMmQ1MzEuNDU2UjNkNTA4LjkyOFI0ZDcuMTY4UjVkNjMwLjc4NFI2ZDBSN2Q2MjMuNjE2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNDdSMTFkNy4xNjhSMTJkNTMxLjQ1NlIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMzRvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEzNFIxMWQwUjEyZDBSMTNhaGc6MjQ2b1IwZDk5Ni4zNTJSMWFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQ1NDYuODE2ZDIxMC45NDNkNTQ2LjgxNmQzNjguNjRkMzg5LjEyZDM2OC42NGQzODkuMTJkMjEwLjk0M2Q1NDYuODE2ZDIxMC45NDNkMzI3LjY4ZDIxMC45NDNkMzI3LjY4ZDM2OC42NGQxNzEuMDA4ZDM2OC42NGQxNzEuMDA4ZDIxMC45NDNkMzI3LjY4ZDIxMC45NDNoUjJkNzA4LjYwOFIzZDY1NC4zMzZSNGQ1Mi4yMjRSNWQ4MTMuMDU2UjZkMFI3ZDc2MC44MzJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI0NlIxMWQ1Mi4yMjRSMTJkNzA4LjYwOFIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEzM29SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTMzUjExZDBSMTJkMFIxM2FoZzoyNDVvUjBkOTk2LjM1MlIxYWQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQ1NjcuMjk2ZDQzMC4wOGQ2MTAuODE2ZDQ3NC4xMTFkNjU0LjMzNmQ1MTguMTQ0ZDY1NC4zMzZkNTc4LjU2ZDY1NC4zMzZkODc1LjUyZDY1NC4zMzZkOTM1LjkzNmQ2MTAuODE2ZDk3OS45NjhkNTY3LjI5NmQxMDI0ZDUwNS44NTZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ4NjcuMzI4ZDQ5Ny42NjRkODY3LjMyOGQ0OTcuNjY0ZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyZDQyOS4wNTZkMjUwLjg4ZDQ2OC45OTJkMjUwLjg4ZDUyNy4zNmQyMTIuOTkxZDUyNy4zNmQzNDIuMDE1ZDQ2My44NzJkMzY4LjY0ZDQyNS45ODRkMzY4LjY0ZDM4OC4wOTZkMzY4LjY0ZDMyOS4yMTZkMzM2Ljg5NWQyNzAuMzM2ZDMwNS4xNTFkMjQwLjY0ZDMwNS4xNTFkMjI5LjM3NmQzMDUuMTUxZDE4Ni4zNjhkMzA1LjE1MWQxNDMuMzZkMzQyLjAxNWQxNDMuMzZkMjE1LjAzOWQyMTIuOTkyZDE4Ny4zOTFkMjQwLjY0ZDE4Ny4zOTFkMjc4LjUyOGQxODcuMzkxZDMzNy45MmQyMTcuMDg3ZDM5Ny4zMTJkMjQ2Ljc4NGQ0MjkuMDU2ZDI1MC44OGhSMmQ3MDguNjA4UjNkNjU0LjMzNlI0ZDUyLjIyNFI1ZDgzNi42MDhSNmQwUjdkNzg0LjM4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjQ1UjExZDUyLjIyNFIxMmQ3MDguNjA4UjEzYWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTNpMmkzaTNpM2kyaTNpMmkzaTNpM2hnOjEzMm9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTMyUjExZDBSMTJkMFIxM2FoZzoyNDRvUjBkOTk2LjM1MlIxYWQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQ1NjcuMjk2ZDQzMC4wOGQ2MTAuODE2ZDQ3NC4xMTFkNjU0LjMzNmQ1MTguMTQ0ZDY1NC4zMzZkNTc4LjU2ZDY1NC4zMzZkODc1LjUyZDY1NC4zMzZkOTM1LjkzNmQ2MTAuODE2ZDk3OS45NjhkNTY3LjI5NmQxMDI0ZDUwNS44NTZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ4NjcuMzI4ZDQ5Ny42NjRkODY3LjMyOGQ0OTcuNjY0ZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyZDMzNC44NDhkMzcwLjY4OGQxOTguNjU2ZDM3MC42ODhkMzExLjI5NmQxODIuMjcxZDQxMy42OTZkMTgyLjI3MWQ1MjYuMzM2ZDM3MC42ODhkMzg5LjEyZDM3MC42ODhkMzYwLjQ0OGQzMjUuNjMxZDMzNC44NDhkMzcwLjY4OGhSMmQ3MDguNjA4UjNkNjU0LjMzNlI0ZDUyLjIyNFI1ZDg0MS43MjhSNmQwUjdkNzg5LjUwNFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjQ0UjExZDUyLjIyNFIxMmQ3MDguNjA4UjEzYWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzoxMzFvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEzMVIxMWQwUjEyZDBSMTNhaGc6MjQzb1IwZDk5Ni4zNTJSMWFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyNjguMjg4ZDM2OS42NjRkMzIwLjUxMmQxNjEuNzkyZDQ4MS4yOGQxNjEuNzkyZDQyOS4wNTZkMzY5LjY2NGQyNjguMjg4ZDM2OS42NjRoUjJkNzA4LjYwOFIzZDY1NC4zMzZSNGQ1Mi4yMjRSNWQ4NjIuMjA4UjZkMFI3ZDgwOS45ODRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI0M1IxMWQ1Mi4yMjRSMTJkNzA4LjYwOFIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTMwb1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMzBSMTFkMFIxMmQwUjEzYWhnOjI0Mm9SMGQ5OTYuMzUyUjFhZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4NzUuNTJkNjU0LjMzNmQ5MzUuOTM2ZDYxMC44MTZkOTc5Ljk2OGQ1NjcuMjk2ZDEwMjRkNTA1Ljg1NmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDg2Ny4zMjhkNDk3LjY2NGQ4NjcuMzI4ZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkNDA4LjU3NmQxNjEuNzkyZDQ2MC44ZDM2OS42NjRkMzAwLjAzMmQzNjkuNjY0ZDI0Ny44MDhkMTYxLjc5MmQ0MDguNTc2ZDE2MS43OTJoUjJkNzA4LjYwOFIzZDY1NC4zMzZSNGQ1Mi4yMjRSNWQ4NjIuMjA4UjZkMFI3ZDgwOS45ODRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI0MlIxMWQ1Mi4yMjRSMTJkNzA4LjYwOFIxM2FpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTI5b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMjlSMTFkMFIxMmQwUjEzYWhnOjI0MW9SMGQ5OTYuMzUyUjFhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQxMDI0ZDUwMC43MzZkMTAyNGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkNDMwLjA4ZDUwOC45MjhkNDMwLjA4ZDQyNy4wMDhkMjUwLjg4ZDQ2Ni45NDRkMjUwLjg4ZDUyNS4zMTJkMjEyLjk5MWQ1MjUuMzEyZDM0Mi4wMTVkNDYxLjgyNGQzNjguNjRkNDIzLjkzNmQzNjguNjRkMzg2LjA0OGQzNjguNjRkMzI3LjE2OGQzMzYuODk1ZDI2OC4yODhkMzA1LjE1MWQyMzguNTkyZDMwNS4xNTFkMjI3LjMyOGQzMDUuMTUxZDE4NC4zMmQzMDUuMTUxZDE0MS4zMTJkMzQyLjAxNWQxNDEuMzEyZDIxNS4wMzlkMjEwLjk0NGQxODcuMzkxZDIzOC41OTJkMTg3LjM5MWQyNzYuNDhkMTg3LjM5MWQzMzUuODcyZDIxNy4wODdkMzk1LjI2NGQyNDYuNzg0ZDQyNy4wMDhkMjUwLjg4aFIyZDcyNC45OTJSM2Q2NTcuNDA4UjRkNTUuMjk2UjVkODM2LjYwOFI2ZDBSN2Q3ODEuMzEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyNDFSMTFkNTUuMjk2UjEyZDcyNC45OTJSMTNhaTFpM2kzaTJpMmkyaTJpMmkyaTJpMmkxaTNpMmkzaTNpM2kyaTNpMmkzaTNpM2hnOjEyOG9SMGQ5OTYuMzUyUjFhaFIyZDBSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTI4UjExZDBSMTJkMFIxM2FoZzoyNDBvUjBkOTk2LjM1MlIxYWhSMmQwUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTI0MFIxMWQwUjEyZDBSMTNhaGc6MTI3b1IwZDk5Ni4zNTJSMWFoUjJkMFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMjdSMTFkMFIxMmQwUjEzYWhnOjIzOW9SMGQ5OTYuMzUyUjFhZDU2LjMyZDEwMjRkNTYuMzJkNDMwLjA4ZDIxMi45OTJkNDMwLjA4ZDIxMi45OTJkMTAyNGQ1Ni4zMmQxMDI0ZDM0My4wNGQyMTAuOTQzZDM0My4wNGQzNjguNjRkMTg1LjM0NGQzNjguNjRkMTg1LjM0NGQyMTAuOTQzZDM0My4wNGQyMTAuOTQzZDEyMy45MDRkMjEwLjk0M2QxMjMuOTA0ZDM2OC42NGQtMzIuNzY4ZDM2OC42NGQtMzIuNzY4ZDIxMC45NDNkMTIzLjkwNGQyMTAuOTQzaFIyZDIxOS4xMzZSM2QzNDMuMDRSNGQtMzIuNzY4UjVkODEzLjA1NlI2ZDBSN2Q4NDUuODI0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMzlSMTFkLTMyLjc2OFIxMmQyMTkuMTM2UjEzYWkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyNm9SMGQ5OTYuMzUyUjFhZDMxMC4yNzJkNjkxLjJkMzUxLjIzMmQ2OTEuMmQ0MDguNTc2ZDY1NC4zMzZkNDA4LjU3NmQ3ODMuMzZkMzQ3LjEzNmQ4MDguOTZkMzA3LjJkODA4Ljk2ZDI3MC4zMzZkODA4Ljk2ZDIxMC40MzJkNzc3LjcyOGQxNTAuNTI4ZDc0Ni40OTZkMTE1LjcxMmQ3NDYuNDk2ZDc2LjhkNzQ2LjQ5NmQyNC41NzZkNzg2LjQzMmQyNC41NzZkNjUxLjI2NGQ3OC44NDhkNjI3LjcxMmQxMjEuODU2ZDYyNy43MTJkMTYwLjc2OGQ2MjcuNzEyZDIyMC42NzJkNjU2Ljg5NmQyODAuNTc2ZDY4Ni4wNzlkMzEwLjI3MmQ2OTEuMmhSMmQ0MTMuNjk2UjNkNDA4LjU3NlI0ZDI0LjU3NlI1ZDM5Ni4yODhSNmQyMTUuMDRSN2QzNzEuNzEyUjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMjZSMTFkMjQuNTc2UjEyZDQxMy42OTZSMTNhaTFpM2kyaTNpM2kzaTNpMmkzaTNpM2hnOjIzOG9SMGQ5OTYuMzUyUjFhZDUyLjIyNGQxMDI0ZDUyLjIyNGQ0MzAuMDhkMjA4Ljg5NmQ0MzAuMDhkMjA4Ljg5NmQxMDI0ZDUyLjIyNGQxMDI0ZDEyMC44MzJkMzcwLjY4OGQtMTUuMzZkMzcwLjY4OGQ5Ny4yOGQxODIuMjcxZDE5OS42OGQxODIuMjcxZDMxMi4zMmQzNzAuNjg4ZDE3NS4xMDRkMzcwLjY4OGQxNDYuNDMyZDMyNS42MzFkMTIwLjgzMmQzNzAuNjg4aFIyZDIxOS4xMzZSM2QzMTIuMzJSNGQtMTUuMzZSNWQ4NDEuNzI4UjZkMFI3ZDg1Ny4wODhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIzOFIxMWQtMTUuMzZSMTJkMjE5LjEzNlIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjEyNW9SMGQ5OTYuMzUyUjFhZDUyLjIyNGQxMDI0ZDUyLjIyNGQ4NjcuMzI4ZDExMS42MTZkODY3LjMyOGQxMTEuNjE2ZDY4Ni4wNzlkMTU3LjY5NmQ2NDcuMTY4ZDExMS42MTZkNjA4LjI1NmQxMTEuNjE2ZDQ0My4zOTFkNTIuMjI0ZDQ0My4zOTFkNTIuMjI0ZDI4Ni43MmQxMTguNzg0ZDI4Ni43MmQxODAuMjI0ZDI4Ni43MmQyMjQuMjU2ZDMzMC4yNGQyNjguMjg4ZDM3My43NmQyNjguMjg4ZDQzNS4xOTlkMjY4LjI4OGQ1NTYuMDMxZDMwOS4yNDhkNTgwLjYwOGQzMDkuMjQ4ZDcxMS42OGQyNjguMjg4ZDczNy4yOGQyNjguMjg4ZDg3NS41MmQyNjguMjg4ZDkzNS45MzZkMjI0LjI1NmQ5NzkuOTY4ZDE4MC4yMjRkMTAyNGQxMTguNzg0ZDEwMjRkNTIuMjI0ZDEwMjRoUjJkMjk1LjkzNlIzZDMwOS4yNDhSNGQ1Mi4yMjRSNWQ3MzcuMjhSNmQwUjdkNjg1LjA1NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTI1UjExZDUyLjIyNFIxMmQyOTUuOTM2UjEzYWkxaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpM2kzaTJoZzoyMzdvUjBkOTk2LjM1MlIxYWQ1Mi4yMjRkMTAyNGQ1Mi4yMjRkNDMwLjA4ZDIwOC44OTZkNDMwLjA4ZDIwOC44OTZkMTAyNGQ1Mi4yMjRkMTAyNGQ1MC4xNzZkMzcwLjY4OGQxMDIuNGQxNjIuODE2ZDI2My4xNjhkMTYyLjgxNmQyMTAuOTQ0ZDM3MC42ODhkNTAuMTc2ZDM3MC42ODhoUjJkMjE5LjEzNlIzZDI2My4xNjhSNGQ1MC4xNzZSNWQ4NjEuMTg0UjZkMFI3ZDgxMS4wMDhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIzN1IxMWQ1MC4xNzZSMTJkMjE5LjEzNlIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyNG9SMGQ5OTYuMzUyUjFhZDU1LjI5NmQxMTI1LjM3NmQ1NS4yOTZkMjAwLjcwM2QyMTEuOTY4ZDIwMC43MDNkMjExLjk2OGQxMTI1LjM3NmQ1NS4yOTZkMTEyNS4zNzZoUjJkMjE5LjEzNlIzZDIxMS45NjhSNGQ1NS4yOTZSNWQ4MjMuMjk2UjZkLTEwMS4zNzZSN2Q3NjhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEyNFIxMWQ1NS4yOTZSMTJkMjE5LjEzNlIxM2FpMWkyaTJpMmkyaGc6MjM2b1IwZDk5Ni4zNTJSMWFkNTcuMzQ0ZDEwMjRkNTcuMzQ0ZDQzMC4wOGQyMTQuMDE2ZDQzMC4wOGQyMTQuMDE2ZDEwMjRkNTcuMzQ0ZDEwMjRkMTc3LjE1MmQxNjEuNzkyZDIyOS4zNzZkMzY5LjY2NGQ2OC42MDhkMzY5LjY2NGQxNi4zODRkMTYxLjc5MmQxNzcuMTUyZDE2MS43OTJoUjJkMjE5LjEzNlIzZDIyOS4zNzZSNGQxNi4zODRSNWQ4NjIuMjA4UjZkMFI3ZDg0NS44MjRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIzNlIxMWQxNi4zODRSMTJkMjE5LjEzNlIxM2FpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyM29SMGQ5OTYuMzUyUjFhZDIyMS4xODRkNjg1LjA1NmQyMjEuMTg0ZDg2Ny4zMjhkMjgwLjU3NmQ4NjcuMzI4ZDI4MC41NzZkMTAyNGQyMTQuMDE2ZDEwMjRkMTUxLjU1MmQxMDI0ZDEwOC4wMzJkOTc5Ljk2OGQ2NC41MTJkOTM1LjkzNmQ2NC41MTJkODc1LjUyZDY0LjUxMmQ3MzcuMjhkNDguMTI4ZDcyNy4wNGQ0OS4xNTJkNzI3LjA0ZDQ2LjA4ZDcyNi4wMTZkMzYuMzUyZDcyMC4zODRkMjYuNjI0ZDcxNC43NTJkMjMuNTUyZDcxMy43MjhkMjMuNTUyZDU3OS41ODRkNjQuNTEyZDU1Ny4wNTZkNjQuNTEyZDQzNS4xOTlkNjQuNTEyZDM3My43NmQxMDguMDMyZDMzMC4yNGQxNTEuNTUyZDI4Ni43MmQyMTQuMDE2ZDI4Ni43MmQyODAuNTc2ZDI4Ni43MmQyODAuNTc2ZDQ0My4zOTFkMjIxLjE4NGQ0NDMuMzkxZDIyMS4xODRkNjA4LjI1NmQxNzUuMTA0ZDY0Ny4xNjhkMTk4LjY1NmQ2NjcuNjQ3ZDE5OC42NTZkNjY2LjYyNGQyMjEuMTg0ZDY4NS4wNTZoUjJkMjk1LjkzNlIzZDI4MC41NzZSNGQyMy41NTJSNWQ3MzcuMjhSNmQwUjdkNzEzLjcyOFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTIzUjExZDIzLjU1MlIxMmQyOTUuOTM2UjEzYWkxaTJpMmkyaTJpM2kzaTJpMmkyaTNpM2kyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMmkyaGc6MjM1b1IwZDk5Ni4zNTJSMWFkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDgwNS44ODhkMjA4Ljg5NmQ4MDUuODg4ZDIwOC44OTZkODY3LjMyOGQ2NTQuMzM2ZDg2Ny4zMjhkNjU0LjMzNmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDIwOC44OTZkNjY4LjY3MmQ0OTcuNjY0ZDY2OC42NzJkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDY2OC42NzJkNTYwLjEyOGQyMTIuOTkxZDU2MC4xMjhkMzcwLjY4OGQ0MDIuNDMyZDM3MC42ODhkNDAyLjQzMmQyMTIuOTkxZDU2MC4xMjhkMjEyLjk5MWQzNDAuOTkyZDIxMi45OTFkMzQwLjk5MmQzNzAuNjg4ZDE4NC4zMmQzNzAuNjg4ZDE4NC4zMmQyMTIuOTkxZDM0MC45OTJkMjEyLjk5MWhSMmQ2NTMuMzEyUjNkNjU0LjMzNlI0ZDUyLjIyNFI1ZDgxMS4wMDhSNmQwUjdkNzU4Ljc4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjM1UjExZDUyLjIyNFIxMmQ2NTMuMzEyUjEzYWkxaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyMm9SMGQ5OTYuMzUyUjFhZDU1LjI5NmQ1ODYuNzUyZDU1LjI5NmQ0MzAuMDhkNjU3LjQwOGQ0MzAuMDhkNjU3LjQwOGQ1OTAuODQ4ZDMwMC4wMzJkODY3LjMyOGQ2NTcuNDA4ZDg2Ny4zMjhkNjU3LjQwOGQxMDI0ZDU1LjI5NmQxMDI0ZDU1LjI5NmQ4NjMuMjMyZDQxMi42NzJkNTg2Ljc1MmQ1NS4yOTZkNTg2Ljc1MmhSMmQ3MTQuNzUyUjNkNjU3LjQwOFI0ZDU1LjI5NlI1ZDU5My45MlI2ZDBSN2Q1MzguNjI0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMjJSMTFkNTUuMjk2UjEyZDcxNC43NTJSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjIzNG9SMGQ5OTYuMzUyUjFhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyZDMzNy45MmQzNzAuNjg4ZDIwMS43MjhkMzcwLjY4OGQzMTQuMzY4ZDE4Mi4yNzFkNDE2Ljc2OGQxODIuMjcxZDUyOS40MDhkMzcwLjY4OGQzOTIuMTkyZDM3MC42ODhkMzYzLjUyZDMyNS42MzFkMzM3LjkyZDM3MC42ODhoUjJkNjUzLjMxMlIzZDY1NC4zMzZSNGQ1Mi4yMjRSNWQ4NDEuNzI4UjZkMFI3ZDc4OS41MDRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIzNFIxMWQ1Mi4yMjRSMTJkNjUzLjMxMlIxM2FpMWkzaTNpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjEyMW9SMGQ5OTYuMzUyUjFhZDY0Ni4xNDRkMTA4OC41MTJkNjQ2LjE0NGQxMTQ5Ljk1MmQ2MDIuNjI0ZDExOTMuNDcyZDU1OS4xMDRkMTIzNi45OTJkNDk3LjY2NGQxMjM2Ljk5MmQxMzcuMjE2ZDEyMzYuOTkyZDEzNy4yMTZkMTA3OS4yOTZkNDg5LjQ3MmQxMDc5LjI5NmQ0ODkuNDcyZDEwMjRkMTkyLjUxMmQxMDI0ZDEzMS4wNzJkMTAyNGQ4Ny4wNGQ5NzkuOTY4ZDQzLjAwOGQ5MzUuOTM2ZDQzLjAwOGQ4NzUuNTJkNDMuMDA4ZDQzMi4xMjhkMTk5LjY4ZDQzMi4xMjhkMTk5LjY4ZDg2Ny4zMjhkNDg5LjQ3MmQ4NjcuMzI4ZDQ4OS40NzJkNDMyLjEyOGQ2NDYuMTQ0ZDQzMi4xMjhkNjQ2LjE0NGQxMDg4LjUxMmhSMmQ3MDEuNDRSM2Q2NDYuMTQ0UjRkNDMuMDA4UjVkNTkxLjg3MlI2ZC0yMTIuOTkyUjdkNTQ4Ljg2NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTIxUjExZDQzLjAwOFIxMmQ3MDEuNDRSMTNhaTFpM2kzaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMmhnOjIzM29SMGQ5OTYuMzUyUjFhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyZDI3MS4zNmQzNjkuNjY0ZDMyMy41ODRkMTYxLjc5MmQ0ODQuMzUyZDE2MS43OTJkNDMyLjEyOGQzNjkuNjY0ZDI3MS4zNmQzNjkuNjY0aFIyZDY1My4zMTJSM2Q2NTQuMzM2UjRkNTIuMjI0UjVkODYyLjIwOFI2ZDBSN2Q4MDkuOTg0UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMzNSMTFkNTIuMjI0UjEyZDY1My4zMTJSMTNhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMjBvUjBkOTk2LjM1MlIxYWQ0OTcuNjY0ZDQzMC4wOGQ2NTkuNDU2ZDQzMC4wOGQ2NTkuNDU2ZDQ4MS4yOGQ0NTQuNjU2ZDcyMS45MmQ1NjcuMjk2ZDg1OS4xMzZkNjU5LjQ1NmQ5NzIuOGQ2NTkuNDU2ZDEwMjRkNDk4LjY4OGQxMDI0ZDM1My4yOGQ4NDUuODI0ZDIwNy44NzJkMTAyNGQ0Ny4xMDRkMTAyNGQ0Ny4xMDRkOTcyLjhkMjUxLjkwNGQ3MjEuOTJkNDcuMTA0ZDQ4MS4yOGQ0Ny4xMDRkNDMwLjA4ZDIwNy44NzJkNDMwLjA4ZDM1My4yOGQ2MDIuMTEyZDQ5Ny42NjRkNDMwLjA4aFIyZDcwOC42MDhSM2Q2NTkuNDU2UjRkNDcuMTA0UjVkNTkzLjkyUjZkMFI3ZDU0Ni44MTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTEyMFIxMWQ0Ny4xMDRSMTJkNzA4LjYwOFIxM2FpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoyMzJvUjBkOTk2LjM1MlIxYWQ1MDUuODU2ZDQzMC4wOGQ1NjcuMjk2ZDQzMC4wOGQ2MTAuODE2ZDQ3NC4xMTFkNjU0LjMzNmQ1MTguMTQ0ZDY1NC4zMzZkNTc4LjU2ZDY1NC4zMzZkODA1Ljg4OGQyMDguODk2ZDgwNS44ODhkMjA4Ljg5NmQ4NjcuMzI4ZDY1NC4zMzZkODY3LjMyOGQ2NTQuMzM2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkMjA4Ljg5NmQ2NjguNjcyZDQ5Ny42NjRkNjY4LjY3MmQ0OTcuNjY0ZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkNjY4LjY3MmQ0MTEuNjQ4ZDE2Mi44MTZkNDYzLjg3MmQzNzAuNjg4ZDMwMy4xMDRkMzcwLjY4OGQyNTAuODhkMTYyLjgxNmQ0MTEuNjQ4ZDE2Mi44MTZoUjJkNjUzLjMxMlIzZDY1NC4zMzZSNGQ1Mi4yMjRSNWQ4NjEuMTg0UjZkMFI3ZDgwOC45NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjMyUjExZDUyLjIyNFIxMmQ2NTMuMzEyUjEzYWkxaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTE5b1IwZDk5Ni4zNTJSMWFkODc3LjU2OGQ0MzAuMDhkMTA0My40NTZkNDMwLjA4ZDgyMC4yMjRkMTAyNGQ3MDEuNDRkMTAyNGQ1NDAuNjcyZDY2OS42OTVkMzg3LjA3MmQxMDI0ZDI2OS4zMTJkMTAyNGQzNS44NGQ0MzAuMDhkMjAxLjcyOGQ0MzAuMDhkMzI5LjcyOGQ3MzguMzA0ZDM3My43NmQ2MzUuOTA0ZDM4NGQ2MTIuMzUyZDQxNi4yNTZkNTM5LjY0N2Q0NDguNTEyZDQ2Ni45NDNkNDYzLjg3MmQ0MzAuMDhkNjE1LjQyNGQ0MzAuMDhkNzU4Ljc4NGQ3NDIuNGQ4NzcuNTY4ZDQzMC4wOGhSMmQxMDc4LjI3MlIzZDEwNDMuNDU2UjRkMzUuODRSNWQ1OTMuOTJSNmQwUjdkNTU4LjA4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkxMTlSMTFkMzUuODRSMTJkMTA3OC4yNzJSMTNhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkyaTJoZzoyMzFvUjBkOTk2LjM1MlIxYWQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQ0MTkuODRkMTAyNGQ0MTQuNzJkMTA0OC41NzZkMzk5Ljg3MmQxMDkxLjU4NGQzODUuMDI0ZDExMzQuNTkyZDM3OS45MDRkMTE1NS4wNzJkMjgwLjU3NmQxMTU1LjA3MmQyODUuNjk2ZDExMzAuNDk2ZDMwMC41NDRkMTA4Ny40ODhkMzE1LjM5MmQxMDQ0LjQ4ZDMyMC41MTJkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ2NTMuMzEyZDQzMC4wOGQ2NTMuMzEyZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGhSMmQ3MDkuNjMyUjNkNjU0LjMzNlI0ZDUyLjIyNFI1ZDU5My45MlI2ZC0xMzEuMDcyUjdkNTQxLjY5NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjMxUjExZDUyLjIyNFIxMmQ3MDkuNjMyUjEzYWkxaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaGc6MTE4b1IwZDk5Ni4zNTJSMWFkNjI5Ljc2ZDQzMC4wOGQ4MDkuOTg0ZDQzMC4wOGQ0ODIuMzA0ZDEwMjRkMzQ4LjE2ZDEwMjRkMjEuNTA0ZDQzMC4wOGQyMDEuNzI4ZDQzMC4wOGQ0MTUuNzQ0ZDgyNC4zMTlkNjI5Ljc2ZDQzMC4wOGhSMmQ4MDguOTZSM2Q4MDkuOTg0UjRkMjEuNTA0UjVkNTkzLjkyUjZkMFI3ZDU3Mi40MTZSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTExOFIxMWQyMS41MDRSMTJkODA4Ljk2UjEzYWkxaTJpMmkyaTJpMmkyaTJoZzoyMzBvUjBkOTk2LjM1MlIxYWQ5NTUuMzkyZDQzMC4wOGQxMDE2LjgzMmQ0MzAuMDhkMTA1OS44NGQ0NzMuNmQxMTAyLjg0OGQ1MTcuMTJkMTEwMi44NDhkNTc4LjU2ZDExMDIuODQ4ZDgwNS44ODhkNjU3LjQwOGQ4MDUuODg4ZDY1Ny40MDhkODY3LjMyOGQxMTAyLjg0OGQ4NjcuMzI4ZDExMDIuODQ4ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ2NDguMTkyZDUwMC43MzZkNjQ4LjE5MmQ1MDAuNzM2ZDU4Ni43NTJkNTQuMjcyZDU4Ni43NTJkNTQuMjcyZDQzMC4wOGQ5NTUuMzkyZDQzMC4wOGQ1MDAuNzM2ZDg2Ny4zMjhkNTAwLjczNmQ3ODUuNDA4ZDIxMC45NDRkNzg1LjQwOGQyMTAuOTQ0ZDg2Ny4zMjhkNTAwLjczNmQ4NjcuMzI4ZDY1Ny40MDhkNjY4LjY3MmQ5NDYuMTc2ZDY2OC42NzJkOTQ2LjE3NmQ1ODYuNzUyZDY1Ny40MDhkNTg2Ljc1MmQ2NTcuNDA4ZDY2OC42NzJoUjJkMTIwNi4yNzJSM2QxMTAyLjg0OFI0ZDU0LjI3MlI1ZDU5My45MlI2ZDBSN2Q1MzkuNjQ4UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMzBSMTFkNTQuMjcyUjEyZDEyMDYuMjcyUjEzYWkxaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjExN29SMGQ5OTYuMzUyUjFhZDQ5OS43MTJkNDMwLjA4ZDY1Ni4zODRkNDMwLjA4ZDY1Ni4zODRkODc1LjUyZDY1Ni4zODRkOTM1LjkzNmQ2MTIuODY0ZDk3OS45NjhkNTY5LjM0NGQxMDI0ZDUwNy45MDRkMTAyNGQyMDIuNzUyZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDQzMC4wOGQyMTAuOTQ0ZDQzMC4wOGQyMTAuOTQ0ZDg2Ny4zMjhkNDk5LjcxMmQ4NjcuMzI4ZDQ5OS43MTJkNDMwLjA4aFIyZDcxMS42OFIzZDY1Ni4zODRSNGQ1NC4yNzJSNWQ1OTMuOTJSNmQwUjdkNTM5LjY0OFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTE3UjExZDU0LjI3MlIxMmQ3MTEuNjhSMTNhaTFpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJoZzoyMjlvUjBkOTk2LjM1MlIxYWQ1MDYuODhkNDMwLjA4ZDU2OC4zMmQ0MzAuMDhkNjExLjg0ZDQ3NC4xMTFkNjU1LjM2ZDUxOC4xNDRkNjU1LjM2ZDU3OC41NmQ2NTUuMzZkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDY0OC4xOTJkNDk4LjY4OGQ2NDguMTkyZDQ5OC42ODhkNTg2Ljc1MmQ1My4yNDhkNTg2Ljc1MmQ1My4yNDhkNDMwLjA4ZDUwNi44OGQ0MzAuMDhkNDk4LjY4OGQ4NjcuMzI4ZDQ5OC42ODhkNzg1LjQwOGQyMDkuOTJkNzg1LjQwOGQyMDkuOTJkODY3LjMyOGQ0OTguNjg4ZDg2Ny4zMjhkMjg3Ljc0NGQxNjQuODY0ZDMzOS45NjhkMTY0Ljg2NGQzNzEuNzEyZDE2NC44NjRkMzk0Ljc1MmQxODcuOTA0ZDQxNy43OTJkMjEwLjk0M2Q0MTcuNzkyZDI0Mi42ODhkNDE3Ljc5MmQyOTIuODY0ZDQxNy43OTJkMzI0LjYwN2QzOTQuNzUyZDM0Ny42NDhkMzcxLjcxMmQzNzAuNjg4ZDMzOS45NjhkMzcwLjY4OGQyODcuNzQ0ZDM3MC42ODhkMjU2ZDM3MC42ODhkMjMyLjQ0OGQzNDcuNjQ4ZDIwOC44OTZkMzI0LjYwN2QyMDguODk2ZDI5Mi44NjRkMjA4Ljg5NmQyNDIuNjg4ZDIwOC44OTZkMjEwLjk0M2QyMzIuNDQ4ZDE4Ny45MDRkMjU2ZDE2NC44NjRkMjg3Ljc0NGQxNjQuODY0ZDI4Ny43NDRkMjQ0LjczNmQyODcuNzQ0ZDMwMC4wMzJkMzM5Ljk2OGQzMDAuMDMyZDMzOS45NjhkMjQ0LjczNmQyODcuNzQ0ZDI0NC43MzZoUjJkNzQyLjRSM2Q2NTUuMzZSNGQ1My4yNDhSNWQ4NTkuMTM2UjZkMFI3ZDgwNS44ODhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIyOVIxMWQ1My4yNDhSMTJkNzQyLjRSMTNhaTFpM2kzaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaGc6MTE2b1IwZDk5Ni4zNTJSMWFkNDMxLjEwNGQ1ODYuNzUyZDIxMC45NDRkNTg2Ljc1MmQyMTAuOTQ0ZDg2Ny4zMjhkNDMxLjEwNGQ4NjcuMzI4ZDQzMS4xMDRkMTAyNGQyMDMuNzc2ZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDI1My45NTJkMjEwLjk0NGQyNTMuOTUyZDIxMC45NDRkNDMwLjA4ZDQzMS4xMDRkNDMwLjA4ZDQzMS4xMDRkNTg2Ljc1MmhSMmQ0NjEuODI0UjNkNDMxLjEwNFI0ZDU0LjI3MlI1ZDc3MC4wNDhSNmQwUjdkNzE1Ljc3NlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTE2UjExZDU0LjI3MlIxMmQ0NjEuODI0UjEzYWkxaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaGc6MjI4b1IwZDk5Ni4zNTJSMWFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDU1Mi45NmQyMTIuOTkxZDU1Mi45NmQzNzAuNjg4ZDM5NS4yNjRkMzcwLjY4OGQzOTUuMjY0ZDIxMi45OTFkNTUyLjk2ZDIxMi45OTFkMzMzLjgyNGQyMTIuOTkxZDMzMy44MjRkMzcwLjY4OGQxNzcuMTUyZDM3MC42ODhkMTc3LjE1MmQyMTIuOTkxZDMzMy44MjRkMjEyLjk5MWhSMmQ3NDIuNFIzZDY1NS4zNlI0ZDUzLjI0OFI1ZDgxMS4wMDhSNmQwUjdkNzU3Ljc2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMjhSMTFkNTMuMjQ4UjEyZDc0Mi40UjEzYWkxaTNpM2kyaTJpM2kzaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTE1b1IwZDk5Ni4zNTJSMWFkNjUyLjI4OGQ1NzguNTZkNjUyLjI4OGQ2MDguMjU2ZDQ5NC41OTJkNjA4LjI1NmQ0OTQuNTkyZDU4Ni43NTJkMjA1LjgyNGQ1ODYuNzUyZDIwNS44MjRkNjQ4LjE5MmQ1MDIuNzg0ZDY0OC4xOTJkNTY1LjI0OGQ2NDguMTkyZDYwOC43NjhkNjkxLjcxMmQ2NTIuMjg4ZDczNS4yMzJkNjUyLjI4OGQ3OTYuNjcyZDY1Mi4yODhkODc1LjUyZDY1Mi4yODhkOTM1LjkzNmQ2MDguNzY4ZDk3OS45NjhkNTY1LjI0OGQxMDI0ZDUwMi43ODRkMTAyNGQxOTcuNjMyZDEwMjRkMTM3LjIxNmQxMDI0ZDkzLjE4NGQ5NzkuOTY4ZDQ5LjE1MmQ5MzUuOTM2ZDQ5LjE1MmQ4NzUuNTJkNDkuMTUyZDg0NS44MjRkMjA1LjgyNGQ4NDUuODI0ZDIwNS44MjRkODY3LjMyOGQ0OTQuNTkyZDg2Ny4zMjhkNDk0LjU5MmQ4MDUuODg4ZDE5Ny42MzJkODA1Ljg4OGQxMzcuMjE2ZDgwNS44ODhkOTMuMTg0ZDc2MS44NTZkNDkuMTUyZDcxNy44MjRkNDkuMTUyZDY1Ny40MDhkNDkuMTUyZDU3OC41NmQ0OS4xNTJkNTE4LjE0NGQ5My4xODRkNDc0LjExMWQxMzcuMjE2ZDQzMC4wOGQxOTcuNjMyZDQzMC4wOGQ1MDIuNzg0ZDQzMC4wOGQ1NjUuMjQ4ZDQzMC4wOGQ2MDguNzY4ZDQ3NC4xMTFkNjUyLjI4OGQ1MTguMTQ0ZDY1Mi4yODhkNTc4LjU2aFIyZDcwMi40NjRSM2Q2NTIuMjg4UjRkNDkuMTUyUjVkNTkzLjkyUjZkMFI3ZDU0NC43NjhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTExNVIxMWQ0OS4xNTJSMTJkNzAyLjQ2NFIxM2FpMWkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaGc6MjI3b1IwZDk5Ni4zNTJSMWFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDQyNC45NmQyNDkuODU2ZDQ2NC44OTZkMjQ5Ljg1NmQ1MjMuMjY0ZDIxMS45NjdkNTIzLjI2NGQzNDAuOTkxZDQ1OS43NzZkMzY3LjYxNmQ0MjEuODg4ZDM2Ny42MTZkMzg0ZDM2Ny42MTZkMzI1LjEyZDMzNS44NzFkMjY2LjI0ZDMwNC4xMjdkMjM2LjU0NGQzMDQuMTI3ZDIyNS4yOGQzMDQuMTI3ZDE4Mi4yNzJkMzA0LjEyN2QxMzkuMjY0ZDM0MC45OTFkMTM5LjI2NGQyMTQuMDE1ZDIwOC44OTZkMTg2LjM2N2QyMzYuNTQ0ZDE4Ni4zNjdkMjc0LjQzMmQxODYuMzY3ZDMzMy44MjRkMjE2LjA2M2QzOTMuMjE2ZDI0NS43NmQ0MjQuOTZkMjQ5Ljg1NmhSMmQ3NDIuNFIzZDY1NS4zNlI0ZDUzLjI0OFI1ZDgzNy42MzJSNmQwUjdkNzg0LjM4NFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjI3UjExZDUzLjI0OFIxMmQ3NDIuNFIxM2FpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkzaTJpM2kzaTNpMmkzaTJpM2kzaTNoZzoxMTRvUjBkOTk2LjM1MlIxYWQyMDIuNzUyZDQzMC4wOGQ1MzAuNDMyZDQzMC4wOGQ1MzAuNDMyZDU4Ni43NTJkMjA5LjkyZDU4Ni43NTJkMjA5LjkyZDEwMjRkNTMuMjQ4ZDEwMjRkNTMuMjQ4ZDU3OC41NmQ1My4yNDhkNTE4LjE0NGQ5Ny4yOGQ0NzQuMTExZDE0MS4zMTJkNDMwLjA4ZDIwMi43NTJkNDMwLjA4aFIyZDUzOC42MjRSM2Q1MzAuNDMyUjRkNTMuMjQ4UjVkNTkzLjkyUjZkMFI3ZDU0MC42NzJSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTExNFIxMWQ1My4yNDhSMTJkNTM4LjYyNFIxM2FpMWkyaTJpMmkyaTJpMmkzaTNoZzoyMjZvUjBkOTk2LjM1MlIxYWQ1MDYuODhkNDMwLjA4ZDU2OC4zMmQ0MzAuMDhkNjExLjg0ZDQ3NC4xMTFkNjU1LjM2ZDUxOC4xNDRkNjU1LjM2ZDU3OC41NmQ2NTUuMzZkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDY0OC4xOTJkNDk4LjY4OGQ2NDguMTkyZDQ5OC42ODhkNTg2Ljc1MmQ1My4yNDhkNTg2Ljc1MmQ1My4yNDhkNDMwLjA4ZDUwNi44OGQ0MzAuMDhkNDk4LjY4OGQ4NjcuMzI4ZDQ5OC42ODhkNzg1LjQwOGQyMDkuOTJkNzg1LjQwOGQyMDkuOTJkODY3LjMyOGQ0OTguNjg4ZDg2Ny4zMjhkMzUxLjIzMmQzNzAuNjg4ZDIxNS4wNGQzNzAuNjg4ZDMyNy42OGQxODIuMjcxZDQzMC4wOGQxODIuMjcxZDU0Mi43MmQzNzAuNjg4ZDQwNS41MDRkMzcwLjY4OGQzNzYuODMyZDMyNS42MzFkMzUxLjIzMmQzNzAuNjg4aFIyZDc0Mi40UjNkNjU1LjM2UjRkNTMuMjQ4UjVkODQxLjcyOFI2ZDBSN2Q3ODguNDhSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTIyNlIxMWQ1My4yNDhSMTJkNzQyLjRSMTNhaTFpM2kzaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjExM29SMGQ5OTYuMzUyUjFhZDIwLjQ4ZDU3OC41NmQyMC40OGQ1MTguMTQ0ZDY0ZDQ3NC4xMTFkMTA3LjUyZDQzMC4wOGQxNjguOTZkNDMwLjA4ZDYyMy42MTZkNDMwLjA4ZDYyMy42MTZkMTI1OS41MmQ0NjYuOTQ0ZDEyNTkuNTJkNDY2Ljk0NGQxMDI0ZDE2OC45NmQxMDI0ZDEwNy41MmQxMDI0ZDY0ZDk3OS45NjhkMjAuNDhkOTM1LjkzNmQyMC40OGQ4NzUuNTJkMjAuNDhkNTc4LjU2ZDE3OC4xNzZkNTg2Ljc1MmQxNzguMTc2ZDg2Ny4zMjhkNDY2Ljk0NGQ4NjcuMzI4ZDQ2Ni45NDRkNTg2Ljc1MmQxNzguMTc2ZDU4Ni43NTJoUjJkNjc5LjkzNlIzZDYyMy42MTZSNGQyMC40OFI1ZDU5My45MlI2ZC0yMzUuNTJSN2Q1NzMuNDRSOGQyMDcuODcyUjlkMjM1LjUyUjEwaTExM1IxMWQyMC40OFIxMmQ2NzkuOTM2UjEzYWkxaTNpM2kyaTJpMmkyaTJpM2kzaTJpMWkyaTJpMmkyaGc6MjI1b1IwZDk5Ni4zNTJSMWFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDI4NC42NzJkMzcwLjY4OGQzMzYuODk2ZDE2Mi44MTZkNDk3LjY2NGQxNjIuODE2ZDQ0NS40NGQzNzAuNjg4ZDI4NC42NzJkMzcwLjY4OGhSMmQ3NDIuNFIzZDY1NS4zNlI0ZDUzLjI0OFI1ZDg2MS4xODRSNmQwUjdkODA3LjkzNlI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMjI1UjExZDUzLjI0OFIxMmQ3NDIuNFIxM2FpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTEyb1IwZDk5Ni4zNTJSMWFkNTA4LjkyOGQ0MzAuMDhkNTcwLjM2OGQ0MzAuMDhkNjEzLjg4OGQ0NzQuMTExZDY1Ny40MDhkNTE4LjE0NGQ2NTcuNDA4ZDU3OC41NmQ2NTcuNDA4ZDg3NS41MmQ2NTcuNDA4ZDkzNS45MzZkNjEzLjg4OGQ5NzkuOTY4ZDU3MC4zNjhkMTAyNGQ1MDguOTI4ZDEwMjRkMjExLjk2OGQxMDI0ZDIxMS45NjhkMTI1OS41MmQ1NS4yOTZkMTI1OS41MmQ1NS4yOTZkNDMwLjA4ZDUwOC45MjhkNDMwLjA4ZDIxMS45NjhkNTg2Ljc1MmQyMTEuOTY4ZDg2Ny4zMjhkNTAwLjczNmQ4NjcuMzI4ZDUwMC43MzZkNTg2Ljc1MmQyMTEuOTY4ZDU4Ni43NTJoUjJkNjc5LjkzNlIzZDY1Ny40MDhSNGQ1NS4yOTZSNWQ1OTMuOTJSNmQtMjM1LjUyUjdkNTM4LjYyNFI4ZDIwNy44NzJSOWQyMzUuNTJSMTBpMTEyUjExZDU1LjI5NlIxMmQ2NzkuOTM2UjEzYWkxaTNpM2kyaTNpM2kyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MjI0b1IwZDk5Ni4zNTJSMWFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDQyNC45NmQxNjIuODE2ZDQ3Ny4xODRkMzcwLjY4OGQzMTYuNDE2ZDM3MC42ODhkMjY0LjE5MmQxNjIuODE2ZDQyNC45NmQxNjIuODE2aFIyZDc0Mi40UjNkNjU1LjM2UjRkNTMuMjQ4UjVkODYxLjE4NFI2ZDBSN2Q4MDcuOTM2UjhkMjA3Ljg3MlI5ZDIzNS41MlIxMGkyMjRSMTFkNTMuMjQ4UjEyZDc0Mi40UjEzYWkxaTNpM2kyaTJpM2kzaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZ2g"}];
-if(typeof document != "undefined") js.Lib.document = document;
-if(typeof window != "undefined") {
-	js.Lib.window = window;
-	js.Lib.window.onerror = function(msg,url,line) {
-		var f = js.Lib.onerror;
-		if(f == null) return false;
-		return f(msg,[url + ":" + line]);
-	};
-}
-browser.text.Font.DEFAULT_FONT_DATA = "q:55oy6:ascentd950.5y4:dataad84d277.5d564d277.5d564d320.5d293d1024d187.5d1024d442.5d362.5d84d362.5d84d277.5hy6:_widthd651.5y4:xMaxd564y4:xMind84y4:yMaxd746.5y4:yMind0y7:_heightd662.5y7:leadingd168y7:descentd241.5y8:charCodei55y15:leftsideBearingd84y12:advanceWidthd651.5y8:commandsai1i2i2i2i2i2i2i2hg:111oR0d950.5R1ad313.5d528.5d239.5d528.5d196.5d586.25d153.5d644d153.5d744.5d153.5d845d196.25d902.75d239d960.5d313.5d960.5d387d960.5d430d902.5d473d844.5d473d744.5d473d645d430d586.75d387d528.5d313.5d528.5d313.5d450.5d433.5d450.5d502d528.5d570.5d606.5d570.5d744.5d570.5d882d502d960.25d433.5d1038.5d313.5d1038.5d193d1038.5d124.75d960.25d56.5d882d56.5d744.5d56.5d606.5d124.75d528.5d193d450.5d313.5d450.5hR2d626.5R3d570.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i111R11d56.5R12d626.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:54oR0d950.5R1ad338d610.5d270d610.5d230.25d657d190.5d703.5d190.5d784.5d190.5d865d230.25d911.75d270d958.5d338d958.5d406d958.5d445.75d911.75d485.5d865d485.5d784.5d485.5d703.5d445.75d657d406d610.5d338d610.5d538.5d294d538.5d386d500.5d368d461.75d358.5d423d349d385d349d285d349d232.25d416.5d179.5d484d172d620.5d201.5d577d246d553.75d290.5d530.5d344d530.5d456.5d530.5d521.75d598.75d587d667d587d784.5d587d899.5d519d969d451d1038.5d338d1038.5d208.5d1038.5d140d939.25d71.5d840d71.5d651.5d71.5d474.5d155.5d369.25d239.5d264d381d264d419d264d457.75d271.5d496.5d279d538.5d294hR2d651.5R3d587R4d71.5R5d760R6d-14.5R7d688.5R8d168R9d241.5R10i54R11d71.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3hg:110oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i110R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:53oR0d950.5R1ad110.5d277.5d507d277.5d507d362.5d203d362.5d203d545.5d225d538d247d534.25d269d530.5d291d530.5d416d530.5d489d599d562d667.5d562d784.5d562d905d487d971.75d412d1038.5d275.5d1038.5d228.5d1038.5d179.75d1030.5d131d1022.5d79d1006.5d79d905d124d929.5d172d941.5d220d953.5d273.5d953.5d360d953.5d410.5d908d461d862.5d461d784.5d461d706.5d410.5d661d360d615.5d273.5d615.5d233d615.5d192.75d624.5d152.5d633.5d110.5d652.5d110.5d277.5hR2d651.5R3d562R4d79R5d746.5R6d-14.5R7d667.5R8d168R9d241.5R10i53R11d79R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i2hg:109oR0d950.5R1ad532.5d571.5d567d509.5d615d480d663d450.5d728d450.5d815.5d450.5d863d511.75d910.5d573d910.5d686d910.5d1024d818d1024d818d689d818d608.5d789.5d569.5d761d530.5d702.5d530.5d631d530.5d589.5d578d548d625.5d548d707.5d548d1024d455.5d1024d455.5d689d455.5d608d427d569.25d398.5d530.5d339d530.5d268.5d530.5d227d578.25d185.5d626d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d217d499.5d261d475d305d450.5d365.5d450.5d426.5d450.5d469.25d481.5d512d512.5d532.5d571.5hR2d997.5R3d910.5R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i109R11d93R12d997.5R13ai1i3i3i3i3i2i2i2i3i3i3i3i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:52oR0d950.5R1ad387d365.5d132d764d387d764d387d365.5d360.5d277.5d487.5d277.5d487.5d764d594d764d594d848d487.5d848d487.5d1024d387d1024d387d848d50d848d50d750.5d360.5d277.5hR2d651.5R3d594R4d50R5d746.5R6d0R7d696.5R8d168R9d241.5R10i52R11d50R12d651.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2hg:108oR0d950.5R1ad96.5d246d188.5d246d188.5d1024d96.5d1024d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i108R11d96.5R12d284.5R13ai1i2i2i2i2hg:51oR0d950.5R1ad415.5d621.5d488d637d528.75d686d569.5d735d569.5d807d569.5d917.5d493.5d978d417.5d1038.5d277.5d1038.5d230.5d1038.5d180.75d1029.25d131d1020d78d1001.5d78d904d120d928.5d170d941d220d953.5d274.5d953.5d369.5d953.5d419.25d916d469d878.5d469d807d469d741d422.75d703.75d376.5d666.5d294d666.5d207d666.5d207d583.5d298d583.5d372.5d583.5d412d553.75d451.5d524d451.5d468d451.5d410.5d410.75d379.75d370d349d294d349d252.5d349d205d358d157.5d367d100.5d386d100.5d296d158d280d208.25d272d258.5d264d303d264d418d264d485d316.25d552d368.5d552d457.5d552d519.5d516.5d562.25d481d605d415.5d621.5hR2d651.5R3d569.5R4d78R5d760R6d-14.5R7d682R8d168R9d241.5R10i51R11d78R12d651.5R13ai1i3i3i3i3i3i3i2i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:107oR0d950.5R1ad93d246d185.5d246d185.5d705.5d460d464d577.5d464d280.5d726d590d1024d470d1024d185.5d750.5d185.5d1024d93d1024d93d246hR2d593R3d590R4d93R5d778R6d0R7d685R8d168R9d241.5R10i107R11d93R12d593R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:50oR0d950.5R1ad196.5d939d549d939d549d1024d75d1024d75d939d132.5d879.5d231.75d779.25d331d679d356.5d650d405d595.5d424.25d557.75d443.5d520d443.5d483.5d443.5d424d401.75d386.5d360d349d293d349d245.5d349d192.75d365.5d140d382d80d415.5d80d313.5d141d289d194d276.5d247d264d291d264d407d264d476d322d545d380d545d477d545d523d527.75d564.25d510.5d605.5d465d661.5d452.5d676d385.5d745.25d318.5d814.5d196.5d939hR2d651.5R3d549R4d75R5d760R6d0R7d685R8d168R9d241.5R10i50R11d75R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:106oR0d950.5R1ad96.5d464d188.5d464d188.5d1034d188.5d1141d147.75d1189d107d1237d16.5d1237d-18.5d1237d-18.5d1159d6d1159d58.5d1159d77.5d1134.75d96.5d1110.5d96.5d1034d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d-18.5R5d778R6d-213R7d796.5R8d168R9d241.5R10i106R11d-18.5R12d284.5R13ai1i2i2i3i3i2i2i2i3i3i2i1i2i2i2i2hg:49oR0d950.5R1ad127d939d292d939d292d369.5d112.5d405.5d112.5d313.5d291d277.5d392d277.5d392d939d557d939d557d1024d127d1024d127d939hR2d651.5R3d557R4d112.5R5d746.5R6d0R7d634R8d168R9d241.5R10i49R11d112.5R12d651.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:105oR0d950.5R1ad96.5d464d188.5d464d188.5d1024d96.5d1024d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i105R11d96.5R12d284.5R13ai1i2i2i2i2i1i2i2i2i2hg:48oR0d950.5R1ad325.5d344d247.5d344d208.25d420.75d169d497.5d169d651.5d169d805d208.25d881.75d247.5d958.5d325.5d958.5d404d958.5d443.25d881.75d482.5d805d482.5d651.5d482.5d497.5d443.25d420.75d404d344d325.5d344d325.5d264d451d264d517.25d363.25d583.5d462.5d583.5d651.5d583.5d840d517.25d939.25d451d1038.5d325.5d1038.5d200d1038.5d133.75d939.25d67.5d840d67.5d651.5d67.5d462.5d133.75d363.25d200d264d325.5d264hR2d651.5R3d583.5R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i48R11d67.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:104oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d246d185.5d246d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d778R6d0R7d685R8d168R9d241.5R10i104R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:47oR0d950.5R1ad260d277.5d345d277.5d85d1119d0d1119d260d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i47R11d0R12d345R13ai1i2i2i2i2hg:103oR0d950.5R1ad465d737.5d465d637.5d423.75d582.5d382.5d527.5d308d527.5d234d527.5d192.75d582.5d151.5d637.5d151.5d737.5d151.5d837d192.75d892d234d947d308d947d382.5d947d423.75d892d465d837d465d737.5d557d954.5d557d1097.5d493.5d1167.25d430d1237d299d1237d250.5d1237d207.5d1229.75d164.5d1222.5d124d1207.5d124d1118d164.5d1140d204d1150.5d243.5d1161d284.5d1161d375d1161d420d1113.75d465d1066.5d465d971d465d925.5d436.5d975d392d999.5d347.5d1024d285.5d1024d182.5d1024d119.5d945.5d56.5d867d56.5d737.5d56.5d607.5d119.5d529d182.5d450.5d285.5d450.5d347.5d450.5d392d475d436.5d499.5d465d549d465d464d557d464d557d954.5hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i103R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i2i3i3i3i3i2i3i3i3i3i3i3i3i3i2i2i2hg:46oR0d950.5R1ad109.5d897d215d897d215d1024d109.5d1024d109.5d897hR2d325.5R3d215R4d109.5R5d127R6d0R7d17.5R8d168R9d241.5R10i46R11d109.5R12d325.5R13ai1i2i2i2i2hg:102oR0d950.5R1ad380d246d380d322.5d292d322.5d242.5d322.5d223.25d342.5d204d362.5d204d414.5d204d464d355.5d464d355.5d535.5d204d535.5d204d1024d111.5d1024d111.5d535.5d23.5d535.5d23.5d464d111.5d464d111.5d425d111.5d331.5d155d288.75d198.5d246d293d246d380d246hR2d360.5R3d380R4d23.5R5d778R6d0R7d754.5R8d168R9d241.5R10i102R11d23.5R12d360.5R13ai1i2i2i3i3i2i2i2i2i2i2i2i2i2i2i2i3i3i2hg:45oR0d950.5R1ad50d702.5d319.5d702.5d319.5d784.5d50d784.5d50d702.5hR2d369.5R3d319.5R4d50R5d321.5R6d239.5R7d271.5R8d168R9d241.5R10i45R11d50R12d369.5R13ai1i2i2i2i2hg:101oR0d950.5R1ad575.5d721d575.5d766d152.5d766d158.5d861d209.75d910.75d261d960.5d352.5d960.5d405.5d960.5d455.25d947.5d505d934.5d554d908.5d554d995.5d504.5d1016.5d452.5d1027.5d400.5d1038.5d347d1038.5d213d1038.5d134.75d960.5d56.5d882.5d56.5d749.5d56.5d612d130.75d531.25d205d450.5d331d450.5d444d450.5d509.75d523.25d575.5d596d575.5d721d483.5d694d482.5d618.5d441.25d573.5d400d528.5d332d528.5d255d528.5d208.75d572d162.5d615.5d155.5d694.5d483.5d694hR2d630R3d575.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i101R11d56.5R12d630R13ai1i2i2i3i3i3i3i2i3i3i3i3i3i3i3i3i1i3i3i3i3i2hg:44oR0d950.5R1ad120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d325.5R3d225.5R4d79R5d127R6d-119R7d48R8d168R9d241.5R10i44R11d79R12d325.5R13ai1i2i2i2i2i2i2hg:100oR0d950.5R1ad465d549d465d246d557d246d557d1024d465d1024d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5hR2d650R3d557R4d56.5R5d778R6d-14.5R7d721.5R8d168R9d241.5R10i100R11d56.5R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:43oR0d950.5R1ad471d382d471d660.5d749.5d660.5d749.5d745.5d471d745.5d471d1024d387d1024d387d745.5d108.5d745.5d108.5d660.5d387d660.5d387d382d471d382hR2d858R3d749.5R4d108.5R5d642R6d0R7d533.5R8d168R9d241.5R10i43R11d108.5R12d858R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:99oR0d950.5R1ad499.5d485.5d499.5d571.5d460.5d550d421.25d539.25d382d528.5d342d528.5d252.5d528.5d203d585.25d153.5d642d153.5d744.5d153.5d847d203d903.75d252.5d960.5d342d960.5d382d960.5d421.25d949.75d460.5d939d499.5d917.5d499.5d1002.5d461d1020.5d419.75d1029.5d378.5d1038.5d332d1038.5d205.5d1038.5d131d959d56.5d879.5d56.5d744.5d56.5d607.5d131.75d529d207d450.5d338d450.5d380.5d450.5d421d459.25d461.5d468d499.5d485.5hR2d563R3d499.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i99R11d56.5R12d563R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:42oR0d950.5R1ad481.5d400.5d302d497.5d481.5d595d452.5d644d284.5d542.5d284.5d731d227.5d731d227.5d542.5d59.5d644d30.5d595d210d497.5d30.5d400.5d59.5d351d227.5d452.5d227.5d264d284.5d264d284.5d452.5d452.5d351d481.5d400.5hR2d512R3d481.5R4d30.5R5d760R6d293R7d729.5R8d168R9d241.5R10i42R11d30.5R12d512R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:98oR0d950.5R1ad498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d185.5d1024d93d1024d93d246d185.5d246d185.5d549hR2d650R3d594R4d93R5d778R6d-14.5R7d685R8d168R9d241.5R10i98R11d93R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:41oR0d950.5R1ad82d247d162d247d237d365d274.25d478d311.5d591d311.5d702.5d311.5d814.5d274.25d928d237d1041.5d162d1159d82d1159d148.5d1044.5d181.25d931.25d214d818d214d702.5d214d587d181.25d474.5d148.5d362d82d247hR2d399.5R3d311.5R4d82R5d777R6d-135R7d695R8d168R9d241.5R10i41R11d82R12d399.5R13ai1i2i3i3i3i3i2i3i3i3i3hg:97oR0d950.5R1ad351d742.5d239.5d742.5d196.5d768d153.5d793.5d153.5d855d153.5d904d185.75d932.75d218d961.5d273.5d961.5d350d961.5d396.25d907.25d442.5d853d442.5d763d442.5d742.5d351d742.5d534.5d704.5d534.5d1024d442.5d1024d442.5d939d411d990d364d1014.25d317d1038.5d249d1038.5d163d1038.5d112.25d990.25d61.5d942d61.5d861d61.5d766.5d124.75d718.5d188d670.5d313.5d670.5d442.5d670.5d442.5d661.5d442.5d598d400.75d563.25d359d528.5d283.5d528.5d235.5d528.5d190d540d144.5d551.5d102.5d574.5d102.5d489.5d153d470d200.5d460.25d248d450.5d293d450.5d414.5d450.5d474.5d513.5d534.5d576.5d534.5d704.5hR2d627.5R3d534.5R4d61.5R5d573.5R6d-14.5R7d512R8d168R9d241.5R10i97R11d61.5R12d627.5R13ai1i3i3i3i3i3i3i2i2i1i2i2i2i3i3i3i3i3i3i2i2i3i3i3i3i2i3i3i3i3hg:40oR0d950.5R1ad317.5d247d250.5d362d218d474.5d185.5d587d185.5d702.5d185.5d818d218.25d931.25d251d1044.5d317.5d1159d237.5d1159d162.5d1041.5d125.25d928d88d814.5d88d702.5d88d591d125d478d162d365d237.5d247d317.5d247hR2d399.5R3d317.5R4d88R5d777R6d-135R7d689R8d168R9d241.5R10i40R11d88R12d399.5R13ai1i3i3i3i3i2i3i3i3i3i2hg:96oR0d950.5R1ad183.5d205d324.5d392d248d392d85d205d183.5d205hR2d512R3d324.5R4d85R5d819R6d632R7d734R8d168R9d241.5R10i96R11d85R12d512R13ai1i2i2i2i2hg:39oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5hR2d281.5R3d183.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i39R11d98.5R12d281.5R13ai1i2i2i2i2hg:95oR0d950.5R1ad522d1194d522d1265.5d-10d1265.5d-10d1194d522d1194hR2d512R3d522R4d-10R5d-170R6d-241.5R7d-160R8d168R9d241.5R10i95R11d-10R12d512R13ai1i2i2i2i2hg:38oR0d950.5R1ad249d622.5d203.5d663d182.25d703.25d161d743.5d161d787.5d161d860.5d214d909d267d957.5d347d957.5d394.5d957.5d436d941.75d477.5d926d514d894d249d622.5d319.5d566.5d573.5d826.5d603d782d619.5d731.25d636d680.5d639d623.5d732d623.5d726d689.5d700d754d674d818.5d627.5d881.5d767d1024d641d1024d569.5d950.5d517.5d995d460.5d1016.75d403.5d1038.5d338d1038.5d217.5d1038.5d141d969.75d64.5d901d64.5d793.5d64.5d729.5d98d673.25d131.5d617d198.5d567.5d174.5d536d162d504.75d149.5d473.5d149.5d443.5d149.5d362.5d205d313.25d260.5d264d352.5d264d394d264d435.25d273d476.5d282d519d300d519d391d475.5d367.5d436d355.25d396.5d343d362.5d343d310d343d277.25d370.75d244.5d398.5d244.5d442.5d244.5d468d259.25d493.75d274d519.5d319.5d566.5hR2d798.5R3d767R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i38R11d64.5R12d798.5R13ai1i3i3i3i3i3i3i2i1i2i3i3i2i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3hg:94oR0d950.5R1ad478d277.5d749.5d556d649d556d429d358.5d209d556d108.5d556d380d277.5d478d277.5hR2d858R3d749.5R4d108.5R5d746.5R6d468R7d638R8d168R9d241.5R10i94R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:37oR0d950.5R1ad744.5d695.5d701d695.5d676.25d732.5d651.5d769.5d651.5d835.5d651.5d900.5d676.25d937.75d701d975d744.5d975d787d975d811.75d937.75d836.5d900.5d836.5d835.5d836.5d770d811.75d732.75d787d695.5d744.5d695.5d744.5d632d823.5d632d870d687d916.5d742d916.5d835.5d916.5d929d869.75d983.75d823d1038.5d744.5d1038.5d664.5d1038.5d618d983.75d571.5d929d571.5d835.5d571.5d741.5d618.25d686.75d665d632d744.5d632d228.5d327.5d185.5d327.5d160.75d364.75d136d402d136d467d136d533d160.5d570d185d607d228.5d607d272d607d296.75d570d321.5d533d321.5d467d321.5d402.5d296.5d365d271.5d327.5d228.5d327.5d680d264d760d264d293d1038.5d213d1038.5d680d264d228.5d264d307.5d264d354.5d318.75d401.5d373.5d401.5d467d401.5d561.5d354.75d616d308d670.5d228.5d670.5d149d670.5d102.75d615.75d56.5d561d56.5d467d56.5d374d103d319d149.5d264d228.5d264hR2d973R3d916.5R4d56.5R5d760R6d-14.5R7d703.5R8d168R9d241.5R10i37R11d56.5R12d973R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i2i2i2i2i1i3i3i3i3i3i3i3i3hg:93oR0d950.5R1ad311.5d246d311.5d1159d99.5d1159d99.5d1087.5d219d1087.5d219d317.5d99.5d317.5d99.5d246d311.5d246hR2d399.5R3d311.5R4d99.5R5d778R6d-135R7d678.5R8d168R9d241.5R10i93R11d99.5R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:36oR0d950.5R1ad346d1174.5d296d1174.5d295.5d1024d243d1023d190.5d1011.75d138d1000.5d85d978d85d888d136d920d188.25d936.25d240.5d952.5d296d953d296d725d185.5d707d135.25d664d85d621d85d546d85d464.5d139.5d417.5d194d370.5d296d363.5d296d246d346d246d346d362d392.5d364d436d371.75d479.5d379.5d521d393d521d480.5d479.5d459.5d435.75d448d392d436.5d346d434.5d346d648d459.5d665.5d513d710.5d566.5d755.5d566.5d833.5d566.5d918d509.75d966.75d453d1015.5d346d1023d346d1174.5d296d639d296d434d238d440.5d207.5d467d177d493.5d177d537.5d177d580.5d205.25d604.5d233.5d628.5d296d639d346d735d346d951.5d409.5d943d441.75d915.5d474d888d474d843d474d799d443.25d773d412.5d747d346d735hR2d651.5R3d566.5R4d85R5d778R6d-150.5R7d693R8d168R9d241.5R10i36R11d85R12d651.5R13ai1i2i2i3i3i2i3i3i2i3i3i3i3i2i2i2i3i3i2i3i3i2i3i3i3i3i2i1i2i3i3i3i3i1i2i3i3i3i3hg:92oR0d950.5R1ad85d277.5d345d1119d260d1119d0d277.5d85d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i92R11d0R12d345R13ai1i2i2i2i2hg:35oR0d950.5R1ad523.5d573.5d378d573.5d336d740.5d482.5d740.5d523.5d573.5d448.5d289d396.5d496.5d542.5d496.5d595d289d675d289d623.5d496.5d779.5d496.5d779.5d573.5d604d573.5d563d740.5d722d740.5d722d817d543.5d817d491.5d1024d411.5d1024d463d817d316.5d817d265d1024d184.5d1024d236.5d817d79d817d79d740.5d255d740.5d297d573.5d136d573.5d136d496.5d316.5d496.5d367.5d289d448.5d289hR2d858R3d779.5R4d79R5d735R6d0R7d656R8d168R9d241.5R10i35R11d79R12d858R13ai1i2i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:91oR0d950.5R1ad88d246d300d246d300d317.5d180d317.5d180d1087.5d300d1087.5d300d1159d88d1159d88d246hR2d399.5R3d300R4d88R5d778R6d-135R7d690R8d168R9d241.5R10i91R11d88R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:34oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5d372.5d277.5d372.5d555d287.5d555d287.5d277.5d372.5d277.5hR2d471R3d372.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i34R11d98.5R12d471R13ai1i2i2i2i2i1i2i2i2i2hg:90oR0d950.5R1ad57.5d277.5d644d277.5d644d354.5d172d939d655.5d939d655.5d1024d46d1024d46d947d518d362.5d57.5d362.5d57.5d277.5hR2d701.5R3d655.5R4d46R5d746.5R6d0R7d700.5R8d168R9d241.5R10i90R11d46R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:33oR0d950.5R1ad154.5d897d256d897d256d1024d154.5d1024d154.5d897d154.5d277.5d256d277.5d256d605d246d783.5d165d783.5d154.5d605d154.5d277.5hR2d410.5R3d256R4d154.5R5d746.5R6d0R7d592R8d168R9d241.5R10i33R11d154.5R12d410.5R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:89oR0d950.5R1ad-2d277.5d106.5d277.5d313.5d584.5d519d277.5d627.5d277.5d363.5d668.5d363.5d1024d262d1024d262d668.5d-2d277.5hR2d625.5R3d627.5R4d-2R5d746.5R6d0R7d748.5R8d168R9d241.5R10i89R11d-2R12d625.5R13ai1i2i2i2i2i2i2i2i2i2hg:32oR0d950.5R1ahR2d325.5R3d0R4d0R5d0R6d0R7d0R8d168R9d241.5R10i32R11d0R12d325.5R13ahg:88oR0d950.5R1ad64.5d277.5d173d277.5d358.5d555d545d277.5d653.5d277.5d413.5d636d669.5d1024d561d1024d351d706.5d139.5d1024d30.5d1024d297d625.5d64.5d277.5hR2d701.5R3d669.5R4d30.5R5d746.5R6d0R7d716R8d168R9d241.5R10i88R11d30.5R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:87oR0d950.5R1ad34d277.5d136d277.5d293d908.5d449.5d277.5d563d277.5d720d908.5d876.5d277.5d979d277.5d791.5d1024d664.5d1024d507d376d348d1024d221d1024d34d277.5hR2d1012.5R3d979R4d34R5d746.5R6d0R7d712.5R8d168R9d241.5R10i87R11d34R12d1012.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:86oR0d950.5R1ad293d1024d8d277.5d113.5d277.5d350d906d587d277.5d692d277.5d407.5d1024d293d1024hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i86R11d8R12d700.5R13ai1i2i2i2i2i2i2i2hg:85oR0d950.5R1ad89d277.5d190.5d277.5d190.5d731d190.5d851d234d903.75d277.5d956.5d375d956.5d472d956.5d515.5d903.75d559d851d559d731d559d277.5d660.5d277.5d660.5d743.5d660.5d889.5d588.25d964d516d1038.5d375d1038.5d233.5d1038.5d161.25d964d89d889.5d89d743.5d89d277.5hR2d749.5R3d660.5R4d89R5d746.5R6d-14.5R7d657.5R8d168R9d241.5R10i85R11d89R12d749.5R13ai1i2i2i3i3i3i3i2i2i2i3i3i3i3i2hg:84oR0d950.5R1ad-3d277.5d628.5d277.5d628.5d362.5d363.5d362.5d363.5d1024d262d1024d262d362.5d-3d362.5d-3d277.5hR2d625.5R3d628.5R4d-3R5d746.5R6d0R7d749.5R8d168R9d241.5R10i84R11d-3R12d625.5R13ai1i2i2i2i2i2i2i2i2hg:83oR0d950.5R1ad548d302d548d400.5d490.5d373d439.5d359.5d388.5d346d341d346d258.5d346d213.75d378d169d410d169d469d169d518.5d198.75d543.75d228.5d569d311.5d584.5d372.5d597d485.5d618.5d539.25d672.75d593d727d593d818d593d926.5d520.25d982.5d447.5d1038.5d307d1038.5d254d1038.5d194.25d1026.5d134.5d1014.5d70.5d991d70.5d887d132d921.5d191d939d250d956.5d307d956.5d393.5d956.5d440.5d922.5d487.5d888.5d487.5d825.5d487.5d770.5d453.75d739.5d420d708.5d343d693d281.5d681d168.5d658.5d118d610.5d67.5d562.5d67.5d477d67.5d378d137.25d321d207d264d329.5d264d382d264d436.5d273.5d491d283d548d302hR2d650R3d593R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i83R11d67.5R12d650R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:82oR0d950.5R1ad454.5d674d487d685d517.75d721d548.5d757d579.5d820d682d1024d573.5d1024d478d832.5d441d757.5d406.25d733d371.5d708.5d311.5d708.5d201.5d708.5d201.5d1024d100.5d1024d100.5d277.5d328.5d277.5d456.5d277.5d519.5d331d582.5d384.5d582.5d492.5d582.5d563d549.75d609.5d517d656d454.5d674d201.5d360.5d201.5d625.5d328.5d625.5d401.5d625.5d438.75d591.75d476d558d476d492.5d476d427d438.75d393.75d401.5d360.5d328.5d360.5d201.5d360.5hR2d711.5R3d682R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i82R11d100.5R12d711.5R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i3i3i3i3i1i2i2i3i3i3i3i2hg:81oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d545d1010.5d678d1156d556d1156d445.5d1036.5d429d1037.5d420.25d1038d411.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.25d57.5d828d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d781.5d696.25d874d644d966.5d545d1010.5hR2d806R3d748.5R4d57.5R5d760R6d-132R7d702.5R8d168R9d241.5R10i81R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i2i2i2i3i3i3i3i3i3i3i3i3i3hg:80oR0d950.5R1ad201.5d360.5d201.5d641d328.5d641d399d641d437.5d604.5d476d568d476d500.5d476d433.5d437.5d397d399d360.5d328.5d360.5d201.5d360.5d100.5d277.5d328.5d277.5d454d277.5d518.25d334.25d582.5d391d582.5d500.5d582.5d611d518.25d667.5d454d724d328.5d724d201.5d724d201.5d1024d100.5d1024d100.5d277.5hR2d617.5R3d582.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i80R11d100.5R12d617.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2i2i2hg:79oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d828d654.5d933.25d560.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.5d57.5d828.5d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264hR2d806R3d748.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i79R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:78oR0d950.5R1ad100.5d277.5d236.5d277.5d567.5d902d567.5d277.5d665.5d277.5d665.5d1024d529.5d1024d198.5d399.5d198.5d1024d100.5d1024d100.5d277.5hR2d766R3d665.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i78R11d100.5R12d766R13ai1i2i2i2i2i2i2i2i2i2i2hg:77oR0d950.5R1ad100.5d277.5d251d277.5d441.5d785.5d633d277.5d783.5d277.5d783.5d1024d685d1024d685d368.5d492.5d880.5d391d880.5d198.5d368.5d198.5d1024d100.5d1024d100.5d277.5hR2d883.5R3d783.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i77R11d100.5R12d883.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:76oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d939d565d939d565d1024d100.5d1024d100.5d277.5hR2d570.5R3d565R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i76R11d100.5R12d570.5R13ai1i2i2i2i2i2i2hg:75oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d593d536.5d277.5d666.5d277.5d296d625.5d693d1024d560d1024d201.5d664.5d201.5d1024d100.5d1024d100.5d277.5hR2d671.5R3d693R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i75R11d100.5R12d671.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:74oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d972d201.5d1107d150.25d1168d99d1229d-14.5d1229d-53d1229d-53d1144d-21.5d1144d45.5d1144d73d1106.5d100.5d1069d100.5d972d100.5d277.5hR2d302R3d201.5R4d-53R5d746.5R6d-205R7d799.5R8d168R9d241.5R10i74R11d-53R12d302R13ai1i2i2i3i3i2i2i2i3i3i2hg:73oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d1024d100.5d1024d100.5d277.5hR2d302R3d201.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i73R11d100.5R12d302R13ai1i2i2i2i2hg:72oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d583.5d568.5d583.5d568.5d277.5d669.5d277.5d669.5d1024d568.5d1024d568.5d668.5d201.5d668.5d201.5d1024d100.5d1024d100.5d277.5hR2d770R3d669.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i72R11d100.5R12d770R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:71oR0d950.5R1ad609.5d917.5d609.5d717d444.5d717d444.5d634d709.5d634d709.5d954.5d651d996d580.5d1017.25d510d1038.5d430d1038.5d255d1038.5d156.25d936.25d57.5d834d57.5d651.5d57.5d468.5d156.25d366.25d255d264d430d264d503d264d568.75d282d634.5d300d690d335d690d442.5d634d395d571d371d508d347d438.5d347d301.5d347d232.75d423.5d164d500d164d651.5d164d802.5d232.75d879d301.5d955.5d438.5d955.5d492d955.5d534d946.25d576d937d609.5d917.5hR2d793.5R3d709.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i71R11d57.5R12d793.5R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:70oR0d950.5R1ad100.5d277.5d529.5d277.5d529.5d362.5d201.5d362.5d201.5d582.5d497.5d582.5d497.5d667.5d201.5d667.5d201.5d1024d100.5d1024d100.5d277.5hR2d589R3d529.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i70R11d100.5R12d589R13ai1i2i2i2i2i2i2i2i2i2i2hg:126oR0d950.5R1ad749.5d615.5d749.5d704.5d697d744d652.25d761d607.5d778d559d778d504d778d431d748.5d425.5d746.5d423d745.5d419.5d744d412d741.5d334.5d710.5d287.5d710.5d243.5d710.5d200.5d729.75d157.5d749d108.5d790.5d108.5d701.5d161d662d205.75d644.75d250.5d627.5d299d627.5d354d627.5d427.5d657.5d432.5d659.5d435d660.5d439d662d446d664.5d523.5d695.5d570.5d695.5d613.5d695.5d655.75d676.5d698d657.5d749.5d615.5hR2d858R3d749.5R4d108.5R5d408.5R6d233.5R7d300R8d168R9d241.5R10i126R11d108.5R12d858R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:69oR0d950.5R1ad100.5d277.5d572.5d277.5d572.5d362.5d201.5d362.5d201.5d583.5d557d583.5d557d668.5d201.5d668.5d201.5d939d581.5d939d581.5d1024d100.5d1024d100.5d277.5hR2d647R3d581.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i69R11d100.5R12d647R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:125oR0d950.5R1ad128d1119d163d1119d233d1119d254.25d1097.5d275.5d1076d275.5d1004.5d275.5d880.5d275.5d802.5d298d767d320.5d731.5d376d718d320.5d705.5d298d670d275.5d634.5d275.5d556d275.5d432d275.5d361d254.25d339.25d233d317.5d163d317.5d128d317.5d128d246d159.5d246d284d246d325.75d282.75d367.5d319.5d367.5d430d367.5d550d367.5d624.5d394.5d653.25d421.5d682d492.5d682d523.5d682d523.5d753.5d492.5d753.5d421.5d753.5d394.5d782.5d367.5d811.5d367.5d887d367.5d1006.5d367.5d1117d325.75d1154d284d1191d159.5d1191d128d1191d128d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i125R11d128R12d651.5R13ai1i2i3i3i2i3i3i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2hg:68oR0d950.5R1ad201.5d360.5d201.5d941d323.5d941d478d941d549.75d871d621.5d801d621.5d650d621.5d500d549.75d430.25d478d360.5d323.5d360.5d201.5d360.5d100.5d277.5d308d277.5d525d277.5d626.5d367.75d728d458d728d650d728d843d626d933.5d524d1024d308d1024d100.5d1024d100.5d277.5hR2d788.5R3d728R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i68R11d100.5R12d788.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2hg:124oR0d950.5R1ad215d241.5d215d1265.5d130d1265.5d130d241.5d215d241.5hR2d345R3d215R4d130R5d782.5R6d-241.5R7d652.5R8d168R9d241.5R10i124R11d130R12d345R13ai1i2i2i2i2hg:67oR0d950.5R1ad659.5d335d659.5d441.5d608.5d394d550.75d370.5d493d347d428d347d300d347d232d425.25d164d503.5d164d651.5d164d799d232d877.25d300d955.5d428d955.5d493d955.5d550.75d932d608.5d908.5d659.5d861d659.5d966.5d606.5d1002.5d547.25d1020.5d488d1038.5d422d1038.5d252.5d1038.5d155d934.75d57.5d831d57.5d651.5d57.5d471.5d155d367.75d252.5d264d422d264d489d264d548.25d281.75d607.5d299.5d659.5d335hR2d715R3d659.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i67R11d57.5R12d715R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:123oR0d950.5R1ad523.5d1119d523.5d1191d492.5d1191d368d1191d325.75d1154d283.5d1117d283.5d1006.5d283.5d887d283.5d811.5d256.5d782.5d229.5d753.5d158.5d753.5d128d753.5d128d682d158.5d682d230d682d256.75d653.25d283.5d624.5d283.5d550d283.5d430d283.5d319.5d325.75d282.75d368d246d492.5d246d523.5d246d523.5d317.5d489.5d317.5d419d317.5d397.5d339.5d376d361.5d376d432d376d556d376d634.5d353.25d670d330.5d705.5d275.5d718d331d731.5d353.5d767d376d802.5d376d880.5d376d1004.5d376d1075d397.5d1097d419d1119d489.5d1119d523.5d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i123R11d128R12d651.5R13ai1i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i3i3i2i3i3i2hg:66oR0d950.5R1ad201.5d667.5d201.5d941d363.5d941d445d941d484.25d907.25d523.5d873.5d523.5d804d523.5d734d484.25d700.75d445d667.5d363.5d667.5d201.5d667.5d201.5d360.5d201.5d585.5d351d585.5d425d585.5d461.25d557.75d497.5d530d497.5d473d497.5d416.5d461.25d388.5d425d360.5d351d360.5d201.5d360.5d100.5d277.5d358.5d277.5d474d277.5d536.5d325.5d599d373.5d599d462d599d530.5d567d571d535d611.5d473d621.5d547.5d637.5d588.75d688.25d630d739d630d815d630d915d562d969.5d494d1024d368.5d1024d100.5d1024d100.5d277.5hR2d702.5R3d630R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i66R11d100.5R12d702.5R13ai1i2i2i3i3i3i3i2i1i2i2i3i3i3i3i2i1i2i3i3i3i3i3i3i3i3i2i2hg:122oR0d950.5R1ad56.5d464d493.5d464d493.5d548d147.5d950.5d493.5d950.5d493.5d1024d44d1024d44d940d390d537.5d56.5d537.5d56.5d464hR2d537.5R3d493.5R4d44R5d560R6d0R7d516R8d168R9d241.5R10i122R11d44R12d537.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:65oR0d950.5R1ad350d377d213d748.5d487.5d748.5d350d377d293d277.5d407.5d277.5d692d1024d587d1024d519d832.5d182.5d832.5d114.5d1024d8d1024d293d277.5hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i65R11d8R12d700.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2hg:121oR0d950.5R1ad329.5d1076d290.5d1176d253.5d1206.5d216.5d1237d154.5d1237d81d1237d81d1160d135d1160d173d1160d194d1142d215d1124d240.5d1057d257d1015d30.5d464d128d464d303d902d478d464d575.5d464d329.5d1076hR2d606R3d575.5R4d30.5R5d560R6d-213R7d529.5R8d168R9d241.5R10i121R11d30.5R12d606R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i2i2hg:64oR0d950.5R1ad381d755.5d381d827d416.5d867.75d452d908.5d514d908.5d575.5d908.5d610.75d867.5d646d826.5d646d755.5d646d685.5d610d644.25d574d603d513d603d452.5d603d416.75d644d381d685d381d755.5d653.5d905d623.5d943.5d584.75d961.75d546d980d494.5d980d408.5d980d354.75d917.75d301d855.5d301d755.5d301d655.5d355d593d409d530.5d494.5d530.5d546d530.5d585d549.25d624d568d653.5d606d653.5d540.5d725d540.5d725d908.5d798d897.5d839.25d841.75d880.5d786d880.5d697.5d880.5d644d864.75d597d849d550d817d510d765d444.5d690.25d409.75d615.5d375d527.5d375d466d375d409.5d391.25d353d407.5d305d439.5d226.5d490.5d182.25d573.25d138d656d138d752.5d138d832d166.75d901.5d195.5d971d250d1024d302.5d1076d371.5d1103.25d440.5d1130.5d519d1130.5d583.5d1130.5d645.75d1108.75d708d1087d760d1046.5d805d1102d742.5d1150.5d668.75d1176.25d595d1202d519d1202d426.5d1202d344.5d1169.25d262.5d1136.5d198.5d1074d134.5d1011.5d101d929.25d67.5d847d67.5d752.5d67.5d661.5d101.5d579d135.5d496.5d198.5d434d263d370.5d347.5d336.75d432d303d526.5d303d632.5d303d723.25d346.5d814d390d875.5d470d913d519d932.75d576.5d952.5d634d952.5d695.5d952.5d827d873d903d793.5d979d653.5d982d653.5d905hR2d1024R3d952.5R4d67.5R5d721R6d-178R7d653.5R8d168R9d241.5R10i64R11d67.5R12d1024R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2hg:120oR0d950.5R1ad562d464d359.5d736.5d572.5d1024d464d1024d301d804d138d1024d29.5d1024d247d731d48d464d156.5d464d305d663.5d453.5d464d562d464hR2d606R3d572.5R4d29.5R5d560R6d0R7d530.5R8d168R9d241.5R10i120R11d29.5R12d606R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:63oR0d950.5R1ad195.5d897d297d897d297d1024d195.5d1024d195.5d897d294d823.5d198.5d823.5d198.5d746.5d198.5d696d212.5d663.5d226.5d631d271.5d588d316.5d543.5d345d517d357.75d493.5d370.5d470d370.5d445.5d370.5d401d337.75d373.5d305d346d251d346d211.5d346d166.75d363.5d122d381d73.5d414.5d73.5d320.5d120.5d292d168.75d278d217d264d268.5d264d360.5d264d416.25d312.5d472d361d472d440.5d472d478.5d454d512.75d436d547d391d590d347d633d323.5d656.5d313.75d669.75d304d683d300d695.5d297d706d295.5d721d294d736d294d762d294d823.5hR2d543.5R3d472R4d73.5R5d760R6d0R7d686.5R8d168R9d241.5R10i63R11d73.5R12d543.5R13ai1i2i2i2i2i1i2i2i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i2hg:119oR0d950.5R1ad43d464d135d464d250d901d364.5d464d473d464d588d901d702.5d464d794.5d464d648d1024d539.5d1024d419d565d298d1024d189.5d1024d43d464hR2d837.5R3d794.5R4d43R5d560R6d0R7d517R8d168R9d241.5R10i119R11d43R12d837.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:62oR0d950.5R1ad108.5d520d108.5d429d749.5d661.5d749.5d744.5d108.5d977d108.5d886d623.5d703.5d108.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i62R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:118oR0d950.5R1ad30.5d464d128d464d303d934d478d464d575.5d464d365.5d1024d240.5d1024d30.5d464hR2d606R3d575.5R4d30.5R5d560R6d0R7d529.5R8d168R9d241.5R10i118R11d30.5R12d606R13ai1i2i2i2i2i2i2i2hg:61oR0d950.5R1ad108.5d559d749.5d559d749.5d643d108.5d643d108.5d559d108.5d763d749.5d763d749.5d848d108.5d848d108.5d763hR2d858R3d749.5R4d108.5R5d465R6d176R7d356.5R8d168R9d241.5R10i61R11d108.5R12d858R13ai1i2i2i2i2i1i2i2i2i2hg:117oR0d950.5R1ad87d803d87d464d179d464d179d799.5d179d879d210d918.75d241d958.5d303d958.5d377.5d958.5d420.75d911d464d863.5d464d781.5d464d464d556d464d556d1024d464d1024d464d938d430.5d989d386.25d1013.75d342d1038.5d283.5d1038.5d187d1038.5d137d978.5d87d918.5d87d803hR2d649R3d556R4d87R5d560R6d-14.5R7d473R8d168R9d241.5R10i117R11d87R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:60oR0d950.5R1ad749.5d520d233.5d703.5d749.5d886d749.5d977d108.5d744.5d108.5d661.5d749.5d429d749.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i60R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:116oR0d950.5R1ad187.5d305d187.5d464d377d464d377d535.5d187.5d535.5d187.5d839.5d187.5d908d206.25d927.5d225d947d282.5d947d377d947d377d1024d282.5d1024d176d1024d135.5d984.25d95d944.5d95d839.5d95d535.5d27.5d535.5d27.5d464d95d464d95d305d187.5d305hR2d401.5R3d377R4d27.5R5d719R6d0R7d691.5R8d168R9d241.5R10i116R11d27.5R12d401.5R13ai1i2i2i2i2i2i3i3i2i2i2i3i3i2i2i2i2i2i2hg:59oR0d950.5R1ad120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5d120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d345R3d225.5R4d79R5d529.5R6d-119R7d450.5R8d168R9d241.5R10i59R11d79R12d345R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:115oR0d950.5R1ad453.5d480.5d453.5d567.5d414.5d547.5d372.5d537.5d330.5d527.5d285.5d527.5d217d527.5d182.75d548.5d148.5d569.5d148.5d611.5d148.5d643.5d173d661.75d197.5d680d271.5d696.5d303d703.5d401d724.5d442.25d762.75d483.5d801d483.5d869.5d483.5d947.5d421.75d993d360d1038.5d252d1038.5d207d1038.5d158.25d1029.75d109.5d1021d55.5d1003.5d55.5d908.5d106.5d935d156d948.25d205.5d961.5d254d961.5d319d961.5d354d939.25d389d917d389d876.5d389d839d363.75d819d338.5d799d253d780.5d221d773d135.5d755d97.5d717.75d59.5d680.5d59.5d615.5d59.5d536.5d115.5d493.5d171.5d450.5d274.5d450.5d325.5d450.5d370.5d458d415.5d465.5d453.5d480.5hR2d533.5R3d483.5R4d55.5R5d573.5R6d-14.5R7d518R8d168R9d241.5R10i115R11d55.5R12d533.5R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:58oR0d950.5R1ad120d897d225.5d897d225.5d1024d120d1024d120d897d120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5hR2d345R3d225.5R4d120R5d529.5R6d0R7d409.5R8d168R9d241.5R10i58R11d120R12d345R13ai1i2i2i2i2i1i2i2i2i2hg:114oR0d950.5R1ad421d550d405.5d541d387.25d536.75d369d532.5d347d532.5d269d532.5d227.25d583.25d185.5d634d185.5d729d185.5d1024d93d1024d93d464d185.5d464d185.5d551d214.5d500d261d475.25d307.5d450.5d374d450.5d383.5d450.5d395d451.75d406.5d453d420.5d455.5d421d550hR2d421R3d421R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i114R11d93R12d421R13ai1i3i3i3i3i2i2i2i2i2i3i3i3i3i2hg:57oR0d950.5R1ad112.5d1008.5d112.5d916.5d150.5d934.5d189.5d944d228.5d953.5d266d953.5d366d953.5d418.75d886.25d471.5d819d479d682d450d725d405.5d748d361d771d307d771d195d771d129.75d703.25d64.5d635.5d64.5d518d64.5d403d132.5d333.5d200.5d264d313.5d264d443d264d511.25d363.25d579.5d462.5d579.5d651.5d579.5d828d495.75d933.25d412d1038.5d270.5d1038.5d232.5d1038.5d193.5d1031d154.5d1023.5d112.5d1008.5d313.5d692d381.5d692d421.25d645.5d461d599d461d518d461d437.5d421.25d390.75d381.5d344d313.5d344d245.5d344d205.75d390.75d166d437.5d166d518d166d599d205.75d645.5d245.5d692d313.5d692hR2d651.5R3d579.5R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i57R11d64.5R12d651.5R13ai1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:113oR0d950.5R1ad151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d465d464d557d464d557d1237d465d1237d465d940hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i113R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:56oR0d950.5R1ad325.5d669.5d253.5d669.5d212.25d708d171d746.5d171d814d171d881.5d212.25d920d253.5d958.5d325.5d958.5d397.5d958.5d439d919.75d480.5d881d480.5d814d480.5d746.5d439.25d708d398d669.5d325.5d669.5d224.5d626.5d159.5d610.5d123.25d566d87d521.5d87d457.5d87d368d150.75d316d214.5d264d325.5d264d437d264d500.5d316d564d368d564d457.5d564d521.5d527.75d566d491.5d610.5d427d626.5d500d643.5d540.75d693d581.5d742.5d581.5d814d581.5d922.5d515.25d980.5d449d1038.5d325.5d1038.5d202d1038.5d135.75d980.5d69.5d922.5d69.5d814d69.5d742.5d110.5d693d151.5d643.5d224.5d626.5d187.5d467d187.5d525d223.75d557.5d260d590d325.5d590d390.5d590d427.25d557.5d464d525d464d467d464d409d427.25d376.5d390.5d344d325.5d344d260d344d223.75d376.5d187.5d409d187.5d467hR2d651.5R3d581.5R4d69.5R5d760R6d-14.5R7d690.5R8d168R9d241.5R10i56R11d69.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:112oR0d950.5R1ad185.5d940d185.5d1237d93d1237d93d464d185.5d464d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5hR2d650R3d594R4d93R5d573.5R6d-213R7d480.5R8d168R9d241.5R10i112R11d93R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hgh";
-browser.text.Font.DEFAULT_FONT_SCALE = 9.0;
-browser.text.Font.DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
-browser.text.Font.DEFAULT_CLASS_NAME = "browser.text.Font";
-DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
-browser.display.DisplayObject.GRAPHICS_INVALID = 2;
-browser.display.DisplayObject.MATRIX_INVALID = 4;
-browser.display.DisplayObject.MATRIX_CHAIN_INVALID = 8;
-browser.display.DisplayObject.MATRIX_OVERRIDDEN = 16;
-browser.display.DisplayObject.TRANSFORM_INVALID = 32;
-browser.display.DisplayObject.BOUNDS_INVALID = 64;
-browser.display.DisplayObject.RENDER_VALIDATE_IN_PROGRESS = 1024;
-browser.display.DisplayObject.ALL_RENDER_FLAGS = 98;
+haxe.Resource.content = [{ name : "config", data : "s683:PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxkYXRhPg0KCTxzZXR0aW5ncz4NCgkJPGFzc2V0cz4NCgkJCTxwYWNrYWdlcyBkZWZhdWx0PSJhc3NldHMiIGF1ZGlvPSJhc3NldHMuYXVkaW8iIC8%DQoJCTwvYXNzZXRzPg0KCQk8Zm9udCBuYW1lPSJhc3NldHNfZm9udHNfb3JiaXRyb25fdHRmIiAvPg0KCTwvc2V0dGluZ3M%DQoJPGd1aT4NCgkJPGJ1dHRvbnMgbmV4dD0iTkVYVCIgc3RhcnQ9IlNUQVJUIiAvPg0KCQk8c2NlbmVzPg0KCQkJPGludHJvIHRpdGxlPSJJTlRST0RVQ1RJT04iIGluc3RydWN0aW9ucz0iQ2xpY2sgb24gYWxsIHRoZSBpbnZhZGVycyBhcyBmYXN0IGFzIHBvc3NpYmxlISIgLz4NCgkJCTxnYW1lIC8%DQoJCQk8cmVzdWx0cyB0aXRsZT0iR0FNRSBPVkVSIiB3aW49IkEgbmV3IHBlcnNvbmFsIGJlc3Qgb2YgIiBsb3NlPSJZb3UgZGlkbid0IGJlYXQgeW91ciBwcmV2aW91cyB0aW1lIG9mICIgLz4NCgkJPC9zY2VuZXM%DQoJPC9ndWk%DQo8L2RhdGE%DQo"},{ name : "NME_assets_fonts_orbitron_ttf", data : "s111907:b3k0Omhhc2hxOjExMW95Njphc2NlbnRkOTk2LjM1Mnk0OmRhdGFhZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4NzUuNTJkNjU0LjMzNmQ5MzUuOTM2ZDYxMC44MTZkOTc5Ljk2OGQ1NjcuMjk2ZDEwMjRkNTA1Ljg1NmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDg2Ny4zMjhkNDk3LjY2NGQ4NjcuMzI4ZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJoeTY6X3dpZHRoZDcwOC42MDh5NDp4TWF4ZDY1NC4zMzZ5NDp4TWluZDUyLjIyNHk0OnlNYXhkNTkzLjkyeTQ6eU1pbmQweTc6X2hlaWdodGQ1NDEuNjk2eTc6bGVhZGluZ2QyMDcuODcyeTc6ZGVzY2VudGQyMzUuNTJ5ODpjaGFyQ29kZWkxMTF5MTU6bGVmdHNpZGVCZWFyaW5nZDUyLjIyNHkxMjphZHZhbmNlV2lkdGhkNzA4LjYwOHk4OmNvbW1hbmRzYWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmhnOjIyM29SMWQ5OTYuMzUyUjJhZDc4Mi4zMzZkNDIyLjkxMmQ3ODIuMzM2ZDU4Mi42NTZkNzgyLjMzNmQ2MjAuNTQ0ZDc2NC45MjhkNjUzLjMxMmQ3ODIuMzM2ZDY4NS4wNTZkNzgyLjMzNmQ3MjIuOTQ0ZDc4Mi4zMzZkODc1LjUyZDc4Mi4zMzZkOTM1LjkzNmQ3MzguMzA0ZDk3OS45NjhkNjk0LjI3MmQxMDI0ZDYzMi44MzJkMTAyNGQyNzkuNTUyZDEwMjRkMjc5LjU1MmQ4NjcuMzI4ZDYyNS42NjRkODY3LjMyOGQ2MjUuNjY0ZDczMi4xNmQyNzkuNTUyZDczMi4xNmQyNzkuNTUyZDU4NC43MDRkNjI1LjY2NGQ1ODQuNzA0ZDYyNS42NjRkNDU4Ljc1MWQyMTUuMDRkNDU4Ljc1MWQyMTUuMDRkMTAyNGQ1OC4zNjhkMTAyNGQ1OC4zNjhkNDQ5LjUzNWQ1OC4zNjhkMzg4LjA5NmQxMDIuNGQzNDQuNTc2ZDE0Ni40MzJkMzAxLjA1NmQyMDcuODcyZDMwMS4wNTZkNjMyLjgzMmQzMDEuMDU2ZDY4OC4xMjhkMzAxLjA1NmQ3MzAuNjI0ZDMzNS44NzFkNzczLjEyZDM3MC42ODhkNzgyLjMzNmQ0MjIuOTEyaFIzZDg1Mi45OTJSNGQ3ODIuMzM2UjVkNTguMzY4UjZkNzIyLjk0NFI3ZDBSOGQ2NjQuNTc2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjIzUjEyZDU4LjM2OFIxM2Q4NTIuOTkyUjE0YWkxaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2hnOjExMG9SMWQ5OTYuMzUyUjJhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQxMDI0ZDUwMC43MzZkMTAyNGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkNDMwLjA4ZDUwOC45MjhkNDMwLjA4aFIzZDcxMi43MDRSNGQ2NTcuNDA4UjVkNTUuMjk2UjZkNTkzLjkyUjdkMFI4ZDUzOC42MjRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMTBSMTJkNTUuMjk2UjEzZDcxMi43MDRSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTJpMmhnOjIyMm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIyMlIxMmQwUjEzZDBSMTRhaGc6MTA5b1IxZDk5Ni4zNTJSMmFkNzcwLjA0OGQ0MzAuMDhkODMxLjQ4OGQ0MzAuMDhkODc1LjAwOGQ0NzQuMTExZDkxOC41MjhkNTE4LjE0NGQ5MTguNTI4ZDU3OC41NmQ5MTguNTI4ZDEwMjRkNzYyLjg4ZDEwMjRkNzYyLjg4ZDU4Ni43NTJkNTY2LjI3MmQ1ODYuNzUyZDU2Ni4yNzJkMTAyNGQ0MDguNTc2ZDEwMjRkNDA4LjU3NmQ1ODYuNzUyZDIxMS45NjhkNTg2Ljc1MmQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDQzMC4wOGQ3NzAuMDQ4ZDQzMC4wOGhSM2QxMDAxLjQ3MlI0ZDkxOC41MjhSNWQ1NS4yOTZSNmQ1OTMuOTJSN2QwUjhkNTM4LjYyNFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEwOVIxMmQ1NS4yOTZSMTNkMTAwMS40NzJSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjIxb1IxZDk5Ni4zNTJSMmFkNjY4LjY3MmQyODYuNzJkODYwLjE2ZDI4Ni43MmQ1MTguMTQ0ZDc0OS41NjhkNTE4LjE0NGQxMDI0ZDM1OC40ZDEwMjRkMzU4LjRkNzQ4LjU0NGQyMjQuMjU2ZDU2OC4zMTlkMTcuNDA4ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQ0MzguMjcyZDU3Ny41MzZkNjY4LjY3MmQyODYuNzJkMzM2Ljg5NmQyMzUuNTE5ZDM4OS4xMmQyNy42NDhkNTQ5Ljg4OGQyNy42NDhkNDk3LjY2NGQyMzUuNTE5ZDMzNi44OTZkMjM1LjUxOWhSM2Q4MjUuMzQ0UjRkODYwLjE2UjVkMTcuNDA4UjZkOTk2LjM1MlI3ZDBSOGQ5NzguOTQ0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjIxUjEyZDE3LjQwOFIxM2Q4MjUuMzQ0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTA4b1IxZDk5Ni4zNTJSMmFkNTMuMjQ4ZDIzNC40OTVkMjEwLjk0NGQyMzQuNDk1ZDIxMC45NDRkODY3LjMyOGQzMzAuNzUyZDg2Ny4zMjhkMzMwLjc1MmQxMDI0ZDIwMS43MjhkMTAyNGQxNDEuMzEyZDEwMjRkOTcuMjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQyMzQuNDk1aFIzZDM0NS4wODhSNGQzMzAuNzUyUjVkNTMuMjQ4UjZkNzg5LjUwNFI3ZDBSOGQ3MzYuMjU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTA4UjEyZDUzLjI0OFIxM2QzNDUuMDg4UjE0YWkxaTJpMmkyaTJpMmkzaTNpMmhnOjIyMG9SMWQ5OTYuMzUyUjJhZDIxNC4wMTZkMjg2LjcyZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQyODYuNzJkNzkyLjU3NmQyODYuNzJkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDI4Ni43MmQyMTQuMDE2ZDI4Ni43MmQ2MTYuNDQ4ZDc3LjgyM2Q2MTYuNDQ4ZDIzNS41MTlkNDU4Ljc1MmQyMzUuNTE5ZDQ1OC43NTJkNzcuODIzZDYxNi40NDhkNzcuODIzZDM5Ny4zMTJkNzcuODIzZDM5Ny4zMTJkMjM1LjUxOWQyNDAuNjRkMjM1LjUxOWQyNDAuNjRkNzcuODIzZDM5Ny4zMTJkNzcuODIzaFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkOTQ2LjE3NlI3ZDBSOGQ4OTAuODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMjBSMTJkNTUuMjk2UjEzZDg0Ny44NzJSMTRhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEwN29SMWQ5OTYuMzUyUjJhZDQ5My41NjhkNDMwLjA4ZDY1MS4yNjRkNDMwLjA4ZDY1MS4yNjRkNDgzLjMyOGQ0MzAuMDhkNzI3LjA0ZDY1MS4yNjRkOTcwLjc1MmQ2NTEuMjY0ZDEwMjRkNDkzLjU2OGQxMDI0ZDI5MS44NGQ4MDUuODg4ZDIxMS45NjhkODA1Ljg4OGQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDIzNS41MTlkMjExLjk2OGQyMzUuNTE5ZDIxMS45NjhkNjQ4LjE5MmQyOTEuODRkNjQ4LjE5MmQ0OTMuNTY4ZDQzMC4wOGhSM2Q2NjEuNTA0UjRkNjUxLjI2NFI1ZDU1LjI5NlI2ZDc4OC40OFI3ZDBSOGQ3MzMuMTg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTA3UjEyZDU1LjI5NlIxM2Q2NjEuNTA0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjE5b1IxZDk5Ni4zNTJSMmFkMjE0LjAxNmQyODYuNzJkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDI4Ni43MmQ3OTIuNTc2ZDI4Ni43MmQ3OTIuNTc2ZDg3Mi40NDhkNzkyLjU3NmQ5MzQuOTEyZDc0OC4wMzJkOTc5LjQ1NmQ3MDMuNDg4ZDEwMjRkNjQxLjAyNGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkMjg2LjcyZDIxNC4wMTZkMjg2LjcyZDQwNC40OGQyMzYuNTQzZDI2OC4yODhkMjM2LjU0M2QzODAuOTI4ZDQ4LjEyN2Q0ODMuMzI4ZDQ4LjEyN2Q1OTUuOTY4ZDIzNi41NDNkNDU4Ljc1MmQyMzYuNTQzZDQzMC4wOGQxOTEuNDg3ZDQwNC40OGQyMzYuNTQzaFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkOTc1Ljg3MlI3ZDBSOGQ5MjAuNTc2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjE5UjEyZDU1LjI5NlIxM2Q4NDcuODcyUjE0YWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjEwNm9SMWQ5OTYuMzUyUjJhZDU5LjM5MmQyMzUuNTE5ZDIxNi4wNjRkMjM1LjUxOWQyMTYuMDY0ZDM5My4yMTZkNTkuMzkyZDM5My4yMTZkNTkuMzkyZDIzNS41MTlkMjE2LjA2NGQ0MzAuMDhkMjE2LjA2NGQxMDg4LjUxMmQyMTYuMDY0ZDExNDkuOTUyZDE3Mi4wMzJkMTE5My40NzJkMTI4ZDEyMzYuOTkyZDY2LjU2ZDEyMzYuOTkyZC0xOTEuNDg4ZDEyMzYuOTkyZC0xOTEuNDg4ZDEwNzkuMjk2ZDU5LjM5MmQxMDc5LjI5NmQ1OS4zOTJkNDMwLjA4ZDIxNi4wNjRkNDMwLjA4aFIzZDI0NC43MzZSNGQyMTYuMDY0UjVkLTE5MS40ODhSNmQ3ODguNDhSN2QtMjEyLjk5MlI4ZDk3OS45NjhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMDZSMTJkLTE5MS40ODhSMTNkMjQ0LjczNlIxNGFpMWkyaTJpMmkyaTFpMmkzaTNpMmkyaTJpMmkyaGc6MjE4b1IxZDk5Ni4zNTJSMmFkMjE0LjAxNmQyODYuNzJkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDI4Ni43MmQ3OTIuNTc2ZDI4Ni43MmQ3OTIuNTc2ZDg3Mi40NDhkNzkyLjU3NmQ5MzQuOTEyZDc0OC4wMzJkOTc5LjQ1NmQ3MDMuNDg4ZDEwMjRkNjQxLjAyNGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkMjg2LjcyZDIxNC4wMTZkMjg2LjcyZDMyNy42OGQyMzUuNTE5ZDM3OS45MDRkMjcuNjQ4ZDU0MC42NzJkMjcuNjQ4ZDQ4OC40NDhkMjM1LjUxOWQzMjcuNjhkMjM1LjUxOWhSM2Q4NDcuODcyUjRkNzkyLjU3NlI1ZDU1LjI5NlI2ZDk5Ni4zNTJSN2QwUjhkOTQxLjA1NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxOFIxMmQ1NS4yOTZSMTNkODQ3Ljg3MlIxNGFpMWkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmkxaTJpMmkyaTJoZzoxMDVvUjFkOTk2LjM1MlIyYWQ1My4yNDhkMTAyNGQ1My4yNDhkNDMwLjA4ZDIwOS45MmQ0MzAuMDhkMjA5LjkyZDEwMjRkNTMuMjQ4ZDEwMjRkNTMuMjQ4ZDIzNS41MTlkMjA5LjkyZDIzNS41MTlkMjA5LjkyZDM5My4yMTZkNTMuMjQ4ZDM5My4yMTZkNTMuMjQ4ZDIzNS41MTloUjNkMjM0LjQ5NlI0ZDIwOS45MlI1ZDUzLjI0OFI2ZDc4OC40OFI3ZDBSOGQ3MzUuMjMyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTA1UjEyZDUzLjI0OFIxM2QyMzQuNDk2UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MjE3b1IxZDk5Ni4zNTJSMmFkMjE0LjAxNmQyODYuNzJkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDI4Ni43MmQ3OTIuNTc2ZDI4Ni43MmQ3OTIuNTc2ZDg3Mi40NDhkNzkyLjU3NmQ5MzQuOTEyZDc0OC4wMzJkOTc5LjQ1NmQ3MDMuNDg4ZDEwMjRkNjQxLjAyNGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkMjg2LjcyZDIxNC4wMTZkMjg2LjcyZDQ2Ny45NjhkMjcuNjQ4ZDUyMC4xOTJkMjM1LjUxOWQzNTkuNDI0ZDIzNS41MTlkMzA3LjJkMjcuNjQ4ZDQ2Ny45NjhkMjcuNjQ4aFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkOTk2LjM1MlI3ZDBSOGQ5NDEuMDU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjE3UjEyZDU1LjI5NlIxM2Q4NDcuODcyUjE0YWkxaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTFpMmkyaTJpMmhnOjEwNG9SMWQ5OTYuMzUyUjJhZDUwOC45MjhkNDMwLjA4ZDU2OS4zNDRkNDMwLjA4ZDYxMy4zNzZkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQxMDI0ZDUwMC43MzZkMTAyNGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkMjM1LjUxOWQyMTEuOTY4ZDIzNS41MTlkMjExLjk2OGQ0MzAuMDhkNTA4LjkyOGQ0MzAuMDhoUjNkNjg0LjAzMlI0ZDY1Ny40MDhSNWQ1NS4yOTZSNmQ3ODguNDhSN2QwUjhkNzMzLjE4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEwNFIxMmQ1NS4yOTZSMTNkNjg0LjAzMlIxNGFpMWkzaTNpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjIxNm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxNlIxMmQwUjEzZDBSMTRhaGc6MTAzb1IxZDk5Ni4zNTJSMmFkNjQ1LjEyZDExMTAuMDE2ZDY0NS4xMmQxMTcxLjQ1NmQ2MDEuNmQxMjE0Ljk3NmQ1NTguMDhkMTI1OC40OTZkNDk2LjY0ZDEyNTguNDk2ZDEzNi4xOTJkMTI1OC40OTZkMTM2LjE5MmQxMTAwLjhkNDg4LjQ0OGQxMTAwLjhkNDg4LjQ0OGQxMDI0ZDE5MS40ODhkMTAyNGQxMzAuMDQ4ZDEwMjRkODYuMDE2ZDk3OS45NjhkNDEuOTg0ZDkzNS45MzZkNDEuOTg0ZDg3NS41MmQ0MS45ODRkNTc4LjU2ZDQxLjk4NGQ1MTguMTQ0ZDg2LjAxNmQ0NzQuMTExZDEzMC4wNDhkNDMwLjA4ZDE5MS40ODhkNDMwLjA4ZDQ5Ni42NGQ0MzAuMDhkNTU4LjA4ZDQzMC4wOGQ2MDEuNmQ0NzQuMTExZDY0NS4xMmQ1MTguMTQ0ZDY0NS4xMmQ1NzguNTZkNjQ1LjEyZDExMTAuMDE2ZDE5OC42NTZkNTg2Ljc1MmQxOTguNjU2ZDg2Ny4zMjhkNDg4LjQ0OGQ4NjcuMzI4ZDQ4OC40NDhkNTg2Ljc1MmQxOTguNjU2ZDU4Ni43NTJoUjNkNjk5LjM5MlI0ZDY0NS4xMlI1ZDQxLjk4NFI2ZDU5My45MlI3ZC0yMzQuNDk2UjhkNTUxLjkzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEwM1IxMmQ0MS45ODRSMTNkNjk5LjM5MlIxNGFpMWkzaTNpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmhnOjIxNW9SMWQ5OTYuMzUyUjJhZDUxOS4xNjhkNDk1LjYxNmQ1MTkuMTY4ZDU0Ni44MTZkMzg2LjA0OGQ3MTYuOGQ1MTkuMTY4ZDg4OC44MzJkNTE5LjE2OGQ5NDAuMDMyZDM1Ni4zNTJkOTQwLjAzMmQyODUuNjk2ZDg0NC44ZDI3NS40NTZkODYxLjE4NGQyNDkuODU2ZDg5My40NGQyMjQuMjU2ZDkyNS42OTZkMjE1LjA0ZDk0MC4wMzJkNTQuMjcyZDk0MC4wMzJkNTQuMjcyZDg4OC44MzJkMTg2LjM2OGQ3MTYuOGQ1NC4yNzJkNTQ2LjgxNmQ1NC4yNzJkNDk1LjYxNmQyMTYuMDY0ZDQ5NS42MTZkMjg1LjY5NmQ1OTEuODcyZDM1Ni4zNTJkNDk1LjYxNmQ1MTkuMTY4ZDQ5NS42MTZoUjNkNTU5LjEwNFI0ZDUxOS4xNjhSNWQ1NC4yNzJSNmQ1MjguMzg0UjdkODMuOTY4UjhkNDc0LjExMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxNVIxMmQ1NC4yNzJSMTNkNTU5LjEwNFIxNGFpMWkyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMmkyaTJoZzoxMDJvUjFkOTk2LjM1MlIyYWQ0MzEuMTA0ZDM5My4yMTZkMjEwLjk0NGQzOTMuMjE2ZDIxMC45NDRkNDMwLjA4ZDQzMS4xMDRkNDMwLjA4ZDQzMS4xMDRkNTg2Ljc1MmQyMTAuOTQ0ZDU4Ni43NTJkMjEwLjk0NGQxMDI0ZDU0LjI3MmQxMDI0ZDU0LjI3MmQzODRkNTQuMjcyZDMyMy41ODNkOTcuNzkyZDI3OS41NTJkMTQxLjMxMmQyMzUuNTE5ZDIwMy43NzZkMjM1LjUxOWQ0MzEuMTA0ZDIzNS41MTlkNDMxLjEwNGQzOTMuMjE2aFIzZDQ1MC41NlI0ZDQzMS4xMDRSNWQ1NC4yNzJSNmQ3ODguNDhSN2QwUjhkNzM0LjIwOFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEwMlIxMmQ1NC4yNzJSMTNkNDUwLjU2UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkyaGc6MjE0b1IxZDk5Ni4zNTJSMmFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDYxNi40NDhkNzcuODIzZDYxNi40NDhkMjM1LjUxOWQ0NTguNzUyZDIzNS41MTlkNDU4Ljc1MmQ3Ny44MjNkNjE2LjQ0OGQ3Ny44MjNkMzk3LjMxMmQ3Ny44MjNkMzk3LjMxMmQyMzUuNTE5ZDI0MC42NGQyMzUuNTE5ZDI0MC42NGQ3Ny44MjNkMzk3LjMxMmQ3Ny44MjNoUjNkODQ3Ljg3MlI0ZDc5Mi41NzZSNWQ1NS4yOTZSNmQ5NDYuMTc2UjdkMFI4ZDg5MC44OFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxNFIxMmQ1NS4yOTZSMTNkODQ3Ljg3MlIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEwMW9SMWQ5OTYuMzUyUjJhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyaFIzZDcwOC42MDhSNGQ2NTQuMzM2UjVkNTIuMjI0UjZkNTkzLjkyUjdkMFI4ZDU0MS42OTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMDFSMTJkNTIuMjI0UjEzZDcwOC42MDhSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmhnOjIxM29SMWQ5OTYuMzUyUjJhZDIwNi44NDhkMjg2LjcyZDY0MS4wMjRkMjg2LjcyZDcwMy40ODhkMjg2LjcyZDc0OC4wMzJkMzMxLjI2NGQ3OTIuNTc2ZDM3NS44MDhkNzkyLjU3NmQ0MzguMjcxZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQ0MzguMjcxZDU1LjI5NmQzNzQuNzg0ZDk5LjMyOGQzMzAuNzUxZDE0My4zNmQyODYuNzJkMjA2Ljg0OGQyODYuNzJkMjE0LjAxNmQ0NDYuNDYzZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQ0NDYuNDYzZDIxNC4wMTZkNDQ2LjQ2M2Q0OTguNjg4ZDExMy42NjNkNTM4LjYyNGQxMTMuNjYzZDU5Ni45OTJkNzUuNzc1ZDU5Ni45OTJkMjA0Ljc5OWQ1MzMuNTA0ZDIzMS40MjNkNDk1LjYxNmQyMzEuNDIzZDQ1Ny43MjhkMjMxLjQyM2QzOTguODQ4ZDE5OS42NzlkMzM5Ljk2OGQxNjcuOTM2ZDMxMC4yNzJkMTY3LjkzNmQyOTkuMDA4ZDE2Ny45MzZkMjU2ZDE2Ny45MzZkMjEyLjk5MmQyMDQuNzk5ZDIxMi45OTJkNzcuODIzZDI4Mi42MjRkNTAuMTc1ZDMxMC4yNzJkNTAuMTc1ZDM0OC4xNmQ1MC4xNzVkNDA3LjU1MmQ3OS44NzFkNDY2Ljk0NGQxMDkuNTY3ZDQ5OC42ODhkMTEzLjY2M2hSM2Q4NDcuODcyUjRkNzkyLjU3NlI1ZDU1LjI5NlI2ZDk3My44MjRSN2QwUjhkOTE4LjUyOFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxM1IxMmQ1NS4yOTZSMTNkODQ3Ljg3MlIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkzaTJpM2kzaTNpMmkzaTJpM2kzaTNoZzoxMDBvUjFkOTk2LjM1MlIyYWQ0NzAuMDE2ZDIzNS41MTlkNjI2LjY4OGQyMzUuNTE5ZDYyNi42ODhkMTAyNGQxNzIuMDMyZDEwMjRkMTEwLjU5MmQxMDI0ZDY3LjA3MmQ5NzkuOTY4ZDIzLjU1MmQ5MzUuOTM2ZDIzLjU1MmQ4NzUuNTJkMjMuNTUyZDU3OC41NmQyMy41NTJkNTE4LjE0NGQ2Ny4wNzJkNDc0LjExMWQxMTAuNTkyZDQzMC4wOGQxNzIuMDMyZDQzMC4wOGQ0NzAuMDE2ZDQzMC4wOGQ0NzAuMDE2ZDIzNS41MTlkMTgxLjI0OGQ1ODYuNzUyZDE4MS4yNDhkODY3LjMyOGQ0NzAuMDE2ZDg2Ny4zMjhkNDcwLjAxNmQ1ODYuNzUyZDE4MS4yNDhkNTg2Ljc1MmhSM2Q2ODMuMDA4UjRkNjI2LjY4OFI1ZDIzLjU1MlI2ZDc4OC40OFI3ZDBSOGQ3NjQuOTI4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTAwUjEyZDIzLjU1MlIxM2Q2ODMuMDA4UjE0YWkxaTJpMmkyaTNpM2kyaTNpM2kyaTJpMWkyaTJpMmkyaGc6MjEyb1IxZDk5Ni4zNTJSMmFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzZDQwNC40OGQyMzYuNTQzZDI2OC4yODhkMjM2LjU0M2QzODAuOTI4ZDQ4LjEyN2Q0ODMuMzI4ZDQ4LjEyN2Q1OTUuOTY4ZDIzNi41NDNkNDU4Ljc1MmQyMzYuNTQzZDQzMC4wOGQxOTEuNDg3ZDQwNC40OGQyMzYuNTQzaFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkOTc1Ljg3MlI3ZDBSOGQ5MjAuNTc2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjEyUjEyZDU1LjI5NlIxM2Q4NDcuODcyUjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzo5OW9SMWQ5OTYuMzUyUjJhZDY1My4zMTJkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ4NjcuMzI4ZDY1NC4zMzZkODY3LjMyOGQ2NTQuMzM2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkNjUzLjMxMmQ0MzAuMDhkNjUzLjMxMmQ1ODYuNzUyaFIzZDcxMS42OFI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ1OTMuOTJSN2QwUjhkNTQxLjY5NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTk5UjEyZDUyLjIyNFIxM2Q3MTEuNjhSMTRhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzoyMTFvUjFkOTk2LjM1MlIyYWQyMDYuODQ4ZDI4Ni43MmQ2NDEuMDI0ZDI4Ni43MmQ3MDMuNDg4ZDI4Ni43MmQ3NDguMDMyZDMzMS4yNjRkNzkyLjU3NmQzNzUuODA4ZDc5Mi41NzZkNDM4LjI3MWQ3OTIuNTc2ZDg3Mi40NDhkNzkyLjU3NmQ5MzQuOTEyZDc0OC4wMzJkOTc5LjQ1NmQ3MDMuNDg4ZDEwMjRkNjQxLjAyNGQxMDI0ZDIwNi44NDhkMTAyNGQxNDMuMzZkMTAyNGQ5OS4zMjhkOTc5Ljk2OGQ1NS4yOTZkOTM1LjkzNmQ1NS4yOTZkODcyLjQ0OGQ1NS4yOTZkNDM4LjI3MWQ1NS4yOTZkMzc0Ljc4NGQ5OS4zMjhkMzMwLjc1MWQxNDMuMzZkMjg2LjcyZDIwNi44NDhkMjg2LjcyZDIxNC4wMTZkNDQ2LjQ2M2QyMTQuMDE2ZDg2NC4yNTZkNjMxLjgwOGQ4NjQuMjU2ZDYzMS44MDhkNDQ2LjQ2M2QyMTQuMDE2ZDQ0Ni40NjNkMzQ4LjE2ZDIzNS41MTlkNDAwLjM4NGQyNy42NDhkNTYxLjE1MmQyNy42NDhkNTA4LjkyOGQyMzUuNTE5ZDM0OC4xNmQyMzUuNTE5aFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkOTk2LjM1MlI3ZDBSOGQ5NDEuMDU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjExUjEyZDU1LjI5NlIxM2Q4NDcuODcyUjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo5OG9SMWQ5OTYuMzUyUjJhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQ4NzUuNTJkNjU3LjQwOGQ5MzUuOTM2ZDYxMy44ODhkOTc5Ljk2OGQ1NzAuMzY4ZDEwMjRkNTA4LjkyOGQxMDI0ZDU1LjI5NmQxMDI0ZDU1LjI5NmQyMzUuNTE5ZDIxMS45NjhkMjM1LjUxOWQyMTEuOTY4ZDQzMC4wOGQ1MDguOTI4ZDQzMC4wOGQyMTEuOTY4ZDU4Ni43NTJkMjExLjk2OGQ4NjcuMzI4ZDUwMC43MzZkODY3LjMyOGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyaFIzZDY4My4wMDhSNGQ2NTcuNDA4UjVkNTUuMjk2UjZkNzg4LjQ4UjdkMFI4ZDczMy4xODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk5OFIxMmQ1NS4yOTZSMTNkNjgzLjAwOFIxNGFpMWkzaTNpMmkzaTNpMmkyaTJpMmkyaTFpMmkyaTJpMmhnOjIxMG9SMWQ5OTYuMzUyUjJhZDIwNi44NDhkMjg2LjcyZDY0MS4wMjRkMjg2LjcyZDcwMy40ODhkMjg2LjcyZDc0OC4wMzJkMzMxLjI2NGQ3OTIuNTc2ZDM3NS44MDhkNzkyLjU3NmQ0MzguMjcxZDc5Mi41NzZkODcyLjQ0OGQ3OTIuNTc2ZDkzNC45MTJkNzQ4LjAzMmQ5NzkuNDU2ZDcwMy40ODhkMTAyNGQ2NDEuMDI0ZDEwMjRkMjA2Ljg0OGQxMDI0ZDE0My4zNmQxMDI0ZDk5LjMyOGQ5NzkuOTY4ZDU1LjI5NmQ5MzUuOTM2ZDU1LjI5NmQ4NzIuNDQ4ZDU1LjI5NmQ0MzguMjcxZDU1LjI5NmQzNzQuNzg0ZDk5LjMyOGQzMzAuNzUxZDE0My4zNmQyODYuNzJkMjA2Ljg0OGQyODYuNzJkMjE0LjAxNmQ0NDYuNDYzZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQ0NDYuNDYzZDIxNC4wMTZkNDQ2LjQ2M2Q0NjcuOTY4ZDI3LjY0OGQ1MjAuMTkyZDIzNS41MTlkMzU5LjQyNGQyMzUuNTE5ZDMwNy4yZDI3LjY0OGQ0NjcuOTY4ZDI3LjY0OGhSM2Q4NDcuODcyUjRkNzkyLjU3NlI1ZDU1LjI5NlI2ZDk5Ni4zNTJSN2QwUjhkOTQxLjA1NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIxMFIxMmQ1NS4yOTZSMTNkODQ3Ljg3MlIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6OTdvUjFkOTk2LjM1MlIyYWQ1MDYuODhkNDMwLjA4ZDU2OC4zMmQ0MzAuMDhkNjExLjg0ZDQ3NC4xMTFkNjU1LjM2ZDUxOC4xNDRkNjU1LjM2ZDU3OC41NmQ2NTUuMzZkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDY0OC4xOTJkNDk4LjY4OGQ2NDguMTkyZDQ5OC42ODhkNTg2Ljc1MmQ1My4yNDhkNTg2Ljc1MmQ1My4yNDhkNDMwLjA4ZDUwNi44OGQ0MzAuMDhkNDk4LjY4OGQ4NjcuMzI4ZDQ5OC42ODhkNzg1LjQwOGQyMDkuOTJkNzg1LjQwOGQyMDkuOTJkODY3LjMyOGQ0OTguNjg4ZDg2Ny4zMjhoUjNkNzEwLjY1NlI0ZDY1NS4zNlI1ZDUzLjI0OFI2ZDU5My45MlI3ZDBSOGQ1NDAuNjcyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpOTdSMTJkNTMuMjQ4UjEzZDcxMC42NTZSMTRhaTFpM2kzaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MjA5b1IxZDk5Ni4zNTJSMmFkNjMzLjg1NmQ3NzguMjRkNjMzLjg1NmQyODYuNzJkNzk0LjYyNGQyODYuNzJkNzk0LjYyNGQxMDI0ZDYzMC43ODRkMTAyNGQyMTYuMDY0ZDUzMC40MzJkMjE2LjA2NGQxMDI0ZDU3LjM0NGQxMDI0ZDU3LjM0NGQyODYuNzJkMjIxLjE4NGQyODYuNzJkNjMzLjg1NmQ3NzguMjRkNTEwLjk3NmQxMTMuNjYzZDU1MC45MTJkMTEzLjY2M2Q2MDkuMjhkNzUuNzc1ZDYwOS4yOGQyMDQuNzk5ZDU0NS43OTJkMjMxLjQyM2Q1MDcuOTA0ZDIzMS40MjNkNDcwLjAxNmQyMzEuNDIzZDQxMS4xMzZkMTk5LjY3OWQzNTIuMjU2ZDE2Ny45MzZkMzIyLjU2ZDE2Ny45MzZkMzExLjI5NmQxNjcuOTM2ZDI2OC4yODhkMTY3LjkzNmQyMjUuMjhkMjA0Ljc5OWQyMjUuMjhkNzcuODIzZDI5NC45MTJkNTAuMTc1ZDMyMi41NmQ1MC4xNzVkMzYwLjQ0OGQ1MC4xNzVkNDE5Ljg0ZDc5Ljg3MWQ0NzkuMjMyZDEwOS41NjdkNTEwLjk3NmQxMTMuNjYzaFIzZDg1MS45NjhSNGQ3OTQuNjI0UjVkNTcuMzQ0UjZkOTczLjgyNFI3ZDBSOGQ5MTYuNDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDlSMTJkNTcuMzQ0UjEzZDg1MS45NjhSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkxaTNpMmkzaTNpM2kyaTNpMmkzaTNpM2hnOjk2b1IxZDk5Ni4zNTJSMmFkMTkzLjUzNmQ1MS4xOTlkMjQ1Ljc2ZDI1OS4wNzJkODQuOTkyZDI1OS4wNzJkMzIuNzY4ZDUxLjE5OWQxOTMuNTM2ZDUxLjE5OWhSM2QyNzguNTI4UjRkMjQ1Ljc2UjVkMzIuNzY4UjZkOTcyLjhSN2Q3NjQuOTI4UjhkOTQwLjAzMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTk2UjEyZDMyLjc2OFIxM2QyNzguNTI4UjE0YWkxaTJpMmkyaTJoZzoyMDhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDhSMTJkMFIxM2QwUjE0YWhnOjk1b1IxZDk5Ni4zNTJSMmFkNzc5LjI2NGQxMDI2LjA0OGQ3NzkuMjY0ZDExODIuNzJkNTUuMjk2ZDExODIuNzJkNTUuMjk2ZDEwMjYuMDQ4ZDc3OS4yNjRkMTAyNi4wNDhoUjNkODQ3Ljg3MlI0ZDc3OS4yNjRSNWQ1NS4yOTZSNmQtMi4wNDhSN2QtMTU4LjcyUjhkLTU3LjM0NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTk1UjEyZDU1LjI5NlIxM2Q4NDcuODcyUjE0YWkxaTJpMmkyaTJoZzoyMDdvUjFkOTk2LjM1MlIyYWQ3NS43NzZkMTAyNGQ3NS43NzZkMjg2LjcyZDIzNS41MmQyODYuNzJkMjM1LjUyZDEwMjRkNzUuNzc2ZDEwMjRkMzQ2LjExMmQ3Ny44MjNkMzQ2LjExMmQyMzUuNTE5ZDE4OC40MTZkMjM1LjUxOWQxODguNDE2ZDc3LjgyM2QzNDYuMTEyZDc3LjgyM2QxMjYuOTc2ZDc3LjgyM2QxMjYuOTc2ZDIzNS41MTlkLTI5LjY5NmQyMzUuNTE5ZC0yOS42OTZkNzcuODIzZDEyNi45NzZkNzcuODIzaFIzZDIyNS4yOFI0ZDM0Ni4xMTJSNWQtMjkuNjk2UjZkOTQ2LjE3NlI3ZDBSOGQ5NzUuODcyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjA3UjEyZC0yOS42OTZSMTNkMjI1LjI4UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjk0b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpOTRSMTJkMFIxM2QwUjE0YWhnOjIwNm9SMWQ5OTYuMzUyUjJhZDYzLjQ4OGQxMDI0ZDYzLjQ4OGQyODYuNzJkMjIzLjIzMmQyODYuNzJkMjIzLjIzMmQxMDI0ZDYzLjQ4OGQxMDI0ZDEyMy45MDRkMjM2LjU0M2QtMTIuMjg4ZDIzNi41NDNkMTAwLjM1MmQ0OC4xMjdkMjAyLjc1MmQ0OC4xMjdkMzE1LjM5MmQyMzYuNTQzZDE3OC4xNzZkMjM2LjU0M2QxNDkuNTA0ZDE5MS40ODdkMTIzLjkwNGQyMzYuNTQzaFIzZDIyNS4yOFI0ZDMxNS4zOTJSNWQtMTIuMjg4UjZkOTc1Ljg3MlI3ZDBSOGQ5ODguMTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDZSMTJkLTEyLjI4OFIxM2QyMjUuMjhSMTRhaTFpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzo5M29SMWQ5OTYuMzUyUjJhZDUyLjIyNGQ0NDMuMzkxZDUyLjIyNGQyODYuNzJkMjY4LjI4OGQyODYuNzJkMjY4LjI4OGQxMDI0ZDUyLjIyNGQxMDI0ZDUyLjIyNGQ4NjcuMzI4ZDExMC41OTJkODY3LjMyOGQxMTAuNTkyZDQ0My4zOTFkNTIuMjI0ZDQ0My4zOTFoUjNkMjgyLjYyNFI0ZDI2OC4yODhSNWQ1Mi4yMjRSNmQ3MzcuMjhSN2QwUjhkNjg1LjA1NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTkzUjEyZDUyLjIyNFIxM2QyODIuNjI0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmhnOjIwNW9SMWQ5OTYuMzUyUjJhZDQzLjAwOGQxMDI0ZDQzLjAwOGQyODYuNzJkMjAyLjc1MmQyODYuNzJkMjAyLjc1MmQxMDI0ZDQzLjAwOGQxMDI0ZDM2Ljg2NGQyMzUuNTE5ZDg5LjA4OGQyNy42NDhkMjQ5Ljg1NmQyNy42NDhkMTk3LjYzMmQyMzUuNTE5ZDM2Ljg2NGQyMzUuNTE5aFIzZDIyNS4yOFI0ZDI0OS44NTZSNWQzNi44NjRSNmQ5OTYuMzUyUjdkMFI4ZDk1OS40ODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDVSMTJkMzYuODY0UjEzZDIyNS4yOFIxNGFpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjkyb1IxZDk5Ni4zNTJSMmFkNS4xMmQyODYuNzJkNjEuNDRkMjg2LjcyZDUzMy41MDRkODY2LjMwNGQ1MzMuNTA0ZDEwMjRkNDc3LjE4NGQxMDI0ZDUuMTJkNDQ0LjQxNWQ1LjEyZDI4Ni43MmhSM2Q1MzIuNDhSNGQ1MzMuNTA0UjVkNS4xMlI2ZDczNy4yOFI3ZDBSOGQ3MzIuMTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk5MlIxMmQ1LjEyUjEzZDUzMi40OFIxNGFpMWkyaTJpMmkyaTJpMmhnOjIwNG9SMWQ5OTYuMzUyUjJhZDk3LjI4ZDEwMjRkOTcuMjhkMjg2LjcyZDI1Ny4wMjRkMjg2LjcyZDI1Ny4wMjRkMTAyNGQ5Ny4yOGQxMDI0ZDE5Ny42MzJkMjcuNjQ4ZDI0OS44NTZkMjM1LjUxOWQ4OS4wODhkMjM1LjUxOWQzNi44NjRkMjcuNjQ4ZDE5Ny42MzJkMjcuNjQ4aFIzZDIyNS4yOFI0ZDI1Ny4wMjRSNWQzNi44NjRSNmQ5OTYuMzUyUjdkMFI4ZDk1OS40ODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDRSMTJkMzYuODY0UjEzZDIyNS4yOFIxNGFpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjkxb1IxZDk5Ni4zNTJSMmFkNTUuMjk2ZDEwMjRkNTUuMjk2ZDI4Ni43MmQyNzEuMzZkMjg2LjcyZDI3MS4zNmQ0NDMuMzkxZDIxMS45NjhkNDQzLjM5MWQyMTEuOTY4ZDg2Ny4zMjhkMjcxLjM2ZDg2Ny4zMjhkMjcxLjM2ZDEwMjRkNTUuMjk2ZDEwMjRoUjNkMjgxLjZSNGQyNzEuMzZSNWQ1NS4yOTZSNmQ3MzcuMjhSN2QwUjhkNjgxLjk4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTkxUjEyZDU1LjI5NlIxM2QyODEuNlIxNGFpMWkyaTJpMmkyaTJpMmkyaTJoZzoyMDNvUjFkOTk2LjM1MlIyYWQ3NDAuMzUyZDI4Ni43MmQ3NDAuMzUyZDQ0Ni40NjNkMjIwLjE2ZDQ0Ni40NjNkMjIwLjE2ZDU3NS40ODhkNjM4Ljk3NmQ1NzUuNDg4ZDYzOC45NzZkNzM1LjIzMmQyMjAuMTZkNzM1LjIzMmQyMjAuMTZkODY0LjI1NmQ3NDAuMzUyZDg2NC4yNTZkNzQwLjM1MmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQyODYuNzJkNzQwLjM1MmQyODYuNzJkNTk0Ljk0NGQ3Ny44MjNkNTk0Ljk0NGQyMzUuNTE5ZDQzNy4yNDhkMjM1LjUxOWQ0MzcuMjQ4ZDc3LjgyM2Q1OTQuOTQ0ZDc3LjgyM2QzNzUuODA4ZDc3LjgyM2QzNzUuODA4ZDIzNS41MTlkMjE5LjEzNmQyMzUuNTE5ZDIxOS4xMzZkNzcuODIzZDM3NS44MDhkNzcuODIzaFIzZDc4NC4zODRSNGQ3NDAuMzUyUjVkNTkuMzkyUjZkOTQ2LjE3NlI3ZDBSOGQ4ODYuNzg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjAzUjEyZDU5LjM5MlIxM2Q3ODQuMzg0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo5MG9SMWQ5OTYuMzUyUjJhZDUyLjIyNGQ0NDYuNDYzZDUyLjIyNGQyODYuNzJkNzg5LjUwNGQyODYuNzJkNzg5LjUwNGQ0NDkuNTM1ZDI5NS45MzZkODY0LjI1NmQ3ODkuNTA0ZDg2NC4yNTZkNzg5LjUwNGQxMDI0ZDUyLjIyNGQxMDI0ZDUyLjIyNGQ4NjEuMTg0ZDU0NS43OTJkNDQ2LjQ2M2Q1Mi4yMjRkNDQ2LjQ2M2hSM2Q4NDAuNzA0UjRkNzg5LjUwNFI1ZDUyLjIyNFI2ZDczNy4yOFI3ZDBSOGQ2ODUuMDU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpOTBSMTJkNTIuMjI0UjEzZDg0MC43MDRSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjIwMm9SMWQ5OTYuMzUyUjJhZDc0MC4zNTJkMjg2LjcyZDc0MC4zNTJkNDQ2LjQ2M2QyMjAuMTZkNDQ2LjQ2M2QyMjAuMTZkNTc1LjQ4OGQ2MzguOTc2ZDU3NS40ODhkNjM4Ljk3NmQ3MzUuMjMyZDIyMC4xNmQ3MzUuMjMyZDIyMC4xNmQ4NjQuMjU2ZDc0MC4zNTJkODY0LjI1NmQ3NDAuMzUyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQ3NDAuMzUyZDI4Ni43MmQzNzIuNzM2ZDIzNi41NDNkMjM2LjU0NGQyMzYuNTQzZDM0OS4xODRkNDguMTI3ZDQ1MS41ODRkNDguMTI3ZDU2NC4yMjRkMjM2LjU0M2Q0MjcuMDA4ZDIzNi41NDNkMzk4LjMzNmQxOTEuNDg3ZDM3Mi43MzZkMjM2LjU0M2hSM2Q3ODQuMzg0UjRkNzQwLjM1MlI1ZDU5LjM5MlI2ZDk3NS44NzJSN2QwUjhkOTE2LjQ4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjAyUjEyZDU5LjM5MlIxM2Q3ODQuMzg0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjg5b1IxZDk5Ni4zNTJSMmFkNjY4LjY3MmQyODYuNzJkODYwLjE2ZDI4Ni43MmQ1MTguMTQ0ZDc0OS41NjhkNTE4LjE0NGQxMDI0ZDM1OC40ZDEwMjRkMzU4LjRkNzQ4LjU0NGQyMjQuMjU2ZDU2OC4zMTlkMTcuNDA4ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQ0MzguMjcyZDU3Ny41MzZkNjY4LjY3MmQyODYuNzJoUjNkODI1LjM0NFI0ZDg2MC4xNlI1ZDE3LjQwOFI2ZDczNy4yOFI3ZDBSOGQ3MTkuODcyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpODlSMTJkMTcuNDA4UjEzZDgyNS4zNDRSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjIwMW9SMWQ5OTYuMzUyUjJhZDc0MC4zNTJkMjg2LjcyZDc0MC4zNTJkNDQ2LjQ2M2QyMjAuMTZkNDQ2LjQ2M2QyMjAuMTZkNTc1LjQ4OGQ2MzguOTc2ZDU3NS40ODhkNjM4Ljk3NmQ3MzUuMjMyZDIyMC4xNmQ3MzUuMjMyZDIyMC4xNmQ4NjQuMjU2ZDc0MC4zNTJkODY0LjI1NmQ3NDAuMzUyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQ3NDAuMzUyZDI4Ni43MmQzMTYuNDE2ZDIzNS41MTlkMzY4LjY0ZDI3LjY0OGQ1MjkuNDA4ZDI3LjY0OGQ0NzcuMTg0ZDIzNS41MTlkMzE2LjQxNmQyMzUuNTE5aFIzZDc4NC4zODRSNGQ3NDAuMzUyUjVkNTkuMzkyUjZkOTk2LjM1MlI3ZDBSOGQ5MzYuOTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMDFSMTJkNTkuMzkyUjEzZDc4NC4zODRSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6ODhvUjFkOTk2LjM1MlIyYWQ2MTkuNTJkMjg2LjcyZDc4NC4zODRkMjg2LjcyZDc4NC4zODRkMzQwLjk5MWQ1MjAuMTkyZDY1NS4zNmQ3ODQuMzg0ZDk2OC43MDRkNzg0LjM4NGQxMDI0ZDYxOS41MmQxMDI0ZDQxNC43MmQ3ODIuMzM2ZDIxMS45NjhkMTAyNGQ0Ny4xMDRkMTAyNGQ0Ny4xMDRkOTY5LjcyOGQzMTAuMjcyZDY1NS4zNmQ0Ny4xMDRkMzQwLjk5MWQ0Ny4xMDRkMjg2LjcyZDIxMS45NjhkMjg2LjcyZDQxNi43NjhkNTI5LjQwOGQ0NDYuNDY0ZDQ5MS41MmQ1MTkuMTY4ZDQwNi4wMTVkNTkxLjg3MmQzMjAuNTExZDYxOS41MmQyODYuNzJoUjNkODMxLjQ4OFI0ZDc4NC4zODRSNWQ0Ny4xMDRSNmQ3MzcuMjhSN2QwUjhkNjkwLjE3NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTg4UjEyZDQ3LjEwNFIxM2Q4MzEuNDg4UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2hnOjIwMG9SMWQ5OTYuMzUyUjJhZDc0MC4zNTJkMjg2LjcyZDc0MC4zNTJkNDQ2LjQ2M2QyMjAuMTZkNDQ2LjQ2M2QyMjAuMTZkNTc1LjQ4OGQ2MzguOTc2ZDU3NS40ODhkNjM4Ljk3NmQ3MzUuMjMyZDIyMC4xNmQ3MzUuMjMyZDIyMC4xNmQ4NjQuMjU2ZDc0MC4zNTJkODY0LjI1NmQ3NDAuMzUyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQ3NDAuMzUyZDI4Ni43MmQ0NDYuNDY0ZDI3LjY0OGQ0OTguNjg4ZDIzNS41MTlkMzM3LjkyZDIzNS41MTlkMjg1LjY5NmQyNy42NDhkNDQ2LjQ2NGQyNy42NDhoUjNkNzg0LjM4NFI0ZDc0MC4zNTJSNWQ1OS4zOTJSNmQ5OTYuMzUyUjdkMFI4ZDkzNi45NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIwMFIxMmQ1OS4zOTJSMTNkNzg0LjM4NFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkxaTJpMmkyaTJoZzo4N29SMWQ5OTYuMzUyUjJhZDk5NS4zMjhkMjg2LjcyZDExNjMuMjY0ZDI4Ni43MmQ4OTQuOTc2ZDEwMjRkNzczLjEyZDEwMjRkNTk5LjA0ZDU0OS44ODdkNTMzLjUwNGQ3MzAuMTEyZDQyNS45ODRkMTAyNGQzMDQuMTI4ZDEwMjRkMzUuODRkMjg2LjcyZDIwNC44ZDI4Ni43MmQzNjUuNTY4ZDcyNi4wMTZkMzkxLjE2OGQ2NTcuNDA4ZDUyNi4zMzZkMjg2LjcyZDY3Mi43NjhkMjg2LjcyZDgzNC41NmQ3MjYuMDE2ZDg2MC4xNmQ2NTcuNDA4ZDk5NS4zMjhkMjg2LjcyaFIzZDEyMDcuMjk2UjRkMTE2My4yNjRSNWQzNS44NFI2ZDczNy4yOFI3ZDBSOGQ3MDEuNDRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk4N1IxMmQzNS44NFIxM2QxMjA3LjI5NlIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MTk5b1IxZDk5Ni4zNTJSMmFkNzkyLjU3NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2QyMTYuMDY0ZDg2NC4yNTZkNzkyLjU3NmQ4NjQuMjU2ZDc5Mi41NzZkMTAyNGQ1NDMuNzQ0ZDEwMjRkNDk1LjYxNmQxMTgzLjc0NGQzMzQuODQ4ZDExODMuNzQ0ZDM4Mi45NzZkMTAyNGQyMDguODk2ZDEwMjRkMTQ1LjQwOGQxMDI0ZDEwMS4zNzZkOTc5Ljk2OGQ1Ny4zNDRkOTM1LjkzNmQ1Ny4zNDRkODcyLjQ0OGQ1Ny4zNDRkNDM4LjI3MWQ1Ny4zNDRkMzc0Ljc4NGQxMDEuMzc2ZDMzMC43NTFkMTQ1LjQwOGQyODYuNzJkMjA4Ljg5NmQyODYuNzJkNzkyLjU3NmQyODYuNzJkNzkyLjU3NmQ0NDYuNDYzaFIzZDg0MS43MjhSNGQ3OTIuNTc2UjVkNTcuMzQ0UjZkNzM3LjI4UjdkLTE1OS43NDRSOGQ2NzkuOTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTk5UjEyZDU3LjM0NFIxM2Q4NDEuNzI4UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzo4Nm9SMWQ5OTYuMzUyUjJhZDUyOS40MDhkODIyLjI3MWQ4MzguNjU2ZDI4Ni43MmQxMDIxLjk1MmQyODYuNzJkNTk0Ljk0NGQxMDI0ZDQ2Mi44NDhkMTAyNGQzNS44NGQyODYuNzJkMjIwLjE2ZDI4Ni43MmQ1MjkuNDA4ZDgyMi4yNzFoUjNkMTAyNy4wNzJSNGQxMDIxLjk1MlI1ZDM1Ljg0UjZkNzM3LjI4UjdkMFI4ZDcwMS40NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTg2UjEyZDM1Ljg0UjEzZDEwMjcuMDcyUjE0YWkxaTJpMmkyaTJpMmkyaTJoZzoxOThvUjFkOTk2LjM1MlIyYWQ3OTIuNTc2ZDQ0Ni40NjNkNzkyLjU3NmQ1NzUuNDg4ZDEyMTEuMzkyZDU3NS40ODhkMTIxMS4zOTJkNzM1LjIzMmQ3OTIuNTc2ZDczNS4yMzJkNzkyLjU3NmQ4NjQuMjU2ZDEzMTMuNzkyZDg2NC4yNTZkMTMxMy43OTJkMTAyNGQ2MzMuODU2ZDEwMjRkNjMzLjg1NmQ3ODYuNDMyZDIxNi4wNjRkNzg2LjQzMmQyMTYuMDY0ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NS44MDhkOTkuODRkMzMxLjI2NGQxNDQuMzg0ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQxMzEzLjc5MmQyODYuNzJkMTMxMy43OTJkNDQ2LjQ2M2Q3OTIuNTc2ZDQ0Ni40NjNkNjMzLjg1NmQ2MjYuNjg4ZDYzMy44NTZkNDQ2LjQ2M2QyMTYuMDY0ZDQ0Ni40NjNkMjE2LjA2NGQ2MjYuNjg4ZDYzMy44NTZkNjI2LjY4OGhSM2QxNDA4UjRkMTMxMy43OTJSNWQ1NS4yOTZSNmQ3MzcuMjhSN2QwUjhkNjgxLjk4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE5OFIxMmQ1NS4yOTZSMTNkMTQwOFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTJpMmkxaTJpMmkyaTJoZzo4NW9SMWQ5OTYuMzUyUjJhZDIxNC4wMTZkMjg2LjcyZDIxNC4wMTZkODY0LjI1NmQ2MzEuODA4ZDg2NC4yNTZkNjMxLjgwOGQyODYuNzJkNzkyLjU3NmQyODYuNzJkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDI4Ni43MmQyMTQuMDE2ZDI4Ni43MmhSM2Q4NDcuODcyUjRkNzkyLjU3NlI1ZDU1LjI5NlI2ZDczNy4yOFI3ZDBSOGQ2ODEuOTg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpODVSMTJkNTUuMjk2UjEzZDg0Ny44NzJSMTRhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzoxOTdvUjFkOTk2LjM1MlIyYWQyMTAuOTQ0ZDI4Ni43MmQ2NDQuMDk2ZDI4Ni43MmQ3MDcuNTg0ZDI4Ni43MmQ3NTIuMTI4ZDMzMS4yNjRkNzk2LjY3MmQzNzUuODA4ZDc5Ni42NzJkNDM4LjI3MWQ3OTYuNjcyZDEwMjRkNjM1LjkwNGQxMDI0ZDYzNS45MDRkNzg2LjQzMmQyMTguMTEyZDc4Ni40MzJkMjE4LjExMmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQ0MzguMjcxZDU5LjM5MmQzNzQuNzg0ZDEwMy40MjRkMzMwLjc1MWQxNDcuNDU2ZDI4Ni43MmQyMTAuOTQ0ZDI4Ni43MmQyMTguMTEyZDYyNi42ODhkNjM1LjkwNGQ2MjYuNjg4ZDYzNS45MDRkNDQ2LjQ2M2QyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ2MjYuNjg4ZDM4Ni4wNDhkMjguNjcyZDQzOC4yNzJkMjguNjcyZDQ3MC4wMTZkMjguNjcyZDQ5My4wNTZkNTEuNzExZDUxNi4wOTZkNzQuNzUxZDUxNi4wOTZkMTA2LjQ5NWQ1MTYuMDk2ZDE1Ni42NzJkNTE2LjA5NmQxODguNDE1ZDQ5My4wNTZkMjExLjQ1NmQ0NzAuMDE2ZDIzNC40OTVkNDM4LjI3MmQyMzQuNDk1ZDM4Ni4wNDhkMjM0LjQ5NWQzNTQuMzA0ZDIzNC40OTVkMzMwLjc1MmQyMTEuNDU2ZDMwNy4yZDE4OC40MTVkMzA3LjJkMTU2LjY3MmQzMDcuMmQxMDYuNDk1ZDMwNy4yZDc0Ljc1MWQzMzAuNzUyZDUxLjcxMWQzNTQuMzA0ZDI4LjY3MmQzODYuMDQ4ZDI4LjY3MmQzODYuMDQ4ZDEwOC41NDNkMzg2LjA0OGQxNjMuODRkNDM4LjI3MmQxNjMuODRkNDM4LjI3MmQxMDguNTQzZDM4Ni4wNDhkMTA4LjU0M2hSM2Q4NTYuMDY0UjRkNzk2LjY3MlI1ZDU5LjM5MlI2ZDk5NS4zMjhSN2QwUjhkOTM1LjkzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE5N1IxMmQ1OS4zOTJSMTNkODU2LjA2NFIxNGFpMWkyaTNpM2kyaTJpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzo4NG9SMWQ5OTYuMzUyUjJhZDIwLjQ4ZDI4Ni43MmQ3NTcuNzZkMjg2LjcyZDc1Ny43NmQ0NDYuNDYzZDQ2OC45OTJkNDQ2LjQ2M2Q0NjguOTkyZDEwMjRkMzA5LjI0OGQxMDI0ZDMwOS4yNDhkNDQ2LjQ2M2QyMC40OGQ0NDYuNDYzZDIwLjQ4ZDI4Ni43MmhSM2Q3NzcuMjE2UjRkNzU3Ljc2UjVkMjAuNDhSNmQ3MzcuMjhSN2QwUjhkNzE2LjhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk4NFIxMmQyMC40OFIxM2Q3NzcuMjE2UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmhnOjE5Nm9SMWQ5OTYuMzUyUjJhZDIxMC45NDRkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkMTAyNGQ2MzUuOTA0ZDEwMjRkNjM1LjkwNGQ3ODYuNDMyZDIxOC4xMTJkNzg2LjQzMmQyMTguMTEyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDQzOC4yNzFkNTkuMzkyZDM3NC43ODRkMTAzLjQyNGQzMzAuNzUxZDE0Ny40NTZkMjg2LjcyZDIxMC45NDRkMjg2LjcyZDIxOC4xMTJkNjI2LjY4OGQ2MzUuOTA0ZDYyNi42ODhkNjM1LjkwNGQ0NDYuNDYzZDIxOC4xMTJkNDQ2LjQ2M2QyMTguMTEyZDYyNi42ODhkNjIwLjU0NGQ3Ny44MjNkNjIwLjU0NGQyMzUuNTE5ZDQ2Mi44NDhkMjM1LjUxOWQ0NjIuODQ4ZDc3LjgyM2Q2MjAuNTQ0ZDc3LjgyM2Q0MDEuNDA4ZDc3LjgyM2Q0MDEuNDA4ZDIzNS41MTlkMjQ0LjczNmQyMzUuNTE5ZDI0NC43MzZkNzcuODIzZDQwMS40MDhkNzcuODIzaFIzZDg1Ni4wNjRSNGQ3OTYuNjcyUjVkNTkuMzkyUjZkOTQ2LjE3NlI3ZDBSOGQ4ODYuNzg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTk2UjEyZDU5LjM5MlIxM2Q4NTYuMDY0UjE0YWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6ODNvUjFkOTk2LjM1MlIyYWQ3ODkuNTA0ZDQzOC4yNzFkNzg5LjUwNGQ1MDYuODhkNjI4LjczNmQ1MDYuODhkNjI4LjczNmQ0NDYuNDYzZDIxMC45NDRkNDQ2LjQ2M2QyMTAuOTQ0ZDU3NS40ODhkNjM3Ljk1MmQ1NzUuNDg4ZDcwMC40MTZkNTc1LjQ4OGQ3NDQuOTZkNjIwLjAzMWQ3ODkuNTA0ZDY2NC41NzZkNzg5LjUwNGQ3MjcuMDRkNzg5LjUwNGQ4NzIuNDQ4ZDc4OS41MDRkOTM0LjkxMmQ3NDQuOTZkOTc5LjQ1NmQ3MDAuNDE2ZDEwMjRkNjM3Ljk1MmQxMDI0ZDIwMy43NzZkMTAyNGQxNDEuMzEyZDEwMjRkOTYuNzY4ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3Mi40NDhkNTIuMjI0ZDgwMy44NGQyMTAuOTQ0ZDgwMy44NGQyMTAuOTQ0ZDg2NC4yNTZkNjI4LjczNmQ4NjQuMjU2ZDYyOC43MzZkNzM1LjIzMmQyMDMuNzc2ZDczNS4yMzJkMTQxLjMxMmQ3MzUuMjMyZDk2Ljc2OGQ2OTEuMmQ1Mi4yMjRkNjQ3LjE2OGQ1Mi4yMjRkNTgzLjY4ZDUyLjIyNGQ0MzguMjcxZDUyLjIyNGQzNzQuNzg0ZDk2Ljc2OGQzMzAuNzUxZDE0MS4zMTJkMjg2LjcyZDIwMy43NzZkMjg2LjcyZDYzNy45NTJkMjg2LjcyZDcwMC40MTZkMjg2LjcyZDc0NC45NmQzMzEuMjY0ZDc4OS41MDRkMzc1LjgwOGQ3ODkuNTA0ZDQzOC4yNzFoUjNkODQxLjcyOFI0ZDc4OS41MDRSNWQ1Mi4yMjRSNmQ3MzcuMjhSN2QwUjhkNjg1LjA1NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTgzUjEyZDUyLjIyNFIxM2Q4NDEuNzI4UjE0YWkxaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkzaTNoZzoxOTVvUjFkOTk2LjM1MlIyYWQyMTAuOTQ0ZDI4Ni43MmQ2NDQuMDk2ZDI4Ni43MmQ3MDcuNTg0ZDI4Ni43MmQ3NTIuMTI4ZDMzMS4yNjRkNzk2LjY3MmQzNzUuODA4ZDc5Ni42NzJkNDM4LjI3MWQ3OTYuNjcyZDEwMjRkNjM1LjkwNGQxMDI0ZDYzNS45MDRkNzg2LjQzMmQyMTguMTEyZDc4Ni40MzJkMjE4LjExMmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQ0MzguMjcxZDU5LjM5MmQzNzQuNzg0ZDEwMy40MjRkMzMwLjc1MWQxNDcuNDU2ZDI4Ni43MmQyMTAuOTQ0ZDI4Ni43MmQyMTguMTEyZDYyNi42ODhkNjM1LjkwNGQ2MjYuNjg4ZDYzNS45MDRkNDQ2LjQ2M2QyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ2MjYuNjg4ZDQ5Mi41NDRkMTEzLjY2M2Q1MzIuNDhkMTEzLjY2M2Q1OTAuODQ4ZDc1Ljc3NWQ1OTAuODQ4ZDIwNC43OTlkNTI3LjM2ZDIzMS40MjNkNDg5LjQ3MmQyMzEuNDIzZDQ1MS41ODRkMjMxLjQyM2QzOTIuNzA0ZDE5OS42NzlkMzMzLjgyNGQxNjcuOTM2ZDMwNC4xMjhkMTY3LjkzNmQyOTIuODY0ZDE2Ny45MzZkMjQ5Ljg1NmQxNjcuOTM2ZDIwNi44NDhkMjA0Ljc5OWQyMDYuODQ4ZDc3LjgyM2QyNzUuNDU2ZDUwLjE3NWQzMDQuMTI4ZDUwLjE3NWQzNDIuMDE2ZDUwLjE3NWQ0MDEuNDA4ZDc5Ljg3MWQ0NjAuOGQxMDkuNTY3ZDQ5Mi41NDRkMTEzLjY2M2hSM2Q4NTYuMDY0UjRkNzk2LjY3MlI1ZDU5LjM5MlI2ZDk3My44MjRSN2QwUjhkOTE0LjQzMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE5NVIxMmQ1OS4zOTJSMTNkODU2LjA2NFIxNGFpMWkyaTNpM2kyaTJpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkzaTJpM2kzaTNpMmkzaTJpM2kzaTNoZzo4Mm9SMWQ5OTYuMzUyUjJhZDc5My42ZDQzOS4yOTVkNzkzLjZkNjI5Ljc2ZDc5My42ZDY5Mi4yMjNkNzQ4LjU0NGQ3MzYuNzY4ZDcwMy40ODhkNzgxLjMxMmQ2NDEuMDI0ZDc4MS4zMTJkNjMzLjg1NmQ3ODEuMzEyZDc5My42ZDk2OS43MjhkNzkzLjZkMTAyNGQ2MjkuNzZkMTAyNGQ0MjUuOTg0ZDc4MS4zMTJkMjE1LjA0ZDc4Mi4zMzZkMjE4LjExMmQ3ODIuMzM2ZDIxOC4xMTJkNzg4LjQ4ZDIxNi4wNjRkNzg4LjQ4ZDIxNS4wNGQ3ODcuNDU2ZDIxNS4wNGQxMDI0ZDU2LjMyZDEwMjRkNTYuMzJkMjg3Ljc0NGQ2NDEuMDI0ZDI4Ny43NDRkNzAzLjQ4OGQyODcuNzQ0ZDc0OC41NDRkMzMyLjI4OGQ3OTMuNmQzNzYuODMyZDc5My42ZDQzOS4yOTVkMjE1LjA0ZDQ0Ni40NjNkMjE1LjA0ZDYyMS41NjhkNjMyLjgzMmQ2MjEuNTY4ZDYzMi44MzJkNDQ2LjQ2M2QyMTUuMDRkNDQ2LjQ2M2hSM2Q4NDQuOFI0ZDc5My42UjVkNTYuMzJSNmQ3MzYuMjU2UjdkMFI4ZDY3OS45MzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk4MlIxMmQ1Ni4zMlIxM2Q4NDQuOFIxNGFpMWkyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaGc6MTk0b1IxZDk5Ni4zNTJSMmFkMjEwLjk0NGQyODYuNzJkNjQ0LjA5NmQyODYuNzJkNzA3LjU4NGQyODYuNzJkNzUyLjEyOGQzMzEuMjY0ZDc5Ni42NzJkMzc1LjgwOGQ3OTYuNjcyZDQzOC4yNzFkNzk2LjY3MmQxMDI0ZDYzNS45MDRkMTAyNGQ2MzUuOTA0ZDc4Ni40MzJkMjE4LjExMmQ3ODYuNDMyZDIxOC4xMTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkNDM4LjI3MWQ1OS4zOTJkMzc0Ljc4NGQxMDMuNDI0ZDMzMC43NTFkMTQ3LjQ1NmQyODYuNzJkMjEwLjk0NGQyODYuNzJkMjE4LjExMmQ2MjYuNjg4ZDYzNS45MDRkNjI2LjY4OGQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzZDIxOC4xMTJkNjI2LjY4OGQ0MDguNTc2ZDIzNi41NDNkMjcyLjM4NGQyMzYuNTQzZDM4NS4wMjRkNDguMTI3ZDQ4Ny40MjRkNDguMTI3ZDYwMC4wNjRkMjM2LjU0M2Q0NjIuODQ4ZDIzNi41NDNkNDM0LjE3NmQxOTEuNDg3ZDQwOC41NzZkMjM2LjU0M2hSM2Q4NTYuMDY0UjRkNzk2LjY3MlI1ZDU5LjM5MlI2ZDk3NS44NzJSN2QwUjhkOTE2LjQ4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTk0UjEyZDU5LjM5MlIxM2Q4NTYuMDY0UjE0YWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzo4MW9SMWQ5OTYuMzUyUjJhZDc5Mi41NzZkNDM4LjI3MWQ3OTIuNTc2ZDg2NC4yNTZkODc2LjU0NGQ4NjQuMjU2ZDg3Ni41NDRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQ2NDBkMjg2LjcyZDcwMy40ODhkMjg2LjcyZDc0OC4wMzJkMzMxLjI2NGQ3OTIuNTc2ZDM3NS44MDhkNzkyLjU3NmQ0MzguMjcxZDIxNC4wMTZkNDQ2LjQ2M2QyMTQuMDE2ZDg2NC4yNTZkNjMxLjgwOGQ4NjQuMjU2ZDYzMS44MDhkNDQ2LjQ2M2QyMTQuMDE2ZDQ0Ni40NjNoUjNkOTA1LjIxNlI0ZDg3Ni41NDRSNWQ1NS4yOTZSNmQ3MzcuMjhSN2QwUjhkNjgxLjk4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTgxUjEyZDU1LjI5NlIxM2Q5MDUuMjE2UjE0YWkxaTJpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmhnOjE5M29SMWQ5OTYuMzUyUjJhZDIxMC45NDRkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkMTAyNGQ2MzUuOTA0ZDEwMjRkNjM1LjkwNGQ3ODYuNDMyZDIxOC4xMTJkNzg2LjQzMmQyMTguMTEyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDQzOC4yNzFkNTkuMzkyZDM3NC43ODRkMTAzLjQyNGQzMzAuNzUxZDE0Ny40NTZkMjg2LjcyZDIxMC45NDRkMjg2LjcyZDIxOC4xMTJkNjI2LjY4OGQ2MzUuOTA0ZDYyNi42ODhkNjM1LjkwNGQ0NDYuNDYzZDIxOC4xMTJkNDQ2LjQ2M2QyMTguMTEyZDYyNi42ODhkMzQyLjAxNmQyMzYuNTQzZDM5NC4yNGQyOC42NzJkNTU1LjAwOGQyOC42NzJkNTAyLjc4NGQyMzYuNTQzZDM0Mi4wMTZkMjM2LjU0M2hSM2Q4NTYuMDY0UjRkNzk2LjY3MlI1ZDU5LjM5MlI2ZDk5NS4zMjhSN2QwUjhkOTM1LjkzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE5M1IxMmQ1OS4zOTJSMTNkODU2LjA2NFIxNGFpMWkyaTNpM2kyaTJpMmkyaTJpMmkyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6ODBvUjFkOTk2LjM1MlIyYWQ1Ny4zNDRkMjg3Ljc0NGQ2NDIuMDQ4ZDI4Ny43NDRkNzA0LjUxMmQyODcuNzQ0ZDc0OS41NjhkMzMyLjI4OGQ3OTQuNjI0ZDM3Ni44MzJkNzk0LjYyNGQ0MzkuMjk1ZDc5NC42MjRkNjI5Ljc2ZDc5NC42MjRkNjkyLjIyM2Q3NDkuNTY4ZDczNi43NjhkNzA0LjUxMmQ3ODEuMzEyZDY0Mi4wNDhkNzgxLjMxMmQyMTYuMDY0ZDc4Mi4zMzZkMjE5LjEzNmQ3ODIuMzM2ZDIxOS4xMzZkNzg4LjQ4ZDIxNy4wODhkNzg4LjQ4ZDIxNi4wNjRkNzg3LjQ1NmQyMTYuMDY0ZDEwMjRkNTcuMzQ0ZDEwMjRkNTcuMzQ0ZDI4Ny43NDRkMjE2LjA2NGQ0NDYuNDYzZDIxNi4wNjRkNjIxLjU2OGQ2MzMuODU2ZDYyMS41NjhkNjMzLjg1NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2hSM2Q4MDkuOTg0UjRkNzk0LjYyNFI1ZDU3LjM0NFI2ZDczNi4yNTZSN2QwUjhkNjc4LjkxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTgwUjEyZDU3LjM0NFIxM2Q4MDkuOTg0UjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpMmkyaTFpMmkyaTJpMmhnOjE5Mm9SMWQ5OTYuMzUyUjJhZDIxMC45NDRkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkMTAyNGQ2MzUuOTA0ZDEwMjRkNjM1LjkwNGQ3ODYuNDMyZDIxOC4xMTJkNzg2LjQzMmQyMTguMTEyZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDQzOC4yNzFkNTkuMzkyZDM3NC43ODRkMTAzLjQyNGQzMzAuNzUxZDE0Ny40NTZkMjg2LjcyZDIxMC45NDRkMjg2LjcyZDIxOC4xMTJkNjI2LjY4OGQ2MzUuOTA0ZDYyNi42ODhkNjM1LjkwNGQ0NDYuNDYzZDIxOC4xMTJkNDQ2LjQ2M2QyMTguMTEyZDYyNi42ODhkNDYxLjgyNGQyNy42NDhkNTE0LjA0OGQyMzUuNTE5ZDM1My4yOGQyMzUuNTE5ZDMwMS4wNTZkMjcuNjQ4ZDQ2MS44MjRkMjcuNjQ4aFIzZDg1Ni4wNjRSNGQ3OTYuNjcyUjVkNTkuMzkyUjZkOTk2LjM1MlI3ZDBSOGQ5MzYuOTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxOTJSMTJkNTkuMzkyUjEzZDg1Ni4wNjRSMTRhaTFpMmkzaTNpMmkyaTJpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjc5b1IxZDk5Ni4zNTJSMmFkMjA2Ljg0OGQyODYuNzJkNjQxLjAyNGQyODYuNzJkNzAzLjQ4OGQyODYuNzJkNzQ4LjAzMmQzMzEuMjY0ZDc5Mi41NzZkMzc1LjgwOGQ3OTIuNTc2ZDQzOC4yNzFkNzkyLjU3NmQ4NzIuNDQ4ZDc5Mi41NzZkOTM0LjkxMmQ3NDguMDMyZDk3OS40NTZkNzAzLjQ4OGQxMDI0ZDY0MS4wMjRkMTAyNGQyMDYuODQ4ZDEwMjRkMTQzLjM2ZDEwMjRkOTkuMzI4ZDk3OS45NjhkNTUuMjk2ZDkzNS45MzZkNTUuMjk2ZDg3Mi40NDhkNTUuMjk2ZDQzOC4yNzFkNTUuMjk2ZDM3NC43ODRkOTkuMzI4ZDMzMC43NTFkMTQzLjM2ZDI4Ni43MmQyMDYuODQ4ZDI4Ni43MmQyMTQuMDE2ZDQ0Ni40NjNkMjE0LjAxNmQ4NjQuMjU2ZDYzMS44MDhkODY0LjI1NmQ2MzEuODA4ZDQ0Ni40NjNkMjE0LjAxNmQ0NDYuNDYzaFIzZDg0Ny44NzJSNGQ3OTIuNTc2UjVkNTUuMjk2UjZkNzM3LjI4UjdkMFI4ZDY4MS45ODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk3OVIxMmQ1NS4yOTZSMTNkODQ3Ljg3MlIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxOTFvUjFkOTk2LjM1MlIyYWQ2NTcuNDA4ZDEwMjRkMTY4Ljk2ZDEwMjRkMTA3LjUyZDEwMjRkNjMuNDg4ZDk3OS45NjhkMTkuNDU2ZDkzNS45MzZkMTkuNDU2ZDg3NS41MmQxOS40NTZkNzA0LjUxMmQxOS40NTZkNjQzLjA3MmQ2My40ODhkNTk5LjU1MWQxMDcuNTJkNTU2LjAzMWQxNjguOTZkNTU2LjAzMWQ0MDAuMzg0ZDU1Ni4wMzFkNDAwLjM4NGQ0NzkuMjMyZDU1Ny4wNTZkNDc5LjIzMmQ1NTcuMDU2ZDU2NC4yMjNkNTU3LjA1NmQ2MjUuNjY0ZDUxMy4wMjRkNjY5LjY5NWQ0NjguOTkyZDcxMy43MjhkNDA3LjU1MmQ3MTMuNzI4ZDE3Ni4xMjhkNzEzLjcyOGQxNzYuMTI4ZDg2Ny4zMjhkNjU3LjQwOGQ4NjcuMzI4ZDY1Ny40MDhkMTAyNGQ1NTcuMDU2ZDMwMS4wNTZkNTU3LjA1NmQ0NTcuNzI3ZDQwMC4zODRkNDU3LjcyN2Q0MDAuMzg0ZDMwMS4wNTZkNTU3LjA1NmQzMDEuMDU2aFIzZDY5MS4yUjRkNjU3LjQwOFI1ZDE5LjQ1NlI2ZDcyMi45NDRSN2QwUjhkNzAzLjQ4OFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE5MVIxMmQxOS40NTZSMTNkNjkxLjJSMTRhaTFpMmkzaTNpMmkzaTNpMmkyaTJpMmkzaTNpMmkyaTJpMmkxaTJpMmkyaTJoZzo3OG9SMWQ5OTYuMzUyUjJhZDYzMy44NTZkNzc4LjI0ZDYzMy44NTZkMjg2LjcyZDc5NC42MjRkMjg2LjcyZDc5NC42MjRkMTAyNGQ2MzAuNzg0ZDEwMjRkMjE2LjA2NGQ1MzAuNDMyZDIxNi4wNjRkMTAyNGQ1Ny4zNDRkMTAyNGQ1Ny4zNDRkMjg2LjcyZDIyMS4xODRkMjg2LjcyZDYzMy44NTZkNzc4LjI0aFIzZDg1MS45NjhSNGQ3OTQuNjI0UjVkNTcuMzQ0UjZkNzM3LjI4UjdkMFI4ZDY3OS45MzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk3OFIxMmQ1Ny4zNDRSMTNkODUxLjk2OFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MTkwb1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTkwUjEyZDBSMTNkMFIxNGFoZzo3N29SMWQ5OTYuMzUyUjJhZDQ3MS4wNGQ1ODQuNzA0ZDcxOS44NzJkMjg2LjcyZDg4NC43MzZkMjg2LjcyZDg4NC43MzZkMTAyNGQ3MjQuOTkyZDEwMjRkNzI0Ljk5MmQ1MjkuNDA4ZDQ3MS4wNGQ4MzIuNTEyZDIxNi4wNjRkNTMwLjQzMmQyMTYuMDY0ZDEwMjRkNTcuMzQ0ZDEwMjRkNTcuMzQ0ZDI4Ni43MmQyMjEuMTg0ZDI4Ni43MmQ0NzEuMDRkNTg0LjcwNGhSM2Q5NTAuMjcyUjRkODg0LjczNlI1ZDU3LjM0NFI2ZDczNy4yOFI3ZDBSOGQ2NzkuOTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNzdSMTJkNTcuMzQ0UjEzZDk1MC4yNzJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxODlvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxODlSMTJkMFIxM2QwUjE0YWhnOjc2b1IxZDk5Ni4zNTJSMmFkNTguMzY4ZDEwMjRkNTguMzY4ZDI4NS42OTZkMjE3LjA4OGQyODUuNjk2ZDIxNy4wODhkODY0LjI1NmQ3OTUuNjQ4ZDg2NC4yNTZkNzk1LjY0OGQxMDI0ZDU4LjM2OGQxMDI0aFIzZDc5Ny42OTZSNGQ3OTUuNjQ4UjVkNTguMzY4UjZkNzM4LjMwNFI3ZDBSOGQ2NzkuOTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNzZSMTJkNTguMzY4UjEzZDc5Ny42OTZSMTRhaTFpMmkyaTJpMmkyaTJoZzoxODhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxODhSMTJkMFIxM2QwUjE0YWhnOjc1b1IxZDk5Ni4zNTJSMmFkNjA0LjE2ZDI4Ni43MmQ3NzAuMDQ4ZDI4Ni43MmQ3NzAuMDQ4ZDM0Mi4wMTVkNTA2Ljg4ZDY1NS4zNmQ3NzAuMDQ4ZDk2OC43MDRkNzcwLjA0OGQxMDI0ZDYwNC4xNmQxMDI0ZDM2Mi40OTZkNzM1LjIzMmQyMTguMTEyZDczNS4yMzJkMjE4LjExMmQxMDI0ZDU4LjM2OGQxMDI0ZDU4LjM2OGQyODYuNzJkMjE4LjExMmQyODYuNzJkMjE4LjExMmQ1NzUuNDg4ZDM2Mi40OTZkNTc1LjQ4OGQ0NTQuNjU2ZDQ2NS45MTlkNjA0LjE2ZDI4Ni43MmhSM2Q4MTYuMTI4UjRkNzcwLjA0OFI1ZDU4LjM2OFI2ZDczNy4yOFI3ZDBSOGQ2NzguOTEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNzVSMTJkNTguMzY4UjEzZDgxNi4xMjhSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE4N29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE4N1IxMmQwUjEzZDBSMTRhaGc6NzRvUjFkOTk2LjM1MlIyYWQxNjIuODE2ZDc3Ny4yMTZkMTYyLjgxNmQ4NjQuMjU2ZDU4MC42MDhkODY0LjI1NmQ1ODAuNjA4ZDI4Ni43MmQ3NDEuMzc2ZDI4Ni43MmQ3NDEuMzc2ZDg3Mi40NDhkNzQxLjM3NmQ5MzQuOTEyZDY5Ni44MzJkOTc5LjQ1NmQ2NTIuMjg4ZDEwMjRkNTg5LjgyNGQxMDI0ZDE1NS42NDhkMTAyNGQ5Mi4xNmQxMDI0ZDQ4LjEyOGQ5NzkuOTY4ZDQuMDk2ZDkzNS45MzZkNC4wOTZkODcyLjQ0OGQ0LjA5NmQ3NzcuMjE2ZDE2Mi44MTZkNzc3LjIxNmhSM2Q3OTguNzJSNGQ3NDEuMzc2UjVkNC4wOTZSNmQ3MzcuMjhSN2QwUjhkNzMzLjE4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTc0UjEyZDQuMDk2UjEzZDc5OC43MlIxNGFpMWkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmhnOjE4Nm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE4NlIxMmQwUjEzZDBSMTRhaGc6NzNvUjFkOTk2LjM1MlIyYWQ1OC4zNjhkMTAyNGQ1OC4zNjhkMjg2LjcyZDIxOC4xMTJkMjg2LjcyZDIxOC4xMTJkMTAyNGQ1OC4zNjhkMTAyNGhSM2QyMjUuMjhSNGQyMTguMTEyUjVkNTguMzY4UjZkNzM3LjI4UjdkMFI4ZDY3OC45MTJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk3M1IxMmQ1OC4zNjhSMTNkMjI1LjI4UjE0YWkxaTJpMmkyaTJoZzoxODVvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxODVSMTJkMFIxM2QwUjE0YWhnOjcyb1IxZDk5Ni4zNTJSMmFkNjUyLjI4OGQyODYuNzJkODExLjAwOGQyODYuNzJkODExLjAwOGQxMDI0ZDY1Mi4yODhkMTAyNGQ2NTIuMjg4ZDczNS4yMzJkMjE3LjA4OGQ3MzUuMjMyZDIxNy4wODhkMTAyNGQ1OC4zNjhkMTAyNGQ1OC4zNjhkMjg2LjcyZDIxNy4wODhkMjg2LjcyZDIxNy4wODhkNTc1LjQ4OGQ2NTIuMjg4ZDU3NS40ODhkNjUyLjI4OGQyODYuNzJoUjNkODcxLjQyNFI0ZDgxMS4wMDhSNWQ1OC4zNjhSNmQ3MzcuMjhSN2QwUjhkNjc4LjkxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTcyUjEyZDU4LjM2OFIxM2Q4NzEuNDI0UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MTg0b1IxZDk5Ni4zNTJSMmFkMzMuNzkyZDExNzMuNTA0ZDg2LjAxNmQ5NjYuNjU2ZDI0Ni43ODRkOTY2LjY1NmQxOTQuNTZkMTE3My41MDRkMzMuNzkyZDExNzMuNTA0aFIzZDIxOC4xMTJSNGQyNDYuNzg0UjVkMzMuNzkyUjZkNTcuMzQ0UjdkLTE0OS41MDRSOGQyMy41NTJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxODRSMTJkMzMuNzkyUjEzZDIxOC4xMTJSMTRhaTFpMmkyaTJpMmhnOjcxb1IxZDk5Ni4zNTJSMmFkNzk0LjYyNGQ0MzguMjcxZDc5NC42MjRkNTA3LjkwNGQ2MzMuODU2ZDUwNy45MDRkNjMzLjg1NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2QyMTYuMDY0ZDg2NC4yNTZkNjMzLjg1NmQ4NjQuMjU2ZDYzMy44NTZkNzUzLjY2NGQ0NzQuMTEyZDc1My42NjRkNDc0LjExMmQ1OTMuOTJkNzk0LjYyNGQ1OTMuOTJkNzk0LjYyNGQ4NzIuNDQ4ZDc5NC42MjRkOTM0LjkxMmQ3NTAuMDhkOTc5LjQ1NmQ3MDUuNTM2ZDEwMjRkNjQyLjA0OGQxMDI0ZDIwOC44OTZkMTAyNGQxNDUuNDA4ZDEwMjRkMTAxLjM3NmQ5NzkuOTY4ZDU3LjM0NGQ5MzUuOTM2ZDU3LjM0NGQ4NzIuNDQ4ZDU3LjM0NGQ0MzguMjcxZDU3LjM0NGQzNzQuNzg0ZDEwMS4zNzZkMzMwLjc1MWQxNDUuNDA4ZDI4Ni43MmQyMDguODk2ZDI4Ni43MmQ2NDIuMDQ4ZDI4Ni43MmQ3MDUuNTM2ZDI4Ni43MmQ3NTAuMDhkMzMxLjI2NGQ3OTQuNjI0ZDM3NS44MDhkNzk0LjYyNGQ0MzguMjcxaFIzZDg0OS45MlI0ZDc5NC42MjRSNWQ1Ny4zNDRSNmQ3MzcuMjhSN2QwUjhkNjc5LjkzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTcxUjEyZDU3LjM0NFIxM2Q4NDkuOTJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2hnOjE4M29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE4M1IxMmQwUjEzZDBSMTRhaGc6NzBvUjFkOTk2LjM1MlIyYWQ1OS4zOTJkMjg2LjcyZDc0MC4zNTJkMjg2LjcyZDc0MC4zNTJkNDQ2LjQ2M2QyMjAuMTZkNDQ2LjQ2M2QyMjAuMTZkNTc1LjQ4OGQ2MzguOTc2ZDU3NS40ODhkNjM4Ljk3NmQ3MzUuMjMyZDIyMC4xNmQ3MzUuMjMyZDIyMC4xNmQxMDI0ZDU5LjM5MmQxMDI0ZDU5LjM5MmQyODYuNzJoUjNkNzQwLjM1MlI0ZDc0MC4zNTJSNWQ1OS4zOTJSNmQ3MzcuMjhSN2QwUjhkNjc3Ljg4OFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTcwUjEyZDU5LjM5MlIxM2Q3NDAuMzUyUjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxODJvUjFkOTk2LjM1MlIyYWQ1Ny4zNDRkNDUwLjU1OWQ1Ny4zNDRkMzkwLjE0NGQxMDEuMzc2ZDM0NS42ZDE0NS40MDhkMzAxLjA1NmQyMDYuODQ4ZDMwMS4wNTZkODAxLjc5MmQzMDEuMDU2ZDgwMS43OTJkMTAyNGQ2NDUuMTJkMTAyNGQ2NDUuMTJkNzg2LjQzMmQ1NzcuNTM2ZDc4Ni40MzJkNTc3LjUzNmQxMDI0ZDQxOS44NGQxMDI0ZDQxOS44NGQ3ODYuNDMyZDIwNi44NDhkNzg2LjQzMmQxNDUuNDA4ZDc4Ni40MzJkMTAxLjM3NmQ3NDIuNGQ1Ny4zNDRkNjk4LjM2N2Q1Ny4zNDRkNjM3Ljk1MmQ1Ny4zNDRkNDUwLjU1OWQ0MTkuODRkNDU4Ljc1MWQyMTQuMDE2ZDQ1OC43NTFkMjE0LjAxNmQ2MjguNzM2ZDQxOS44NGQ2MjguNzM2ZDQxOS44NGQ0NTguNzUxZDU3Ny41MzZkNDU4Ljc1MWQ1NzcuNTM2ZDYyOC43MzZkNjQ1LjEyZDYyOC43MzZkNjQ1LjEyZDQ1OC43NTFkNTc3LjUzNmQ0NTguNzUxaFIzZDg1Mi45OTJSNGQ4MDEuNzkyUjVkNTcuMzQ0UjZkNzIyLjk0NFI3ZDBSOGQ2NjUuNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE4MlIxMmQ1Ny4zNDRSMTNkODUyLjk5MlIxNGFpMWkzaTNpMmkyaTJpMmkyaTJpMmkyaTJpM2kzaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjY5b1IxZDk5Ni4zNTJSMmFkNzQwLjM1MmQyODYuNzJkNzQwLjM1MmQ0NDYuNDYzZDIyMC4xNmQ0NDYuNDYzZDIyMC4xNmQ1NzUuNDg4ZDYzOC45NzZkNTc1LjQ4OGQ2MzguOTc2ZDczNS4yMzJkMjIwLjE2ZDczNS4yMzJkMjIwLjE2ZDg2NC4yNTZkNzQwLjM1MmQ4NjQuMjU2ZDc0MC4zNTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkMjg2LjcyZDc0MC4zNTJkMjg2LjcyaFIzZDc4NC4zODRSNGQ3NDAuMzUyUjVkNTkuMzkyUjZkNzM3LjI4UjdkMFI4ZDY3Ny44ODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk2OVIxMmQ1OS4zOTJSMTNkNzg0LjM4NFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjE4MW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE4MVIxMmQwUjEzZDBSMTRhaGc6NjhvUjFkOTk2LjM1MlIyYWQ1OS4zOTJkMjg2LjcyZDY0NC4wOTZkMjg2LjcyZDcwNy41ODRkMjg2LjcyZDc1Mi4xMjhkMzMxLjI2NGQ3OTYuNjcyZDM3NS44MDhkNzk2LjY3MmQ0MzguMjcxZDc5Ni42NzJkODcyLjQ0OGQ3OTYuNjcyZDkzNC45MTJkNzUyLjEyOGQ5NzkuNDU2ZDcwNy41ODRkMTAyNGQ2NDQuMDk2ZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDI4Ni43MmQyMTguMTEyZDQ0Ni40NjNkMjE4LjExMmQ4NjQuMjU2ZDYzNS45MDRkODY0LjI1NmQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzaFIzZDg1NC4wMTZSNGQ3OTYuNjcyUjVkNTkuMzkyUjZkNzM3LjI4UjdkMFI4ZDY3Ny44ODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk2OFIxMmQ1OS4zOTJSMTNkODU0LjAxNlIxNGFpMWkyaTNpM2kyaTNpM2kyaTJpMWkyaTJpMmkyaGc6MTgwb1IxZDk5Ni4zNTJSMmFkMzMuNzkyZDI1OS4wNzJkODYuMDE2ZDUxLjE5OWQyNDYuNzg0ZDUxLjE5OWQxOTQuNTZkMjU5LjA3MmQzMy43OTJkMjU5LjA3MmhSM2QyMTguMTEyUjRkMjQ2Ljc4NFI1ZDMzLjc5MlI2ZDk3Mi44UjdkNzY0LjkyOFI4ZDkzOS4wMDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxODBSMTJkMzMuNzkyUjEzZDIxOC4xMTJSMTRhaTFpMmkyaTJpMmhnOjY3b1IxZDk5Ni4zNTJSMmFkNzkyLjU3NmQ0NDYuNDYzZDIxNi4wNjRkNDQ2LjQ2M2QyMTYuMDY0ZDg2NC4yNTZkNzkyLjU3NmQ4NjQuMjU2ZDc5Mi41NzZkMTAyNGQyMDguODk2ZDEwMjRkMTQ1LjQwOGQxMDI0ZDEwMS4zNzZkOTc5Ljk2OGQ1Ny4zNDRkOTM1LjkzNmQ1Ny4zNDRkODcyLjQ0OGQ1Ny4zNDRkNDM4LjI3MWQ1Ny4zNDRkMzc0Ljc4NGQxMDEuMzc2ZDMzMC43NTFkMTQ1LjQwOGQyODYuNzJkMjA4Ljg5NmQyODYuNzJkNzkyLjU3NmQyODYuNzJkNzkyLjU3NmQ0NDYuNDYzaFIzZDg0MS43MjhSNGQ3OTIuNTc2UjVkNTcuMzQ0UjZkNzM3LjI4UjdkMFI4ZDY3OS45MzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk2N1IxMmQ1Ny4zNDRSMTNkODQxLjcyOFIxNGFpMWkyaTJpMmkyaTJpM2kzaTJpM2kzaTJpMmhnOjE3OW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE3OVIxMmQwUjEzZDBSMTRhaGc6NjZvUjFkOTk2LjM1MlIyYWQ3NjkuMDI0ZDQzOC4yNzFkNzY5LjAyNGQ1NzYuNTEyZDc2OS4wMjRkNjA1LjE4NGQ3NjEuODU2ZDYyMy42MTZkNzk3LjY5NmQ2NjguNjcyZDc5Ny42OTZkNzE5Ljg3MmQ3OTcuNjk2ZDg3Mi40NDhkNzk3LjY5NmQ5MzQuOTEyZDc1My4xNTJkOTc5LjQ1NmQ3MDguNjA4ZDEwMjRkNjQ1LjEyZDEwMjRkNjAuNDE2ZDEwMjRkNjAuNDE2ZDI4Ni43MmQ2MTcuNDcyZDI4Ni43MmQ2NzkuOTM2ZDI4Ni43MmQ3MjQuNDhkMzMxLjI2NGQ3NjkuMDI0ZDM3NS44MDhkNzY5LjAyNGQ0MzguMjcxZDIxOS4xMzZkNzI5LjA4OGQyMTkuMTM2ZDg2NC4yNTZkNjM2LjkyOGQ4NjQuMjU2ZDYzNi45MjhkNzI5LjA4OGQyMTkuMTM2ZDcyOS4wODhkMjE5LjEzNmQ0NDYuNDYzZDIxOS4xMzZkNTY5LjM0NGQ2MDguMjU2ZDU2OS4zNDRkNjA4LjI1NmQ0NDYuNDYzZDIxOS4xMzZkNDQ2LjQ2M2hSM2Q4NTEuOTY4UjRkNzk3LjY5NlI1ZDYwLjQxNlI2ZDczNy4yOFI3ZDBSOGQ2NzYuODY0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNjZSMTJkNjAuNDE2UjEzZDg1MS45NjhSMTRhaTFpMmkzaTNpMmkzaTNpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNzhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNzhSMTJkMFIxM2QwUjE0YWhnOjY1b1IxZDk5Ni4zNTJSMmFkMjEwLjk0NGQyODYuNzJkNjQ0LjA5NmQyODYuNzJkNzA3LjU4NGQyODYuNzJkNzUyLjEyOGQzMzEuMjY0ZDc5Ni42NzJkMzc1LjgwOGQ3OTYuNjcyZDQzOC4yNzFkNzk2LjY3MmQxMDI0ZDYzNS45MDRkMTAyNGQ2MzUuOTA0ZDc4Ni40MzJkMjE4LjExMmQ3ODYuNDMyZDIxOC4xMTJkMTAyNGQ1OS4zOTJkMTAyNGQ1OS4zOTJkNDM4LjI3MWQ1OS4zOTJkMzc0Ljc4NGQxMDMuNDI0ZDMzMC43NTFkMTQ3LjQ1NmQyODYuNzJkMjEwLjk0NGQyODYuNzJkMjE4LjExMmQ2MjYuNjg4ZDYzNS45MDRkNjI2LjY4OGQ2MzUuOTA0ZDQ0Ni40NjNkMjE4LjExMmQ0NDYuNDYzZDIxOC4xMTJkNjI2LjY4OGhSM2Q4NTYuMDY0UjRkNzk2LjY3MlI1ZDU5LjM5MlI2ZDczNy4yOFI3ZDBSOGQ2NzcuODg4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNjVSMTJkNTkuMzkyUjEzZDg1Ni4wNjRSMTRhaTFpMmkzaTNpMmkyaTJpMmkyaTJpMmkzaTNpMWkyaTJpMmkyaGc6MTc3b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTc3UjEyZDBSMTNkMFIxNGFoZzo2NG9SMWQ5OTYuMzUyUjJhZDM4OS4xMmQ0OTIuNTQ0ZDQ1Mi42MDhkNDkyLjU0NGQ1MTQuMDQ4ZDQ5Mi41NDRkNTQ3LjMyOGQ1MjUuODI0ZDU4MC42MDhkNTU5LjEwNGQ1ODAuNjA4ZDYyMC41NDRkNTgwLjYwOGQ2ODUuMDU2ZDYyNS42NjRkNjg1LjA1NmQ2MjUuNjY0ZDQ0My4zOTFkMjE1LjA0ZDQ0My4zOTFkMjE1LjA0ZDg2Ny4zMjhkNzgyLjMzNmQ4NjcuMzI4ZDc4Mi4zMzZkMTAyNGQyMDcuODcyZDEwMjRkMTQ2LjQzMmQxMDI0ZDEwMi40ZDk3OS45NjhkNTguMzY4ZDkzNS45MzZkNTguMzY4ZDg3NS41MmQ1OC4zNjhkNDM1LjE5OWQ1OC4zNjhkMzczLjc2ZDEwMi40ZDMzMC4yNGQxNDYuNDMyZDI4Ni43MmQyMDcuODcyZDI4Ni43MmQ2MzIuODMyZDI4Ni43MmQ2OTQuMjcyZDI4Ni43MmQ3MzguMzA0ZDMzMC4yNGQ3ODIuMzM2ZDM3My43NmQ3ODIuMzM2ZDQzNS4xOTlkNzgyLjMzNmQ4MDIuODE2ZDM4OS4xMmQ4MDIuODE2ZDMyNy42OGQ4MDIuODE2ZDI5My44ODhkNzY5LjUzNmQyNjAuMDk2ZDczNi4yNTZkMjYwLjA5NmQ2NzQuODE2ZDI2MC4wOTZkNjIwLjU0NGQyNjAuMDk2ZDU1OS4xMDRkMjkzLjg4OGQ1MjUuODI0ZDMyNy42OGQ0OTIuNTQ0ZDM4OS4xMmQ0OTIuNTQ0ZDM2OC42NGQ2ODUuMDU2ZDQ3Mi4wNjRkNjg1LjA1NmQ0NzIuMDY0ZDYwMS4wODhkMzY4LjY0ZDYwMS4wODhkMzY4LjY0ZDY4NS4wNTZoUjNkODUwLjk0NFI0ZDc4Mi4zMzZSNWQ1OC4zNjhSNmQ3MzcuMjhSN2QwUjhkNjc4LjkxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTY0UjEyZDU4LjM2OFIxM2Q4NTAuOTQ0UjE0YWkxaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxNzZvUjFkOTk2LjM1MlIyYWQxOTUuNTg0ZDMwMS4wNTZkMjc4LjUyOGQzMDEuMDU2ZDMzOC45NDRkMzAxLjA1NmQzODIuOTc2ZDM0NC41NzZkNDI3LjAwOGQzODguMDk2ZDQyNy4wMDhkNDQ5LjUzNWQ0MjcuMDA4ZDUyMy4yNjRkNDI3LjAwOGQ1ODQuNzA0ZDM4Mi45NzZkNjI4LjczNmQzMzguOTQ0ZDY3Mi43NjhkMjc4LjUyOGQ2NzIuNzY4ZDE5NS41ODRkNjcyLjc2OGQxMzQuMTQ0ZDY3Mi43NjhkOTAuMTEyZDYyOC43MzZkNDYuMDhkNTg0LjcwNGQ0Ni4wOGQ1MjMuMjY0ZDQ2LjA4ZDQ0OS41MzVkNDYuMDhkMzg4LjA5NmQ5MC4xMTJkMzQ0LjU3NmQxMzQuMTQ0ZDMwMS4wNTZkMTk1LjU4NGQzMDEuMDU2ZDE4NC4zMmQ0MzkuMjk1ZDE4NC4zMmQ1MzMuNTAzZDI4OC43NjhkNTMzLjUwM2QyODguNzY4ZDQzOS4yOTVkMTg0LjMyZDQzOS4yOTVoUjNkNDQ5LjUzNlI0ZDQyNy4wMDhSNWQ0Ni4wOFI2ZDcyMi45NDRSN2QzNTEuMjMyUjhkNjc2Ljg2NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE3NlIxMmQ0Ni4wOFIxM2Q0NDkuNTM2UjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmhnOjYzb1IxZDk5Ni4zNTJSMmFkMzEuNzQ0ZDI4Ni43MmQ1MTkuMTY4ZDI4Ni43MmQ1ODEuNjMyZDI4Ni43MmQ2MjUuMTUyZDMzMC4yNGQ2NjguNjcyZDM3My43NmQ2NjguNjcyZDQzNS4xOTlkNjY4LjY3MmQ2MDUuMTg0ZDY2OC42NzJkNjY2LjYyNGQ2MjUuMTUyZDcxMC42NTZkNTgxLjYzMmQ3NTQuNjg4ZDUxOS4xNjhkNzU0LjY4OGQyODguNzY4ZDc1NC42ODhkMjg4Ljc2OGQ4MjUuMzQ0ZDEzMS4wNzJkODI1LjM0NGQxMzEuMDcyZDc0NS40NzJkMTMxLjA3MmQ2ODQuMDMxZDE3NC41OTJkNjQwLjUxMmQyMTguMTEyZDU5Ni45OTJkMjc5LjU1MmQ1OTYuOTkyZDUxMmQ1OTYuOTkyZDUxMmQ0NDMuMzkxZDMxLjc0NGQ0NDMuMzkxZDMxLjc0NGQyODYuNzJkMjg4Ljc2OGQxMDI0ZDEzMS4wNzJkMTAyNGQxMzEuMDcyZDg2Ny4zMjhkMjg4Ljc2OGQ4NjcuMzI4ZDI4OC43NjhkMTAyNGhSM2Q2OTQuMjcyUjRkNjY4LjY3MlI1ZDMxLjc0NFI2ZDczNy4yOFI3ZDBSOGQ3MDUuNTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNjNSMTJkMzEuNzQ0UjEzZDY5NC4yNzJSMTRhaTFpMmkzaTNpMmkzaTNpMmkyaTJpMmkzaTNpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNzVvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNzVSMTJkMFIxM2QwUjE0YWhnOjYyb1IxZDk5Ni4zNTJSMmFkNjAuNDE2ZDEwNDMuNDU1ZDYwLjQxNmQ4NjEuMTg0ZDI5OS4wMDhkNzIyLjk0NGQxNjcuOTM2ZDY0OS4yMTZkMTUyLjU3NmQ2NDEuMDI0ZDExNS4yZDYxNy45ODNkNzcuODI0ZDU5NC45NDRkNjAuNDE2ZDU4NS43MjhkNjAuNDE2ZDQwNC40OGQ0OTguNjg4ZDY1Ny40MDhkNDk4LjY4OGQ3ODkuNTA0ZDYwLjQxNmQxMDQzLjQ1NWhSM2Q0ODYuNFI0ZDQ5OC42ODhSNWQ2MC40MTZSNmQ2MTkuNTJSN2QtMTkuNDU2UjhkNTU5LjEwNFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTYyUjEyZDYwLjQxNlIxM2Q0ODYuNFIxNGFpMWkyaTJpMmkzaTNpMmkyaTJpMmhnOjE3NG9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE3NFIxMmQwUjEzZDBSMTRhaGc6NjFvUjFkOTk2LjM1MlIyYWQ1OTkuMDRkNzM1LjIzMmQ1OTkuMDRkODkxLjkwNGQ2MC40MTZkODkxLjkwNGQ2MC40MTZkNzM1LjIzMmQ1OTkuMDRkNzM1LjIzMmQ1OTkuMDRkNTI4LjM4NGQ1OTkuMDRkNjg1LjA1NmQ2MC40MTZkNjg1LjA1NmQ2MC40MTZkNTI4LjM4NGQ1OTkuMDRkNTI4LjM4NGhSM2Q2NTMuMzEyUjRkNTk5LjA0UjVkNjAuNDE2UjZkNDk1LjYxNlI3ZDEzMi4wOTZSOGQ0MzUuMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTYxUjEyZDYwLjQxNlIxM2Q2NTMuMzEyUjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTczb1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTczUjEyZDBSMTNkMFIxNGFoZzo2MG9SMWQ5OTYuMzUyUjJhZDIwMi43NTJkNzIwLjg5NmQ0NDIuMzY4ZDg2MC4xNmQ0NDIuMzY4ZDEwNDEuNDA3ZDUuMTJkNzg3LjQ1NmQ1LjEyZDY1Ni4zODRkNDQyLjM2OGQ0MDIuNDMyZDQ0Mi4zNjhkNTgyLjY1NmQyMDIuNzUyZDcyMC44OTZoUjNkNDg0LjM1MlI0ZDQ0Mi4zNjhSNWQ1LjEyUjZkNjIxLjU2OFI3ZC0xNy40MDhSOGQ2MTYuNDQ4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNjBSMTJkNS4xMlIxM2Q0ODQuMzUyUjE0YWkxaTJpMmkyaTJpMmkyaTJoZzoxNzJvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNzJSMTJkMFIxM2QwUjE0YWhnOjU5b1IxZDk5Ni4zNTJSMmFkMjA5LjkyZDQzMC4wOGQyMDkuOTJkNTg3Ljc3NmQ1Mi4yMjRkNTg3Ljc3NmQ1Mi4yMjRkNDMwLjA4ZDIwOS45MmQ0MzAuMDhkNTMuMjQ4ZDg3OC41OTJkMjA5LjkyZDg3OC41OTJkMjA5LjkyZDEwMDcuNjE2ZDIwOS45MmQxMDYyLjkxMmQxNjUuMzc2ZDExMDUuOTJkMTIwLjgzMmQxMTQ4LjkyOGQ1My4yNDhkMTE2MC4xOTJkNTMuMjQ4ZDg3OC41OTJoUjNkMjcyLjM4NFI0ZDIwOS45MlI1ZDUyLjIyNFI2ZDU5My45MlI3ZC0xMzYuMTkyUjhkNTQxLjY5NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTU5UjEyZDUyLjIyNFIxM2QyNzIuMzg0UjE0YWkxaTJpMmkyaTJpMWkyaTJpM2kzaTJoZzoxNzFvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNzFSMTJkMFIxM2QwUjE0YWhnOjU4b1IxZDk5Ni4zNTJSMmFkNTUuMjk2ZDg2Ny4zMjhkMjExLjk2OGQ4NjcuMzI4ZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkODY3LjMyOGQyMTEuOTY4ZDQzMC4wOGQyMTEuOTY4ZDU4Ny43NzZkNTUuMjk2ZDU4Ny43NzZkNTUuMjk2ZDQzMC4wOGQyMTEuOTY4ZDQzMC4wOGhSM2QyNTIuOTI4UjRkMjExLjk2OFI1ZDU1LjI5NlI2ZDU5My45MlI3ZDBSOGQ1MzguNjI0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNThSMTJkNTUuMjk2UjEzZDI1Mi45MjhSMTRhaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNzBvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNzBSMTJkMFIxM2QwUjE0YWhnOjU3b1IxZDk5Ni4zNTJSMmFkNjMwLjc4NGQxMDI0ZDIwNC44ZDEwMjRkMTUwLjUyOGQxMDI0ZDEwNy4wMDhkOTc4Ljk0NGQ2My40ODhkOTMzLjg4OGQ1Mi4yMjRkODY3LjMyOGQ2MjIuNTkyZDg2Ny4zMjhkNjIyLjU5MmQ3MzYuMjU2ZDIwNC44ZDczNi4yNTZkMTQzLjM2ZDczNi4yNTZkOTkuMzI4ZDY5Mi4yMjNkNTUuMjk2ZDY0OC4xOTJkNTUuMjk2ZDU4Ni43NTJkNTUuMjk2ZDQzNS4xOTlkNTUuMjk2ZDM3My43NmQ5OS4zMjhkMzMwLjI0ZDE0My4zNmQyODYuNzJkMjA0LjhkMjg2LjcyZDYzMC43ODRkMjg2LjcyZDY5Mi4yMjRkMjg2LjcyZDczNS43NDRkMzMwLjI0ZDc3OS4yNjRkMzczLjc2ZDc3OS4yNjRkNDM1LjE5OWQ3NzkuMjY0ZDg3NS41MmQ3NzkuMjY0ZDkzNS45MzZkNzM1Ljc0NGQ5NzkuOTY4ZDY5Mi4yMjRkMTAyNGQ2MzAuNzg0ZDEwMjRkMjEyLjk5MmQ1NzguNTZkNjIyLjU5MmQ1NzguNTZkNjIyLjU5MmQ0NDMuMzkxZDIxMi45OTJkNDQzLjM5MWQyMTIuOTkyZDU3OC41NmhSM2Q4NDcuODcyUjRkNzc5LjI2NFI1ZDUyLjIyNFI2ZDczNy4yOFI3ZDBSOGQ2ODUuMDU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNTdSMTJkNTIuMjI0UjEzZDg0Ny44NzJSMTRhaTFpMmkzaTNpMmkyaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmhnOjE2OW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2OVIxMmQwUjEzZDBSMTRhaGc6NTZvUjFkOTk2LjM1MlIyYWQ3ODIuMzM2ZDQwOC41NzZkNzgyLjMzNmQ1NzkuNTg0ZDc4Mi4zMzZkNjE3LjQ3MmQ3NjQuOTI4ZDY1MC4yNGQ3ODIuMzM2ZDY4MS45ODNkNzgyLjMzNmQ3MTkuODcyZDc4Mi4zMzZkODc1LjUyZDc4Mi4zMzZkOTM1LjkzNmQ3MzguMzA0ZDk3OS45NjhkNjk0LjI3MmQxMDI0ZDYzMi44MzJkMTAyNGQyMDcuODcyZDEwMjRkMTQ2LjQzMmQxMDI0ZDEwMi40ZDk3OS45NjhkNTguMzY4ZDkzNS45MzZkNTguMzY4ZDg3NS41MmQ1OC4zNjhkNzE5Ljg3MmQ1OC4zNjhkNjg3LjEwNGQ3NS43NzZkNjUwLjI0ZDU4LjM2OGQ2MTMuMzc2ZDU4LjM2OGQ1NzkuNTg0ZDU4LjM2OGQ0MzUuMTk5ZDU4LjM2OGQzNzMuNzZkMTAyLjRkMzMwLjI0ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyZDYzMi44MzJkMjg2LjcyZDY4OC4xMjhkMjg2LjcyZDczMC42MjRkMzIxLjUzNWQ3NzMuMTJkMzU2LjM1MmQ3ODIuMzM2ZDQwOC41NzZkMjE1LjA0ZDcyOS4wODhkMjE1LjA0ZDg2Ny4zMjhkNjI1LjY2NGQ4NjcuMzI4ZDYyNS42NjRkNzI5LjA4OGQyMTUuMDRkNzI5LjA4OGQyMTUuMDRkNDQ0LjQxNWQyMTUuMDRkNTgxLjYzMmQ2MjUuNjY0ZDU4MS42MzJkNjI1LjY2NGQ0NDQuNDE1ZDIxNS4wNGQ0NDQuNDE1aFIzZDg1NC4wMTZSNGQ3ODIuMzM2UjVkNTguMzY4UjZkNzM3LjI4UjdkMFI4ZDY3OC45MTJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk1NlIxMmQ1OC4zNjhSMTNkODU0LjAxNlIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTY4b1IxZDk5Ni4zNTJSMmFkNDMxLjEwNGQxMDEuMzc1ZDQzMS4xMDRkMjU5LjA3MmQyNzMuNDA4ZDI1OS4wNzJkMjczLjQwOGQxMDEuMzc1ZDQzMS4xMDRkMTAxLjM3NWQyMTEuOTY4ZDEwMS4zNzVkMjExLjk2OGQyNTkuMDcyZDU1LjI5NmQyNTkuMDcyZDU1LjI5NmQxMDEuMzc1ZDIxMS45NjhkMTAxLjM3NWhSM2QzOTQuMjRSNGQ0MzEuMTA0UjVkNTUuMjk2UjZkOTIyLjYyNFI3ZDc2NC45MjhSOGQ4NjcuMzI4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTY4UjEyZDU1LjI5NlIxM2QzOTQuMjRSMTRhaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzo1NW9SMWQ5OTYuMzUyUjJhZDMuMDcyZDI4NS42OTZkNDY2Ljk0NGQyODUuNjk2ZDUyOC4zODRkMjg1LjY5NmQ1NzEuOTA0ZDMyOS4yMTZkNjE1LjQyNGQzNzIuNzM2ZDYxNS40MjRkNDM0LjE3NWQ2MTUuNDI0ZDEwMjRkNDU4Ljc1MmQxMDI0ZDQ1OC43NTJkNDQyLjM2N2QzLjA3MmQ0NDIuMzY3ZDMuMDcyZDI4NS42OTZoUjNkNjc1Ljg0UjRkNjE1LjQyNFI1ZDMuMDcyUjZkNzM4LjMwNFI3ZDBSOGQ3MzUuMjMyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNTVSMTJkMy4wNzJSMTNkNjc1Ljg0UjE0YWkxaTJpM2kzaTJpMmkyaTJpMmhnOjE2N29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2N1IxMmQwUjEzZDBSMTRhaGc6NTRvUjFkOTk2LjM1MlIyYWQ2NzAuNzJkNDQzLjM5MWQyMTUuMDRkNDQzLjM5MWQyMTUuMDRkNTcxLjM5MmQ2MzIuODMyZDU3MS4zOTJkNjk0LjI3MmQ1NzEuMzkyZDczOC4zMDRkNjE0LjkxMmQ3ODIuMzM2ZDY1OC40MzJkNzgyLjMzNmQ3MTkuODcyZDc4Mi4zMzZkODc1LjUyZDc4Mi4zMzZkOTM1LjkzNmQ3MzguMzA0ZDk3OS45NjhkNjk0LjI3MmQxMDI0ZDYzMi44MzJkMTAyNGQyMDcuODcyZDEwMjRkMTQ2LjQzMmQxMDI0ZDEwMi40ZDk3OS45NjhkNTguMzY4ZDkzNS45MzZkNTguMzY4ZDg3NS41MmQ1OC4zNjhkNDM1LjE5OWQ1OC4zNjhkMzczLjc2ZDEwMi40ZDMzMC4yNGQxNDYuNDMyZDI4Ni43MmQyMDcuODcyZDI4Ni43MmQ2NzAuNzJkMjg2LjcyZDY3MC43MmQ0NDMuMzkxZDIxNS4wNGQ3MjkuMDg4ZDIxNS4wNGQ4NjcuMzI4ZDYyNS42NjRkODY3LjMyOGQ2MjUuNjY0ZDcyOS4wODhkMjE1LjA0ZDcyOS4wODhoUjNkODM5LjY4UjRkNzgyLjMzNlI1ZDU4LjM2OFI2ZDczNy4yOFI3ZDBSOGQ2NzguOTEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNTRSMTJkNTguMzY4UjEzZDgzOS42OFIxNGFpMWkyaTJpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTFpMmkyaTJpMmhnOjE2Nm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2NlIxMmQwUjEzZDBSMTRhaGc6NTNvUjFkOTk2LjM1MlIyYWQ3ODIuMzM2ZDQ0My4zOTFkMjE1LjA0ZDQ0My4zOTFkMjE1LjA0ZDU3MS4zOTJkNjMyLjgzMmQ1NzEuMzkyZDY5NC4yNzJkNTcxLjM5MmQ3MzguMzA0ZDYxNC45MTJkNzgyLjMzNmQ2NTguNDMyZDc4Mi4zMzZkNzE5Ljg3MmQ3ODIuMzM2ZDg3NS41MmQ3ODIuMzM2ZDkzNS45MzZkNzM4LjMwNGQ5NzkuOTY4ZDY5NC4yNzJkMTAyNGQ2MzIuODMyZDEwMjRkMjA3Ljg3MmQxMDI0ZDE0Ni40MzJkMTAyNGQxMDIuNGQ5NzkuOTY4ZDU4LjM2OGQ5MzUuOTM2ZDU4LjM2OGQ4NzUuNTJkNTguMzY4ZDgxOC4xNzVkMjE1LjA0ZDgxOC4xNzVkMjE1LjA0ZDg2Ny4zMjhkNjI1LjY2NGQ4NjcuMzI4ZDYyNS42NjRkNzI5LjA4OGQ1OC4zNjhkNzI5LjA4OGQ1OC4zNjhkMjg2LjcyZDc4Mi4zMzZkMjg2LjcyZDc4Mi4zMzZkNDQzLjM5MWhSM2Q4NDkuOTJSNGQ3ODIuMzM2UjVkNTguMzY4UjZkNzM3LjI4UjdkMFI4ZDY3OC45MTJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk1M1IxMmQ1OC4zNjhSMTNkODQ5LjkyUjE0YWkxaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmhnOjE2NW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2NVIxMmQwUjEzZDBSMTRhaGc6NTJvUjFkOTk2LjM1MlIyYWQ2MDQuMTZkNjgzLjAwOGQ3MDIuNDY0ZDY4My4wMDhkNzAyLjQ2NGQ4NDAuNzA0ZDYwNC4xNmQ4NDAuNzA0ZDYwNC4xNmQxMDI0ZDQ0Ny40ODhkMTAyNGQ0NDcuNDg4ZDg0MC43MDRkNi4xNDRkODQwLjcwNGQ2LjE0NGQ3MDAuNDE1ZDQ2My44NzJkMjg2LjcyZDYwNC4xNmQyODYuNzJkNjA0LjE2ZDY4My4wMDhkNDQ3LjQ4OGQ1MzEuNDU2ZDI2MS4xMmQ2ODMuMDA4ZDQ0Ny40ODhkNjgzLjAwOGQ0NDcuNDg4ZDUzMS40NTZoUjNkNzQ3LjUyUjRkNzAyLjQ2NFI1ZDYuMTQ0UjZkNzM3LjI4UjdkMFI4ZDczMS4xMzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk1MlIxMmQ2LjE0NFIxM2Q3NDcuNTJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTFpMmkyaTJoZzoxNjRvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNjRSMTJkMFIxM2QwUjE0YWhnOjUxb1IxZDk5Ni4zNTJSMmFkNzUwLjU5MmQ0MzUuMTk5ZDc1MC41OTJkNTgyLjY1NmQ3NTAuNTkyZDYwOC4yNTZkNzQ0LjQ0OGQ2MjkuNzZkNzc4LjI0ZDY3MC43MmQ3NzguMjRkNzIyLjk0NGQ3NzguMjRkODc1LjUyZDc3OC4yNGQ5MzUuOTM2ZDczNC43MmQ5NzkuOTY4ZDY5MS4yZDEwMjRkNjI5Ljc2ZDEwMjRkMjAzLjc3NmQxMDI0ZDE0Mi4zMzZkMTAyNGQ5OC4zMDRkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ4MTguMTc1ZDIxMC45NDRkODE4LjE3NWQyMTAuOTQ0ZDg2Ny4zMjhkNjIxLjU2OGQ4NjcuMzI4ZDYyMS41NjhkNzMxLjEzNmQxNzUuMTA0ZDczMS4xMzZkMTc1LjEwNGQ1NzQuNDY0ZDU5My45MmQ1NzQuNDY0ZDU5My45MmQ0NDMuMzkxZDIxMC45NDRkNDQzLjM5MWQyMTAuOTQ0ZDUwMC43MzZkNTQuMjcyZDUwMC43MzZkNTQuMjcyZDQzNS4xOTlkNTQuMjcyZDM3My43NmQ5OC4zMDRkMzMwLjI0ZDE0Mi4zMzZkMjg2LjcyZDIwMy43NzZkMjg2LjcyZDYwMi4xMTJkMjg2LjcyZDY2My41NTJkMjg2LjcyZDcwNy4wNzJkMzMwLjI0ZDc1MC41OTJkMzczLjc2ZDc1MC41OTJkNDM1LjE5OWhSM2Q4NDUuODI0UjRkNzc4LjI0UjVkNTQuMjcyUjZkNzM3LjI4UjdkMFI4ZDY4My4wMDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk1MVIxMmQ1NC4yNzJSMTNkODQ1LjgyNFIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2hnOjE2M29SMWQ5OTYuMzUyUjJhZDY5Ni4zMmQ0OTIuNTQ0ZDUzOC42MjRkNDkyLjU0NGQ1MzguNjI0ZDQ0My4zOTFkMjg4Ljc2OGQ0NDMuMzkxZDI4OC43NjhkNTgzLjY4ZDU5OC4wMTZkNTgzLjY4ZDU5OC4wMTZkNzQwLjM1MmQyODguNzY4ZDc0MC4zNTJkMjg4Ljc2OGQ4NjcuMzI4ZDY5Ni4zMmQ4NjcuMzI4ZDY5Ni4zMmQxMDI0ZDM5LjkzNmQxMDI0ZDM5LjkzNmQ4NjcuMzI4ZDEzMi4wOTZkODY3LjMyOGQxMzIuMDk2ZDc0MC4zNTJkMzkuOTM2ZDc0MC4zNTJkMzkuOTM2ZDU4My42OGQxMzIuMDk2ZDU4My42OGQxMzIuMDk2ZDQzNS4xOTlkMTMyLjA5NmQzNzMuNzZkMTc2LjEyOGQzMzAuMjRkMjIwLjE2ZDI4Ni43MmQyODAuNTc2ZDI4Ni43MmQ1NDcuODRkMjg2LjcyZDYwOS4yOGQyODYuNzJkNjUyLjhkMzMwLjI0ZDY5Ni4zMmQzNzMuNzZkNjk2LjMyZDQzNS4xOTlkNjk2LjMyZDQ5Mi41NDRoUjNkNzUxLjYxNlI0ZDY5Ni4zMlI1ZDM5LjkzNlI2ZDczNy4yOFI3ZDBSOGQ2OTcuMzQ0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTYzUjEyZDM5LjkzNlIxM2Q3NTEuNjE2UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaGc6NTBvUjFkOTk2LjM1MlIyYWQyMDcuODcyZDI4Ni43MmQ2MzIuODMyZDI4Ni43MmQ2OTQuMjcyZDI4Ni43MmQ3MzguMzA0ZDMzMC4yNGQ3ODIuMzM2ZDM3My43NmQ3ODIuMzM2ZDQzNS4xOTlkNzgyLjMzNmQ1OTguMDE2ZDc4Mi4zMzZkNjU5LjQ1NmQ3MzguMzA0ZDcwMy40ODhkNjk0LjI3MmQ3NDcuNTJkNjMyLjgzMmQ3NDcuNTJkMjE1LjA0ZDc0Ny41MmQyMTUuMDRkODY3LjMyOGQ3ODIuMzM2ZDg2Ny4zMjhkNzgyLjMzNmQxMDI0ZDU4LjM2OGQxMDI0ZDU4LjM2OGQ3MzguMzA0ZDU4LjM2OGQ2NzYuODY0ZDEwMi40ZDYzMy4zNDRkMTQ2LjQzMmQ1ODkuODI0ZDIwNy44NzJkNTg5LjgyNGQ2MjUuNjY0ZDU4OS44MjRkNjI1LjY2NGQ0NDMuMzkxZDIxNS4wNGQ0NDMuMzkxZDIxNS4wNGQ1MDIuNzg0ZDU4LjM2OGQ1MDIuNzg0ZDU4LjM2OGQ0MzUuMTk5ZDU4LjM2OGQzNzMuNzZkMTAyLjRkMzMwLjI0ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyaFIzZDg0OS45MlI0ZDc4Mi4zMzZSNWQ1OC4zNjhSNmQ3MzcuMjhSN2QwUjhkNjc4LjkxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTUwUjEyZDU4LjM2OFIxM2Q4NDkuOTJSMTRhaTFpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTNpM2hnOjE2Mm9SMWQ5OTYuMzUyUjJhZDYzNS45MDRkNTc4LjU2ZDQ1NS42OGQ1NzguNTZkNDU1LjY4ZDg2Ny4zMjhkNjM1LjkwNGQ4NjcuMzI4ZDYzNS45MDRkMTAyNGQ0NTUuNjhkMTAyNGQ0NTUuNjhkMTEyNS4zNzZkMjk3Ljk4NGQxMTI1LjM3NmQyOTcuOTg0ZDEwMjRkMTgzLjI5NmQxMDI0ZDEyMS44NTZkMTAyNGQ3Ny44MjRkOTc5Ljk2OGQzMy43OTJkOTM1LjkzNmQzMy43OTJkODc1LjUyZDMzLjc5MmQ1NjkuMzQ0ZDMzLjc5MmQ1MDcuOTA0ZDc3LjgyNGQ0NjMuODcxZDEyMS44NTZkNDE5Ljg0ZDE4My4yOTZkNDE5Ljg0ZDI5Ny45ODRkNDE5Ljg0ZDI5Ny45ODRkMzAyLjA4ZDQ1NS42OGQzMDIuMDhkNDU1LjY4ZDQxOS44NGQ2MzUuOTA0ZDQxOS44NGQ2MzUuOTA0ZDU3OC41NmQyOTcuOTg0ZDg2Ny4zMjhkMjk3Ljk4NGQ1NzguNTZkMTkwLjQ2NGQ1NzguNTZkMTkwLjQ2NGQ4NjcuMzI4ZDI5Ny45ODRkODY3LjMyOGhSM2Q2NTEuMjY0UjRkNjM1LjkwNFI1ZDMzLjc5MlI2ZDcyMS45MlI3ZC0xMDEuMzc2UjhkNjg4LjEyOFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2MlIxMmQzMy43OTJSMTNkNjUxLjI2NFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6NDlvUjFkOTk2LjM1MlIyYWQxLjAyNGQ1NjcuMjk2ZDIzNi41NDRkMjg2LjcyZDM5OS4zNmQyODYuNzJkMzk5LjM2ZDEwMjRkMjQyLjY4OGQxMDI0ZDI0Mi42ODhkNTI1LjMxMmQyNDAuNjRkNTI3LjM2ZDI0MS42NjRkNTI3LjM2ZDIwOC44OTZkNTY3LjI5NmQxLjAyNGQ1NjcuMjk2aFIzZDQwMC4zODRSNGQzOTkuMzZSNWQxLjAyNFI2ZDczNy4yOFI3ZDBSOGQ3MzYuMjU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNDlSMTJkMS4wMjRSMTNkNDAwLjM4NFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmhnOjE2MW9SMWQ5OTYuMzUyUjJhZDIxMC45NDRkMzAxLjA1NmQyMTAuOTQ0ZDQ1Ny43MjdkNTQuMjcyZDQ1Ny43MjdkNTQuMjcyZDMwMS4wNTZkMjEwLjk0NGQzMDEuMDU2ZDIxMC45NDRkMTAyNGQ1NC4yNzJkMTAyNGQ1NC4yNzJkNDg1LjM3NmQyMTAuOTQ0ZDQ4NS4zNzZkMjEwLjk0NGQxMDI0aFIzZDIxNS4wNFI0ZDIxMC45NDRSNWQ1NC4yNzJSNmQ3MjIuOTQ0UjdkMFI4ZDY2OC42NzJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNjFSMTJkNTQuMjcyUjEzZDIxNS4wNFIxNGFpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjQ4b1IxZDk5Ni4zNTJSMmFkMjA3Ljg3MmQyODYuNzJkNjMyLjgzMmQyODYuNzJkNjk0LjI3MmQyODYuNzJkNzM4LjMwNGQzMzIuMjg4ZDc4Mi4zMzZkMzc3Ljg1NmQ3ODIuMzM2ZDQzOS4yOTVkNzgyLjMzNmQ4NjUuMjhkNzgyLjMzNmQ5MjYuNzJkNzM3Ljc5MmQ5NzUuMzZkNjkzLjI0OGQxMDI0ZDYzMi44MzJkMTAyNGQyMDcuODcyZDEwMjRkMTQ3LjQ1NmQxMDI0ZDEwMi45MTJkOTc1LjM2ZDU4LjM2OGQ5MjYuNzJkNTguMzY4ZDg2NS4yOGQ1OC4zNjhkNDM5LjI5NWQ1OC4zNjhkMzc3Ljg1NmQxMDIuNGQzMzIuMjg4ZDE0Ni40MzJkMjg2LjcyZDIwNy44NzJkMjg2LjcyZDI5OS4wMDhkODU3LjA4OGQ2MjUuNjY0ZDg1Ny4wODhkNjI1LjY2NGQ1ODIuNjU2ZDI5OS4wMDhkODU3LjA4OGQ1NDEuNjk2ZDQ0Ny40ODdkMjE1LjA0ZDQ0Ny40ODdkMjE1LjA0ZDcyMS45MmQ1NDEuNjk2ZDQ0Ny40ODdoUjNkODU0LjAxNlI0ZDc4Mi4zMzZSNWQ1OC4zNjhSNmQ3MzcuMjhSN2QwUjhkNjc4LjkxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTQ4UjEyZDU4LjM2OFIxM2Q4NTQuMDE2UjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMWkyaTJpMmhnOjE2MG9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE2MFIxMmQwUjEzZDBSMTRhaGc6NDdvUjFkOTk2LjM1MlIyYWQ2LjE0NGQ4NjUuMjhkNDc4LjIwOGQyODYuNzJkNTM0LjUyOGQyODYuNzJkNTM0LjUyOGQ0NDQuNDE1ZDYyLjQ2NGQxMDI0ZDYuMTQ0ZDEwMjRkNi4xNDRkODY1LjI4aFIzZDUzMy41MDRSNGQ1MzQuNTI4UjVkNi4xNDRSNmQ3MzcuMjhSN2QwUjhkNzMxLjEzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTQ3UjEyZDYuMTQ0UjEzZDUzMy41MDRSMTRhaTFpMmkyaTJpMmkyaTJoZzoxNTlvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNTlSMTJkMFIxM2QwUjE0YWhnOjQ2b1IxZDk5Ni4zNTJSMmFkMjExLjk2OGQ4NjcuMzI4ZDIxMS45NjhkMTAyNGQ1NS4yOTZkMTAyNGQ1NS4yOTZkODY3LjMyOGQyMTEuOTY4ZDg2Ny4zMjhoUjNkMjM4LjU5MlI0ZDIxMS45NjhSNWQ1NS4yOTZSNmQxNTYuNjcyUjdkMFI4ZDEwMS4zNzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk0NlIxMmQ1NS4yOTZSMTNkMjM4LjU5MlIxNGFpMWkyaTJpMmkyaGc6MTU4b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTU4UjEyZDBSMTNkMFIxNGFoZzo0NW9SMWQ5OTYuMzUyUjJhZDQ4Ny40MjRkNjQzLjA3MmQ0ODcuNDI0ZDc5OS43NDRkNjAuNDE2ZDc5OS43NDRkNjAuNDE2ZDY0My4wNzJkNDg3LjQyNGQ2NDMuMDcyaFIzZDUyOS40MDhSNGQ0ODcuNDI0UjVkNjAuNDE2UjZkMzgwLjkyOFI3ZDIyNC4yNTZSOGQzMjAuNTEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNDVSMTJkNjAuNDE2UjEzZDUyOS40MDhSMTRhaTFpMmkyaTJpMmhnOjE1N29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE1N1IxMmQwUjEzZDBSMTRhaGc6NDRvUjFkOTk2LjM1MlIyYWQ1NS4yOTZkODc4LjU5MmQyMTEuOTY4ZDg3OC41OTJkMjExLjk2OGQxMDA3LjYxNmQyMTEuOTY4ZDEwNjIuOTEyZDE2Ny40MjRkMTEwNS45MmQxMjIuODhkMTE0OC45MjhkNTUuMjk2ZDExNjAuMTkyZDU1LjI5NmQ4NzguNTkyaFIzZDI0OC44MzJSNGQyMTEuOTY4UjVkNTUuMjk2UjZkMTQ1LjQwOFI3ZC0xMzYuMTkyUjhkOTAuMTEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNDRSMTJkNTUuMjk2UjEzZDI0OC44MzJSMTRhaTFpMmkyaTNpM2kyaGc6MTU2b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTU2UjEyZDBSMTNkMFIxNGFoZzo0M29SMWQ5OTYuMzUyUjJhZDE1MC41MjhkNTA4LjkyOGQzMDcuMmQ1MDguOTI4ZDMwNy4yZDY0My4wNzJkNDQ0LjQxNmQ2NDMuMDcyZDQ0NC40MTZkNzk5Ljc0NGQzMDcuMmQ3OTkuNzQ0ZDMwNy4yZDkzNS45MzZkMTUwLjUyOGQ5MzUuOTM2ZDE1MC41MjhkNzk5Ljc0NGQxNy40MDhkNzk5Ljc0NGQxNy40MDhkNjQzLjA3MmQxNTAuNTI4ZDY0My4wNzJkMTUwLjUyOGQ1MDguOTI4aFIzZDQ2NS45MlI0ZDQ0NC40MTZSNWQxNy40MDhSNmQ1MTUuMDcyUjdkODguMDY0UjhkNDk3LjY2NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTQzUjEyZDE3LjQwOFIxM2Q0NjUuOTJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJoZzoxNTVvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNTVSMTJkMFIxM2QwUjE0YWhnOjQyb1IxZDk5Ni4zNTJSMmFkNDU1LjY4ZDM4MS45NTJkNTAzLjgwOGQ1MzMuNTAzZDM5MS4xNjhkNTY5LjM0NGQ0NjEuODI0ZDY2NC41NzZkMzM1Ljg3MmQ3NTYuNzM2ZDI2My4xNjhkNjYxLjUwNGQxOTUuNTg0ZDc1Ni43MzZkNjcuNTg0ZDY2NC41NzZkMTM4LjI0ZDU2OS4zNDRkMjUuNmQ1MzMuNTAzZDczLjcyOGQzODEuOTUyZDE4NS4zNDRkNDE5Ljg0ZDE4NS4zNDRkMzAxLjA1NmQzNDMuMDRkMzAxLjA1NmQzNDMuMDRkNDE5Ljg0ZDM1My4yOGQ0MTYuNzY4ZDQ1NS42OGQzODEuOTUyaFIzZDUyOC4zODRSNGQ1MDMuODA4UjVkMjUuNlI2ZDcyMi45NDRSN2QyNjcuMjY0UjhkNjk3LjM0NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTQyUjEyZDI1LjZSMTNkNTI4LjM4NFIxNGFpMWkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpM2hnOjE1NG9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE1NFIxMmQwUjEzZDBSMTRhaGc6NDFvUjFkOTk2LjM1MlIyYWQ1Ny4zNDRkMTAyNGQ1Ny4zNDRkODY3LjMyOGQxMTYuNzM2ZDg2Ny4zMjhkMTE2LjczNmQ0NDMuMzkxZDU3LjM0NGQ0NDMuMzkxZDU3LjM0NGQyODYuNzJkMTI1Ljk1MmQyODYuNzJkMTg2LjM2OGQyODYuNzJkMjMwLjRkMzMwLjI0ZDI3NC40MzJkMzczLjc2ZDI3NC40MzJkNDM1LjE5OWQyNzQuNDMyZDg3NS41MmQyNzQuNDMyZDkzNS45MzZkMjMwLjRkOTc5Ljk2OGQxODYuMzY4ZDEwMjRkMTI1Ljk1MmQxMDI0ZDU3LjM0NGQxMDI0aFIzZDMwNC4xMjhSNGQyNzQuNDMyUjVkNTcuMzQ0UjZkNzM3LjI4UjdkMFI4ZDY3OS45MzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWk0MVIxMmQ1Ny4zNDRSMTNkMzA0LjEyOFIxNGFpMWkyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmhnOjE1M29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE1M1IxMmQwUjEzZDBSMTRhaGc6NDBvUjFkOTk2LjM1MlIyYWQyNjkuMzEyZDQ0My4zOTFkMjA5LjkyZDQ0My4zOTFkMjA5LjkyZDg2Ny4zMjhkMjY5LjMxMmQ4NjcuMzI4ZDI2OS4zMTJkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDQzNS4xOTlkNTMuMjQ4ZDM3My43NmQ5Ni43NjhkMzMwLjI0ZDE0MC4yODhkMjg2LjcyZDIwMS43MjhkMjg2LjcyZDI2OS4zMTJkMjg2LjcyZDI2OS4zMTJkNDQzLjM5MWhSM2QzMDEuMDU2UjRkMjY5LjMxMlI1ZDUzLjI0OFI2ZDczNy4yOFI3ZDBSOGQ2ODQuMDMyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpNDBSMTJkNTMuMjQ4UjEzZDMwMS4wNTZSMTRhaTFpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJoZzoxNTJvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNTJSMTJkMFIxM2QwUjE0YWhnOjM5b1IxZDk5Ni4zNTJSMmFkMjE3LjA4OGQzMDEuMDU2ZDIxNy4wODhkNTA3LjkwNGQ2MC40MTZkNTA3LjkwNGQ2MC40MTZkMzAxLjA1NmQyMTcuMDg4ZDMwMS4wNTZoUjNkMjU3LjAyNFI0ZDIxNy4wODhSNWQ2MC40MTZSNmQ3MjIuOTQ0UjdkNTE2LjA5NlI4ZDY2Mi41MjhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkzOVIxMmQ2MC40MTZSMTNkMjU3LjAyNFIxNGFpMWkyaTJpMmkyaGc6MTUxb1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTUxUjEyZDBSMTNkMFIxNGFoZzozOG9SMWQ5OTYuMzUyUjJhZDc3Ny4yMTZkODExLjAwOGQ4OTQuOTc2ZDg4MC42NGQ4OTQuOTc2ZDEwNDIuNDMyZDc1MS42MTZkOTYwLjUxMmQ3MDUuNTM2ZDEwMjRkNjI4LjczNmQxMDI0ZDIwMi43NTJkMTAyNGQxNDEuMzEyZDEwMjRkOTcuNzkyZDk3OS45NjhkNTQuMjcyZDkzNS45MzZkNTQuMjcyZDg3NS41MmQ1NC4yNzJkNjg2LjA3OWQ1NC4yNzJkNjYzLjU1MmQ2NS41MzZkNjM4Ljk3NmQ3Ni44ZDYxNC40ZDk4LjMwNGQ2MDAuMDY0ZDkxLjEzNmQ1ODIuNjU2ZDkxLjEzNmQ1NDUuNzkxZDkxLjEzNmQ0MzYuMjIzZDkxLjEzNmQzNzQuNzg0ZDEzNS4xNjhkMzMxLjI2NGQxNzkuMmQyODcuNzQ0ZDIzOS42MTZkMjg3Ljc0NGQ2MDEuMDg4ZDI4Ny43NDRkNjU1LjM2ZDI4Ny43NDRkNjk3Ljg1NmQzMjIuNTU5ZDc0MC4zNTJkMzU3LjM3NmQ3NDkuNTY4ZDQwOS42ZDc0OS41NjhkNDk5LjcxMmQ1OTIuODk2ZDQ5OS43MTJkNTkyLjg5NmQ0NDUuNDM5ZDI0Ny44MDhkNDQ1LjQzOWQyNDcuODA4ZDU1Ni4wMzFkNjIwLjU0NGQ3NDMuNDI0ZDYyMC41NDRkNjQ2LjE0NGQ3NzcuMjE2ZDY0Ni4xNDRkNzc3LjIxNmQ4MTEuMDA4ZDQ0Mi4zNjhkODE0LjA3OWQyMTAuOTQ0ZDY5Ny4zNDRkMjEwLjk0NGQ4NjcuMzI4ZDU0OC44NjRkODY3LjMyOGQ1MzMuNTA0ZDg1OS4xMzZkNDk3LjY2NGQ4NDEuNzI4ZDQ2MS44MjRkODI0LjMxOWQ0NDIuMzY4ZDgxNC4wNzloUjNkOTYwLjUxMlI0ZDg5NC45NzZSNWQ1NC4yNzJSNmQ3MzYuMjU2UjdkLTE4LjQzMlI4ZDY4MS45ODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkzOFIxMmQ1NC4yNzJSMTNkOTYwLjUxMlIxNGFpMWkyaTJpMmkzaTJpM2kzaTJpM2kzaTNpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkzaTNoZzoxNTBvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNTBSMTJkMFIxM2QwUjE0YWhnOjM3b1IxZDk5Ni4zNTJSMmFkODA4Ljk2ZDI4Ny43NDRkODYxLjE4NGQyODcuNzQ0ZDg2MS4xODRkNDQ3LjQ4N2QxODkuNDRkMTAyNGQxMzcuMjE2ZDEwMjRkMTM3LjIxNmQ4NjMuMjMyZDgwOC45NmQyODcuNzQ0ZDE4OC40MTZkMjk0LjkxMmQyNzEuMzZkMjk0LjkxMmQzMzIuOGQyOTQuOTEyZDM3MS43MTJkMzMzLjMxMmQ0MTAuNjI0ZDM3MS43MTJkNDEwLjYyNGQ0MzMuMTUyZDQxMC42MjRkNTA2Ljg4ZDQxMC42MjRkNTY4LjMxOWQzNzEuNzEyZDYwNy4yMzJkMzMyLjhkNjQ2LjE0NGQyNzEuMzZkNjQ2LjE0NGQxODguNDE2ZDY0Ni4xNDRkMTI2Ljk3NmQ2NDYuMTQ0ZDg4LjA2NGQ2MDcuMjMyZDQ5LjE1MmQ1NjguMzE5ZDQ5LjE1MmQ1MDYuODhkNDkuMTUyZDQzMy4xNTJkNDkuMTUyZDM3MS43MTJkODguMDY0ZDMzMy4zMTJkMTI2Ljk3NmQyOTQuOTEyZDE4OC40MTZkMjk0LjkxMmQ3MDguNjA4ZDY2My41NTJkNzkxLjU1MmQ2NjMuNTUyZDg1Mi45OTJkNjYzLjU1MmQ4OTEuOTA0ZDcwMS45NTJkOTMwLjgxNmQ3NDAuMzUyZDkzMC44MTZkODAxLjc5MmQ5MzAuODE2ZDg3NS41MmQ5MzAuODE2ZDkzNi45NmQ4OTEuOTA0ZDk3NS44NzJkODUyLjk5MmQxMDE0Ljc4NGQ3OTEuNTUyZDEwMTQuNzg0ZDcwOC42MDhkMTAxNC43ODRkNjQ4LjE5MmQxMDE0Ljc4NGQ2MDkuMjhkOTc1Ljg3MmQ1NzAuMzY4ZDkzNi45NmQ1NzAuMzY4ZDg3NS41MmQ1NzAuMzY4ZDgwMS43OTJkNTcwLjM2OGQ3NDAuMzUyZDYwOS4yOGQ3MDEuOTUyZDY0OC4xOTJkNjYzLjU1MmQ3MDguNjA4ZDY2My41NTJkNjk4LjM2OGQ3OTEuNTUyZDY5OC4zNjhkODg2Ljc4NGQ4MDIuODE2ZDg4Ni43ODRkODAyLjgxNmQ3OTEuNTUyZDY5OC4zNjhkNzkxLjU1MmQxNzcuMTUyZDQyMi45MTJkMTc3LjE1MmQ1MTcuMTJkMjgxLjZkNTE3LjEyZDI4MS42ZDQyMi45MTJkMTc3LjE1MmQ0MjIuOTEyaFIzZDk4OS4xODRSNGQ5MzAuODE2UjVkNDkuMTUyUjZkNzM2LjI1NlI3ZDBSOGQ2ODcuMTA0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMzdSMTJkNDkuMTUyUjEzZDk4OS4xODRSMTRhaTFpMmkyaTJpMmkyaTJpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNDlvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNDlSMTJkMFIxM2QwUjE0YWhnOjM2b1IxZDk5Ni4zNTJSMmFkNzU3Ljc2ZDQzNS4xOTlkNzU3Ljc2ZDUwMi43ODRkNjAxLjA4OGQ1MDIuNzg0ZDYwMS4wODhkNDQzLjM5MWQ0NzUuMTM2ZDQ0My4zOTFkNDc1LjEzNmQ1ODAuNjA4ZDYwOS4yOGQ1ODAuNjA4ZDY3MC43MmQ1ODAuNjA4ZDcxNC4yNGQ2MjQuNjRkNzU3Ljc2ZDY2OC42NzJkNzU3Ljc2ZDczMC4xMTJkNzU3Ljc2ZDg3NS41MmQ3NTcuNzZkOTM1LjkzNmQ3MTQuMjRkOTc5Ljk2OGQ2NzAuNzJkMTAyNGQ2MDkuMjhkMTAyNGQ0NzUuMTM2ZDEwMjRkNDc1LjEzNmQxMTI0LjM1MmQzMTcuNDRkMTEyNC4zNTJkMzE3LjQ0ZDEwMjRkMTgzLjI5NmQxMDI0ZDEyMS44NTZkMTAyNGQ3OC4zMzZkOTc5Ljk2OGQzNC44MTZkOTM1LjkzNmQzNC44MTZkODc1LjUyZDM0LjgxNmQ4MDcuOTM2ZDE5MS40ODhkODA3LjkzNmQxOTEuNDg4ZDg2Ny4zMjhkMzE3LjQ0ZDg2Ny4zMjhkMzE3LjQ0ZDczNy4yOGQxODMuMjk2ZDczNy4yOGQxMjEuODU2ZDczNy4yOGQ3OC4zMzZkNjkzLjc2ZDM0LjgxNmQ2NTAuMjRkMzQuODE2ZDU4OC44ZDM0LjgxNmQ0MzUuMTk5ZDM0LjgxNmQzNzMuNzZkNzguMzM2ZDMzMC4yNGQxMjEuODU2ZDI4Ni43MmQxODMuMjk2ZDI4Ni43MmQzMTcuNDRkMjg2LjcyZDMxNy40NGQxODYuMzY3ZDQ3NS4xMzZkMTg2LjM2N2Q0NzUuMTM2ZDI4Ni43MmQ2MDkuMjhkMjg2LjcyZDY3MC43MmQyODYuNzJkNzE0LjI0ZDMzMC4yNGQ3NTcuNzZkMzczLjc2ZDc1Ny43NmQ0MzUuMTk5ZDMxNy40NGQ1ODAuNjA4ZDMxNy40NGQ0NDMuMzkxZDE5MS40ODhkNDQzLjM5MWQxOTEuNDg4ZDU4MC42MDhkMzE3LjQ0ZDU4MC42MDhkNDc1LjEzNmQ3MzcuMjhkNDc1LjEzNmQ4NjcuMzI4ZDYwMS4wODhkODY3LjMyOGQ2MDEuMDg4ZDczNy4yOGQ0NzUuMTM2ZDczNy4yOGhSM2Q4MDYuOTEyUjRkNzU3Ljc2UjVkMzQuODE2UjZkODM3LjYzMlI3ZC0xMDAuMzUyUjhkODAyLjgxNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTM2UjEyZDM0LjgxNlIxM2Q4MDYuOTEyUjE0YWkxaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpM2kzaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxNDhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNDhSMTJkMFIxM2QwUjE0YWhnOjM1b1IxZDk5Ni4zNTJSMmFkNzY4ZDQ0MC4zMTlkNzY4ZDU5Ni45OTJkNjUwLjI0ZDU5Ni45OTJkNjE1LjQyNGQ3MDUuNTM2ZDczOS4zMjhkNzA1LjUzNmQ3MzkuMzI4ZDg2Mi4yMDhkNTY0LjIyNGQ4NjIuMjA4ZDU1Ni4wMzJkODg2Ljc4NGQ1NDAuNjcyZDk0My4xMDRkNTI1LjMxMmQ5OTkuNDI0ZDUxOC4xNDRkMTAyNGQzNTkuNDI0ZDEwMjRkNDA4LjU3NmQ4NjIuMjA4ZDI2NS4yMTZkODYyLjIwOGQyNTcuMDI0ZDg4OS44NTZkMjQxLjE1MmQ5NDcuMmQyMjUuMjhkMTAwNC41NDRkMjIwLjE2ZDEwMjRkNjEuNDRkMTAyNGQxMDkuNTY4ZDg2Mi4yMDhkMzIuNzY4ZDg2Mi4yMDhkMzIuNzY4ZDcwNS41MzZkMTU2LjY3MmQ3MDUuNTM2ZDE5MS40ODhkNTk2Ljk5MmQ2MS40NGQ1OTYuOTkyZDYxLjQ0ZDQ0MC4zMTlkMjQxLjY2NGQ0NDAuMzE5ZDI1NC45NzZkNDAzLjQ1NmQyOTAuODE2ZDI4Ni43MmQ0NTIuNjA4ZDI4Ni43MmQ0MDAuMzg0ZDQ0MC4zMTlkNTQxLjY5NmQ0NDAuMzE5ZDU5MC44NDhkMjg2LjcyZDc1MS42MTZkMjg2LjcyZDY5OS4zOTJkNDQwLjMxOWQ3NjhkNDQwLjMxOWQzMTYuNDE2ZDcwNS41MzZkNDU1LjY4ZDcwNS41MzZkNDkwLjQ5NmQ1OTYuOTkyZDM1MS4yMzJkNTk2Ljk5MmQzMTYuNDE2ZDcwNS41MzZoUjNkODE2LjEyOFI0ZDc2OFI1ZDMyLjc2OFI2ZDczNy4yOFI3ZDBSOGQ3MDQuNTEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMzVSMTJkMzIuNzY4UjEzZDgxNi4xMjhSMTRhaTFpMmkyaTJpMmkyaTJpM2kzaTJpMmkyaTNpM2kyaTJpMmkyaTJpMmkyaTJpMmkzaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTQ3b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTQ3UjEyZDBSMTNkMFIxNGFoZzozNG9SMWQ5OTYuMzUyUjJhZDE5Mi41MTJkMzAxLjA1NmQxOTIuNTEyZDUwNi44OGQzNi44NjRkNTA2Ljg4ZDM2Ljg2NGQzMDEuMDU2ZDE5Mi41MTJkMzAxLjA1NmQzNzcuODU2ZDMwMS4wNTZkMzc3Ljg1NmQ1MDYuODhkMjIyLjIwOGQ1MDYuODhkMjIyLjIwOGQzMDEuMDU2ZDM3Ny44NTZkMzAxLjA1NmhSM2Q0MDUuNTA0UjRkMzc3Ljg1NlI1ZDM2Ljg2NFI2ZDcyMi45NDRSN2Q1MTcuMTJSOGQ2ODYuMDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkzNFIxMmQzNi44NjRSMTNkNDA1LjUwNFIxNGFpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjE0Nm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE0NlIxMmQwUjEzZDBSMTRhaGc6MzNvUjFkOTk2LjM1MlIyYWQyMTYuMDY0ZDEwMjRkNTkuMzkyZDEwMjRkNTkuMzkyZDg2Ny4zMjhkMjE2LjA2NGQ4NjcuMzI4ZDIxNi4wNjRkMTAyNGQ1OS4zOTJkODE4LjE3NWQ1OS4zOTJkMjg2LjcyZDIxNi4wNjRkMjg2LjcyZDIxNi4wNjRkODE4LjE3NWQ1OS4zOTJkODE4LjE3NWhSM2QyMjUuMjhSNGQyMTYuMDY0UjVkNTkuMzkyUjZkNzM3LjI4UjdkMFI4ZDY3Ny44ODhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkzM1IxMmQ1OS4zOTJSMTNkMjI1LjI4UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTQ1b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTQ1UjEyZDBSMTNkMFIxNGFoZzozMm9SMWQ5OTYuMzUyUjJhaFIzZDMyOS43MjhSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTMyUjEyZDBSMTNkMzI5LjcyOFIxNGFoZzoxNDRvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNDRSMTJkMFIxM2QwUjE0YWhnOjE0M29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE0M1IxMmQwUjEzZDBSMTRhaGc6MjU1b1IxZDk5Ni4zNTJSMmFkNjQ2LjE0NGQxMDg4LjUxMmQ2NDYuMTQ0ZDExNDkuOTUyZDYwMi42MjRkMTE5My40NzJkNTU5LjEwNGQxMjM2Ljk5MmQ0OTcuNjY0ZDEyMzYuOTkyZDEzNy4yMTZkMTIzNi45OTJkMTM3LjIxNmQxMDc5LjI5NmQ0ODkuNDcyZDEwNzkuMjk2ZDQ4OS40NzJkMTAyNGQxOTIuNTEyZDEwMjRkMTMxLjA3MmQxMDI0ZDg3LjA0ZDk3OS45NjhkNDMuMDA4ZDkzNS45MzZkNDMuMDA4ZDg3NS41MmQ0My4wMDhkNDMyLjEyOGQxOTkuNjhkNDMyLjEyOGQxOTkuNjhkODY3LjMyOGQ0ODkuNDcyZDg2Ny4zMjhkNDg5LjQ3MmQ0MzIuMTI4ZDY0Ni4xNDRkNDMyLjEyOGQ2NDYuMTQ0ZDEwODguNTEyZDU1NS4wMDhkMjEwLjk0M2Q1NTUuMDA4ZDM2OC42NGQzOTcuMzEyZDM2OC42NGQzOTcuMzEyZDIxMC45NDNkNTU1LjAwOGQyMTAuOTQzZDMzNS44NzJkMjEwLjk0M2QzMzUuODcyZDM2OC42NGQxNzkuMmQzNjguNjRkMTc5LjJkMjEwLjk0M2QzMzUuODcyZDIxMC45NDNoUjNkNzA0LjUxMlI0ZDY0Ni4xNDRSNWQ0My4wMDhSNmQ4MTMuMDU2UjdkLTIxMi45OTJSOGQ3NzAuMDQ4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjU1UjEyZDQzLjAwOFIxM2Q3MDQuNTEyUjE0YWkxaTNpM2kyaTJpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjE0Mm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTE0MlIxMmQwUjEzZDBSMTRhaGc6MjU0b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjU0UjEyZDBSMTNkMFIxNGFoZzoxNDFvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxNDFSMTJkMFIxM2QwUjE0YWhnOjI1M29SMWQ5OTYuMzUyUjJhZDY0Ni4xNDRkMTA4OC41MTJkNjQ2LjE0NGQxMTQ5Ljk1MmQ2MDIuNjI0ZDExOTMuNDcyZDU1OS4xMDRkMTIzNi45OTJkNDk3LjY2NGQxMjM2Ljk5MmQxMzcuMjE2ZDEyMzYuOTkyZDEzNy4yMTZkMTA3OS4yOTZkNDg5LjQ3MmQxMDc5LjI5NmQ0ODkuNDcyZDEwMjRkMTkyLjUxMmQxMDI0ZDEzMS4wNzJkMTAyNGQ4Ny4wNGQ5NzkuOTY4ZDQzLjAwOGQ5MzUuOTM2ZDQzLjAwOGQ4NzUuNTJkNDMuMDA4ZDQzMi4xMjhkMTk5LjY4ZDQzMi4xMjhkMTk5LjY4ZDg2Ny4zMjhkNDg5LjQ3MmQ4NjcuMzI4ZDQ4OS40NzJkNDMyLjEyOGQ2NDYuMTQ0ZDQzMi4xMjhkNjQ2LjE0NGQxMDg4LjUxMmQyNzYuNDhkMzY5LjY2NGQzMjguNzA0ZDE2MS43OTJkNDg5LjQ3MmQxNjEuNzkyZDQzNy4yNDhkMzY5LjY2NGQyNzYuNDhkMzY5LjY2NGhSM2Q3MDQuNTEyUjRkNjQ2LjE0NFI1ZDQzLjAwOFI2ZDg2Mi4yMDhSN2QtMjEyLjk5MlI4ZDgxOS4yUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjUzUjEyZDQzLjAwOFIxM2Q3MDQuNTEyUjE0YWkxaTNpM2kyaTJpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTQwb1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTQwUjEyZDBSMTNkMFIxNGFoZzoyNTJvUjFkOTk2LjM1MlIyYWQ0OTkuNzEyZDQzMC4wOGQ2NTYuMzg0ZDQzMC4wOGQ2NTYuMzg0ZDg3NS41MmQ2NTYuMzg0ZDkzNS45MzZkNjEyLjg2NGQ5NzkuOTY4ZDU2OS4zNDRkMTAyNGQ1MDcuOTA0ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ0MzAuMDhkMjEwLjk0NGQ0MzAuMDhkMjEwLjk0NGQ4NjcuMzI4ZDQ5OS43MTJkODY3LjMyOGQ0OTkuNzEyZDQzMC4wOGQ1NTguMDhkMjEyLjk5MWQ1NTguMDhkMzcwLjY4OGQ0MDAuMzg0ZDM3MC42ODhkNDAwLjM4NGQyMTIuOTkxZDU1OC4wOGQyMTIuOTkxZDMzOC45NDRkMjEyLjk5MWQzMzguOTQ0ZDM3MC42ODhkMTgyLjI3MmQzNzAuNjg4ZDE4Mi4yNzJkMjEyLjk5MWQzMzguOTQ0ZDIxMi45OTFoUjNkNzExLjY4UjRkNjU2LjM4NFI1ZDU0LjI3MlI2ZDgxMS4wMDhSN2QwUjhkNzU2LjczNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTI1MlIxMmQ1NC4yNzJSMTNkNzExLjY4UjE0YWkxaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMzlvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMzlSMTJkMFIxM2QwUjE0YWhnOjI1MW9SMWQ5OTYuMzUyUjJhZDQ5OS43MTJkNDMwLjA4ZDY1Ni4zODRkNDMwLjA4ZDY1Ni4zODRkODc1LjUyZDY1Ni4zODRkOTM1LjkzNmQ2MTIuODY0ZDk3OS45NjhkNTY5LjM0NGQxMDI0ZDUwNy45MDRkMTAyNGQyMDIuNzUyZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDQzMC4wOGQyMTAuOTQ0ZDQzMC4wOGQyMTAuOTQ0ZDg2Ny4zMjhkNDk5LjcxMmQ4NjcuMzI4ZDQ5OS43MTJkNDMwLjA4ZDMyNS42MzJkMzY5LjY2NGQxODkuNDRkMzY5LjY2NGQzMDIuMDhkMTgxLjI0N2Q0MDQuNDhkMTgxLjI0N2Q1MTcuMTJkMzY5LjY2NGQzNzkuOTA0ZDM2OS42NjRkMzUxLjIzMmQzMjQuNjA3ZDMyNS42MzJkMzY5LjY2NGhSM2Q3MTEuNjhSNGQ2NTYuMzg0UjVkNTQuMjcyUjZkODQyLjc1MlI3ZDBSOGQ3ODguNDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNTFSMTJkNTQuMjcyUjEzZDcxMS42OFIxNGFpMWkyaTJpM2kzaTJpM2kzaTJpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzoxMzhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMzhSMTJkMFIxM2QwUjE0YWhnOjI1MG9SMWQ5OTYuMzUyUjJhZDQ5OS43MTJkNDMwLjA4ZDY1Ni4zODRkNDMwLjA4ZDY1Ni4zODRkODc1LjUyZDY1Ni4zODRkOTM1LjkzNmQ2MTIuODY0ZDk3OS45NjhkNTY5LjM0NGQxMDI0ZDUwNy45MDRkMTAyNGQyMDIuNzUyZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDQzMC4wOGQyMTAuOTQ0ZDQzMC4wOGQyMTAuOTQ0ZDg2Ny4zMjhkNDk5LjcxMmQ4NjcuMzI4ZDQ5OS43MTJkNDMwLjA4ZDI3OS41NTJkMzY5LjY2NGQzMzEuNzc2ZDE2MS43OTJkNDkyLjU0NGQxNjEuNzkyZDQ0MC4zMmQzNjkuNjY0ZDI3OS41NTJkMzY5LjY2NGhSM2Q3MTEuNjhSNGQ2NTYuMzg0UjVkNTQuMjcyUjZkODYyLjIwOFI3ZDBSOGQ4MDcuOTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjUwUjEyZDU0LjI3MlIxM2Q3MTEuNjhSMTRhaTFpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTM3b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTM3UjEyZDBSMTNkMFIxNGFoZzoyNDlvUjFkOTk2LjM1MlIyYWQ0OTkuNzEyZDQzMC4wOGQ2NTYuMzg0ZDQzMC4wOGQ2NTYuMzg0ZDg3NS41MmQ2NTYuMzg0ZDkzNS45MzZkNjEyLjg2NGQ5NzkuOTY4ZDU2OS4zNDRkMTAyNGQ1MDcuOTA0ZDEwMjRkMjAyLjc1MmQxMDI0ZDE0MS4zMTJkMTAyNGQ5Ny43OTJkOTc5Ljk2OGQ1NC4yNzJkOTM1LjkzNmQ1NC4yNzJkODc1LjUyZDU0LjI3MmQ0MzAuMDhkMjEwLjk0NGQ0MzAuMDhkMjEwLjk0NGQ4NjcuMzI4ZDQ5OS43MTJkODY3LjMyOGQ0OTkuNzEyZDQzMC4wOGQzOTkuMzZkMTYxLjc5MmQ0NTEuNTg0ZDM2OS42NjRkMjkwLjgxNmQzNjkuNjY0ZDIzOC41OTJkMTYxLjc5MmQzOTkuMzZkMTYxLjc5MmhSM2Q3MTEuNjhSNGQ2NTYuMzg0UjVkNTQuMjcyUjZkODYyLjIwOFI3ZDBSOGQ4MDcuOTM2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjQ5UjEyZDU0LjI3MlIxM2Q3MTEuNjhSMTRhaTFpMmkyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTM2b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTM2UjEyZDBSMTNkMFIxNGFoZzoyNDhvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNDhSMTJkMFIxM2QwUjE0YWhnOjEzNW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEzNVIxMmQwUjEzZDBSMTRhaGc6MjQ3b1IxZDk5Ni4zNTJSMmFkNTA4LjkyOGQ2MjEuNTY4ZDUwOC45MjhkNzc4LjI0ZDcuMTY4ZDc3OC4yNGQ3LjE2OGQ2MjEuNTY4ZDUwOC45MjhkNjIxLjU2OGQxODcuMzkyZDg2Ny4zMjhkMzQ0LjA2NGQ4NjcuMzI4ZDM0NC4wNjRkMTAyNGQxODcuMzkyZDEwMjRkMTg3LjM5MmQ4NjcuMzI4ZDM0NC4wNjRkMzkzLjIxNmQzNDQuMDY0ZDU1MC45MTJkMTg3LjM5MmQ1NTAuOTEyZDE4Ny4zOTJkMzkzLjIxNmQzNDQuMDY0ZDM5My4yMTZoUjNkNTMxLjQ1NlI0ZDUwOC45MjhSNWQ3LjE2OFI2ZDYzMC43ODRSN2QwUjhkNjIzLjYxNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTI0N1IxMmQ3LjE2OFIxM2Q1MzEuNDU2UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEzNG9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEzNFIxMmQwUjEzZDBSMTRhaGc6MjQ2b1IxZDk5Ni4zNTJSMmFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQ1NDYuODE2ZDIxMC45NDNkNTQ2LjgxNmQzNjguNjRkMzg5LjEyZDM2OC42NGQzODkuMTJkMjEwLjk0M2Q1NDYuODE2ZDIxMC45NDNkMzI3LjY4ZDIxMC45NDNkMzI3LjY4ZDM2OC42NGQxNzEuMDA4ZDM2OC42NGQxNzEuMDA4ZDIxMC45NDNkMzI3LjY4ZDIxMC45NDNoUjNkNzA4LjYwOFI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4MTMuMDU2UjdkMFI4ZDc2MC44MzJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNDZSMTJkNTIuMjI0UjEzZDcwOC42MDhSMTRhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMzNvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMzNSMTJkMFIxM2QwUjE0YWhnOjI0NW9SMWQ5OTYuMzUyUjJhZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4NzUuNTJkNjU0LjMzNmQ5MzUuOTM2ZDYxMC44MTZkOTc5Ljk2OGQ1NjcuMjk2ZDEwMjRkNTA1Ljg1NmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDg2Ny4zMjhkNDk3LjY2NGQ4NjcuMzI4ZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkNDI5LjA1NmQyNTAuODhkNDY4Ljk5MmQyNTAuODhkNTI3LjM2ZDIxMi45OTFkNTI3LjM2ZDM0Mi4wMTVkNDYzLjg3MmQzNjguNjRkNDI1Ljk4NGQzNjguNjRkMzg4LjA5NmQzNjguNjRkMzI5LjIxNmQzMzYuODk1ZDI3MC4zMzZkMzA1LjE1MWQyNDAuNjRkMzA1LjE1MWQyMjkuMzc2ZDMwNS4xNTFkMTg2LjM2OGQzMDUuMTUxZDE0My4zNmQzNDIuMDE1ZDE0My4zNmQyMTUuMDM5ZDIxMi45OTJkMTg3LjM5MWQyNDAuNjRkMTg3LjM5MWQyNzguNTI4ZDE4Ny4zOTFkMzM3LjkyZDIxNy4wODdkMzk3LjMxMmQyNDYuNzg0ZDQyOS4wNTZkMjUwLjg4aFIzZDcwOC42MDhSNGQ2NTQuMzM2UjVkNTIuMjI0UjZkODM2LjYwOFI3ZDBSOGQ3ODQuMzg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjQ1UjEyZDUyLjIyNFIxM2Q3MDguNjA4UjE0YWkxaTJpM2kzaTJpM2kzaTJpM2kzaTJpM2kzaTFpMmkyaTJpMmkxaTNpMmkzaTNpM2kyaTNpMmkzaTNpM2hnOjEzMm9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEzMlIxMmQwUjEzZDBSMTRhaGc6MjQ0b1IxZDk5Ni4zNTJSMmFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQzMzQuODQ4ZDM3MC42ODhkMTk4LjY1NmQzNzAuNjg4ZDMxMS4yOTZkMTgyLjI3MWQ0MTMuNjk2ZDE4Mi4yNzFkNTI2LjMzNmQzNzAuNjg4ZDM4OS4xMmQzNzAuNjg4ZDM2MC40NDhkMzI1LjYzMWQzMzQuODQ4ZDM3MC42ODhoUjNkNzA4LjYwOFI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4NDEuNzI4UjdkMFI4ZDc4OS41MDRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNDRSMTJkNTIuMjI0UjEzZDcwOC42MDhSMTRhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmkyaTJpMmhnOjEzMW9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEzMVIxMmQwUjEzZDBSMTRhaGc6MjQzb1IxZDk5Ni4zNTJSMmFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyNjguMjg4ZDM2OS42NjRkMzIwLjUxMmQxNjEuNzkyZDQ4MS4yOGQxNjEuNzkyZDQyOS4wNTZkMzY5LjY2NGQyNjguMjg4ZDM2OS42NjRoUjNkNzA4LjYwOFI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4NjIuMjA4UjdkMFI4ZDgwOS45ODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNDNSMTJkNTIuMjI0UjEzZDcwOC42MDhSMTRhaTFpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEzMG9SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEzMFIxMmQwUjEzZDBSMTRhaGc6MjQyb1IxZDk5Ni4zNTJSMmFkMjAwLjcwNGQ0MzAuMDhkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDg3NS41MmQ2NTQuMzM2ZDkzNS45MzZkNjEwLjgxNmQ5NzkuOTY4ZDU2Ny4yOTZkMTAyNGQ1MDUuODU2ZDEwMjRkMjAwLjcwNGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni4yNTZkOTc5Ljk2OGQ1Mi4yMjRkOTM1LjkzNmQ1Mi4yMjRkODc1LjUyZDUyLjIyNGQ1NzguNTZkNTIuMjI0ZDUxOC4xNDRkOTYuMjU2ZDQ3NC4xMTFkMTQwLjI4OGQ0MzAuMDhkMjAwLjcwNGQ0MzAuMDhkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGQ0OTcuNjY0ZDg2Ny4zMjhkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQ0MDguNTc2ZDE2MS43OTJkNDYwLjhkMzY5LjY2NGQzMDAuMDMyZDM2OS42NjRkMjQ3LjgwOGQxNjEuNzkyZDQwOC41NzZkMTYxLjc5MmhSM2Q3MDguNjA4UjRkNjU0LjMzNlI1ZDUyLjIyNFI2ZDg2Mi4yMDhSN2QwUjhkODA5Ljk4NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTI0MlIxMmQ1Mi4yMjRSMTNkNzA4LjYwOFIxNGFpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTI5b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTI5UjEyZDBSMTNkMFIxNGFoZzoyNDFvUjFkOTk2LjM1MlIyYWQ1MDguOTI4ZDQzMC4wOGQ1NzAuMzY4ZDQzMC4wOGQ2MTMuODg4ZDQ3NC4xMTFkNjU3LjQwOGQ1MTguMTQ0ZDY1Ny40MDhkNTc4LjU2ZDY1Ny40MDhkMTAyNGQ1MDAuNzM2ZDEwMjRkNTAwLjczNmQ1ODYuNzUyZDIxMS45NjhkNTg2Ljc1MmQyMTEuOTY4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDQzMC4wOGQ1MDguOTI4ZDQzMC4wOGQ0MjcuMDA4ZDI1MC44OGQ0NjYuOTQ0ZDI1MC44OGQ1MjUuMzEyZDIxMi45OTFkNTI1LjMxMmQzNDIuMDE1ZDQ2MS44MjRkMzY4LjY0ZDQyMy45MzZkMzY4LjY0ZDM4Ni4wNDhkMzY4LjY0ZDMyNy4xNjhkMzM2Ljg5NWQyNjguMjg4ZDMwNS4xNTFkMjM4LjU5MmQzMDUuMTUxZDIyNy4zMjhkMzA1LjE1MWQxODQuMzJkMzA1LjE1MWQxNDEuMzEyZDM0Mi4wMTVkMTQxLjMxMmQyMTUuMDM5ZDIxMC45NDRkMTg3LjM5MWQyMzguNTkyZDE4Ny4zOTFkMjc2LjQ4ZDE4Ny4zOTFkMzM1Ljg3MmQyMTcuMDg3ZDM5NS4yNjRkMjQ2Ljc4NGQ0MjcuMDA4ZDI1MC44OGhSM2Q3MjQuOTkyUjRkNjU3LjQwOFI1ZDU1LjI5NlI2ZDgzNi42MDhSN2QwUjhkNzgxLjMxMlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTI0MVIxMmQ1NS4yOTZSMTNkNzI0Ljk5MlIxNGFpMWkzaTNpMmkyaTJpMmkyaTJpMmkyaTFpM2kyaTNpM2kzaTJpM2kyaTNpM2kzaGc6MTI4b1IxZDk5Ni4zNTJSMmFoUjNkMFI0ZDBSNWQwUjZkMFI3ZDBSOGQwUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTI4UjEyZDBSMTNkMFIxNGFoZzoyNDBvUjFkOTk2LjM1MlIyYWhSM2QwUjRkMFI1ZDBSNmQwUjdkMFI4ZDBSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyNDBSMTJkMFIxM2QwUjE0YWhnOjEyN29SMWQ5OTYuMzUyUjJhaFIzZDBSNGQwUjVkMFI2ZDBSN2QwUjhkMFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEyN1IxMmQwUjEzZDBSMTRhaGc6MjM5b1IxZDk5Ni4zNTJSMmFkNTYuMzJkMTAyNGQ1Ni4zMmQ0MzAuMDhkMjEyLjk5MmQ0MzAuMDhkMjEyLjk5MmQxMDI0ZDU2LjMyZDEwMjRkMzQzLjA0ZDIxMC45NDNkMzQzLjA0ZDM2OC42NGQxODUuMzQ0ZDM2OC42NGQxODUuMzQ0ZDIxMC45NDNkMzQzLjA0ZDIxMC45NDNkMTIzLjkwNGQyMTAuOTQzZDEyMy45MDRkMzY4LjY0ZC0zMi43NjhkMzY4LjY0ZC0zMi43NjhkMjEwLjk0M2QxMjMuOTA0ZDIxMC45NDNoUjNkMjE5LjEzNlI0ZDM0My4wNFI1ZC0zMi43NjhSNmQ4MTMuMDU2UjdkMFI4ZDg0NS44MjRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzlSMTJkLTMyLjc2OFIxM2QyMTkuMTM2UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyNm9SMWQ5OTYuMzUyUjJhZDMxMC4yNzJkNjkxLjJkMzUxLjIzMmQ2OTEuMmQ0MDguNTc2ZDY1NC4zMzZkNDA4LjU3NmQ3ODMuMzZkMzQ3LjEzNmQ4MDguOTZkMzA3LjJkODA4Ljk2ZDI3MC4zMzZkODA4Ljk2ZDIxMC40MzJkNzc3LjcyOGQxNTAuNTI4ZDc0Ni40OTZkMTE1LjcxMmQ3NDYuNDk2ZDc2LjhkNzQ2LjQ5NmQyNC41NzZkNzg2LjQzMmQyNC41NzZkNjUxLjI2NGQ3OC44NDhkNjI3LjcxMmQxMjEuODU2ZDYyNy43MTJkMTYwLjc2OGQ2MjcuNzEyZDIyMC42NzJkNjU2Ljg5NmQyODAuNTc2ZDY4Ni4wNzlkMzEwLjI3MmQ2OTEuMmhSM2Q0MTMuNjk2UjRkNDA4LjU3NlI1ZDI0LjU3NlI2ZDM5Ni4yODhSN2QyMTUuMDRSOGQzNzEuNzEyUjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTI2UjEyZDI0LjU3NlIxM2Q0MTMuNjk2UjE0YWkxaTNpMmkzaTNpM2kzaTJpM2kzaTNoZzoyMzhvUjFkOTk2LjM1MlIyYWQ1Mi4yMjRkMTAyNGQ1Mi4yMjRkNDMwLjA4ZDIwOC44OTZkNDMwLjA4ZDIwOC44OTZkMTAyNGQ1Mi4yMjRkMTAyNGQxMjAuODMyZDM3MC42ODhkLTE1LjM2ZDM3MC42ODhkOTcuMjhkMTgyLjI3MWQxOTkuNjhkMTgyLjI3MWQzMTIuMzJkMzcwLjY4OGQxNzUuMTA0ZDM3MC42ODhkMTQ2LjQzMmQzMjUuNjMxZDEyMC44MzJkMzcwLjY4OGhSM2QyMTkuMTM2UjRkMzEyLjMyUjVkLTE1LjM2UjZkODQxLjcyOFI3ZDBSOGQ4NTcuMDg4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjM4UjEyZC0xNS4zNlIxM2QyMTkuMTM2UjE0YWkxaTJpMmkyaTJpMWkyaTJpMmkyaTJpMmkyaGc6MTI1b1IxZDk5Ni4zNTJSMmFkNTIuMjI0ZDEwMjRkNTIuMjI0ZDg2Ny4zMjhkMTExLjYxNmQ4NjcuMzI4ZDExMS42MTZkNjg2LjA3OWQxNTcuNjk2ZDY0Ny4xNjhkMTExLjYxNmQ2MDguMjU2ZDExMS42MTZkNDQzLjM5MWQ1Mi4yMjRkNDQzLjM5MWQ1Mi4yMjRkMjg2LjcyZDExOC43ODRkMjg2LjcyZDE4MC4yMjRkMjg2LjcyZDIyNC4yNTZkMzMwLjI0ZDI2OC4yODhkMzczLjc2ZDI2OC4yODhkNDM1LjE5OWQyNjguMjg4ZDU1Ni4wMzFkMzA5LjI0OGQ1ODAuNjA4ZDMwOS4yNDhkNzExLjY4ZDI2OC4yODhkNzM3LjI4ZDI2OC4yODhkODc1LjUyZDI2OC4yODhkOTM1LjkzNmQyMjQuMjU2ZDk3OS45NjhkMTgwLjIyNGQxMDI0ZDExOC43ODRkMTAyNGQ1Mi4yMjRkMTAyNGhSM2QyOTUuOTM2UjRkMzA5LjI0OFI1ZDUyLjIyNFI2ZDczNy4yOFI3ZDBSOGQ2ODUuMDU2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTI1UjEyZDUyLjIyNFIxM2QyOTUuOTM2UjE0YWkxaTJpMmkyaTJpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpM2kzaTJoZzoyMzdvUjFkOTk2LjM1MlIyYWQ1Mi4yMjRkMTAyNGQ1Mi4yMjRkNDMwLjA4ZDIwOC44OTZkNDMwLjA4ZDIwOC44OTZkMTAyNGQ1Mi4yMjRkMTAyNGQ1MC4xNzZkMzcwLjY4OGQxMDIuNGQxNjIuODE2ZDI2My4xNjhkMTYyLjgxNmQyMTAuOTQ0ZDM3MC42ODhkNTAuMTc2ZDM3MC42ODhoUjNkMjE5LjEzNlI0ZDI2My4xNjhSNWQ1MC4xNzZSNmQ4NjEuMTg0UjdkMFI4ZDgxMS4wMDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzdSMTJkNTAuMTc2UjEzZDIxOS4xMzZSMTRhaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMjRvUjFkOTk2LjM1MlIyYWQ1NS4yOTZkMTEyNS4zNzZkNTUuMjk2ZDIwMC43MDNkMjExLjk2OGQyMDAuNzAzZDIxMS45NjhkMTEyNS4zNzZkNTUuMjk2ZDExMjUuMzc2aFIzZDIxOS4xMzZSNGQyMTEuOTY4UjVkNTUuMjk2UjZkODIzLjI5NlI3ZC0xMDEuMzc2UjhkNzY4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTI0UjEyZDU1LjI5NlIxM2QyMTkuMTM2UjE0YWkxaTJpMmkyaTJoZzoyMzZvUjFkOTk2LjM1MlIyYWQ1Ny4zNDRkMTAyNGQ1Ny4zNDRkNDMwLjA4ZDIxNC4wMTZkNDMwLjA4ZDIxNC4wMTZkMTAyNGQ1Ny4zNDRkMTAyNGQxNzcuMTUyZDE2MS43OTJkMjI5LjM3NmQzNjkuNjY0ZDY4LjYwOGQzNjkuNjY0ZDE2LjM4NGQxNjEuNzkyZDE3Ny4xNTJkMTYxLjc5MmhSM2QyMTkuMTM2UjRkMjI5LjM3NlI1ZDE2LjM4NFI2ZDg2Mi4yMDhSN2QwUjhkODQ1LjgyNFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIzNlIxMmQxNi4zODRSMTNkMjE5LjEzNlIxNGFpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjEyM29SMWQ5OTYuMzUyUjJhZDIyMS4xODRkNjg1LjA1NmQyMjEuMTg0ZDg2Ny4zMjhkMjgwLjU3NmQ4NjcuMzI4ZDI4MC41NzZkMTAyNGQyMTQuMDE2ZDEwMjRkMTUxLjU1MmQxMDI0ZDEwOC4wMzJkOTc5Ljk2OGQ2NC41MTJkOTM1LjkzNmQ2NC41MTJkODc1LjUyZDY0LjUxMmQ3MzcuMjhkNDguMTI4ZDcyNy4wNGQ0OS4xNTJkNzI3LjA0ZDQ2LjA4ZDcyNi4wMTZkMzYuMzUyZDcyMC4zODRkMjYuNjI0ZDcxNC43NTJkMjMuNTUyZDcxMy43MjhkMjMuNTUyZDU3OS41ODRkNjQuNTEyZDU1Ny4wNTZkNjQuNTEyZDQzNS4xOTlkNjQuNTEyZDM3My43NmQxMDguMDMyZDMzMC4yNGQxNTEuNTUyZDI4Ni43MmQyMTQuMDE2ZDI4Ni43MmQyODAuNTc2ZDI4Ni43MmQyODAuNTc2ZDQ0My4zOTFkMjIxLjE4NGQ0NDMuMzkxZDIyMS4xODRkNjA4LjI1NmQxNzUuMTA0ZDY0Ny4xNjhkMTk4LjY1NmQ2NjcuNjQ3ZDE5OC42NTZkNjY2LjYyNGQyMjEuMTg0ZDY4NS4wNTZoUjNkMjk1LjkzNlI0ZDI4MC41NzZSNWQyMy41NTJSNmQ3MzcuMjhSN2QwUjhkNzEzLjcyOFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTEyM1IxMmQyMy41NTJSMTNkMjk1LjkzNlIxNGFpMWkyaTJpMmkyaTNpM2kyaTJpMmkzaTNpMmkyaTJpM2kzaTJpMmkyaTJpMmkyaTJpMmhnOjIzNW9SMWQ5OTYuMzUyUjJhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyZDU2MC4xMjhkMjEyLjk5MWQ1NjAuMTI4ZDM3MC42ODhkNDAyLjQzMmQzNzAuNjg4ZDQwMi40MzJkMjEyLjk5MWQ1NjAuMTI4ZDIxMi45OTFkMzQwLjk5MmQyMTIuOTkxZDM0MC45OTJkMzcwLjY4OGQxODQuMzJkMzcwLjY4OGQxODQuMzJkMjEyLjk5MWQzNDAuOTkyZDIxMi45OTFoUjNkNjUzLjMxMlI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4MTEuMDA4UjdkMFI4ZDc1OC43ODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzVSMTJkNTIuMjI0UjEzZDY1My4zMTJSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaGc6MTIyb1IxZDk5Ni4zNTJSMmFkNTUuMjk2ZDU4Ni43NTJkNTUuMjk2ZDQzMC4wOGQ2NTcuNDA4ZDQzMC4wOGQ2NTcuNDA4ZDU5MC44NDhkMzAwLjAzMmQ4NjcuMzI4ZDY1Ny40MDhkODY3LjMyOGQ2NTcuNDA4ZDEwMjRkNTUuMjk2ZDEwMjRkNTUuMjk2ZDg2My4yMzJkNDEyLjY3MmQ1ODYuNzUyZDU1LjI5NmQ1ODYuNzUyaFIzZDcxNC43NTJSNGQ2NTcuNDA4UjVkNTUuMjk2UjZkNTkzLjkyUjdkMFI4ZDUzOC42MjRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMjJSMTJkNTUuMjk2UjEzZDcxNC43NTJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmhnOjIzNG9SMWQ5OTYuMzUyUjJhZDUwNS44NTZkNDMwLjA4ZDU2Ny4yOTZkNDMwLjA4ZDYxMC44MTZkNDc0LjExMWQ2NTQuMzM2ZDUxOC4xNDRkNjU0LjMzNmQ1NzguNTZkNjU0LjMzNmQ4MDUuODg4ZDIwOC44OTZkODA1Ljg4OGQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ1MDUuODU2ZDQzMC4wOGQyMDguODk2ZDY2OC42NzJkNDk3LjY2NGQ2NjguNjcyZDQ5Ny42NjRkNTg2Ljc1MmQyMDguODk2ZDU4Ni43NTJkMjA4Ljg5NmQ2NjguNjcyZDMzNy45MmQzNzAuNjg4ZDIwMS43MjhkMzcwLjY4OGQzMTQuMzY4ZDE4Mi4yNzFkNDE2Ljc2OGQxODIuMjcxZDUyOS40MDhkMzcwLjY4OGQzOTIuMTkyZDM3MC42ODhkMzYzLjUyZDMyNS42MzFkMzM3LjkyZDM3MC42ODhoUjNkNjUzLjMxMlI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4NDEuNzI4UjdkMFI4ZDc4OS41MDRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzRSMTJkNTIuMjI0UjEzZDY1My4zMTJSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmkxaTJpMmkyaTJpMmkyaTJoZzoxMjFvUjFkOTk2LjM1MlIyYWQ2NDYuMTQ0ZDEwODguNTEyZDY0Ni4xNDRkMTE0OS45NTJkNjAyLjYyNGQxMTkzLjQ3MmQ1NTkuMTA0ZDEyMzYuOTkyZDQ5Ny42NjRkMTIzNi45OTJkMTM3LjIxNmQxMjM2Ljk5MmQxMzcuMjE2ZDEwNzkuMjk2ZDQ4OS40NzJkMTA3OS4yOTZkNDg5LjQ3MmQxMDI0ZDE5Mi41MTJkMTAyNGQxMzEuMDcyZDEwMjRkODcuMDRkOTc5Ljk2OGQ0My4wMDhkOTM1LjkzNmQ0My4wMDhkODc1LjUyZDQzLjAwOGQ0MzIuMTI4ZDE5OS42OGQ0MzIuMTI4ZDE5OS42OGQ4NjcuMzI4ZDQ4OS40NzJkODY3LjMyOGQ0ODkuNDcyZDQzMi4xMjhkNjQ2LjE0NGQ0MzIuMTI4ZDY0Ni4xNDRkMTA4OC41MTJoUjNkNzAxLjQ0UjRkNjQ2LjE0NFI1ZDQzLjAwOFI2ZDU5MS44NzJSN2QtMjEyLjk5MlI4ZDU0OC44NjRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMjFSMTJkNDMuMDA4UjEzZDcwMS40NFIxNGFpMWkzaTNpMmkyaTJpMmkyaTNpM2kyaTJpMmkyaTJpMmkyaGc6MjMzb1IxZDk5Ni4zNTJSMmFkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDgwNS44ODhkMjA4Ljg5NmQ4MDUuODg4ZDIwOC44OTZkODY3LjMyOGQ2NTQuMzM2ZDg2Ny4zMjhkNjU0LjMzNmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDIwOC44OTZkNjY4LjY3MmQ0OTcuNjY0ZDY2OC42NzJkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDY2OC42NzJkMjcxLjM2ZDM2OS42NjRkMzIzLjU4NGQxNjEuNzkyZDQ4NC4zNTJkMTYxLjc5MmQ0MzIuMTI4ZDM2OS42NjRkMjcxLjM2ZDM2OS42NjRoUjNkNjUzLjMxMlI0ZDY1NC4zMzZSNWQ1Mi4yMjRSNmQ4NjIuMjA4UjdkMFI4ZDgwOS45ODRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzNSMTJkNTIuMjI0UjEzZDY1My4zMTJSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMjBvUjFkOTk2LjM1MlIyYWQ0OTcuNjY0ZDQzMC4wOGQ2NTkuNDU2ZDQzMC4wOGQ2NTkuNDU2ZDQ4MS4yOGQ0NTQuNjU2ZDcyMS45MmQ1NjcuMjk2ZDg1OS4xMzZkNjU5LjQ1NmQ5NzIuOGQ2NTkuNDU2ZDEwMjRkNDk4LjY4OGQxMDI0ZDM1My4yOGQ4NDUuODI0ZDIwNy44NzJkMTAyNGQ0Ny4xMDRkMTAyNGQ0Ny4xMDRkOTcyLjhkMjUxLjkwNGQ3MjEuOTJkNDcuMTA0ZDQ4MS4yOGQ0Ny4xMDRkNDMwLjA4ZDIwNy44NzJkNDMwLjA4ZDM1My4yOGQ2MDIuMTEyZDQ5Ny42NjRkNDMwLjA4aFIzZDcwOC42MDhSNGQ2NTkuNDU2UjVkNDcuMTA0UjZkNTkzLjkyUjdkMFI4ZDU0Ni44MTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMjBSMTJkNDcuMTA0UjEzZDcwOC42MDhSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaTJpMmkyaGc6MjMyb1IxZDk5Ni4zNTJSMmFkNTA1Ljg1NmQ0MzAuMDhkNTY3LjI5NmQ0MzAuMDhkNjEwLjgxNmQ0NzQuMTExZDY1NC4zMzZkNTE4LjE0NGQ2NTQuMzM2ZDU3OC41NmQ2NTQuMzM2ZDgwNS44ODhkMjA4Ljg5NmQ4MDUuODg4ZDIwOC44OTZkODY3LjMyOGQ2NTQuMzM2ZDg2Ny4zMjhkNjU0LjMzNmQxMDI0ZDIwMC43MDRkMTAyNGQxNDAuMjg4ZDEwMjRkOTYuMjU2ZDk3OS45NjhkNTIuMjI0ZDkzNS45MzZkNTIuMjI0ZDg3NS41MmQ1Mi4yMjRkNTc4LjU2ZDUyLjIyNGQ1MTguMTQ0ZDk2LjI1NmQ0NzQuMTExZDE0MC4yODhkNDMwLjA4ZDIwMC43MDRkNDMwLjA4ZDUwNS44NTZkNDMwLjA4ZDIwOC44OTZkNjY4LjY3MmQ0OTcuNjY0ZDY2OC42NzJkNDk3LjY2NGQ1ODYuNzUyZDIwOC44OTZkNTg2Ljc1MmQyMDguODk2ZDY2OC42NzJkNDExLjY0OGQxNjIuODE2ZDQ2My44NzJkMzcwLjY4OGQzMDMuMTA0ZDM3MC42ODhkMjUwLjg4ZDE2Mi44MTZkNDExLjY0OGQxNjIuODE2aFIzZDY1My4zMTJSNGQ2NTQuMzM2UjVkNTIuMjI0UjZkODYxLjE4NFI3ZDBSOGQ4MDguOTZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzJSMTJkNTIuMjI0UjEzZDY1My4zMTJSMTRhaTFpM2kzaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZzoxMTlvUjFkOTk2LjM1MlIyYWQ4NzcuNTY4ZDQzMC4wOGQxMDQzLjQ1NmQ0MzAuMDhkODIwLjIyNGQxMDI0ZDcwMS40NGQxMDI0ZDU0MC42NzJkNjY5LjY5NWQzODcuMDcyZDEwMjRkMjY5LjMxMmQxMDI0ZDM1Ljg0ZDQzMC4wOGQyMDEuNzI4ZDQzMC4wOGQzMjkuNzI4ZDczOC4zMDRkMzczLjc2ZDYzNS45MDRkMzg0ZDYxMi4zNTJkNDE2LjI1NmQ1MzkuNjQ3ZDQ0OC41MTJkNDY2Ljk0M2Q0NjMuODcyZDQzMC4wOGQ2MTUuNDI0ZDQzMC4wOGQ3NTguNzg0ZDc0Mi40ZDg3Ny41NjhkNDMwLjA4aFIzZDEwNzguMjcyUjRkMTA0My40NTZSNWQzNS44NFI2ZDU5My45MlI3ZDBSOGQ1NTguMDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMTlSMTJkMzUuODRSMTNkMTA3OC4yNzJSMTRhaTFpMmkyaTJpMmkyaTJpMmkyaTJpMmkzaTNpMmkyaTJoZzoyMzFvUjFkOTk2LjM1MlIyYWQyMDguODk2ZDg2Ny4zMjhkNjU0LjMzNmQ4NjcuMzI4ZDY1NC4zMzZkMTAyNGQ0MTkuODRkMTAyNGQ0MTQuNzJkMTA0OC41NzZkMzk5Ljg3MmQxMDkxLjU4NGQzODUuMDI0ZDExMzQuNTkyZDM3OS45MDRkMTE1NS4wNzJkMjgwLjU3NmQxMTU1LjA3MmQyODUuNjk2ZDExMzAuNDk2ZDMwMC41NDRkMTA4Ny40ODhkMzE1LjM5MmQxMDQ0LjQ4ZDMyMC41MTJkMTAyNGQyMDAuNzA0ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2LjI1NmQ5NzkuOTY4ZDUyLjIyNGQ5MzUuOTM2ZDUyLjIyNGQ4NzUuNTJkNTIuMjI0ZDU3OC41NmQ1Mi4yMjRkNTE4LjE0NGQ5Ni4yNTZkNDc0LjExMWQxNDAuMjg4ZDQzMC4wOGQyMDAuNzA0ZDQzMC4wOGQ2NTMuMzEyZDQzMC4wOGQ2NTMuMzEyZDU4Ni43NTJkMjA4Ljg5NmQ1ODYuNzUyZDIwOC44OTZkODY3LjMyOGhSM2Q3MDkuNjMyUjRkNjU0LjMzNlI1ZDUyLjIyNFI2ZDU5My45MlI3ZC0xMzEuMDcyUjhkNTQxLjY5NlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIzMVIxMmQ1Mi4yMjRSMTNkNzA5LjYzMlIxNGFpMWkyaTJpMmkzaTNpMmkzaTNpMmkzaTNpMmkzaTNpMmkyaTJpMmhnOjExOG9SMWQ5OTYuMzUyUjJhZDYyOS43NmQ0MzAuMDhkODA5Ljk4NGQ0MzAuMDhkNDgyLjMwNGQxMDI0ZDM0OC4xNmQxMDI0ZDIxLjUwNGQ0MzAuMDhkMjAxLjcyOGQ0MzAuMDhkNDE1Ljc0NGQ4MjQuMzE5ZDYyOS43NmQ0MzAuMDhoUjNkODA4Ljk2UjRkODA5Ljk4NFI1ZDIxLjUwNFI2ZDU5My45MlI3ZDBSOGQ1NzIuNDE2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTE4UjEyZDIxLjUwNFIxM2Q4MDguOTZSMTRhaTFpMmkyaTJpMmkyaTJpMmhnOjIzMG9SMWQ5OTYuMzUyUjJhZDk1NS4zOTJkNDMwLjA4ZDEwMTYuODMyZDQzMC4wOGQxMDU5Ljg0ZDQ3My42ZDExMDIuODQ4ZDUxNy4xMmQxMTAyLjg0OGQ1NzguNTZkMTEwMi44NDhkODA1Ljg4OGQ2NTcuNDA4ZDgwNS44ODhkNjU3LjQwOGQ4NjcuMzI4ZDExMDIuODQ4ZDg2Ny4zMjhkMTEwMi44NDhkMTAyNGQyMDIuNzUyZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDY0OC4xOTJkNTAwLjczNmQ2NDguMTkyZDUwMC43MzZkNTg2Ljc1MmQ1NC4yNzJkNTg2Ljc1MmQ1NC4yNzJkNDMwLjA4ZDk1NS4zOTJkNDMwLjA4ZDUwMC43MzZkODY3LjMyOGQ1MDAuNzM2ZDc4NS40MDhkMjEwLjk0NGQ3ODUuNDA4ZDIxMC45NDRkODY3LjMyOGQ1MDAuNzM2ZDg2Ny4zMjhkNjU3LjQwOGQ2NjguNjcyZDk0Ni4xNzZkNjY4LjY3MmQ5NDYuMTc2ZDU4Ni43NTJkNjU3LjQwOGQ1ODYuNzUyZDY1Ny40MDhkNjY4LjY3MmhSM2QxMjA2LjI3MlI0ZDExMDIuODQ4UjVkNTQuMjcyUjZkNTkzLjkyUjdkMFI4ZDUzOS42NDhSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMzBSMTJkNTQuMjcyUjEzZDEyMDYuMjcyUjE0YWkxaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjExN29SMWQ5OTYuMzUyUjJhZDQ5OS43MTJkNDMwLjA4ZDY1Ni4zODRkNDMwLjA4ZDY1Ni4zODRkODc1LjUyZDY1Ni4zODRkOTM1LjkzNmQ2MTIuODY0ZDk3OS45NjhkNTY5LjM0NGQxMDI0ZDUwNy45MDRkMTAyNGQyMDIuNzUyZDEwMjRkMTQxLjMxMmQxMDI0ZDk3Ljc5MmQ5NzkuOTY4ZDU0LjI3MmQ5MzUuOTM2ZDU0LjI3MmQ4NzUuNTJkNTQuMjcyZDQzMC4wOGQyMTAuOTQ0ZDQzMC4wOGQyMTAuOTQ0ZDg2Ny4zMjhkNDk5LjcxMmQ4NjcuMzI4ZDQ5OS43MTJkNDMwLjA4aFIzZDcxMS42OFI0ZDY1Ni4zODRSNWQ1NC4yNzJSNmQ1OTMuOTJSN2QwUjhkNTM5LjY0OFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTExN1IxMmQ1NC4yNzJSMTNkNzExLjY4UjE0YWkxaTJpMmkzaTNpMmkzaTNpMmkyaTJpMmkyaGc6MjI5b1IxZDk5Ni4zNTJSMmFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDI4Ny43NDRkMTY0Ljg2NGQzMzkuOTY4ZDE2NC44NjRkMzcxLjcxMmQxNjQuODY0ZDM5NC43NTJkMTg3LjkwNGQ0MTcuNzkyZDIxMC45NDNkNDE3Ljc5MmQyNDIuNjg4ZDQxNy43OTJkMjkyLjg2NGQ0MTcuNzkyZDMyNC42MDdkMzk0Ljc1MmQzNDcuNjQ4ZDM3MS43MTJkMzcwLjY4OGQzMzkuOTY4ZDM3MC42ODhkMjg3Ljc0NGQzNzAuNjg4ZDI1NmQzNzAuNjg4ZDIzMi40NDhkMzQ3LjY0OGQyMDguODk2ZDMyNC42MDdkMjA4Ljg5NmQyOTIuODY0ZDIwOC44OTZkMjQyLjY4OGQyMDguODk2ZDIxMC45NDNkMjMyLjQ0OGQxODcuOTA0ZDI1NmQxNjQuODY0ZDI4Ny43NDRkMTY0Ljg2NGQyODcuNzQ0ZDI0NC43MzZkMjg3Ljc0NGQzMDAuMDMyZDMzOS45NjhkMzAwLjAzMmQzMzkuOTY4ZDI0NC43MzZkMjg3Ljc0NGQyNDQuNzM2aFIzZDc0Mi40UjRkNjU1LjM2UjVkNTMuMjQ4UjZkODU5LjEzNlI3ZDBSOGQ4MDUuODg4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjI5UjEyZDUzLjI0OFIxM2Q3NDIuNFIxNGFpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTNpM2kyaTNpM2kyaTNpM2kyaTNpM2kxaTJpMmkyaTJoZzoxMTZvUjFkOTk2LjM1MlIyYWQ0MzEuMTA0ZDU4Ni43NTJkMjEwLjk0NGQ1ODYuNzUyZDIxMC45NDRkODY3LjMyOGQ0MzEuMTA0ZDg2Ny4zMjhkNDMxLjEwNGQxMDI0ZDIwMy43NzZkMTAyNGQxNDEuMzEyZDEwMjRkOTcuNzkyZDk3OS45NjhkNTQuMjcyZDkzNS45MzZkNTQuMjcyZDg3NS41MmQ1NC4yNzJkMjUzLjk1MmQyMTAuOTQ0ZDI1My45NTJkMjEwLjk0NGQ0MzAuMDhkNDMxLjEwNGQ0MzAuMDhkNDMxLjEwNGQ1ODYuNzUyaFIzZDQ2MS44MjRSNGQ0MzEuMTA0UjVkNTQuMjcyUjZkNzcwLjA0OFI3ZDBSOGQ3MTUuNzc2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTE2UjEyZDU0LjI3MlIxM2Q0NjEuODI0UjE0YWkxaTJpMmkyaTJpMmkzaTNpMmkyaTJpMmkyaGc6MjI4b1IxZDk5Ni4zNTJSMmFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDU1Mi45NmQyMTIuOTkxZDU1Mi45NmQzNzAuNjg4ZDM5NS4yNjRkMzcwLjY4OGQzOTUuMjY0ZDIxMi45OTFkNTUyLjk2ZDIxMi45OTFkMzMzLjgyNGQyMTIuOTkxZDMzMy44MjRkMzcwLjY4OGQxNzcuMTUyZDM3MC42ODhkMTc3LjE1MmQyMTIuOTkxZDMzMy44MjRkMjEyLjk5MWhSM2Q3NDIuNFI0ZDY1NS4zNlI1ZDUzLjI0OFI2ZDgxMS4wMDhSN2QwUjhkNzU3Ljc2UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjI4UjEyZDUzLjI0OFIxM2Q3NDIuNFIxNGFpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjExNW9SMWQ5OTYuMzUyUjJhZDY1Mi4yODhkNTc4LjU2ZDY1Mi4yODhkNjA4LjI1NmQ0OTQuNTkyZDYwOC4yNTZkNDk0LjU5MmQ1ODYuNzUyZDIwNS44MjRkNTg2Ljc1MmQyMDUuODI0ZDY0OC4xOTJkNTAyLjc4NGQ2NDguMTkyZDU2NS4yNDhkNjQ4LjE5MmQ2MDguNzY4ZDY5MS43MTJkNjUyLjI4OGQ3MzUuMjMyZDY1Mi4yODhkNzk2LjY3MmQ2NTIuMjg4ZDg3NS41MmQ2NTIuMjg4ZDkzNS45MzZkNjA4Ljc2OGQ5NzkuOTY4ZDU2NS4yNDhkMTAyNGQ1MDIuNzg0ZDEwMjRkMTk3LjYzMmQxMDI0ZDEzNy4yMTZkMTAyNGQ5My4xODRkOTc5Ljk2OGQ0OS4xNTJkOTM1LjkzNmQ0OS4xNTJkODc1LjUyZDQ5LjE1MmQ4NDUuODI0ZDIwNS44MjRkODQ1LjgyNGQyMDUuODI0ZDg2Ny4zMjhkNDk0LjU5MmQ4NjcuMzI4ZDQ5NC41OTJkODA1Ljg4OGQxOTcuNjMyZDgwNS44ODhkMTM3LjIxNmQ4MDUuODg4ZDkzLjE4NGQ3NjEuODU2ZDQ5LjE1MmQ3MTcuODI0ZDQ5LjE1MmQ2NTcuNDA4ZDQ5LjE1MmQ1NzguNTZkNDkuMTUyZDUxOC4xNDRkOTMuMTg0ZDQ3NC4xMTFkMTM3LjIxNmQ0MzAuMDhkMTk3LjYzMmQ0MzAuMDhkNTAyLjc4NGQ0MzAuMDhkNTY1LjI0OGQ0MzAuMDhkNjA4Ljc2OGQ0NzQuMTExZDY1Mi4yODhkNTE4LjE0NGQ2NTIuMjg4ZDU3OC41NmhSM2Q3MDIuNDY0UjRkNjUyLjI4OFI1ZDQ5LjE1MlI2ZDU5My45MlI3ZDBSOGQ1NDQuNzY4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMTE1UjEyZDQ5LjE1MlIxM2Q3MDIuNDY0UjE0YWkxaTJpMmkyaTJpMmkyaTNpM2kyaTNpM2kyaTNpM2kyaTJpMmkyaTJpMmkzaTNpMmkzaTNpMmkzaTNoZzoyMjdvUjFkOTk2LjM1MlIyYWQ1MDYuODhkNDMwLjA4ZDU2OC4zMmQ0MzAuMDhkNjExLjg0ZDQ3NC4xMTFkNjU1LjM2ZDUxOC4xNDRkNjU1LjM2ZDU3OC41NmQ2NTUuMzZkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDY0OC4xOTJkNDk4LjY4OGQ2NDguMTkyZDQ5OC42ODhkNTg2Ljc1MmQ1My4yNDhkNTg2Ljc1MmQ1My4yNDhkNDMwLjA4ZDUwNi44OGQ0MzAuMDhkNDk4LjY4OGQ4NjcuMzI4ZDQ5OC42ODhkNzg1LjQwOGQyMDkuOTJkNzg1LjQwOGQyMDkuOTJkODY3LjMyOGQ0OTguNjg4ZDg2Ny4zMjhkNDI0Ljk2ZDI0OS44NTZkNDY0Ljg5NmQyNDkuODU2ZDUyMy4yNjRkMjExLjk2N2Q1MjMuMjY0ZDM0MC45OTFkNDU5Ljc3NmQzNjcuNjE2ZDQyMS44ODhkMzY3LjYxNmQzODRkMzY3LjYxNmQzMjUuMTJkMzM1Ljg3MWQyNjYuMjRkMzA0LjEyN2QyMzYuNTQ0ZDMwNC4xMjdkMjI1LjI4ZDMwNC4xMjdkMTgyLjI3MmQzMDQuMTI3ZDEzOS4yNjRkMzQwLjk5MWQxMzkuMjY0ZDIxNC4wMTVkMjA4Ljg5NmQxODYuMzY3ZDIzNi41NDRkMTg2LjM2N2QyNzQuNDMyZDE4Ni4zNjdkMzMzLjgyNGQyMTYuMDYzZDM5My4yMTZkMjQ1Ljc2ZDQyNC45NmQyNDkuODU2aFIzZDc0Mi40UjRkNjU1LjM2UjVkNTMuMjQ4UjZkODM3LjYzMlI3ZDBSOGQ3ODQuMzg0UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjI3UjEyZDUzLjI0OFIxM2Q3NDIuNFIxNGFpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkzaTJpM2kzaTNpMmkzaTJpM2kzaTNoZzoxMTRvUjFkOTk2LjM1MlIyYWQyMDIuNzUyZDQzMC4wOGQ1MzAuNDMyZDQzMC4wOGQ1MzAuNDMyZDU4Ni43NTJkMjA5LjkyZDU4Ni43NTJkMjA5LjkyZDEwMjRkNTMuMjQ4ZDEwMjRkNTMuMjQ4ZDU3OC41NmQ1My4yNDhkNTE4LjE0NGQ5Ny4yOGQ0NzQuMTExZDE0MS4zMTJkNDMwLjA4ZDIwMi43NTJkNDMwLjA4aFIzZDUzOC42MjRSNGQ1MzAuNDMyUjVkNTMuMjQ4UjZkNTkzLjkyUjdkMFI4ZDU0MC42NzJSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMTRSMTJkNTMuMjQ4UjEzZDUzOC42MjRSMTRhaTFpMmkyaTJpMmkyaTJpM2kzaGc6MjI2b1IxZDk5Ni4zNTJSMmFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDM1MS4yMzJkMzcwLjY4OGQyMTUuMDRkMzcwLjY4OGQzMjcuNjhkMTgyLjI3MWQ0MzAuMDhkMTgyLjI3MWQ1NDIuNzJkMzcwLjY4OGQ0MDUuNTA0ZDM3MC42ODhkMzc2LjgzMmQzMjUuNjMxZDM1MS4yMzJkMzcwLjY4OGhSM2Q3NDIuNFI0ZDY1NS4zNlI1ZDUzLjI0OFI2ZDg0MS43MjhSN2QwUjhkNzg4LjQ4UjlkMjA3Ljg3MlIxMGQyMzUuNTJSMTFpMjI2UjEyZDUzLjI0OFIxM2Q3NDIuNFIxNGFpMWkzaTNpMmkyaTNpM2kyaTJpMmkyaTJpMmkxaTJpMmkyaTJpMWkyaTJpMmkyaTJpMmkyaGc6MTEzb1IxZDk5Ni4zNTJSMmFkMjAuNDhkNTc4LjU2ZDIwLjQ4ZDUxOC4xNDRkNjRkNDc0LjExMWQxMDcuNTJkNDMwLjA4ZDE2OC45NmQ0MzAuMDhkNjIzLjYxNmQ0MzAuMDhkNjIzLjYxNmQxMjU5LjUyZDQ2Ni45NDRkMTI1OS41MmQ0NjYuOTQ0ZDEwMjRkMTY4Ljk2ZDEwMjRkMTA3LjUyZDEwMjRkNjRkOTc5Ljk2OGQyMC40OGQ5MzUuOTM2ZDIwLjQ4ZDg3NS41MmQyMC40OGQ1NzguNTZkMTc4LjE3NmQ1ODYuNzUyZDE3OC4xNzZkODY3LjMyOGQ0NjYuOTQ0ZDg2Ny4zMjhkNDY2Ljk0NGQ1ODYuNzUyZDE3OC4xNzZkNTg2Ljc1MmhSM2Q2NzkuOTM2UjRkNjIzLjYxNlI1ZDIwLjQ4UjZkNTkzLjkyUjdkLTIzNS41MlI4ZDU3My40NFI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTExM1IxMmQyMC40OFIxM2Q2NzkuOTM2UjE0YWkxaTNpM2kyaTJpMmkyaTJpM2kzaTJpMWkyaTJpMmkyaGc6MjI1b1IxZDk5Ni4zNTJSMmFkNTA2Ljg4ZDQzMC4wOGQ1NjguMzJkNDMwLjA4ZDYxMS44NGQ0NzQuMTExZDY1NS4zNmQ1MTguMTQ0ZDY1NS4zNmQ1NzguNTZkNjU1LjM2ZDEwMjRkMjAxLjcyOGQxMDI0ZDE0MC4yODhkMTAyNGQ5Ni43NjhkOTc5Ljk2OGQ1My4yNDhkOTM1LjkzNmQ1My4yNDhkODc1LjUyZDUzLjI0OGQ2NDguMTkyZDQ5OC42ODhkNjQ4LjE5MmQ0OTguNjg4ZDU4Ni43NTJkNTMuMjQ4ZDU4Ni43NTJkNTMuMjQ4ZDQzMC4wOGQ1MDYuODhkNDMwLjA4ZDQ5OC42ODhkODY3LjMyOGQ0OTguNjg4ZDc4NS40MDhkMjA5LjkyZDc4NS40MDhkMjA5LjkyZDg2Ny4zMjhkNDk4LjY4OGQ4NjcuMzI4ZDI4NC42NzJkMzcwLjY4OGQzMzYuODk2ZDE2Mi44MTZkNDk3LjY2NGQxNjIuODE2ZDQ0NS40NGQzNzAuNjg4ZDI4NC42NzJkMzcwLjY4OGhSM2Q3NDIuNFI0ZDY1NS4zNlI1ZDUzLjI0OFI2ZDg2MS4xODRSN2QwUjhkODA3LjkzNlI5ZDIwNy44NzJSMTBkMjM1LjUyUjExaTIyNVIxMmQ1My4yNDhSMTNkNzQyLjRSMTRhaTFpM2kzaTJpMmkzaTNpMmkyaTJpMmkyaTJpMWkyaTJpMmkyaTFpMmkyaTJpMmhnOjExMm9SMWQ5OTYuMzUyUjJhZDUwOC45MjhkNDMwLjA4ZDU3MC4zNjhkNDMwLjA4ZDYxMy44ODhkNDc0LjExMWQ2NTcuNDA4ZDUxOC4xNDRkNjU3LjQwOGQ1NzguNTZkNjU3LjQwOGQ4NzUuNTJkNjU3LjQwOGQ5MzUuOTM2ZDYxMy44ODhkOTc5Ljk2OGQ1NzAuMzY4ZDEwMjRkNTA4LjkyOGQxMDI0ZDIxMS45NjhkMTAyNGQyMTEuOTY4ZDEyNTkuNTJkNTUuMjk2ZDEyNTkuNTJkNTUuMjk2ZDQzMC4wOGQ1MDguOTI4ZDQzMC4wOGQyMTEuOTY4ZDU4Ni43NTJkMjExLjk2OGQ4NjcuMzI4ZDUwMC43MzZkODY3LjMyOGQ1MDAuNzM2ZDU4Ni43NTJkMjExLjk2OGQ1ODYuNzUyaFIzZDY3OS45MzZSNGQ2NTcuNDA4UjVkNTUuMjk2UjZkNTkzLjkyUjdkLTIzNS41MlI4ZDUzOC42MjRSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkxMTJSMTJkNTUuMjk2UjEzZDY3OS45MzZSMTRhaTFpM2kzaTJpM2kzaTJpMmkyaTJpMmkxaTJpMmkyaTJoZzoyMjRvUjFkOTk2LjM1MlIyYWQ1MDYuODhkNDMwLjA4ZDU2OC4zMmQ0MzAuMDhkNjExLjg0ZDQ3NC4xMTFkNjU1LjM2ZDUxOC4xNDRkNjU1LjM2ZDU3OC41NmQ2NTUuMzZkMTAyNGQyMDEuNzI4ZDEwMjRkMTQwLjI4OGQxMDI0ZDk2Ljc2OGQ5NzkuOTY4ZDUzLjI0OGQ5MzUuOTM2ZDUzLjI0OGQ4NzUuNTJkNTMuMjQ4ZDY0OC4xOTJkNDk4LjY4OGQ2NDguMTkyZDQ5OC42ODhkNTg2Ljc1MmQ1My4yNDhkNTg2Ljc1MmQ1My4yNDhkNDMwLjA4ZDUwNi44OGQ0MzAuMDhkNDk4LjY4OGQ4NjcuMzI4ZDQ5OC42ODhkNzg1LjQwOGQyMDkuOTJkNzg1LjQwOGQyMDkuOTJkODY3LjMyOGQ0OTguNjg4ZDg2Ny4zMjhkNDI0Ljk2ZDE2Mi44MTZkNDc3LjE4NGQzNzAuNjg4ZDMxNi40MTZkMzcwLjY4OGQyNjQuMTkyZDE2Mi44MTZkNDI0Ljk2ZDE2Mi44MTZoUjNkNzQyLjRSNGQ2NTUuMzZSNWQ1My4yNDhSNmQ4NjEuMTg0UjdkMFI4ZDgwNy45MzZSOWQyMDcuODcyUjEwZDIzNS41MlIxMWkyMjRSMTJkNTMuMjQ4UjEzZDc0Mi40UjE0YWkxaTNpM2kyaTJpM2kzaTJpMmkyaTJpMmkyaTFpMmkyaTJpMmkxaTJpMmkyaTJoZ2h5ODpmb250TmFtZXkxNDpPcmJpdHJvbi1CbGFja2c"}];
+flash.display.DisplayObject.GRAPHICS_INVALID = 2;
+flash.display.DisplayObject.MATRIX_INVALID = 4;
+flash.display.DisplayObject.MATRIX_CHAIN_INVALID = 8;
+flash.display.DisplayObject.MATRIX_OVERRIDDEN = 16;
+flash.display.DisplayObject.TRANSFORM_INVALID = 32;
+flash.display.DisplayObject.BOUNDS_INVALID = 64;
+flash.display.DisplayObject.RENDER_VALIDATE_IN_PROGRESS = 1024;
+flash.display.DisplayObject.ALL_RENDER_FLAGS = 98;
 awe6.core.drivers.AAudioManager._PACKAGE_ID = "assets.audio";
 awe6.core.drivers.AFactory._CONFIG_ASSETS_NODE = "settings.assets.url";
 awe6.core.drivers.AKernel._POWERED_BY = "Powered by awe6";
@@ -16673,386 +14685,400 @@ awe6.core.drivers.AKernel._FULL_SCREEN_ENABLE = "Enter Full Screen Mode";
 awe6.core.drivers.AKernel._FULL_SCREEN_DISABLE = "Exit Full Screen Mode";
 awe6.core.drivers.ASession.DEBUG_ID = "DEBUG_AWE6";
 awe6.core.drivers.ASession._VERSION_ID = "_____VERSION";
-browser.Lib.HTML_ACCELEROMETER_EVENT_TYPE = "devicemotion";
-browser.Lib.HTML_ORIENTATION_EVENT_TYPE = "orientationchange";
-browser.Lib.DEFAULT_HEIGHT = 500;
-browser.Lib.DEFAULT_WIDTH = 500;
-browser.Lib.HTML_DIV_EVENT_TYPES = ["resize","mouseover","mouseout","mousewheel","dblclick","click"];
-browser.Lib.HTML_TOUCH_EVENT_TYPES = ["touchstart","touchmove","touchend"];
-browser.Lib.HTML_TOUCH_ALT_EVENT_TYPES = ["mousedown","mousemove","mouseup"];
-browser.Lib.HTML_WINDOW_EVENT_TYPES = ["keyup","keypress","keydown","resize","blur","focus"];
-browser.Lib.NME_IDENTIFIER = "haxe:jeash";
-browser.Lib.VENDOR_HTML_TAG = "data-";
-browser.Lib.starttime = haxe.Timer.stamp();
-browser.display._BitmapData.MinstdGenerator.a = 16807;
-browser.display._BitmapData.MinstdGenerator.m = -2147483648 - 1;
-browser.display.BitmapDataChannel.ALPHA = 8;
-browser.display.BitmapDataChannel.BLUE = 4;
-browser.display.BitmapDataChannel.GREEN = 2;
-browser.display.BitmapDataChannel.RED = 1;
-browser.display.Graphics.TILE_SCALE = 1;
-browser.display.Graphics.TILE_ROTATION = 2;
-browser.display.Graphics.TILE_RGB = 4;
-browser.display.Graphics.TILE_ALPHA = 8;
-browser.display.Graphics.TILE_TRANS_2x2 = 16;
-browser.display.Graphics.TILE_BLEND_NORMAL = 0;
-browser.display.Graphics.TILE_BLEND_ADD = 65536;
-browser.display.Graphics.BMP_REPEAT = 16;
-browser.display.Graphics.BMP_SMOOTH = 65536;
-browser.display.Graphics.CORNER_ROUND = 0;
-browser.display.Graphics.CORNER_MITER = 4096;
-browser.display.Graphics.CORNER_BEVEL = 8192;
-browser.display.Graphics.CURVE = 2;
-browser.display.Graphics.END_NONE = 0;
-browser.display.Graphics.END_ROUND = 256;
-browser.display.Graphics.END_SQUARE = 512;
-browser.display.Graphics.LINE = 1;
-browser.display.Graphics.MOVE = 0;
-browser.display.Graphics.NME_MAX_DIM = 5000;
-browser.display.Graphics.PIXEL_HINTING = 16384;
-browser.display.Graphics.RADIAL = 1;
-browser.display.Graphics.SCALE_HORIZONTAL = 2;
-browser.display.Graphics.SCALE_NONE = 0;
-browser.display.Graphics.SCALE_NORMAL = 3;
-browser.display.Graphics.SCALE_VERTICAL = 1;
-browser.display.Graphics.SPREAD_REPEAT = 2;
-browser.display.Graphics.SPREAD_REFLECT = 4;
-browser.display.GraphicsPathCommand.LINE_TO = 2;
-browser.display.GraphicsPathCommand.MOVE_TO = 1;
-browser.display.GraphicsPathCommand.CURVE_TO = 3;
-browser.display.GraphicsPathCommand.WIDE_LINE_TO = 5;
-browser.display.GraphicsPathCommand.WIDE_MOVE_TO = 4;
-browser.display.GraphicsPathCommand.NO_OP = 0;
-browser.events.Event.ACTIVATE = "activate";
-browser.events.Event.ADDED = "added";
-browser.events.Event.ADDED_TO_STAGE = "addedToStage";
-browser.events.Event.CANCEL = "cancel";
-browser.events.Event.CHANGE = "change";
-browser.events.Event.CLOSE = "close";
-browser.events.Event.COMPLETE = "complete";
-browser.events.Event.CONNECT = "connect";
-browser.events.Event.CONTEXT3D_CREATE = "context3DCreate";
-browser.events.Event.DEACTIVATE = "deactivate";
-browser.events.Event.ENTER_FRAME = "enterFrame";
-browser.events.Event.ID3 = "id3";
-browser.events.Event.INIT = "init";
-browser.events.Event.MOUSE_LEAVE = "mouseLeave";
-browser.events.Event.OPEN = "open";
-browser.events.Event.REMOVED = "removed";
-browser.events.Event.REMOVED_FROM_STAGE = "removedFromStage";
-browser.events.Event.RENDER = "render";
-browser.events.Event.RESIZE = "resize";
-browser.events.Event.SCROLL = "scroll";
-browser.events.Event.SELECT = "select";
-browser.events.Event.TAB_CHILDREN_CHANGE = "tabChildrenChange";
-browser.events.Event.TAB_ENABLED_CHANGE = "tabEnabledChange";
-browser.events.Event.TAB_INDEX_CHANGE = "tabIndexChange";
-browser.events.Event.UNLOAD = "unload";
-browser.events.Event.SOUND_COMPLETE = "soundComplete";
-browser.events.MouseEvent.CLICK = "click";
-browser.events.MouseEvent.DOUBLE_CLICK = "doubleClick";
-browser.events.MouseEvent.MOUSE_DOWN = "mouseDown";
-browser.events.MouseEvent.MOUSE_MOVE = "mouseMove";
-browser.events.MouseEvent.MOUSE_OUT = "mouseOut";
-browser.events.MouseEvent.MOUSE_OVER = "mouseOver";
-browser.events.MouseEvent.MOUSE_UP = "mouseUp";
-browser.events.MouseEvent.MOUSE_WHEEL = "mouseWheel";
-browser.events.MouseEvent.RIGHT_CLICK = "rightClick";
-browser.events.MouseEvent.RIGHT_MOUSE_DOWN = "rightMouseDown";
-browser.events.MouseEvent.RIGHT_MOUSE_UP = "rightMouseUp";
-browser.events.MouseEvent.ROLL_OUT = "rollOut";
-browser.events.MouseEvent.ROLL_OVER = "rollOver";
-browser.display.Stage.NAME = "Stage";
-browser.display.Stage.nmeAcceleration = { x : 0.0, y : 1.0, z : 0.0};
-browser.display.Stage.OrientationPortrait = 1;
-browser.display.Stage.OrientationPortraitUpsideDown = 2;
-browser.display.Stage.OrientationLandscapeRight = 3;
-browser.display.Stage.OrientationLandscapeLeft = 4;
-browser.display.Stage.DEFAULT_FRAMERATE = 0.0;
-browser.display.Stage.UI_EVENTS_QUEUE_MAX = 1000;
-browser.display.Stage.nmeMouseChanges = [browser.events.MouseEvent.MOUSE_OUT,browser.events.MouseEvent.MOUSE_OVER,browser.events.MouseEvent.ROLL_OUT,browser.events.MouseEvent.ROLL_OVER];
-browser.display.Stage.nmeTouchChanges = ["touchOut","touchOver","touchRollOut","touchRollOver"];
-browser.display.StageQuality.BEST = "best";
-browser.display.StageQuality.HIGH = "high";
-browser.display.StageQuality.MEDIUM = "medium";
-browser.display.StageQuality.LOW = "low";
-browser.display.Tilesheet.TILE_SCALE = 1;
-browser.display.Tilesheet.TILE_ROTATION = 2;
-browser.display.Tilesheet.TILE_RGB = 4;
-browser.display.Tilesheet.TILE_ALPHA = 8;
-browser.display.Tilesheet.TILE_TRANS_2x2 = 16;
-browser.display.Tilesheet.TILE_BLEND_NORMAL = 0;
-browser.display.Tilesheet.TILE_BLEND_ADD = 65536;
-browser.errors.Error.DEFAULT_TO_STRING = "Error";
-browser.events.Listener.sIDs = 1;
-browser.events.EventPhase.CAPTURING_PHASE = 0;
-browser.events.EventPhase.AT_TARGET = 1;
-browser.events.EventPhase.BUBBLING_PHASE = 2;
-browser.events.FocusEvent.FOCUS_IN = "focusIn";
-browser.events.FocusEvent.FOCUS_OUT = "focusOut";
-browser.events.FocusEvent.KEY_FOCUS_CHANGE = "keyFocusChange";
-browser.events.FocusEvent.MOUSE_FOCUS_CHANGE = "mouseFocusChange";
-browser.events.HTTPStatusEvent.HTTP_RESPONSE_STATUS = "httpResponseStatus";
-browser.events.HTTPStatusEvent.HTTP_STATUS = "httpStatus";
-browser.events.IOErrorEvent.IO_ERROR = "ioError";
-browser.events.KeyboardEvent.KEY_DOWN = "keyDown";
-browser.events.KeyboardEvent.KEY_UP = "keyUp";
-browser.events.ProgressEvent.PROGRESS = "progress";
-browser.events.ProgressEvent.SOCKET_DATA = "socketData";
-browser.events.TouchEvent.TOUCH_BEGIN = "touchBegin";
-browser.events.TouchEvent.TOUCH_END = "touchEnd";
-browser.events.TouchEvent.TOUCH_MOVE = "touchMove";
-browser.events.TouchEvent.TOUCH_OUT = "touchOut";
-browser.events.TouchEvent.TOUCH_OVER = "touchOver";
-browser.events.TouchEvent.TOUCH_ROLL_OUT = "touchRollOut";
-browser.events.TouchEvent.TOUCH_ROLL_OVER = "touchRollOver";
-browser.events.TouchEvent.TOUCH_TAP = "touchTap";
-browser.filters.DropShadowFilter.DEGREES_FULL_RADIUS = 360.0;
-browser.geom.Transform.DEG_TO_RAD = Math.PI / 180.0;
-browser.media.Sound.EXTENSION_MP3 = "mp3";
-browser.media.Sound.EXTENSION_OGG = "ogg";
-browser.media.Sound.EXTENSION_WAV = "wav";
-browser.media.Sound.EXTENSION_AAC = "aac";
-browser.media.Sound.MEDIA_TYPE_MP3 = "audio/mpeg";
-browser.media.Sound.MEDIA_TYPE_OGG = "audio/ogg; codecs=\"vorbis\"";
-browser.media.Sound.MEDIA_TYPE_WAV = "audio/wav; codecs=\"1\"";
-browser.media.Sound.MEDIA_TYPE_AAC = "audio/mp4; codecs=\"mp4a.40.2\"";
-browser.net.URLRequestMethod.DELETE = "DELETE";
-browser.net.URLRequestMethod.GET = "GET";
-browser.net.URLRequestMethod.HEAD = "HEAD";
-browser.net.URLRequestMethod.OPTIONS = "OPTIONS";
-browser.net.URLRequestMethod.POST = "POST";
-browser.net.URLRequestMethod.PUT = "PUT";
-browser.system.System.useCodePage = false;
-browser.text.TextField.mDefaultFont = "Bitstream_Vera_Sans";
-browser.text.TextField.sSelectionOwner = null;
-browser.text.FontInstance.mSolidFonts = new Hash();
-browser.text.TextFieldAutoSize.CENTER = "CENTER";
-browser.text.TextFieldAutoSize.LEFT = "LEFT";
-browser.text.TextFieldAutoSize.NONE = "NONE";
-browser.text.TextFieldAutoSize.RIGHT = "RIGHT";
-browser.text.TextFieldType.DYNAMIC = "DYNAMIC";
-browser.text.TextFieldType.INPUT = "INPUT";
-browser.ui.Keyboard.KEY_0 = 48;
-browser.ui.Keyboard.KEY_1 = 49;
-browser.ui.Keyboard.KEY_2 = 50;
-browser.ui.Keyboard.KEY_3 = 51;
-browser.ui.Keyboard.KEY_4 = 52;
-browser.ui.Keyboard.KEY_5 = 53;
-browser.ui.Keyboard.KEY_6 = 54;
-browser.ui.Keyboard.KEY_7 = 55;
-browser.ui.Keyboard.KEY_8 = 56;
-browser.ui.Keyboard.KEY_9 = 57;
-browser.ui.Keyboard.A = 65;
-browser.ui.Keyboard.B = 66;
-browser.ui.Keyboard.C = 67;
-browser.ui.Keyboard.D = 68;
-browser.ui.Keyboard.E = 69;
-browser.ui.Keyboard.F = 70;
-browser.ui.Keyboard.G = 71;
-browser.ui.Keyboard.H = 72;
-browser.ui.Keyboard.I = 73;
-browser.ui.Keyboard.J = 74;
-browser.ui.Keyboard.K = 75;
-browser.ui.Keyboard.L = 76;
-browser.ui.Keyboard.M = 77;
-browser.ui.Keyboard.N = 78;
-browser.ui.Keyboard.O = 79;
-browser.ui.Keyboard.P = 80;
-browser.ui.Keyboard.Q = 81;
-browser.ui.Keyboard.R = 82;
-browser.ui.Keyboard.S = 83;
-browser.ui.Keyboard.T = 84;
-browser.ui.Keyboard.U = 85;
-browser.ui.Keyboard.V = 86;
-browser.ui.Keyboard.W = 87;
-browser.ui.Keyboard.X = 88;
-browser.ui.Keyboard.Y = 89;
-browser.ui.Keyboard.Z = 90;
-browser.ui.Keyboard.NUMPAD_0 = 96;
-browser.ui.Keyboard.NUMPAD_1 = 97;
-browser.ui.Keyboard.NUMPAD_2 = 98;
-browser.ui.Keyboard.NUMPAD_3 = 99;
-browser.ui.Keyboard.NUMPAD_4 = 100;
-browser.ui.Keyboard.NUMPAD_5 = 101;
-browser.ui.Keyboard.NUMPAD_6 = 102;
-browser.ui.Keyboard.NUMPAD_7 = 103;
-browser.ui.Keyboard.NUMPAD_8 = 104;
-browser.ui.Keyboard.NUMPAD_9 = 105;
-browser.ui.Keyboard.NUMPAD_MULTIPLY = 106;
-browser.ui.Keyboard.NUMPAD_ADD = 107;
-browser.ui.Keyboard.NUMPAD_ENTER = 108;
-browser.ui.Keyboard.NUMPAD_SUBTRACT = 109;
-browser.ui.Keyboard.NUMPAD_DECIMAL = 110;
-browser.ui.Keyboard.NUMPAD_DIVIDE = 111;
-browser.ui.Keyboard.F1 = 112;
-browser.ui.Keyboard.F2 = 113;
-browser.ui.Keyboard.F3 = 114;
-browser.ui.Keyboard.F4 = 115;
-browser.ui.Keyboard.F5 = 116;
-browser.ui.Keyboard.F6 = 117;
-browser.ui.Keyboard.F7 = 118;
-browser.ui.Keyboard.F8 = 119;
-browser.ui.Keyboard.F9 = 120;
-browser.ui.Keyboard.F10 = 121;
-browser.ui.Keyboard.F11 = 122;
-browser.ui.Keyboard.F12 = 123;
-browser.ui.Keyboard.F13 = 124;
-browser.ui.Keyboard.F14 = 125;
-browser.ui.Keyboard.F15 = 126;
-browser.ui.Keyboard.BACKSPACE = 8;
-browser.ui.Keyboard.TAB = 9;
-browser.ui.Keyboard.ENTER = 13;
-browser.ui.Keyboard.SHIFT = 16;
-browser.ui.Keyboard.CONTROL = 17;
-browser.ui.Keyboard.CAPS_LOCK = 18;
-browser.ui.Keyboard.ESCAPE = 27;
-browser.ui.Keyboard.SPACE = 32;
-browser.ui.Keyboard.PAGE_UP = 33;
-browser.ui.Keyboard.PAGE_DOWN = 34;
-browser.ui.Keyboard.END = 35;
-browser.ui.Keyboard.HOME = 36;
-browser.ui.Keyboard.LEFT = 37;
-browser.ui.Keyboard.RIGHT = 39;
-browser.ui.Keyboard.UP = 38;
-browser.ui.Keyboard.DOWN = 40;
-browser.ui.Keyboard.INSERT = 45;
-browser.ui.Keyboard.DELETE = 46;
-browser.ui.Keyboard.NUMLOCK = 144;
-browser.ui.Keyboard.BREAK = 19;
-browser.ui.Keyboard.DOM_VK_CANCEL = 3;
-browser.ui.Keyboard.DOM_VK_HELP = 6;
-browser.ui.Keyboard.DOM_VK_BACK_SPACE = 8;
-browser.ui.Keyboard.DOM_VK_TAB = 9;
-browser.ui.Keyboard.DOM_VK_CLEAR = 12;
-browser.ui.Keyboard.DOM_VK_RETURN = 13;
-browser.ui.Keyboard.DOM_VK_ENTER = 14;
-browser.ui.Keyboard.DOM_VK_SHIFT = 16;
-browser.ui.Keyboard.DOM_VK_CONTROL = 17;
-browser.ui.Keyboard.DOM_VK_ALT = 18;
-browser.ui.Keyboard.DOM_VK_PAUSE = 19;
-browser.ui.Keyboard.DOM_VK_CAPS_LOCK = 20;
-browser.ui.Keyboard.DOM_VK_ESCAPE = 27;
-browser.ui.Keyboard.DOM_VK_SPACE = 32;
-browser.ui.Keyboard.DOM_VK_PAGE_UP = 33;
-browser.ui.Keyboard.DOM_VK_PAGE_DOWN = 34;
-browser.ui.Keyboard.DOM_VK_END = 35;
-browser.ui.Keyboard.DOM_VK_HOME = 36;
-browser.ui.Keyboard.DOM_VK_LEFT = 37;
-browser.ui.Keyboard.DOM_VK_UP = 38;
-browser.ui.Keyboard.DOM_VK_RIGHT = 39;
-browser.ui.Keyboard.DOM_VK_DOWN = 40;
-browser.ui.Keyboard.DOM_VK_PRINTSCREEN = 44;
-browser.ui.Keyboard.DOM_VK_INSERT = 45;
-browser.ui.Keyboard.DOM_VK_DELETE = 46;
-browser.ui.Keyboard.DOM_VK_0 = 48;
-browser.ui.Keyboard.DOM_VK_1 = 49;
-browser.ui.Keyboard.DOM_VK_2 = 50;
-browser.ui.Keyboard.DOM_VK_3 = 51;
-browser.ui.Keyboard.DOM_VK_4 = 52;
-browser.ui.Keyboard.DOM_VK_5 = 53;
-browser.ui.Keyboard.DOM_VK_6 = 54;
-browser.ui.Keyboard.DOM_VK_7 = 55;
-browser.ui.Keyboard.DOM_VK_8 = 56;
-browser.ui.Keyboard.DOM_VK_9 = 57;
-browser.ui.Keyboard.DOM_VK_SEMICOLON = 59;
-browser.ui.Keyboard.DOM_VK_EQUALS = 61;
-browser.ui.Keyboard.DOM_VK_A = 65;
-browser.ui.Keyboard.DOM_VK_B = 66;
-browser.ui.Keyboard.DOM_VK_C = 67;
-browser.ui.Keyboard.DOM_VK_D = 68;
-browser.ui.Keyboard.DOM_VK_E = 69;
-browser.ui.Keyboard.DOM_VK_F = 70;
-browser.ui.Keyboard.DOM_VK_G = 71;
-browser.ui.Keyboard.DOM_VK_H = 72;
-browser.ui.Keyboard.DOM_VK_I = 73;
-browser.ui.Keyboard.DOM_VK_J = 74;
-browser.ui.Keyboard.DOM_VK_K = 75;
-browser.ui.Keyboard.DOM_VK_L = 76;
-browser.ui.Keyboard.DOM_VK_M = 77;
-browser.ui.Keyboard.DOM_VK_N = 78;
-browser.ui.Keyboard.DOM_VK_O = 79;
-browser.ui.Keyboard.DOM_VK_P = 80;
-browser.ui.Keyboard.DOM_VK_Q = 81;
-browser.ui.Keyboard.DOM_VK_R = 82;
-browser.ui.Keyboard.DOM_VK_S = 83;
-browser.ui.Keyboard.DOM_VK_T = 84;
-browser.ui.Keyboard.DOM_VK_U = 85;
-browser.ui.Keyboard.DOM_VK_V = 86;
-browser.ui.Keyboard.DOM_VK_W = 87;
-browser.ui.Keyboard.DOM_VK_X = 88;
-browser.ui.Keyboard.DOM_VK_Y = 89;
-browser.ui.Keyboard.DOM_VK_Z = 90;
-browser.ui.Keyboard.DOM_VK_CONTEXT_MENU = 93;
-browser.ui.Keyboard.DOM_VK_NUMPAD0 = 96;
-browser.ui.Keyboard.DOM_VK_NUMPAD1 = 97;
-browser.ui.Keyboard.DOM_VK_NUMPAD2 = 98;
-browser.ui.Keyboard.DOM_VK_NUMPAD3 = 99;
-browser.ui.Keyboard.DOM_VK_NUMPAD4 = 100;
-browser.ui.Keyboard.DOM_VK_NUMPAD5 = 101;
-browser.ui.Keyboard.DOM_VK_NUMPAD6 = 102;
-browser.ui.Keyboard.DOM_VK_NUMPAD7 = 103;
-browser.ui.Keyboard.DOM_VK_NUMPAD8 = 104;
-browser.ui.Keyboard.DOM_VK_NUMPAD9 = 105;
-browser.ui.Keyboard.DOM_VK_MULTIPLY = 106;
-browser.ui.Keyboard.DOM_VK_ADD = 107;
-browser.ui.Keyboard.DOM_VK_SEPARATOR = 108;
-browser.ui.Keyboard.DOM_VK_SUBTRACT = 109;
-browser.ui.Keyboard.DOM_VK_DECIMAL = 110;
-browser.ui.Keyboard.DOM_VK_DIVIDE = 111;
-browser.ui.Keyboard.DOM_VK_F1 = 112;
-browser.ui.Keyboard.DOM_VK_F2 = 113;
-browser.ui.Keyboard.DOM_VK_F3 = 114;
-browser.ui.Keyboard.DOM_VK_F4 = 115;
-browser.ui.Keyboard.DOM_VK_F5 = 116;
-browser.ui.Keyboard.DOM_VK_F6 = 117;
-browser.ui.Keyboard.DOM_VK_F7 = 118;
-browser.ui.Keyboard.DOM_VK_F8 = 119;
-browser.ui.Keyboard.DOM_VK_F9 = 120;
-browser.ui.Keyboard.DOM_VK_F10 = 121;
-browser.ui.Keyboard.DOM_VK_F11 = 122;
-browser.ui.Keyboard.DOM_VK_F12 = 123;
-browser.ui.Keyboard.DOM_VK_F13 = 124;
-browser.ui.Keyboard.DOM_VK_F14 = 125;
-browser.ui.Keyboard.DOM_VK_F15 = 126;
-browser.ui.Keyboard.DOM_VK_F16 = 127;
-browser.ui.Keyboard.DOM_VK_F17 = 128;
-browser.ui.Keyboard.DOM_VK_F18 = 129;
-browser.ui.Keyboard.DOM_VK_F19 = 130;
-browser.ui.Keyboard.DOM_VK_F20 = 131;
-browser.ui.Keyboard.DOM_VK_F21 = 132;
-browser.ui.Keyboard.DOM_VK_F22 = 133;
-browser.ui.Keyboard.DOM_VK_F23 = 134;
-browser.ui.Keyboard.DOM_VK_F24 = 135;
-browser.ui.Keyboard.DOM_VK_NUM_LOCK = 144;
-browser.ui.Keyboard.DOM_VK_SCROLL_LOCK = 145;
-browser.ui.Keyboard.DOM_VK_COMMA = 188;
-browser.ui.Keyboard.DOM_VK_PERIOD = 190;
-browser.ui.Keyboard.DOM_VK_SLASH = 191;
-browser.ui.Keyboard.DOM_VK_BACK_QUOTE = 192;
-browser.ui.Keyboard.DOM_VK_OPEN_BRACKET = 219;
-browser.ui.Keyboard.DOM_VK_BACK_SLASH = 220;
-browser.ui.Keyboard.DOM_VK_CLOSE_BRACKET = 221;
-browser.ui.Keyboard.DOM_VK_QUOTE = 222;
-browser.ui.Keyboard.DOM_VK_META = 224;
-browser.ui.Keyboard.DOM_VK_KANA = 21;
-browser.ui.Keyboard.DOM_VK_HANGUL = 21;
-browser.ui.Keyboard.DOM_VK_JUNJA = 23;
-browser.ui.Keyboard.DOM_VK_FINAL = 24;
-browser.ui.Keyboard.DOM_VK_HANJA = 25;
-browser.ui.Keyboard.DOM_VK_KANJI = 25;
-browser.ui.Keyboard.DOM_VK_CONVERT = 28;
-browser.ui.Keyboard.DOM_VK_NONCONVERT = 29;
-browser.ui.Keyboard.DOM_VK_ACEPT = 30;
-browser.ui.Keyboard.DOM_VK_MODECHANGE = 31;
-browser.ui.Keyboard.DOM_VK_SELECT = 41;
-browser.ui.Keyboard.DOM_VK_PRINT = 42;
-browser.ui.Keyboard.DOM_VK_EXECUTE = 43;
-browser.ui.Keyboard.DOM_VK_SLEEP = 95;
-browser.utils.Endian.BIG_ENDIAN = "bigEndian";
-browser.utils.Endian.LITTLE_ENDIAN = "littleEndian";
-browser.utils.Uuid.UID_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 demo.scenes.Game.TIME_LIMIT = 30;
+flash.Lib.HTML_ACCELEROMETER_EVENT_TYPE = "devicemotion";
+flash.Lib.HTML_ORIENTATION_EVENT_TYPE = "orientationchange";
+flash.Lib.DEFAULT_HEIGHT = 500;
+flash.Lib.DEFAULT_WIDTH = 500;
+flash.Lib.HTML_DIV_EVENT_TYPES = ["resize","mouseover","mouseout","mousewheel","dblclick","click"];
+flash.Lib.HTML_TOUCH_EVENT_TYPES = ["touchstart","touchmove","touchend"];
+flash.Lib.HTML_TOUCH_ALT_EVENT_TYPES = ["mousedown","mousemove","mouseup"];
+flash.Lib.HTML_WINDOW_EVENT_TYPES = ["keyup","keypress","keydown","resize","blur","focus"];
+flash.Lib.NME_IDENTIFIER = "haxe:jeash";
+flash.Lib.VENDOR_HTML_TAG = "data-";
+flash.Lib.starttime = haxe.Timer.stamp();
+flash.display._BitmapData.MinstdGenerator.a = 16807;
+flash.display._BitmapData.MinstdGenerator.m = -2147483648 - 1;
+flash.display.BitmapDataChannel.ALPHA = 8;
+flash.display.BitmapDataChannel.BLUE = 4;
+flash.display.BitmapDataChannel.GREEN = 2;
+flash.display.BitmapDataChannel.RED = 1;
+flash.display.Graphics.TILE_SCALE = 1;
+flash.display.Graphics.TILE_ROTATION = 2;
+flash.display.Graphics.TILE_RGB = 4;
+flash.display.Graphics.TILE_ALPHA = 8;
+flash.display.Graphics.TILE_TRANS_2x2 = 16;
+flash.display.Graphics.TILE_BLEND_NORMAL = 0;
+flash.display.Graphics.TILE_BLEND_ADD = 65536;
+flash.display.Graphics.BMP_REPEAT = 16;
+flash.display.Graphics.BMP_SMOOTH = 65536;
+flash.display.Graphics.CORNER_ROUND = 0;
+flash.display.Graphics.CORNER_MITER = 4096;
+flash.display.Graphics.CORNER_BEVEL = 8192;
+flash.display.Graphics.CURVE = 2;
+flash.display.Graphics.END_NONE = 0;
+flash.display.Graphics.END_ROUND = 256;
+flash.display.Graphics.END_SQUARE = 512;
+flash.display.Graphics.LINE = 1;
+flash.display.Graphics.MOVE = 0;
+flash.display.Graphics.NME_MAX_DIM = 5000;
+flash.display.Graphics.PIXEL_HINTING = 16384;
+flash.display.Graphics.RADIAL = 1;
+flash.display.Graphics.SCALE_HORIZONTAL = 2;
+flash.display.Graphics.SCALE_NONE = 0;
+flash.display.Graphics.SCALE_NORMAL = 3;
+flash.display.Graphics.SCALE_VERTICAL = 1;
+flash.display.Graphics.SPREAD_REPEAT = 2;
+flash.display.Graphics.SPREAD_REFLECT = 4;
+flash.display.GraphicsPathCommand.LINE_TO = 2;
+flash.display.GraphicsPathCommand.MOVE_TO = 1;
+flash.display.GraphicsPathCommand.CURVE_TO = 3;
+flash.display.GraphicsPathCommand.WIDE_LINE_TO = 5;
+flash.display.GraphicsPathCommand.WIDE_MOVE_TO = 4;
+flash.display.GraphicsPathCommand.NO_OP = 0;
+flash.display.GraphicsPathCommand.CUBIC_CURVE_TO = 6;
+flash.events.Event.ACTIVATE = "activate";
+flash.events.Event.ADDED = "added";
+flash.events.Event.ADDED_TO_STAGE = "addedToStage";
+flash.events.Event.CANCEL = "cancel";
+flash.events.Event.CHANGE = "change";
+flash.events.Event.CLOSE = "close";
+flash.events.Event.COMPLETE = "complete";
+flash.events.Event.CONNECT = "connect";
+flash.events.Event.CONTEXT3D_CREATE = "context3DCreate";
+flash.events.Event.DEACTIVATE = "deactivate";
+flash.events.Event.ENTER_FRAME = "enterFrame";
+flash.events.Event.ID3 = "id3";
+flash.events.Event.INIT = "init";
+flash.events.Event.MOUSE_LEAVE = "mouseLeave";
+flash.events.Event.OPEN = "open";
+flash.events.Event.REMOVED = "removed";
+flash.events.Event.REMOVED_FROM_STAGE = "removedFromStage";
+flash.events.Event.RENDER = "render";
+flash.events.Event.RESIZE = "resize";
+flash.events.Event.SCROLL = "scroll";
+flash.events.Event.SELECT = "select";
+flash.events.Event.TAB_CHILDREN_CHANGE = "tabChildrenChange";
+flash.events.Event.TAB_ENABLED_CHANGE = "tabEnabledChange";
+flash.events.Event.TAB_INDEX_CHANGE = "tabIndexChange";
+flash.events.Event.UNLOAD = "unload";
+flash.events.Event.SOUND_COMPLETE = "soundComplete";
+flash.events.MouseEvent.CLICK = "click";
+flash.events.MouseEvent.DOUBLE_CLICK = "doubleClick";
+flash.events.MouseEvent.MOUSE_DOWN = "mouseDown";
+flash.events.MouseEvent.MOUSE_MOVE = "mouseMove";
+flash.events.MouseEvent.MOUSE_OUT = "mouseOut";
+flash.events.MouseEvent.MOUSE_OVER = "mouseOver";
+flash.events.MouseEvent.MOUSE_UP = "mouseUp";
+flash.events.MouseEvent.MOUSE_WHEEL = "mouseWheel";
+flash.events.MouseEvent.RIGHT_CLICK = "rightClick";
+flash.events.MouseEvent.RIGHT_MOUSE_DOWN = "rightMouseDown";
+flash.events.MouseEvent.RIGHT_MOUSE_UP = "rightMouseUp";
+flash.events.MouseEvent.ROLL_OUT = "rollOut";
+flash.events.MouseEvent.ROLL_OVER = "rollOver";
+flash.display.Stage.NAME = "Stage";
+flash.display.Stage.nmeAcceleration = { x : 0.0, y : 1.0, z : 0.0};
+flash.display.Stage.OrientationPortrait = 1;
+flash.display.Stage.OrientationPortraitUpsideDown = 2;
+flash.display.Stage.OrientationLandscapeRight = 3;
+flash.display.Stage.OrientationLandscapeLeft = 4;
+flash.display.Stage.DEFAULT_FRAMERATE = 0.0;
+flash.display.Stage.UI_EVENTS_QUEUE_MAX = 1000;
+flash.display.Stage.nmeMouseChanges = [flash.events.MouseEvent.MOUSE_OUT,flash.events.MouseEvent.MOUSE_OVER,flash.events.MouseEvent.ROLL_OUT,flash.events.MouseEvent.ROLL_OVER];
+flash.display.Stage.nmeTouchChanges = ["touchOut","touchOver","touchRollOut","touchRollOver"];
+flash.display.StageQuality.BEST = "best";
+flash.display.StageQuality.HIGH = "high";
+flash.display.StageQuality.MEDIUM = "medium";
+flash.display.StageQuality.LOW = "low";
+flash.errors.Error.DEFAULT_TO_STRING = "Error";
+flash.events.TextEvent.LINK = "link";
+flash.events.TextEvent.TEXT_INPUT = "textInput";
+flash.events.ErrorEvent.ERROR = "error";
+flash.events.Listener.sIDs = 1;
+flash.events.EventPhase.CAPTURING_PHASE = 0;
+flash.events.EventPhase.AT_TARGET = 1;
+flash.events.EventPhase.BUBBLING_PHASE = 2;
+flash.events.FocusEvent.FOCUS_IN = "focusIn";
+flash.events.FocusEvent.FOCUS_OUT = "focusOut";
+flash.events.FocusEvent.KEY_FOCUS_CHANGE = "keyFocusChange";
+flash.events.FocusEvent.MOUSE_FOCUS_CHANGE = "mouseFocusChange";
+flash.events.HTTPStatusEvent.HTTP_RESPONSE_STATUS = "httpResponseStatus";
+flash.events.HTTPStatusEvent.HTTP_STATUS = "httpStatus";
+flash.events.IOErrorEvent.IO_ERROR = "ioError";
+flash.events.KeyboardEvent.KEY_DOWN = "keyDown";
+flash.events.KeyboardEvent.KEY_UP = "keyUp";
+flash.events.ProgressEvent.PROGRESS = "progress";
+flash.events.ProgressEvent.SOCKET_DATA = "socketData";
+flash.events.SecurityErrorEvent.SECURITY_ERROR = "securityError";
+flash.events.TouchEvent.TOUCH_BEGIN = "touchBegin";
+flash.events.TouchEvent.TOUCH_END = "touchEnd";
+flash.events.TouchEvent.TOUCH_MOVE = "touchMove";
+flash.events.TouchEvent.TOUCH_OUT = "touchOut";
+flash.events.TouchEvent.TOUCH_OVER = "touchOver";
+flash.events.TouchEvent.TOUCH_ROLL_OUT = "touchRollOut";
+flash.events.TouchEvent.TOUCH_ROLL_OVER = "touchRollOver";
+flash.events.TouchEvent.TOUCH_TAP = "touchTap";
+flash.filters.DropShadowFilter.DEGREES_FULL_RADIUS = 360.0;
+flash.geom.Transform.DEG_TO_RAD = Math.PI / 180.0;
+flash.media.Sound.EXTENSION_MP3 = "mp3";
+flash.media.Sound.EXTENSION_OGG = "ogg";
+flash.media.Sound.EXTENSION_WAV = "wav";
+flash.media.Sound.EXTENSION_AAC = "aac";
+flash.media.Sound.MEDIA_TYPE_MP3 = "audio/mpeg";
+flash.media.Sound.MEDIA_TYPE_OGG = "audio/ogg; codecs=\"vorbis\"";
+flash.media.Sound.MEDIA_TYPE_WAV = "audio/wav; codecs=\"1\"";
+flash.media.Sound.MEDIA_TYPE_AAC = "audio/mp4; codecs=\"mp4a.40.2\"";
+flash.net.URLRequestMethod.DELETE = "DELETE";
+flash.net.URLRequestMethod.GET = "GET";
+flash.net.URLRequestMethod.HEAD = "HEAD";
+flash.net.URLRequestMethod.OPTIONS = "OPTIONS";
+flash.net.URLRequestMethod.POST = "POST";
+flash.net.URLRequestMethod.PUT = "PUT";
+flash.system.ApplicationDomain.currentDomain = new flash.system.ApplicationDomain(null);
+flash.system.SecurityDomain.currentDomain = new flash.system.SecurityDomain();
+flash.system.System.useCodePage = false;
+flash.text.Font.DEFAULT_FONT_DATA = "q:55oy6:ascentd950.5y4:dataad84d277.5d564d277.5d564d320.5d293d1024d187.5d1024d442.5d362.5d84d362.5d84d277.5hy6:_widthd651.5y4:xMaxd564y4:xMind84y4:yMaxd746.5y4:yMind0y7:_heightd662.5y7:leadingd168y7:descentd241.5y8:charCodei55y15:leftsideBearingd84y12:advanceWidthd651.5y8:commandsai1i2i2i2i2i2i2i2hg:111oR0d950.5R1ad313.5d528.5d239.5d528.5d196.5d586.25d153.5d644d153.5d744.5d153.5d845d196.25d902.75d239d960.5d313.5d960.5d387d960.5d430d902.5d473d844.5d473d744.5d473d645d430d586.75d387d528.5d313.5d528.5d313.5d450.5d433.5d450.5d502d528.5d570.5d606.5d570.5d744.5d570.5d882d502d960.25d433.5d1038.5d313.5d1038.5d193d1038.5d124.75d960.25d56.5d882d56.5d744.5d56.5d606.5d124.75d528.5d193d450.5d313.5d450.5hR2d626.5R3d570.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i111R11d56.5R12d626.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:54oR0d950.5R1ad338d610.5d270d610.5d230.25d657d190.5d703.5d190.5d784.5d190.5d865d230.25d911.75d270d958.5d338d958.5d406d958.5d445.75d911.75d485.5d865d485.5d784.5d485.5d703.5d445.75d657d406d610.5d338d610.5d538.5d294d538.5d386d500.5d368d461.75d358.5d423d349d385d349d285d349d232.25d416.5d179.5d484d172d620.5d201.5d577d246d553.75d290.5d530.5d344d530.5d456.5d530.5d521.75d598.75d587d667d587d784.5d587d899.5d519d969d451d1038.5d338d1038.5d208.5d1038.5d140d939.25d71.5d840d71.5d651.5d71.5d474.5d155.5d369.25d239.5d264d381d264d419d264d457.75d271.5d496.5d279d538.5d294hR2d651.5R3d587R4d71.5R5d760R6d-14.5R7d688.5R8d168R9d241.5R10i54R11d71.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3hg:110oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i110R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:53oR0d950.5R1ad110.5d277.5d507d277.5d507d362.5d203d362.5d203d545.5d225d538d247d534.25d269d530.5d291d530.5d416d530.5d489d599d562d667.5d562d784.5d562d905d487d971.75d412d1038.5d275.5d1038.5d228.5d1038.5d179.75d1030.5d131d1022.5d79d1006.5d79d905d124d929.5d172d941.5d220d953.5d273.5d953.5d360d953.5d410.5d908d461d862.5d461d784.5d461d706.5d410.5d661d360d615.5d273.5d615.5d233d615.5d192.75d624.5d152.5d633.5d110.5d652.5d110.5d277.5hR2d651.5R3d562R4d79R5d746.5R6d-14.5R7d667.5R8d168R9d241.5R10i53R11d79R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i2hg:109oR0d950.5R1ad532.5d571.5d567d509.5d615d480d663d450.5d728d450.5d815.5d450.5d863d511.75d910.5d573d910.5d686d910.5d1024d818d1024d818d689d818d608.5d789.5d569.5d761d530.5d702.5d530.5d631d530.5d589.5d578d548d625.5d548d707.5d548d1024d455.5d1024d455.5d689d455.5d608d427d569.25d398.5d530.5d339d530.5d268.5d530.5d227d578.25d185.5d626d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d217d499.5d261d475d305d450.5d365.5d450.5d426.5d450.5d469.25d481.5d512d512.5d532.5d571.5hR2d997.5R3d910.5R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i109R11d93R12d997.5R13ai1i3i3i3i3i2i2i2i3i3i3i3i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:52oR0d950.5R1ad387d365.5d132d764d387d764d387d365.5d360.5d277.5d487.5d277.5d487.5d764d594d764d594d848d487.5d848d487.5d1024d387d1024d387d848d50d848d50d750.5d360.5d277.5hR2d651.5R3d594R4d50R5d746.5R6d0R7d696.5R8d168R9d241.5R10i52R11d50R12d651.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2hg:108oR0d950.5R1ad96.5d246d188.5d246d188.5d1024d96.5d1024d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i108R11d96.5R12d284.5R13ai1i2i2i2i2hg:51oR0d950.5R1ad415.5d621.5d488d637d528.75d686d569.5d735d569.5d807d569.5d917.5d493.5d978d417.5d1038.5d277.5d1038.5d230.5d1038.5d180.75d1029.25d131d1020d78d1001.5d78d904d120d928.5d170d941d220d953.5d274.5d953.5d369.5d953.5d419.25d916d469d878.5d469d807d469d741d422.75d703.75d376.5d666.5d294d666.5d207d666.5d207d583.5d298d583.5d372.5d583.5d412d553.75d451.5d524d451.5d468d451.5d410.5d410.75d379.75d370d349d294d349d252.5d349d205d358d157.5d367d100.5d386d100.5d296d158d280d208.25d272d258.5d264d303d264d418d264d485d316.25d552d368.5d552d457.5d552d519.5d516.5d562.25d481d605d415.5d621.5hR2d651.5R3d569.5R4d78R5d760R6d-14.5R7d682R8d168R9d241.5R10i51R11d78R12d651.5R13ai1i3i3i3i3i3i3i2i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:107oR0d950.5R1ad93d246d185.5d246d185.5d705.5d460d464d577.5d464d280.5d726d590d1024d470d1024d185.5d750.5d185.5d1024d93d1024d93d246hR2d593R3d590R4d93R5d778R6d0R7d685R8d168R9d241.5R10i107R11d93R12d593R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:50oR0d950.5R1ad196.5d939d549d939d549d1024d75d1024d75d939d132.5d879.5d231.75d779.25d331d679d356.5d650d405d595.5d424.25d557.75d443.5d520d443.5d483.5d443.5d424d401.75d386.5d360d349d293d349d245.5d349d192.75d365.5d140d382d80d415.5d80d313.5d141d289d194d276.5d247d264d291d264d407d264d476d322d545d380d545d477d545d523d527.75d564.25d510.5d605.5d465d661.5d452.5d676d385.5d745.25d318.5d814.5d196.5d939hR2d651.5R3d549R4d75R5d760R6d0R7d685R8d168R9d241.5R10i50R11d75R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:106oR0d950.5R1ad96.5d464d188.5d464d188.5d1034d188.5d1141d147.75d1189d107d1237d16.5d1237d-18.5d1237d-18.5d1159d6d1159d58.5d1159d77.5d1134.75d96.5d1110.5d96.5d1034d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d-18.5R5d778R6d-213R7d796.5R8d168R9d241.5R10i106R11d-18.5R12d284.5R13ai1i2i2i3i3i2i2i2i3i3i2i1i2i2i2i2hg:49oR0d950.5R1ad127d939d292d939d292d369.5d112.5d405.5d112.5d313.5d291d277.5d392d277.5d392d939d557d939d557d1024d127d1024d127d939hR2d651.5R3d557R4d112.5R5d746.5R6d0R7d634R8d168R9d241.5R10i49R11d112.5R12d651.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:105oR0d950.5R1ad96.5d464d188.5d464d188.5d1024d96.5d1024d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i105R11d96.5R12d284.5R13ai1i2i2i2i2i1i2i2i2i2hg:48oR0d950.5R1ad325.5d344d247.5d344d208.25d420.75d169d497.5d169d651.5d169d805d208.25d881.75d247.5d958.5d325.5d958.5d404d958.5d443.25d881.75d482.5d805d482.5d651.5d482.5d497.5d443.25d420.75d404d344d325.5d344d325.5d264d451d264d517.25d363.25d583.5d462.5d583.5d651.5d583.5d840d517.25d939.25d451d1038.5d325.5d1038.5d200d1038.5d133.75d939.25d67.5d840d67.5d651.5d67.5d462.5d133.75d363.25d200d264d325.5d264hR2d651.5R3d583.5R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i48R11d67.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:104oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d246d185.5d246d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d778R6d0R7d685R8d168R9d241.5R10i104R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:47oR0d950.5R1ad260d277.5d345d277.5d85d1119d0d1119d260d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i47R11d0R12d345R13ai1i2i2i2i2hg:103oR0d950.5R1ad465d737.5d465d637.5d423.75d582.5d382.5d527.5d308d527.5d234d527.5d192.75d582.5d151.5d637.5d151.5d737.5d151.5d837d192.75d892d234d947d308d947d382.5d947d423.75d892d465d837d465d737.5d557d954.5d557d1097.5d493.5d1167.25d430d1237d299d1237d250.5d1237d207.5d1229.75d164.5d1222.5d124d1207.5d124d1118d164.5d1140d204d1150.5d243.5d1161d284.5d1161d375d1161d420d1113.75d465d1066.5d465d971d465d925.5d436.5d975d392d999.5d347.5d1024d285.5d1024d182.5d1024d119.5d945.5d56.5d867d56.5d737.5d56.5d607.5d119.5d529d182.5d450.5d285.5d450.5d347.5d450.5d392d475d436.5d499.5d465d549d465d464d557d464d557d954.5hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i103R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i2i3i3i3i3i2i3i3i3i3i3i3i3i3i2i2i2hg:46oR0d950.5R1ad109.5d897d215d897d215d1024d109.5d1024d109.5d897hR2d325.5R3d215R4d109.5R5d127R6d0R7d17.5R8d168R9d241.5R10i46R11d109.5R12d325.5R13ai1i2i2i2i2hg:102oR0d950.5R1ad380d246d380d322.5d292d322.5d242.5d322.5d223.25d342.5d204d362.5d204d414.5d204d464d355.5d464d355.5d535.5d204d535.5d204d1024d111.5d1024d111.5d535.5d23.5d535.5d23.5d464d111.5d464d111.5d425d111.5d331.5d155d288.75d198.5d246d293d246d380d246hR2d360.5R3d380R4d23.5R5d778R6d0R7d754.5R8d168R9d241.5R10i102R11d23.5R12d360.5R13ai1i2i2i3i3i2i2i2i2i2i2i2i2i2i2i2i3i3i2hg:45oR0d950.5R1ad50d702.5d319.5d702.5d319.5d784.5d50d784.5d50d702.5hR2d369.5R3d319.5R4d50R5d321.5R6d239.5R7d271.5R8d168R9d241.5R10i45R11d50R12d369.5R13ai1i2i2i2i2hg:101oR0d950.5R1ad575.5d721d575.5d766d152.5d766d158.5d861d209.75d910.75d261d960.5d352.5d960.5d405.5d960.5d455.25d947.5d505d934.5d554d908.5d554d995.5d504.5d1016.5d452.5d1027.5d400.5d1038.5d347d1038.5d213d1038.5d134.75d960.5d56.5d882.5d56.5d749.5d56.5d612d130.75d531.25d205d450.5d331d450.5d444d450.5d509.75d523.25d575.5d596d575.5d721d483.5d694d482.5d618.5d441.25d573.5d400d528.5d332d528.5d255d528.5d208.75d572d162.5d615.5d155.5d694.5d483.5d694hR2d630R3d575.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i101R11d56.5R12d630R13ai1i2i2i3i3i3i3i2i3i3i3i3i3i3i3i3i1i3i3i3i3i2hg:44oR0d950.5R1ad120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d325.5R3d225.5R4d79R5d127R6d-119R7d48R8d168R9d241.5R10i44R11d79R12d325.5R13ai1i2i2i2i2i2i2hg:100oR0d950.5R1ad465d549d465d246d557d246d557d1024d465d1024d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5hR2d650R3d557R4d56.5R5d778R6d-14.5R7d721.5R8d168R9d241.5R10i100R11d56.5R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:43oR0d950.5R1ad471d382d471d660.5d749.5d660.5d749.5d745.5d471d745.5d471d1024d387d1024d387d745.5d108.5d745.5d108.5d660.5d387d660.5d387d382d471d382hR2d858R3d749.5R4d108.5R5d642R6d0R7d533.5R8d168R9d241.5R10i43R11d108.5R12d858R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:99oR0d950.5R1ad499.5d485.5d499.5d571.5d460.5d550d421.25d539.25d382d528.5d342d528.5d252.5d528.5d203d585.25d153.5d642d153.5d744.5d153.5d847d203d903.75d252.5d960.5d342d960.5d382d960.5d421.25d949.75d460.5d939d499.5d917.5d499.5d1002.5d461d1020.5d419.75d1029.5d378.5d1038.5d332d1038.5d205.5d1038.5d131d959d56.5d879.5d56.5d744.5d56.5d607.5d131.75d529d207d450.5d338d450.5d380.5d450.5d421d459.25d461.5d468d499.5d485.5hR2d563R3d499.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i99R11d56.5R12d563R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:42oR0d950.5R1ad481.5d400.5d302d497.5d481.5d595d452.5d644d284.5d542.5d284.5d731d227.5d731d227.5d542.5d59.5d644d30.5d595d210d497.5d30.5d400.5d59.5d351d227.5d452.5d227.5d264d284.5d264d284.5d452.5d452.5d351d481.5d400.5hR2d512R3d481.5R4d30.5R5d760R6d293R7d729.5R8d168R9d241.5R10i42R11d30.5R12d512R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:98oR0d950.5R1ad498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d185.5d1024d93d1024d93d246d185.5d246d185.5d549hR2d650R3d594R4d93R5d778R6d-14.5R7d685R8d168R9d241.5R10i98R11d93R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:41oR0d950.5R1ad82d247d162d247d237d365d274.25d478d311.5d591d311.5d702.5d311.5d814.5d274.25d928d237d1041.5d162d1159d82d1159d148.5d1044.5d181.25d931.25d214d818d214d702.5d214d587d181.25d474.5d148.5d362d82d247hR2d399.5R3d311.5R4d82R5d777R6d-135R7d695R8d168R9d241.5R10i41R11d82R12d399.5R13ai1i2i3i3i3i3i2i3i3i3i3hg:97oR0d950.5R1ad351d742.5d239.5d742.5d196.5d768d153.5d793.5d153.5d855d153.5d904d185.75d932.75d218d961.5d273.5d961.5d350d961.5d396.25d907.25d442.5d853d442.5d763d442.5d742.5d351d742.5d534.5d704.5d534.5d1024d442.5d1024d442.5d939d411d990d364d1014.25d317d1038.5d249d1038.5d163d1038.5d112.25d990.25d61.5d942d61.5d861d61.5d766.5d124.75d718.5d188d670.5d313.5d670.5d442.5d670.5d442.5d661.5d442.5d598d400.75d563.25d359d528.5d283.5d528.5d235.5d528.5d190d540d144.5d551.5d102.5d574.5d102.5d489.5d153d470d200.5d460.25d248d450.5d293d450.5d414.5d450.5d474.5d513.5d534.5d576.5d534.5d704.5hR2d627.5R3d534.5R4d61.5R5d573.5R6d-14.5R7d512R8d168R9d241.5R10i97R11d61.5R12d627.5R13ai1i3i3i3i3i3i3i2i2i1i2i2i2i3i3i3i3i3i3i2i2i3i3i3i3i2i3i3i3i3hg:40oR0d950.5R1ad317.5d247d250.5d362d218d474.5d185.5d587d185.5d702.5d185.5d818d218.25d931.25d251d1044.5d317.5d1159d237.5d1159d162.5d1041.5d125.25d928d88d814.5d88d702.5d88d591d125d478d162d365d237.5d247d317.5d247hR2d399.5R3d317.5R4d88R5d777R6d-135R7d689R8d168R9d241.5R10i40R11d88R12d399.5R13ai1i3i3i3i3i2i3i3i3i3i2hg:96oR0d950.5R1ad183.5d205d324.5d392d248d392d85d205d183.5d205hR2d512R3d324.5R4d85R5d819R6d632R7d734R8d168R9d241.5R10i96R11d85R12d512R13ai1i2i2i2i2hg:39oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5hR2d281.5R3d183.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i39R11d98.5R12d281.5R13ai1i2i2i2i2hg:95oR0d950.5R1ad522d1194d522d1265.5d-10d1265.5d-10d1194d522d1194hR2d512R3d522R4d-10R5d-170R6d-241.5R7d-160R8d168R9d241.5R10i95R11d-10R12d512R13ai1i2i2i2i2hg:38oR0d950.5R1ad249d622.5d203.5d663d182.25d703.25d161d743.5d161d787.5d161d860.5d214d909d267d957.5d347d957.5d394.5d957.5d436d941.75d477.5d926d514d894d249d622.5d319.5d566.5d573.5d826.5d603d782d619.5d731.25d636d680.5d639d623.5d732d623.5d726d689.5d700d754d674d818.5d627.5d881.5d767d1024d641d1024d569.5d950.5d517.5d995d460.5d1016.75d403.5d1038.5d338d1038.5d217.5d1038.5d141d969.75d64.5d901d64.5d793.5d64.5d729.5d98d673.25d131.5d617d198.5d567.5d174.5d536d162d504.75d149.5d473.5d149.5d443.5d149.5d362.5d205d313.25d260.5d264d352.5d264d394d264d435.25d273d476.5d282d519d300d519d391d475.5d367.5d436d355.25d396.5d343d362.5d343d310d343d277.25d370.75d244.5d398.5d244.5d442.5d244.5d468d259.25d493.75d274d519.5d319.5d566.5hR2d798.5R3d767R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i38R11d64.5R12d798.5R13ai1i3i3i3i3i3i3i2i1i2i3i3i2i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3hg:94oR0d950.5R1ad478d277.5d749.5d556d649d556d429d358.5d209d556d108.5d556d380d277.5d478d277.5hR2d858R3d749.5R4d108.5R5d746.5R6d468R7d638R8d168R9d241.5R10i94R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:37oR0d950.5R1ad744.5d695.5d701d695.5d676.25d732.5d651.5d769.5d651.5d835.5d651.5d900.5d676.25d937.75d701d975d744.5d975d787d975d811.75d937.75d836.5d900.5d836.5d835.5d836.5d770d811.75d732.75d787d695.5d744.5d695.5d744.5d632d823.5d632d870d687d916.5d742d916.5d835.5d916.5d929d869.75d983.75d823d1038.5d744.5d1038.5d664.5d1038.5d618d983.75d571.5d929d571.5d835.5d571.5d741.5d618.25d686.75d665d632d744.5d632d228.5d327.5d185.5d327.5d160.75d364.75d136d402d136d467d136d533d160.5d570d185d607d228.5d607d272d607d296.75d570d321.5d533d321.5d467d321.5d402.5d296.5d365d271.5d327.5d228.5d327.5d680d264d760d264d293d1038.5d213d1038.5d680d264d228.5d264d307.5d264d354.5d318.75d401.5d373.5d401.5d467d401.5d561.5d354.75d616d308d670.5d228.5d670.5d149d670.5d102.75d615.75d56.5d561d56.5d467d56.5d374d103d319d149.5d264d228.5d264hR2d973R3d916.5R4d56.5R5d760R6d-14.5R7d703.5R8d168R9d241.5R10i37R11d56.5R12d973R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i2i2i2i2i1i3i3i3i3i3i3i3i3hg:93oR0d950.5R1ad311.5d246d311.5d1159d99.5d1159d99.5d1087.5d219d1087.5d219d317.5d99.5d317.5d99.5d246d311.5d246hR2d399.5R3d311.5R4d99.5R5d778R6d-135R7d678.5R8d168R9d241.5R10i93R11d99.5R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:36oR0d950.5R1ad346d1174.5d296d1174.5d295.5d1024d243d1023d190.5d1011.75d138d1000.5d85d978d85d888d136d920d188.25d936.25d240.5d952.5d296d953d296d725d185.5d707d135.25d664d85d621d85d546d85d464.5d139.5d417.5d194d370.5d296d363.5d296d246d346d246d346d362d392.5d364d436d371.75d479.5d379.5d521d393d521d480.5d479.5d459.5d435.75d448d392d436.5d346d434.5d346d648d459.5d665.5d513d710.5d566.5d755.5d566.5d833.5d566.5d918d509.75d966.75d453d1015.5d346d1023d346d1174.5d296d639d296d434d238d440.5d207.5d467d177d493.5d177d537.5d177d580.5d205.25d604.5d233.5d628.5d296d639d346d735d346d951.5d409.5d943d441.75d915.5d474d888d474d843d474d799d443.25d773d412.5d747d346d735hR2d651.5R3d566.5R4d85R5d778R6d-150.5R7d693R8d168R9d241.5R10i36R11d85R12d651.5R13ai1i2i2i3i3i2i3i3i2i3i3i3i3i2i2i2i3i3i2i3i3i2i3i3i3i3i2i1i2i3i3i3i3i1i2i3i3i3i3hg:92oR0d950.5R1ad85d277.5d345d1119d260d1119d0d277.5d85d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i92R11d0R12d345R13ai1i2i2i2i2hg:35oR0d950.5R1ad523.5d573.5d378d573.5d336d740.5d482.5d740.5d523.5d573.5d448.5d289d396.5d496.5d542.5d496.5d595d289d675d289d623.5d496.5d779.5d496.5d779.5d573.5d604d573.5d563d740.5d722d740.5d722d817d543.5d817d491.5d1024d411.5d1024d463d817d316.5d817d265d1024d184.5d1024d236.5d817d79d817d79d740.5d255d740.5d297d573.5d136d573.5d136d496.5d316.5d496.5d367.5d289d448.5d289hR2d858R3d779.5R4d79R5d735R6d0R7d656R8d168R9d241.5R10i35R11d79R12d858R13ai1i2i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:91oR0d950.5R1ad88d246d300d246d300d317.5d180d317.5d180d1087.5d300d1087.5d300d1159d88d1159d88d246hR2d399.5R3d300R4d88R5d778R6d-135R7d690R8d168R9d241.5R10i91R11d88R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:34oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5d372.5d277.5d372.5d555d287.5d555d287.5d277.5d372.5d277.5hR2d471R3d372.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i34R11d98.5R12d471R13ai1i2i2i2i2i1i2i2i2i2hg:90oR0d950.5R1ad57.5d277.5d644d277.5d644d354.5d172d939d655.5d939d655.5d1024d46d1024d46d947d518d362.5d57.5d362.5d57.5d277.5hR2d701.5R3d655.5R4d46R5d746.5R6d0R7d700.5R8d168R9d241.5R10i90R11d46R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:33oR0d950.5R1ad154.5d897d256d897d256d1024d154.5d1024d154.5d897d154.5d277.5d256d277.5d256d605d246d783.5d165d783.5d154.5d605d154.5d277.5hR2d410.5R3d256R4d154.5R5d746.5R6d0R7d592R8d168R9d241.5R10i33R11d154.5R12d410.5R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:89oR0d950.5R1ad-2d277.5d106.5d277.5d313.5d584.5d519d277.5d627.5d277.5d363.5d668.5d363.5d1024d262d1024d262d668.5d-2d277.5hR2d625.5R3d627.5R4d-2R5d746.5R6d0R7d748.5R8d168R9d241.5R10i89R11d-2R12d625.5R13ai1i2i2i2i2i2i2i2i2i2hg:32oR0d950.5R1ahR2d325.5R3d0R4d0R5d0R6d0R7d0R8d168R9d241.5R10i32R11d0R12d325.5R13ahg:88oR0d950.5R1ad64.5d277.5d173d277.5d358.5d555d545d277.5d653.5d277.5d413.5d636d669.5d1024d561d1024d351d706.5d139.5d1024d30.5d1024d297d625.5d64.5d277.5hR2d701.5R3d669.5R4d30.5R5d746.5R6d0R7d716R8d168R9d241.5R10i88R11d30.5R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:87oR0d950.5R1ad34d277.5d136d277.5d293d908.5d449.5d277.5d563d277.5d720d908.5d876.5d277.5d979d277.5d791.5d1024d664.5d1024d507d376d348d1024d221d1024d34d277.5hR2d1012.5R3d979R4d34R5d746.5R6d0R7d712.5R8d168R9d241.5R10i87R11d34R12d1012.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:86oR0d950.5R1ad293d1024d8d277.5d113.5d277.5d350d906d587d277.5d692d277.5d407.5d1024d293d1024hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i86R11d8R12d700.5R13ai1i2i2i2i2i2i2i2hg:85oR0d950.5R1ad89d277.5d190.5d277.5d190.5d731d190.5d851d234d903.75d277.5d956.5d375d956.5d472d956.5d515.5d903.75d559d851d559d731d559d277.5d660.5d277.5d660.5d743.5d660.5d889.5d588.25d964d516d1038.5d375d1038.5d233.5d1038.5d161.25d964d89d889.5d89d743.5d89d277.5hR2d749.5R3d660.5R4d89R5d746.5R6d-14.5R7d657.5R8d168R9d241.5R10i85R11d89R12d749.5R13ai1i2i2i3i3i3i3i2i2i2i3i3i3i3i2hg:84oR0d950.5R1ad-3d277.5d628.5d277.5d628.5d362.5d363.5d362.5d363.5d1024d262d1024d262d362.5d-3d362.5d-3d277.5hR2d625.5R3d628.5R4d-3R5d746.5R6d0R7d749.5R8d168R9d241.5R10i84R11d-3R12d625.5R13ai1i2i2i2i2i2i2i2i2hg:83oR0d950.5R1ad548d302d548d400.5d490.5d373d439.5d359.5d388.5d346d341d346d258.5d346d213.75d378d169d410d169d469d169d518.5d198.75d543.75d228.5d569d311.5d584.5d372.5d597d485.5d618.5d539.25d672.75d593d727d593d818d593d926.5d520.25d982.5d447.5d1038.5d307d1038.5d254d1038.5d194.25d1026.5d134.5d1014.5d70.5d991d70.5d887d132d921.5d191d939d250d956.5d307d956.5d393.5d956.5d440.5d922.5d487.5d888.5d487.5d825.5d487.5d770.5d453.75d739.5d420d708.5d343d693d281.5d681d168.5d658.5d118d610.5d67.5d562.5d67.5d477d67.5d378d137.25d321d207d264d329.5d264d382d264d436.5d273.5d491d283d548d302hR2d650R3d593R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i83R11d67.5R12d650R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:82oR0d950.5R1ad454.5d674d487d685d517.75d721d548.5d757d579.5d820d682d1024d573.5d1024d478d832.5d441d757.5d406.25d733d371.5d708.5d311.5d708.5d201.5d708.5d201.5d1024d100.5d1024d100.5d277.5d328.5d277.5d456.5d277.5d519.5d331d582.5d384.5d582.5d492.5d582.5d563d549.75d609.5d517d656d454.5d674d201.5d360.5d201.5d625.5d328.5d625.5d401.5d625.5d438.75d591.75d476d558d476d492.5d476d427d438.75d393.75d401.5d360.5d328.5d360.5d201.5d360.5hR2d711.5R3d682R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i82R11d100.5R12d711.5R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i3i3i3i3i1i2i2i3i3i3i3i2hg:81oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d545d1010.5d678d1156d556d1156d445.5d1036.5d429d1037.5d420.25d1038d411.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.25d57.5d828d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d781.5d696.25d874d644d966.5d545d1010.5hR2d806R3d748.5R4d57.5R5d760R6d-132R7d702.5R8d168R9d241.5R10i81R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i2i2i2i3i3i3i3i3i3i3i3i3i3hg:80oR0d950.5R1ad201.5d360.5d201.5d641d328.5d641d399d641d437.5d604.5d476d568d476d500.5d476d433.5d437.5d397d399d360.5d328.5d360.5d201.5d360.5d100.5d277.5d328.5d277.5d454d277.5d518.25d334.25d582.5d391d582.5d500.5d582.5d611d518.25d667.5d454d724d328.5d724d201.5d724d201.5d1024d100.5d1024d100.5d277.5hR2d617.5R3d582.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i80R11d100.5R12d617.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2i2i2hg:79oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d828d654.5d933.25d560.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.5d57.5d828.5d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264hR2d806R3d748.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i79R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:78oR0d950.5R1ad100.5d277.5d236.5d277.5d567.5d902d567.5d277.5d665.5d277.5d665.5d1024d529.5d1024d198.5d399.5d198.5d1024d100.5d1024d100.5d277.5hR2d766R3d665.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i78R11d100.5R12d766R13ai1i2i2i2i2i2i2i2i2i2i2hg:77oR0d950.5R1ad100.5d277.5d251d277.5d441.5d785.5d633d277.5d783.5d277.5d783.5d1024d685d1024d685d368.5d492.5d880.5d391d880.5d198.5d368.5d198.5d1024d100.5d1024d100.5d277.5hR2d883.5R3d783.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i77R11d100.5R12d883.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:76oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d939d565d939d565d1024d100.5d1024d100.5d277.5hR2d570.5R3d565R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i76R11d100.5R12d570.5R13ai1i2i2i2i2i2i2hg:75oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d593d536.5d277.5d666.5d277.5d296d625.5d693d1024d560d1024d201.5d664.5d201.5d1024d100.5d1024d100.5d277.5hR2d671.5R3d693R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i75R11d100.5R12d671.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:74oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d972d201.5d1107d150.25d1168d99d1229d-14.5d1229d-53d1229d-53d1144d-21.5d1144d45.5d1144d73d1106.5d100.5d1069d100.5d972d100.5d277.5hR2d302R3d201.5R4d-53R5d746.5R6d-205R7d799.5R8d168R9d241.5R10i74R11d-53R12d302R13ai1i2i2i3i3i2i2i2i3i3i2hg:73oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d1024d100.5d1024d100.5d277.5hR2d302R3d201.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i73R11d100.5R12d302R13ai1i2i2i2i2hg:72oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d583.5d568.5d583.5d568.5d277.5d669.5d277.5d669.5d1024d568.5d1024d568.5d668.5d201.5d668.5d201.5d1024d100.5d1024d100.5d277.5hR2d770R3d669.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i72R11d100.5R12d770R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:71oR0d950.5R1ad609.5d917.5d609.5d717d444.5d717d444.5d634d709.5d634d709.5d954.5d651d996d580.5d1017.25d510d1038.5d430d1038.5d255d1038.5d156.25d936.25d57.5d834d57.5d651.5d57.5d468.5d156.25d366.25d255d264d430d264d503d264d568.75d282d634.5d300d690d335d690d442.5d634d395d571d371d508d347d438.5d347d301.5d347d232.75d423.5d164d500d164d651.5d164d802.5d232.75d879d301.5d955.5d438.5d955.5d492d955.5d534d946.25d576d937d609.5d917.5hR2d793.5R3d709.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i71R11d57.5R12d793.5R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:70oR0d950.5R1ad100.5d277.5d529.5d277.5d529.5d362.5d201.5d362.5d201.5d582.5d497.5d582.5d497.5d667.5d201.5d667.5d201.5d1024d100.5d1024d100.5d277.5hR2d589R3d529.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i70R11d100.5R12d589R13ai1i2i2i2i2i2i2i2i2i2i2hg:126oR0d950.5R1ad749.5d615.5d749.5d704.5d697d744d652.25d761d607.5d778d559d778d504d778d431d748.5d425.5d746.5d423d745.5d419.5d744d412d741.5d334.5d710.5d287.5d710.5d243.5d710.5d200.5d729.75d157.5d749d108.5d790.5d108.5d701.5d161d662d205.75d644.75d250.5d627.5d299d627.5d354d627.5d427.5d657.5d432.5d659.5d435d660.5d439d662d446d664.5d523.5d695.5d570.5d695.5d613.5d695.5d655.75d676.5d698d657.5d749.5d615.5hR2d858R3d749.5R4d108.5R5d408.5R6d233.5R7d300R8d168R9d241.5R10i126R11d108.5R12d858R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:69oR0d950.5R1ad100.5d277.5d572.5d277.5d572.5d362.5d201.5d362.5d201.5d583.5d557d583.5d557d668.5d201.5d668.5d201.5d939d581.5d939d581.5d1024d100.5d1024d100.5d277.5hR2d647R3d581.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i69R11d100.5R12d647R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:125oR0d950.5R1ad128d1119d163d1119d233d1119d254.25d1097.5d275.5d1076d275.5d1004.5d275.5d880.5d275.5d802.5d298d767d320.5d731.5d376d718d320.5d705.5d298d670d275.5d634.5d275.5d556d275.5d432d275.5d361d254.25d339.25d233d317.5d163d317.5d128d317.5d128d246d159.5d246d284d246d325.75d282.75d367.5d319.5d367.5d430d367.5d550d367.5d624.5d394.5d653.25d421.5d682d492.5d682d523.5d682d523.5d753.5d492.5d753.5d421.5d753.5d394.5d782.5d367.5d811.5d367.5d887d367.5d1006.5d367.5d1117d325.75d1154d284d1191d159.5d1191d128d1191d128d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i125R11d128R12d651.5R13ai1i2i3i3i2i3i3i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2hg:68oR0d950.5R1ad201.5d360.5d201.5d941d323.5d941d478d941d549.75d871d621.5d801d621.5d650d621.5d500d549.75d430.25d478d360.5d323.5d360.5d201.5d360.5d100.5d277.5d308d277.5d525d277.5d626.5d367.75d728d458d728d650d728d843d626d933.5d524d1024d308d1024d100.5d1024d100.5d277.5hR2d788.5R3d728R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i68R11d100.5R12d788.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2hg:124oR0d950.5R1ad215d241.5d215d1265.5d130d1265.5d130d241.5d215d241.5hR2d345R3d215R4d130R5d782.5R6d-241.5R7d652.5R8d168R9d241.5R10i124R11d130R12d345R13ai1i2i2i2i2hg:67oR0d950.5R1ad659.5d335d659.5d441.5d608.5d394d550.75d370.5d493d347d428d347d300d347d232d425.25d164d503.5d164d651.5d164d799d232d877.25d300d955.5d428d955.5d493d955.5d550.75d932d608.5d908.5d659.5d861d659.5d966.5d606.5d1002.5d547.25d1020.5d488d1038.5d422d1038.5d252.5d1038.5d155d934.75d57.5d831d57.5d651.5d57.5d471.5d155d367.75d252.5d264d422d264d489d264d548.25d281.75d607.5d299.5d659.5d335hR2d715R3d659.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i67R11d57.5R12d715R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:123oR0d950.5R1ad523.5d1119d523.5d1191d492.5d1191d368d1191d325.75d1154d283.5d1117d283.5d1006.5d283.5d887d283.5d811.5d256.5d782.5d229.5d753.5d158.5d753.5d128d753.5d128d682d158.5d682d230d682d256.75d653.25d283.5d624.5d283.5d550d283.5d430d283.5d319.5d325.75d282.75d368d246d492.5d246d523.5d246d523.5d317.5d489.5d317.5d419d317.5d397.5d339.5d376d361.5d376d432d376d556d376d634.5d353.25d670d330.5d705.5d275.5d718d331d731.5d353.5d767d376d802.5d376d880.5d376d1004.5d376d1075d397.5d1097d419d1119d489.5d1119d523.5d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i123R11d128R12d651.5R13ai1i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i3i3i2i3i3i2hg:66oR0d950.5R1ad201.5d667.5d201.5d941d363.5d941d445d941d484.25d907.25d523.5d873.5d523.5d804d523.5d734d484.25d700.75d445d667.5d363.5d667.5d201.5d667.5d201.5d360.5d201.5d585.5d351d585.5d425d585.5d461.25d557.75d497.5d530d497.5d473d497.5d416.5d461.25d388.5d425d360.5d351d360.5d201.5d360.5d100.5d277.5d358.5d277.5d474d277.5d536.5d325.5d599d373.5d599d462d599d530.5d567d571d535d611.5d473d621.5d547.5d637.5d588.75d688.25d630d739d630d815d630d915d562d969.5d494d1024d368.5d1024d100.5d1024d100.5d277.5hR2d702.5R3d630R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i66R11d100.5R12d702.5R13ai1i2i2i3i3i3i3i2i1i2i2i3i3i3i3i2i1i2i3i3i3i3i3i3i3i3i2i2hg:122oR0d950.5R1ad56.5d464d493.5d464d493.5d548d147.5d950.5d493.5d950.5d493.5d1024d44d1024d44d940d390d537.5d56.5d537.5d56.5d464hR2d537.5R3d493.5R4d44R5d560R6d0R7d516R8d168R9d241.5R10i122R11d44R12d537.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:65oR0d950.5R1ad350d377d213d748.5d487.5d748.5d350d377d293d277.5d407.5d277.5d692d1024d587d1024d519d832.5d182.5d832.5d114.5d1024d8d1024d293d277.5hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i65R11d8R12d700.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2hg:121oR0d950.5R1ad329.5d1076d290.5d1176d253.5d1206.5d216.5d1237d154.5d1237d81d1237d81d1160d135d1160d173d1160d194d1142d215d1124d240.5d1057d257d1015d30.5d464d128d464d303d902d478d464d575.5d464d329.5d1076hR2d606R3d575.5R4d30.5R5d560R6d-213R7d529.5R8d168R9d241.5R10i121R11d30.5R12d606R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i2i2hg:64oR0d950.5R1ad381d755.5d381d827d416.5d867.75d452d908.5d514d908.5d575.5d908.5d610.75d867.5d646d826.5d646d755.5d646d685.5d610d644.25d574d603d513d603d452.5d603d416.75d644d381d685d381d755.5d653.5d905d623.5d943.5d584.75d961.75d546d980d494.5d980d408.5d980d354.75d917.75d301d855.5d301d755.5d301d655.5d355d593d409d530.5d494.5d530.5d546d530.5d585d549.25d624d568d653.5d606d653.5d540.5d725d540.5d725d908.5d798d897.5d839.25d841.75d880.5d786d880.5d697.5d880.5d644d864.75d597d849d550d817d510d765d444.5d690.25d409.75d615.5d375d527.5d375d466d375d409.5d391.25d353d407.5d305d439.5d226.5d490.5d182.25d573.25d138d656d138d752.5d138d832d166.75d901.5d195.5d971d250d1024d302.5d1076d371.5d1103.25d440.5d1130.5d519d1130.5d583.5d1130.5d645.75d1108.75d708d1087d760d1046.5d805d1102d742.5d1150.5d668.75d1176.25d595d1202d519d1202d426.5d1202d344.5d1169.25d262.5d1136.5d198.5d1074d134.5d1011.5d101d929.25d67.5d847d67.5d752.5d67.5d661.5d101.5d579d135.5d496.5d198.5d434d263d370.5d347.5d336.75d432d303d526.5d303d632.5d303d723.25d346.5d814d390d875.5d470d913d519d932.75d576.5d952.5d634d952.5d695.5d952.5d827d873d903d793.5d979d653.5d982d653.5d905hR2d1024R3d952.5R4d67.5R5d721R6d-178R7d653.5R8d168R9d241.5R10i64R11d67.5R12d1024R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2hg:120oR0d950.5R1ad562d464d359.5d736.5d572.5d1024d464d1024d301d804d138d1024d29.5d1024d247d731d48d464d156.5d464d305d663.5d453.5d464d562d464hR2d606R3d572.5R4d29.5R5d560R6d0R7d530.5R8d168R9d241.5R10i120R11d29.5R12d606R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:63oR0d950.5R1ad195.5d897d297d897d297d1024d195.5d1024d195.5d897d294d823.5d198.5d823.5d198.5d746.5d198.5d696d212.5d663.5d226.5d631d271.5d588d316.5d543.5d345d517d357.75d493.5d370.5d470d370.5d445.5d370.5d401d337.75d373.5d305d346d251d346d211.5d346d166.75d363.5d122d381d73.5d414.5d73.5d320.5d120.5d292d168.75d278d217d264d268.5d264d360.5d264d416.25d312.5d472d361d472d440.5d472d478.5d454d512.75d436d547d391d590d347d633d323.5d656.5d313.75d669.75d304d683d300d695.5d297d706d295.5d721d294d736d294d762d294d823.5hR2d543.5R3d472R4d73.5R5d760R6d0R7d686.5R8d168R9d241.5R10i63R11d73.5R12d543.5R13ai1i2i2i2i2i1i2i2i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i2hg:119oR0d950.5R1ad43d464d135d464d250d901d364.5d464d473d464d588d901d702.5d464d794.5d464d648d1024d539.5d1024d419d565d298d1024d189.5d1024d43d464hR2d837.5R3d794.5R4d43R5d560R6d0R7d517R8d168R9d241.5R10i119R11d43R12d837.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:62oR0d950.5R1ad108.5d520d108.5d429d749.5d661.5d749.5d744.5d108.5d977d108.5d886d623.5d703.5d108.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i62R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:118oR0d950.5R1ad30.5d464d128d464d303d934d478d464d575.5d464d365.5d1024d240.5d1024d30.5d464hR2d606R3d575.5R4d30.5R5d560R6d0R7d529.5R8d168R9d241.5R10i118R11d30.5R12d606R13ai1i2i2i2i2i2i2i2hg:61oR0d950.5R1ad108.5d559d749.5d559d749.5d643d108.5d643d108.5d559d108.5d763d749.5d763d749.5d848d108.5d848d108.5d763hR2d858R3d749.5R4d108.5R5d465R6d176R7d356.5R8d168R9d241.5R10i61R11d108.5R12d858R13ai1i2i2i2i2i1i2i2i2i2hg:117oR0d950.5R1ad87d803d87d464d179d464d179d799.5d179d879d210d918.75d241d958.5d303d958.5d377.5d958.5d420.75d911d464d863.5d464d781.5d464d464d556d464d556d1024d464d1024d464d938d430.5d989d386.25d1013.75d342d1038.5d283.5d1038.5d187d1038.5d137d978.5d87d918.5d87d803hR2d649R3d556R4d87R5d560R6d-14.5R7d473R8d168R9d241.5R10i117R11d87R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:60oR0d950.5R1ad749.5d520d233.5d703.5d749.5d886d749.5d977d108.5d744.5d108.5d661.5d749.5d429d749.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i60R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:116oR0d950.5R1ad187.5d305d187.5d464d377d464d377d535.5d187.5d535.5d187.5d839.5d187.5d908d206.25d927.5d225d947d282.5d947d377d947d377d1024d282.5d1024d176d1024d135.5d984.25d95d944.5d95d839.5d95d535.5d27.5d535.5d27.5d464d95d464d95d305d187.5d305hR2d401.5R3d377R4d27.5R5d719R6d0R7d691.5R8d168R9d241.5R10i116R11d27.5R12d401.5R13ai1i2i2i2i2i2i3i3i2i2i2i3i3i2i2i2i2i2i2hg:59oR0d950.5R1ad120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5d120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d345R3d225.5R4d79R5d529.5R6d-119R7d450.5R8d168R9d241.5R10i59R11d79R12d345R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:115oR0d950.5R1ad453.5d480.5d453.5d567.5d414.5d547.5d372.5d537.5d330.5d527.5d285.5d527.5d217d527.5d182.75d548.5d148.5d569.5d148.5d611.5d148.5d643.5d173d661.75d197.5d680d271.5d696.5d303d703.5d401d724.5d442.25d762.75d483.5d801d483.5d869.5d483.5d947.5d421.75d993d360d1038.5d252d1038.5d207d1038.5d158.25d1029.75d109.5d1021d55.5d1003.5d55.5d908.5d106.5d935d156d948.25d205.5d961.5d254d961.5d319d961.5d354d939.25d389d917d389d876.5d389d839d363.75d819d338.5d799d253d780.5d221d773d135.5d755d97.5d717.75d59.5d680.5d59.5d615.5d59.5d536.5d115.5d493.5d171.5d450.5d274.5d450.5d325.5d450.5d370.5d458d415.5d465.5d453.5d480.5hR2d533.5R3d483.5R4d55.5R5d573.5R6d-14.5R7d518R8d168R9d241.5R10i115R11d55.5R12d533.5R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:58oR0d950.5R1ad120d897d225.5d897d225.5d1024d120d1024d120d897d120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5hR2d345R3d225.5R4d120R5d529.5R6d0R7d409.5R8d168R9d241.5R10i58R11d120R12d345R13ai1i2i2i2i2i1i2i2i2i2hg:114oR0d950.5R1ad421d550d405.5d541d387.25d536.75d369d532.5d347d532.5d269d532.5d227.25d583.25d185.5d634d185.5d729d185.5d1024d93d1024d93d464d185.5d464d185.5d551d214.5d500d261d475.25d307.5d450.5d374d450.5d383.5d450.5d395d451.75d406.5d453d420.5d455.5d421d550hR2d421R3d421R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i114R11d93R12d421R13ai1i3i3i3i3i2i2i2i2i2i3i3i3i3i2hg:57oR0d950.5R1ad112.5d1008.5d112.5d916.5d150.5d934.5d189.5d944d228.5d953.5d266d953.5d366d953.5d418.75d886.25d471.5d819d479d682d450d725d405.5d748d361d771d307d771d195d771d129.75d703.25d64.5d635.5d64.5d518d64.5d403d132.5d333.5d200.5d264d313.5d264d443d264d511.25d363.25d579.5d462.5d579.5d651.5d579.5d828d495.75d933.25d412d1038.5d270.5d1038.5d232.5d1038.5d193.5d1031d154.5d1023.5d112.5d1008.5d313.5d692d381.5d692d421.25d645.5d461d599d461d518d461d437.5d421.25d390.75d381.5d344d313.5d344d245.5d344d205.75d390.75d166d437.5d166d518d166d599d205.75d645.5d245.5d692d313.5d692hR2d651.5R3d579.5R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i57R11d64.5R12d651.5R13ai1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:113oR0d950.5R1ad151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d465d464d557d464d557d1237d465d1237d465d940hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i113R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:56oR0d950.5R1ad325.5d669.5d253.5d669.5d212.25d708d171d746.5d171d814d171d881.5d212.25d920d253.5d958.5d325.5d958.5d397.5d958.5d439d919.75d480.5d881d480.5d814d480.5d746.5d439.25d708d398d669.5d325.5d669.5d224.5d626.5d159.5d610.5d123.25d566d87d521.5d87d457.5d87d368d150.75d316d214.5d264d325.5d264d437d264d500.5d316d564d368d564d457.5d564d521.5d527.75d566d491.5d610.5d427d626.5d500d643.5d540.75d693d581.5d742.5d581.5d814d581.5d922.5d515.25d980.5d449d1038.5d325.5d1038.5d202d1038.5d135.75d980.5d69.5d922.5d69.5d814d69.5d742.5d110.5d693d151.5d643.5d224.5d626.5d187.5d467d187.5d525d223.75d557.5d260d590d325.5d590d390.5d590d427.25d557.5d464d525d464d467d464d409d427.25d376.5d390.5d344d325.5d344d260d344d223.75d376.5d187.5d409d187.5d467hR2d651.5R3d581.5R4d69.5R5d760R6d-14.5R7d690.5R8d168R9d241.5R10i56R11d69.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:112oR0d950.5R1ad185.5d940d185.5d1237d93d1237d93d464d185.5d464d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5hR2d650R3d594R4d93R5d573.5R6d-213R7d480.5R8d168R9d241.5R10i112R11d93R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hgh";
+flash.text.Font.DEFAULT_FONT_SCALE = 9.0;
+flash.text.Font.DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
+flash.text.Font.DEFAULT_CLASS_NAME = "flash.text.Font";
+flash.text.Font.nmeRegisteredFonts = new Array();
+flash.text.TextField.mDefaultFont = "Bitstream_Vera_Sans";
+flash.text.FontInstance.mSolidFonts = new haxe.ds.StringMap();
+flash.text.TextFieldAutoSize.CENTER = "CENTER";
+flash.text.TextFieldAutoSize.LEFT = "LEFT";
+flash.text.TextFieldAutoSize.NONE = "NONE";
+flash.text.TextFieldAutoSize.RIGHT = "RIGHT";
+flash.text.TextFieldType.DYNAMIC = "DYNAMIC";
+flash.text.TextFieldType.INPUT = "INPUT";
+flash.ui.Keyboard.NUMBER_0 = 48;
+flash.ui.Keyboard.NUMBER_1 = 49;
+flash.ui.Keyboard.NUMBER_2 = 50;
+flash.ui.Keyboard.NUMBER_3 = 51;
+flash.ui.Keyboard.NUMBER_4 = 52;
+flash.ui.Keyboard.NUMBER_5 = 53;
+flash.ui.Keyboard.NUMBER_6 = 54;
+flash.ui.Keyboard.NUMBER_7 = 55;
+flash.ui.Keyboard.NUMBER_8 = 56;
+flash.ui.Keyboard.NUMBER_9 = 57;
+flash.ui.Keyboard.A = 65;
+flash.ui.Keyboard.B = 66;
+flash.ui.Keyboard.C = 67;
+flash.ui.Keyboard.D = 68;
+flash.ui.Keyboard.E = 69;
+flash.ui.Keyboard.F = 70;
+flash.ui.Keyboard.G = 71;
+flash.ui.Keyboard.H = 72;
+flash.ui.Keyboard.I = 73;
+flash.ui.Keyboard.J = 74;
+flash.ui.Keyboard.K = 75;
+flash.ui.Keyboard.L = 76;
+flash.ui.Keyboard.M = 77;
+flash.ui.Keyboard.N = 78;
+flash.ui.Keyboard.O = 79;
+flash.ui.Keyboard.P = 80;
+flash.ui.Keyboard.Q = 81;
+flash.ui.Keyboard.R = 82;
+flash.ui.Keyboard.S = 83;
+flash.ui.Keyboard.T = 84;
+flash.ui.Keyboard.U = 85;
+flash.ui.Keyboard.V = 86;
+flash.ui.Keyboard.W = 87;
+flash.ui.Keyboard.X = 88;
+flash.ui.Keyboard.Y = 89;
+flash.ui.Keyboard.Z = 90;
+flash.ui.Keyboard.NUMPAD_0 = 96;
+flash.ui.Keyboard.NUMPAD_1 = 97;
+flash.ui.Keyboard.NUMPAD_2 = 98;
+flash.ui.Keyboard.NUMPAD_3 = 99;
+flash.ui.Keyboard.NUMPAD_4 = 100;
+flash.ui.Keyboard.NUMPAD_5 = 101;
+flash.ui.Keyboard.NUMPAD_6 = 102;
+flash.ui.Keyboard.NUMPAD_7 = 103;
+flash.ui.Keyboard.NUMPAD_8 = 104;
+flash.ui.Keyboard.NUMPAD_9 = 105;
+flash.ui.Keyboard.NUMPAD_MULTIPLY = 106;
+flash.ui.Keyboard.NUMPAD_ADD = 107;
+flash.ui.Keyboard.NUMPAD_ENTER = 108;
+flash.ui.Keyboard.NUMPAD_SUBTRACT = 109;
+flash.ui.Keyboard.NUMPAD_DECIMAL = 110;
+flash.ui.Keyboard.NUMPAD_DIVIDE = 111;
+flash.ui.Keyboard.F1 = 112;
+flash.ui.Keyboard.F2 = 113;
+flash.ui.Keyboard.F3 = 114;
+flash.ui.Keyboard.F4 = 115;
+flash.ui.Keyboard.F5 = 116;
+flash.ui.Keyboard.F6 = 117;
+flash.ui.Keyboard.F7 = 118;
+flash.ui.Keyboard.F8 = 119;
+flash.ui.Keyboard.F9 = 120;
+flash.ui.Keyboard.F10 = 121;
+flash.ui.Keyboard.F11 = 122;
+flash.ui.Keyboard.F12 = 123;
+flash.ui.Keyboard.F13 = 124;
+flash.ui.Keyboard.F14 = 125;
+flash.ui.Keyboard.F15 = 126;
+flash.ui.Keyboard.BACKSPACE = 8;
+flash.ui.Keyboard.TAB = 9;
+flash.ui.Keyboard.ENTER = 13;
+flash.ui.Keyboard.SHIFT = 16;
+flash.ui.Keyboard.CONTROL = 17;
+flash.ui.Keyboard.CAPS_LOCK = 18;
+flash.ui.Keyboard.ESCAPE = 27;
+flash.ui.Keyboard.SPACE = 32;
+flash.ui.Keyboard.PAGE_UP = 33;
+flash.ui.Keyboard.PAGE_DOWN = 34;
+flash.ui.Keyboard.END = 35;
+flash.ui.Keyboard.HOME = 36;
+flash.ui.Keyboard.LEFT = 37;
+flash.ui.Keyboard.RIGHT = 39;
+flash.ui.Keyboard.UP = 38;
+flash.ui.Keyboard.DOWN = 40;
+flash.ui.Keyboard.INSERT = 45;
+flash.ui.Keyboard.DELETE = 46;
+flash.ui.Keyboard.NUMLOCK = 144;
+flash.ui.Keyboard.BREAK = 19;
+flash.ui.Keyboard.SEMICOLON = 186;
+flash.ui.Keyboard.EQUAL = 187;
+flash.ui.Keyboard.COMMA = 188;
+flash.ui.Keyboard.MINUS = 189;
+flash.ui.Keyboard.PERIOD = 190;
+flash.ui.Keyboard.SLASH = 191;
+flash.ui.Keyboard.BACKQUOTE = 192;
+flash.ui.Keyboard.LEFTBRACKET = 219;
+flash.ui.Keyboard.BACKSLASH = 220;
+flash.ui.Keyboard.RIGHTBRACKET = 221;
+flash.ui.Keyboard.DOM_VK_CANCEL = 3;
+flash.ui.Keyboard.DOM_VK_HELP = 6;
+flash.ui.Keyboard.DOM_VK_BACK_SPACE = 8;
+flash.ui.Keyboard.DOM_VK_TAB = 9;
+flash.ui.Keyboard.DOM_VK_CLEAR = 12;
+flash.ui.Keyboard.DOM_VK_RETURN = 13;
+flash.ui.Keyboard.DOM_VK_ENTER = 14;
+flash.ui.Keyboard.DOM_VK_SHIFT = 16;
+flash.ui.Keyboard.DOM_VK_CONTROL = 17;
+flash.ui.Keyboard.DOM_VK_ALT = 18;
+flash.ui.Keyboard.DOM_VK_PAUSE = 19;
+flash.ui.Keyboard.DOM_VK_CAPS_LOCK = 20;
+flash.ui.Keyboard.DOM_VK_ESCAPE = 27;
+flash.ui.Keyboard.DOM_VK_SPACE = 32;
+flash.ui.Keyboard.DOM_VK_PAGE_UP = 33;
+flash.ui.Keyboard.DOM_VK_PAGE_DOWN = 34;
+flash.ui.Keyboard.DOM_VK_END = 35;
+flash.ui.Keyboard.DOM_VK_HOME = 36;
+flash.ui.Keyboard.DOM_VK_LEFT = 37;
+flash.ui.Keyboard.DOM_VK_UP = 38;
+flash.ui.Keyboard.DOM_VK_RIGHT = 39;
+flash.ui.Keyboard.DOM_VK_DOWN = 40;
+flash.ui.Keyboard.DOM_VK_PRINTSCREEN = 44;
+flash.ui.Keyboard.DOM_VK_INSERT = 45;
+flash.ui.Keyboard.DOM_VK_DELETE = 46;
+flash.ui.Keyboard.DOM_VK_0 = 48;
+flash.ui.Keyboard.DOM_VK_1 = 49;
+flash.ui.Keyboard.DOM_VK_2 = 50;
+flash.ui.Keyboard.DOM_VK_3 = 51;
+flash.ui.Keyboard.DOM_VK_4 = 52;
+flash.ui.Keyboard.DOM_VK_5 = 53;
+flash.ui.Keyboard.DOM_VK_6 = 54;
+flash.ui.Keyboard.DOM_VK_7 = 55;
+flash.ui.Keyboard.DOM_VK_8 = 56;
+flash.ui.Keyboard.DOM_VK_9 = 57;
+flash.ui.Keyboard.DOM_VK_SEMICOLON = 59;
+flash.ui.Keyboard.DOM_VK_EQUALS = 61;
+flash.ui.Keyboard.DOM_VK_A = 65;
+flash.ui.Keyboard.DOM_VK_B = 66;
+flash.ui.Keyboard.DOM_VK_C = 67;
+flash.ui.Keyboard.DOM_VK_D = 68;
+flash.ui.Keyboard.DOM_VK_E = 69;
+flash.ui.Keyboard.DOM_VK_F = 70;
+flash.ui.Keyboard.DOM_VK_G = 71;
+flash.ui.Keyboard.DOM_VK_H = 72;
+flash.ui.Keyboard.DOM_VK_I = 73;
+flash.ui.Keyboard.DOM_VK_J = 74;
+flash.ui.Keyboard.DOM_VK_K = 75;
+flash.ui.Keyboard.DOM_VK_L = 76;
+flash.ui.Keyboard.DOM_VK_M = 77;
+flash.ui.Keyboard.DOM_VK_N = 78;
+flash.ui.Keyboard.DOM_VK_O = 79;
+flash.ui.Keyboard.DOM_VK_P = 80;
+flash.ui.Keyboard.DOM_VK_Q = 81;
+flash.ui.Keyboard.DOM_VK_R = 82;
+flash.ui.Keyboard.DOM_VK_S = 83;
+flash.ui.Keyboard.DOM_VK_T = 84;
+flash.ui.Keyboard.DOM_VK_U = 85;
+flash.ui.Keyboard.DOM_VK_V = 86;
+flash.ui.Keyboard.DOM_VK_W = 87;
+flash.ui.Keyboard.DOM_VK_X = 88;
+flash.ui.Keyboard.DOM_VK_Y = 89;
+flash.ui.Keyboard.DOM_VK_Z = 90;
+flash.ui.Keyboard.DOM_VK_CONTEXT_MENU = 93;
+flash.ui.Keyboard.DOM_VK_NUMPAD0 = 96;
+flash.ui.Keyboard.DOM_VK_NUMPAD1 = 97;
+flash.ui.Keyboard.DOM_VK_NUMPAD2 = 98;
+flash.ui.Keyboard.DOM_VK_NUMPAD3 = 99;
+flash.ui.Keyboard.DOM_VK_NUMPAD4 = 100;
+flash.ui.Keyboard.DOM_VK_NUMPAD5 = 101;
+flash.ui.Keyboard.DOM_VK_NUMPAD6 = 102;
+flash.ui.Keyboard.DOM_VK_NUMPAD7 = 103;
+flash.ui.Keyboard.DOM_VK_NUMPAD8 = 104;
+flash.ui.Keyboard.DOM_VK_NUMPAD9 = 105;
+flash.ui.Keyboard.DOM_VK_MULTIPLY = 106;
+flash.ui.Keyboard.DOM_VK_ADD = 107;
+flash.ui.Keyboard.DOM_VK_SEPARATOR = 108;
+flash.ui.Keyboard.DOM_VK_SUBTRACT = 109;
+flash.ui.Keyboard.DOM_VK_DECIMAL = 110;
+flash.ui.Keyboard.DOM_VK_DIVIDE = 111;
+flash.ui.Keyboard.DOM_VK_F1 = 112;
+flash.ui.Keyboard.DOM_VK_F2 = 113;
+flash.ui.Keyboard.DOM_VK_F3 = 114;
+flash.ui.Keyboard.DOM_VK_F4 = 115;
+flash.ui.Keyboard.DOM_VK_F5 = 116;
+flash.ui.Keyboard.DOM_VK_F6 = 117;
+flash.ui.Keyboard.DOM_VK_F7 = 118;
+flash.ui.Keyboard.DOM_VK_F8 = 119;
+flash.ui.Keyboard.DOM_VK_F9 = 120;
+flash.ui.Keyboard.DOM_VK_F10 = 121;
+flash.ui.Keyboard.DOM_VK_F11 = 122;
+flash.ui.Keyboard.DOM_VK_F12 = 123;
+flash.ui.Keyboard.DOM_VK_F13 = 124;
+flash.ui.Keyboard.DOM_VK_F14 = 125;
+flash.ui.Keyboard.DOM_VK_F15 = 126;
+flash.ui.Keyboard.DOM_VK_F16 = 127;
+flash.ui.Keyboard.DOM_VK_F17 = 128;
+flash.ui.Keyboard.DOM_VK_F18 = 129;
+flash.ui.Keyboard.DOM_VK_F19 = 130;
+flash.ui.Keyboard.DOM_VK_F20 = 131;
+flash.ui.Keyboard.DOM_VK_F21 = 132;
+flash.ui.Keyboard.DOM_VK_F22 = 133;
+flash.ui.Keyboard.DOM_VK_F23 = 134;
+flash.ui.Keyboard.DOM_VK_F24 = 135;
+flash.ui.Keyboard.DOM_VK_NUM_LOCK = 144;
+flash.ui.Keyboard.DOM_VK_SCROLL_LOCK = 145;
+flash.ui.Keyboard.DOM_VK_COMMA = 188;
+flash.ui.Keyboard.DOM_VK_PERIOD = 190;
+flash.ui.Keyboard.DOM_VK_SLASH = 191;
+flash.ui.Keyboard.DOM_VK_BACK_QUOTE = 192;
+flash.ui.Keyboard.DOM_VK_OPEN_BRACKET = 219;
+flash.ui.Keyboard.DOM_VK_BACK_SLASH = 220;
+flash.ui.Keyboard.DOM_VK_CLOSE_BRACKET = 221;
+flash.ui.Keyboard.DOM_VK_QUOTE = 222;
+flash.ui.Keyboard.DOM_VK_META = 224;
+flash.ui.Keyboard.DOM_VK_KANA = 21;
+flash.ui.Keyboard.DOM_VK_HANGUL = 21;
+flash.ui.Keyboard.DOM_VK_JUNJA = 23;
+flash.ui.Keyboard.DOM_VK_FINAL = 24;
+flash.ui.Keyboard.DOM_VK_HANJA = 25;
+flash.ui.Keyboard.DOM_VK_KANJI = 25;
+flash.ui.Keyboard.DOM_VK_CONVERT = 28;
+flash.ui.Keyboard.DOM_VK_NONCONVERT = 29;
+flash.ui.Keyboard.DOM_VK_ACEPT = 30;
+flash.ui.Keyboard.DOM_VK_MODECHANGE = 31;
+flash.ui.Keyboard.DOM_VK_SELECT = 41;
+flash.ui.Keyboard.DOM_VK_PRINT = 42;
+flash.ui.Keyboard.DOM_VK_EXECUTE = 43;
+flash.ui.Keyboard.DOM_VK_SLEEP = 95;
+flash.utils.Endian.BIG_ENDIAN = "bigEndian";
+flash.utils.Endian.LITTLE_ENDIAN = "littleEndian";
+flash.utils.Uuid.UID_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 haxe.Serializer.USE_CACHE = false;
 haxe.Serializer.USE_ENUM_INDEX = false;
 haxe.Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
@@ -17064,27 +15090,36 @@ haxe.Template.expr_float = new EReg("^([+-]?)(?=\\d|,\\d)\\d*(,\\d*)?([Ee]([+-]?
 haxe.Template.globals = { };
 haxe.Unserializer.DEFAULT_RESOLVER = Type;
 haxe.Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-haxe.Unserializer.CODES = null;
-haxe.xml.Check.blanks = new EReg("^[ \r\n\t]*$","");
-js.Lib.onerror = null;
-nme.Lib.FULLSCREEN = 1;
-nme.Lib.BORDERLESS = 2;
-nme.Lib.RESIZABLE = 4;
-nme.Lib.HARDWARE = 8;
-nme.Lib.VSYNC = 16;
-nme.Lib.HW_AA = 32;
-nme.Lib.HW_AA_HIRES = 96;
-nme.Lib.ALLOW_SHADERS = 128;
-nme.Lib.REQUIRE_SHADERS = 256;
-nme.Lib.DEPTH_BUFFER = 512;
-nme.Lib.STENCIL_BUFFER = 1024;
-nme.Lib.MIN_FLOAT_VALUE = Number.MIN_VALUE;
-nme.Lib.MAX_FLOAT_VALUE = Number.MAX_VALUE;
-nme.installer.Assets.cachedBitmapData = new Hash();
-nme.installer.Assets.initialized = false;
-nme.installer.Assets.libraryTypes = new Hash();
-nme.installer.Assets.resourceClasses = new Hash();
-nme.installer.Assets.resourceNames = new Hash();
-nme.installer.Assets.resourceTypes = new Hash();
+haxe.ds.ObjectMap.count = 0;
+haxe.xml.Parser.escapes = (function($this) {
+	var $r;
+	var h = new haxe.ds.StringMap();
+	h.set("lt","<");
+	h.set("gt",">");
+	h.set("amp","&");
+	h.set("quot","\"");
+	h.set("apos","'");
+	h.set("nbsp",String.fromCharCode(160));
+	$r = h;
+	return $r;
+}(this));
+js.Browser.window = typeof window != "undefined" ? window : null;
+js.Browser.document = typeof window != "undefined" ? window.document : null;
+nme.AssetData.className = new haxe.ds.StringMap();
+nme.AssetData.library = new haxe.ds.StringMap();
+nme.AssetData.path = new haxe.ds.StringMap();
+nme.AssetData.type = new haxe.ds.StringMap();
+nme.AssetData.initialized = false;
+openfl.Assets.cachedBitmapData = new haxe.ds.StringMap();
+openfl.Assets.initialized = false;
+openfl.display.Tilesheet.TILE_SCALE = 1;
+openfl.display.Tilesheet.TILE_ROTATION = 2;
+openfl.display.Tilesheet.TILE_RGB = 4;
+openfl.display.Tilesheet.TILE_ALPHA = 8;
+openfl.display.Tilesheet.TILE_TRANS_2x2 = 16;
+openfl.display.Tilesheet.TILE_BLEND_NORMAL = 0;
+openfl.display.Tilesheet.TILE_BLEND_ADD = 65536;
+openfl.display.Tilesheet.TILE_BLEND_MULTIPLY = 131072;
+openfl.display.Tilesheet.TILE_BLEND_SCREEN = 262144;
 ApplicationMain.main();
 })();

@@ -3,6 +3,7 @@
 <!-- saved from url=(0014)about:internet -->
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
 	<title>awe6 - html5 demo</title>
 </head>
 <body style="padding: 0; margin: 0; background-color: #FFFFFF;">
@@ -12,7 +13,22 @@
 	
 	
 	<div id="haxe:jeash" style="background-color: #FFFFFF; width: 600px; height: 400px" data-framerate="20"></div>
-	
+	<style>
+	/******************************/
+	/* Makes screen non-selectable and prevents text cursor from displaying */
+	/******************************/
+	div {
+		margin: 0;
+		padding: 0;
+		-moz-user-select: -moz-none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		/*3D transform */
+		-webkit-transform: scale3d(1, 1, 1);
+		-o-user-select: none;
+		user-select: none;
+	}
+	</style>
 	
 	
 	<script>function winParameters () { return {}; }</script>
