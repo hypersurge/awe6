@@ -104,6 +104,10 @@ class BasicButton extends Entity, implements IPositionable
 			onRollOut();
 		}
 		isOver = l_isOver;
+		if ( isOver && l_inputMouse.getIsButtonDown() )
+		{
+			setAgenda( EAgenda.SUB_TYPE( _HelperEState.OVER ) );
+		}
 		if ( isOver && l_inputMouse.getIsButtonRelease() )
 		{
 			onClick();
