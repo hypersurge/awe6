@@ -63,7 +63,9 @@ class Text extends GuiEntity
 		textStyle = ( p_textStyle != null ) ? p_textStyle : new TextStyle();
 		_isMultiline = p_isMultiline;
 		_isInput = p_isInput;
-		#if !flash
+		#if js
+		// as of openfl-html5 1.0.5 input text does not work well / as expected, may be due to embedded fonts?
+		// mostly works for openfl-native, but some issues noted below
 		_isInput = false;
 		#end
 		super( p_kernel, p_width, p_height, false );
@@ -74,18 +76,28 @@ class Text extends GuiEntity
 	{
 		super._init();
 		_textField = new TextField();
-		_textField.addEventListener( KeyboardEvent.KEY_DOWN, _stopEventPropogation );
-		_textField.addEventListener( KeyboardEvent.KEY_UP, _stopEventPropogation );
 		_textField.multiline = _isMultiline;
 		_textField.wordWrap = _isMultiline;
 		_textField.type = _isInput ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+		#if flash
+		// this should be for all targets (e.g. to prevent key listener at InputKeyboard, but OpenFL native doesn't process the event at all if left in - so watch out for unexpected results
+		// "Delete" doesn't appear to work for OpenFL native?  Backspace or overtyping does, so not a breaker.
+		_textField.addEventListener( KeyboardEvent.KEY_DOWN, _stopEventPropogation );
+		_textField.addEventListener( KeyboardEvent.KEY_UP, _stopEventPropogation );
+		#end
 		#if js
+		// best tradeoff of two scenarios:
+		// 1) if wordWrap is off, and text too wide then all text is shifted left, causing inconsistent results across targets
+		// 2) if wordWrap is on, text alignment is good, but wrap exists, causing inconsistent results across targets
+		// conclusion is showing all the text is better than losing some of the important text
 		_textField.wordWrap = true;
 		#end
 		_textFormat = new TextFormat();
 		_draw();
 		_context.addChild( _textField );
 		#if ( flash || js )
+		// thinking is that text more likely does not change regularly
+		// if this is untrue (e.g. a timer), uncache it on a case by case basis
 		try
 		{
 			untyped _context.cacheAsBitmap = true;
@@ -109,7 +121,7 @@ class Text extends GuiEntity
 	{
 		try
 		{
-			untyped p_event.stopImmediatePropagation();
+			p_event.stopImmediatePropagation();
 		}
 		catch ( p_error:Dynamic ) {}
 	}
@@ -153,7 +165,8 @@ class Text extends GuiEntity
 			_textField.selectable = _isInput;
 			_textField.embedFonts = false;
 			#if flash
-			_textField.thickness = textStyle.thickness * 200;
+			// advanced features for flash's text renderer
+			_textField.thickness = textStyle.thickness * 100;
 			_textField.antiAliasType = AntiAliasType.ADVANCED;
 			for ( i in Font.enumerateFonts() )
 			{
@@ -194,6 +207,7 @@ class Text extends GuiEntity
 		}
 		text = p_value;
 		#if js
+		// htmlText is very raw, no fonts etc
 		_textField.text = text;
 		#else
 		_textField.htmlText = text;
