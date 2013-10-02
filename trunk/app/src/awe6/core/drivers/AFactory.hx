@@ -39,6 +39,7 @@ import awe6.core.Scene;
 import awe6.core.SceneTransition;
 import awe6.core.TextStyle;
 import awe6.interfaces.EFullScreen;
+import awe6.interfaces.EJoypadTouch;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
@@ -90,6 +91,7 @@ class AFactory implements IFactory, implements IDisposable
 	public var height( default, null ):Int;
 	public var bgColor( default, null ):Int;
 	public var fullScreenType( default, null ):EFullScreen;
+	public var joypadTouchType( default, null ):EJoypadTouch;
 	public var secret( default, null ):String;
 	public var targetFramerate( default, null ):Int;
 	public var isFixedUpdates( default, null ):Bool;
@@ -177,6 +179,7 @@ class AFactory implements IFactory, implements IDisposable
 			height = 400;
 			bgColor = 0xFF0000;
 			fullScreenType = EFullScreen.SCALE_ASPECT_RATIO_PRESERVE;
+			joypadTouchType = EJoypadTouch.DISABLED;
 			secret = "YouMustOverrideThis";
 			targetFramerate = 25;
 			isFixedUpdates = true;

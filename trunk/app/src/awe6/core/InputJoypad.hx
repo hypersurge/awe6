@@ -29,12 +29,12 @@
 
 package awe6.core;
 import awe6.interfaces.EJoypadButton;
+import awe6.interfaces.EJoypadTouch;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputJoypad;
 import awe6.interfaces.IKernel;
 import awe6.Types.IInputMouse;
-import flash.ui.Multitouch;
 
 /**
  * The InputJoypad class provides a minimalist implementation of the IInputJoypad interface.
@@ -58,11 +58,11 @@ class InputJoypad implements IInputJoypad
 	private var _keyLeftAlt:EKey;
 	private var _keyPrimaryAlt:EKey;
 	private var _keySecondaryAlt:EKey;
+	private var _joypadTouchType:EJoypadTouch;
 	
-	public function new( p_kernel:IKernel, p_up:EKey, p_right:EKey, p_down:EKey, p_left:EKey, p_primary:EKey, p_secondary:EKey, p_upAlt:EKey, p_rightAlt:EKey, p_downAlt:EKey, p_leftAlt:EKey, p_primaryAlt:EKey, p_secondaryAlt:EKey )
+	public function new( p_kernel:IKernel, ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey, ?p_joypadTouchType:EJoypadTouch )
 	{
 		_kernel = p_kernel;
-		_isTouchEnabled = Multitouch.supportsTouchEvents;
 		_keyUp = ( p_up != null ) ? p_up : EKey.UP;
 		_keyRight = ( p_right != null ) ? p_right : EKey.RIGHT;
 		_keyDown = ( p_down != null ) ? p_down : EKey.DOWN;
@@ -75,14 +75,21 @@ class InputJoypad implements IInputJoypad
 		_keyLeftAlt = ( p_leftAlt != null ) ? p_leftAlt : EKey.A;
 		_keyPrimaryAlt = ( p_primaryAlt != null ) ? p_primaryAlt : EKey.Q;
 		_keySecondaryAlt = ( p_secondaryAlt != null ) ? p_secondaryAlt : EKey.E;
+		_joypadTouchType = ( p_joypadTouchType != null ) ? p_joypadTouchType : _kernel.factory.joypadTouchType;
+		_isTouchEnabled = _kernel.factory.joypadTouchType != EJoypadTouch.DISABLED;
 	}
 	
-	private function _check( p_type:EJoypadButton, p_function:EKey->Bool ):Bool
+	public function toString():String
+	{
+		return Std.string( { up:getIsButtonDown( EJoypadButton.UP ), right:getIsButtonDown( EJoypadButton.RIGHT ), down:getIsButtonDown( EJoypadButton.DOWN ), left:getIsButtonDown( EJoypadButton.LEFT ), fire:getIsButtonDown( EJoypadButton.FIRE ), primary:getIsButtonDown( EJoypadButton.PRIMARY ), secondary:getIsButtonDown( EJoypadButton.SECONDARY ) } );
+	}
+	
+	private function _checkKeyboard( p_type:EJoypadButton, p_function:EKey->Bool ):Bool
 	{
 		switch ( p_type )
 		{
 			case FIRE :
-				return ( _check( EJoypadButton.PRIMARY, p_function ) || _check( EJoypadButton.SECONDARY, p_function ) );
+				return ( _checkKeyboard( EJoypadButton.PRIMARY, p_function ) || _checkKeyboard( EJoypadButton.SECONDARY, p_function ) );
 			case UP :
 				return p_function( _keyUp ) || p_function( _keyUpAlt );
 			case RIGHT :
@@ -100,17 +107,17 @@ class InputJoypad implements IInputJoypad
 	
 	public function getIsButtonDown( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyDown ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonDown ) );
+		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyDown ) || ( _isTouchEnabled && _checkTouchIsDown( p_type ) );
 	}
 	
 	public function getIsButtonPress( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyPress ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonPress ) );
+		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyPress ) || ( _isTouchEnabled && _checkTouchIsPress( p_type ) );
 	}
 	
 	public function getIsButtonRelease( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyRelease ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonRelease ) );
+		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyRelease ) || ( _isTouchEnabled && _checkTouchIsRelease( p_type ) );
 	}
 	
 	public function getButtonDownDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
@@ -157,15 +164,6 @@ class InputJoypad implements IInputJoypad
 		}
 	}
 	
-	private function _checkTouch( p_type:EJoypadButton, p_function:EMouseButton->Bool ):Bool
-	{
-		if ( ( _kernel.inputs == null ) || ( !p_function( EMouseButton.LEFT ) ) )
-		{
-			return false;
-		}
-		return ( _getClosestTouchButton() == p_type );
-	}
-	
 	private function _getTouchButtonPosition( p_type:EJoypadButton ):{ x:Float, y:Float }
 	{
 		return switch( p_type )
@@ -203,9 +201,54 @@ class InputJoypad implements IInputJoypad
 		return l_result;
 	}
 	
-	public function toString():String
+	private function _checkTouchHelper1( p_type:EJoypadButton, p_function:EMouseButton->Bool ):Bool
 	{
-		return Std.string( { up:getIsButtonDown( EJoypadButton.UP ), right:getIsButtonDown( EJoypadButton.RIGHT ), down:getIsButtonDown( EJoypadButton.DOWN ), left:getIsButtonDown( EJoypadButton.LEFT ), fire:getIsButtonDown( EJoypadButton.FIRE ), primary:getIsButtonDown( EJoypadButton.PRIMARY ), secondary:getIsButtonDown( EJoypadButton.SECONDARY ) } );
+		return ( p_function( EMouseButton.LEFT ) && ( _getClosestTouchButton() == p_type ) );
+	}
+	
+	private function _checkTouchIsDown( p_type:EJoypadButton ):Bool
+	{
+		return switch( _kernel.factory.joypadTouchType )
+		{
+			case DISABLED :
+				false;
+			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
+				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonDown );
+			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+		}
+	}
+	
+	private function _checkTouchIsPress( p_type:EJoypadButton ):Bool
+	{
+		return switch( _kernel.factory.joypadTouchType )
+		{
+			case DISABLED :
+				false;
+			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
+				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonDown );
+			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+		}
+	}
+	
+	private function _checkTouchIsRelease( p_type:EJoypadButton ):Bool
+	{
+		return switch( _kernel.factory.joypadTouchType )
+		{
+			case DISABLED :
+				false;
+			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
+				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonRelease );
+			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
+				false;
+		}
 	}
 	
 	

@@ -67,7 +67,8 @@ interface IInputManager implements IResettable
 	 * @param	?leftAlt	Optional alternative key for left directional movement.
 	 * @param	?primaryAlt	Optional alternative key for primary fire.
 	 * @param	?secondaryAlt	Optional alternative key for secondary fire.
+	 * @param	?joypadTouchType	Optional touch enabled mode (for devices without keys), defaults to IFactory.joypadTouchType
 	 * @return	A virtual joypad with custom key controls.
 	 */
-	function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey ):IInputJoypad;
+	function createJoypad( ?up:EKey, ?right:EKey, ?down:EKey, ?left:EKey, ?primary:EKey, ?secondary:EKey, ?upAlt:EKey, ?rightAlt:EKey, ?downAlt:EKey, ?leftAlt:EKey, ?primaryAlt:EKey, ?secondaryAlt:EKey, ?joypadTouchType:EJoypadTouch ):IInputJoypad;
 }

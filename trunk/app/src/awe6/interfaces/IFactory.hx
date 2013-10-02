@@ -85,6 +85,10 @@ interface IFactory
 	 */
 	var fullScreenType( default, null ):EFullScreen;
 	/**
+	 * The default handler for joypadTouch mode.
+	 */
+	var joypadTouchType( default, null ):EJoypadTouch;
+	/**
 	 * The default secret key used to encrypt data.  Set it to something specific for your project, and conceal it's value.
 	 */
 	var secret( default, null ):String;
