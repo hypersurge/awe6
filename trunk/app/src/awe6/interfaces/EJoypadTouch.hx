@@ -46,17 +46,10 @@ enum EJoypadTouch
 	 */
 	DPAD_FULLSCREEN_WITH_CENTER_PRIMARY;
 	/**
-	 * A drag can begin anywhere.
-	 * <p>If the horizontal drag vector is > 10% of screen diagonal size then left or right is down.</p>
-	 * <p>If the vertical drag vector is > 10% of screen diagonal size then up or down is down.</p>
+	 * A drag can begin anywhere.  Size sets the minimum vector length that determines movement.  25 pixels is the default.
+	 * <p>If the horizontal drag vector is > size then left or right is down.</p>
+	 * <p>If the vertical drag vector is > size then up or down is down.</p>
 	 * <p>Any tap of less than 200ms triggers primary release.</p>
 	 */
-	ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP;
-	/**
-	 * A drag can begin anywhere.
-	 * <p>If the horizontal drag vector is > 25% of screen diagonal size then left or right is down.</p>
-	 * <p>If the vertical drag vector is > 25% of screen diagonal size then up or down is down.</p>
-	 * <p>Any tap of less than 200ms triggers primary release.</p>
-	 */
-	ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP;
+	ANALOG_ANYWHERE_WITH_PRIMARY_TAP( ?size:Int );
 }
