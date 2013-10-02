@@ -28,6 +28,7 @@
  */
 
 package awe6.core;
+import awe6.interfaces.EJoypadTouch;
 import awe6.interfaces.EKey;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputKeyboard;
@@ -76,9 +77,9 @@ class InputManager extends Process, implements IInputManager
 		super._disposer();		
 	}
 	
-	public function createJoypad( ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey ):IInputJoypad
+	public function createJoypad( ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey, ?p_joypadTouchType:EJoypadTouch ):IInputJoypad
 	{
-		return new InputJoypad( _kernel, p_up, p_right, p_down, p_left, p_primary, p_secondary, p_upAlt, p_rightAlt, p_downAlt, p_leftAlt, p_primaryAlt, p_secondaryAlt );
+		return new InputJoypad( _kernel, p_up, p_right, p_down, p_left, p_primary, p_secondary, p_upAlt, p_rightAlt, p_downAlt, p_leftAlt, p_primaryAlt, p_secondaryAlt, p_joypadTouchType );
 	}
 	
 	public function reset():Bool
