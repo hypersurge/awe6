@@ -46,10 +46,17 @@ enum EJoypadTouch
 	 */
 	DPAD_FULLSCREEN_WITH_CENTER_PRIMARY;
 	/**
-	 * A drag can begin anywhere.  Size sets the minimum vector length that determines movement.  25 pixels is the default.
-	 * <p>If the horizontal drag vector is > size then left or right is down.</p>
-	 * <p>If the vertical drag vector is > size then up or down is down.</p>
+	 * A drag can begin anywhere.  Distance sets the minimum vector length that determines movement.  25 pixels is the default.
+	 * <p>If the horizontal drag vector is > distance then left or right is down.</p>
+	 * <p>If the vertical drag vector is > distance then up or down is down.</p>
 	 * <p>Any tap of less than 200ms triggers primary release.</p>
 	 */
-	ANALOG_ANYWHERE_WITH_PRIMARY_TAP( ?size:Int );
+	DRAG_WITH_PRIMARY_TAP( ?distance:Int );
+	/**
+	 * A swipe can begin anywhere.  Speed sets the minimum vector length (pixels per second) that determines movement.  100 pixels is the default.
+	 * <p>If the horizontal swipe vector is > speed then left or right is down.</p>
+	 * <p>If the vertical swipe vector is > speed then up or down is down.</p>
+	 * <p>Any tap of less than 200ms triggers primary release.</p>
+	 */
+	SWIPE_WITH_PRIMARY_TAP( ?speed:Int );
 }
