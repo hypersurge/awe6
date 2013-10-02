@@ -1,0 +1,16 @@
+package $(PackageDot)scenes;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Game extends AScene $(CSLB){
+	override private function _init():Void $(CSLB){
+		super._init();
+		isPauseable = true;
+		// extend / addentities
+		_title.text = "GAME";
+	}
+
+}
