@@ -28,10 +28,13 @@
  */
 
 package awe6.core;
-import awe6.interfaces.EKey;
 import awe6.interfaces.EJoypadButton;
+import awe6.interfaces.EKey;
+import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputJoypad;
 import awe6.interfaces.IKernel;
+import awe6.Types.IInputMouse;
+import flash.ui.Multitouch;
 
 /**
  * The InputJoypad class provides a minimalist implementation of the IInputJoypad interface.
@@ -41,6 +44,8 @@ import awe6.interfaces.IKernel;
 class InputJoypad implements IInputJoypad
 {
 	private var _kernel:IKernel;
+	private var _mouse:IInputMouse;
+	private var _isTouchEnabled:Bool;
 	private var _keyUp:EKey;
 	private var _keyRight:EKey;
 	private var _keyDown:EKey;
@@ -57,6 +62,7 @@ class InputJoypad implements IInputJoypad
 	public function new( p_kernel:IKernel, p_up:EKey, p_right:EKey, p_down:EKey, p_left:EKey, p_primary:EKey, p_secondary:EKey, p_upAlt:EKey, p_rightAlt:EKey, p_downAlt:EKey, p_leftAlt:EKey, p_primaryAlt:EKey, p_secondaryAlt:EKey )
 	{
 		_kernel = p_kernel;
+		_isTouchEnabled = Multitouch.supportsTouchEvents;
 		_keyUp = ( p_up != null ) ? p_up : EKey.UP;
 		_keyRight = ( p_right != null ) ? p_right : EKey.RIGHT;
 		_keyDown = ( p_down != null ) ? p_down : EKey.DOWN;
@@ -94,17 +100,17 @@ class InputJoypad implements IInputJoypad
 	
 	public function getIsButtonDown( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyDown );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyDown ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonDown ) );
 	}
 	
 	public function getIsButtonPress( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyPress );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyPress ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonPress ) );
 	}
 	
 	public function getIsButtonRelease( p_type:EJoypadButton ):Bool
 	{
-		return _check( p_type, _kernel.inputs.keyboard.getIsKeyRelease );
+		return _check( p_type, _kernel.inputs.keyboard.getIsKeyRelease ) || ( _isTouchEnabled && _checkTouch( p_type, _kernel.inputs.mouse.getIsButtonRelease ) );
 	}
 	
 	public function getButtonDownDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
@@ -150,5 +156,57 @@ class InputJoypad implements IInputJoypad
 				return Std.int( Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
+	
+	private function _checkTouch( p_type:EJoypadButton, p_function:EMouseButton->Bool ):Bool
+	{
+		if ( ( _kernel.inputs == null ) || ( !p_function( EMouseButton.LEFT ) ) )
+		{
+			return false;
+		}
+		return ( _getClosestTouchButton() == p_type );
+	}
+	
+	private function _getTouchButtonPosition( p_type:EJoypadButton ):{ x:Float, y:Float }
+	{
+		return switch( p_type )
+		{
+			case UP : { x: _kernel.factory.width * .5, y: _kernel.factory.height * .25 };
+			case RIGHT : { x: _kernel.factory.width * .75, y: _kernel.factory.height * .5 };
+			case DOWN : { x: _kernel.factory.width * .5, y: _kernel.factory.height * .75 };
+			case LEFT : { x: _kernel.factory.width * .25, y: _kernel.factory.height * .5 };
+			case FIRE, PRIMARY, SECONDARY : { x: _kernel.factory.width * .5, y: _kernel.factory.height * .5 };
+		}
+	}
+	
+	private function _getClosestTouchButton( ?p_x:Float, ?p_y:Float ):EJoypadButton
+	{
+		if ( p_x == null )
+		{
+			p_x = _kernel.inputs.mouse.x;
+		}
+		if ( p_y == null )
+		{
+			p_y = _kernel.inputs.mouse.y;
+		}
+		var l_closest:Float = 99999999;
+		var l_result:EJoypadButton = EJoypadButton.FIRE;
+		for ( i in [ EJoypadButton.FIRE, EJoypadButton.UP, EJoypadButton.RIGHT, EJoypadButton.DOWN, EJoypadButton.LEFT, EJoypadButton.PRIMARY ] )
+		{
+			var l_position = _getTouchButtonPosition( i );
+			var l_distance:Float = _kernel.tools.distance( p_x, p_y, l_position.x, l_position.y, true );
+			if ( l_distance < l_closest )
+			{
+				l_closest = l_distance;
+				l_result = i;
+			}
+		}
+		return l_result;
+	}
+	
+	public function toString():String
+	{
+		return Std.string( { up:getIsButtonDown( EJoypadButton.UP ), right:getIsButtonDown( EJoypadButton.RIGHT ), down:getIsButtonDown( EJoypadButton.DOWN ), left:getIsButtonDown( EJoypadButton.LEFT ), fire:getIsButtonDown( EJoypadButton.FIRE ), primary:getIsButtonDown( EJoypadButton.PRIMARY ), secondary:getIsButtonDown( EJoypadButton.SECONDARY ) } );
+	}
+	
 	
 }
