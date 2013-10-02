@@ -4,8 +4,8 @@
   "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","nme","awe6","entity"],
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
-  "releasenote": "Haxe 3.0, OpenFL compatible release.  http://code.google.com/p/awe6/wiki/ReleaseNotes",
-  "version": "2.1.585",
+  "releasenote": "Bug fixes, improvements, touch modes added to Joypad.  http://code.google.com/p/awe6/wiki/ReleaseNotes",
+  "version": "2.2.605",
   "url": "http://awe6.org",
   "dependencies": {
 

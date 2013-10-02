@@ -64,6 +64,7 @@ typedef View = awe6.core.View;
 typedef EAgenda = awe6.interfaces.EAgenda;
 typedef EAudioChannel = awe6.interfaces.EAudioChannel;
 typedef EJoypadButton = awe6.interfaces.EJoypadButton;
+typedef EJoypadTouch = awe6.interfaces.EJoypadTouch;
 typedef EKey = awe6.interfaces.EKey;
 typedef EMessage = awe6.interfaces.EMessage;
 typedef EMouseButton = awe6.interfaces.EMouseButton;
