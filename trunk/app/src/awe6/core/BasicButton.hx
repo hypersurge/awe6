@@ -137,6 +137,7 @@ class BasicButton extends Entity, implements IPositionable
 	
 	public function onClick():Void
 	{
+		setAgenda( EAgenda.SUB_TYPE( _HelperEState.UP ) );
 		if ( onClickCallback == null )
 		{
 			return;
