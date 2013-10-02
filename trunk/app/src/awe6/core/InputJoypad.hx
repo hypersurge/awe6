@@ -211,23 +211,23 @@ class InputJoypad implements IInputJoypad
 		var l_result:_JoypadState = { age:_mouse.getAge(), isFire:false, isUp:false, isRight:false, isDown:false, isLeft:false, isPrevFire:_joypadStateCache.isFire, isPrevUp:_joypadStateCache.isUp, isPrevRight:_joypadStateCache.isRight, isPrevDown:_joypadStateCache.isDown, isPrevLeft:_joypadStateCache.isLeft };
 		switch( _joypadTouchType )
 		{
-			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
+			case DPAD :
 			{
 				var l_closestTouchButton:EJoypadButton = _getClosestTouchButton();
-				if ( _kernel.inputs.mouse.getIsButtonDown() )
+				l_result.isFire = ( l_closestTouchButton == EJoypadButton.FIRE ) && _mouse.getIsButtonRelease() && ( _mouse.getButtonDownDuration( true, true ) < 200 );
+				if ( _mouse.getIsButtonDown() )
 				{
-					l_result.isFire = l_closestTouchButton == EJoypadButton.FIRE;
 					l_result.isUp = l_closestTouchButton == EJoypadButton.UP;
 					l_result.isRight = l_closestTouchButton == EJoypadButton.RIGHT;
 					l_result.isDown = l_closestTouchButton == EJoypadButton.DOWN;
 					l_result.isLeft = l_closestTouchButton == EJoypadButton.LEFT;
 				}
 			}
-			case DRAG_WITH_PRIMARY_TAP( p_distance ) :
+			case JOYSTICK( p_distance ) :
 			{
 				if ( p_distance == null )
 				{
-					p_distance = 25;
+					p_distance = 20;
 				}
 				l_result.isFire = _mouse.getIsButtonRelease() && ( _mouse.getButtonDownDuration( true, true ) < 200 );
 				l_result.isUp = _mouse.getButtonDragHeight() < -p_distance;
@@ -235,7 +235,7 @@ class InputJoypad implements IInputJoypad
 				l_result.isDown = _mouse.getButtonDragHeight() > p_distance;
 				l_result.isLeft = _mouse.getButtonDragWidth() < -p_distance;
 			}
-			case SWIPE_WITH_PRIMARY_TAP( p_speed ) :
+			case SWIPE( p_speed ) :
 			{
 				l_result.isFire = _mouse.getIsButtonRelease() && ( _mouse.getButtonDownDuration( true, true ) < 200 );
 				if ( _kernel.inputs.mouse.getIsButtonDown() )
@@ -303,12 +303,15 @@ class InputJoypad implements IInputJoypad
 		{
 			return true;
 		}
-		if ( Std.is( _kernel.inputs.mouse, InputMouse ) )
+		else if ( Std.is( _kernel.inputs.mouse, InputMouse ) )
 		{
 			_mouse = cast( _kernel.inputs.mouse, InputMouse );
 			return true;
 		}
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 	
 }

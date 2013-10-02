@@ -30,6 +30,7 @@
 package demo;
 import awe6.core.AFactory;
 import awe6.core.TextStyle;
+import awe6.interfaces.EJoypadTouch;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.ETextAlign;
@@ -64,6 +65,7 @@ class Factory extends AFactory
 			startingSceneType = INTRO;
 			targetFramerate = 60;
 			isFixedUpdates = false;
+			joypadTouchType = EJoypadTouch.SWIPE();
 		}
 	}
 

@@ -29,12 +29,14 @@
 
 package demo.scenes;
 import awe6.extras.gui.Text;
+import awe6.interfaces.EJoypadButton;
 import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import demo.gui.Button;
 
 class Intro extends AScene
 {
+	private var _button:Button;
 
 	override private function _init():Void
 	{
@@ -45,9 +47,9 @@ class Intro extends AScene
 		l_result.y = 70;
 		addEntity( l_result, true, 2 );
 
-		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
-		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
-		addEntity( l_button, true, 1 );
+		_button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
+		_button.setPosition( ( _kernel.factory.width - _button.width ) / 2, ( _kernel.factory.height - _button.height ) / 2 );
+		addEntity( _button, true, 1 );
 	}
 
 	override private function _updater( p_deltaTime:Int = 0 ):Void
@@ -62,6 +64,31 @@ class Intro extends AScene
 		if ( _kernel.inputs.keyboard.getIsKeyRelease( EKey.F ) )
 		{
 			_kernel.isFullScreen = !_kernel.isFullScreen;
+		}
+		
+		if ( _kernel.inputs.joypad.getIsButtonDown( EJoypadButton.UP ) )
+		{
+			_button.y--;
+		}
+		if ( _kernel.inputs.joypad.getIsButtonDown( EJoypadButton.RIGHT ) )
+		{
+			_button.x++;
+		}
+		if ( _kernel.inputs.joypad.getIsButtonDown( EJoypadButton.DOWN ) )
+		{
+			_button.y++;
+		}
+		if ( _kernel.inputs.joypad.getIsButtonDown( EJoypadButton.LEFT ) )
+		{
+			_button.x--;
+		}
+		if ( _kernel.inputs.joypad.getIsButtonDown( EJoypadButton.FIRE ) )
+		{
+			_button.setPosition( _button.x + Std.random( 10 ) - 5, _button.y + Std.random( 10 ) - 5 );
+		}
+		if ( _kernel.inputs.joypad.getIsButtonRelease( EJoypadButton.FIRE ) )
+		{
+			_button.setPosition( _button.x + Std.random( 100 ) - 50, _button.y + Std.random( 100 ) - 50 );
 		}
 
 	}

@@ -41,22 +41,23 @@ enum EJoypadTouch
 	 */
 	DISABLED;
 	/**
-	 * The whole screen is split into fixed position regions, only one can be down at a time.
+	 * The screen is split into five fixed position regions corresponding to directions, only one can be down at a time.
 	 * <p>A single fire button (primary) is located in the center.</p>
 	 */
-	DPAD_FULLSCREEN_WITH_CENTER_PRIMARY;
+	DPAD;
 	/**
-	 * A drag can begin anywhere.  Distance sets the minimum vector length that determines movement.  25 pixels is the default.
+	 * A self centering joystick represented by a constant drag / touch.  A drag can begin anywhere.
+	 * <p>Distance sets the minimum vector length that determines movement.  20 pixels is the default.</p>
 	 * <p>If the horizontal drag vector is > distance then left or right is down.</p>
 	 * <p>If the vertical drag vector is > distance then up or down is down.</p>
-	 * <p>Any tap of less than 200ms triggers primary release.</p>
+	 * <p>Any tap of less than 200ms triggers primary down.</p>
 	 */
-	DRAG_WITH_PRIMARY_TAP( ?distance:Int );
+	JOYSTICK( ?distance:Int );
 	/**
 	 * A swipe can begin anywhere.  Speed sets the minimum vector length (pixels per second) that determines movement.  100 pixels is the default.
 	 * <p>If the horizontal swipe vector is > speed then left or right is down.</p>
 	 * <p>If the vertical swipe vector is > speed then up or down is down.</p>
-	 * <p>Any tap of less than 200ms triggers primary release.</p>
+	 * <p>Any tap of less than 200ms triggers primary down.</p>
 	 */
-	SWIPE_WITH_PRIMARY_TAP( ?speed:Int );
+	SWIPE( ?speed:Int );
 }
