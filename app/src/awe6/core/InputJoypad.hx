@@ -34,7 +34,6 @@ import awe6.interfaces.EKey;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IInputJoypad;
 import awe6.interfaces.IKernel;
-import awe6.Types.IInputMouse;
 
 /**
  * The InputJoypad class provides a minimalist implementation of the IInputJoypad interface.
@@ -44,7 +43,7 @@ import awe6.Types.IInputMouse;
 class InputJoypad implements IInputJoypad
 {
 	private var _kernel:IKernel;
-	private var _mouse:IInputMouse;
+	private var _mouse:InputMouse;
 	private var _isTouchEnabled:Bool;
 	private var _keyUp:EKey;
 	private var _keyRight:EKey;
@@ -59,6 +58,7 @@ class InputJoypad implements IInputJoypad
 	private var _keyPrimaryAlt:EKey;
 	private var _keySecondaryAlt:EKey;
 	private var _joypadTouchType:EJoypadTouch;
+	private var _joypadStateCache:_JoypadState;
 	
 	public function new( p_kernel:IKernel, ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey, ?p_joypadTouchType:EJoypadTouch )
 	{
@@ -77,6 +77,7 @@ class InputJoypad implements IInputJoypad
 		_keySecondaryAlt = ( p_secondaryAlt != null ) ? p_secondaryAlt : EKey.E;
 		_joypadTouchType = ( p_joypadTouchType != null ) ? p_joypadTouchType : _kernel.factory.joypadTouchType;
 		_isTouchEnabled = _kernel.factory.joypadTouchType != EJoypadTouch.DISABLED;
+		_joypadStateCache = { age:0, isFire:false, isUp:false, isRight:false, isDown:false, isLeft:false, isPrevFire:false, isPrevUp:false, isPrevRight:false, isPrevDown:false, isPrevLeft:false };
 	}
 	
 	public function toString():String
@@ -180,11 +181,11 @@ class InputJoypad implements IInputJoypad
 	{
 		if ( p_x == null )
 		{
-			p_x = _kernel.inputs.mouse.x;
+			p_x = _mouse.x;
 		}
 		if ( p_y == null )
 		{
-			p_y = _kernel.inputs.mouse.y;
+			p_y = _mouse.y;
 		}
 		var l_closest:Float = 99999999;
 		var l_result:EJoypadButton = EJoypadButton.FIRE;
@@ -201,55 +202,130 @@ class InputJoypad implements IInputJoypad
 		return l_result;
 	}
 	
-	private function _checkTouchHelper1( p_type:EJoypadButton, p_function:EMouseButton->Bool ):Bool
+	private function _checkTouchHelperDpad( p_type:EJoypadButton, p_function:EMouseButton->Bool ):Bool
 	{
 		return ( p_function( EMouseButton.LEFT ) && ( _getClosestTouchButton() == p_type ) );
 	}
 	
+	private function _getAnalogState( ?p_size:Float ):_JoypadState
+	{
+		if ( _mouse.getAge() == _joypadStateCache.age )
+		{
+			return _joypadStateCache;
+		}
+		if ( p_size == null )
+		{
+			p_size = 20;
+		}
+		var l_result:_JoypadState = { age:_mouse.getAge(), isFire:false, isUp:false, isRight:false, isDown:false, isLeft:false, isPrevFire:false, isPrevUp:false, isPrevRight:false, isPrevDown:false, isPrevLeft:false };
+		l_result.isFire = _mouse.getIsButtonRelease() && ( _mouse.getButtonDownDuration( true, true ) < 200 );
+		l_result.isUp = _mouse.getButtonDragHeight() < -p_size;
+		l_result.isRight = _mouse.getButtonDragWidth() > p_size;
+		l_result.isDown = _mouse.getButtonDragHeight() > p_size;
+		l_result.isLeft = _mouse.getButtonDragWidth() < -p_size;
+		l_result.isPrevFire = !_joypadStateCache.isFire;
+		l_result.isPrevUp = !_joypadStateCache.isUp;
+		l_result.isPrevRight = !_joypadStateCache.isRight;
+		l_result.isPrevDown = !_joypadStateCache.isDown;
+		l_result.isPrevLeft = !_joypadStateCache.isLeft;
+		_joypadStateCache = l_result;
+		return _joypadStateCache;
+	}
+	
+	private function _checkTouchHelperAnalogDown( p_type:EJoypadButton, ?p_size:Float ):Bool
+	{
+		var l_state:_JoypadState = _getAnalogState( p_size );
+		return switch( p_type )
+		{
+			case UP : l_state.isUp;
+			case RIGHT : l_state.isRight;
+			case DOWN : l_state.isDown;
+			case LEFT : l_state.isLeft;
+			case FIRE, PRIMARY, SECONDARY : l_state.isFire;
+		}
+	}
+	
+	private function _checkTouchHelperAnalogPress( p_type:EJoypadButton, ?p_size:Float ):Bool
+	{
+		var l_state:_JoypadState = _getAnalogState( p_size );
+		return switch( p_type )
+		{
+			case UP : l_state.isUp && !l_state.isPrevUp;
+			case RIGHT : l_state.isRight && !l_state.isPrevRight;
+			case DOWN : l_state.isDown && !l_state.isPrevDown;
+			case LEFT : l_state.isLeft && !l_state.isPrevLeft;
+			case FIRE, PRIMARY, SECONDARY : l_state.isFire && !l_state.isPrevFire;
+		}
+	}
+	
+	private function _checkTouchHelperAnalogRelease( p_type:EJoypadButton, ?p_size:Float ):Bool
+	{
+		var l_state:_JoypadState = _getAnalogState( p_size );
+		return switch( p_type )
+		{
+			case UP : !l_state.isUp && l_state.isPrevUp;
+			case RIGHT : !l_state.isRight && l_state.isPrevRight;
+			case DOWN : !l_state.isDown && l_state.isPrevDown;
+			case LEFT : !l_state.isLeft && l_state.isPrevLeft;
+			case FIRE, PRIMARY, SECONDARY : !l_state.isFire && l_state.isPrevFire;
+		}
+	}
+	
+	private inline function _assignMouse():Bool
+	{
+		if ( _mouse != null )
+		{
+			return true;
+		}
+		if ( Std.is( _kernel.inputs.mouse, InputMouse ) )
+		{
+			_mouse = cast( _kernel.inputs.mouse, InputMouse );
+			return true;
+		}
+		return false;
+	}
+	
 	private function _checkTouchIsDown( p_type:EJoypadButton ):Bool
 	{
+		if ( !_assignMouse() ) return false;
 		return switch( _kernel.factory.joypadTouchType )
 		{
 			case DISABLED :
 				false;
 			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
-				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonDown );
-			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
-			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
+				_checkTouchHelperDpad( p_type, _kernel.inputs.mouse.getIsButtonDown );
+			case ANALOG_ANYWHERE_WITH_PRIMARY_TAP( p_size ) :
+				_checkTouchHelperAnalogDown( p_type, p_size );
 		}
 	}
 	
 	private function _checkTouchIsPress( p_type:EJoypadButton ):Bool
 	{
+		if ( !_assignMouse() ) return false;
 		return switch( _kernel.factory.joypadTouchType )
 		{
 			case DISABLED :
 				false;
 			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
-				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonDown );
-			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
-			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
+				_checkTouchHelperDpad( p_type, _kernel.inputs.mouse.getIsButtonDown );
+			case ANALOG_ANYWHERE_WITH_PRIMARY_TAP( p_size ) :
+				_checkTouchHelperAnalogPress( p_type, p_size );
 		}
 	}
 	
 	private function _checkTouchIsRelease( p_type:EJoypadButton ):Bool
 	{
+		if ( !_assignMouse() ) return false;
 		return switch( _kernel.factory.joypadTouchType )
 		{
 			case DISABLED :
 				false;
 			case DPAD_FULLSCREEN_WITH_CENTER_PRIMARY :
-				_checkTouchHelper1( p_type, _kernel.inputs.mouse.getIsButtonRelease );
-			case ANALOG_SMALL_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
-			case ANALOG_LARGE_ANYWHERE_WITH_PRIMARY_TAP :
-				false;
+				_checkTouchHelperDpad( p_type, _kernel.inputs.mouse.getIsButtonRelease );
+			case ANALOG_ANYWHERE_WITH_PRIMARY_TAP( p_size ) :
+				_checkTouchHelperAnalogRelease( p_type, p_size );
 		}
 	}
-	
-	
 }
+
+private typedef _JoypadState = { age:Int, isFire:Bool, isUp:Bool, isRight:Bool, isDown:Bool, isLeft:Bool, isPrevFire:Bool, isPrevUp:Bool, isPrevRight:Bool, isPrevDown:Bool, isPrevLeft:Bool }
