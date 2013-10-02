@@ -1,5 +1,15 @@
 #summary Release notes for each release candidate
 
+=RC 2,2,605=
+
+Minor release.  Includes:
+
+ * Masks removed from GuiEntity for js target
+ * Various OpenFL-native / cpp related errors fixed
+ * Minor enhancements to BasicButton and Text
+ * Introduced EJoypadTouch, and automated touch controls on the Joypad (enable via Factory._configurer)
+
+
 =RC 2,1,585=
 
 Minor release.  Includes:
