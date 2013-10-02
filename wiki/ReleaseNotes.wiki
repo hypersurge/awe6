@@ -4,10 +4,10 @@
 
 Minor release.  Includes:
 
- * Masks removed from GuiEntity for js target
+ * Masks removed from !GuiEntity for js target
  * Various OpenFL-native / cpp related errors fixed
- * Minor enhancements to BasicButton and Text
- * Introduced EJoypadTouch, and automated touch controls on the Joypad (enable via Factory._configurer)
+ * Minor enhancements to !BasicButton and Text
+ * Introduced EJoypadTouch, and automated touch controls on the Joypad (enable via Factory.`_`configurer)
 
 
 =RC 2,1,585=
@@ -16,7 +16,7 @@ Minor release.  Includes:
 
  * Minor API fixes and consistencies (e.g. durations to ms:Int)
  * Wrapped untyped driver methods in try catch to ease additional OpenFL HTML5 backends (e.g. bitfive)
- * Minor FlashDevelop template fixes for OpenFL build compatibility
+ * Minor !FlashDevelop template fixes for OpenFL build compatibility
  * View and Entity collections add methods return added item (to allow decoration)
  * Compiles to Neko (via OpenFL native)
 
@@ -29,7 +29,7 @@ Major release, some breaking changes.  Includes:
  * NME drivers replaced with OpenFL drivers
  * Optional paramaters refactored (Floats, Ints, Bools made non-nullable)
  * Run script NME references replaced with OpenFL references
- * FlashDevelop templates updated for above
+ * !FlashDevelop templates updated for above
  * API docs not yet revised, due to chxdoc compatibility
 
 
