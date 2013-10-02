@@ -56,7 +56,7 @@ class Factory extends AFactory
 		if ( p_isPreconfig )
 		{
 			id = "awe6Demo";
-			version = "2.1.585"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+			version = "2.2.605"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
 			isDecached = true;
 			width = 600;
@@ -65,7 +65,7 @@ class Factory extends AFactory
 			startingSceneType = INTRO;
 			targetFramerate = 60;
 			isFixedUpdates = false;
-			joypadTouchType = EJoypadTouch.SWIPE();
+			joypadTouchType = EJoypadTouch.JOYSTICK();
 		}
 	}
 
