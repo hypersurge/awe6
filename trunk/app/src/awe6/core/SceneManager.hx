@@ -131,7 +131,11 @@ class SceneManager extends Process, implements ISceneManager
 	
 	public function back():Void
 	{
-		setScene( _kernel.factory.getBackSceneType( scene.type ) );
+		var l_sceneType:EScene = _kernel.factory.getBackSceneType( scene.type );
+		if ( l_sceneType != null )
+		{
+			setScene( l_sceneType );
+		}
 	}
 	
 	public function next():Void
@@ -140,7 +144,11 @@ class SceneManager extends Process, implements ISceneManager
 		{
 			_kernel.session.save();
 		}
-		setScene( _kernel.factory.getNextSceneType( scene.type ) );
+		var l_sceneType:EScene = _kernel.factory.getNextSceneType( scene.type );
+		if ( l_sceneType != null )
+		{
+			setScene( l_sceneType );
+		}
 	}
 	
 	public function restart():Void
