@@ -55,6 +55,6 @@ class Session extends ASession
 	
 	override private function _driverSave():Void
 	{
-		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ) ) ;
+		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ), _tools.BIG_NUMBER ) ;
 	}
 }
