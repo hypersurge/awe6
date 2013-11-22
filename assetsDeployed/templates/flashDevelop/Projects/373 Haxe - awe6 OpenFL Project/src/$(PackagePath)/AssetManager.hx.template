@@ -45,7 +45,7 @@ class AssetManager extends AAssetManager $(CSLB){
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
 		#if js
-		_html5AudioExtension = untyped flash.media.Sound.nmeCanPlayType( "ogg" ) ? ".ogg" : ".mp3";
+		_html5AudioExtension = untyped flash.media.Sound.__canPlayType( "ogg" ) ? ".ogg" : ".mp3";
 		#end
 	}
 
