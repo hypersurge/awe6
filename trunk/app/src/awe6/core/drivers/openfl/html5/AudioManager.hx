@@ -60,7 +60,7 @@ class AudioManager extends AAudioManager
 			try
 			{
 				// openfl-html5
-				untyped l_sound.getSoundChannel().nmeAudio.muted = p_value;
+				untyped l_sound.getSoundChannel().__audio.muted = p_value;
 			}
 			catch ( p_error:Dynamic )
 			{
@@ -102,7 +102,7 @@ class _HelperSound extends _AHelperSound
 		try
 		{
 			// openfl-html5
-			untyped _soundChannel.nmeAudio.muted = _kernel.audio.isMute;
+			untyped _soundChannel.__audio.muted = _kernel.audio.isMute;
 		}
 		catch ( p_error:Dynamic )
 		{

@@ -123,7 +123,7 @@ class InputMouse extends AInputMouse
 	
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		// Lib.nmeSetCursor unreliable / private enumerator, therefore removed
+		// Lib.__setCursor unreliable / private enumerator, therefore removed
 		return super.set_cursorType( p_value );
 	}
 
