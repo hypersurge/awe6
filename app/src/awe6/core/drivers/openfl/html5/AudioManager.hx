@@ -94,7 +94,7 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose();
 		}
-		_soundChannel = _sound.play( _startTime, _loops );
+		_soundChannel = _sound.play( _startTime, _loops == 1 ? 0 : _loops );
 		if ( _soundChannel == null )
 		{
 			return dispose(); // perhaps sounds are flooded?
