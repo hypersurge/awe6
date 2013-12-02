@@ -153,13 +153,28 @@ class AFactory implements IFactory, implements IDisposable
 			{
 				i.firstChild().nodeValue = i.firstChild().toString().split( "<![CDATA[" ).join( "" ).split( "]]>" ).join( "" );
 			}
-			config.set( l_name, i.firstChild() == null ? "" : i.firstChild().nodeValue );
-//			trace( l_name + " = " + config.get( l_name ) );
+			if ( i.firstChild() == null )
+			{
+				config.set( l_name, "" );
+			}
+			else
+			{
+				var l_nodeType = i.firstChild().nodeType;
+				if ( ( l_nodeType != Xml.Element ) && ( l_nodeType != Xml.Document ) )
+				{
+					config.set( l_name, i.firstChild() == null ? "" : i.firstChild().nodeValue );
+				}
+				else
+				{
+					config.set( l_name, "" );
+				}
+			}
+			//trace( l_name + " = " + config.get( l_name ) );
 			for ( j in i.attributes() )
 			{
 				var l_aName:String = l_name + "." + j;
 				config.set( l_aName, i.get( j ) );
-//				trace( l_aName + " = " + config.get( l_aName ) );
+				//trace( l_aName + " = " + config.get( l_aName ) );
 			}
 		}
 	}
