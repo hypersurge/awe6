@@ -75,13 +75,13 @@ class InputMouse extends AInputMouse
 	
 	override private function _isWithinBounds():Bool
 	{
-		return ( _stage.mouseX >= 0 ) && ( _stage.mouseX <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( _stage.mouseY <= _kernel.factory.height );
+		return ( _stage.mouseX >= 0 ) && ( ( _stage.mouseX / _stage.scaleX ) <= _kernel.factory.width ) && ( _stage.mouseY >= 0 ) && ( ( _stage.mouseY / _stage.scaleY ) <= _kernel.factory.height );
 	}
 	
 	override private function _getPosition():Void
 	{
-		var l_x:Int = Std.int( _tools.limit( _stage.mouseX, 0, _kernel.factory.width ) );
-		var l_y:Int = Std.int( _tools.limit( _stage.mouseY, 0, _kernel.factory.height ) );
+		var l_x:Int = Std.int( _tools.limit( _stage.mouseX / _stage.scaleX, 0, _kernel.factory.width ) );
+		var l_y:Int = Std.int( _tools.limit( _stage.mouseY / _stage.scaleY, 0, _kernel.factory.height ) );
 		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
 		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
 	}
@@ -123,7 +123,7 @@ class InputMouse extends AInputMouse
 	
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		// Lib.__setCursor unreliable / private enumerator, therefore removed
+		// Lib.nmeSetCursor unreliable / private enumerator, therefore removed
 		return super.set_cursorType( p_value );
 	}
 

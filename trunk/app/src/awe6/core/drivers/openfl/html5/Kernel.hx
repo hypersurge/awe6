@@ -30,6 +30,7 @@
 package awe6.core.drivers.openfl.html5;
 import awe6.core.drivers.AKernel;
 import flash.display.Stage;
+import flash.display.StageDisplayState;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
@@ -74,6 +75,42 @@ class Kernel extends AKernel
 	
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
+		if ( p_value )
+		{
+			var l_scale:Float = Math.min( _stage.fullScreenWidth / factory.width, _stage.fullScreenHeight / factory.height );
+			switch( factory.fullScreenType )
+			{
+				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
+					null;
+				case SCALE_ASPECT_RATIO_IGNORE :
+					_stage.displayState = StageDisplayState.FULL_SCREEN;
+					_stage.scaleX = _stage.fullScreenWidth / factory.width;
+					_stage.scaleY = _stage.fullScreenHeight / factory.height;
+				case SCALE_ASPECT_RATIO_PRESERVE :
+					_stage.displayState = StageDisplayState.FULL_SCREEN;
+					_stage.scaleX = _stage.scaleY = l_scale;
+				case SCALE_NEAREST_MULTIPLE :
+					_stage.displayState = StageDisplayState.FULL_SCREEN;
+					if ( l_scale < .5 )
+					{
+						l_scale = .25;
+					}
+					else if ( l_scale < 1 )
+					{
+						l_scale = .5;
+					}
+					else
+					{
+						l_scale = Math.floor( l_scale );
+					}
+					_stage.scaleX = _stage.scaleY = l_scale;
+			}
+		}
+		else
+		{
+			_stage.displayState = StageDisplayState.NORMAL;
+			_stage.scaleX = _stage.scaleY = 1;
+		}
 	}
 	
 }
