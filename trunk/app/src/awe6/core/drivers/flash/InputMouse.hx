@@ -72,6 +72,7 @@ class InputMouse extends AInputMouse
 		_stage.removeEventListener( MouseEvent.MOUSE_UP, _onMouseUp );
 		_stage.removeEventListener( MouseEvent.MOUSE_WHEEL, _onMouseWheel );
 		_stage.removeEventListener( Event.DEACTIVATE, _reset );
+		if ( _mouseClicks != null ) _mouseClicks.unload();
 		super._disposer();		
 	}	
 	
