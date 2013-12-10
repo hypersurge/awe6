@@ -253,8 +253,16 @@ class _AHelperSound implements IDisposable
 		{
 			return;
 		}
-		_volume = _kernel.tools.limit( p_volume, 0, 1 );
-		_pan = _kernel.tools.limit( p_pan, -1, 1 );
+		if ( p_asRelative )
+		{
+			_volume = p_volume;
+			_pan = p_pan;
+		}
+		else
+		{
+			_volume = _kernel.tools.limit( p_volume, 0, 1 );
+			_pan = _kernel.tools.limit( p_pan, -1, 1 );
+		}
 		_driverTransform( p_asRelative );
 	}
 	
