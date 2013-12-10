@@ -30,7 +30,6 @@
 package awe6.core;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IMessageManager;
-import awe6.interfaces.IPriority;
 #if haxe3
 // typedef aliasing caused issue on hxcpp
 import haxe.ds.GenericStack;
@@ -134,7 +133,7 @@ class MessageManager extends Process, implements IMessageManager
 	{
 		if ( _isVerbose )
 		{
-			trace( "Sending message: " + Std.string( p_message ) + " from " + p_sender.id );
+			trace( "Sending message: " + Std.string( p_message ) + " from " + p_sender.id + "(" + Type.getClass( p_sender ) + ") via " + p_target.id + " (" + Type.getClass( p_target ) + ")" );
 		}
 		if ( !_isOkToSendMessage() )
 		{
@@ -173,7 +172,7 @@ class MessageManager extends Process, implements IMessageManager
 		}
 		if ( p_isBubbleUp && ( p_target.parent != null ) && ( Std.is( p_target.parent, IEntity ) ) )
 		{
-			_sendMessage( p_message, p_sender, cast p_target.parent, false, true );
+			_sendMessage( p_message, p_sender, p_target.parent, false, true );
 		}
 		return;
 	}
@@ -201,10 +200,16 @@ class MessageManager extends Process, implements IMessageManager
 #end
 		for ( i in _subscriptions )
 		{
-			if ( ( p_subscriber != null ) && ( i.subscriber != p_subscriber ) )
+			// if dispatched.subscriber is defined (it always is as target for none removals)
+			// and it's neither
+			// 	an exact match with subscriber.subscriber
+			// 	nor an exact match with subscriber.sender
+			// , bomb
+			if ( ( p_subscriber != null ) && ( p_subscriber != i.subscriber ) && ( p_subscriber != i.sender ) )
 			{
 				continue;
 			}
+			// if dispatched.message is defined and the subscriber.message is not a typed match, bomb
 			if ( ( p_message != null ) && !Std.is( p_message, i.messageClass ) )
 			{
 				switch ( Type.typeof( p_message ) )
@@ -222,17 +227,37 @@ class MessageManager extends Process, implements IMessageManager
 						}
 				}
 			}
+			// if dispatched.handler is defined and the subscriber.handler is not an exact match, bomb // only used for unsubscribe?
 			if ( ( p_handler != null ) && ( !Reflect.compareMethods( i.handler, p_handler ) ) )
 			{
 				continue;
 			}
-			if ( ( p_sender != null ) && ( i.sender != null ) && ( i.sender != p_sender ) )
+			if ( p_sender != null )
 			{
-				continue;
-			}
-			if ( ( p_sender != null ) && ( i.senderClassType != null ) && ( p_isRemove || !Std.is( p_sender, i.senderClassType ) ) )
-			{
-				continue;
+				// if doing an unsubscribe
+				if ( p_isRemove )
+				{
+					// if subscriber sender is class typed (i.e. vague), bomb
+					if ( i.senderClassType != null )
+					{
+						continue;
+					}
+					// if subscriber sender is not specified (i.e. vague), bomb
+					if ( i.sender == null )
+					{
+						continue;
+					}
+				}
+				// if suscriber sender is class typed and dispatched.sender is not of that type, bomb
+				if ( ( i.senderClassType != null ) && !Std.is( p_sender, i.senderClassType ) )
+				{
+					continue;
+				}
+				// if subscriber.sender is specific and dispatched.sender is not exact match, bomb
+				if ( ( i.sender != null ) && ( i.sender != p_sender ) )
+				{
+					continue;
+				}
 			}
 			l_result.add( i );
 		}
