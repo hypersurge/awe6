@@ -33,9 +33,6 @@ import flash.Lib;
 import haxe.Log;
 import haxe.PosInfos;
 import haxe.Resource;
-#if flash
-import org.flashdevelop.utils.FlashConnect;
-#end
 
 class Main
 {
@@ -47,11 +44,7 @@ class Main
 		var l_isDebug:Bool = false;
 		#end
 		#if flash
-		if ( l_isDebug )
-		{
-			FlashConnect.redirect();
-		}
-		else
+		if ( !l_isDebug )
 		{
 			Log.trace = function( v:Dynamic, ?infos:PosInfos ):Void {};
 		}
