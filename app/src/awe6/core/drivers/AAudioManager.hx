@@ -54,6 +54,11 @@ class AAudioManager extends Process, implements IAudioManager
 	
 	private var _sounds:Array<_AHelperSound>;
 	private var _packageId:String;
+	
+	public function new( p_kernel:IKernel )
+	{
+		super( p_kernel );
+	}
 
 	override private function _init():Void 
 	{
