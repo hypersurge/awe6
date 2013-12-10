@@ -29,7 +29,6 @@
 
 package awe6.core;
 import awe6.interfaces.IAssetManagerProcess;
-import awe6.interfaces.IKernel;
 
 /**
  * The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
@@ -44,11 +43,6 @@ class AAssetManager extends Process, implements IAssetManagerProcess
 #end
 {
 	private var _PACKAGE_ID:String;	
-	
-	public function new( p_kernel:IKernel )
-	{
-		super( p_kernel );
-	}
 	
 	override private function _init():Void
 	{
