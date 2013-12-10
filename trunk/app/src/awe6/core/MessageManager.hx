@@ -29,6 +29,7 @@
 
 package awe6.core;
 import awe6.interfaces.IEntity;
+import awe6.interfaces.IKernel;
 import awe6.interfaces.IMessageManager;
 import awe6.interfaces.IPriority;
 #if haxe3
@@ -57,6 +58,11 @@ class MessageManager extends Process, implements IMessageManager
 #end
 	private var _messageQueue:List<_HelperMessage<Dynamic>>;
 	private var _isVerbose:Bool;
+	
+	public function new( p_kernel:IKernel )
+	{
+		super( p_kernel );
+	}
 
 	override private function _init():Void 
 	{

@@ -30,7 +30,6 @@
 package awe6.core.drivers.openfl.html5;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
-import flash.display.Loader;
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -44,7 +43,6 @@ import flash.ui.Mouse;
 class InputMouse extends AInputMouse
 {
 	private var _stage:Stage;
-	private var _mouseClicks:Loader;
 	
 	override private function _driverInit():Void 
 	{
