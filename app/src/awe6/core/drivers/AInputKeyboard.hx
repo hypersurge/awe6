@@ -48,11 +48,6 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	private var _keys:Array<_HelperKey>;
 	private var _buffer:Array<_HelperKeyEvent>;
 
-	public function new( p_kernel:IKernel )
-	{
-		super( p_kernel );
-	}
-	
 	override private function _init():Void 
 	{
 		super._init();

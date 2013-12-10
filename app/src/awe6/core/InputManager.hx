@@ -35,7 +35,6 @@ import awe6.interfaces.IInputKeyboard;
 import awe6.interfaces.IInputManager;
 import awe6.interfaces.IInputMouse;
 import awe6.interfaces.IInputJoypad;
-import awe6.interfaces.IKernel;
 
 /**
  * The InputManager class provides a minimalist implementation of the IInputManager interface.
@@ -55,11 +54,6 @@ class InputManager extends Process, implements IInputManager
 	private var _inputKeyboard:InputKeyboard;
 	private var _inputMouse:InputMouse;	
 	
-	public function new( p_kernel:IKernel )
-	{
-		super( p_kernel );
-	}
-
 	override private function _init():Void 
 	{
 		super._init();

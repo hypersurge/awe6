@@ -78,11 +78,6 @@ class AInputMouse extends Process, implements IInputMouse
 	private var _buttonMiddle:_HelperButton;
 	private var _buttonRight:_HelperButton;
 	
-	public function new( p_kernel:IKernel )
-	{
-		super( p_kernel );
-	}
-	
 	override private function _init():Void 
 	{
 		super._init();

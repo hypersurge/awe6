@@ -261,7 +261,7 @@ class AFactory implements IFactory, implements IDisposable
 		}
 		else
 		{
-			return cast new AAssetManager( _kernel ); // safe downcast
+			return new AAssetManager( _kernel ); // safe downcast
 		}
 	}
 	
