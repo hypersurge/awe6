@@ -31,7 +31,6 @@ package awe6.core.drivers.createjs;
 import awe6.core.drivers.AInputKeyboard;
 import js.Browser;
 import js.html.Document;
-import js.html.Event;
 import js.html.KeyboardEvent;
 
 /**
@@ -40,13 +39,13 @@ import js.html.KeyboardEvent;
  */
 class InputKeyboard extends AInputKeyboard
 {
-	private var _stage:Document;
+	private var _document:Document;
 	
 	override private function _driverInit():Void 
 	{
-		_stage = Browser.document;
-		_stage.addEventListener( "keydown", _onKeyDown );
-		_stage.addEventListener( "keyup", _onKeyUp );
+		_document = Browser.document;
+		_document.addEventListener( "keydown", _onKeyDown );
+		_document.addEventListener( "keyup", _onKeyUp );
 	}
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void 
@@ -56,8 +55,8 @@ class InputKeyboard extends AInputKeyboard
 	
 	override private function _disposer():Void 
 	{
-		_stage.removeEventListener( "keydown", _onKeyDown );
-		_stage.removeEventListener( "keyup", _onKeyUp );
+		_document.removeEventListener( "keydown", _onKeyDown );
+		_document.removeEventListener( "keyup", _onKeyUp );
 		super._disposer();
 	}
 	
@@ -68,7 +67,6 @@ class InputKeyboard extends AInputKeyboard
 			return;
 		}
 		_addEvent( p_event.keyCode, true );
-		return;
 	}
 	
 	private function _onKeyUp( p_event:KeyboardEvent ):Void
@@ -78,7 +76,6 @@ class InputKeyboard extends AInputKeyboard
 			return;
 		}
 		_addEvent( p_event.keyCode, false );
-		return;
 	}
 	
 }

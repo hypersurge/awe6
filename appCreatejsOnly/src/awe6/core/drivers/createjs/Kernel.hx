@@ -29,8 +29,10 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.AKernel;
+import createjs.easeljs.Shape;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Ticker;
+import js.Browser;
 import js.html.Event;
 
 /**
@@ -49,6 +51,14 @@ class Kernel extends AKernel
 	override private function _driverInit():Void
 	{
 		_stage = _context.getStage();
+		_stage.tickOnUpdate = false;
+		_stage.mouseEnabled = false;
+		var l_shape:Shape = new Shape();
+		l_shape.alpha = .01;
+		l_shape.graphics.beginFill( "#000000" );
+		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		l_shape.graphics.endFill();
+		_stage.addChildAt( l_shape, 0 );
 		Ticker.setFPS( factory.targetFramerate );
 		Ticker.timingMode = Ticker.RAF_SYNCHED;
 		Ticker.addEventListener( "tick", _onEnterFrame );
@@ -71,7 +81,42 @@ class Kernel extends AKernel
 	
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
+		if ( p_value )
+		{
+			var l_windowWidth:Int = Browser.window.innerWidth;
+			var l_windowHeight:Int = Browser.window.innerHeight;
+			var l_scale:Float = Math.min( l_windowWidth / factory.width, l_windowHeight / factory.height );
+			switch( factory.fullScreenType )
+			{
+				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
+					null;
+				case SCALE_ASPECT_RATIO_IGNORE :
+					_stage.scaleX = l_windowWidth / factory.width;
+					_stage.scaleY = l_windowHeight / factory.height;
+				case SCALE_ASPECT_RATIO_PRESERVE :
+					_stage.scaleX = _stage.scaleY = l_scale;
+				case SCALE_NEAREST_MULTIPLE :
+					if ( l_scale < .5 )
+					{
+						l_scale = .25;
+					}
+					else if ( l_scale < 1 )
+					{
+						l_scale = .5;
+					}
+					else
+					{
+						l_scale = Math.floor( l_scale );
+					}
+					_stage.scaleX = _stage.scaleY = l_scale;
+			}
+		}
+		else
+		{
+			_stage.scaleX = _stage.scaleY = 1;
+		}
+		_stage.canvas.width = _kernel.factory.width * _stage.scaleX;
+		_stage.canvas.height = _kernel.factory.height * _stage.scaleY;
 	}
 	
 }
-

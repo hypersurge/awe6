@@ -87,7 +87,7 @@ class Sphere extends Entity
 
 	private function _isHit():Bool
 	{
-		if ( !_kernel.inputs.mouse.getIsButtonPress( EMouseButton.LEFT ) )
+		if ( !_kernel.inputs.mouse.getIsButtonDown( EMouseButton.LEFT ) )
 		{
 			return false;
 		}

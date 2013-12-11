@@ -47,6 +47,9 @@ class Factory extends AFactory
 			_parseXml( _config );
 		}
 		_launchKernel();
+		trace( id + " v" + version + " by " + author );
+		trace( "Powered by awe6 (http://awe6.org)" );
+		trace( "" );
 	}
 
 	private function _parseXml( p_data:String ):Void
