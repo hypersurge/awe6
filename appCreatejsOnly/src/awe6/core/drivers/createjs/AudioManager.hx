@@ -59,7 +59,7 @@ class _HelperSound extends _AHelperSound
 	
 	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
-		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
+		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops == 1 ? 0 : p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
 	}
 	
 	override private function _driverInit():Void
