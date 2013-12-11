@@ -30,6 +30,7 @@
 package democreatejs.scenes;
 import awe6.core.Scene;
 import awe6.interfaces.EAudioChannel;
+import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import democreatejs.AssetManager;
 import democreatejs.gui.Text;
@@ -55,10 +56,17 @@ class AScene extends Scene
 			_title.y = 40;
 			addEntity( _title, true, 100 );
 		}
-
 		view.addChild( _assetManager.background, 0 );
-
 		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
+	}
+	
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		if ( _kernel.inputs.keyboard.getIsKeyRelease( EKey.F ) )
+		{
+			_kernel.isFullScreen = !_kernel.isFullScreen;
+		}
 	}
 
 }

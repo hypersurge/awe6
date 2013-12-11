@@ -30,10 +30,12 @@
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
+import createjs.easeljs.MouseEvent;
+import createjs.easeljs.Stage;
+import createjs.easeljs.Touch;
 import js.Browser;
 import js.html.Document;
-import js.html.Event;
-import js.html.MouseEvent;
+import js.html.TouchEvent;
 
 /**
  * This InputMouse class provides CreateJS target overrides.
@@ -41,50 +43,76 @@ import js.html.MouseEvent;
  */
 class InputMouse extends AInputMouse
 {
-	private var _stage:Document;
+	private var _stage:Stage;
+	private var _document:Document;
+	private var _isTouch:Bool;
 	
 	override private function _driverInit():Void 
 	{
-		_stage = Browser.document;
-		_stage.addEventListener( "mousedown", _onMouseDown );
-		_stage.addEventListener( "mouseup", _onMouseUp );
-		_stage.addEventListener( "mousemove", _onMouseMove );
+		_stage = untyped _kernel._stage;
+		// _stage.enableMouseOver( 20 ); // enable this if you want cursors, otherwise it's a performance hit for no other benefit
+		_document = Browser.document;
+		_isTouch = Touch.isSupported();
+		if ( _isTouch )
+		{
+			Touch.enable( _stage, true );
+			_document.addEventListener( "touchstart", _onTouchStart );
+			_document.addEventListener( "touchmove", _onTouchMove );
+			_document.addEventListener( "touchend", _onTouchEnd );
+		}
+		_stage.addEventListener( "stagemousedown", _onMouseDown );
+		_stage.addEventListener( "stagemouseup", _onMouseUp );
 	}
 	
 	override private function _disposer():Void 
 	{
-		_stage.removeEventListener( "mousedown", _onMouseDown );
-		_stage.removeEventListener( "mouseup", _onMouseUp );
-		_stage.removeEventListener( "mousemove", _onMouseMove );
+		if ( _isTouch )
+		{
+			Touch.disable( _stage );
+			_document.removeEventListener( "touchstart", _onTouchStart );
+			_document.removeEventListener( "touchmove", _onTouchMove );
+			_document.removeEventListener( "touchend", _onTouchEnd );
+		}
+		_stage.removeEventListener( "stagemousedown", _onMouseDown );
+		_stage.removeEventListener( "stagemouseup", _onMouseUp );
 		super._disposer();		
 	}	
 	
-	override private function _updater( p_deltaTime:Int = 0 ):Void 
-	{
-		super._updater( p_deltaTime );
-	}
-	
 	override private function _isWithinBounds():Bool
 	{
-		return true;
+		return _stage.mouseInBounds;
 	}
 	
 	override private function _getPosition():Void
 	{
-		var l_x:Int = Std.int( _tools.limit( x, 0, _kernel.factory.width ) );
-		var l_y:Int = Std.int( _tools.limit( y, 0, _kernel.factory.height ) );
-		x = ( l_x == _kernel.factory.width ) ? _xPrev : l_x;
-		y = ( l_y == _kernel.factory.height ) ? _yPrev : l_y;		
+		if ( !_isTouch )
+		{
+			x = Std.int( _tools.limit( _stage.mouseX / _stage.scaleX, 0, _kernel.factory.width ) );
+			y = Std.int( _tools.limit( _stage.mouseY / _stage.scaleY, 0, _kernel.factory.height ) );
+		}
+		x = ( x == _kernel.factory.width ) ? _xPrev : x;
+		y = ( y == _kernel.factory.height ) ? _yPrev : y;
 	}
 	
-	private function _onMouseMove( p_event:MouseEvent ):Void
+	private function _onTouchStart( p_event:TouchEvent ):Void
 	{
-		if ( !isActive )
-		{
-			return;
-		}
-		x = p_event.x;
-		y = p_event.y;
+		p_event.preventDefault();
+		x = p_event.targetTouches[0].pageX;
+		y = p_event.targetTouches[0].pageY;
+	}
+	
+	private function _onTouchMove( p_event:TouchEvent ):Void
+	{
+		p_event.preventDefault();
+		x = p_event.targetTouches[0].pageX;
+		y = p_event.targetTouches[0].pageY;
+	}
+
+	private function _onTouchEnd( p_event:TouchEvent ):Void
+	{
+		p_event.preventDefault();
+		x = p_event.targetTouches[0].pageX;
+		y = p_event.targetTouches[0].pageY;
 	}
 	
 	private function _onMouseDown( p_event:MouseEvent ):Void
@@ -107,12 +135,29 @@ class InputMouse extends AInputMouse
 	
 	override private function set_isVisible( p_value:Bool ):Bool
 	{
+		_stage.cursor = p_value ? "none" : "auto";
 		return super.set_isVisible( p_value );
 	}
 	
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
+		switch( p_value )
+		{
+			case ARROW :
+				_stage.cursor = "crosshair";
+			case AUTO :
+				_stage.cursor = "auto";
+			case BUTTON :
+				_stage.cursor = "pointer";
+			case HAND :
+				_stage.cursor = "pointer";
+			case IBEAM :
+				_stage.cursor = "text";
+			case SUB_TYPE( p_value ) :
+				_stage.cursor = p_value; // http://www.w3schools.com/cssref/playit.asp?filename=playcss_cursor&preval=alias
+		}
 		return super.set_cursorType( p_value );
 	}
+
 
 }
