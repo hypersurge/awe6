@@ -66,4 +66,45 @@ class Macros
     }
 	
 	#end
+	
+	
+	/**
+	 * This macro returns a recursive list of files from a folder.
+	 * @param	p_folderPath	The parent path.
+	 * @return
+	 */
+	macro public static function getFolderContents( p_folderPath:String )
+	{
+		function recursive( p_folderPath:String, ?p_result:Array<String> ):Array<String>
+		{
+			if ( p_result == null )
+			{
+				p_result = [];
+			}
+			if ( sys.FileSystem.isDirectory( p_folderPath ) )
+			{
+				var l_contents = sys.FileSystem.readDirectory( p_folderPath );
+				for ( i in l_contents )
+				{
+					if ( ( i.substr( 0, 1 ) == "." ) || ( i.substr( 0, 2 ) == "__" ) ) // "__" is our proprietary convention for hidden resources
+					{
+						continue;
+					}
+					var l_fileName:String = p_folderPath + "/" + i;
+					if ( sys.FileSystem.isDirectory( l_fileName ) )
+					{
+						p_result.concat( recursive( l_fileName, p_result ) );
+					}
+					else
+					{
+						p_result.push( l_fileName );
+					}
+				}
+			}
+			return p_result;
+		}
+		haxe.macro.Context.registerModuleDependency( "awe6.core.Macros", p_folderPath + "/__config.xml" ); // Compilation server will cache these paths unless config changes
+		return haxe.macro.Context.makeExpr( recursive( p_folderPath ), haxe.macro.Context.currentPos() );
+	}
+	
 }
