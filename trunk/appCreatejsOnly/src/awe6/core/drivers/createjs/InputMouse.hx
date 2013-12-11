@@ -46,19 +46,19 @@ class InputMouse extends AInputMouse
 	private var _stage:Stage;
 	private var _document:Document;
 	private var _isTouch:Bool;
+	private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound
 	
 	override private function _driverInit():Void 
 	{
 		_stage = untyped _kernel._stage;
-		// _stage.enableMouseOver( 20 ); // enable this if you want cursors, otherwise it's a performance hit for no other benefit
 		_document = Browser.document;
 		_isTouch = Touch.isSupported();
 		if ( _isTouch )
 		{
 			Touch.enable( _stage, true );
-			_document.addEventListener( "touchstart", _onTouchStart );
-			_document.addEventListener( "touchmove", _onTouchMove );
-			_document.addEventListener( "touchend", _onTouchEnd );
+			_document.addEventListener( "touchstart", _onTouch );
+			_document.addEventListener( "touchmove", _onTouch );
+			_document.addEventListener( "touchend", _onTouch );
 		}
 		_stage.addEventListener( "stagemousedown", _onMouseDown );
 		_stage.addEventListener( "stagemouseup", _onMouseUp );
@@ -69,9 +69,9 @@ class InputMouse extends AInputMouse
 		if ( _isTouch )
 		{
 			Touch.disable( _stage );
-			_document.removeEventListener( "touchstart", _onTouchStart );
-			_document.removeEventListener( "touchmove", _onTouchMove );
-			_document.removeEventListener( "touchend", _onTouchEnd );
+			_document.removeEventListener( "touchstart", _onTouch );
+			_document.removeEventListener( "touchmove", _onTouch );
+			_document.removeEventListener( "touchend", _onTouch );
 		}
 		_stage.removeEventListener( "stagemousedown", _onMouseDown );
 		_stage.removeEventListener( "stagemouseup", _onMouseUp );
@@ -94,27 +94,26 @@ class InputMouse extends AInputMouse
 		y = ( y == _kernel.factory.height ) ? _yPrev : y;
 	}
 	
-	private function _onTouchStart( p_event:TouchEvent ):Void
+	private function _onTouch( p_event:TouchEvent ):Void
 	{
-		p_event.preventDefault();
-		x = p_event.targetTouches[0].pageX;
-		y = p_event.targetTouches[0].pageY;
-	}
-	
-	private function _onTouchMove( p_event:TouchEvent ):Void
-	{
-		p_event.preventDefault();
-		x = p_event.targetTouches[0].pageX;
-		y = p_event.targetTouches[0].pageY;
+		if ( _stage.mouseInBounds )
+		{
+			p_event.preventDefault();
+		}
+		try
+		{
+			x = p_event.targetTouches[0].pageX;
+			y = p_event.targetTouches[0].pageY;
+		}
+		catch( p_error:Dynamic ) {}
+		if ( _isSoundTriggered )
+		{
+			return;
+		}
+		_kernel.audio.start( "Silence" );
+		_isSoundTriggered = true; // one touch is enough
 	}
 
-	private function _onTouchEnd( p_event:TouchEvent ):Void
-	{
-		p_event.preventDefault();
-		x = p_event.targetTouches[0].pageX;
-		y = p_event.targetTouches[0].pageY;
-	}
-	
 	private function _onMouseDown( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
@@ -158,6 +157,10 @@ class InputMouse extends AInputMouse
 		}
 		return super.set_cursorType( p_value );
 	}
-
-
+	
+	// enable this if you want cursors, otherwise it's a performance hit for no other benefit so is disabled by default (as per CreateJS)
+	public function enableMouseOver( p_updatesPerSecond:Float = 20 ):Void
+	{
+		_stage.enableMouseOver( p_updatesPerSecond );
+	}
 }

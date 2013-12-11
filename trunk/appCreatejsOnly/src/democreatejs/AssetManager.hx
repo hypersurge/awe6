@@ -66,6 +66,7 @@ class AssetManager extends AAssetManager
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		background = _createView( BACKGROUND );
 		
+		Sound.registerSound( "assets/audio/Silence.ogg|assets/audio/Silence.mp3", "Silence" );
 		Sound.registerSound( "assets/audio/ButtonDown.ogg|assets/audio/ButtonDown.mp3", "ButtonDown" );
 		Sound.registerSound( "assets/audio/ButtonOver.ogg|assets/audio/ButtonOver.mp3", "ButtonOver" );
 		Sound.registerSound( "assets/audio/MusicGame.ogg|assets/audio/MusicGame.mp3", "MusicGame" );
