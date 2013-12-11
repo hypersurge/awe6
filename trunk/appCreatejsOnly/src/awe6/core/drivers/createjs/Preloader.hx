@@ -29,6 +29,8 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.APreloader;
+import createjs.easeljs.Event;
+import createjs.preloadjs.LoadQueue;
 
 /**
  * This Preloader class provides CreateJS target overrides.
@@ -36,4 +38,38 @@ import awe6.core.drivers.APreloader;
  */
 class Preloader extends APreloader
 {
+	private var _loadQueue:LoadQueue;
+	private var _context:Context;
+	
+	override private function _init():Void
+	{
+		super._init();
+		_context = new Context();
+		view = new View( _kernel, _context );
+		_loadQueue = new LoadQueue( true, "" );
+		for ( i in _assets )
+		{
+			_loadQueue.loadFile( i );
+		}
+		_loadQueue.addEventListener( "complete", _onComplete );
+		_loadQueue.load();
+	}
+	
+	override private function _next():Void
+	{
+		// intentionally resets contents of super._next
+	}
+	
+	override private function get_progress():Float
+	{
+		return _loadQueue.progress;
+	}
+	
+	private function _onComplete( p_event:Event ):Void
+	{
+		if ( _isComplete ) return;
+		_kernel.onPreloaderComplete( this );
+		_isComplete = true;
+	}
+	
 }

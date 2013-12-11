@@ -24,7 +24,7 @@
     <option flashStrict="False" />
     <option mainClass="democreatejs.Main" />
     <option enabledebug="False" />
-    <option additional="--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')&#xA;-resource bin/assets/config.xml@config&#xA;-dce no" />
+    <option additional="--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')&#xA;-resource bin/assets/__config.xml@config&#xA;-dce no" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

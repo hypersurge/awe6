@@ -30,6 +30,7 @@
 package awe6.core.drivers.createjs;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
+import awe6.core.Macros;
 
 /**
  * This Factory class provides CreateJS target overrides.
@@ -37,6 +38,7 @@ import awe6.core.drivers.AFactory;
  */
 class Factory extends AFactory
 {
+
 	override private function _driverInit():Void
 	{
 		var l_context = new Context();
@@ -55,6 +57,16 @@ class Factory extends AFactory
 	private function _parseXml( p_data:String ):Void
 	{
 		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
+	}
+	
+	override private function _getAssetUrls():Array<String>
+	{
+		var l_result = Macros.getFolderContents( "bin/assets" ); // hardwired
+		for ( i in 0...l_result.length )
+		{
+			l_result[i] = l_result[i].substr( 4 ); // remove the "bin/" from hardwire
+		}
+		return l_result;
 	}
 
 	override private function _driverDisposer():Void
