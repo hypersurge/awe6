@@ -29,9 +29,34 @@
 
 package democreatejs;
 import awe6.core.APreloader;
+import createjs.easeljs.Shape;
 
 class Preloader extends APreloader
 {
-	//TODO: Preloader with LoadQueue
+	private var _bg:Shape;
+	private var _fg:Shape;
+	
+	override private function _init():Void
+	{
+		super._init();
+		_bg = new Shape();
+		_bg.graphics.beginFill( "#202020" );
+		_bg.graphics.drawRect( 0, 0, 100, 10 );
+		_bg.graphics.endFill();
+		_fg = new Shape();
+		_fg.graphics.beginFill( "#cccccc" );
+		_fg.graphics.drawRect( 1, 1, 98, 8 );
+		_fg.graphics.endFill();
+		_bg.x = _fg.x = ( _kernel.factory.width - 100 ) * .5;
+		_bg.y = _fg.y = ( _kernel.factory.height - 10 ) * .5;
+		_context.addChild( _bg );
+		_context.addChild( _fg );
+	}
+	
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		_fg.scaleX = progress;
+	}
 }
 
