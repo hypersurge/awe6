@@ -46,6 +46,7 @@ class AScene extends Scene
 	override private function _init():Void
 	{
 		super._init();
+		trace( type );
 		_assetManager = cast( _kernel.assets, AssetManager );
 		_session = cast( _kernel.session, Session );
 		var l_sceneType: String = _tools.toCamelCase( Std.string( type ) );

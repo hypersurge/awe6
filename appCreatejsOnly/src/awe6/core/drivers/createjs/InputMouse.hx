@@ -96,16 +96,16 @@ class InputMouse extends AInputMouse
 	
 	private function _onTouch( p_event:TouchEvent ):Void
 	{
-		if ( _stage.mouseInBounds )
-		{
-			p_event.preventDefault();
-		}
 		try
 		{
 			x = p_event.targetTouches[0].pageX;
 			y = p_event.targetTouches[0].pageY;
 		}
 		catch( p_error:Dynamic ) {}
+		if ( _stage.mouseInBounds )
+		{
+			p_event.preventDefault();
+		}
 		if ( _isSoundTriggered )
 		{
 			return;

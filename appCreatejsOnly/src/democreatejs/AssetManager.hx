@@ -33,7 +33,6 @@ import awe6.core.Context;
 import awe6.core.View;
 import awe6.interfaces.IView;
 import createjs.easeljs.Bitmap;
-import createjs.soundjs.Sound;
 
 class AssetManager extends AAssetManager
 {
@@ -65,16 +64,6 @@ class AssetManager extends AAssetManager
 		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		background = _createView( BACKGROUND );
-		
-		Sound.registerSound( "assets/audio/Silence.ogg|assets/audio/Silence.mp3", "Silence" );
-		Sound.registerSound( "assets/audio/ButtonDown.ogg|assets/audio/ButtonDown.mp3", "ButtonDown" );
-		Sound.registerSound( "assets/audio/ButtonOver.ogg|assets/audio/ButtonOver.mp3", "ButtonOver" );
-		Sound.registerSound( "assets/audio/MusicGame.ogg|assets/audio/MusicGame.mp3", "MusicGame" );
-		Sound.registerSound( "assets/audio/MusicMenu.ogg|assets/audio/MusicMenu.mp3", "MusicMenu" );
-		Sound.registerSound( "assets/audio/Sfx1.ogg|assets/audio/Sfx1.mp3", "Sfx1" );
-		Sound.registerSound( "assets/audio/Sfx2.ogg|assets/audio/Sfx2.mp3", "Sfx2" );
-		Sound.registerSound( "assets/audio/Sfx3.ogg|assets/audio/Sfx3.mp3", "Sfx3" );
-		Sound.registerSound( "assets/audio/Sfx4.ogg|assets/audio/Sfx4.mp3", "Sfx4" );
 	}
 
 	private function _createView( p_type:EAsset ):IView

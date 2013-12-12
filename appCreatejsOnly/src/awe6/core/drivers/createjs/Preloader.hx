@@ -31,6 +31,7 @@ package awe6.core.drivers.createjs;
 import awe6.core.drivers.APreloader;
 import createjs.easeljs.Event;
 import createjs.preloadjs.LoadQueue;
+import createjs.soundjs.Sound;
 
 /**
  * This Preloader class provides CreateJS target overrides.
@@ -40,24 +41,51 @@ class Preloader extends APreloader
 {
 	private var _loadQueue:LoadQueue;
 	private var _context:Context;
+	private var _activePlugin:Dynamic;
+	private var _manifest:Array<Dynamic> ;
 	
 	override private function _init():Void
 	{
 		super._init();
 		_context = new Context();
 		view = new View( _kernel, _context );
-		_loadQueue = new LoadQueue( true, "" );
-		for ( i in _assets )
+		// we push valid sounds to manifest
+		var l_validSoundFormat:String = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
+		var l_soundAssets:Array<String> = [];
+		_manifest = [];
+		if ( Sound.initializeDefaultPlugins() )
 		{
-			_loadQueue.loadFile( i );
+			_activePlugin = Sound.activePlugin;
+			for ( i in _assets )
+			{
+				var l_extension:String = i.substr( -3 );
+				if ( ( l_extension == "mp3" ) || ( l_extension == "ogg" ) )
+				{
+					l_soundAssets.push( i );
+					if ( l_extension == l_validSoundFormat )
+					{
+						var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
+						_manifest.push( { src:i, id:l_id } );
+					}
+				}
+			}
 		}
+		// we drop all sounds from _assets (valid ones are already preloading via registerSound)
+		for ( i in l_soundAssets )
+		{
+			_assets.remove( i );
+		}
+		// we load _assets, and add the manifest
+		_loadQueue = new LoadQueue( true, "" );
+		_loadQueue.installPlugin( Sound );
+		_loadQueue.loadManifest( _manifest.concat( _assets ) );
 		_loadQueue.addEventListener( "complete", _onComplete );
 		_loadQueue.load();
 	}
 	
 	override private function _next():Void
 	{
-		// intentionally resets contents of super._next
+		// intentionally resets contents of super._next (not appropriate for this driver)
 	}
 	
 	override private function get_progress():Float
@@ -68,8 +96,13 @@ class Preloader extends APreloader
 	private function _onComplete( p_event:Event ):Void
 	{
 		if ( _isComplete ) return;
-		_kernel.onPreloaderComplete( this );
+		_continue();
+	}
+	
+	private function _continue():Void
+	{
 		_isComplete = true;
+		_assets = []; // this effectively calls onPreloaderComplete (via _updater), a little hacky but keeps it consistent with other drivers
 	}
 	
 }
