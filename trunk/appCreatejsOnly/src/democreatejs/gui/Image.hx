@@ -38,7 +38,7 @@ class Image extends GuiEntity
 	
 	public function new( p_kernel:IKernel, p_bitmapDataUrl:String )
 	{
-		_bitmapData = p_bitmapData;
+		_bitmapDataUrl = p_bitmapDataUrl;
 		super( p_kernel );
 	}
 	
