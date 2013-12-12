@@ -50,11 +50,11 @@ class Preloader extends APreloader
 		_context = new Context();
 		view = new View( _kernel, _context );
 		// we push valid sounds to manifest
-		var l_validSoundFormat:String = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
 		var l_soundAssets:Array<String> = [];
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
+			var l_validSoundFormat:String = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
 			{
