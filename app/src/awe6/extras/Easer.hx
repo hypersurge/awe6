@@ -80,14 +80,14 @@ class Easer extends Entity
 		}
 		if ( !_isRelative )
 		{
-			Reflect.setField( _object, _field, _tools.ease( _originalValue, _newValue, l_progress ) );
+			Reflect.setProperty( _object, _field, _tools.ease( _originalValue, _newValue, l_progress ) );
 		}
 		else
 		{
 			var l_prev:Float = _tools.ease( _originalValue, _newValue, _prevProgress ); 
 			var l_prog:Float = _tools.ease( _originalValue, _newValue, l_progress );
 			var l_diff:Float = l_prog - l_prev;
-			Reflect.setField( _object, _field, Reflect.getProperty( _object, _field ) + l_diff );
+			Reflect.setProperty( _object, _field, Reflect.getProperty( _object, _field ) + l_diff );
 		}
 		_prevProgress = l_progress;
 		if ( l_progress == 1 )
