@@ -85,7 +85,6 @@ class Text extends GuiEntity
 	private function _draw():Void
 	{
 		_textField.lineWidth = width;
-		_textField.lineHeight = height;
 		
 		if ( _prevTextStyle != textStyle.toString() )
 		{
@@ -98,6 +97,7 @@ class Text extends GuiEntity
 					_textField.x = width * .5;
 				case RIGHT :
 					_textField.textAlign = "right";
+					_textField.x = width;
 				case JUSTIFY :
 					_textField.textAlign = "left";
 			}
