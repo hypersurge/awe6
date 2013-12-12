@@ -34,6 +34,8 @@ import createjs.easeljs.Stage;
 import createjs.easeljs.Ticker;
 import js.Browser;
 import js.html.Event;
+import haxe.Log;
+import haxe.PosInfos;
 
 /**
  * This Kernel class provides CreateJS target overrides.
@@ -50,6 +52,13 @@ class Kernel extends AKernel
 	
 	override private function _driverInit():Void
 	{
+		if ( !isDebug )
+		{
+			Log.trace = function( p_value:Dynamic, ?p_infos:PosInfos ):Void
+			{
+				untyped js.Boot.__trace( p_value, null );
+			}
+		}
 		_stage = _context.getStage();
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;

@@ -49,6 +49,7 @@ class Factory extends AFactory
 			_parseXml( _config );
 		}
 		_launchKernel();
+		trace( config.exists( "settings.asciiArt" ) ? config.get( "settings.asciiArt" ) : "" );
 		trace( id + " v" + version + " by " + author );
 		trace( "Powered by awe6 (http://awe6.org)" );
 		trace( "" );
