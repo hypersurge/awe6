@@ -60,11 +60,17 @@ class Factory extends AFactory
 			isDecached = true;
 			width = 600;
 			height = 400;
-			bgColor = 0xFFFFFF;
+			bgColor = 0x000000;
 			startingSceneType = EScene.INTRO;
 			targetFramerate = 60;
 			isFixedUpdates = false;
 		}
+	}
+	
+	override private function _driverInit():Void
+	{
+		super._driverInit();
+		_kernel.isFullScreen = !_kernel.isDebug;
 	}
 
 	override public function createAssetManager():IAssetManagerProcess

@@ -29,6 +29,7 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.ASession;
+import js.Browser;
 import js.Cookie;
 
 /**
@@ -40,21 +41,30 @@ class Session extends ASession
 	
 	override private function _driverLoad():Void
 	{
-		_savedData = {};		
-		if ( Cookie.exists( _kernel.factory.id ) )
+		_savedData = { };
+		if ( Browser.document.cookie != null )
 		{
-			_savedData = _tools.unserialize( Cookie.get( _kernel.factory.id ) );
+			if ( Cookie.exists( _kernel.factory.id ) )
+			{
+				_savedData = _tools.unserialize( Cookie.get( _kernel.factory.id ) );
+			}
 		}
 	}
 	
 	override private function _driverReset():Void
 	{
-		Cookie.remove( _kernel.factory.id );
+		if ( Browser.document.cookie != null )
+		{
+			Cookie.remove( _kernel.factory.id );
+		}
 		_savedData = {};
 	}
 	
 	override private function _driverSave():Void
 	{
-		Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ), _tools.BIG_NUMBER ) ;
+		if ( Browser.document.cookie != null )
+		{
+			Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ), _tools.BIG_NUMBER ) ;
+		}
 	}
 }

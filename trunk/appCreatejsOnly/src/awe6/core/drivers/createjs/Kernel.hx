@@ -32,10 +32,10 @@ import awe6.core.drivers.AKernel;
 import createjs.easeljs.Shape;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Ticker;
-import js.Browser;
-import js.html.Event;
 import haxe.Log;
 import haxe.PosInfos;
+import js.Browser;
+import js.html.Event;
 
 /**
  * This Kernel class provides CreateJS target overrides.
@@ -44,6 +44,7 @@ import haxe.PosInfos;
 class Kernel extends AKernel
 {
 	private var _stage:Stage;
+	private var _prevWindowSize:String;
 
 	override private function _driverGetIsLocal():Bool
 	{
@@ -63,8 +64,7 @@ class Kernel extends AKernel
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
 		var l_shape:Shape = new Shape();
-		l_shape.alpha = .01;
-		l_shape.graphics.beginFill( "#000000" );
+		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		l_shape.graphics.endFill();
 		_stage.addChildAt( l_shape, 0 );
@@ -81,7 +81,15 @@ class Kernel extends AKernel
 	{
 		_updater( 0 ); // avoid isActive
 		_stage.update();
-		
+		if ( isFullScreen )
+		{
+			_stage.updateCache();
+		}
+		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
+		if ( _prevWindowSize != l_windowSize )
+		{
+			_driverSetIsFullScreen( isFullScreen );
+		}
 	}
 	
 	override private function _driverSetIsEyeCandy( p_value:Bool ):Void
@@ -90,10 +98,16 @@ class Kernel extends AKernel
 	
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
+		_prevWindowSize = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( p_value )
 		{
 			var l_windowWidth:Int = Browser.window.innerWidth;
 			var l_windowHeight:Int = Browser.window.innerHeight;
+			if ( Browser.document.body.clientWidth != null )
+			{
+				l_windowWidth = Browser.document.body.clientWidth;
+				l_windowHeight = Browser.document.body.clientHeight;
+			}
 			var l_scale:Float = Math.min( l_windowWidth / factory.width, l_windowHeight / factory.height );
 			switch( factory.fullScreenType )
 			{
@@ -119,10 +133,13 @@ class Kernel extends AKernel
 					}
 					_stage.scaleX = _stage.scaleY = l_scale;
 			}
+			_stage.uncache();
+			_stage.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		}
 		else
 		{
 			_stage.scaleX = _stage.scaleY = 1;
+			_stage.uncache();
 		}
 		_stage.canvas.width = _kernel.factory.width * _stage.scaleX;
 		_stage.canvas.height = _kernel.factory.height * _stage.scaleY;
