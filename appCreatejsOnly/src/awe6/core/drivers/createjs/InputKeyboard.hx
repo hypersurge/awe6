@@ -43,14 +43,9 @@ class InputKeyboard extends AInputKeyboard
 	
 	override private function _driverInit():Void 
 	{
-		_document = Browser.document;
+		_document = Browser.document; // must be linked to Browser
 		_document.addEventListener( "keydown", _onKeyDown );
 		_document.addEventListener( "keyup", _onKeyUp );
-	}
-	
-	override private function _updater( p_deltaTime:Int = 0 ):Void 
-	{
-		super._updater( p_deltaTime );
 	}
 	
 	override private function _disposer():Void 

@@ -42,6 +42,7 @@ class Preloader extends APreloader
 	private var _loadQueue:LoadQueue;
 	private var _context:Context;
 	private var _activePlugin:Dynamic;
+	private var _validSoundFormat:String;
 	private var _manifest:Array<Dynamic> ;
 	
 	override private function _init():Void
@@ -54,7 +55,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_validSoundFormat:String = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
+			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
 			{
@@ -62,7 +63,7 @@ class Preloader extends APreloader
 				if ( ( l_extension == "mp3" ) || ( l_extension == "ogg" ) )
 				{
 					l_soundAssets.push( i );
-					if ( l_extension == l_validSoundFormat )
+					if ( l_extension == _validSoundFormat )
 					{
 						var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
 						_manifest.push( { src:i, id:l_id } );

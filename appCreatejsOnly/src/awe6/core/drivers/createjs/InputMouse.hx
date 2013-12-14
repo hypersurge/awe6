@@ -33,8 +33,6 @@ import awe6.interfaces.EMouseCursor;
 import createjs.easeljs.MouseEvent;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Touch;
-import js.Browser;
-import js.html.Document;
 import js.html.TouchEvent;
 
 /**
@@ -44,21 +42,22 @@ import js.html.TouchEvent;
 class InputMouse extends AInputMouse
 {
 	private var _stage:Stage;
-	private var _document:Document;
 	private var _isTouch:Bool;
 	private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound
+	private var _touchX:Int;
+	private var _touchY:Int;
 	
 	override private function _driverInit():Void 
 	{
 		_stage = untyped _kernel._stage;
-		_document = Browser.document;
 		_isTouch = Touch.isSupported();
 		if ( _isTouch )
 		{
 			Touch.enable( _stage, true );
-			_document.addEventListener( "touchstart", _onTouch );
-			_document.addEventListener( "touchmove", _onTouch );
-			_document.addEventListener( "touchend", _onTouch );
+			_touchX = _touchY = 0;
+			_stage.canvas.addEventListener( "touchstart", _onTouchStart );
+			_stage.canvas.addEventListener( "touchmove", _onTouch );
+			_stage.canvas.addEventListener( "touchend", _onTouch );
 		}
 		_stage.addEventListener( "stagemousedown", _onMouseDown );
 		_stage.addEventListener( "stagemouseup", _onMouseUp );
@@ -69,9 +68,9 @@ class InputMouse extends AInputMouse
 		if ( _isTouch )
 		{
 			Touch.disable( _stage );
-			_document.removeEventListener( "touchstart", _onTouch );
-			_document.removeEventListener( "touchmove", _onTouch );
-			_document.removeEventListener( "touchend", _onTouch );
+			_stage.canvas.removeEventListener( "touchstart", _onTouchStart );
+			_stage.canvas.removeEventListener( "touchmove", _onTouch );
+			_stage.canvas.removeEventListener( "touchend", _onTouch );
 		}
 		_stage.removeEventListener( "stagemousedown", _onMouseDown );
 		_stage.removeEventListener( "stagemouseup", _onMouseUp );
@@ -90,16 +89,28 @@ class InputMouse extends AInputMouse
 			x = Std.int( _tools.limit( _stage.mouseX / _stage.scaleX, 0, _kernel.factory.width ) );
 			y = Std.int( _tools.limit( _stage.mouseY / _stage.scaleY, 0, _kernel.factory.height ) );
 		}
+		else
+		{
+			x = _touchX;
+			y = _touchY;
+		}
 		x = ( x == _kernel.factory.width ) ? _xPrev : x;
 		y = ( y == _kernel.factory.height ) ? _yPrev : y;
+	}
+	
+	private function _onTouchStart( p_event:TouchEvent ):Void
+	{
+		_onTouch( p_event );
+		x = _touchX;
+		y = _touchY;
 	}
 	
 	private function _onTouch( p_event:TouchEvent ):Void
 	{
 		try
 		{
-			x = p_event.targetTouches[0].pageX;
-			y = p_event.targetTouches[0].pageY;
+			_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageX - Std.int( _stage.canvas.offsetLeft ) ) / _stage.scaleX, 0, _kernel.factory.width  ) );
+			_touchY = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( _stage.canvas.offsetTop  ) ) / _stage.scaleY, 0, _kernel.factory.height ) );
 		}
 		catch( p_error:Dynamic ) {}
 		if ( _stage.mouseInBounds )
