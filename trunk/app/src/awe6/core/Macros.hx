@@ -73,10 +73,23 @@ class Macros
 	 * @param	p_folderPath	The parent path.
 	 * @return
 	 */
-	macro public static function getFolderContents( p_folderPath:String )
+	
+	 /**
+	  * This macro returns a recursive list of files from a folder.
+	  * @param	p_folderPath	The parent path.
+	  * @param	p_isAppcache	Whether to create a manifest file
+	  * @param	p_appcacheFolderPath	Where to create the manifest file
+	  * @param	p_appcacheExtra	Additional data to add to the manifest file
+	  */
+	macro public static function getFolderContents( p_folderPath:String, p_isAppcache:Bool = false, p_appcacheFolderPath:String, p_appcacheExtra:String )
 	{
+		haxe.macro.Context.registerModuleDependency( "awe6.core.Macros", p_folderPath + "/__config.xml" ); // Compilation server will cache these paths unless config changes
 		function recursive( p_folderPath:String, ?p_result:Array<String> ):Array<String>
 		{
+			if ( p_folderPath.substr( -1 ) == "/" )
+			{
+				p_folderPath = p_folderPath.substr( 0, -1 );
+			}
 			if ( p_result == null )
 			{
 				p_result = [];
@@ -86,7 +99,7 @@ class Macros
 				var l_contents = sys.FileSystem.readDirectory( p_folderPath );
 				for ( i in l_contents )
 				{
-					if ( ( i.substr( 0, 1 ) == "." ) || ( i.substr( 0, 2 ) == "__" ) ) // "__" is our proprietary convention for hidden resources
+					if ( ( i.substr( 0, 1 ) == "." ) ) // remove hidden files
 					{
 						continue;
 					}
@@ -103,8 +116,25 @@ class Macros
 			}
 			return p_result;
 		}
-		haxe.macro.Context.registerModuleDependency( "awe6.core.Macros", p_folderPath + "/__config.xml" ); // Compilation server will cache these paths unless config changes
-		return haxe.macro.Context.makeExpr( recursive( p_folderPath ), haxe.macro.Context.currentPos() );
+		var l_result = recursive( p_folderPath );
+		if ( p_isAppcache )
+		{
+			var l_contents:String = "CACHE MANIFEST\n# timestamp " + Date.now() + "\nCACHE:\n";
+			for ( i in l_result )
+			{
+				var l_file:String = i;
+				if ( i.substr( 0, p_appcacheFolderPath.length ) == p_appcacheFolderPath )
+				{
+					i = i.substr( p_appcacheFolderPath.length );
+				}
+				l_contents += i + "\n";
+			}
+			l_contents += p_appcacheExtra;
+			var l_file = sys.io.File.write( p_appcacheFolderPath + "cache.manifest", false );
+			l_file.writeString( l_contents );
+			l_file.close();
+		}
+		return haxe.macro.Context.makeExpr( l_result, haxe.macro.Context.currentPos() );
 	}
 	
 }

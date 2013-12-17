@@ -20,7 +20,7 @@ class Main
 		#else
 		var l_isDebug:Bool = false;
 		#end
-        var l_stage = new Stage( cast Browser.document.getElementById( "c" ) );
+        var l_stage = new Stage( cast Browser.document.getElementById( "gameCanvas" ) );
 		var l_context = new Context();
 		l_stage.addChild( l_context );
 		var l_factory = new Factory( l_context, l_isDebug, Resource.getString( "config" ) );

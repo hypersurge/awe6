@@ -62,10 +62,19 @@ class Factory extends AFactory
 	
 	override private function _getAssetUrls():Array<String>
 	{
-		var l_result = Macros.getFolderContents( "bin/assets" ); // hardwired
+		var l_result = Macros.getFolderContents( "bin/assets/", true, "bin/", "createjs-2013.09.25.min.js\ngame.js\n" ); // has to be hardwired for macro - consider appcache isn't always favorable because of needing to cache all the files, rather than a subset (e.g. audio formats).  It can slow things down, and doesn't work for audio on iOS anyway.
+		var l_toRemove:Array<String> = [];
 		for ( i in 0...l_result.length )
 		{
 			l_result[i] = l_result[i].substr( 4 ); // remove the "bin/" from hardwire
+			if ( ( l_result[i].substr( 0, 2 ) == "__" ) || ( l_result[i].indexOf( "/__" ) > -1 ) )
+			{
+				l_toRemove.push( l_result[i] );
+			}
+		}
+		for ( i in l_toRemove )
+		{
+			l_result.remove( i );
 		}
 		return l_result;
 	}

@@ -48,7 +48,12 @@ class Kernel extends AKernel
 
 	override private function _driverGetIsLocal():Bool
 	{
-		return true;
+		var l_result:Bool = switch( Browser.window.location.protocol )
+		{
+			case "http:", "https:" : false;
+			default : true;
+		}
+		return l_result;
 	}
 	
 	override private function _driverInit():Void
@@ -61,6 +66,7 @@ class Kernel extends AKernel
 			}
 		}
 		_stage = _context.getStage();
+		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
 		var l_shape:Shape = new Shape();
@@ -79,16 +85,20 @@ class Kernel extends AKernel
 	
 	private function _onEnterFrame( p_event:Event ):Void
 	{
+		_updates++;
 		_updater( 0 ); // avoid isActive
 		_stage.update();
 		if ( isFullScreen )
 		{
 			_stage.updateCache();
 		}
-		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
-		if ( _prevWindowSize != l_windowSize )
+		if ( _updates % ( factory.targetFramerate ) == 0 )
 		{
-			_driverSetIsFullScreen( isFullScreen );
+			var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
+			if ( _prevWindowSize != l_windowSize )
+			{
+				_driverSetIsFullScreen( isFullScreen );
+			}
 		}
 	}
 	

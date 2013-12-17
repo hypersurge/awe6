@@ -57,10 +57,13 @@ class InputMouse extends AInputMouse
 			_touchX = _touchY = 0;
 			_stage.canvas.addEventListener( "touchstart", _onTouchStart );
 			_stage.canvas.addEventListener( "touchmove", _onTouch );
-			_stage.canvas.addEventListener( "touchend", _onTouch );
+			_stage.canvas.addEventListener( "touchend", _onTouchEnd );
 		}
-		_stage.addEventListener( "stagemousedown", _onMouseDown );
-		_stage.addEventListener( "stagemouseup", _onMouseUp );
+		else
+		{
+			_stage.addEventListener( "stagemousedown", _onMouseDown );
+			_stage.addEventListener( "stagemouseup", _onMouseUp );
+		}
 	}
 	
 	override private function _disposer():Void 
@@ -70,10 +73,13 @@ class InputMouse extends AInputMouse
 			Touch.disable( _stage );
 			_stage.canvas.removeEventListener( "touchstart", _onTouchStart );
 			_stage.canvas.removeEventListener( "touchmove", _onTouch );
-			_stage.canvas.removeEventListener( "touchend", _onTouch );
+			_stage.canvas.removeEventListener( "touchend", _onTouchEnd );
 		}
-		_stage.removeEventListener( "stagemousedown", _onMouseDown );
-		_stage.removeEventListener( "stagemouseup", _onMouseUp );
+		else
+		{
+			_stage.removeEventListener( "stagemousedown", _onMouseDown );
+			_stage.removeEventListener( "stagemouseup", _onMouseUp );
+		}
 		super._disposer();		
 	}	
 	
@@ -100,9 +106,16 @@ class InputMouse extends AInputMouse
 	
 	private function _onTouchStart( p_event:TouchEvent ):Void
 	{
+		_onMouseDown( cast p_event );
 		_onTouch( p_event );
 		x = _touchX;
 		y = _touchY;
+	}
+	
+	private function _onTouchEnd( p_event:TouchEvent ):Void
+	{
+		_onMouseUp( cast p_event );
+		_onTouch( p_event );
 	}
 	
 	private function _onTouch( p_event:TouchEvent ):Void
