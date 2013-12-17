@@ -32,6 +32,7 @@ import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
 import createjs.easeljs.Shadow;
+import createjs.easeljs.Touch;
 typedef TextField = createjs.easeljs.Text;
 
 class Text extends GuiEntity
@@ -63,6 +64,10 @@ class Text extends GuiEntity
 		super._init();
 		_textField = new TextField();
 		_textField.text = text;
+		if ( Touch.isSupported() ) // a hack to check mobile
+		{
+			_textField.y += 3;
+		}
 		_draw();
 		_context.addChild( _textField );
 		_context.mouseEnabled = _isInput;
@@ -85,7 +90,6 @@ class Text extends GuiEntity
 	private function _draw():Void
 	{
 		_textField.lineWidth = width;
-		
 		if ( _prevTextStyle != textStyle.toString() )
 		{
 			switch ( textStyle.align )

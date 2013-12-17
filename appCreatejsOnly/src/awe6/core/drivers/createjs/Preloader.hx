@@ -55,6 +55,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
+			var l_isSoundDisabled:Bool = untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome; // Android (Stock / not Chrome) has slow loading audio that doesn't play, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
@@ -63,7 +64,7 @@ class Preloader extends APreloader
 				if ( ( l_extension == "mp3" ) || ( l_extension == "ogg" ) )
 				{
 					l_soundAssets.push( i );
-					if ( l_extension == _validSoundFormat )
+					if ( !l_isSoundDisabled && ( l_extension == _validSoundFormat ) )
 					{
 						var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
 						_manifest.push( { src:i, id:l_id } );
@@ -77,11 +78,10 @@ class Preloader extends APreloader
 			_assets.remove( i );
 		}
 		// we load _assets, and add the manifest
-		_loadQueue = new LoadQueue( true, "" );
+		_loadQueue = new LoadQueue( !_kernel.isLocal, "" );
 		_loadQueue.installPlugin( Sound );
 		_loadQueue.loadManifest( _manifest.concat( _assets ) );
 		_loadQueue.addEventListener( "complete", _onComplete );
-		_loadQueue.load();
 	}
 	
 	override private function _next():Void
@@ -97,6 +97,7 @@ class Preloader extends APreloader
 	private function _onComplete( p_event:Event ):Void
 	{
 		if ( _isComplete ) return;
+		_loadQueue.removeEventListener( "complete", _onComplete );
 		_continue();
 	}
 	
