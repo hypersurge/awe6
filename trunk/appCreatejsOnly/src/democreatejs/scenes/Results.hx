@@ -28,12 +28,19 @@
  */
 
 package democreatejs.scenes;
+import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IKernel;
 import democreatejs.gui.Button;
 import democreatejs.gui.Text;
 
 class Results extends AScene
 {
+	
+	public function new( p_kernel:IKernel, p_type:EScene, p_isPauseable:Bool = false, p_isMuteable:Bool = true, p_isSessionSavedOnNext:Bool = false ) 
+	{
+		super( p_kernel, p_type, p_isPauseable, p_isMuteable, p_isSessionSavedOnNext );
+	}
 
 	override private function _init():Void
 	{
