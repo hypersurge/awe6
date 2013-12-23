@@ -44,6 +44,8 @@ import js.html.Event;
 class Kernel extends AKernel
 {
 	private var _stage:Stage;
+	private var _scaleX:Float;
+	private var _scaleY:Float;
 	private var _prevWindowSize:String;
 
 	override private function _driverGetIsLocal():Bool
@@ -65,6 +67,7 @@ class Kernel extends AKernel
 				untyped js.Boot.__trace( p_value, null );
 			}
 		}
+		_scaleX = _scaleY = 1;
 		_stage = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
@@ -88,10 +91,6 @@ class Kernel extends AKernel
 		_updates++;
 		_updater( 0 ); // avoid isActive
 		_stage.update();
-		if ( isFullScreen )
-		{
-			_stage.updateCache();
-		}
 		if ( _updates % ( factory.targetFramerate ) == 0 )
 		{
 			var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
@@ -109,14 +108,15 @@ class Kernel extends AKernel
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
 		_prevWindowSize = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
+		_scaleX = _scaleY = 1;
 		if ( p_value )
 		{
 			var l_windowWidth:Int = Browser.window.innerWidth;
 			var l_windowHeight:Int = Browser.window.innerHeight;
 			if ( Browser.document.body.clientWidth != null )
 			{
-				l_windowWidth = Browser.document.body.clientWidth;
-				l_windowHeight = Browser.document.body.clientHeight;
+				l_windowWidth = Browser.document.body.clientWidth - 2;
+				l_windowHeight = Browser.document.body.clientHeight - 2;
 			}
 			var l_scale:Float = Math.min( l_windowWidth / factory.width, l_windowHeight / factory.height );
 			switch( factory.fullScreenType )
@@ -124,10 +124,10 @@ class Kernel extends AKernel
 				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
 					null;
 				case SCALE_ASPECT_RATIO_IGNORE :
-					_stage.scaleX = l_windowWidth / factory.width;
-					_stage.scaleY = l_windowHeight / factory.height;
+					_scaleX = l_windowWidth / factory.width;
+					_scaleY = l_windowHeight / factory.height;
 				case SCALE_ASPECT_RATIO_PRESERVE :
-					_stage.scaleX = _stage.scaleY = l_scale;
+					_scaleX = _scaleY = l_scale;
 				case SCALE_NEAREST_MULTIPLE :
 					if ( l_scale < .5 )
 					{
@@ -141,18 +141,12 @@ class Kernel extends AKernel
 					{
 						l_scale = Math.floor( l_scale );
 					}
-					_stage.scaleX = _stage.scaleY = l_scale;
+					_scaleX = _scaleY = l_scale;
 			}
-			_stage.uncache();
-			_stage.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		}
-		else
-		{
-			_stage.scaleX = _stage.scaleY = 1;
-			_stage.uncache();
-		}
-		_stage.canvas.width = _kernel.factory.width * _stage.scaleX;
-		_stage.canvas.height = _kernel.factory.height * _stage.scaleY;
+		_stage.canvas.width = _kernel.factory.width;
+		_stage.canvas.height = _kernel.factory.height;
+		_stage.canvas.style.setProperty( "width", _kernel.factory.width * _scaleX + "px", "" );
+		_stage.canvas.style.setProperty( "height", _kernel.factory.height * _scaleY + "px", "" );
 	}
-	
 }
