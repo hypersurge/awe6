@@ -122,8 +122,8 @@ class InputMouse extends AInputMouse
 	{
 		try
 		{
-			_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageX - Std.int( _stage.canvas.offsetLeft ) ) / _stage.scaleX, 0, _kernel.factory.width  ) );
-			_touchY = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( _stage.canvas.offsetTop  ) ) / _stage.scaleY, 0, _kernel.factory.height ) );
+			_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageX - Std.int( _stage.canvas.offsetLeft ) ) / untyped _kernel._scaleX, 0, _kernel.factory.width  ) );
+			_touchY = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( _stage.canvas.offsetTop  ) ) / untyped _kernel._scaleY, 0, _kernel.factory.height ) );
 		}
 		catch( p_error:Dynamic ) {}
 		if ( _stage.mouseInBounds )

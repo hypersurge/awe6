@@ -54,7 +54,7 @@ class Factory extends AFactory
 	{
 		if ( p_isPreconfig )
 		{
-			id = "awe6SwfDemo";
+			id = "awe6CreatejsDemo";
 			version = "0.1.000"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
 			isDecached = true;
