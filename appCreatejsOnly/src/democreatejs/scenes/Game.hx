@@ -30,8 +30,10 @@
 package democreatejs.scenes;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMessage;
+import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IEntity;
+import awe6.interfaces.IKernel;
 import democreatejs.entities.Sphere;
 import democreatejs.gui.Text;
 
@@ -40,6 +42,11 @@ class Game extends AScene
 	public static inline var TIME_LIMIT = 30;
 	private var _timer:Text;
 	private var _score:Int;
+	
+	public function new( p_kernel:IKernel, p_type:EScene, p_isPauseable:Bool = false, p_isMuteable:Bool = true, p_isSessionSavedOnNext:Bool = false ) 
+	{
+		super( p_kernel, p_type, p_isPauseable, p_isMuteable, p_isSessionSavedOnNext );
+	}
 
 	override private function _init():Void
 	{

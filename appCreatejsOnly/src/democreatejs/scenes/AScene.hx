@@ -31,7 +31,9 @@ package democreatejs.scenes;
 import awe6.core.Scene;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EKey;
+import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
+import awe6.interfaces.IKernel;
 import democreatejs.AssetManager;
 import democreatejs.gui.Text;
 import democreatejs.Session;
@@ -42,11 +44,15 @@ class AScene extends Scene
 	private var _session:Session;
 	private var _title:Text;
 	private var _isMusic:Bool;
+	
+	public function new( p_kernel:IKernel, p_type:EScene, p_isPauseable:Bool = false, p_isMuteable:Bool = true, p_isSessionSavedOnNext:Bool = false ) 
+	{
+		super( p_kernel, p_type, p_isPauseable, p_isMuteable, p_isSessionSavedOnNext );
+	}
 
 	override private function _init():Void
 	{
 		super._init();
-		trace( type );
 		_assetManager = cast( _kernel.assets, AssetManager );
 		_session = cast( _kernel.session, Session );
 		var l_sceneType: String = _tools.toCamelCase( Std.string( type ) );
