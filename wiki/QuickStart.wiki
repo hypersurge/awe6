@@ -86,5 +86,7 @@ haxelib run awe6 create entity <projectname> <packagename> <author>
 = Next Steps =
 
   * See ExampleHelloWorld.
+  * Read Game From Scratch's [http://www.gamefromscratch.com/post/2013/05/14/A-closer-look-at-the-Awe6-Haxe-game-engine.aspx tutorial].
+  * Create a new project using the templates explained above.
   * See a more detailed cross platform demo [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/].
-  * Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group].
+  * Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group] - all questions welcomed, we respond fast.
