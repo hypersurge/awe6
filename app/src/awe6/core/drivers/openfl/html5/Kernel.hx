@@ -47,7 +47,7 @@ class Kernel extends AKernel
 
 	override private function _driverGetIsLocal():Bool
 	{
-		return Security.sandboxType != Security.REMOTE;		
+		return false;
 	}
 	
 	override private function _driverInit():Void
@@ -56,7 +56,6 @@ class Kernel extends AKernel
 		Lib.current.focusRect = false;
 		_stage.frameRate = factory.targetFramerate;
 		_stage.scaleMode = StageScaleMode.NO_SCALE;
-		_stage.quality = StageQuality.LOW;
 		_stage.addEventListener( Event.ENTER_FRAME, _onEnterFrame );
 	}
 
@@ -77,15 +76,15 @@ class Kernel extends AKernel
 	{
 		if ( p_value )
 		{
-			var l_scale:Float = Math.min( _stage.fullScreenWidth / factory.width, _stage.fullScreenHeight / factory.height );
+			var l_scale:Float = Math.min( _stage.stageWidth / factory.width, _stage.stageHeight / factory.height );
 			switch( factory.fullScreenType )
 			{
 				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
 					null;
 				case SCALE_ASPECT_RATIO_IGNORE :
 					_stage.displayState = StageDisplayState.FULL_SCREEN;
-					_stage.scaleX = _stage.fullScreenWidth / factory.width;
-					_stage.scaleY = _stage.fullScreenHeight / factory.height;
+					_stage.scaleX = _stage.stageWidth / factory.width;
+					_stage.scaleY = _stage.stageHeight / factory.height;
 				case SCALE_ASPECT_RATIO_PRESERVE :
 					_stage.displayState = StageDisplayState.FULL_SCREEN;
 					_stage.scaleX = _stage.scaleY = l_scale;

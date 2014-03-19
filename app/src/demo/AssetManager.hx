@@ -82,7 +82,7 @@ class AssetManager extends AAssetManager
 		_html5AudioExtension = ".mp3";
 		try
 		{
-			// openfl-html5
+			// openfl-html5, needs a fix for openfl-html5
 			_html5AudioExtension = untyped flash.media.Sound.__canPlayType( "ogg" ) ? ".ogg" : ".mp3";
 		}
 		catch ( p_error:Dynamic )
