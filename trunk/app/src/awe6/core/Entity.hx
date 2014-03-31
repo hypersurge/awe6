@@ -251,12 +251,12 @@ class Entity extends Process, implements IEntity
 			}
 			if ( p_isBubbleDown )
 			{
-				l_result.concat( i.getEntitiesByClass( p_classType, p_agenda, true ) );
+				l_result = l_result.concat( i.getEntitiesByClass( p_classType, p_agenda, true ) );
 			}
 		}
 		if ( p_isBubbleUp && ( parent != null ) )
 		{
-			l_result.concat( parent.getEntitiesByClass( p_classType, p_agenda, false, true ) );
+			l_result = l_result.concat( parent.getEntitiesByClass( p_classType, p_agenda, false, true ) );
 		}
 		return l_result;
 	}
