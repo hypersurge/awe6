@@ -67,7 +67,7 @@ class Preloader extends APreloader
 					if ( !l_isSoundDisabled && ( l_extension == _validSoundFormat ) )
 					{
 						var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
-						_manifest.push( { src:i, id:l_id } );
+						_manifest.push( { src:i, id:l_id } ); // comment this one for silence
 					}
 				}
 			}
@@ -80,7 +80,9 @@ class Preloader extends APreloader
 		// we load _assets, and add the manifest
 		_loadQueue = new LoadQueue( !_kernel.isLocal, "" );
 		_loadQueue.installPlugin( Sound );
-		_loadQueue.loadManifest( _manifest.concat( _assets ) );
+		var l_assets = _manifest.concat( _assets );
+		l_assets.reverse(); // sounds last
+		_loadQueue.loadManifest( l_assets );
 		_loadQueue.addEventListener( "complete", _onComplete );
 	}
 	
