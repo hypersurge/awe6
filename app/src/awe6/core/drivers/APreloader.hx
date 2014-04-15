@@ -95,11 +95,15 @@ class APreloader extends Process, implements IPreloader
 		{
 			if ( !_isComplete )
 			{
-				#if haxe3
-				Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?)
-				#else
-				Timer.delay( callback( _kernel.onPreloaderComplete, this ), 100 ); // delayed because some assets aren't available instantly (?)
-				#end
+				try
+				{
+					#if haxe3
+					untyped Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?)
+					#else
+					untyped Timer.delay( callback( _kernel.onPreloaderComplete, this ), 100 ); // delayed because some assets aren't available instantly (?)
+					#end
+				}
+				catch( p_error:Dynamic ) {}
 				_isComplete = true;
 			}
 			return;
