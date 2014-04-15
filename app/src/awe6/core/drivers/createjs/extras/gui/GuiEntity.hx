@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.gui;
+package awe6.core.drivers.createjs.extras.gui;
 import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;

@@ -35,7 +35,7 @@ import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
 import democreatejs.AssetManager;
-import democreatejs.gui.Text;
+import awe6.core.drivers.createjs.extras.gui.Text;
 import democreatejs.Session;
 
 class AScene extends Scene

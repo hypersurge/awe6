@@ -32,7 +32,7 @@ import awe6.core.APreloader;
 import awe6.interfaces.ETextStyle;
 import createjs.easeljs.Shape;
 import createjs.easeljs.Touch;
-import democreatejs.gui.Text;
+import awe6.core.drivers.createjs.extras.gui.Text;
 
 class Preloader extends APreloader
 {

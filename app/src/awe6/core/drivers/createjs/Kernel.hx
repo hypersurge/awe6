@@ -73,7 +73,7 @@ class Kernel extends AKernel
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
 		var l_shape:Shape = new Shape();
-		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 6 ) );
+		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 8 ).substr( 2, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		l_shape.graphics.endFill();
 		_stage.addChildAt( l_shape, 0 );
