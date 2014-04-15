@@ -53,14 +53,16 @@ class AudioManager extends AAudioManager
 		for ( i in _sounds )
 		{
 			var l_sound:_HelperSound = cast i;
-			if ( l_sound.getSoundChannel() == null )
+/*			if ( l_sound.getSoundChannel() == null )
 			{
 				continue;
-			}
+			}*/
 			try
 			{
 				// openfl-html5
-				untyped l_sound.getSoundChannel().__audio.muted = p_value;
+				untyped p_value ? l_sound__howl.mute() : l_sound__howl.unmute();
+				// openfl-html5-dom
+//				untyped l_sound.getSoundChannel().__audio.muted = p_value;
 			}
 			catch ( p_error:Dynamic )
 			{

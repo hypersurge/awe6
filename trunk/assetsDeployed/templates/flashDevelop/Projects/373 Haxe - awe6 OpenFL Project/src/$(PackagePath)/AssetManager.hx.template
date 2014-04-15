@@ -43,10 +43,7 @@ class AssetManager extends AAssetManager $(CSLB){
 		overlayPauseOver = _createView( OVERLAY_PAUSE_OVER );
 		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
-		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
-		#if js
-		_html5AudioExtension = untyped flash.media.Sound.__canPlayType( "ogg" ) ? ".ogg" : ".mp3";
-		#end
+		font = Assets.getFont( "assets/fonts/orbitron.ttf" ); // may not work for html5
 	}
 
 	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic $(CSLB){
@@ -57,11 +54,9 @@ class AssetManager extends AAssetManager $(CSLB){
 			p_packageId = _PACKAGE_ID;
 		}
 		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) ) $(CSLB){
-			var l_extension:String = ".mp3";
+			var l_extension:String = ".mp3"; // js extension stripped and then handled by Howler
 			#if ( cpp || neko )
 			l_extension = ".ogg"; // doesn't work on Macs?
-			#elseif js
-			l_extension = _html5AudioExtension;
 			#end
 			p_id += l_extension;
 		}
@@ -98,7 +93,7 @@ class AssetManager extends AAssetManager $(CSLB){
 		l_context.addChild( l_bitmap );
 		switch( p_type ) $(CSLB){
 			case OVERLAY_BACKGROUND :
-			#if !js
+			#if !js // BitmapData still not behaving accurately for js
 				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
 				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
