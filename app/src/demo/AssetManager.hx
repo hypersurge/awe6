@@ -77,26 +77,7 @@ class AssetManager extends AAssetManager
 		buttonUp = Assets.getBitmapData( "assets/ButtonUp.png" );
 		buttonOver = Assets.getBitmapData( "assets/ButtonOver.png" );
 		sphere = Assets.getBitmapData( "assets/Sphere.png" );
-		font = Assets.getFont( "assets/fonts/orbitron.ttf" );
-		#if js
-		_html5AudioExtension = ".mp3";
-		try
-		{
-			// openfl-html5, needs a fix for openfl-html5
-			_html5AudioExtension = untyped flash.media.Sound.__canPlayType( "ogg" ) ? ".ogg" : ".mp3";
-		}
-		catch ( p_error:Dynamic )
-		{
-			try
-			{
-				// openfl-bitfive
-				untyped flash.Lib.current.stage.component.style.width = Std.string( _kernel.factory.width + "px" );
-				untyped flash.Lib.current.stage.component.style.height = Std.string( _kernel.factory.height + "px" );
-				// _html5AudioExtension = untyped flash.media.Sound.canPlayType( "ogg" ) ? ".ogg" : ".mp3"; // doesn't work reliably
-			}
-			catch ( p_error:Dynamic ) {}
-		}
-		#end
+		font = Assets.getFont( "assets/fonts/orbitron.ttf" ); // currently doesn't work for openfl-html5
 	}
 
 	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
@@ -111,11 +92,9 @@ class AssetManager extends AAssetManager
 		}
 		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) )
 		{
-			var l_extension:String = ".mp3";
+			var l_extension:String = ".mp3"; // js extension now stripped, and handled automatically by Howler (assumes .ogg, .mp3, .wav)
 			#if ( cpp || neko )
 			l_extension = ".ogg"; // doesn't work on Macs?
-			#elseif js
-			l_extension = _html5AudioExtension;
 			#end
 			p_id += l_extension;
 		}
@@ -160,7 +139,7 @@ class AssetManager extends AAssetManager
 		switch( p_type )
 		{
 			case OVERLAY_BACKGROUND :
-			#if !js
+			#if !js // BitmapData still not behaving accurately for js
 				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
 				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );

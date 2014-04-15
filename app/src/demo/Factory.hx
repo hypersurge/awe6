@@ -56,7 +56,7 @@ class Factory extends AFactory
 		if ( p_isPreconfig )
 		{
 			id = "awe6Demo";
-			version = "2.2.605"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+			version = "2.3.605"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
 			isDecached = true;
 			width = 600;

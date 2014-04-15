@@ -9,13 +9,11 @@
  	
 	<source path="src" />
 	<haxelib name="openfl" />
-	<!-- <haxelib name="openfl-bitfive" if="html5" /> soon this might be a better option for games -->
 	
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude|*.ogg" if="flash" />
 	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude" unless="flash" />
 	
 	<haxeflag name="--flash-strict" if="flash" />
-	<!-- <haxeflag name="--dead-code-elimination" if="html5" /> IE9 says not yet -->
 	
 	<!--
 	<compilerflag name="-D awe6DriverRemap" />
