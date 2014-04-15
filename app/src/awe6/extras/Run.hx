@@ -63,6 +63,7 @@ class Run
 	// Project types
 	private static inline var _PROJECT_SWF = "swf";
 	private static inline var _PROJECT_OPENFL = "openfl";
+	private static inline var _PROJECT_CREATEJS = "createjs";
 	// Creation targets	
 	private static inline var _TARGET_PROJECT = "project";
 	private static inline var _TARGET_SCENE = "scene";
@@ -124,10 +125,11 @@ class Run
 			var l_packageName:String = Sys.args()[ l_param+2 ];
 			var l_authorName:String = Sys.args()[ l_param+3 ];
 			// When called from haxelib, the last argument is the calling directory
-			_callingDir = Sys.args()[ l_param+4 ];
+			_callingDir = Sys.args()[ l_param + 4 ];
+			if ( _callingDir == null ) _callingDir = "./";
 			if ( l_target == _TARGET_PROJECT )
 			{
-				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_OPENFL ) )
+				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_OPENFL ) || ( l_projectType == _PROJECT_CREATEJS ) )
 				{
 					_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
 				}
@@ -172,7 +174,7 @@ class Run
 		{
 			Lib.println( "Syntax:");
 			Lib.println("   to create a new project" );
-			Lib.println("     haxelib run awe6 create project " + _PROJECT_SWF + "|" + _PROJECT_OPENFL + " <name> <package> <author>" );
+			Lib.println("     haxelib run awe6 create project " + _PROJECT_SWF + "|" + _PROJECT_OPENFL + "|" + _PROJECT_CREATEJS + " <name> <package> <author>" );
 			Lib.println("   to create scenes or entities" );
 			Lib.println("     haxelib run awe6 create " + _TARGET_SCENE + "|" + _TARGET_ENTITY + " <name> <package> <author>" );
 		}
@@ -183,6 +185,7 @@ class Run
 		while ( !FileSystem.exists( p_directory ) )
 		{
 			var l_path:Path = new Path( p_directory );
+			trace( l_path );
 			while ( !FileSystem.exists( l_path.dir ) )
 			{
 				l_path = new Path( l_path.dir );
@@ -334,16 +337,16 @@ class Run
 		}
 		else
 		{
-			var l_isNme:Bool = ( p_projectType == _PROJECT_OPENFL );
 			_unzipFlashDevelopTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
-			if ( l_isNme )
+			switch( p_projectType )
 			{
-				_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 OpenFL Project", p_projectPath );
-			}
-			else
-			{
-				_moveAllFilesToDir( p_projectPath + "/Projects/313 Haxe - awe6 Project", p_projectPath );
+				case _PROJECT_CREATEJS :
+					_moveAllFilesToDir( p_projectPath + "/Projects/374 Haxe - awe6 CreateJS Project", p_projectPath );
+				case _PROJECT_OPENFL :
+					_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 OpenFL Project", p_projectPath );
+				case _PROJECT_SWF, _ :
+					_moveAllFilesToDir( p_projectPath + "/Projects/313 Haxe - awe6 Project", p_projectPath );
 			}
 			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
@@ -363,12 +366,12 @@ class Run
 			FileSystem.rename( p_projectPath + "/src/$(PackagePath)", l_currentPackageNamePath );
 			var l_projectName:String = new Path( p_projectPath ).file;
 			var l_projectHxml:String = p_projectPath + "/" + l_projectName + ".hxml" + _TEMPLATE_EXT;
-			_createHxml( l_projectHxml, l_isNme );
+			_createHxml( l_projectHxml, p_projectType );
 			_handleTemplate( l_projectHxml, [ "$(ProjectName)" ], [ l_projectName ] );
 			_modifyTemplates( p_projectPath,
 				[ "$(ProjectID)", "$(DefaultUser)", "$(ProjectName)", "$(PackageName)", "$(PackageDot)", "$(CBI)", "$(CSLB)" ],
 				[ l_projectName, p_authorName, l_projectName, p_packageName, p_packageName + ".", " ", "\n" ] );
-			if ( l_isNme )
+			if ( p_projectType == _PROJECT_OPENFL )
 			{
 				var l_projectXml:String = p_projectPath + "/" + l_projectName + ".xml" + _TEMPLATE_EXT;
 				FileSystem.rename( p_projectPath + "/$(ProjectName).xml", l_projectXml );
@@ -378,18 +381,26 @@ class Run
 		}
 	}
 	
-	private function _createHxml( p_fileName:String, p_isOpenfl:Bool = false ):Void
+	private function _createHxml( p_fileName:String, p_projectType:String = _PROJECT_SWF ):Void
 	{
 		var l_content:String = "";
-		if ( p_isOpenfl )
+		l_content = switch( p_projectType )
 		{
-			l_content = "
--cmd \"openfl test flash\"
+			case _PROJECT_OPENFL : "
+-cmd \"lime test flash\"
 ";
-		}
-		else
-		{
-			l_content = "
+			case _PROJECT_CREATEJS : "
+-cp src
+-js bin/game.js
+-lib awe6
+-lib createjs
+-resource bin/assets/__config.xml@config
+-dce full
+-main Main
+-D awe6DriverRemap 
+--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')
+";
+			case _PROJECT_SWF, _ : "
 -cp src
 -swf assets/game.swf
 -swf-header 600:400:25:FFFFFF
