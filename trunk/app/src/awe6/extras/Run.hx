@@ -185,7 +185,6 @@ class Run
 		while ( !FileSystem.exists( p_directory ) )
 		{
 			var l_path:Path = new Path( p_directory );
-			trace( l_path );
 			while ( !FileSystem.exists( l_path.dir ) )
 			{
 				l_path = new Path( l_path.dir );

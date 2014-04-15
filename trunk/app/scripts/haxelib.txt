@@ -1,10 +1,11 @@
 haxelib build list:
 	Export /assetsDeployed/templates/flashDevelop, zip and replace /app/scripts/haxelib/__resources/flashDevelop.zip
+	Export /app/src/awe6, and copy to /app/scripts/haxelib
 	Run /app/run.hxml to generate /app/scripts/haxelib/run.n
 	Run /app/haxedoc.hxml to generate /app/scripts/haxelib/haxedoc.xml
 	Export /app/src/awe6 and copy to /app/scripts/haxelib/
 	Update /app/scripts/haxelib/haxelib.json with relevant version and comments
-	zip /app/scripts/haxelib name as awe6-X,X,X.zip
+	zip /app/scripts/haxelib name as awe6-X,X,X.zip (remove hidden svn folders)
 	test: haxelib install awe6-X,X,X.zip
 	test run: haxelib run awe6 install
 	submit: haxelib submit awe6-X,X,X.zip
