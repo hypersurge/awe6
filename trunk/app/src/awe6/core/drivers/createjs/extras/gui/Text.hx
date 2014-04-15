@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.gui;
+package awe6.core.drivers.createjs.extras.gui;
 import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
@@ -46,15 +46,15 @@ class Text extends GuiEntity
 	
 	private var _textField:TextField;
 	private var _isMultiline:Bool;
-	private var _isInput:Bool;
+	private var _isCached:Bool;
 	private var _isDirty:Bool;
 	private var _prevTextStyle:String;
 	
-	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, p_text:String = "", ?p_textStyle:ITextStyle, p_isMultiline:Bool = false, p_isInput:Bool = false )
+	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, p_text:String = "", ?p_textStyle:ITextStyle, p_isMultiline:Bool = false, p_isCached:Bool = false )
 	{
 		textStyle = p_textStyle;
 		_isMultiline = p_isMultiline;
-		_isInput = p_isInput;
+		_isCached = p_isCached;
 		super( p_kernel, p_width, p_height, false );
 		text = p_text;
 	}
@@ -66,12 +66,10 @@ class Text extends GuiEntity
 		_textField.text = text;
 		if ( Touch.isSupported() ) // a hack to check mobile
 		{
-			_textField.y += 3;
+			_textField.y += 3 * ( textStyle.size / 12 );
 		}
 		_draw();
 		_context.addChild( _textField );
-		_context.mouseEnabled = _isInput;
-		_context.mouseChildren = _isInput;
 		_isDirty = false;
 		_prevTextStyle = textStyle.toString();
 	}
@@ -111,6 +109,10 @@ class Text extends GuiEntity
 			{
 				_textField.shadow = new Shadow( "#" + StringTools.hex( textStyle.filters[0], 6 ), textStyle.filters[1], textStyle.filters[2], textStyle.filters[3] );
 			}
+		}
+		if ( _isCached )
+		{
+			_context.cache( 0, 0, width, height );
 		}
 		_isDirty = false;
 	}

@@ -37,7 +37,7 @@ import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
 import democreatejs.AssetManager;
-import democreatejs.gui.Text;
+import awe6.core.drivers.createjs.extras.gui.Text;
 
 class Button extends BasicButton
 {

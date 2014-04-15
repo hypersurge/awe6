@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.gui;
+package awe6.core.drivers.createjs.extras.gui;
 import awe6.interfaces.IKernel;
 import createjs.easeljs.Bitmap;
 
@@ -35,10 +35,12 @@ class Image extends GuiEntity
 {
 	private var _bitmapDataUrl:String;
 	private var _bitmap:Bitmap;
+	private var _isAdd:Bool;
 	
-	public function new( p_kernel:IKernel, p_bitmapDataUrl:String )
+	public function new( p_kernel:IKernel, p_bitmapDataUrl:String, ?p_isAdd:Bool = false )
 	{
 		_bitmapDataUrl = p_bitmapDataUrl;
+		_isAdd = p_isAdd;
 		super( p_kernel );
 	}
 	
@@ -47,7 +49,10 @@ class Image extends GuiEntity
 		super._init();
 		_context.mouseEnabled = false;
 		_bitmap = new Bitmap( _bitmapDataUrl );
+		_bitmap.compositeOperation = _isAdd ? "lighter" : "source-over";
 		_context.addChild( _bitmap );
+		width = _bitmap.image.width;
+		height = _bitmap.image.height;
 	}
 	
 	public function configure( p_bitmapDataUrl:String ):Void
