@@ -1,5 +1,15 @@
 #summary Release notes for each release candidate
 
+=RC 2,3,642=
+
+Minor release.  Includes:
+
+ * Added CreateJS driver & templates
+ * Minor fixes on collections (Entities & Messages)
+ * Minor fixes to OpenFL-html5 driver
+ * Various workarounds for odd gotchas (constructor passthrus, dce etc)
+
+
 =RC 2,2,605=
 
 Minor release.  Includes:
