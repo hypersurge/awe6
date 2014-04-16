@@ -2,27 +2,29 @@
 
 [https://awe6.googlecode.com/svn/trunk/docs/images/IosMockup.jpg]
 
-You can readily deploy your awe6 powered games to multiple mobile devices (e.g. iOS, Android).  There are various approaches, each with its respective pros and cons.  Please note the author of awe6 is a fan of SWF & HTML5 as they represent ubiquitous platforms (today and tomorrow respectively) and there are many HTML5 accelerators now available in this space.
+You can readily deploy your awe6 powered games to multiple mobile devices (e.g. iOS, Android).  There are various approaches, each with its respective pros and cons.  Please note the author of awe6 is a fan of SWF & HTML5 as they represent ubiquitous platforms (today and tomorrow respectively) and there are many HTML5 accelerators now available in this space, some running as default in modern browsers.
 
-==NME==
+==OpenFL==
 
-[http://haxenme.org NME] is Haxe's homegrown solution to deploying multimedia to C++ devices.  The NME library wraps the C++ SDL library into a familiar flash like API - it is therefore extremely fast!
+[http://openfl.org OpenFL] is a Haxe homegrown solution to deploying multimedia natively to devices.  The library wraps lower level libraries  into a familiar Flash like API.
 
-To use awe6 with your NME project add the following line to your NME project's nmml file:
+To use awe6 with your OpenFL project add the following line to your OpenFL project's xml file:
 
 {{{
 <haxelib name="awe6" />
 }}}
 
-Alternatively create a new awe6 NME project using the templates included in the haxelib installation.  See QuickStart for more information.
+Alternatively create a new awe6 OpenFL project using the templates included in the haxelib installation.  See QuickStart for more information.
 
-Please note many subtle variances currently exist between the NME and Flash APIs so code methodically and consider fallbacks.  Specifically avoid frequent draw(), masks, filters, negative matrix transformations or complex Sounds.  The other drawback of NME is that existing ActionScript libraries may not be available to your project.
+Please note many subtle variances currently exist between the OpenFL and Flash APIs so code methodically and consider fallbacks.  Specifically avoid frequent draw(), masks, filters, negative matrix transformations or complex Sounds.  The other drawback of a native approach is that existing ActionScript libraries may not be available to your project.
+
+To deploy to iOS a Mac is required.
 
 ==Adobe AIR==
 
-Converts any SWF to a mobile app.  The majority of the Flash API is available and works generally as expected.
+Converts any SWF to a mobile app.  The majority of the Flash API is available and works generally as expected.  Conventional DisplayList usage can be slow, so use of flash.display.Bitmap (which has been optimised for use with mobile devices) is a basic requirement.  Using GPU specific libraries (e.g. Starling or Away3D) is also increasingly effective.
 
-To deploy to iOS a Mac is not required.  No fee (other than iOS Developer Membership) is incurred.  Follow these steps to target your game to Web via awe6 + Flash Player, iPhone, iPod, iPad, Android via awe6 + AIR:
+Follow these steps to target your game to Web via awe6 + Flash Player, iPhone, iPod, iPad, Android via awe6 + AIR:
 
  # Install [http://www.adobe.com/products/air/sdk/ AIR SDK (2.7+)].
  # Follow the [QuickStart Quick Start Tutorial] and build an awe6 application.
@@ -32,4 +34,8 @@ To deploy to iOS a Mac is not required.  No fee (other than iOS Developer Member
 
 Note: deployment to iOS requires a valid membership of the Apple Developer iOS program.  Certificate creation and application packaging can be done from either a Mac or Windows following [http://www.adobe.com/devnet/air/articles/packaging-air-apps-ios.html these steps].  Final push to iTunes requires a Mac (perhaps borrow a friend's, if you don't own one?).
 
-Performance on mobile devices using AIR 2.7+ is promising if proper coding discipline is adhered to.  Be strict and consider memory management including object pooling (to avoid GC calls) in your Entities and make effective use of flash.display.Bitmap (which has been optimised for use with mobile devices).  Using GPU specific libraries (e.g. Starling) is also increasingly effective.
+==Mobile Web / HTML5==
+
+Run mobile games directly in the browser using HTML5.  Games can even be saved to the home-screen (using AppCache) to give the "app" experience.  Benefits include no delays in App Store approval, no privacy concerns, easy social media integration.  Various monetization and advertising revenue options now exist.
+
+To make a game with awe6 that targets HTML5 use either OpenFL-html5 or the CreateJS driver and template provided in awe6 version 2.3+.
