@@ -43,7 +43,8 @@ class Preloader extends APreloader
 	private var _context:Context;
 	private var _activePlugin:Dynamic;
 	private var _validSoundFormat:String;
-	private var _manifest:Array<Dynamic> ;
+	private var _manifest:Array<Dynamic>;
+	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled, maxConnections is x10 (otherwise can be slow on mobile devices / uncacheable)
 	
 	override private function _init():Void
 	{
@@ -67,7 +68,10 @@ class Preloader extends APreloader
 					if ( !l_isSoundDisabled && ( l_extension == _validSoundFormat ) )
 					{
 						var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
-						_manifest.push( { src:i, id:l_id } ); // comment this one for silence
+						if ( !_isFastTestMode )
+						{
+							_manifest.push( { src:i, id:l_id } ); // comment this one for silence
+						}
 					}
 				}
 			}
@@ -78,7 +82,12 @@ class Preloader extends APreloader
 			_assets.remove( i );
 		}
 		// we load _assets, and add the manifest
-		_loadQueue = new LoadQueue( !_kernel.isLocal, "" );
+		_loadQueue = new LoadQueue( !_kernel.isLocal && !_isFastTestMode, "" );
+		if ( _isFastTestMode )
+		{
+			_loadQueue.setMaxConnections( 10 );
+		}
+		trace( _loadQueue.useXHR );
 		_loadQueue.installPlugin( Sound );
 		var l_assets = _manifest.concat( _assets );
 		l_assets.reverse(); // sounds last
