@@ -8,12 +8,12 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<style>
 	@font-face	{ font-family: 'Orbitron'; src: url('assets/fonts/__orbitron.ttf'); } 
-	html		{ height: 100%; margin: 0px; }
-	body		{ background: #ffffff; color: #000000; font-family: 'Orbitron'; margin: 0px; height:100%; -webkit-user-select: none; }
+	html		{ height: 100%; margin: 0px; padding: 0px; }
+	body		{ background: #ffffff; color: #000000; font-family: 'Orbitron'; margin: 0px;  padding: 0px; height:100%; -webkit-user-select: none; overflow: hidden; }
 	</style>
 </head>
 <body>
-	<table style="width:100%; height:100%; border-collapse: collapse; border-spacing: 0px;"><tr><td style="text-align:center"><canvas id="gameCanvas" /></td></tr></table>
+	<table cellspacing="0" cellpadding="0" style="width:100%; height:100%; border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 0px;"><tr><td style="text-align:center"><canvas id="gameCanvas" /></td></tr></table>
 	<script src="createjs-2013.09.25.min.js"></script>
 	<script src="game.js"></script>
 </body>
