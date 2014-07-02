@@ -115,8 +115,8 @@ class Kernel extends AKernel
 			var l_windowHeight:Int = Browser.window.innerHeight;
 			if ( Browser.document.body.clientWidth != null )
 			{
-				l_windowWidth = Browser.document.body.clientWidth - 2;
-				l_windowHeight = Browser.document.body.clientHeight - 2;
+				l_windowWidth = Browser.document.body.clientWidth;
+				l_windowHeight = Browser.document.body.clientHeight;
 			}
 			var l_scale:Float = Math.min( l_windowWidth / factory.width, l_windowHeight / factory.height );
 			switch( factory.fullScreenType )
