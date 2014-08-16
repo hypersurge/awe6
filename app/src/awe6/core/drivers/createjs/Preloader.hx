@@ -83,14 +83,11 @@ class Preloader extends APreloader
 		}
 		// we load _assets, and add the manifest
 		_loadQueue = new LoadQueue( !_kernel.isLocal && !_isFastTestMode, "" );
-		if ( _isFastTestMode )
-		{
-			_loadQueue.setMaxConnections( 10 );
-		}
-		trace( _loadQueue.useXHR );
+		_loadQueue.setMaxConnections( 10 );
 		_loadQueue.installPlugin( Sound );
 		var l_assets = _manifest.concat( _assets );
-		l_assets.reverse(); // sounds last
+		// l_assets.reverse(); // sounds last
+		l_assets = _tools.shuffle( l_assets ); // shuffle to allow better sound load concurrency
 		_loadQueue.loadManifest( l_assets );
 		_loadQueue.addEventListener( "complete", _onComplete );
 	}
