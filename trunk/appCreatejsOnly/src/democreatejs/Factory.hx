@@ -34,6 +34,7 @@ import awe6.interfaces.EScene;
 import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IAssetManagerProcess;
+import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
@@ -57,7 +58,7 @@ class Factory extends AFactory
 			id = "awe6CreatejsDemo";
 			version = "0.1.000"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
-			isDecached = true;
+			isDecached = false;
 			width = 600;
 			height = 400;
 			bgColor = 0x000000;
@@ -67,12 +68,13 @@ class Factory extends AFactory
 		}
 	}
 	
-	override private function _driverInit():Void
+	override public function onInitComplete( p_kernel:IKernel ):Void 
 	{
-		super._driverInit();
+		super.onInitComplete( p_kernel );
 		_kernel.isFullScreen = !_kernel.isDebug;
+		// _kernel.audio.isMute = true;
 	}
-
+	
 	override public function createAssetManager():IAssetManagerProcess
 	{
 		if ( _assetManager == null )
