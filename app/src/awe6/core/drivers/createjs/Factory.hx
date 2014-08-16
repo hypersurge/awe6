@@ -31,6 +31,8 @@ package awe6.core.drivers.createjs;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 import awe6.core.Macros;
+import haxe.Http;
+import haxe.io.Bytes;
 
 /**
  * This Factory class provides CreateJS target overrides.
@@ -38,26 +40,102 @@ import awe6.core.Macros;
  */
 class Factory extends AFactory
 {
+	private static inline var _CONFIG_URL = "assets/__config.xml";
+	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
+	
+	private var _countConfigsLoaded:Int;
+	private var _countConfigsToLoad:Int;
 
 	override private function _driverInit():Void
 	{
 		var l_context = new Context();
 		_context.addChild( l_context );
 		_context = l_context;
+		_countConfigsLoaded = 0;
+		_countConfigsToLoad = 0;
 		if ( _config != "" )
 		{
-			_parseXml( _config );
+			var l_config:String = ( _config != null ) ? _config : _CONFIG_URL;
+			_loadConfig( l_config );
 		}
-		_launchKernel();
+		else
+		{
+			_displayCredits();
+			_launchKernel();
+		}
+	}
+	
+	private function _displayCredits():Void
+	{
 		trace( config.exists( "settings.asciiArt" ) ? config.get( "settings.asciiArt" ) : "" );
 		trace( id + " v" + version + " by " + author );
 		trace( "Powered by awe6 (http://awe6.org)" );
 		trace( "" );
 	}
 
+	private function _loadConfig( p_config:String ):Void
+	{
+		if ( p_config.substr( 0, 5 ) == "<?xml" )
+		{
+			// trace( "passed as xml" );
+			_parseXml( p_config );
+		}
+		else
+		{
+			if ( isDecached )
+			{
+				p_config += "?dc=" + Std.random( 99999 );
+			}
+			// trace( "Loading Config: \"" + p_config + "\"" );
+			var l_loader:Http = new Http( p_config );
+			try
+			{
+				l_loader.onError = _onIOError;
+				l_loader.onData = _onComplete;
+				l_loader.request();
+			}
+			catch ( p_error:Dynamic )
+			{
+				trace( "Local file loading of config is a security risk.  Try a local webserver, or embedding the config using haxe.Resource" );
+			}
+			_countConfigsToLoad++;
+		}
+	}
+	
 	private function _parseXml( p_data:String ):Void
 	{
 		_traverseElements( Xml.parse( p_data ).firstElement().elements(), "" );
+		if ( config.exists( _CONFIG_JOIN_NODE ) && ( _countConfigsLoaded < 100 ) )
+		{
+			var l_url:String = config.get( _CONFIG_JOIN_NODE );
+			config.remove( _CONFIG_JOIN_NODE );
+			var l_urls:Array<String> = l_url.split( "," );
+			for ( i in l_urls )
+			{
+				_loadConfig( i );
+			}
+		}
+		if ( _countConfigsLoaded == _countConfigsToLoad )
+		{
+			_displayCredits();
+			_launchKernel();
+		}
+	}
+	
+	private function _onIOError( p_event:String ):Void
+	{
+		trace( "IO Errors Occurred During Config Loading:" + p_event );
+	}
+	
+	private function _onComplete( p_event:String ):Void
+	{
+		_countConfigsLoaded++;
+		var l_string:String = p_event;
+		if ( l_string.substr( 0, 5 ) != "<?xml" )
+		{
+			l_string = createEncrypter().decrypt( Bytes.ofString( l_string ) ).toString();
+		}
+		_parseXml( l_string );
 	}
 	
 	override private function _getAssetUrls():Array<String>
