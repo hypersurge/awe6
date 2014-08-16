@@ -68,7 +68,7 @@ class Preloader extends APreloader
 		if ( !_isTouch || _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) || _kernel.inputs.mouse.getIsButtonRelease() )
 		{
 			_isLaunched = true;
-			 super._continue();
+			super._continue();
 		}
 	}
 	
