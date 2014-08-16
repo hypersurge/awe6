@@ -3,6 +3,7 @@ package democreatejs;
 import awe6.core.Context;
 import createjs.easeljs.Stage;
 import democreatejs.Factory;
+import haxe.Resource;
 import js.Browser;
 
 /**
@@ -22,7 +23,7 @@ class Main
         var l_stage = new Stage( cast Browser.document.getElementById( "gameCanvas" ) );
 		var l_context = new Context();
 		l_stage.addChild( l_context );
-		var l_factory = new Factory( l_context, l_isDebug );
+		var l_factory = new Factory( l_context, l_isDebug, Resource.getString( "config" ) );
 	}
 
 	public function new() 
