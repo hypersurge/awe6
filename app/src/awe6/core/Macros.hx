@@ -127,7 +127,7 @@ class Macros
 				l_contents += i + "\n";
 			}
 			l_contents += p_appcacheExtra;
-			var l_file = sys.io.File.write( p_appcacheFolderPath + "cache.manifest", false );
+			var l_file = sys.io.File.write( p_appcacheFolderPath + "manifest.appcache", false );
 			l_file.writeString( l_contents );
 			l_file.close();
 		}
