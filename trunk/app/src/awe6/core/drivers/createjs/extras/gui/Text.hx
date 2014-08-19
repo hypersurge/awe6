@@ -28,11 +28,9 @@
  */
 
 package awe6.core.drivers.createjs.extras.gui;
-import awe6.core.TextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
 import createjs.easeljs.Shadow;
-import createjs.easeljs.Touch;
 typedef TextField = createjs.easeljs.Text;
 
 class Text extends GuiEntity
@@ -64,10 +62,6 @@ class Text extends GuiEntity
 		super._init();
 		_textField = new TextField();
 		_textField.text = text;
-		if ( Touch.isSupported() ) // a hack to check mobile
-		{
-			_textField.y += 3 * ( textStyle.size / 12 );
-		}
 		_draw();
 		_context.addChild( _textField );
 		_isDirty = false;
