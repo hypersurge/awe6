@@ -50,7 +50,7 @@ class InputMouse extends AInputMouse
 	override private function _driverInit():Void 
 	{
 		_stage = untyped _kernel._stage;
-		_isTouch = Touch.isSupported();
+		_isTouch = Touch.isSupported() && untyped !_kernel.system.isDesktop; // too much to consider with mouses and touch, so disabling touch
 		if ( _isTouch )
 		{
 			Touch.enable( _stage, true );

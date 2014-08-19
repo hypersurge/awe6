@@ -62,6 +62,16 @@ class Text extends GuiEntity
 		super._init();
 		_textField = new TextField();
 		_textField.text = text;
+		var l_isDesktop:Bool = true;
+		try
+		{
+			l_isDesktop = untyped _kernel.system.isDesktop;
+		}
+		catch ( p_error:Dynamic ) { }
+		if ( !l_isDesktop ) // hack - mobile text is higher? need a proper fix ... but in the meanwhile
+		{
+			_textField.y += 1 + ( 2 * textStyle.size / 12 );
+		}
 		_draw();
 		_context.addChild( _textField );
 		_isDirty = false;
@@ -98,7 +108,7 @@ class Text extends GuiEntity
 					_textField.textAlign = "left";
 			}
 			_textField.color = "#" + StringTools.hex( textStyle.color, 6 );
-			_textField.font = ( textStyle.isBold ? "bold " : "" ) + ( textStyle.isItalic ? "italic " : "" ) + textStyle.size + "px " + textStyle.font;
+			_textField.font = ( textStyle.isBold ? "bold " : "" ) + ( textStyle.isItalic ? "italic " : "" ) + textStyle.size + "px '" + textStyle.font + "'";
 			if ( textStyle.filters != null )
 			{
 				_textField.shadow = new Shadow( "#" + StringTools.hex( textStyle.filters[0], 6 ), textStyle.filters[1], textStyle.filters[2], textStyle.filters[3] );
