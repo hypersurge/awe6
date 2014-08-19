@@ -4,7 +4,7 @@
 		<assets>
 			<packages default="assets" audio="assets.audio" />
 		</assets>
-		<font name="Orbitron" />
+		<font name="__orbitron" />
 		<asciiArt>
                      _____
   _____      _____  / ___/
