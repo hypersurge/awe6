@@ -44,12 +44,19 @@ class Preloader extends APreloader
 	private var _activePlugin:Dynamic;
 	private var _validSoundFormat:String;
 	private var _manifest:Array<Dynamic>;
-	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled, maxConnections is x10 (otherwise can be slow on mobile devices / uncacheable)
+	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled
+	private var _isDesktop:Bool;
 	
 	override private function _init():Void
 	{
 		super._init();
 		_context = new Context();
+		_isDesktop = true;
+		try
+		{
+			_isDesktop = untyped _kernel.system.isDesktop;
+		}
+		catch ( p_error:Dynamic ) {}
 		view = new View( _kernel, _context );
 		// we push valid sounds to manifest
 		var l_soundAssets:Array<String> = [];
@@ -57,7 +64,7 @@ class Preloader extends APreloader
 		if ( Sound.initializeDefaultPlugins() )
 		{
 			var l_isSoundDisabled:Bool = untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome; // Android (Stock / not Chrome) has slow loading audio that doesn't play, hence disabled.  Chrome is default from Android 4.3+
-			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : "mp3";
+			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : "mp3"; // favor .ogg
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
 			{
