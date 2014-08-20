@@ -49,6 +49,7 @@ class Kernel extends AKernel
 	private var _scaleX:Float;
 	private var _scaleY:Float;
 	private var _prevWindowSize:String;
+	private var _isRotated:Bool;
 
 	override private function _driverGetIsLocal():Bool
 	{
@@ -75,9 +76,11 @@ class Kernel extends AKernel
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
+		_stage.canvas.width = factory.width;
+		_stage.canvas.height = factory.height;
 		var l_shape:Shape = new Shape();
 		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 8 ).substr( 2, 6 ) );
-		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		l_shape.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_shape.graphics.endFill();
 		_stage.addChildAt( l_shape, 0 );
 		Ticker.setFPS( factory.targetFramerate );
@@ -94,13 +97,10 @@ class Kernel extends AKernel
 		_updates++;
 		_updater( 0 ); // avoid isActive
 		_stage.update();
-		if ( _updates % ( factory.targetFramerate ) == 0 )
+		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
+		if ( _prevWindowSize != l_windowSize )
 		{
-			var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
-			if ( _prevWindowSize != l_windowSize )
-			{
-				_driverSetIsFullScreen( isFullScreen );
-			}
+			_driverSetIsFullScreen( isFullScreen );
 		}
 	}
 	
@@ -112,23 +112,37 @@ class Kernel extends AKernel
 	{
 		_prevWindowSize = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		_scaleX = _scaleY = 1;
+		var l_factoryWidth:Int = factory.width;
+		var l_factoryHeight:Int = factory.height;
+		var l_windowWidth:Int = Browser.window.innerWidth;
+		var l_windowHeight:Int = Browser.window.innerHeight;
+/*		if ( Browser.document.body.clientWidth != null ) // creates inaccurate results on mobile
+		{
+			l_windowWidth = Browser.document.body.clientWidth;
+			l_windowHeight = Browser.document.body.clientHeight;
+		}*/
+		var l_isFactoryPortait:Bool = l_factoryWidth < l_factoryHeight;
+		var l_isDevicePortrait:Bool = l_windowWidth < l_windowHeight;
+		var l_isRotated:Bool = !system.isDesktop && ( l_isFactoryPortait != l_isDevicePortrait );
+		l_isRotated = false; // disabled for now - need to resolve Touch coordinates
+		if ( l_isRotated != _isRotated )
+		{
+			_stage.canvas.style.setProperty( "transform", "rotate(" + ( l_isRotated ? "90" : "0" ) + "deg)", "" );
+		}
 		if ( p_value )
 		{
-			var l_windowWidth:Int = Browser.window.innerWidth;
-			var l_windowHeight:Int = Browser.window.innerHeight;
-			if ( Browser.document.body.clientWidth != null )
+			var l_scale:Float = Math.min( l_windowWidth / l_factoryWidth, l_windowHeight / l_factoryHeight );
+			if ( l_isRotated )
 			{
-				l_windowWidth = Browser.document.body.clientWidth;
-				l_windowHeight = Browser.document.body.clientHeight;
+				l_scale = Math.min( l_windowWidth / l_factoryHeight, l_windowHeight / l_factoryWidth );
 			}
-			var l_scale:Float = Math.min( l_windowWidth / factory.width, l_windowHeight / factory.height );
 			switch( factory.fullScreenType )
 			{
 				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
 					null;
 				case SCALE_ASPECT_RATIO_IGNORE :
-					_scaleX = l_windowWidth / factory.width;
-					_scaleY = l_windowHeight / factory.height;
+					_scaleX = l_windowWidth / l_factoryWidth;
+					_scaleY = l_windowHeight / l_factoryHeight;
 				case SCALE_ASPECT_RATIO_PRESERVE :
 					_scaleX = _scaleY = l_scale;
 				case SCALE_NEAREST_MULTIPLE :
@@ -147,10 +161,13 @@ class Kernel extends AKernel
 					_scaleX = _scaleY = l_scale;
 			}
 		}
-		_stage.canvas.width = _kernel.factory.width;
-		_stage.canvas.height = _kernel.factory.height;
-		_stage.canvas.style.setProperty( "width", _kernel.factory.width * _scaleX + "px", "" );
-		_stage.canvas.style.setProperty( "height", _kernel.factory.height * _scaleY + "px", "" );
+		var l_marginX:Float = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
+		var l_marginY:Float = Math.round( ( l_windowHeight - ( l_factoryHeight * _scaleY ) ) / 2 );
+		_stage.canvas.style.setProperty( "width", l_factoryWidth * _scaleX + "px", "" );
+		_stage.canvas.style.setProperty( "height", l_factoryHeight * _scaleY + "px", "" );
+		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
+		_stage.canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
+		_isRotated = l_isRotated;
 		// scrollTo would go here, but it doesn't work anymore!
 	}
 	
