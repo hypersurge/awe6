@@ -7,18 +7,28 @@
 	<meta name="description" content="" />
 	<meta name="viewport" content="width=device-width, user-scaleable=no, initial-scale=1.0, minimal-ui" />
 	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="icon" sizes="256x256" href="assets/__Icon196.png">
 	<link rel="icon" sizes="196x196" href="assets/__Icon196.png">
 	<link rel="icon" sizes="128x128" href="assets/__Icon128.png">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="apple-touch-icon" href="assets/__Icon196.png" />
 	<style>
-	@font-face	{ font-family: '__orbitron'; src: url('assets/fonts/__orbitron.ttf'); }
+	@font-face
+	{
+		font-family: 'orbitronembedded';
+		src: url('assets/fonts/__Orbitron.eot'); /*IE9*/
+		src: url('assets/fonts/__Orbitron.eot?#iefix') format('embedded-opentype'), /*IE6-IE8*/
+			 url('assets/fonts/__Orbitron.woff') format('woff'), /*Modern Browsers*/
+			 url('assets/fonts/__Orbitron.ttf') format('truetype'), /*Safari, Android, iOS*/
+			 url('assets/fonts/__Orbitron.svg#futuraembedded') format('svg'); /*Legacy iOS*/
+		font-weight: normal;
+		font-style: normal;
+	}	
 	html		{ height: 100%; margin: 0px; padding: 0px; }
-	body		{ background: #ffffff; color: #000000; font-family: '__orbitron'; margin: 0px;  padding: 0px; height:100%; -webkit-user-select: none; overflow: hidden; }
+	body		{ background: #ffffff; color: #000000; font-family: 'orbitronembedded'; margin: 0px;  padding: 0px; height:100%; -webkit-user-select: none; overflow: hidden; }
 	</style>
 </head>
 <body>
-	<!-- <table cellspacing="0" cellpadding="0" style="width:100%; height:100%; border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 0px;"><tr><td style="text-align:center"><canvas id="gameCanvas" /></td></tr></table> -->
 	<canvas id="gameCanvas" />
 	<script src="createjs.min.js"></script>
 	<script src="game.js"></script>
