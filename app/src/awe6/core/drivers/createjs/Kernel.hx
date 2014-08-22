@@ -116,26 +116,12 @@ class Kernel extends AKernel
 		var l_factoryHeight:Int = factory.height;
 		var l_windowWidth:Int = Browser.window.innerWidth;
 		var l_windowHeight:Int = Browser.window.innerHeight;
-/*		if ( Browser.document.body.clientWidth != null ) // creates inaccurate results on mobile
-		{
-			l_windowWidth = Browser.document.body.clientWidth;
-			l_windowHeight = Browser.document.body.clientHeight;
-		}*/
 		var l_isFactoryPortait:Bool = l_factoryWidth < l_factoryHeight;
 		var l_isDevicePortrait:Bool = l_windowWidth < l_windowHeight;
-		var l_isRotated:Bool = !system.isDesktop && ( l_isFactoryPortait != l_isDevicePortrait );
-		l_isRotated = false; // disabled for now - need to resolve Touch coordinates
-		if ( l_isRotated != _isRotated )
-		{
-			_stage.canvas.style.setProperty( "transform", "rotate(" + ( l_isRotated ? "90" : "0" ) + "deg)", "" );
-		}
+		system.isRotated = !system.isDesktop && ( l_isFactoryPortait != l_isDevicePortrait );
 		if ( p_value )
 		{
 			var l_scale:Float = Math.min( l_windowWidth / l_factoryWidth, l_windowHeight / l_factoryHeight );
-			if ( l_isRotated )
-			{
-				l_scale = Math.min( l_windowWidth / l_factoryHeight, l_windowHeight / l_factoryWidth );
-			}
 			switch( factory.fullScreenType )
 			{
 				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
@@ -167,7 +153,6 @@ class Kernel extends AKernel
 		_stage.canvas.style.setProperty( "height", l_factoryHeight * _scaleY + "px", "" );
 		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
 		_stage.canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
-		_isRotated = l_isRotated;
 		// scrollTo would go here, but it doesn't work anymore!
 	}
 	
@@ -194,9 +179,11 @@ private class _HelperSystem
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
+	public var isRotated:Bool;
 	
 	public function new()
 	{
+		isRotated = false;
 		isAndroid = isChromeOs = isIos = isLinux = isMacOs = isSilk = isWindows = isWindowsPhone = isDesktop = false;
 		
         userAgent = Browser.navigator.userAgent;

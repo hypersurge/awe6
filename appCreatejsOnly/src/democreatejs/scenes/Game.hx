@@ -55,8 +55,7 @@ class Game extends AScene
 		isSessionSavedOnNext = true;
 		_session.isWin = false;
 		var l_textStyle = _kernel.factory.createTextStyle( ETextStyle.SUBHEAD );
-//		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), l_textStyle );
-		_timer = new Text( _kernel, 50, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), l_textStyle );
+		_timer = new Text( _kernel, _kernel.factory.width, 50, Std.string( _tools.convertAgeToFormattedTime( 0 ) ), l_textStyle );
 		_timer.y = 70;
 		addEntity( _timer, true, 1000 );
 
@@ -80,7 +79,6 @@ class Game extends AScene
 	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
-		_timer.setPosition( _kernel.inputs.mouse.x, _kernel.inputs.mouse.y );
 		_score = Std.int( _tools.limit( ( 1000 * TIME_LIMIT ) - _age, 0, _tools.BIG_NUMBER ) );
 		if ( _score == 0 )
 		{
