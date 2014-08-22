@@ -84,20 +84,10 @@ class InputMouse extends AInputMouse
 	
 	override private function _getPosition():Void
 	{
-		var l_isRotated = untyped _kernel._isRotated;
 		if ( !_isTouch )
 		{
-			if ( !l_isRotated )
-			{
-				x = Std.int( _tools.limit( _stage.mouseX / _stage.scaleX, 0, _kernel.factory.width ) );
-				y = Std.int( _tools.limit( _stage.mouseY / _stage.scaleY, 0, _kernel.factory.height ) );
-			}
-			else
-			{
-				var l_ratio:Float = _kernel.factory.width / _kernel.factory.height;
-				x = Std.int( _tools.limit( _stage.mouseY * l_ratio, 0, _kernel.factory.width ) );
-				y = Std.int( _tools.limit( ( _kernel.factory.width - _stage.mouseX ) / l_ratio , 0, _kernel.factory.height ) );
-			}
+			x = Std.int( _tools.limit( _stage.mouseX / _stage.scaleX, 0, _kernel.factory.width ) );
+			y = Std.int( _tools.limit( _stage.mouseY / _stage.scaleY, 0, _kernel.factory.height ) );
 		}
 		else
 		{
@@ -124,23 +114,10 @@ class InputMouse extends AInputMouse
 	
 	private function _onTouch( p_event:TouchEvent ):Void
 	{
-		var l_isRotated = untyped _kernel._isRotated;
 		try
 		{
-			if ( !l_isRotated )
-			{
-				_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageX - Std.int( _stage.canvas.offsetLeft ) ) / untyped _kernel._scaleX, 0, _kernel.factory.width  ) );
-				_touchY = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( _stage.canvas.offsetTop  ) ) / untyped _kernel._scaleY, 0, _kernel.factory.height ) );
-			}
-			else
-			{
-				// TBC
-				var l_ratio:Float = _kernel.factory.width / _kernel.factory.height;
-//				x = Std.int( _tools.limit( _stage.mouseY * l_ratio, 0, _kernel.factory.width ) );
-				_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( 0 ) ) / untyped _kernel._scaleY, 0, _kernel.factory.width  ) );
-//				y = Std.int( _tools.limit( ( _kernel.factory.width - _stage.mouseX ) / l_ratio , 0, _kernel.factory.height ) );
-				_touchY = Std.int( _tools.limit( ( _kernel.factory.width - ( ( p_event.targetTouches[0].pageX - Std.int( 0 ) ) / untyped _kernel._scaleX ) ) , 0, _kernel.factory.height ) );
-			}
+			_touchX = Std.int( _tools.limit( ( p_event.targetTouches[0].pageX - Std.int( _stage.canvas.offsetLeft ) ) / untyped _kernel._scaleX, 0, _kernel.factory.width  ) );
+			_touchY = Std.int( _tools.limit( ( p_event.targetTouches[0].pageY - Std.int( _stage.canvas.offsetTop  ) ) / untyped _kernel._scaleY, 0, _kernel.factory.height ) );
 		}
 		catch( p_error:Dynamic ) {}
 		if ( _stage.mouseInBounds )
