@@ -68,10 +68,6 @@ class Text extends GuiEntity
 			l_isDesktop = untyped _kernel.system.isDesktop;
 		}
 		catch ( p_error:Dynamic ) { }
-		if ( !l_isDesktop ) // hack - mobile text is higher? need a proper fix ... but in the meanwhile
-		{
-			_textField.y += 1 + ( 2 * textStyle.size / 12 );
-		}
 		_draw();
 		_context.addChild( _textField );
 		_isDirty = false;
