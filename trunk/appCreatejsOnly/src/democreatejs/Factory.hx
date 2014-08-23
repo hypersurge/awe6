@@ -34,7 +34,6 @@ import awe6.interfaces.EScene;
 import awe6.interfaces.ETextAlign;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IAssetManagerProcess;
-import awe6.interfaces.IKernel;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
@@ -68,10 +67,10 @@ class Factory extends AFactory
 		}
 	}
 	
-	override public function onInitComplete( p_kernel:IKernel ):Void 
+	override private function _launchKernel():Void 
 	{
-		super.onInitComplete( p_kernel );
-		_kernel.isFullScreen = !_kernel.isDebug;
+		super._launchKernel();
+		// _kernel.isFullScreen = !_kernel.isDebug;
 		// _kernel.audio.isMute = true;
 	}
 	

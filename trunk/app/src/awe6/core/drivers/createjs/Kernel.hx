@@ -119,6 +119,8 @@ class Kernel extends AKernel
 		var l_isFactoryPortait:Bool = l_factoryWidth < l_factoryHeight;
 		var l_isDevicePortrait:Bool = l_windowWidth < l_windowHeight;
 		system.isRotated = !system.isDesktop && ( l_isFactoryPortait != l_isDevicePortrait );
+		var l_marginX:Float = 0;
+		var l_marginY:Float = 0;
 		if ( p_value )
 		{
 			var l_scale:Float = Math.min( l_windowWidth / l_factoryWidth, l_windowHeight / l_factoryHeight );
@@ -146,9 +148,9 @@ class Kernel extends AKernel
 					}
 					_scaleX = _scaleY = l_scale;
 			}
+			l_marginX = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
+			l_marginY = Math.round( ( l_windowHeight - ( l_factoryHeight * _scaleY ) ) / 2 );
 		}
-		var l_marginX:Float = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
-		var l_marginY:Float = Math.round( ( l_windowHeight - ( l_factoryHeight * _scaleY ) ) / 2 );
 		_stage.canvas.style.setProperty( "width", l_factoryWidth * _scaleX + "px", "" );
 		_stage.canvas.style.setProperty( "height", l_factoryHeight * _scaleY + "px", "" );
 		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
