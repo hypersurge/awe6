@@ -47,11 +47,11 @@ class Intro extends AScene
 		_kernel.session = _kernel.factory.createSession( "Basic" );
 		super._init();
 
-		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, _kernel.getConfig( "gui.scenes.intro.instructions" ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
+		var l_result:Text = new Text( _kernel, _kernel.factory.width, 50, _kernel.getConfig( Config.gui_scenes_intro_instructions ), _kernel.factory.createTextStyle( ETextStyle.SUBHEAD ) );
 		l_result.y = 70;
 		addEntity( l_result, true, 2 );
 
-		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.start" ) );
+		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( Config.gui_buttons_start ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
 		

@@ -41,6 +41,7 @@ class Preloader extends APreloader
 	
 	override private function _init():Void
 	{
+		// _isFastTestMode = true;
 		super._init();
 		_bg = new Shape();
 		_bg.graphics.beginFill( "#202020" );
@@ -74,7 +75,7 @@ class Preloader extends APreloader
 		_isComplete = true;
 		if ( !_isDesktop )
 		{
-			var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
+			var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( Config.gui_preloaderComplete ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
 			l_text.setPosition( 0, _bg.y - 5 );
 			view.addChild( l_text.view );
 		}
