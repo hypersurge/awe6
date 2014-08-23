@@ -33,6 +33,8 @@ import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
 import createjs.soundjs.Sound;
 import createjs.soundjs.SoundInstance;
+import js.Browser;
+import js.html.Event;
 
 /**
  * This AudioManager class provides CreateJS target overrides.
@@ -40,6 +42,20 @@ import createjs.soundjs.SoundInstance;
  */
 class AudioManager extends AAudioManager
 {
+	private var _visibilityWasMute:Bool;
+	
+	override private function _init():Void 
+	{
+		super._init();
+		_visibilityWasMute = isMute;
+		Browser.document.addEventListener( "visibilitychange", _onVisibilityChange );
+	}
+	
+	override private function _disposer():Void 
+	{
+		Browser.document.removeEventListener( "visibilitychange", _onVisibilityChange );
+		super._disposer();
+	}
 
 	override private function _driverSoundFactory( p_id:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void ):_AHelperSound
 	{
@@ -49,7 +65,34 @@ class AudioManager extends AAudioManager
 	override private function _driverSetIsMute( p_value:Bool ):Void
 	{
 		Sound.setMute( p_value );
-	}	
+	}
+	
+	private function _onVisibilityChange( p_event:Event ):Void
+	{
+		var l_isHidden:Bool = _getVisibilityPropery();
+		if ( l_isHidden )
+		{
+			_visibilityWasMute = isMute;
+			isMute = true;
+		}
+		else
+		{
+			isMute = _visibilityWasMute;
+		}
+	}
+	
+	private function _getVisibilityPropery():Bool
+	{
+		var l_vendorPrefixes:Array<String> = [ "hidden", "mozHidden", "msHidden", "oHidden", "webkitHidden" ];
+		for ( i in l_vendorPrefixes )
+		{
+			if ( Reflect.hasField( Browser.document, i ) )
+			{
+				return Reflect.field( Browser.document, i );
+			}
+		}
+		return Browser.document.hidden;
+	}
 	
 }
 
