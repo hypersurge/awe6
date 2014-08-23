@@ -62,8 +62,8 @@ class Factory extends AFactory
 			height = 400;
 			bgColor = 0x000000;
 			startingSceneType = EScene.INTRO;
-			targetFramerate = 60;
-			isFixedUpdates = false;
+			targetFramerate = 30;
+			isFixedUpdates = true;
 		}
 	}
 	
