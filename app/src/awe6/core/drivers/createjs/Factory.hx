@@ -78,7 +78,7 @@ class Factory extends AFactory
 		_displayCredits();
 		super._launchKernel();
 		var l_isDesktop:Bool = _concreteKernel.system.isDesktop;
-		var l_fullScreenValue:String = "mobile";
+		var l_fullScreenValue:String = "default";
 		if ( config.exists( _CONFIG_FULL_SCREEN ) )
 		{
 			l_fullScreenValue = config.get( _CONFIG_FULL_SCREEN );
