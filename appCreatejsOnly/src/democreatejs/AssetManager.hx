@@ -71,18 +71,18 @@ class AssetManager extends AAssetManager
 		var l_context:Context = new Context();
 		var l_url:String = switch( p_type )
 		{
-			case OVERLAY_BACKGROUND : "assets/overlay/OverlayBackground.png";
-			case OVERLAY_BACK_UP : "assets/overlay/buttons/BackUp.png";
-			case OVERLAY_BACK_OVER : "assets/overlay/buttons/BackOver.png";
-			case OVERLAY_MUTE_UP : "assets/overlay/buttons/MuteUp.png";
-			case OVERLAY_MUTE_OVER : "assets/overlay/buttons/MuteOver.png";
-			case OVERLAY_UNMUTE_UP : "assets/overlay/buttons/UnmuteUp.png";
-			case OVERLAY_UNMUTE_OVER : "assets/overlay/buttons/UnmuteOver.png";
-			case OVERLAY_PAUSE_UP : "assets/overlay/buttons/PauseUp.png";
-			case OVERLAY_PAUSE_OVER : "assets/overlay/buttons/PauseOver.png";
-			case OVERLAY_UNPAUSE_UP : "assets/overlay/buttons/UnpauseUp.png";
-			case OVERLAY_UNPAUSE_OVER : "assets/overlay/buttons/UnpauseOver.png";
-			case BACKGROUND : "assets/scenes/Background.png";
+			case OVERLAY_BACKGROUND : Assets.overlay_OverlayBackground__png;
+			case OVERLAY_BACK_UP : Assets.overlay_buttons_BackUp__png;
+			case OVERLAY_BACK_OVER : Assets.overlay_buttons_BackOver__png;
+			case OVERLAY_MUTE_UP : Assets.overlay_buttons_MuteUp__png;
+			case OVERLAY_MUTE_OVER : Assets.overlay_buttons_MuteOver__png;
+			case OVERLAY_UNMUTE_UP : Assets.overlay_buttons_UnmuteUp__png;
+			case OVERLAY_UNMUTE_OVER : Assets.overlay_buttons_UnmuteOver__png;
+			case OVERLAY_PAUSE_UP : Assets.overlay_buttons_PauseUp__png;
+			case OVERLAY_PAUSE_OVER : Assets.overlay_buttons_PauseOver__png;
+			case OVERLAY_UNPAUSE_UP : Assets.overlay_buttons_UnpauseUp__png;
+			case OVERLAY_UNPAUSE_OVER : Assets.overlay_buttons_UnpauseOver__png;
+			case BACKGROUND : Assets.scenes_Background__png;
 		}
 		var l_bitmap:Bitmap = new Bitmap( l_url );
 		l_context.addChild( l_bitmap );
@@ -91,17 +91,17 @@ class AssetManager extends AAssetManager
 	
 	public function createSphere():Bitmap
 	{
-		return new Bitmap( "assets/Sphere.png" );
+		return new Bitmap( Assets.Sphere__png );
 	}
 
 	public function createButtonUp():Bitmap
 	{
-		return new Bitmap( "assets/ButtonUp.png" );
+		return new Bitmap( Assets.ButtonUp__png );
 	}
 	
 	public function createButtonOver():Bitmap
 	{
-		return new Bitmap( "assets/ButtonOver.png" );
+		return new Bitmap( Assets.ButtonOver__png );
 	}
 }
 
@@ -120,4 +120,3 @@ enum EAsset
 	OVERLAY_UNPAUSE_OVER;
 	BACKGROUND;
 }
-

@@ -45,7 +45,7 @@ class Results extends AScene
 	override private function _init():Void
 	{
 		super._init();
-		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( "gui.buttons.next" ) );
+		var l_button:Button = new Button( _kernel, _kernel.factory.keyNext, 0, 0, _kernel.scenes.next, null, null, _kernel.getConfig( Config.gui_buttons_next ) );
 		l_button.setPosition( ( _kernel.factory.width - l_button.width ) / 2, ( _kernel.factory.height - l_button.height ) / 2 );
 		addEntity( l_button, true, 1 );
 
