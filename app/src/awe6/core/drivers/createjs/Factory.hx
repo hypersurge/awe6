@@ -40,8 +40,12 @@ import haxe.io.Bytes;
  */
 class Factory extends AFactory
 {
+	private static inline var _CONFIG_ASCII_ART = "settings.asciiArt";
 	private static inline var _CONFIG_URL = "assets/__config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
+	private static inline var _CONFIG_FULL_SCREEN = "settings.fullScreen"; // none, desktop, mobile, all, default [desktop true, mobile false]
+	private static inline var _ATTRIBUTE_CONFIG = "config";
+	private static inline var _ATTRIBUTE_FULL_SCREEN = "fullScreen";
 	
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
@@ -56,18 +60,40 @@ class Factory extends AFactory
 		if ( _config != "" )
 		{
 			var l_config:String = ( _config != null ) ? _config : _CONFIG_URL;
+			var l_configAttribute:String = _context.getStage().canvas.getAttribute( _ATTRIBUTE_CONFIG );
+			if ( l_configAttribute != null )
+			{
+				l_config = l_configAttribute;
+			}
 			_loadConfig( l_config );
 		}
 		else
 		{
-			_displayCredits();
 			_launchKernel();
 		}
 	}
 	
+	override private function _launchKernel():Void 
+	{
+		_displayCredits();
+		super._launchKernel();
+		var l_isDesktop:Bool = _concreteKernel.system.isDesktop;
+		var l_fullScreenValue:String = "mobile";
+		if ( config.exists( _CONFIG_FULL_SCREEN ) )
+		{
+			l_fullScreenValue = config.get( _CONFIG_FULL_SCREEN );
+		}
+		var l_fullScreenAttribute:String = _context.getStage().canvas.getAttribute( _ATTRIBUTE_FULL_SCREEN );
+		if ( l_fullScreenAttribute != null )
+		{
+			l_fullScreenValue = l_fullScreenAttribute;
+		}
+		_kernel.isFullScreen = ( l_isDesktop && ( ( l_fullScreenValue == "desktop" ) || ( l_fullScreenValue == "all" ) ) ) || ( !l_isDesktop && ( ( l_fullScreenValue == "mobile" ) || ( l_fullScreenValue == "all" ) || ( l_fullScreenValue == "default" ) ) );
+	}
+	
 	private function _displayCredits():Void
 	{
-		trace( config.exists( "settings.asciiArt" ) ? config.get( "settings.asciiArt" ) : "" );
+		trace( config.exists( _CONFIG_ASCII_ART ) ? config.get( _CONFIG_ASCII_ART ) : "" );
 		trace( id + " v" + version + " by " + author );
 		trace( "Powered by awe6 (http://awe6.org)" );
 		trace( "" );
@@ -117,7 +143,6 @@ class Factory extends AFactory
 		}
 		if ( _countConfigsLoaded == _countConfigsToLoad )
 		{
-			_displayCredits();
 			_launchKernel();
 		}
 	}

@@ -4,6 +4,7 @@
 		<assets>
 			<packages default="assets" audio="assets.audio" />
 		</assets>
+		<fullScreen>default</fullScreen>
 		<font name="orbitronembedded" />
 		<asciiArt>
                      _____
