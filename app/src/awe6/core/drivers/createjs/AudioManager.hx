@@ -107,7 +107,6 @@ class _HelperSound extends _AHelperSound
 	
 	override private function _driverInit():Void
 	{
-		_sound = Sound.play( "assets.audio." + id, 0, _startTime, _loops, _volume, _pan );
 		try
 		{
 			_sound = Sound.play( "assets.audio." + id, 0, _startTime, _loops, _volume, _pan );
