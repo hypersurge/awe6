@@ -33,6 +33,8 @@ import awe6.core.drivers.AFactory;
 import awe6.core.Macros;
 import haxe.Http;
 import haxe.io.Bytes;
+import haxe.Log;
+import haxe.PosInfos;
 
 /**
  * This Factory class provides CreateJS target overrides.
@@ -52,6 +54,14 @@ class Factory extends AFactory
 
 	override private function _driverInit():Void
 	{
+		if ( !isDebug )
+		{
+			// removes PosInfos in the wild
+			Log.trace = function( p_value:Dynamic, ?p_infos:PosInfos ):Void
+			{
+				untyped js.Boot.__trace( p_value, null );
+			}
+		}
 		var l_context = new Context();
 		_context.addChild( l_context );
 		_context = l_context;
