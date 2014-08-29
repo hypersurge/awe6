@@ -32,8 +32,6 @@ import awe6.core.drivers.AKernel;
 import createjs.easeljs.Shape;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Ticker;
-import haxe.Log;
-import haxe.PosInfos;
 import js.Browser;
 import js.html.Event;
 
@@ -64,13 +62,6 @@ class Kernel extends AKernel
 	override private function _driverInit():Void
 	{
 		system = new _HelperSystem();
-		if ( !isDebug )
-		{
-			Log.trace = function( p_value:Dynamic, ?p_infos:PosInfos ):Void
-			{
-				untyped js.Boot.__trace( p_value, null );
-			}
-		}
 		_scaleX = _scaleY = 1;
 		_stage = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
