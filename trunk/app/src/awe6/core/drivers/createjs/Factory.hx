@@ -132,7 +132,7 @@ class Factory extends AFactory
 			}
 			catch ( p_error:Dynamic )
 			{
-				trace( "Local file loading of config is a security risk.  Try a local webserver, or embedding the config using haxe.Resource" );
+				return _onIOError( Std.string( p_error ) );
 			}
 			_countConfigsToLoad++;
 		}
@@ -160,6 +160,18 @@ class Factory extends AFactory
 	private function _onIOError( p_event:String ):Void
 	{
 		trace( "IO Errors Occurred During Config Loading:" + p_event );
+		trace( "Double check your Config path.  Cross domain (or local) file loading of Config is a security risk and is, therefore, disabled on this browser." );
+		if ( ( _config != null ) && ( _config.substr( 0, 5 ) == "<?xml" ) )
+		{
+			trace( "Embedded Config detected, using that to continue ..." );
+			_countConfigsLoaded = _countConfigsToLoad;
+			_parseXml( _config );
+		}
+		else
+		{
+			trace( "Use a web server (or local server) to run over http and serve all files from the same domain.  Or embed the Config directlty in the code (e.g. as a Resource)." );
+			trace( "Unable to continue without Config." );
+		}
 	}
 	
 	private function _onComplete( p_event:String ):Void
