@@ -23,9 +23,9 @@ To install !FlashDevelop project files and templates via haxelib tool, run in th
 haxelib run awe6 install
 }}}
 
-=== Starting a new awe6 swf project with !FlashDevelop ===
+=== Starting a new awe6 Swf project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20Haxe%20-%20awe6%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20Haxe%20-%20awe6%20Swf%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 Project_
@@ -69,7 +69,7 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 
 === Starting a new project with awe6 ===
 
-  * Create an awe6 swf project:
+  * Create an awe6 Swf project:
 
 {{{
 haxelib run awe6 create project swf <projectname> <packagename> <author>
