@@ -41,7 +41,7 @@ import js.html.Event;
  */
 class Kernel extends AKernel
 {
-	public var system( default, null ):_HelperSystem;
+	public var system( default, null ):System;
 	
 	private var _stage:Stage;
 	private var _scaleX:Float;
@@ -61,7 +61,7 @@ class Kernel extends AKernel
 	
 	override private function _driverInit():Void
 	{
-		system = new _HelperSystem();
+		system = new System();
 		_scaleX = _scaleY = 1;
 		_stage = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
@@ -149,73 +149,4 @@ class Kernel extends AKernel
 		// scrollTo would go here, but it doesn't work anymore!
 	}
 	
-}
-
-/**
- * Detects device operating system. Thanks to System.js by MrDoob, Modernizr, Richard Davey
- * <p>Use sparingly, e.g. in Factory configuration or Kernel methods.</p>
- * <p>We are avoiding browser detection or feature detection; this should be handled per entity to allow substitution.</p>
- * @author	Mr.doob
- * @author	Modernizr
- * @author	Richard Davey
- * @author	Robert Fell
- */
-private class _HelperSystem
-{
-	public var userAgent( default, null ):String;
-	public var isAndroid( default, null ):Bool;
-	public var isChromeOs( default, null ):Bool;
-	public var isIos( default, null ):Bool;
-	public var isLinux( default, null ):Bool;
-	public var isMacOs( default, null ):Bool;
-	public var isSilk( default, null ):Bool;
-	public var isWindows( default, null ):Bool;
-	public var isWindowsPhone( default, null ):Bool;
-	public var isDesktop( default, null ):Bool;
-	public var isRotated:Bool;
-	
-	public function new()
-	{
-		isRotated = false;
-		isAndroid = isChromeOs = isIos = isLinux = isMacOs = isSilk = isWindows = isWindowsPhone = isDesktop = false;
-		
-        userAgent = Browser.navigator.userAgent;
-		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
-        if ( ~/Android/.match( userAgent ) )
-        {
-            isAndroid = true;
-        }
-        else if ( ~/CrOS/.match( userAgent ) )
-        {
-            isChromeOs = true;
-        }
-        else if ( ~/iP[ao]d|iPhone/i.match( userAgent ) )
-        {
-            isIos = true;
-        }
-        else if ( ~/Linux/.match( userAgent ) )
-        {
-            isLinux = true;
-        }
-        else if ( ~/Mac OS/.match( userAgent ) )
-        {
-            isMacOs = true;
-        }
-        else if ( ~/Windows/.match( userAgent ) )
-        {
-            isWindows = true;
-            if ( ~/Windows Phone/i.match( userAgent ) )
-            {
-                isWindowsPhone = true;
-            }
-        }
-        if ( isWindows || isMacOs || ( isLinux && !isSilk ) )
-        {
-            isDesktop = true;
-        }
-        if ( isWindowsPhone )
-        {
-            isDesktop = false;
-        }
-	}
 }
