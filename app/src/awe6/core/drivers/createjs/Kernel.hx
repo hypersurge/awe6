@@ -142,8 +142,8 @@ class Kernel extends AKernel
 			l_marginX = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
 			l_marginY = Math.round( ( l_windowHeight - ( l_factoryHeight * _scaleY ) ) / 2 );
 		}
-		_stage.canvas.style.setProperty( "width", l_factoryWidth * _scaleX + "px", "" );
-		_stage.canvas.style.setProperty( "height", l_factoryHeight * _scaleY + "px", "" );
+		_stage.canvas.style.setProperty( "width", Math.round( l_factoryWidth * _scaleX ) + "px", "" );
+		_stage.canvas.style.setProperty( "height", Math.round( l_factoryHeight * _scaleY ) + "px", "" );
 		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
 		_stage.canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
 		// scrollTo would go here, but it doesn't work anymore!
