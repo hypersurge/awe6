@@ -31,7 +31,7 @@ class Factory extends AFactory $(CSLB){
 			isDecached = true;
 			width = 600;
 			height = 400;
-			bgColor = 0xFF999999;
+			bgColor = 0xFFFFFFFF;
 			startingSceneType = INTRO;
 			targetFramerate = 20;
 			isFixedUpdates = true;
