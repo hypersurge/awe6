@@ -38,11 +38,10 @@ class Factory extends AFactory $(CSLB){
 		}
 	}
 	
-	override private function _driverInit():Void $(CSLB){
-		super._driverInit();
-		_kernel.isFullScreen = !_kernel.isDebug;
+	override private function _launchKernel():Void $(CSLB){
+		super._launchKernel();
 	}
-	
+
 	override public function createAssetManager():IAssetManagerProcess $(CSLB){
 		if ( _assetManager == null ) $(CSLB){
 			_assetManager = new AssetManager( _kernel );

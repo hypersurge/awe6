@@ -16,9 +16,6 @@
 	
 	<icon name="assets/_exclude/openfl.svg" />
 	
-	<haxeflag name="--flash-strict" if="flash" />
-	<!-- <haxeflag name="--dead-code-elimination" if="html5" /> IE9 says not yet -->
-	
 	<compilerflag name="-resource assets/_exclude/config.xml@config" />
 	
 </project>
