@@ -3,7 +3,6 @@ haxelib build list:
 	Export /app/src/awe6, and copy to /app/scripts/haxelib
 	Run /app/run.hxml to generate /app/scripts/haxelib/run.n
 	Run /app/haxedoc.hxml to generate /app/scripts/haxelib/haxedoc.xml
-	Export /app/src/awe6 and copy to /app/scripts/haxelib/
 	Update /app/scripts/haxelib/haxelib.json with relevant version and comments
 	zip /app/scripts/haxelib name as awe6-X,X,X.zip (remove hidden svn folders)
 	test: haxelib install awe6-X,X,X.zip
