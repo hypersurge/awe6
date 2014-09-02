@@ -5,7 +5,7 @@
 			<packages default="assets" audio="assets.audio" />
 		</assets>
 		<fullScreen>default</fullScreen>
-		<font name="orbitronembedded" />
+		<font name="orbitron-webfont" />
 		<asciiArt>
                      _____
   _____      _____  / ___/

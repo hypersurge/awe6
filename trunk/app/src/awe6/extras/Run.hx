@@ -345,7 +345,7 @@ class Run
 				case _PROJECT_OPENFL :
 					_moveAllFilesToDir( p_projectPath + "/Projects/373 Haxe - awe6 OpenFL Project", p_projectPath );
 				case _PROJECT_SWF, _ :
-					_moveAllFilesToDir( p_projectPath + "/Projects/313 Haxe - awe6 Project", p_projectPath );
+					_moveAllFilesToDir( p_projectPath + "/Projects/313 Haxe - awe6 Swf Project", p_projectPath );
 			}
 			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
