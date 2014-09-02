@@ -1,5 +1,14 @@
 #summary Release notes for each release candidate
 
+=RC 2,4,678=
+
+Minor release.  Includes:
+
+ * CreateJS driver enhancements
+ * Templates overhaul for webfonts and removing table tags
+ * Fixed OpenFL html5 audio mute
+
+
 =RC 2,3,642=
 
 Minor release.  Includes:
