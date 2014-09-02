@@ -24,7 +24,7 @@
 		font-style: normal;
 	}	
 	html		{ height: 100%; margin: 0px; padding: 0px; }
-	body		{ background: #000000; color: #808080; font-family: 'orbitron-webfont'; margin: 0px;  padding: 0px; height:100%; -webkit-user-select: none; overflow: hidden; }
+	body		{ background: #FFFFFF; color: #808080; font-family: 'orbitron-webfont'; margin: 0px;  padding: 0px; height:100%; -webkit-user-select: none; overflow: hidden; }
 	</style>
 </head>
 <body>
