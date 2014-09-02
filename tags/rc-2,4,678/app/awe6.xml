@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- NMML reference: https://gist.github.com/1763850 -->
+	
+	<meta title="awe6" package="org.awe6.demo" version="1.0.0" company="awe6" />
+	<app main="Main" path="export" file="awe6" />
+
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="flash" />
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" unless="flash" />
+ 	
+	<source path="src" />
+	<haxelib name="openfl" />
+	
+	<assets path="assets/managed" rename="assets" include="*" exclude="*.ogg" if="flash" />
+	<assets path="assets/managed" rename="assets" include="*" exclude="_exclude" unless="flash" />
+
+	<!--
+	<compilerflag name="-D awe6DriverRemap" />
+	<compilerflag name="--macro awe6.core.Macros.setDriverRemap('demo.customdriver')" /> 
+	-->
+	
+	<compilerflag name="-resource assets/managed/_exclude/config.xml@config" />
+	
+</project>

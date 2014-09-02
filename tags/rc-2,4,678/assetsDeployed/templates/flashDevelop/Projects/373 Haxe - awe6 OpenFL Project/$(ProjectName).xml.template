@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="$(ProjectName)" package="$(PackageName)" version="1.0.0" company="$(DefaultUser)" />
+	<app main="Main" path="export" file="$(ProjectID)" />
+	
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" if="target_flash" />
+	<window width="600" height="400" fps="20" orientation="landscape" resizable="true" unless="target_flash" />
+ 	
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="awe6" />
+	
+	<assets path="assets" rename="assets" include="*" exclude="_exclude|*.ogg" if="flash" />
+	<assets path="assets" rename="assets" include="*" exclude="_exclude" unless="flash" />
+	
+	<icon name="assets/_exclude/openfl.svg" />
+	
+	<compilerflag name="-resource assets/_exclude/config.xml@config" />
+	
+</project>
