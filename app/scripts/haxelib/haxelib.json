@@ -1,11 +1,11 @@
 {
   "name": "awe6",
   "license": "MIT",
-  "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","nme","awe6","entity"],
+  "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","nme","openfl","createjs","awe6","entity"],
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
-  "releasenote": "Bug fixes, html5 drivers improved (openfl-html5, CreateJS), CreateJS templates added.  http://code.google.com/p/awe6/wiki/ReleaseNotes",
-  "version": "2.3.642",
+  "releasenote": "html5 drivers and templates improved (openfl-html5, CreateJS).  http://code.google.com/p/awe6/wiki/ReleaseNotes",
+  "version": "2.4.678",
   "url": "http://awe6.org",
   "dependencies": {
 
