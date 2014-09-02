@@ -50,22 +50,16 @@ class AudioManager extends AAudioManager
 
 	override private function _driverSetIsMute( p_value:Bool ):Void
 	{
-		for ( i in _sounds )
+		try
 		{
-			var l_sound:_HelperSound = cast i;
-/*			if ( l_sound.getSoundChannel() == null )
+			// openfl-html5 (recently changed from Howler to SoundJS)
+			untyped createjs.Sound.setMute( p_value );
+		}
+		catch ( p_error:Dynamic )
+		{
+			for ( i in _sounds )
 			{
-				continue;
-			}*/
-			try
-			{
-				// openfl-html5
-				untyped p_value ? l_sound__howl.mute() : l_sound__howl.unmute();
-				// openfl-html5-dom
-//				untyped l_sound.getSoundChannel().__audio.muted = p_value;
-			}
-			catch ( p_error:Dynamic )
-			{
+				var l_sound:_HelperSound = cast i;
 				try
 				{
 					// openfl-bitfive
@@ -74,7 +68,7 @@ class AudioManager extends AAudioManager
 				catch ( p_error:Dynamic ) {}
 			}
 		}
-	}	
+	}
 	
 }
 
@@ -103,8 +97,8 @@ class _HelperSound extends _AHelperSound
 		}
 		try
 		{
-			// openfl-html5
-			untyped _soundChannel.__audio.muted = _kernel.audio.isMute;
+			// openfl-html5 aka SoundJS
+			untyped _sound.setMute( _kernel.audio.isMute );
 		}
 		catch ( p_error:Dynamic )
 		{
