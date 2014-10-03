@@ -46,10 +46,16 @@ class Preloader extends APreloader
 	private var _manifest:Array<Dynamic>;
 	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled
 	private var _isDesktop:Bool;
+	private var _proprietaryAudioFormat:String; // this format is used if ogg is not supported - defaults to mp3, but can be overridden to mpeg, wav, m4a, mp3, mp4, aiff, wma, mid (if things don't work, double check your serer mime-types - e.g. audio/mp4 m4a)
 	
 	override private function _init():Void
 	{
 		super._init();
+		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
+		if ( ( _proprietaryAudioFormat == null ) || ( _proprietaryAudioFormat == "" ) || ( !Lambda.has( l_audioFormats, _proprietaryAudioFormat ) ) )
+		{
+			_proprietaryAudioFormat = "mp3"; // we default to mp3 to reduce the need for server mime-type configuration, however m4a is our suggested proprietary format (less restrictive licensing, better looping, smaller filesize)
+		}
 		_context = new Context();
 		_isDesktop = true;
 		try
@@ -63,13 +69,13 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_isSoundDisabled:Bool = untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome; // Android (Stock / not Chrome) has slow loading audio that doesn't play, hence disabled.  Chrome is default from Android 4.3+
-			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : "mp3"; // favor .ogg
+			var l_isSoundDisabled:Bool = untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome; // Android (Stock / not Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : _proprietaryAudioFormat; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
 			{
 				var l_extension:String = i.substr( -3 );
-				if ( ( l_extension == "mp3" ) || ( l_extension == "ogg" ) )
+				if ( Lambda.has( l_audioFormats, l_extension ) )
 				{
 					l_soundAssets.push( i );
 					if ( !l_isSoundDisabled && ( l_extension == _validSoundFormat ) )
@@ -93,7 +99,7 @@ class Preloader extends APreloader
 		_loadQueue.setMaxConnections( 10 );
 		_loadQueue.installPlugin( Sound );
 		var l_assets = _manifest.concat( _assets );
-		// l_assets.reverse(); // sounds last
+		//l_assets.reverse(); // sounds last
 		l_assets = _tools.shuffle( l_assets ); // shuffle to allow better sound load concurrency
 		_loadQueue.loadManifest( l_assets );
 		_loadQueue.addEventListener( "complete", _onComplete );
