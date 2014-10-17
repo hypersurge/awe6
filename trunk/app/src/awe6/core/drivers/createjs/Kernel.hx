@@ -87,7 +87,8 @@ class Kernel extends AKernel
 	{
 		_updates++;
 		_updater( 0 ); // avoid isActive
-		_stage.update();
+		_stage.tickOnUpdate = isActive;
+		_stage.update( p_event );
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{
