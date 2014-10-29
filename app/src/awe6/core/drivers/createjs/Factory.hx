@@ -71,7 +71,7 @@ class Factory extends AFactory
 		{
 			var l_config:String = ( _config != null ) ? _config : _CONFIG_URL;
 			var l_configAttribute:String = _context.getStage().canvas.getAttribute( _ATTRIBUTE_CONFIG );
-			if ( l_configAttribute != null )
+			if ( ( l_configAttribute != null ) && ( l_configAttribute != "" ) )
 			{
 				l_config = l_configAttribute;
 			}
@@ -94,7 +94,7 @@ class Factory extends AFactory
 			l_fullScreenValue = config.get( _CONFIG_FULL_SCREEN );
 		}
 		var l_fullScreenAttribute:String = _context.getStage().canvas.getAttribute( _ATTRIBUTE_FULL_SCREEN );
-		if ( l_fullScreenAttribute != null )
+		if ( ( l_fullScreenAttribute != null ) && ( l_fullScreenAttribute != "" ) )
 		{
 			l_fullScreenValue = l_fullScreenAttribute;
 		}
