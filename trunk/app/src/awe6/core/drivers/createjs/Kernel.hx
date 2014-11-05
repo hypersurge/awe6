@@ -44,6 +44,7 @@ class Kernel extends AKernel
 	public var system( default, null ):System;
 	
 	private var _stage:Stage;
+	private var _stageDynamic:Dynamic;
 	private var _scaleX:Float;
 	private var _scaleY:Float;
 	private var _prevWindowSize:String;
@@ -63,7 +64,7 @@ class Kernel extends AKernel
 	{
 		system = new System();
 		_scaleX = _scaleY = 1;
-		_stage = _context.getStage();
+		_stage = _stageDynamic = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
@@ -88,7 +89,7 @@ class Kernel extends AKernel
 		_updates++;
 		_updater( 0 ); // avoid isActive
 		_stage.tickOnUpdate = isActive;
-		_stage.update( p_event );
+		_stageDynamic.update( p_event ); // using dynamic hack until CreateJS externs are patched to properly allow event into update
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{
