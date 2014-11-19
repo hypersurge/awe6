@@ -41,16 +41,17 @@ import js.html.TouchEvent;
  */
 class InputMouse extends AInputMouse
 {
+	static private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound, only needed once per application, hence static
+	
 	private var _stage:Stage;
 	private var _isTouch:Bool;
-	private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound
 	private var _touchX:Int;
 	private var _touchY:Int;
 	
 	override private function _driverInit():Void 
 	{
 		_stage = untyped _kernel._stage;
-		_isTouch = Touch.isSupported() && untyped !_kernel.system.isDesktop; // too much to consider with mouses and touch, so disabling touch
+		_isTouch = Touch.isSupported() && untyped !_kernel.system.isDesktop; // too much to consider with mice and touch, so disabling touch
 		if ( _isTouch )
 		{
 			Touch.enable( _stage, true );
@@ -130,11 +131,20 @@ class InputMouse extends AInputMouse
 		}
 		_kernel.audio.start( "Silence" );
 		_isSoundTriggered = true; // one touch is enough
+		if ( _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
+		{
+			untyped _kernel.system.requestFullScreen();
+			untyped _kernel.system.requestLockScreen();
+		}
 	}
 
 	private function _onMouseDown( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
+		{
+			return;
+		}
+		if ( !_isTouch && p_event.nativeEvent.button == 2 ) // disable right click
 		{
 			return;
 		}
@@ -144,6 +154,10 @@ class InputMouse extends AInputMouse
 	private function _onMouseUp( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
+		{
+			return;
+		}
+		if ( !_isTouch && p_event.nativeEvent.button == 2 ) // disable right click
 		{
 			return;
 		}

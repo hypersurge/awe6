@@ -50,6 +50,7 @@ class Overlay extends AOverlay
 		var l_shape:Shape = new Shape();
 		l_shape.graphics.beginFill( "#" + StringTools.hex( _pauseColor, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		l_shape.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		l_shape.alpha = _pauseAlpha;
 		_pauseContext.addChild( l_shape );
 		
@@ -70,6 +71,7 @@ class Overlay extends AOverlay
 		var l_shape:Shape = new Shape();
 		l_shape.graphics.beginFill( "#" + StringTools.hex( p_color, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		l_shape.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
 		_flashContext.addChild( l_shape );
 		p_duration = ( p_duration != null ) ? p_duration : p_asTime ? 500 : _kernel.factory.targetFramerate * .5;
 		_flashDuration = _flashStartingDuration = p_duration;

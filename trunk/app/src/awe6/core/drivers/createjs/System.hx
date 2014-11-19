@@ -28,6 +28,7 @@
  */
 
 package awe6.core.drivers.createjs;
+import awe6.interfaces.IKernel;
 import js.Browser;
 	
 /**
@@ -39,7 +40,7 @@ import js.Browser;
  * @author	Richard Davey
  * @author	Robert Fell
  */
-class System
+@:keep class System
 {
 	public var userAgent( default, null ):String;
 	public var isAndroid( default, null ):Bool;
@@ -53,11 +54,13 @@ class System
 	public var isDesktop( default, null ):Bool;
 	public var isRotated:Bool;
 	
-	public function new()
+	private var _kernel:IKernel;
+	
+	public function new( p_kernel:IKernel )
 	{
+		_kernel = p_kernel;
 		isRotated = false;
 		isAndroid = isChromeOs = isIos = isLinux = isMacOs = isSilk = isWindows = isWindowsPhone = isDesktop = false;
-		
         userAgent = Browser.navigator.userAgent;
 		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
         if ( ~/Android/.match( userAgent ) )
@@ -96,5 +99,93 @@ class System
         {
             isDesktop = false;
         }
+	}
+	
+	public function requestFullScreen():Void
+	{
+		// we can't guarantee the result, hence it is a request
+		try
+		{
+			var l_element = Browser.document.documentElement;
+			if ( l_element.requestFullscreen != null )
+			{
+				l_element.requestFullscreen();
+			}
+			else if ( untyped l_element.msRequestFullscreen != null )
+			{
+				untyped l_element.msRequestFullscreen();
+			}
+			else if ( untyped l_element.mozRequestFullScreen != null )
+			{
+				untyped l_element.mozRequestFullScreen();
+			}
+			else if ( untyped l_element.webkitRequestFullscreen != null )
+			{
+				untyped l_element.webkitRequestFullscreen();
+			}
+		}
+		catch ( p_error:Dynamic )
+		{
+		}
+	}
+	
+	public function requestExitFullScreen():Void
+	{
+		// we can't guarantee the result, hence it is a request
+		try
+		{
+			var l_document = Browser.document;
+			if ( l_document.exitFullscreen != null )
+			{
+				l_document.exitFullscreen();
+			}
+			else if ( untyped l_document.msExitFullscreen != null )
+			{
+				untyped l_document.msExitFullscreen();
+			}
+			else if ( untyped l_document.mozCancelFullScreen != null )
+			{
+				untyped l_document.mozCancelFullScreen();
+			}
+			else if ( untyped l_document.webkitExitFullscreen != null )
+			{
+				untyped l_document.webkitExitFullscreen();
+			}
+		}
+		catch ( p_error:Dynamic )
+		{
+		}
+	}
+	
+	public function requestLockScreen():Void
+	{
+		// we can't guarantee the result, hence it is a request
+		try
+		{
+			var l_orientation:String = _kernel.factory.width < _kernel.factory.height ? "portrait-primary" : "landscape-primary";
+			var l_screen = Browser.window.screen;
+			if ( untyped l_screen.orientation != null )
+			{
+				if ( untyped l_screen.orientation.lock != null )
+				{
+					untyped l_screen.orientation.lock( l_orientation );
+				}
+				else if ( untyped l_screen.orientation.lockOrientation != null )
+				{
+					untyped l_screen.orientation.lockOrientation( l_orientation );
+				}
+			}
+			else if ( untyped l_screen.mozOrientation != null )
+			{
+				untyped l_screen.mozLockOrientation( l_orientation );
+			}
+			else if ( untyped l_screen.msOrientation != null )
+			{
+				untyped l_screen.msLockOrientation( l_orientation );
+			}
+		}
+		catch ( p_error:Dynamic )
+		{
+		}
 	}
 }

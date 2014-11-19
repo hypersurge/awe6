@@ -46,9 +46,12 @@ class Factory extends AFactory
 	private static inline var _CONFIG_URL = "assets/__config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	private static inline var _CONFIG_FULL_SCREEN = "settings.fullScreen"; // none, desktop, mobile, all, default [desktop true, mobile false]
+	private static inline var _CONFIG_NATIVE_EXPERIENCE = "settings.nativeExperience"; // true, false
 	private static inline var _ATTRIBUTE_CONFIG = "config";
 	private static inline var _ATTRIBUTE_FULL_SCREEN = "fullScreen";
+	private static inline var _ATTRIBUTE_NATIVE_EXPERIENCE = "nativeExperience";
 	
+	public var isNativeExperience:Bool;
 	private var _countConfigsLoaded:Int;
 	private var _countConfigsToLoad:Int;
 
@@ -86,6 +89,17 @@ class Factory extends AFactory
 	override private function _launchKernel():Void 
 	{
 		_displayCredits();
+		var l_isNativeExperienceValue:Bool = true;
+		if ( config.exists( _CONFIG_NATIVE_EXPERIENCE ) )
+		{
+			l_isNativeExperienceValue = config.get( _CONFIG_NATIVE_EXPERIENCE ) == "true";
+		}
+		var l_nativeExperienceAttribute:String = _context.getStage().canvas.getAttribute( _ATTRIBUTE_NATIVE_EXPERIENCE );
+		if ( ( l_nativeExperienceAttribute != null ) && ( l_nativeExperienceAttribute != "" ) )
+		{
+			l_isNativeExperienceValue = l_nativeExperienceAttribute == "true";
+		}
+		isNativeExperience = l_isNativeExperienceValue;
 		super._launchKernel();
 		var l_isDesktop:Bool = _concreteKernel.system.isDesktop;
 		var l_fullScreenValue:String = "default";
@@ -99,6 +113,11 @@ class Factory extends AFactory
 			l_fullScreenValue = l_fullScreenAttribute;
 		}
 		_kernel.isFullScreen = ( l_isDesktop && ( ( l_fullScreenValue == "desktop" ) || ( l_fullScreenValue == "all" ) ) ) || ( !l_isDesktop && ( ( l_fullScreenValue == "mobile" ) || ( l_fullScreenValue == "all" ) || ( l_fullScreenValue == "default" ) ) );
+		if ( _kernel.isFullScreen && isNativeExperience )
+		{
+			_concreteKernel.system.requestFullScreen(); // likely will not work
+			_concreteKernel.system.requestLockScreen(); // likely will only work if running in standalone / web app mode
+		}
 	}
 	
 	private function _displayCredits():Void
