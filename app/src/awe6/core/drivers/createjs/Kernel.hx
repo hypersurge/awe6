@@ -29,9 +29,11 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.AKernel;
+import awe6.interfaces.EOverlayButton;
 import createjs.easeljs.Shape;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Ticker;
+import haxe.Timer;
 import js.Browser;
 import js.html.Event;
 
@@ -48,7 +50,6 @@ class Kernel extends AKernel
 	private var _scaleX:Float;
 	private var _scaleY:Float;
 	private var _prevWindowSize:String;
-	private var _isRotated:Bool;
 
 	override private function _driverGetIsLocal():Bool
 	{
@@ -62,7 +63,7 @@ class Kernel extends AKernel
 	
 	override private function _driverInit():Void
 	{
-		system = new System();
+		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_stage = _stageDynamic = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
@@ -74,14 +75,24 @@ class Kernel extends AKernel
 		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 8 ).substr( 2, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_shape.graphics.endFill();
+		l_shape.cache( 0, 0, factory.width, factory.height );
 		_stage.addChildAt( l_shape, 0 );
 		Ticker.setFPS( factory.targetFramerate );
 		Ticker.timingMode = Ticker.RAF_SYNCHED;
 		Ticker.addEventListener( "tick", _onEnterFrame );
+		_stage.canvas.addEventListener( "contextmenu", _onContextMenu, false );
+	}
+	
+	private function _onContextMenu( p_event:Event ):Void
+	{
+		p_event.preventDefault();
+		p_event.stopImmediatePropagation();
+		Timer.delay( overlay.activateButton.bind( EOverlayButton.PAUSE ), 100 );
 	}
 
 	override private function _driverDisposer():Void
 	{
+		_stage.canvas.removeEventListener( "contextmenu", _onContextMenu );
 	}
 	
 	private function _onEnterFrame( p_event:Event ):Void
@@ -148,7 +159,8 @@ class Kernel extends AKernel
 		_stage.canvas.style.setProperty( "height", Math.round( l_factoryHeight * _scaleY ) + "px", "" );
 		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
 		_stage.canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
-		// scrollTo would go here, but it doesn't work anymore!
+		// scrollTo hack would go here, it doesn't work on modern browsers and can cause unexpected results!?
+		// if ( p_value ) Browser.window.scrollTo( 0, 1 );
 	}
 	
 }

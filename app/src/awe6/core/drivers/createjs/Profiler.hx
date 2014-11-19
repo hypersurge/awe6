@@ -63,6 +63,8 @@ class Profiler extends AProfiler
 		l_shape.graphics.beginFill( "#" + StringTools.hex( _marginColor, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, _width, _marginHeight );
 		l_shape.graphics.endFill();
+		
+		l_shape.cache( 0, 0, _width, _marginHeight );
 
 		_fpsTextField = new Text( "", "", "#" + StringTools.hex( _fpsColor, 6 ) );
 		_context.addChild( _fpsTextField );
