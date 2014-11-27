@@ -31,6 +31,7 @@ package awe6.core.drivers.createjs;
 import awe6.core.drivers.ASession;
 import js.Browser;
 import js.Cookie;
+import js.html.Storage;
 
 /**
  * This Session class provides CreateJS target overrides.
@@ -38,33 +39,59 @@ import js.Cookie;
  */
 class Session extends ASession
 {
+	private static inline var _CONFIG_SESSION_REMOVED = "settings.sessionSaved"; // true or false, defaults to true
+	
+	private var _storage:Storage;
+	
+	override private function _init() 
+	{
+		var l_isSessionSaved:Bool = true;
+		if ( _kernel.getConfig( _CONFIG_SESSION_REMOVED ) != null )
+		{
+			l_isSessionSaved = _kernel.getConfig( _CONFIG_SESSION_REMOVED ) != "false";
+		}
+		_storage = l_isSessionSaved ? Browser.getLocalStorage() : Browser.getSessionStorage();
+		super._init();
+	}
 	
 	override private function _driverLoad():Void
 	{
 		_savedData = { };
+		// for backwards compatibility we try to load existing cookie, and then remove it
 		if ( Browser.document.cookie != null )
 		{
 			if ( Cookie.exists( _kernel.factory.id ) )
 			{
 				_savedData = _tools.unserialize( Cookie.get( _kernel.factory.id ) );
+				_driverSave(); // write it to storage immediately
+				Cookie.remove( _kernel.factory.id ); // housekeeping, we don't need Cookie anymore
+			}
+		}
+		// end of backwards compatibility
+		if ( _storage != null )
+		{
+			var l_item:String = _storage.getItem( _kernel.factory.id );
+			if ( l_item != null )
+			{
+				_savedData = _tools.unserialize( l_item );
 			}
 		}
 	}
 	
 	override private function _driverReset():Void
 	{
-		if ( Browser.document.cookie != null )
+		if ( _storage != null )
 		{
-			Cookie.remove( _kernel.factory.id );
+			_storage.removeItem( _kernel.factory.id );
 		}
 		_savedData = {};
 	}
 	
 	override private function _driverSave():Void
 	{
-		if ( Browser.document.cookie != null )
+		if ( _storage != null )
 		{
-			Cookie.set( _kernel.factory.id, _tools.serialize( _savedData ), _tools.BIG_NUMBER ) ;
+			_storage.setItem( _kernel.factory.id, _tools.serialize( _savedData ) );
 		}
 	}
 }
