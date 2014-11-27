@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
 	<settings>
-		<assets>
-			<packages default="assets" audio="assets.audio" />
-		</assets>
 		<fullScreen>default</fullScreen>
 		<font name="orbitron-webfont" />
 		<asciiArt>

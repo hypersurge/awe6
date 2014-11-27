@@ -45,6 +45,7 @@ class Preloader extends APreloader
 	private var _validSoundFormat:String;
 	private var _manifest:Array<Dynamic>;
 	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled
+	private var _isSoundDisabled:Bool; // if true then audio asset loading is disabled
 	private var _isDesktop:Bool;
 	private var _proprietaryAudioFormat:String; // this format is used if ogg is not supported - defaults to mp3, but can be overridden to mpeg, wav, m4a, mp3, mp4, aiff, wma, mid (if things don't work, double check your serer mime-types - e.g. audio/mp4 m4a)
 	
@@ -69,7 +70,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_isSoundDisabled:Bool = untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome; // Android (Stock / not Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+			var l_isSoundDisabled:Bool = _isSoundDisabled || ( untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome ); // Android (Stock / not Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : _proprietaryAudioFormat; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )

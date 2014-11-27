@@ -81,6 +81,13 @@ class Kernel extends AKernel
 		Ticker.timingMode = Ticker.RAF_SYNCHED;
 		Ticker.addEventListener( "tick", _onEnterFrame );
 		_stage.canvas.addEventListener( "contextmenu", _onContextMenu, false );
+		Browser.window.addEventListener( "unload", _onUnload );
+	}
+	
+	private function _onUnload( p_event:Event ):Void
+	{
+		Browser.window.removeEventListener( "unload", _onUnload );
+		session.save();
 	}
 	
 	private function _onContextMenu( p_event:Event ):Void
