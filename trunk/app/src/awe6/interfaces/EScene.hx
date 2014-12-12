@@ -37,16 +37,17 @@ package awe6.interfaces;
 enum EScene
 {
 	INTRO;
-	EXIT;
 	SELECT_SESSION;
+	INSTRUCTIONS;
+	SETTINGS;
 	MENU;
 	AVATAR;
 	SHOP;
-	INSTRUCTIONS;
-	SETTINGS;
+	REWARDS;
+	LEADERBOARD;
 	GAME;
 	RESULTS;
-	REWARDS;
+	EXIT;
 	/**
 	 * Recommended to be used as a testing sandbox to test new entities etc.
 	 */
