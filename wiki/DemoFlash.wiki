@@ -1,6 +1,6 @@
 #summary Multi Device Online Demo: Flash
 
-<wiki:gadget url="http://awe6.googlecode.com/svn/trunk/docs/awe6DemoFlashGadget.xml" border="0" width="620" height="420" />
+<wiki:gadget url="https://awe6.googlecode.com/svn/trunk/docs/awe6DemoFlashGadget.xml" border="0" width="620" height="420" />
 
 This demo shows the awe6 demo compiled to Flash / SWF.  Flash Player 10+ is required to view it.  Flash Player is available to install from [http://get.adobe.com/flashplayer/ Adobe's website].
 
