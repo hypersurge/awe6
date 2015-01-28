@@ -69,6 +69,7 @@ class Kernel extends AKernel
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
+		// _stageDynamic.snapToPixelEnabled = true;
 		_stage.canvas.width = factory.width;
 		_stage.canvas.height = factory.height;
 		var l_shape:Shape = new Shape();
@@ -137,7 +138,7 @@ class Kernel extends AKernel
 			var l_scale:Float = Math.min( l_windowWidth / l_factoryWidth, l_windowHeight / l_factoryHeight );
 			switch( factory.fullScreenType )
 			{
-				case DISABLED, NO_SCALE, SUB_TYPE( _ ) :
+				case DISABLED, NO_SCALE :
 					null;
 				case SCALE_ASPECT_RATIO_IGNORE :
 					_scaleX = l_windowWidth / l_factoryWidth;
@@ -158,6 +159,34 @@ class Kernel extends AKernel
 						l_scale = Math.floor( l_scale );
 					}
 					_scaleX = _scaleY = l_scale;
+				case SUB_TYPE( p_type ) :
+					if ( ( p_type.bleedWidth != null ) && ( p_type.bleedHeight != null ) )
+					{
+						var l_preserveWidth:Int = l_factoryWidth - ( Std.parseInt( p_type.bleedWidth ) * 2 );
+						var l_preserveHeight:Int = l_factoryHeight - ( Std.parseInt( p_type.bleedHeight ) * 2 );
+						if ( ( l_factoryHeight / l_factoryWidth ) > ( l_windowHeight / l_windowWidth ) )
+						{
+							if ( ( l_preserveHeight / l_factoryWidth ) > ( l_windowHeight / l_windowWidth ) )
+							{
+								_scaleX = _scaleY = l_windowHeight / l_preserveHeight;
+							}
+							else
+							{
+								_scaleY = _scaleX = l_windowWidth / l_factoryWidth;
+							}
+						}
+						else
+						{
+							if ( ( l_factoryHeight / l_preserveWidth ) > ( l_windowHeight / l_windowWidth ) )
+							{
+								_scaleY = _scaleX = l_windowHeight / l_factoryHeight;
+							}
+							else
+							{
+								_scaleY = _scaleX = l_windowWidth / l_preserveWidth;
+							}
+						}
+					}
 			}
 			l_marginX = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
 			l_marginY = Math.round( ( l_windowHeight - ( l_factoryHeight * _scaleY ) ) / 2 );
