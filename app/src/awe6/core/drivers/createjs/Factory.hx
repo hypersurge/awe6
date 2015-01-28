@@ -113,7 +113,7 @@ class Factory extends AFactory
 			l_fullScreenValue = l_fullScreenAttribute;
 		}
 		_kernel.isFullScreen = ( l_isDesktop && ( ( l_fullScreenValue == "desktop" ) || ( l_fullScreenValue == "all" ) ) ) || ( !l_isDesktop && ( ( l_fullScreenValue == "mobile" ) || ( l_fullScreenValue == "all" ) || ( l_fullScreenValue == "default" ) ) );
-		if ( _kernel.isFullScreen && isNativeExperience )
+		if ( _kernel.isFullScreen && isNativeExperience && !l_isDesktop )
 		{
 			_concreteKernel.system.requestFullScreen(); // likely will not work
 			_concreteKernel.system.requestLockScreen(); // likely will only work if running in standalone / web app mode
