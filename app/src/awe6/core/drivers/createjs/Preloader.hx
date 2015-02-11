@@ -71,7 +71,7 @@ class Preloader extends APreloader
 		if ( Sound.initializeDefaultPlugins() )
 		{
 			var l_isSoundDisabled:Bool = _isSoundDisabled || ( untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome ); // Android (Stock / not Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
-			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : _proprietaryAudioFormat; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
+			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : Sound.getCapability( _proprietaryAudioFormat ) ? _proprietaryAudioFormat : "noValidFormat"; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
 			{
