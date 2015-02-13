@@ -48,10 +48,12 @@ class Preloader extends APreloader
 	private var _isSoundDisabled:Bool; // if true then audio asset loading is disabled
 	private var _isDesktop:Bool;
 	private var _proprietaryAudioFormat:String; // this format is used if ogg is not supported - defaults to mp3, but can be overridden to mpeg, wav, m4a, mp3, mp4, aiff, wma, mid (if things don't work, double check your serer mime-types - e.g. audio/mp4 m4a)
+	private var _system:System;
 	
 	override private function _init():Void
 	{
 		super._init();
+		_system = untyped _kernel.system;
 		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
 		if ( ( _proprietaryAudioFormat == null ) || ( _proprietaryAudioFormat == "" ) || ( !Lambda.has( l_audioFormats, _proprietaryAudioFormat ) ) )
 		{
@@ -61,7 +63,7 @@ class Preloader extends APreloader
 		_isDesktop = true;
 		try
 		{
-			_isDesktop = untyped _kernel.system.isDesktop;
+			_isDesktop = _system.isDesktop;
 		}
 		catch ( p_error:Dynamic ) {}
 		view = new View( _kernel, _context );
@@ -70,7 +72,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_isSoundDisabled:Bool = _isSoundDisabled || ( untyped Sound.BrowserDetect.isAndroid && untyped !Sound.BrowserDetect.isChrome ); // Android (Stock / not Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && !( ~/Chrome/.match( _system.userAgent ) || ~/Firefox/.match( _system.userAgent ) ) ); // Android (non Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : Sound.getCapability( _proprietaryAudioFormat ) ? _proprietaryAudioFormat : "noValidFormat"; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
@@ -100,10 +102,11 @@ class Preloader extends APreloader
 		_loadQueue.setMaxConnections( 10 );
 		_loadQueue.installPlugin( Sound );
 		var l_assets = _manifest.concat( _assets );
-		//l_assets.reverse(); // sounds last
 		l_assets = _tools.shuffle( l_assets ); // shuffle to allow better sound load concurrency
-		_loadQueue.loadManifest( l_assets );
 		_loadQueue.addEventListener( "complete", _onComplete );
+		_loadQueue.addEventListener( "fileerror", _onError );
+		_loadQueue.addEventListener( "error", _onError );
+		_loadQueue.loadManifest( l_assets );
 	}
 	
 	override private function _next():Void
@@ -116,11 +119,17 @@ class Preloader extends APreloader
 		return _loadQueue.progress;
 	}
 	
-	private function _onComplete( p_event:Event ):Void
+	private function _onComplete( ?p_event:Event ):Void
 	{
 		if ( _isComplete ) return;
 		_loadQueue.removeEventListener( "complete", _onComplete );
 		_continue();
+	}
+	
+	private function _onError( p_event:Event ):Void
+	{
+		_loadQueue.removeEventListener( "error", _onError );
+		// js.Browser.window.alert( Std.string( p_event ) );
 	}
 	
 	private function _continue():Void
