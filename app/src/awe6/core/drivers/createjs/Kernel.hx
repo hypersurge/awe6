@@ -69,6 +69,7 @@ class Kernel extends AKernel
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
+		_stage.mouseChildren = false;
 		// _stageDynamic.snapToPixelEnabled = true;
 		_stage.canvas.width = factory.width;
 		_stage.canvas.height = factory.height;
