@@ -96,7 +96,10 @@ class Kernel extends AKernel
 	{
 		p_event.preventDefault();
 		p_event.stopImmediatePropagation();
-		Timer.delay( overlay.activateButton.bind( EOverlayButton.PAUSE ), 100 );
+		if ( overlay != null )
+		{
+			Timer.delay( overlay.activateButton.bind( EOverlayButton.PAUSE ), 100 );
+		}
 	}
 
 	override private function _driverDisposer():Void
