@@ -32,6 +32,7 @@ import awe6.core.drivers.APreloader;
 import createjs.easeljs.Event;
 import createjs.preloadjs.LoadQueue;
 import createjs.soundjs.Sound;
+import haxe.Timer;
 
 /**
  * This Preloader class provides CreateJS target overrides.
@@ -106,7 +107,7 @@ class Preloader extends APreloader
 		_loadQueue.addEventListener( "complete", _onComplete );
 		_loadQueue.addEventListener( "fileerror", _onError );
 		_loadQueue.addEventListener( "error", _onError );
-		_loadQueue.loadManifest( l_assets );
+		Timer.delay( _loadQueue.loadManifest.bind( l_assets ), 100 );
 	}
 	
 	override private function _next():Void
@@ -129,7 +130,7 @@ class Preloader extends APreloader
 	private function _onError( p_event:Event ):Void
 	{
 		_loadQueue.removeEventListener( "error", _onError );
-		// js.Browser.window.alert( Std.string( p_event ) );
+		trace( p_event );
 	}
 	
 	private function _continue():Void
