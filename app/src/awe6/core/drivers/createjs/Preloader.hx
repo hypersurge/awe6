@@ -73,7 +73,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && !( ~/Chrome/.match( _system.userAgent ) || ~/Firefox/.match( _system.userAgent ) ) ); // Android (non Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && !( ~/Chrome/.match( _system.userAgent ) || ~/Firefox/.match( _system.userAgent ) || _system.isCocoonjs ) ); // Android (non Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : Sound.getCapability( _proprietaryAudioFormat ) ? _proprietaryAudioFormat : "noValidFormat"; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
@@ -107,7 +107,7 @@ class Preloader extends APreloader
 		_loadQueue.addEventListener( "complete", _onComplete );
 		_loadQueue.addEventListener( "fileerror", _onError );
 		_loadQueue.addEventListener( "error", _onError );
-		Timer.delay( _loadQueue.loadManifest.bind( l_assets ), 100 );
+		Timer.delay( _loadQueue.loadManifest.bind( l_assets ), 200 );
 	}
 	
 	override private function _next():Void
@@ -124,13 +124,14 @@ class Preloader extends APreloader
 	{
 		if ( _isComplete ) return;
 		_loadQueue.removeEventListener( "complete", _onComplete );
+		_loadQueue.removeEventListener( "fileerror", _onError );
+		_loadQueue.removeEventListener( "error", _onError );
 		_continue();
 	}
 	
 	private function _onError( p_event:Event ):Void
 	{
-		_loadQueue.removeEventListener( "error", _onError );
-		trace( p_event );
+		trace( untyped [ p_event, p_event.title, p_event.message, p_event.data ] );
 	}
 	
 	private function _continue():Void
