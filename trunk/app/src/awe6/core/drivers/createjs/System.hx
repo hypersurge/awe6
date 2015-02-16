@@ -49,6 +49,7 @@ import js.Browser;
 	public var isLinux( default, null ):Bool;
 	public var isMacOs( default, null ):Bool;
 	public var isSilk( default, null ):Bool;
+	public var isCocoonjs( default, null ):Bool;
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
@@ -63,6 +64,7 @@ import js.Browser;
 		isAndroid = isChromeOs = isIos = isLinux = isMacOs = isSilk = isWindows = isWindowsPhone = isDesktop = false;
         userAgent = Browser.navigator.userAgent;
 		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
+		isCocoonjs = untyped Browser.navigator.isCocoonJS == true;
         if ( ~/Android/.match( userAgent ) )
         {
             isAndroid = true;
@@ -159,6 +161,10 @@ import js.Browser;
 	
 	public function requestLockScreen():Void
 	{
+		if ( isDesktop )
+		{
+			return;
+		}
 		// we can't guarantee the result, hence it is a request
 		try
 		{
