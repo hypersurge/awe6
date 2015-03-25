@@ -36,6 +36,7 @@ package awe6.interfaces;
  */
 enum EScene
 {
+	SPLASH;
 	INTRO;
 	SELECT_SESSION;
 	INSTRUCTIONS;
@@ -46,6 +47,7 @@ enum EScene
 	REWARDS;
 	LEADERBOARD;
 	GAME;
+	INTERSTITIAL;
 	RESULTS;
 	EXIT;
 	/**
