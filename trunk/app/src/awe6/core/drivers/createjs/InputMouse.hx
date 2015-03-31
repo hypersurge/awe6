@@ -60,8 +60,11 @@ class InputMouse extends AInputMouse
 			_stage.canvas.addEventListener( "touchmove", _onTouch );
 			_stage.canvas.addEventListener( "touchend", _onTouchEnd );
 		}
-		_stage.addEventListener( "stagemousedown", _onMouseDown );
-		_stage.addEventListener( "stagemouseup", _onMouseUp );
+		else
+		{
+			_stage.addEventListener( "stagemousedown", _onMouseDown );
+			_stage.addEventListener( "stagemouseup", _onMouseUp );
+		}
 	}
 	
 	override private function _disposer():Void 
