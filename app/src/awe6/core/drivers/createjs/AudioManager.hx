@@ -143,7 +143,11 @@ class _HelperSound extends _AHelperSound
 		{
 			return;
 		}
-		_sound.stop();
+		try
+		{
+			_sound.stop();
+		}
+		catch ( p_error:Dynamic ) {}
 	}
 	
 	private function _onSoundComplete( p_event:Dynamic ):Void
