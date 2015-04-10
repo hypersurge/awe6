@@ -29,6 +29,7 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.AInputKeyboard;
+import awe6.interfaces.EKey;
 import js.Browser;
 import js.html.Document;
 import js.html.KeyboardEvent;
@@ -40,10 +41,12 @@ import js.html.KeyboardEvent;
 class InputKeyboard extends AInputKeyboard
 {
 	private var _document:Document;
+	private var _preventDefaultKeyCodes:Array<Int>; // storing as KeyCoes rather than EKey to save additional lookups
 	
 	override private function _driverInit():Void 
 	{
 		_document = Browser.document; // must be linked to Browser
+		_preventDefaultKeyCodes = [];
 		_document.addEventListener( "keydown", _onKeyDown );
 		_document.addEventListener( "keyup", _onKeyUp );
 	}
@@ -61,6 +64,10 @@ class InputKeyboard extends AInputKeyboard
 		{
 			return;
 		}
+		if ( Lambda.has( _preventDefaultKeyCodes, p_event.keyCode ) )
+		{
+			p_event.preventDefault();
+		}
 		_addEvent( p_event.keyCode, true );
 	}
 	
@@ -70,7 +77,47 @@ class InputKeyboard extends AInputKeyboard
 		{
 			return;
 		}
+		if ( Lambda.has( _preventDefaultKeyCodes, p_event.keyCode ) )
+		{
+			p_event.preventDefault();
+		}
 		_addEvent( p_event.keyCode, false );
 	}
 	
+	@:keep public function preventDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		if ( p_keyTypes == null )
+		{
+			return;
+		}
+		for ( i in p_keyTypes )
+		{
+			var l_keyCode:Int = getKeyCode( i );
+			if ( !Lambda.has( _preventDefaultKeyCodes, l_keyCode ) )
+			{
+				_preventDefaultKeyCodes.push( l_keyCode );
+			}
+		}
+	}
+	
+	@:keep public function allowDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		if ( p_keyTypes == null )
+		{
+			return;
+		}
+		var i:Int = 0;      
+		while ( i < _preventDefaultKeyCodes.length )
+		{
+			var l_keyType:EKey = getKey( _preventDefaultKeyCodes[i] );
+			if ( Lambda.has( p_keyTypes, l_keyType ) )
+			{
+				_preventDefaultKeyCodes.splice( i, 1 );
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
 }

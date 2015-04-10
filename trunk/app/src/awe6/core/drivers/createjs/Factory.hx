@@ -31,6 +31,7 @@ package awe6.core.drivers.createjs;
 import awe6.core.Context;
 import awe6.core.drivers.AFactory;
 import awe6.core.Macros;
+import awe6.interfaces.EKey;
 import haxe.Http;
 import haxe.io.Bytes;
 import haxe.Log;
@@ -231,4 +232,13 @@ class Factory extends AFactory
 		}
 	}
 	
+	public function preventDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		untyped _kernel.inputs.keyboard.preventDefaultForKeys( p_keyTypes );
+	}
+	
+	public function allowDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		untyped _kernel.inputs.keyboard.allowDefaultForKeys( p_keyTypes );
+	}
 }
