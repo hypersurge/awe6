@@ -50,6 +50,7 @@ import js.Browser;
 	public var isMacOs( default, null ):Bool;
 	public var isSilk( default, null ):Bool;
 	public var isCocoonjs( default, null ):Bool;
+	public var isCrosswalk( default, null ):Bool;
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
@@ -65,6 +66,7 @@ import js.Browser;
         userAgent = Browser.navigator.userAgent;
 		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
 		isCocoonjs = untyped Browser.navigator.isCocoonJS == true;
+		isCrosswalk = ~/Crosswalk/.match( userAgent );
         if ( ~/Android/.match( userAgent ) )
         {
             isAndroid = true;
