@@ -73,7 +73,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
-			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && !( ~/Chrome/.match( _system.userAgent ) || ~/Firefox/.match( _system.userAgent ) || _system.isCocoonjs ) ); // Android (non Chrome) has slow loading audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : Sound.getCapability( _proprietaryAudioFormat ) ? _proprietaryAudioFormat : "noValidFormat"; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
 			for ( i in _assets )
@@ -138,6 +138,19 @@ class Preloader extends APreloader
 	{
 		_isComplete = true;
 		_assets = []; // this effectively calls onPreloaderComplete (via _updater), a little hacky but keeps it consistent with other drivers
+	}
+	
+	private function _getIsStockAndroidBrowser():Bool
+	{
+		// reference: http://stackoverflow.com/questions/14403766/how-to-detect-the-stock-android-browser
+		var l_isAndroidMobile = ( _system.userAgent.indexOf( "Android" ) > -1 ) && ( _system.userAgent.indexOf( "Mozilla/5.0" ) > -1 ) && ( _system.userAgent.indexOf( "AppleWebKit" ) > -1 );
+		var l_regExpAppleWebKit = ~/AppleWebKit\/([\d.]+)/;
+		var l_isAppleWebKit = l_regExpAppleWebKit.match( _system.userAgent );
+		var l_appleWebKitVersion = !l_isAppleWebKit ? 0 : Std.parseFloat( l_regExpAppleWebKit.matched( 1 ) );
+		var l_regExpChrome = ~/Chrome\/([\d.]+)/;
+		var l_isChrome = l_regExpChrome.match( _system.userAgent );
+		var l_chromeVersion = !l_isChrome ? 0 : Std.parseFloat( l_regExpChrome.matched( 1 ) );
+		return l_isAndroidMobile && ( ( l_isAppleWebKit && ( l_appleWebKitVersion < 537 ) ) || ( l_isChrome && ( l_chromeVersion < 37 ) ) );
 	}
 	
 }

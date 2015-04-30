@@ -67,6 +67,7 @@ class Kernel extends AKernel
 		_scaleX = _scaleY = 1;
 		_stage = _stageDynamic = _context.getStage();
 		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
+		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "transparent", "" ); // removes flashing on tap from Android Browser
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
 //		_stage.mouseChildren = false;
