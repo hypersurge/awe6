@@ -110,10 +110,17 @@ class Kernel extends AKernel
 	
 	private function _onEnterFrame( p_event:Event ):Void
 	{
-		_updates++;
-		_updater( 0 ); // avoid isActive
-		_stage.tickOnUpdate = isActive;
-		_stageDynamic.update( p_event ); // using dynamic hack until CreateJS externs are patched to properly allow event into update
+		if ( untyped ( p_event.paused != null ) && ( p_event.paused == true ) ) // special case to allow Ticker.pause / above Kernel pausing
+		{
+			_stage.tickOnUpdate = false;
+		}
+		else
+		{
+			_updates++;
+			_updater( 0 ); // avoid isActive
+			_stage.tickOnUpdate = isActive;
+			_stageDynamic.update( p_event ); // using dynamic hack until CreateJS externs are patched to properly allow event into update
+		}
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{
