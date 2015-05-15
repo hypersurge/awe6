@@ -134,12 +134,8 @@ class AAudioManager extends Process, implements IAudioManager
 		}
 	}
 	
-	private function set_isMute( ?p_value:Bool ):Bool
+	private function set_isMute( p_value:Bool ):Bool
 	{
-		if ( p_value == null )
-		{
-			p_value = !isMute;
-		}
 		isMute = p_value;
 		_driverSetIsMute( p_value );
 		return isMute;
