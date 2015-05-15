@@ -38,11 +38,7 @@ interface IPauseable
 	/**
 	 * Determines if the object is updating or not.
 	 */
-	#if haxe3
 	var isActive( default, set ):Bool;
-	#else
-	var isActive( default, set_isActive ):Bool;
-	#end
 	/**
 	 * Sets isActive to false.
 	 */

@@ -32,41 +32,21 @@ import awe6.interfaces.EAgenda;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-#if haxe3
-// typedef aliasing caused issue on hxcpp
 import haxe.ds.GenericStack;
-#else
-import haxe.FastList;
-#end
 
 /**
  * The Entity class provides a minimalist implementation of the IEntity interface.
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class Entity extends Process implements IEntity
-#else
-class Entity extends Process, implements IEntity
-#end
 {
-	#if haxe3
 	public var id( default, set ):String;
 	public var agenda( get, null ):EAgenda;
 	public var parent( get, null ):IEntity;
 	public var view( get, null ):IView;
-	#else
-	public var id( default, set_id ):String;
-	public var agenda( get_agenda, null ):EAgenda;
-	public var parent( get_parent, null ):IEntity;
-	public var view( get_view, null ):IView;
-	#end
 	
-#if haxe3
 	private var _entityAgendaPairs:GenericStack<_HelperEntityAgendaPair>;
-#else
-	private var _entityAgendaPairs:FastList<_HelperEntityAgendaPair>;
-#end
 	private var _isAgendaDirty:Bool;
 	private var _cachedEntities:Array<IEntity>;
 
@@ -84,11 +64,7 @@ class Entity extends Process, implements IEntity
 	{
 		super._init();
 		agenda = EAgenda.ALWAYS;
-#if haxe3
 		_entityAgendaPairs = new GenericStack<_HelperEntityAgendaPair>();
-#else
-		_entityAgendaPairs = new FastList<_HelperEntityAgendaPair>();
-#end
 		_isAgendaDirty = true;
 		_cachedEntities = [];
 	}

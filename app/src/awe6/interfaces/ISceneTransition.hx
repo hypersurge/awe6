@@ -33,11 +33,7 @@ package awe6.interfaces;
  * The ISceneTransition interface should be implemented by objects intended to display visual transitions during scene changes.
  * @author	Robert Fell
  */
-#if haxe3
 interface ISceneTransition extends IProcess extends IProgress extends IViewable
-#else
-interface ISceneTransition implements IProcess, implements IProgress, implements IViewable
-#end
 {
 	/**
 	 * The time over which the transition occurs.

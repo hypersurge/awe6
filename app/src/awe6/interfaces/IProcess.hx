@@ -34,10 +34,6 @@ package awe6.interfaces;
  * <p>Many managers will implement this interface.</p>
  * @author	Robert Fell
  */
-#if haxe3
 interface IProcess extends IUpdateable extends IDisposable extends IPauseable
-#else
-interface IProcess implements IUpdateable, implements IDisposable, implements IPauseable
-#end
 {
 }

@@ -35,11 +35,7 @@ package awe6.interfaces;
  * <p>State based input is useful for many types of game mechanics, including: momentum, instant replays and special move combos.</p>
  * @author	Robert Fell
  */
-#if haxe3
 interface IInputManager extends IResettable
-#else
-interface IInputManager implements IResettable
-#end
 {
 	/**
 	 * The default virtual joypad user input: simple 4 directional controller with 2 fire buttons.  Listens to cursor keys and WASD keys.

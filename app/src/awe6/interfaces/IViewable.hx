@@ -38,9 +38,5 @@ interface IViewable
 	/**
 	 * The view bound to this object.
 	 */
-	#if haxe3
 	var view( get, null ):IView;
-	#else
-	var view( get_view, null ):IView;
-	#end
 }

@@ -39,18 +39,10 @@ import awe6.interfaces.IKernel;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class AAudioManager extends Process implements IAudioManager
-#else
-class AAudioManager extends Process, implements IAudioManager
-#end
 {
 	private static inline var _PACKAGE_ID = "assets.audio";
-	#if haxe3
 	public var isMute( default, set ):Bool;
-	#else
-	public var isMute( default, set_isMute ):Bool;
-	#end
 	
 	private var _sounds:Array<_AHelperSound>;
 	private var _packageId:String;

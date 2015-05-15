@@ -33,11 +33,7 @@ package awe6.interfaces;
  * The IEntityCollection interface should be implemented by objects which compose multiple entities.
  * @author Robert Fell
  */
-#if haxe3
 interface IEntityCollection extends IAgendaManager
-#else
-interface IEntityCollection implements IAgendaManager
-#end
 {
 	/**
 	 * Adds an entity to this object's children.

@@ -41,11 +41,7 @@ import haxe.io.Bytes;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class AInputMouse extends Process implements IInputMouse
-#else
-class AInputMouse extends Process, implements IInputMouse
-#end
 {
 	public var x( default, null ):Int;
 	public var y( default, null ):Int;
@@ -56,13 +52,8 @@ class AInputMouse extends Process, implements IInputMouse
 	public var isWithinBounds( default, null ):Bool;
 	public var isMoving( default, null ):Bool;
 	public var scroll( default, null ):Int;
-	#if haxe3
 	public var isVisible( default, set ):Bool;
 	public var cursorType( default, set ):EMouseCursor;
-	#else
-	public var isVisible( default, set_isVisible ):Bool;
-	public var cursorType( default, set_cursorType ):EMouseCursor;
-	#end
 	
 	private var _buffer:Array<Bool>;
 	private var _xPrev:Int;

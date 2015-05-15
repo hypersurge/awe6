@@ -39,11 +39,7 @@ import awe6.interfaces.IKernel;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class AInputKeyboard extends Process implements IInputKeyboard
-#else
-class AInputKeyboard extends Process, implements IInputKeyboard
-#end
 {
 	private var _keys:Array<_HelperKey>;
 	private var _buffer:Array<_HelperKeyEvent>;
@@ -63,11 +59,7 @@ class AInputKeyboard extends Process, implements IInputKeyboard
 	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
-		#if haxe3
 		var l_encounteredKeyCodes = new Map<String,Bool>();
-		#else
-		var l_encounteredKeyCodes = new Hash<Bool>();
-		#end
 		var l_nextBuffer:Array<_HelperKeyEvent> = [];
 		for ( i in _buffer )
 		{

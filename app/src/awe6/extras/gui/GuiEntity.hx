@@ -33,25 +33,14 @@ import awe6.core.Entity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
 
-#if haxe3
 class GuiEntity extends Entity implements IPositionable
-#else
-class GuiEntity extends Entity, implements IPositionable
-#end
 {
 	public var width( default, null ):Float;
 	public var height( default, null ):Float;
-	#if haxe3
 	public var x( default, set ):Float;
 	public var y( default, set ):Float;
 	public var isFlippedX( default, set ):Bool;
 	public var isFlippedY( default, set ):Bool;
-	#else
-	public var x( default, set_x ):Float;
-	public var y( default, set_y ):Float;
-	public var isFlippedX( default, set_isFlippedX ):Bool;
-	public var isFlippedY( default, set_isFlippedY ):Bool;
-	#end
 	
 	private var _context:Context;
 	
