@@ -30,7 +30,6 @@
 package awe6.core;
 import awe6.interfaces.IEncrypter;
 import haxe.io.Bytes;
-import haxe.io.BytesData;
 
 /**
  * The Encrypter class provides a minimalist implementation of the IEncrypter interface.
@@ -49,13 +48,13 @@ class Encrypter implements IEncrypter
 	public function encrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
-		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );
+		return _xor( p_value, l_secret );
 	}
 	
 	public function decrypt( p_value:Bytes, p_secret:String = "" ):Bytes
 	{
 		var l_secret:String = p_secret != "" ? p_secret : _defaultSecret;
-		return Bytes.ofData( _xor( p_value.getData(), l_secret ) );
+		return _xor( p_value, l_secret );
 	}
 	
 	/**
@@ -63,17 +62,13 @@ class Encrypter implements IEncrypter
 	 * <p>XOR is the default encryption routine used in awe6 because (due to the ease of client side application decompiling) the obfuscation routine is secondary to the secret key concealment.</p>
 	 * <p>Tip: haXe offers some interesting approaches towards concealing the key from plainsite.</p>
 	 */
-	private function _xor( p_value:BytesData, p_secret:String ):BytesData
+	private function _xor( p_value:Bytes, p_secret:String ):Bytes
 	{
-		#if neko
-		// TODO: no XOR for Neko!?
-		return p_value;
-		#else
-		var l_result:BytesData = new BytesData();
+		var l_result:Bytes = Bytes.alloc( p_value.length );
 		var l_secretIndex:Int = 0;
-		for ( i in 0...p_value.length )
+		for ( i in 0...l_result.length )
 		{
-			l_result[i] = untyped p_value[i] ^ p_secret.charCodeAt( l_secretIndex );
+			l_result.set( i, p_value.get( i ) ^ p_secret.charCodeAt( l_secretIndex ) );
 			l_secretIndex++;
 			if ( l_secretIndex >= p_secret.length )
 			{
@@ -81,7 +76,6 @@ class Encrypter implements IEncrypter
 			}
 		}
 		return l_result;
-		#end
 	}	
 	
 }
