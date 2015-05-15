@@ -52,7 +52,7 @@ class Profiler extends AProfiler
 		super._init();
 		
 		// Works on Chrome with flag --enable-precise-memory-info
-		_isMemoryEnabled = ( Browser.window.performance != null ) && ( Browser.window.performance.memory != null );
+		_isMemoryEnabled = ( Browser.window.performance != null ) && ( untyped Browser.window.performance.memory != null );
 		_width = 75;
 		_height = 24;
 		_marginHeight = 12;
@@ -92,8 +92,8 @@ class Profiler extends AProfiler
 		_fpsTextField.text = _fpsLabel + ": " + l_fps + " / " + _kernel.factory.targetFramerate;
 		if ( _isMemoryEnabled && ( _updates % _kernel.factory.targetFramerate == 0 ) )
 		{
-			var l_memoryUsed:Float = Math.round( Browser.window.performance.memory.usedJSHeapSize / 1024 / 1024 );
-			var l_memoryLimit = Math.round( Browser.window.performance.memory.jsHeapSizeLimit / 1024 / 1024 );
+			var l_memoryUsed:Float = Math.round( untyped Browser.window.performance.memory.usedJSHeapSize / 1024 / 1024 );
+			var l_memoryLimit = Math.round( untyped Browser.window.performance.memory.jsHeapSizeLimit / 1024 / 1024 );
 			_memoryTextField.text = _memoryLabel + ": " + l_memoryUsed + " / " + l_memoryLimit;
 		}
 	}
