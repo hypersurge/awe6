@@ -38,11 +38,7 @@ interface IAgendaManager
 	/**
 	 * The object's current agenda.
 	 */
-	#if haxe3
 	var agenda( get, null ):EAgenda;
-	#else
-	var agenda( get_agenda, null ):EAgenda;
-	#end
 	/**
 	 * Change the object's current agenda.
 	 * @param	type	The new agenda.  If none is specified will assign to EAgenda.ALWAYS.

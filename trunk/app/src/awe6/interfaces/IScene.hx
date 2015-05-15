@@ -34,11 +34,7 @@ package awe6.interfaces;
  * <p>Scenes represent the larger building blocks of the awe6 concept, and contain Entities which do the work.</p> 
  * @author	Robert Fell
  */
-#if haxe3
 interface IScene extends IProcess extends IEntityCollection extends IViewable
-#else
-interface IScene implements IProcess, implements IEntityCollection, implements IViewable
-#end
 {
 	/**
 	 * The type of this scene.

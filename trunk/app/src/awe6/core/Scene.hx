@@ -41,24 +41,15 @@ import awe6.interfaces.IView;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class Scene extends Process implements IScene
-#else
-class Scene extends Process, implements IScene
-#end
 {
 	public var type( default, null ):EScene;
 	public var isDisposable( default, null ):Bool;
 	public var isPauseable( default, null ):Bool;
 	public var isMuteable( default, null ):Bool;	
 	public var isSessionSavedOnNext( default, null ):Bool;
-	#if haxe3
 	public var view( get, null ):IView;
 	public var agenda( get, null ):EAgenda;
-	#else
-	public var view( get_view, null ):IView;
-	public var agenda( get_agenda, null ):EAgenda;
-	#end
 
 	private var _entity( default, null ):IEntity;
 

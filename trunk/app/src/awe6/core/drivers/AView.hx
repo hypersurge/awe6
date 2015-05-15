@@ -39,31 +39,18 @@ import awe6.interfaces.IView;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class AView extends Process implements IView
-#else
-class AView extends Process, implements IView
-#end
 {
 	public var context( default, null ):Context;
 	public var owner( default, null ):Dynamic;
 	public var globalX( default, null ):Float;
 	public var globalY( default, null ):Float;
-	#if haxe3
 	@:isVar public var priority( get, set ):Int;
 	public var x( default, set ):Float;
 	public var y( default, set ):Float;
 	public var isVisible( default, set ):Bool;	
 	public var isInViewStack( get, null ):Bool;
 	public var parent( get, null ):IView;
-	#else
-	public var priority( get_priority, set_priority ):Int;
-	public var x( default, set_x ):Float;
-	public var y( default, set_y ):Float;
-	public var isVisible( default, set_isVisible ):Bool;	
-	public var isInViewStack( get_isInViewStack, null ):Bool;
-	public var parent( get_parent, null ):IView;
-	#end
 	
 	private var _isDirty:Bool;
 	private var _children:Array<AView>;

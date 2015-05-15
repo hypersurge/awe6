@@ -38,11 +38,7 @@ import flash.events.MouseEvent;
 class Button extends GuiEntity
 {
 	public static inline var DEFAULT_LABEL = "Button";
-	#if haxe3
 	public var label( default, set ):String;
-	#else
-	public var label( default, set_label ):String;
-	#end
 	
 	private var _key:EKey;
 	private var _onClickCallback:Void->Void;

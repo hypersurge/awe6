@@ -23,6 +23,7 @@
   <build>
     <option directives="" />
     <option flashStrict="False" />
+    <option noInlineOnDebug="False" />
     <option mainClass="demoswf.Main" />
     <option enabledebug="False" />
     <option additional="-swf-lib assets\preloader.swf" />
@@ -51,6 +52,7 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Default" />
+    <option testMovieCommand="" />
   </options>
   <!-- Plugin storage -->
   <storage />

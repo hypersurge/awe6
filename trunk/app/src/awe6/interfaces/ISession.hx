@@ -44,11 +44,7 @@ interface ISession
 	/**
 	 * Useful for testing and debug.
 	 */
-	#if haxe3
 	var isTester( get, null ):Bool;
-	#else
-	var isTester( get_isTester, null ):Bool;
-	#end
 	/**
 	 * Creates a copy of the current session.
 	 * @param	newId	The unique identifier of the copy.

@@ -36,23 +36,12 @@ import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
 import awe6.interfaces.IView;
 
-#if haxe3
 class BasicButton extends Entity implements IPositionable
-#else
-class BasicButton extends Entity, implements IPositionable
-#end
 {
-	#if haxe3
 	public var x( default, set ):Float;
 	public var y( default, set ):Float;
 	public var width( default, set ):Float;
 	public var height( default, set ):Float;
-	#else
-	public var x( default, set_x ):Float;
-	public var y( default, set_y ):Float;
-	public var width( default, set_width ):Float;
-	public var height( default, set_height ):Float;
-	#end
 	public var isOver( default, null ):Bool;
 	public var onClickCallback:Void->Void;
 	public var onRollOverCallback:Void->Void;

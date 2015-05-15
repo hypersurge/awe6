@@ -64,11 +64,7 @@ import haxe.Timer;
  * @author	Robert Fell
  * @author	Mihail Ivanchev
  */
-#if haxe3
 class AKernel extends Process implements IKernel
-#else
-class AKernel extends Process, implements IKernel
-#end
 {
 	private static inline var _POWERED_BY = "Powered by awe6";
 	private static inline var _POWERED_BY_URL = "http://awe6.org";
@@ -89,15 +85,9 @@ class AKernel extends Process, implements IKernel
 	public var inputs( default, null ):IInputManager;
 	public var scenes( default, null ):ISceneManager;
 	public var messenger( default, null ):IMessageManager;
-	#if haxe3
 	public var isEyeCandy( default, set ):Bool;
 	public var isFullScreen( default, set ):Bool;
 	@:isVar public var session( get, set ):ISession;
-	#else
-	public var isEyeCandy( default, set_isEyeCandy ):Bool;
-	public var isFullScreen( default, set_isFullScreen ):Bool;
-	public var session( get_session, set_session ):ISession;
-	#end
 	
 	private var _context:Context;
 	private var _view:View;

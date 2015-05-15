@@ -32,19 +32,11 @@ package awe6.extras;
 import haxe.Resource;
 import haxe.io.Path;
 import haxe.io.Eof;
-#if haxe3
 import sys.FileSystem;
 import sys.io.File;
 import sys.io.FileInput;
 import sys.io.FileOutput;
 import haxe.zip.Reader;
-#else
-import neko.FileSystem;
-import neko.io.File;
-import neko.io.FileInput;
-import neko.io.FileOutput;
-import neko.zip.Reader;
-#end
 import neko.Lib;
 import StringTools;
 

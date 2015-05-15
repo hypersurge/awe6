@@ -42,19 +42,10 @@ import haxe.Timer;
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell
  */
-#if haxe3
 class APreloader extends Process implements IPreloader
-#else
-class APreloader extends Process, implements IPreloader
-#end
 {
-	#if haxe3
 	public var view( get, null ):IView;
 	public var progress( get, null ):Float;
-	#else
-	public var view( get_view, null ):IView;
-	public var progress( get_progress, null ):Float;
-	#end
 	
 	private var _assets:Array<String>;
 	private var _isDecached:Bool;
@@ -97,11 +88,7 @@ class APreloader extends Process, implements IPreloader
 			{
 				try
 				{
-					#if haxe3
-					untyped Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?)
-					#else
-					untyped Timer.delay( callback( _kernel.onPreloaderComplete, this ), 100 ); // delayed because some assets aren't available instantly (?)
-					#end
+					Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?)
 				}
 				catch( p_error:Dynamic ) {}
 				_isComplete = true;

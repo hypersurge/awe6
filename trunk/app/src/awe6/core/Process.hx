@@ -41,11 +41,7 @@ import awe6.interfaces.ITools;
  */
 class Process implements IProcess
 {
-	#if haxe3
 	public var isActive( default, set ):Bool;
-	#else
-	public var isActive( default, set_isActive ):Bool;
-	#end
 	public var isDisposed( default, null ):Bool;
 	
 	private var _kernel:IKernel;

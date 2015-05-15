@@ -50,11 +50,7 @@ class ASession implements ISession
 	private var _version:Int;
 	
 	public var id( default, null ):String;
-	#if haxe3
 	public var isTester( get, null ):Bool;
-	#else
-	public var isTester( get_isTester, null ):Bool;
-	#end
 	public var loadCount:Int;
 	public var saveCount:Int;
 	//extend me

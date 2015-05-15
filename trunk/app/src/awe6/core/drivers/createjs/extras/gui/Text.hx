@@ -35,11 +35,7 @@ typedef TextField = createjs.easeljs.Text;
 
 class Text extends GuiEntity
 {
-	#if haxe3
 	public var text( default, set ):String;
-	#else
-	public var text( default, set_text ):String;
-	#end
 	public var textStyle:ITextStyle;
 	
 	private var _textField:TextField;

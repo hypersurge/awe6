@@ -33,10 +33,6 @@ package awe6.interfaces;
  * The IPreloader interface should be implemented by objects intended to act as preloaders.
  * @author	Robert Fell
  */
-#if haxe3
 interface IPreloader extends IProcess extends IViewable extends IProgress
-#else
-interface IPreloader implements IProcess, implements IViewable, implements IProgress
-#end
 {
 }
