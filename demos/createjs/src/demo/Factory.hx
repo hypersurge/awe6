@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs;
+package demo;
 import awe6.core.AFactory;
 import awe6.core.TextStyle;
 import awe6.interfaces.EScene;
@@ -40,11 +40,11 @@ import awe6.interfaces.IScene;
 import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
-import democreatejs.gui.Overlay;
-import democreatejs.scenes.Game;
-import democreatejs.scenes.Intro;
-import democreatejs.scenes.Results;
-import democreatejs.scenes.SceneTransition;
+import demo.gui.Overlay;
+import demo.scenes.Game;
+import demo.scenes.Intro;
+import demo.scenes.Results;
+import demo.scenes.SceneTransition;
 
 class Factory extends AFactory
 {

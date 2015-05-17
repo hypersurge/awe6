@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.gui;
+package demo.gui;
 import awe6.core.BasicButton;
 import awe6.core.Context;
 import awe6.core.View;
@@ -36,7 +36,7 @@ import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-import democreatejs.AssetManager;
+import demo.AssetManager;
 import awe6.core.drivers.createjs.extras.gui.Text;
 
 class Button extends BasicButton

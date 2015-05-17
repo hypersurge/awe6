@@ -27,13 +27,13 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.entities;
+package demo.entities;
 import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IKernel;
-import democreatejs.AssetManager;
+import demo.AssetManager;
 
 class Sphere extends Entity
 {

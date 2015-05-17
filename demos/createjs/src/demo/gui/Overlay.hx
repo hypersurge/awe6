@@ -27,11 +27,11 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.gui;
+package demo.gui;
 import awe6.core.BasicButton;
 import awe6.interfaces.EOverlayButton;
 import awe6.interfaces.IKernel;
-import democreatejs.AssetManager;
+import demo.AssetManager;
 
 class Overlay extends awe6.core.Overlay
 {

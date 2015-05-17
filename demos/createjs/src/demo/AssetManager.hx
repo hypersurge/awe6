@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs;
+package demo;
 import awe6.core.AAssetManager;
 import awe6.core.Context;
 import awe6.core.View;

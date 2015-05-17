@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs;
+package demo;
 import awe6.core.APreloader;
 import awe6.core.drivers.createjs.extras.gui.Text;
 import awe6.interfaces.ETextStyle;
@@ -45,11 +45,11 @@ class Preloader extends APreloader
 		super._init();
 		_bg = new Shape();
 		_bg.graphics.beginFill( "#202020" );
-		_bg.graphics.drawRect( 0, 0, 100, 10 );
+		_bg.graphics.drawRect( -1, -1, 102, 12 );
 		_bg.graphics.endFill();
 		_fg = new Shape();
 		_fg.graphics.beginFill( "#cccccc" );
-		_fg.graphics.drawRect( 1, 1, 98, 8 );
+		_fg.graphics.drawRect( 0, 0, 100, 10 );
 		_fg.graphics.endFill();
 		_bg.x = _fg.x = ( _kernel.factory.width - 100 ) * .5;
 		_bg.y = _fg.y = ( _kernel.factory.height - 10 ) * .5;
