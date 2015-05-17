@@ -25,7 +25,7 @@ haxelib run awe6 install
 
 === Starting a new awe6 Swf project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/313%20Haxe%20-%20awe6%20Swf%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assets/templates/flashDevelop/Projects/313%20Haxe%20-%20awe6%20Swf%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 Project_
@@ -37,7 +37,7 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 
 === Starting a new awe6 OpenFL project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/373%20Haxe%20-%20awe6%20OpenFL%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assets/templates/flashDevelop/Projects/373%20Haxe%20-%20awe6%20OpenFL%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 OpenFL Project_
@@ -51,7 +51,7 @@ https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Proj
 
 === Starting a new awe6 CreateJS project with !FlashDevelop ===
 
-https://awe6.googlecode.com/svn/trunk/assetsDeployed/templates/flashDevelop/Projects/374%20Haxe%20-%20awe6%20CreateJS%20Project/Project.png
+https://awe6.googlecode.com/svn/trunk/assets/templates/flashDevelop/Projects/374%20Haxe%20-%20awe6%20CreateJS%20Project/Project.png
 
   * Open !FlashDevelop.
   * _Project > New Project > Haxe > awe6 CreateJS Project_
@@ -106,5 +106,5 @@ haxelib run awe6 create entity <projectname> <packagename> <author>
   * See ExampleHelloWorld.
   * Read Game From Scratch's [http://www.gamefromscratch.com/post/2013/05/14/A-closer-look-at-the-Awe6-Haxe-game-engine.aspx tutorial].
   * Create a new project using the templates explained above.
-  * See a more detailed cross platform demo [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fapp%2Fsrc%2Fdemo /trunk/app/].
+  * See more detailed platform specific demos [http://code.google.com/p/awe6/source/browse/#svn%2Ftrunk%2Fdemos%2F /trunk/demos/].
   * Ask questions in the [http://groups.google.com/group/awe6 awe6 Google group] - all questions welcomed, we respond fast.
