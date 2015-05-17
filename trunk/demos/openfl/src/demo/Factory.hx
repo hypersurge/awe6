@@ -56,7 +56,7 @@ class Factory extends AFactory
 		if ( p_isPreconfig )
 		{
 			id = "awe6Demo";
-			version = "2.3.605"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
+			version = "2.5.605"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
 			isDecached = true;
 			width = 600;
@@ -123,9 +123,6 @@ class Factory extends AFactory
 			p_type = BODY;
 		}
 		var l_fontName:String = _assetManager.font.fontName;
-		#if js
-		l_fontName = "Orbitron Black";
-		#end
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( p_type )
 		{
