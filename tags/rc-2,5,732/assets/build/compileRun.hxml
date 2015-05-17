@@ -1,0 +1,7 @@
+-cp ../../lib
+-neko ../../lib/run.n
+-main awe6.extras.Run
+
+# --next
+# -cmd neko ../../lib/run.n
+# -cmd pause

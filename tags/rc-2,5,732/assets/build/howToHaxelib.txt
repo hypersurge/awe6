@@ -1,0 +1,11 @@
+haxelib build list:
+	Export /assets/templates/flashDevelop, zip and replace /lib/__resources/flashDevelop.zip
+	Run /assets/build/compileRun.hxml (to generate /lib/run.n)
+	Run /app/compileHaxedoc.hxml (to generate /lib/haxedoc.xml)
+	Update /lib/haxelib.json with relevant version and comments
+	zip /app/scripts/haxelib name as awe6-X,X,X.zip (remove hidden svn folders)
+	test: haxelib install awe6-X,X,X.zip
+	test run: haxelib run awe6 install
+	perform tests: create a new project with each template, build it
+	submit: haxelib submit awe6-X,X,X.zip
+	tag RC to /tags/rc-X,X,X.zip

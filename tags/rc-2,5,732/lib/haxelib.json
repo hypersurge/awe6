@@ -1,0 +1,13 @@
+{
+  "name": "awe6",
+  "license": "MIT",
+  "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","nme","openfl","createjs","awe6","entity"],
+  "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
+  "contributors": ["hypersurge"],
+  "releasenote": "Haxe 3.2.0 compatible release, many CreateJS improvements.  http://code.google.com/p/awe6/wiki/ReleaseNotes",
+  "version": "2.5.732",
+  "url": "http://awe6.org",
+  "dependencies": {
+
+  }
+}

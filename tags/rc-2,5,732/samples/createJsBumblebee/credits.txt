@@ -1,0 +1,3 @@
+Original source: valerie.elimak.  http://workshops.elimak.com/awe6june12/bumblebee/
+Design: Loes Vrielink based in Amsterdam. http://herculoes.com/
+CreateJS port: hypersurge
