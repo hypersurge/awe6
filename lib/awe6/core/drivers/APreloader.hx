@@ -88,7 +88,7 @@ class APreloader extends Process implements IPreloader
 			{
 				try
 				{
-					Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?)
+					untyped Timer.delay( _kernel.onPreloaderComplete.bind( this ), 100 ); // delayed because some assets aren't available instantly (?) // untyped because of docs generation / non-target
 				}
 				catch( p_error:Dynamic ) {}
 				_isComplete = true;
