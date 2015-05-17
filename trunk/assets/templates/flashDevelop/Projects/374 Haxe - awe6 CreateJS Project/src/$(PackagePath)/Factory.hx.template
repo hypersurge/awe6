@@ -33,7 +33,7 @@ class Factory extends AFactory $(CSLB){
 			height = 400;
 			bgColor = 0xFFFFFFFF;
 			startingSceneType = INTRO;
-			targetFramerate = 20;
+			targetFramerate = 30;
 			isFixedUpdates = true;
 		}
 	}
