@@ -6,5 +6,6 @@ haxelib build list:
 	zip /app/scripts/haxelib name as awe6-X,X,X.zip (remove hidden svn folders)
 	test: haxelib install awe6-X,X,X.zip
 	test run: haxelib run awe6 install
+	perform tests: create a new project with each template, build it
 	submit: haxelib submit awe6-X,X,X.zip
 	tag RC to /tags/rc-X,X,X.zip
