@@ -1,5 +1,13 @@
 #summary Release notes for each release candidate
 
+=RC 2,5,732
+
+Minor release.  Includes:
+
+ * Haxe 3.2.0 compatibility
+ * CreateJS driver optimizations for mobile web
+
+
 =RC 2,4,678=
 
 Minor release.  Includes:
