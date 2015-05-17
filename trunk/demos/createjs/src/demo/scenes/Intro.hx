@@ -27,13 +27,12 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.scenes;
-import awe6.interfaces.EKey;
+package demo.scenes;
+import awe6.core.drivers.createjs.extras.gui.Text;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
-import democreatejs.gui.Button;
-import awe6.core.drivers.createjs.extras.gui.Text;
+import demo.gui.Button;
 
 class Intro extends AScene 
 {

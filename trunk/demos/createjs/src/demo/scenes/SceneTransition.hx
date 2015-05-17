@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.scenes;
+package demo.scenes;
 import awe6.interfaces.IKernel;
 
 class SceneTransition extends awe6.core.SceneTransition

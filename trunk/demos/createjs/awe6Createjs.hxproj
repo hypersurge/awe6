@@ -16,14 +16,14 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="..\app\src" />
+    <class path="..\..\lib" />
   </classpaths>
   <!-- Build options -->
   <build>
     <option directives="awe6DriverRemap" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="democreatejs.Main" />
+    <option mainClass="Main" />
     <option enabledebug="False" />
     <option additional="--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')&#xA;-resource bin/assets/__config.xml@config&#xA;-dce full" />
   </build>
@@ -33,7 +33,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\democreatejs\Main.hx" />
+    <compile path="src\Main.hx" />
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>

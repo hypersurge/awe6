@@ -27,15 +27,15 @@
  * THE SOFTWARE.
  */
 
-package democreatejs.scenes;
+package demo.scenes;
+import awe6.core.drivers.createjs.extras.gui.Text;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMessage;
 import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
-import democreatejs.entities.Sphere;
-import awe6.core.drivers.createjs.extras.gui.Text;
+import demo.entities.Sphere;
 
 class Game extends AScene
 {

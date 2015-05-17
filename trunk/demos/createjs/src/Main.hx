@@ -1,8 +1,8 @@
-package democreatejs;
+package ;
 
 import awe6.core.Context;
 import createjs.easeljs.Stage;
-import democreatejs.Factory;
+import demo.Factory;
 import haxe.Resource;
 import js.Browser;
 
