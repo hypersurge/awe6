@@ -27,24 +27,24 @@
  * THE SOFTWARE.
  */
 
-package demoswf;
+package demo;
 import awe6.core.AFactory;
 import awe6.core.TextStyle;
 import awe6.interfaces.EScene;
-import awe6.interfaces.ETextStyle;
 import awe6.interfaces.ETextAlign;
+import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IAssetManagerProcess;
 import awe6.interfaces.IOverlayProcess;
 import awe6.interfaces.IPreloader;
 import awe6.interfaces.IScene;
+import awe6.interfaces.ISceneTransition;
 import awe6.interfaces.ISession;
 import awe6.interfaces.ITextStyle;
-import awe6.interfaces.ISceneTransition;
-import demoswf.scenes.Game;
-import demoswf.scenes.Intro;
-import demoswf.scenes.Results;
-import demoswf.scenes.SceneTransition;
-import demoswf.gui.Overlay;
+import demo.gui.Overlay;
+import demo.scenes.Game;
+import demo.scenes.Intro;
+import demo.scenes.Results;
+import demo.scenes.SceneTransition;
 
 class Factory extends AFactory
 {

@@ -27,13 +27,13 @@
  * THE SOFTWARE.
  */
 
-package demoswf.entities;
+package demo.entities;
 import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMouseButton;
 import awe6.interfaces.IKernel;
-import demoswf.AssetManager;
+import demo.AssetManager;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.geom.Matrix;

@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package demoswf;
+package demo;
 import awe6.core.APreloader;
 
 class Preloader extends APreloader

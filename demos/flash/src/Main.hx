@@ -1,5 +1,5 @@
-package demoswf;
-import demoswf.Factory;
+package ;
+import demo.Factory;
 import flash.Lib;
 import haxe.Log;
 import haxe.PosInfos;
