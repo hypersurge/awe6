@@ -1,0 +1,5 @@
+-D awe6Xml
+-cp ../../lib
+--no-output
+-xml ../../lib/haxedoc.xml
+awe6.Types
