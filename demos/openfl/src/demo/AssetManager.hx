@@ -139,7 +139,7 @@ class AssetManager extends AAssetManager
 		switch( p_type )
 		{
 			case OVERLAY_BACKGROUND :
-			#if !js // BitmapData still not behaving accurately for js
+			#if !js // BitmapData still not behaving accurately for js (as of 2015-05-17)
 				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
 				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
