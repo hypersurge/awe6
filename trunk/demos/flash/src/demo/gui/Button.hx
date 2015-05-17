@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-package demoswf.gui;
+package demo.gui;
 import awe6.core.BasicButton;
 import awe6.core.Context;
 import awe6.core.View;
@@ -37,7 +37,7 @@ import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IView;
-import demoswf.AssetManager;
+import demo.AssetManager;
 import flash.display.Bitmap;
 
 class Button extends BasicButton

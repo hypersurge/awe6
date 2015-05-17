@@ -27,19 +27,13 @@
  * THE SOFTWARE.
  */
 
-package demoswf.scenes;
-import awe6.core.Scene;
+package demo.scenes;
 import awe6.extras.gui.Text;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.EMessage;
-import awe6.interfaces.EScene;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.IEntity;
-import awe6.interfaces.IKernel;
-import demoswf.AssetManager;
-import demoswf.entities.Bouncer;
-import demoswf.entities.Sphere;
-import demoswf.Session;
+import demo.entities.Sphere;
 
 class Game extends AScene
 {

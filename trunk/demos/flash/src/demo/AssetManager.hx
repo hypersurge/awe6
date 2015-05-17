@@ -27,11 +27,11 @@
  * THE SOFTWARE.
  */
 
-package demoswf;
-import assets.ButtonOver;
+package demo;
 import assets.Background;
 import assets.BackOver;
 import assets.BackUp;
+import assets.ButtonOver;
 import assets.ButtonUp;
 import assets.MuteOver;
 import assets.MuteUp;
@@ -97,11 +97,7 @@ class AssetManager extends AAssetManager
 		switch( p_type )
 		{
 			case OVERLAY_BACKGROUND :
-			#if !js
 				l_bitmap.bitmapData = new BitmapDataScale9( new OverlayBackground(), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
-			#else
-				l_bitmap.bitmapData = new OverlayBackground();
-			#end
 			case OVERLAY_BACK_UP :
 				l_bitmap.bitmapData = new BackUp();
 			case OVERLAY_BACK_OVER :

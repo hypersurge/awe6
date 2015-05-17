@@ -4,9 +4,6 @@
 cd ..\assets\
 if exist hxclasses rmdir hxclasses /s /q
 
-:: haxe 2.07+ version:
-:: C:\Motion-Twin\haxe\haxe -swf test.swf -swf-lib audio.swf --gen-hx-classes --no-output
-:: C:\Motion-Twin\haxe\haxe -swf test.swf -swf-lib gui.swf --gen-hx-classes --no-output
 :: haxe 3.0+ version:
 haxe -swf test.swf -swf-lib audio.swf --gen-hx-classes --no-output
 haxe -swf test.swf -swf-lib gui.swf --gen-hx-classes --no-output

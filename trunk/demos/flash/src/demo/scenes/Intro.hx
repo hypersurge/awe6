@@ -27,11 +27,11 @@
  * THE SOFTWARE.
  */
 
-package demoswf.scenes;
+package demo.scenes;
 import awe6.extras.gui.Text;
 import awe6.interfaces.EKey;
 import awe6.interfaces.ETextStyle;
-import demoswf.gui.Button;
+import demo.gui.Button;
 
 class Intro extends AScene
 {
