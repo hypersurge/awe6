@@ -35,7 +35,7 @@ class ParallaxEntity extends PositionableEntity
 		_images[0].y = _images[1].y = _kernel.factory.height - _height;
 	}
 		
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void 
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
 	{
 		super._updater( p_deltaTime );
 		for ( i in _images )

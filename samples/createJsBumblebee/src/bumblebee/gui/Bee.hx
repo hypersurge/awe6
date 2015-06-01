@@ -47,12 +47,12 @@ class Bee extends PositionableEntity
 		updateAgenda( _EBeeState.NORMAL );
 	}
 	
-	private function updateAgenda( p_type:_EBeeState) 
+	private function updateAgenda( p_type:_EBeeState ) 
 	{
 		setAgenda( EAgenda.SUB_TYPE( p_type ) );
 	}
 	
-	override private function _updater( ?p_deltaTime:Int = 0 ):Void
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		var l_adjustedDelta:Float = p_deltaTime * .001;

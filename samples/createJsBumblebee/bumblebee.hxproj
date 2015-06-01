@@ -22,7 +22,7 @@
     <option directives="awe6DriverRemap" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="bumblebee.Main" />
+    <option mainClass="Main" />
     <option enabledebug="False" />
     <option additional="--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')&#xA;-resource bin/assets/__config.xml@config&#xA;-dce full" />
   </build>
