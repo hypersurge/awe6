@@ -4,3 +4,4 @@
 cd scripts
 if exist ..\bin rmdir ..\bin /s /q
 call assets.bat
+cd ..
