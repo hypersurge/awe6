@@ -130,7 +130,7 @@ class AInputKeyboard extends Process implements IInputKeyboard
 	{
 		_buffer = [];
 		_keys = [];
-		for ( i in 0...512 )
+		for ( i in 0...256 ) // keyCodes beyond this range are unlikely, and if required can be edited here - for mobile performance it may be worth pausing InputKeyboard entirely
 		{
 			_keys[i] = new _HelperKey( _kernel );
 		}
