@@ -1,9 +1,4 @@
-                      _____ 
-   _____      _____  / ___/
-  /__   | /| /   _ \/ __ \ 
- / _  / |/ |/ /  __  /_/ / 
- \___/|__/|__/\___/\____/  
-  awe6 is game, inverted
+The MIT License
 
 Copyright (c) 2010, Robert Fell, awe6.org
 
