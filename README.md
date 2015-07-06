@@ -1,3 +1,5 @@
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.md) [![Haxelib Version](https://img.shields.io/badge/haxelib-v2.5.732-blue.svg)](http://lib.haxe.org/p/awe6)
+
 # awe6, the inverted game framework
 
 > For game developers who risk being made obsolete by “The Next Big Thing” (TNBT) - awe6, the inverted game framework, is a development tool focused on Future Proofing. It provides a shared language for all team members, for any game, for any platform. It embraces TNBT, is open source, and is designed to power any genre of game.
