@@ -51,6 +51,7 @@ class GuiEntity extends Entity implements IPositionable
 		width = p_width;
 		height = p_height;
 		_context = new Context();
+		setPosition( 0, 0 );
 		#if !js
 		if ( p_isMasked )
 		{

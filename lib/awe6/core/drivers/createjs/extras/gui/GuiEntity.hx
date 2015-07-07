@@ -51,6 +51,7 @@ class GuiEntity extends Entity implements IPositionable
 		width = p_width;
 		height = p_height;
 		_context = new Context();
+		setPosition( 0, 0 );
 		super( p_kernel, _context );
 	}
 	
