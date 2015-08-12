@@ -64,7 +64,20 @@ class AudioManager extends AAudioManager
 
 	override private function _driverSetIsMute( p_value:Bool ):Void
 	{
-		Sound.setMute( p_value );
+		try
+		{
+			untyped Sound.muted = p_value;
+		}
+		catch ( p_error:Dynamic )
+		{
+			try
+			{
+				untyped Sound.setMute( p_value );
+			}
+			catch ( p_error:Dynamic )
+			{
+			}
+		}
 	}
 	
 	private function _onVisibilityChange( p_event:Event ):Void
@@ -116,7 +129,6 @@ class _HelperSound extends _AHelperSound
 		{
 			return dispose();
 		}
-		_sound.setMute( _kernel.audio.isMute );
 		_sound.addEventListener( "complete", _onSoundComplete );
 		_driverTransform();
 		return;
