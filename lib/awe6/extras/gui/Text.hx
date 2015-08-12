@@ -152,7 +152,7 @@ class Text extends GuiEntity
 			}
 			_textFormat.color = textStyle.color;
 			_textFormat.font = textStyle.font;
-			_textFormat.size = textStyle.size;
+			_textFormat.size = Math.round( textStyle.size );
 			_textFormat.letterSpacing = Std.int( textStyle.spacingHorizontal );
 			_textFormat.leading = Std.int( textStyle.spacingVertical );
 			_textFormat.italic = textStyle.isItalic;
