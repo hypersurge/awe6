@@ -33,6 +33,7 @@ import awe6.interfaces.EMouseCursor;
 import createjs.easeljs.MouseEvent;
 import createjs.easeljs.Stage;
 import createjs.easeljs.Touch;
+import js.Browser;
 import js.html.TouchEvent;
 
 /**
@@ -65,6 +66,7 @@ class InputMouse extends AInputMouse
 			_stage.addEventListener( "stagemousedown", _onMouseDown );
 			_stage.addEventListener( "stagemouseup", _onMouseUp );
 		}
+		Browser.window.focus();
 	}
 	
 	override private function _disposer():Void 
@@ -143,6 +145,7 @@ class InputMouse extends AInputMouse
 
 	private function _onMouseDown( p_event:MouseEvent ):Void
 	{
+		Browser.window.focus();
 		if ( !isActive )
 		{
 			return;
