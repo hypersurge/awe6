@@ -70,13 +70,13 @@ class AudioManager extends AAudioManager
 		}
 		catch ( p_error:Dynamic )
 		{
-			try
-			{
-				untyped Sound.setMute( p_value );
-			}
-			catch ( p_error:Dynamic )
-			{
-			}
+		}
+		try
+		{
+			untyped Sound.setMute( p_value );
+		}
+		catch ( p_error:Dynamic )
+		{
 		}
 	}
 	
