@@ -186,7 +186,7 @@ class MessageManager extends Process implements IMessageManager
 				switch ( Type.typeof( p_message ) )
 				{
 					case TEnum( e ) :
-						if ( ( Type.getEnum( untyped p_message ) != Type.getEnum( i.message ) ) || ( Type.enumConstructor( untyped p_message ) != Type.enumConstructor( i.message ) ) )
+						if ( ( Type.getEnum( untyped p_message ) != Type.getEnum( i.message ) ) || ( Type.enumConstructor( untyped p_message ) != Type.enumConstructor( i.message ) ) || ( Type.enumParameters( untyped p_message ).toString() != Type.enumParameters( i.message ).toString() ) )
 						{
 							e; // do something with e to avoid warning?
 							continue;
