@@ -66,8 +66,18 @@ class Kernel extends AKernel
 		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_stage = _stageDynamic = _context.getStage();
-		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba( 255, 255, 255, 0 )", "" ); // removes flashing on tap from Android Browser
-		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "transparent", "" ); // removes flashing on tap from Android Browser
+		_stage.canvas.style.setProperty( "-ms-touch-action", "none", "" );
+		_stage.canvas.style.setProperty( "image-rendering", "-o-crisp-edges", "" );
+		_stage.canvas.style.setProperty( "image-rendering", "optimize-contrast", "" );
+		_stage.canvas.style.setProperty( "-ms-interpolation-mode", "nearest-neighbor", "" );
+		_stage.canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba(0,0,0,0)", "" );
+		_stage.canvas.style.setProperty( "-moz-tap-highlight-color", "rgba(0,0,0,0)", "" );
+		_stage.canvas.style.setProperty( "tap-highlight-color", "rgba(0,0,0,0)", "" );
+		_stage.canvas.style.setProperty( "user-select", "none", "" );
+		_stage.canvas.style.setProperty( "-webkit-touch-callout", "none", "" );
+		_stage.canvas.style.setProperty( "-webkit-user-select", "none", "" );
+		_stage.canvas.style.setProperty( "-moz-user-select", "none", "" );
+		_stage.canvas.style.setProperty( "-ms-user-select", "none", "" );
 		_stage.tickOnUpdate = false;
 		_stage.mouseEnabled = false;
 //		_stage.mouseChildren = false;
@@ -78,7 +88,6 @@ class Kernel extends AKernel
 		l_shape.graphics.beginFill( "#" + StringTools.hex( factory.bgColor, 8 ).substr( 2, 6 ) );
 		l_shape.graphics.drawRect( 0, 0, factory.width, factory.height );
 		l_shape.graphics.endFill();
-		l_shape.cache( 0, 0, factory.width, factory.height );
 		_stage.addChildAt( l_shape, 0 );
 		Ticker.setFPS( factory.targetFramerate );
 		Ticker.timingMode = Ticker.RAF_SYNCHED;
