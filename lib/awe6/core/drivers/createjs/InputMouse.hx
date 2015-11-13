@@ -78,8 +78,11 @@ class InputMouse extends AInputMouse
 			_stage.canvas.removeEventListener( "touchmove", _onTouch );
 			_stage.canvas.removeEventListener( "touchend", _onTouchEnd );
 		}
-		_stage.removeEventListener( "stagemousedown", _onMouseDown );
-		_stage.removeEventListener( "stagemouseup", _onMouseUp );
+		else
+		{
+			_stage.removeEventListener( "stagemousedown", _onMouseDown );
+			_stage.removeEventListener( "stagemouseup", _onMouseUp );
+		}
 		super._disposer();		
 	}	
 	
@@ -116,6 +119,17 @@ class InputMouse extends AInputMouse
 	{
 		_onMouseUp( cast p_event );
 		_onTouch( p_event );
+		if ( _isSoundTriggered )
+		{
+			return;
+		}
+		_kernel.audio.start( "Silence" );
+		_isSoundTriggered = true; // one touch is enough
+		if ( _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
+		{
+			untyped _kernel.system.requestFullScreen();
+			untyped _kernel.system.requestLockScreen();
+		}
 	}
 	
 	private function _onTouch( p_event:TouchEvent ):Void
@@ -129,17 +143,6 @@ class InputMouse extends AInputMouse
 		if ( _stage.mouseInBounds )
 		{
 			p_event.preventDefault();
-		}
-		if ( _isSoundTriggered )
-		{
-			return;
-		}
-		_kernel.audio.start( "Silence" );
-		_isSoundTriggered = true; // one touch is enough
-		if ( _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
-		{
-			untyped _kernel.system.requestFullScreen();
-			untyped _kernel.system.requestLockScreen();
 		}
 	}
 
