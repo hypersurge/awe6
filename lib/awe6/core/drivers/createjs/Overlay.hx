@@ -31,7 +31,9 @@ package awe6.core.drivers.createjs;
 import awe6.core.Context;
 import awe6.core.drivers.AOverlay;
 import awe6.core.View;
+import createjs.easeljs.Bitmap;
 import createjs.easeljs.Shape;
+import js.html.CanvasRenderingContext2D;
 
 /**
  * This Overlay class provides CreateJS target overrides.
@@ -39,6 +41,7 @@ import createjs.easeljs.Shape;
  */
 class Overlay extends AOverlay
 {
+	private var _pauseSnapshot:Bitmap;
 	
 	override private function _driverInit():Void
 	{
@@ -77,4 +80,46 @@ class Overlay extends AOverlay
 		_flashAlpha = _flashStartingAlpha = _tools.limit( p_startingAlpha, 0, 1 );
 	}
 	
+	// blurred modal works, but is disabled because performance is poor for many mobile devices
+/*	override private function _drawPause( p_isVisible:Bool = true ):Void
+	{
+		super._drawPause( p_isVisible );
+		if ( !p_isVisible || ( _pauseBlur < 1 ) )
+		{
+			return;
+		}
+		if ( ( _pauseSnapshot != null ) && ( _pauseSnapshot.parent != null ) )
+		{
+			_pauseSnapshot.parent.removeChild( _pauseSnapshot );
+		}
+		_pauseSnapshot = null;
+		try
+		{
+			untyped _kernel.scenes.scene.view.context.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
+			var l_original = untyped _kernel.scenes.scene.view.context.cacheCanvas;
+			_pauseSnapshot = new Bitmap( l_original );
+			_pauseSnapshot.cache( 0, 0, _kernel.factory.width, _kernel.factory.height );
+			var l_context2d:CanvasRenderingContext2D = _pauseSnapshot.cacheCanvas.getContext("2d");
+			if ( l_context2d != null )
+			{
+				var i:Int = 1;
+				var l_steps:Array<Float> = [ _pauseBlur, _pauseBlur * .55, _pauseBlur * .35];
+				l_context2d.globalAlpha = .25;
+				for ( i in l_steps )
+				{
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, -i, -i );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, i, -i );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, -i, i );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, i, i );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, 0, -i );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, -i, 0 );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, i, 0 );
+					l_context2d.drawImage( _pauseSnapshot.cacheCanvas, 0, i );
+				}
+			}
+			untyped _kernel.scenes.scene.view.context.uncache();
+			_pauseContext.addChildAt( _pauseSnapshot, 0 );
+		}
+		catch ( l_error:Dynamic ) {}
+	}*/
 }
