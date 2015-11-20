@@ -31,39 +31,54 @@ package awe6.core.drivers.createjs.extras.gui;
 import awe6.interfaces.IKernel;
 import createjs.easeljs.Bitmap;
 
-class Image extends GuiEntity
-{
-	private var _bitmapDataUrl:String;
+class Image extends GuiEntity 
+{	
+	public var alpha( get, set ):Float;
+	
+	private var _imageData:Dynamic; // String, CanvasElement, ImageElement
 	private var _bitmap:Bitmap;
 	private var _isAdd:Bool;
 	
-	public function new( p_kernel:IKernel, p_bitmapDataUrl:String, ?p_isAdd:Bool = false )
+	public function new( p_kernel:IKernel, p_imageData:Dynamic, p_isAdd:Bool = false, p_alpha:Float = 1 )
 	{
-		_bitmapDataUrl = p_bitmapDataUrl;
+		_imageData = p_imageData;
 		_isAdd = p_isAdd;
-		super( p_kernel );
+		super( p_kernel, false );
+		alpha = p_alpha;
 	}
 	
 	override private function _init():Void 
 	{
 		super._init();
 		_context.mouseEnabled = false;
-		_bitmap = new Bitmap( _bitmapDataUrl );
-		_bitmap.compositeOperation = _isAdd ? "lighter" : "source-over";
-		_context.addChild( _bitmap );
-		width = _bitmap.image.width;
-		height = _bitmap.image.height;
+		configure( _imageData, _isAdd );
 	}
 	
-	public function configure( p_bitmapDataUrl:String ):Void
+	public function configure( p_imageData:Dynamic, p_isAdd:Bool = false ):Void
 	{
-		_bitmapDataUrl = p_bitmapDataUrl;
+		_imageData = p_imageData;
+		_isAdd = p_isAdd;
 		if ( ( _bitmap != null ) && ( _bitmap.parent != null ) )
 		{
 			_bitmap.parent.removeChild( _bitmap );
 		}
-		_bitmap = new Bitmap( _bitmapDataUrl );
+		_bitmap = new Bitmap( _imageData );
+		_bitmap.compositeOperation = _isAdd ? "lighter" : "source-over";
+		if ( _bitmap.image != null )
+		{
+			width = _bitmap.image.width;
+			height = _bitmap.image.height;
+		}
 		_context.addChild( _bitmap );
 	}
 	
+	private function get_alpha():Float
+	{
+		return _bitmap.alpha;
+	}
+	
+	private function set_alpha( p_value:Float ):Float
+	{
+		return _bitmap.alpha = p_value;
+	}
 }
