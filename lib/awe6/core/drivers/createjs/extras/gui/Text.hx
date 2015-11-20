@@ -39,6 +39,7 @@ class Text extends GuiEntity
 	public var textStyle:ITextStyle;
 	
 	private var _textField:TextField;
+	private var _textFieldOutline:TextField;
 	private var _isMultiline:Bool;
 	private var _isCached:Bool;
 	private var _isDirty:Bool;
@@ -58,12 +59,6 @@ class Text extends GuiEntity
 		super._init();
 		_textField = new TextField();
 		_textField.text = text;
-		var l_isDesktop:Bool = true;
-		try
-		{
-			l_isDesktop = untyped _kernel.system.isDesktop;
-		}
-		catch ( p_error:Dynamic ) { }
 		_draw();
 		_context.addChild( _textField );
 		_isDirty = false;
@@ -103,7 +98,26 @@ class Text extends GuiEntity
 			_textField.font = ( textStyle.isBold ? "bold " : "" ) + ( textStyle.isItalic ? "italic " : "" ) + textStyle.size + "px '" + textStyle.font + "'";
 			if ( textStyle.filters != null )
 			{
-				_textField.shadow = new Shadow( "#" + StringTools.hex( textStyle.filters[0], 6 ), textStyle.filters[1], textStyle.filters[2], textStyle.filters[3] );
+				var l_shadowOwner:TextField = _textField;
+				l_shadowOwner.shadow = null;
+				var l_filters = textStyle.filters.copy();
+				if ( ( _textFieldOutline != null ) && ( _textFieldOutline.parent != null ) )
+				{
+					_textFieldOutline.parent.removeChild( _textFieldOutline );
+				}
+				_textFieldOutline = null;
+				if ( ( l_filters.length == 2 ) || ( l_filters.length == 6 ) )
+				{
+					_textFieldOutline = _textField.clone();
+					_textFieldOutline.color = "#" + StringTools.hex( l_filters.shift(), 6 );
+					untyped _textFieldOutline.outline = l_filters.shift() * 2;
+					_context.addChildAt(_textFieldOutline, 0 );
+					l_shadowOwner = _textFieldOutline;
+				}
+				if ( l_filters.length == 4 )
+				{
+					l_shadowOwner.shadow = new Shadow( "#" + StringTools.hex( l_filters[0], 6 ), l_filters[1], l_filters[2], l_filters[3] );
+				}
 			}
 		}
 		if ( _isCached )
@@ -125,6 +139,10 @@ class Text extends GuiEntity
 		}
 		text = p_value;
 		_textField.text = text;
+		if ( _textFieldOutline != null )
+		{
+			_textFieldOutline.text = text;
+		}
 		_isDirty = true;
 		return text;
 	}	
