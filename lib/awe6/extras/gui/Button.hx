@@ -140,7 +140,7 @@ class Button extends GuiEntity
 		{
 			return;
 		}
-		Reflect.callMethod( this, _onClickCallback, [] );
+		_onClickCallback();
 	}
 	
 	public function onRollOver():Void
@@ -149,7 +149,7 @@ class Button extends GuiEntity
 		{
 			return;
 		}
-		Reflect.callMethod( this, _onRollOverCallback, [] );		
+		_onRollOverCallback();
 	}
 	
 	public function onRollOut():Void
@@ -158,7 +158,7 @@ class Button extends GuiEntity
 		{
 			return;
 		}
-		Reflect.callMethod( this, _onRollOutCallback, [] );		
+		_onRollOutCallback();
 	}
 	
 	private function set_label( p_value:String ):String

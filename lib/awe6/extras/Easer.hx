@@ -94,7 +94,7 @@ class Easer extends Entity
 		{
 			if ( _callback != null )
 			{
-				Reflect.callMethod( this, _callback, [] );		
+				_callback();
 			}
 			dispose();
 		}

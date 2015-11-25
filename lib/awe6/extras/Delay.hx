@@ -49,7 +49,10 @@ class Delay extends Entity
 		_duration -= p_deltaTime;
 		if ( _duration <= 0 )
 		{
-			Reflect.callMethod( this, _callbackFunction, [] );
+			if ( _callbackFunction != null )
+			{
+				_callbackFunction();
+			}
 			dispose();
 		}
 	}

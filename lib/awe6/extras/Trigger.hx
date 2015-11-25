@@ -75,7 +75,10 @@ class Trigger extends Entity
 	
 	public function activate( p_isActivated:Bool = true ):Void
 	{
-		Reflect.callMethod( this, _callbackFunction, [] );
+		if ( _callbackFunction != null )
+		{
+			_callbackFunction();
+		}
 		dispose();
 	}
 	

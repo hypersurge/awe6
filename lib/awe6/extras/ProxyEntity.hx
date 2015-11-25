@@ -48,7 +48,7 @@ class ProxyEntity extends Entity
 		super._updater( p_deltaTime );
 		if ( _proxyUpdate != null )
 		{
-			Reflect.callMethod( this, _proxyUpdate, [] );
+			_proxyUpdate( p_deltaTime );
 		}
 	}
 	
@@ -56,7 +56,7 @@ class ProxyEntity extends Entity
 	{
 		if ( _proxyDispose != null )
 		{
-			Reflect.callMethod( this, _proxyDispose, [] );
+			_proxyDispose();
 		}
 		super._disposer();		
 	}
