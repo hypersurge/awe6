@@ -6,8 +6,6 @@ import awe6.extras.gui.BitmapDataScale9;
 import awe6.interfaces.IView;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import openfl.Assets;
-import flash.text.Font;
 
 /**
 $(CBI)* ...
@@ -26,9 +24,6 @@ class AssetManager extends AAssetManager $(CSLB){
 	public var overlayUnmuteUp( default, null ):IView;
 	public var overlayUnpauseOver( default, null ):IView;
 	public var overlayUnpauseUp( default, null ):IView;
-	public var font( default, null ):Font;
-		
-	private var _html5AudioExtension:String;
 	
 	override private function _init():Void $(CSLB){
 		super._init();
@@ -43,48 +38,6 @@ class AssetManager extends AAssetManager $(CSLB){
 		overlayPauseOver = _createView( OVERLAY_PAUSE_OVER );
 		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
-		font = Assets.getFont( "assets/fonts/orbitron.ttf" ); // may not work for html5
-	}
-
-	override public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic $(CSLB){
-		if ( p_packageId == null ) $(CSLB){
-			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		}
-		if ( p_packageId == null ) $(CSLB){
-			p_packageId = _PACKAGE_ID;
-		}
-		if ( ( p_packageId == _kernel.getConfig( "settings.assets.packages.audio" ) ) || ( p_packageId == "assets.audio" ) ) $(CSLB){
-			var l_extension:String = ".mp3"; // js extension stripped and then handled by Howler
-			#if ( cpp || neko )
-			l_extension = ".ogg"; // doesn't work on Macs?
-			#end
-			p_id += l_extension;
-		}
-		if ( ( p_packageId.length > 0 ) && ( p_packageId.substr( -1, 1 ) != "." ) ) $(CSLB){
-			p_packageId += ".";
-		}
-		var l_assetName:String = StringTools.replace( p_packageId, ".", "/" ) + p_id;
-		var l_result:Dynamic = Assets.getSound( l_assetName );
-		if ( l_result != null ) $(CSLB){
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getBitmapData( l_assetName );
-		if ( l_result != null ) $(CSLB){
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getFont( l_assetName );
-		if ( l_result != null ) $(CSLB){
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getText( l_assetName );
-		if ( l_result != null ) $(CSLB){
-			return l_result;
-		}
-		var l_result:Dynamic = Assets.getBytes( l_assetName );
-		if ( l_result != null ) $(CSLB){
-			return l_result;
-		}
-		return super.getAsset( p_id, p_packageId, p_args );
 	}
 
 	private function _createView( p_type:EAsset ):IView $(CSLB){
@@ -94,30 +47,30 @@ class AssetManager extends AAssetManager $(CSLB){
 		switch( p_type ) $(CSLB){
 			case OVERLAY_BACKGROUND :
 			#if !js // BitmapData still not behaving accurately for js
-				l_bitmap.bitmapData = new BitmapDataScale9( Assets.getBitmapData( "assets/overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+				l_bitmap.bitmapData = new BitmapDataScale9( getAsset( "overlay/OverlayBackground.png" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			#else
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/OverlayBackground.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/OverlayBackground.png" );
 			#end
 			case OVERLAY_BACK_UP :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackUp.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/BackUp.png" );
 			case OVERLAY_BACK_OVER :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/BackOver.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/BackOver.png" );
 			case OVERLAY_MUTE_UP :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteUp.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/MuteUp.png" );
 			case OVERLAY_MUTE_OVER :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/MuteOver.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/MuteOver.png" );
 			case OVERLAY_UNMUTE_UP :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteUp.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/UnmuteUp.png" );
 			case OVERLAY_UNMUTE_OVER :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnmuteOver.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/UnmuteOver.png" );
 			case OVERLAY_PAUSE_UP :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseUp.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/PauseUp.png" );
 			case OVERLAY_PAUSE_OVER :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/PauseOver.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/PauseOver.png" );
 			case OVERLAY_UNPAUSE_UP :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseUp.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/UnpauseUp.png" );
 			case OVERLAY_UNPAUSE_OVER :
-				l_bitmap.bitmapData = Assets.getBitmapData( "assets/overlay/buttons/UnpauseOver.png" );
+				l_bitmap.bitmapData = getAsset( "overlay/buttons/UnpauseOver.png" );
 		}
 		return new View( _kernel, l_context );
 	}

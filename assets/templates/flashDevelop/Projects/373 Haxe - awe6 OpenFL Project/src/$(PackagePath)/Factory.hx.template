@@ -79,7 +79,7 @@ class Factory extends AFactory $(CSLB){
 		if ( p_type == null ) $(CSLB){
 			p_type = BODY;
 		}
-		var l_fontName:String = _assetManager.font.fontName;
+		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0x808080 );
 		l_result.size = switch ( p_type ) $(CSLB){
 			case HEADLINE :
