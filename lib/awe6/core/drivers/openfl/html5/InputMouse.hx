@@ -109,7 +109,6 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		scroll += p_event.delta;
-		trace( scroll );
 	}
 	
 	override private function set_isVisible( p_value:Bool ):Bool
@@ -121,7 +120,6 @@ class InputMouse extends AInputMouse
 	
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		// Lib.nmeSetCursor unreliable / private enumerator, therefore removed
 		return super.set_cursorType( p_value );
 	}
 

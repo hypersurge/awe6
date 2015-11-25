@@ -4,7 +4,7 @@
 		<assets>
 			<packages default="assets" audio="assets.audio" />
 		</assets>
-		<font name="assets_fonts_orbitron_ttf" />
+		<font name="Orbitron Black" />
 	</settings>
 	<gui>
 		<buttons next="NEXT" start="START" />

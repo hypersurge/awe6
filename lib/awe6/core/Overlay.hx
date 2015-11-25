@@ -36,13 +36,17 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Overlay = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Overlay" ) ]>;
-#elseif ( cpp || neko )
-typedef Overlay = awe6.core.drivers.openfl.native.Overlay;
+	typedef Overlay = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Overlay" ) ]>;
+#elseif openfl
+	#if ( cpp || neko )
+		typedef Overlay = awe6.core.drivers.openfl.native.Overlay;
+	#elseif flash
+		typedef Overlay = awe6.core.drivers.flash.Overlay;
+	#elseif js
+		typedef Overlay = awe6.core.drivers.openfl.html5.Overlay;
+	#end
 #elseif flash
-typedef Overlay = awe6.core.drivers.flash.Overlay;
-#elseif js
-typedef Overlay = awe6.core.drivers.openfl.html5.Overlay;
+	typedef Overlay = awe6.core.drivers.flash.Overlay;
 #else
-typedef Overlay = awe6.core.drivers.AOverlay;
+	typedef Overlay = awe6.core.drivers.AOverlay;
 #end

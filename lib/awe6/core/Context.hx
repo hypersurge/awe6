@@ -36,13 +36,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Context = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Context" ) ]>;
-#elseif ( cpp || neko )
-typedef Context = awe6.core.drivers.openfl.native.Context;
+	typedef Context = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Context" ) ]>;
+#elseif openfl
+	typedef Context = awe6.core.drivers.openfl.Context;
 #elseif flash
-typedef Context = awe6.core.drivers.flash.Context;
-#elseif js
-typedef Context = awe6.core.drivers.openfl.html5.Context;
+	typedef Context = awe6.core.drivers.flash.Context;
 #else
-typedef Context = Array<Dynamic>; // acting as a placeholder for doc generation.
+	typedef Context = Array<Dynamic>; // acting as a placeholder for doc generation.
 #end

@@ -35,13 +35,17 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Profiler = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Profiler" ) ]>;
-#elseif ( cpp || neko )
-typedef Profiler = awe6.core.drivers.openfl.native.Profiler;
+	typedef Profiler = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Profiler" ) ]>;
+#elseif openfl
+	#if ( cpp || neko )
+		typedef Profiler = awe6.core.drivers.openfl.native.Profiler;
+	#elseif flash
+		typedef Profiler = awe6.core.drivers.flash.Profiler;
+	#elseif js
+		typedef Profiler = awe6.core.drivers.openfl.html5.Profiler;
+	#end
 #elseif flash
-typedef Profiler = awe6.core.drivers.flash.Profiler;
-#elseif js
-typedef Profiler = awe6.core.drivers.openfl.html5.Profiler;
+	typedef Profiler = awe6.core.drivers.flash.Profiler;
 #else
-typedef Profiler = awe6.core.drivers.AProfiler;
+	typedef Profiler = awe6.core.drivers.AProfiler;
 #end

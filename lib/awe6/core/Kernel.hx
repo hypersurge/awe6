@@ -36,13 +36,17 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef Kernel = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Kernel" ) ]>;
-#elseif ( cpp || neko )
-typedef Kernel = awe6.core.drivers.openfl.native.Kernel;
+	typedef Kernel = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Kernel" ) ]>;
+#elseif openfl
+	#if ( cpp || neko )
+		typedef Kernel = awe6.core.drivers.openfl.native.Kernel;
+	#elseif flash
+		typedef Kernel = awe6.core.drivers.flash.Kernel;
+	#elseif js
+		typedef Kernel = awe6.core.drivers.openfl.html5.Kernel;
+	#end
 #elseif flash
-typedef Kernel = awe6.core.drivers.flash.Kernel;
-#elseif js
-typedef Kernel = awe6.core.drivers.openfl.html5.Kernel;
+	typedef Kernel = awe6.core.drivers.flash.Kernel;
 #else
-typedef Kernel = awe6.core.drivers.AKernel;
+	typedef Kernel = awe6.core.drivers.AKernel;
 #end

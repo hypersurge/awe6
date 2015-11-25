@@ -36,13 +36,17 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef AudioManager = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "AudioManager" ) ]>;
-#elseif ( cpp || neko )
-typedef AudioManager = awe6.core.drivers.openfl.native.AudioManager;
+	typedef AudioManager = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "AudioManager" ) ]>;
+#elseif openfl
+	#if ( cpp || neko )
+		typedef AudioManager = awe6.core.drivers.openfl.native.AudioManager;
+	#elseif flash
+		typedef AudioManager = awe6.core.drivers.flash.AudioManager;
+	#elseif js
+		typedef AudioManager = awe6.core.drivers.openfl.html5.AudioManager;
+	#end
 #elseif flash
-typedef AudioManager = awe6.core.drivers.flash.AudioManager;
-#elseif js
-typedef AudioManager = awe6.core.drivers.openfl.html5.AudioManager;
+	typedef AudioManager = awe6.core.drivers.flash.AudioManager;
 #else
-typedef AudioManager = awe6.core.drivers.AAudioManager;
+	typedef AudioManager = awe6.core.drivers.AAudioManager;
 #end

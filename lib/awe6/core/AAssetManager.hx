@@ -28,48 +28,21 @@
  */
 
 package awe6.core;
-import awe6.interfaces.IAssetManagerProcess;
 
 /**
- * The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
+ * The AAssetManager class provides a minimalist abstract implementation of the IAssetManager interface.
  * <p>It is intended as an abstract class to be extended.</p>
  * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>AAssetManager includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell
- */
-class AAssetManager extends Process implements IAssetManagerProcess
-{
-	private var _PACKAGE_ID:String;	
-	
-	override private function _init():Void
-	{
-		_PACKAGE_ID = "assets";
-		super._init();
-	}
+ **/
 
-	public function getAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
-	{
-		if ( p_packageId == null )
-		{
-			p_packageId = _kernel.getConfig( "settings.assets.packages.default" );
-		}
-		if ( p_packageId == null )
-		{
-			p_packageId = _PACKAGE_ID;
-		}		
-		var l_assetName:String = p_id;
-		if ( p_packageId.length > 0 )
-		{
-			l_assetName = p_packageId + "." + p_id;
-		}
-		var l_assetClass:Class<Dynamic> = Type.resolveClass( l_assetName );
-		if ( l_assetClass == null )
-		{
-			return null;			
-		}
-		if ( p_args == null )
-		{
-			p_args = [];
-		}
-		return Type.createInstance( l_assetClass, p_args );
-	}
-}
+#if awe6DriverRemap
+	typedef AAssetManager = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "AssetManager" ) ]>;
+#elseif openfl
+	typedef AAssetManager = awe6.core.drivers.openfl.AssetManager;
+#elseif flash
+	typedef AAssetManager = awe6.core.drivers.flash.AssetManager;
+#else
+	typedef AAssetManager = awe6.core.drivers.AssetManager;
+#end

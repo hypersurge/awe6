@@ -122,7 +122,7 @@ class Factory extends AFactory
 		{
 			p_type = BODY;
 		}
-		var l_fontName:String = _assetManager.font.fontName;
+		var l_fontName:String = _kernel.getConfig( "settings.font.name" );
 		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ new flash.filters.GlowFilter( 0x020382, 1, 4, 4, 5, 2 ) ] );
 		l_result.size = switch ( p_type )
 		{

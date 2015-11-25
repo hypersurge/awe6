@@ -128,7 +128,7 @@ class Factory extends AFactory
 			p_type = BODY;
 		}
 		var l_fontName:String = _kernel.getConfig( Config.settings_font_name );
-		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ 0x000000, 2, 0x000000, 1, 1, 4 ] );
+		var l_result:TextStyle = new TextStyle( l_fontName, 12, 0xFFFFFF, false, false, ETextAlign.CENTER, 0, 0, 0, [ 0x020382, 2, 0x020382, 1, 1, 4 ] );
 		l_result.size = switch ( p_type )
 		{
 			case HEADLINE :

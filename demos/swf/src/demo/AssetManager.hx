@@ -28,21 +28,6 @@
  */
 
 package demo;
-import assets.Background;
-import assets.BackOver;
-import assets.BackUp;
-import assets.ButtonOver;
-import assets.ButtonUp;
-import assets.MuteOver;
-import assets.MuteUp;
-import assets.OverlayBackground;
-import assets.PauseOver;
-import assets.PauseUp;
-import assets.Sphere;
-import assets.UnmuteOver;
-import assets.UnmuteUp;
-import assets.UnpauseOver;
-import assets.UnpauseUp;
 import awe6.core.AAssetManager;
 import awe6.core.Context;
 import awe6.core.View;
@@ -84,9 +69,9 @@ class AssetManager extends AAssetManager
 		overlayUnpauseUp = _createView( OVERLAY_UNPAUSE_UP );
 		overlayUnpauseOver = _createView( OVERLAY_UNPAUSE_OVER );
 		background = _createView( BACKGROUND );
-		buttonUp = new ButtonUp();
-		buttonOver = new ButtonOver();
-		sphere = new Sphere();
+		buttonUp = getAsset( "ButtonUp" );
+		buttonOver = getAsset( "ButtonOver" );
+		sphere = getAsset( "Sphere" );
 	}
 
 	private function _createView( p_type:EAsset ):IView
@@ -97,29 +82,29 @@ class AssetManager extends AAssetManager
 		switch( p_type )
 		{
 			case OVERLAY_BACKGROUND :
-				l_bitmap.bitmapData = new BitmapDataScale9( new OverlayBackground(), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
+				l_bitmap.bitmapData = new BitmapDataScale9( getAsset( "OverlayBackground" ), 110, 20, 550, 350, _kernel.factory.width, _kernel.factory.height, true );
 			case OVERLAY_BACK_UP :
-				l_bitmap.bitmapData = new BackUp();
+				l_bitmap.bitmapData = getAsset( "BackUp" );
 			case OVERLAY_BACK_OVER :
-				l_bitmap.bitmapData = new BackOver();
+				l_bitmap.bitmapData = getAsset( "BackOver" );
 			case OVERLAY_MUTE_UP :
-				l_bitmap.bitmapData = new MuteUp();
+				l_bitmap.bitmapData = getAsset( "MuteUp" );
 			case OVERLAY_MUTE_OVER :
-				l_bitmap.bitmapData = new MuteOver();
+				l_bitmap.bitmapData = getAsset( "MuteOver" );
 			case OVERLAY_UNMUTE_UP :
-				l_bitmap.bitmapData = new UnmuteUp();
+				l_bitmap.bitmapData = getAsset( "UnmuteUp" );
 			case OVERLAY_UNMUTE_OVER :
-				l_bitmap.bitmapData = new UnmuteOver();
+				l_bitmap.bitmapData = getAsset( "UnmuteOver" );
 			case OVERLAY_PAUSE_UP :
-				l_bitmap.bitmapData = new PauseUp();
+				l_bitmap.bitmapData = getAsset( "PauseUp" );
 			case OVERLAY_PAUSE_OVER :
-				l_bitmap.bitmapData = new PauseOver();
+				l_bitmap.bitmapData = getAsset( "PauseOver" );
 			case OVERLAY_UNPAUSE_UP :
-				l_bitmap.bitmapData = new UnpauseUp();
+				l_bitmap.bitmapData = getAsset( "UnpauseUp" );
 			case OVERLAY_UNPAUSE_OVER :
-				l_bitmap.bitmapData = new UnpauseOver();
+				l_bitmap.bitmapData = getAsset( "UnpauseOver" );
 			case BACKGROUND :
-				l_bitmap.bitmapData = new Background();
+				l_bitmap.bitmapData = getAsset( "Background" );
 		}
 		return new View( _kernel, l_context );
 	}

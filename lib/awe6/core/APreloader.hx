@@ -37,13 +37,11 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-typedef APreloader = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Preloader" ) ]>;
-#elseif ( cpp || neko )
-typedef APreloader = awe6.core.drivers.openfl.native.Preloader;
+	typedef APreloader = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Preloader" ) ]>;
+#elseif openfl
+	typedef APreloader = awe6.core.drivers.openfl.Preloader;
 #elseif flash
-typedef APreloader = awe6.core.drivers.flash.Preloader;
-#elseif js
-typedef APreloader = awe6.core.drivers.openfl.html5.Preloader;
+	typedef APreloader = awe6.core.drivers.flash.Preloader;
 #else
-typedef APreloader = awe6.core.drivers.APreloader;
+	typedef APreloader = awe6.core.drivers.APreloader;
 #end
