@@ -32,7 +32,6 @@ import awe6.interfaces.EMessage;
 import awe6.interfaces.IEntity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IProcess;
-import awe6.interfaces.ITools;
 
 /**
  * The Process class provides a minimalist implementation of the IProcess interface.
@@ -57,18 +56,10 @@ class Process implements IProcess
 		_tools = cast _kernel.tools;
 		_isEntity = Std.is( this, IEntity );
 		_init();
-//		removed from default for performance reasons. If required you can reinstate it in the concrete class's _init
-/*
-		if ( _isEntity )
-		{
-			_kernel.messenger.sendMessage( EMessage.INIT, cast this, true, true, true );
-		}
-*/
 	}
 	
 	private function _init():Void
 	{
-//		Reflect.setField( this, "isActive", true ); // avoids the setter
 		_isIsActiveSetterBypassed = true;
 		isActive = true;
 		isDisposed = false;
@@ -86,15 +77,7 @@ class Process implements IProcess
 		{
 			isDisposed = true;
 			isActive = false;
-//			removed from default for performance reasons. If required you can reinstate it in the concrete class's _disposer
-/*
-			if ( _isEntity )
-			{
-				_kernel.messenger.sendMessage( EMessage.DISPOSE, cast this, true, true, true );
-			}
-*/
 			_disposer();
-			return;
 		}
 	}
 	
@@ -119,7 +102,6 @@ class Process implements IProcess
 			_age += p_deltaTime;
 			_updates++;
 			_updater( p_deltaTime );
-			return;
 		}
 	}
 	
@@ -159,7 +141,6 @@ class Process implements IProcess
 		else
 		{
 			_pauser();
-//			Reflect.setField( this, "isActive", false ); // avoids the setter
 			_isIsActiveSetterBypassed = true;
 			isActive = false;
 			if ( _isEntity )
@@ -183,14 +164,12 @@ class Process implements IProcess
 		else
 		{
 			_resumer();
-	//		Reflect.setField( this, "isActive", true ); // avoids the setter
 			_isIsActiveSetterBypassed = true;
 			isActive = true;
 			if ( _isEntity )
 			{
 				_kernel.messenger.sendMessage( EMessage.RESUME, cast this, true, true, true );
 			}
-			return;
 		}
 	}
 	

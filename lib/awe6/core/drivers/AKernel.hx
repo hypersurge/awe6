@@ -195,14 +195,21 @@ class AKernel extends Process implements IKernel
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
-		_helperFramerate.update();
-		var l_deltaTime:Int = factory.isFixedUpdates ? Std.int( 1000 / factory.targetFramerate ) : _helperFramerate.timeInterval;
-		super._updater( l_deltaTime );
+		if ( factory.isFixedUpdates )
+		{
+			p_deltaTime = Std.int( 1000 / factory.targetFramerate );
+		}
+		else
+		{
+			_helperFramerate.update();
+			p_deltaTime = _helperFramerate.timeInterval;
+		}
+		super._updater( p_deltaTime );
 		for ( i in _processes )
 		{
-			i.update( l_deltaTime );
+			i.update( p_deltaTime );
 		}
-		_view.update( l_deltaTime );
+		_view.update( p_deltaTime );
 	}
 	
 	override private function _disposer():Void
