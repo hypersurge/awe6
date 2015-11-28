@@ -29,6 +29,7 @@
 
 package awe6.core.drivers.createjs;
 import awe6.core.drivers.AAssetManager;
+import createjs.preloadjs.LoadQueue;
 
 /**
  * This AssetManager class provides createjs target overrides.
@@ -36,9 +37,16 @@ import awe6.core.drivers.AAssetManager;
  */
 class AssetManager extends AAssetManager
 {
+	public static var loadQueue:LoadQueue;
 	
-/*	override private function _driverGetAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
+	override private function _driverGetAsset( p_id:String, ?p_packageId:String, ?p_args:Array<Dynamic> ):Dynamic
 	{
-	}*/
+		var l_result:Dynamic = null;
+		if ( loadQueue != null )
+		{
+			l_result = loadQueue.getResult( p_id );
+		}
+		return l_result;
+	}
 	
 }

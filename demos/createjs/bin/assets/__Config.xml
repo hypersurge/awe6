@@ -13,7 +13,7 @@
 		</asciiArt>
 	</settings>
 	<gui>
-		<preloaderComplete>Tap anywhere to start</preloaderComplete>
+		<audioHoldMessage>TAP ANYWHERE TO START</audioHoldMessage>
 		<buttons next="NEXT" start="START" />
 		<scenes>
 			<intro title="INTRODUCTION" instructions="Click on all the invaders as fast as possible!" />

@@ -84,24 +84,24 @@ class AssetManager extends AAssetManager
 			case OVERLAY_UNPAUSE_OVER : Assets.overlay_buttons_UnpauseOver__png;
 			case BACKGROUND : Assets.scenes_Background__png;
 		}
-		var l_bitmap:Bitmap = new Bitmap( l_url );
+		var l_bitmap:Bitmap = new Bitmap( getAsset( l_url ) );
 		l_context.addChild( l_bitmap );
 		return new View( _kernel, l_context );
 	}
 	
 	public function createSphere():Bitmap
 	{
-		return new Bitmap( Assets.Sphere__png );
+		return new Bitmap( getAsset( Assets.Sphere__png ) );
 	}
 
 	public function createButtonUp():Bitmap
 	{
-		return new Bitmap( Assets.ButtonUp__png );
+		return new Bitmap( getAsset( Assets.ButtonUp__png ) );
 	}
 	
 	public function createButtonOver():Bitmap
 	{
-		return new Bitmap( Assets.ButtonOver__png );
+		return new Bitmap( getAsset( Assets.ButtonOver__png ) );
 	}
 }
 
