@@ -135,7 +135,7 @@ class BasicButton extends Entity implements IPositionable
 		{
 			return;
 		}
-		Reflect.callMethod( this, onClickCallback, [] );
+		onClickCallback();
 	}
 	
 	public function onRollOver():Void
@@ -145,7 +145,7 @@ class BasicButton extends Entity implements IPositionable
 		{
 			return;
 		}
-		Reflect.callMethod( this, onRollOverCallback, [] );		
+		onRollOverCallback();
 	}
 	
 	public function onRollOut():Void
@@ -155,7 +155,7 @@ class BasicButton extends Entity implements IPositionable
 		{
 			return;
 		}
-		Reflect.callMethod( this, onRollOutCallback, [] );		
+		onRollOutCallback();
 	}
 	
 	public function setPosition( p_x:Float, p_y:Float ):Void

@@ -181,20 +181,14 @@ class InputMouse extends AInputMouse
 	
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
-		switch( p_value )
+		_stage.canvas.style.cursor = switch( p_value )
 		{
-			case ARROW :
-				_stage.cursor = "crosshair";
-			case AUTO :
-				_stage.cursor = "auto";
-			case BUTTON :
-				_stage.cursor = "pointer";
-			case HAND :
-				_stage.cursor = "pointer";
-			case IBEAM :
-				_stage.cursor = "text";
-			case SUB_TYPE( p_value ) :
-				_stage.cursor = p_value; // http://www.w3schools.com/cssref/playit.asp?filename=playcss_cursor&preval=alias
+			case ARROW : "crosshair";
+			case AUTO : "auto";
+			case BUTTON : "pointer";
+			case HAND : "pointer";
+			case IBEAM : "text";
+			case SUB_TYPE( p_value ) : p_value; // http://www.w3schools.com/cssref/playit.asp?filename=playcss_cursor&preval=alias
 		}
 		return super.set_cursorType( p_value );
 	}
