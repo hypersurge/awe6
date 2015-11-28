@@ -64,7 +64,7 @@ class InputKeyboard extends AInputKeyboard
 		{
 			return;
 		}
-		if ( Lambda.has( _preventDefaultKeyCodes, p_event.keyCode ) )
+		if ( _preventDefaultKeyCodes.indexOf( p_event.keyCode ) != -1 )
 		{
 			p_event.preventDefault();
 		}
@@ -77,7 +77,7 @@ class InputKeyboard extends AInputKeyboard
 		{
 			return;
 		}
-		if ( Lambda.has( _preventDefaultKeyCodes, p_event.keyCode ) )
+		if ( _preventDefaultKeyCodes.indexOf( p_event.keyCode ) != -1 )
 		{
 			p_event.preventDefault();
 		}
