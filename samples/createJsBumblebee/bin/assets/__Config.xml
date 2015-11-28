@@ -16,6 +16,6 @@
 		</asciiArt>
 	</settings>
 	<gui>
-		<preloaderComplete>Tap anywhere to start</preloaderComplete>
+		<audioHoldMessage>TAP ANYWHERE TO START</audioHoldMessage>
 	</gui>
 </data>

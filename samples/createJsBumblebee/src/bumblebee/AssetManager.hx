@@ -97,7 +97,7 @@ class AssetManager extends AAssetManager
 			case SCENE_INTRO : Assets.game_SceneIntro__png;
 			case TREES : Assets.game_Trees__png;
 		}
-		var l_bitmap:Bitmap = new Bitmap( l_url );
+		var l_bitmap:Bitmap = new Bitmap( getAsset( l_url ) );
 		l_context.addChild( l_bitmap );
 		return new View( _kernel, l_context );
 	}

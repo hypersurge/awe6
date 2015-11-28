@@ -13,7 +13,6 @@ class Preloader extends APreloader
 {
 	private var _bg:Shape;
 	private var _fg:Shape;
-	private var _isLaunched:Bool;
 
 	override private function _init():Void 
 	{
@@ -36,24 +35,13 @@ class Preloader extends APreloader
 	{
 		super._updater( p_deltaTime );
 		_fg.scaleX = progress;
-		if ( !_isComplete ) return;
-		if ( _isLaunched ) return;
-//		if ( _isDesktop || _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) || _kernel.inputs.mouse.getIsButtonRelease() )  // safe to skip this as no sound required on initial scene
-		{
-			_isLaunched = true;
-			 super._continue();
-		}
 	}
 	
-	override private function _continue():Void 
+	override private function _showAudioHoldMessage():Void
 	{
-		_isComplete = true;
-		if ( !_isDesktop ) 
-		{
-			var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
-			l_text.setPosition( 0, _bg.y - 5 );
-			view.addChild( l_text.view );
-		}
+		var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
+		l_text.setPosition( 0, _bg.y - 5 );
+		view.addChild( l_text.view );
 		_context.removeChild( _bg );
 		_context.removeChild( _fg );
 	}

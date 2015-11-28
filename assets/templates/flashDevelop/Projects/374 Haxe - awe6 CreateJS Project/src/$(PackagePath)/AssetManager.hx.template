@@ -53,7 +53,7 @@ class AssetManager extends AAssetManager $(CSLB){
 			case OVERLAY_UNPAUSE_UP : Assets.overlay_buttons_UnpauseUp__png;
 			case OVERLAY_UNPAUSE_OVER : Assets.overlay_buttons_UnpauseOver__png;
 		}
-		var l_bitmap:Bitmap = new Bitmap( l_url );
+		var l_bitmap:Bitmap = new Bitmap( getAsset( l_url ) );
 		l_context.addChild( l_bitmap );
 		return new View( _kernel, l_context );
 	}

@@ -1,9 +1,8 @@
 package $(PackageName);
 import awe6.core.APreloader;
+import awe6.core.drivers.createjs.extras.gui.Text;
 import awe6.interfaces.ETextStyle;
 import createjs.easeljs.Shape;
-import createjs.easeljs.Touch;
-import awe6.core.drivers.createjs.extras.gui.Text;
 
 /**
 $(CBI)* ...
@@ -13,7 +12,6 @@ $(CBI)*/
 class Preloader extends APreloader $(CSLB){
 	private var _bg:Shape;
 	private var _fg:Shape;
-	private var _isLaunched:Bool;
 
 	override private function _init():Void $(CSLB){
 		super._init();
@@ -34,21 +32,12 @@ class Preloader extends APreloader $(CSLB){
 	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
 		super._updater( p_deltaTime );
 		_fg.scaleX = progress;
-		if ( !_isComplete ) return;
-		if ( _isLaunched ) return;
-		if ( _isDesktop || _kernel.inputs.keyboard.getIsKeyRelease( _kernel.factory.keyNext ) || _kernel.inputs.mouse.getIsButtonRelease() ) $(CSLB){
-			_isLaunched = true;
-			 super._continue();
-		}
 	}
 	
-	override private function _continue():Void $(CSLB){
-		_isComplete = true;
-		if ( !_isDesktop ) $(CSLB){
-			var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
-			l_text.setPosition( 0, _bg.y - 5 );
-			view.addChild( l_text.view );
-		}
+	override private function _showAudioHoldMessage():Void $(CSLB){
+		var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
+		l_text.setPosition( 0, _bg.y - 5 );
+		view.addChild( l_text.view );
 		_context.removeChild( _bg );
 		_context.removeChild( _fg );
 	}
