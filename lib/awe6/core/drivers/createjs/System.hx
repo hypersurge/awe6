@@ -66,6 +66,10 @@ import js.Browser;
         userAgent = Browser.navigator.userAgent;
 		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
 		isCocoonjs = untyped Browser.navigator.isCocoonJS == true;
+		if ( isCocoonjs )
+		{
+			_cocoonOverrides();
+		}
 		isCrosswalk = ~/Crosswalk/.match( userAgent );
         if ( ~/Android/.match( userAgent ) )
         {
@@ -103,6 +107,20 @@ import js.Browser;
         {
             isDesktop = false;
         }
+	}
+	
+	private function _cocoonOverrides()
+	{
+		untyped __js__('
+		Image.prototype.naturalWidth = function()
+		{
+			return this.width;
+		}
+		Image.prototype.naturalHeight = function()
+		{
+			return this.height;
+		}
+		');
 	}
 	
 	public function requestFullScreen():Void
