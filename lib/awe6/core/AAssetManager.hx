@@ -44,5 +44,5 @@ package awe6.core;
 #elseif flash
 	typedef AAssetManager = awe6.core.drivers.flash.AssetManager;
 #else
-	typedef AAssetManager = awe6.core.drivers.AssetManager;
+	typedef AAssetManager = awe6.core.drivers.AAssetManager;
 #end

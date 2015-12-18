@@ -2176,7 +2176,7 @@
 		</meta>
 	</class>
 	<typedef path="awe6.AAssetManager" params="" file="../../lib/awe6/Types.hx" module="awe6.Types">
-		<c path="awe6.core.AAssetManager"/>
+		<t path="awe6.core.AAssetManager"/>
 		<haxe_doc>* This collection is intended to provide:
  * Single dependency for importing all of awe6
  * Single dependency for generating documentaion of awe6
@@ -2255,6 +2255,45 @@
 		<new set="method" line="116"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>* Adding a class here improves some editors' shortcut keys.  It has no other purpose, hence being private.</haxe_doc>
 	</class>
+	<typedef path="awe6.core.AAssetManager" params="" file="../../lib/awe6/core/AAssetManager.hx">
+		<c path="awe6.core.drivers.AAssetManager"/>
+		<haxe_doc><![CDATA[* The AAssetManager class provides a minimalist abstract implementation of the IAssetManager interface.
+ * <p>It is intended as an abstract class to be extended.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>AAssetManager includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</typedef>
+	<typedef path="awe6.core.AFactory" params="" file="../../lib/awe6/core/AFactory.hx">
+		<c path="awe6.core.drivers.AFactory"/>
+		<haxe_doc><![CDATA[* The AFactory class provides a minimalist abstract implementation of the IFactory interface.
+ * <p>It is intended as an abstract class to be extended.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>AFactory includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</typedef>
+	<typedef path="awe6.core.APreloader" params="" file="../../lib/awe6/core/APreloader.hx">
+		<c path="awe6.core.drivers.APreloader"/>
+		<haxe_doc><![CDATA[* The APreloader class provides a minimalist abstract implementation of the IPreloader interface.
+ * <p>It is intended as an abstract class to be extended.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>APreloader includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</typedef>
+	<typedef path="awe6.core.ASession" params="" file="../../lib/awe6/core/ASession.hx">
+		<c path="awe6.core.drivers.ASession"/>
+		<haxe_doc><![CDATA[* The ASession class provides a minimalist abstract implementation of the ISession interface.
+ * <p>It is intended as an abstract class to be extended.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>ASession includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</typedef>
+	<typedef path="awe6.core.AudioManager" params="" file="../../lib/awe6/core/AudioManager.hx">
+		<c path="awe6.core.drivers.AAudioManager"/>
+		<haxe_doc><![CDATA[* The AudioManager class provides a minimalist implementation of the IAudioManager interface.
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * <p>AudioManager includes target specific code so is implemented using the awe6.core.drivers package.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</typedef>
 	<class path="awe6.interfaces.IPauseable" params="" file="../../lib/awe6/interfaces/IPauseable.hx" interface="1">
 		<set_isActive public="1" set="method">
 			<f a="value">
@@ -2339,30 +2378,30 @@
 		<_updates><x path="Int"/></_updates>
 		<_isEntity><x path="Bool"/></_isEntity>
 		<_isIsActiveSetterBypassed><x path="Bool"/></_isIsActiveSetterBypassed>
-		<_init set="method" line="69"><f a=""><x path="Void"/></f></_init>
-		<dispose public="1" get="inline" set="null" line="79"><f a=""><x path="Void"/></f></dispose>
-		<_disposer set="method" line="101"><f a=""><x path="Void"/></f></_disposer>
-		<getAge public="1" set="method" line="106"><f a="?p_asTime">
+		<_init set="method" line="61"><f a=""><x path="Void"/></f></_init>
+		<dispose public="1" get="inline" set="null" line="70"><f a=""><x path="Void"/></f></dispose>
+		<_disposer set="method" line="84"><f a=""><x path="Void"/></f></_disposer>
+		<getAge public="1" set="method" line="89"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getAge>
-		<update public="1" get="inline" set="null" line="111"><f a="?p_deltaTime">
+		<update public="1" get="inline" set="null" line="94"><f a="?p_deltaTime">
 	<x path="Int"/>
 	<x path="Void"/>
 </f></update>
-		<_updater set="method" line="126"><f a="?p_deltaTime">
+		<_updater set="method" line="108"><f a="?p_deltaTime">
 	<x path="Int"/>
 	<x path="Void"/>
 </f></_updater>
-		<set_isActive set="method" line="131"><f a="p_value">
+		<set_isActive set="method" line="113"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Bool"/>
 </f></set_isActive>
-		<pause public="1" get="inline" set="null" line="153"><f a=""><x path="Void"/></f></pause>
-		<_pauser set="method" line="172"><f a=""><x path="Void"/></f></_pauser>
-		<resume public="1" get="inline" set="null" line="177"><f a=""><x path="Void"/></f></resume>
-		<_resumer set="method" line="197"><f a=""><x path="Void"/></f></_resumer>
-		<new public="1" set="method" line="54"><f a="p_kernel">
+		<pause public="1" get="inline" set="null" line="135"><f a=""><x path="Void"/></f></pause>
+		<_pauser set="method" line="153"><f a=""><x path="Void"/></f></_pauser>
+		<resume public="1" get="inline" set="null" line="158"><f a=""><x path="Void"/></f></resume>
+		<_resumer set="method" line="176"><f a=""><x path="Void"/></f></_resumer>
+		<new public="1" set="method" line="53"><f a="p_kernel">
 	<c path="awe6.interfaces.IKernel"/>
 	<x path="Void"/>
 </f></new>
@@ -2370,84 +2409,6 @@
  * <p>For API documentation please review the corresponding Interfaces.</p>
  * @author	Robert Fell]]></haxe_doc>
 	</class>
-	<class path="awe6.interfaces.IAssetManager" params="" file="../../lib/awe6/interfaces/IAssetManager.hx" interface="1">
-		<getAsset public="1" set="method">
-			<f a="id:?packageId:?args">
-				<c path="String"/>
-				<c path="String"/>
-				<c path="Array"><d/></c>
-				<d/>
-			</f>
-			<haxe_doc>* Request an embedded or loaded media asset.  E.g. bitmap or sound.
-	 * @param	id	The uniqie reference of the requested asset.  E.g. className.
-	 * @param	?packageId	The package of the requested asset.  Will default to "assets" if not provided.
-	 * @param	?args	Some assets may require additional arguments, provide them here.
-	 * @return	The asset - can be of any type for type inference (or cast as appropriate).</haxe_doc>
-		</getAsset>
-		<haxe_doc><![CDATA[* Provides functions to interact with media assets embedded or loaded in the application.
- * <p>Use with caution, there are usually more type safe ways to utilise assets.</p>
- * @author	Robert Fell]]></haxe_doc>
-	</class>
-	<class path="awe6.interfaces.IAssetManagerProcess" params="" file="../../lib/awe6/interfaces/IAssetManagerProcess.hx" interface="1">
-		<extends path="awe6.interfaces.IProcess"/>
-		<extends path="awe6.interfaces.IAssetManager"/>
-		<haxe_doc><![CDATA[* The IAssetManagerProcess interface should be implemented by objects representing an operating IAssetManager.
- * <p>These extra interface requirements are required for internal workings, but are not exposed via the minimal IAssetManager interface.</p>
- * @author	Robert Fell]]></haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<class path="awe6.core.AAssetManager" params="" file="../../lib/awe6/core/AAssetManager.hx">
-		<extends path="awe6.core.Process"/>
-		<implements path="awe6.interfaces.IAssetManagerProcess"/>
-		<_PACKAGE_ID><c path="String"/></_PACKAGE_ID>
-		<_init set="method" line="43" override="1"><f a=""><x path="Void"/></f></_init>
-		<getAsset public="1" set="method" line="49"><f a="p_id:?p_packageId:?p_args">
-	<c path="String"/>
-	<c path="String"/>
-	<c path="Array"><d/></c>
-	<d/>
-</f></getAsset>
-		<new public="1" set="method" line="39"><f a="p_kernel">
-	<c path="awe6.interfaces.IKernel"/>
-	<x path="Void"/>
-</f></new>
-		<haxe_doc><![CDATA[* The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
- * <p>It is intended as an abstract class to be extended.</p>
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * @author	Robert Fell]]></haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<typedef path="awe6.core.AFactory" params="" file="../../lib/awe6/core/AFactory.hx">
-		<c path="awe6.core.drivers.AFactory"/>
-		<haxe_doc><![CDATA[* The AFactory class provides a minimalist abstract implementation of the IFactory interface.
- * <p>It is intended as an abstract class to be extended.</p>
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>AFactory includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell]]></haxe_doc>
-	</typedef>
-	<typedef path="awe6.core.APreloader" params="" file="../../lib/awe6/core/APreloader.hx">
-		<c path="awe6.core.drivers.APreloader"/>
-		<haxe_doc><![CDATA[* The APreloader class provides a minimalist abstract implementation of the IPreloader interface.
- * <p>It is intended as an abstract class to be extended.</p>
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>APreloader includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell]]></haxe_doc>
-	</typedef>
-	<typedef path="awe6.core.ASession" params="" file="../../lib/awe6/core/ASession.hx">
-		<c path="awe6.core.drivers.ASession"/>
-		<haxe_doc><![CDATA[* The ASession class provides a minimalist abstract implementation of the ISession interface.
- * <p>It is intended as an abstract class to be extended.</p>
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>ASession includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell]]></haxe_doc>
-	</typedef>
-	<typedef path="awe6.core.AudioManager" params="" file="../../lib/awe6/core/AudioManager.hx">
-		<c path="awe6.core.drivers.AAudioManager"/>
-		<haxe_doc><![CDATA[* The AudioManager class provides a minimalist implementation of the IAudioManager interface.
- * <p>For API documentation please review the corresponding Interfaces.</p>
- * <p>AudioManager includes target specific code so is implemented using the awe6.core.drivers package.</p>
- * @author	Robert Fell]]></haxe_doc>
-	</typedef>
 	<class path="awe6.interfaces.IAgendaManager" params="" file="../../lib/awe6/interfaces/IAgendaManager.hx" interface="1">
 		<get_agenda public="1" set="method">
 			<f a=""><e path="awe6.interfaces.EAgenda"/></f>
@@ -4141,6 +4102,60 @@
  * <p>Kernel includes target specific code so is implemented using the awe6.core.drivers package.</p>
  * @author	Robert Fell]]></haxe_doc>
 	</typedef>
+	<class path="awe6.interfaces.IAssetManager" params="" file="../../lib/awe6/interfaces/IAssetManager.hx" interface="1">
+		<getAsset public="1" set="method">
+			<f a="id:?packageId:?args">
+				<c path="String"/>
+				<c path="String"/>
+				<c path="Array"><d/></c>
+				<d/>
+			</f>
+			<haxe_doc>* Request an embedded or loaded media asset.  E.g. bitmap or sound.
+	 * @param	id	The uniqie reference of the requested asset.  E.g. className.
+	 * @param	?packageId	The package of the requested asset.  Will default to "assets" if not provided.
+	 * @param	?args	Some assets may require additional arguments, provide them here.
+	 * @return	The asset - can be of any type for type inference (or cast as appropriate).</haxe_doc>
+		</getAsset>
+		<haxe_doc><![CDATA[* Provides functions to interact with media assets embedded or loaded in the application.
+ * <p>Use with caution, there are usually more type safe ways to utilise assets.</p>
+ * @author	Robert Fell]]></haxe_doc>
+	</class>
+	<class path="awe6.interfaces.IAssetManagerProcess" params="" file="../../lib/awe6/interfaces/IAssetManagerProcess.hx" interface="1">
+		<extends path="awe6.interfaces.IProcess"/>
+		<extends path="awe6.interfaces.IAssetManager"/>
+		<haxe_doc><![CDATA[* The IAssetManagerProcess interface should be implemented by objects representing an operating IAssetManager.
+ * <p>These extra interface requirements are required for internal workings, but are not exposed via the minimal IAssetManager interface.</p>
+ * @author	Robert Fell]]></haxe_doc>
+		<meta><m n=":directlyUsed"/></meta>
+	</class>
+	<class path="awe6.core.drivers.AAssetManager" params="" file="../../lib/awe6/core/drivers/AAssetManager.hx">
+		<extends path="awe6.core.Process"/>
+		<implements path="awe6.interfaces.IAssetManagerProcess"/>
+		<_PACKAGE_ID get="inline" set="null" line="42" static="1"><c path="String"/></_PACKAGE_ID>
+		<_packageId><c path="String"/></_packageId>
+		<_init set="method" line="45" override="1"><f a=""><x path="Void"/></f></_init>
+		<getAsset public="1" set="method" line="55"><f a="p_id:?p_packageId:?p_args">
+	<c path="String"/>
+	<c path="String"/>
+	<c path="Array"><d/></c>
+	<d/>
+</f></getAsset>
+		<_driverGetAsset set="method" line="64"><f a="p_id:?p_packageId:?p_args">
+	<c path="String"/>
+	<c path="String"/>
+	<c path="Array"><d/></c>
+	<d/>
+</f></_driverGetAsset>
+		<new public="1" set="method" line="40"><f a="p_kernel">
+	<c path="awe6.interfaces.IKernel"/>
+	<x path="Void"/>
+</f></new>
+		<haxe_doc><![CDATA[* The AAssetManager class provides a minimalist implementation of the IAssetManager interface.
+ * <p>It is intended as an abstract class to be extended.</p>
+ * <p>For API documentation please review the corresponding Interfaces.</p>
+ * @author	Robert Fell]]></haxe_doc>
+		<meta><m n=":directlyUsed"/></meta>
+	</class>
 	<class path="awe6.interfaces.IAudioManager" params="" file="../../lib/awe6/interfaces/IAudioManager.hx" interface="1">
 		<set_isMute public="1" set="method">
 			<f a="value">
@@ -5367,49 +5382,49 @@
 	<x path="Int"/>
 	<x path="Void"/>
 </f></_updater>
-		<_disposer set="method" line="208" override="1"><f a=""><x path="Void"/></f></_disposer>
-		<getConfig public="1" set="method" line="235"><f a="p_id">
+		<_disposer set="method" line="215" override="1"><f a=""><x path="Void"/></f></_disposer>
+		<getConfig public="1" set="method" line="242"><f a="p_id">
 	<c path="String"/>
 	<d/>
 </f></getConfig>
-		<log public="1" set="method" line="240"><f a="p_value">
+		<log public="1" set="method" line="247"><f a="p_value">
 	<d/>
 	<x path="Void"/>
 </f></log>
-		<getFramerate public="1" set="method" line="252"><f a="?p_asActual">
+		<getFramerate public="1" set="method" line="259"><f a="?p_asActual">
 	<x path="Bool"/>
 	<x path="Float"/>
 </f></getFramerate>
-		<_addProcess set="method" line="257"><f a="p_process:?p_isLast">
+		<_addProcess set="method" line="264"><f a="p_process:?p_isLast">
 	<c path="awe6.interfaces.IProcess"/>
 	<x path="Bool"/>
 	<x path="Void"/>
 </f></_addProcess>
-		<_removeProcess set="method" line="273"><f a="p_process">
+		<_removeProcess set="method" line="280"><f a="p_process">
 	<c path="awe6.interfaces.IProcess"/>
 	<x path="Bool"/>
 </f></_removeProcess>
-		<_totalReset set="method" line="283"><f a=""><x path="Void"/></f></_totalReset>
-		<set_isEyeCandy set="method" line="294"><f a="p_value">
+		<_totalReset set="method" line="290"><f a=""><x path="Void"/></f></_totalReset>
+		<set_isEyeCandy set="method" line="301"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Bool"/>
 </f></set_isEyeCandy>
-		<_driverSetIsEyeCandy set="method" line="306"><f a="p_value">
+		<_driverSetIsEyeCandy set="method" line="313"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Void"/>
 </f></_driverSetIsEyeCandy>
-		<set_isFullScreen set="method" line="311"><f a="p_value">
+		<set_isFullScreen set="method" line="318"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Bool"/>
 </f></set_isFullScreen>
-		<_driverSetIsFullScreen set="method" line="323"><f a="p_value">
+		<_driverSetIsFullScreen set="method" line="330"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Void"/>
 </f></_driverSetIsFullScreen>
-		<_pauser set="method" line="328" override="1"><f a=""><x path="Void"/></f></_pauser>
-		<_resumer set="method" line="337" override="1"><f a=""><x path="Void"/></f></_resumer>
-		<get_session set="method" line="346"><f a=""><c path="awe6.interfaces.ISession"/></f></get_session>
-		<set_session set="method" line="351"><f a="p_value">
+		<_pauser set="method" line="335" override="1"><f a=""><x path="Void"/></f></_pauser>
+		<_resumer set="method" line="344" override="1"><f a=""><x path="Void"/></f></_resumer>
+		<get_session set="method" line="353"><f a=""><c path="awe6.interfaces.ISession"/></f></get_session>
+		<set_session set="method" line="358"><f a="p_value">
 	<c path="awe6.interfaces.ISession"/>
 	<c path="awe6.interfaces.ISession"/>
 </f></set_session>
@@ -5429,9 +5444,9 @@
 		<framerate public="1" set="null"><x path="Float"/></framerate>
 		<timeInterval public="1" set="null"><x path="Int"/></timeInterval>
 		<_timeAtLastUpdate><x path="Int"/></_timeAtLastUpdate>
-		<update public="1" set="method" line="370"><f a=""><x path="Void"/></f></update>
-		<_timer get="inline" set="null" line="377"><f a=""><x path="Int"/></f></_timer>
-		<new public="1" set="method" line="364"><f a="p_framerate">
+		<update public="1" set="method" line="377"><f a=""><x path="Void"/></f></update>
+		<_timer get="inline" set="null" line="384"><f a=""><x path="Int"/></f></_timer>
+		<new public="1" set="method" line="371"><f a="p_framerate">
 	<x path="Float"/>
 	<x path="Void"/>
 </f></new>
