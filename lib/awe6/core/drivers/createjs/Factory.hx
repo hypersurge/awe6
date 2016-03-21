@@ -126,6 +126,10 @@ class Factory extends AFactory
 		trace( config.exists( _CONFIG_ASCII_ART ) ? config.get( _CONFIG_ASCII_ART ) : "" );
 		trace( id + " v" + version + " by " + author );
 		trace( "Powered by awe6 (http://awe6.org)" );
+		if ( isDecached )
+		{
+			trace( "Note: decaching is currently enabled" );
+		}
 		trace( "" );
 	}
 
@@ -143,9 +147,10 @@ class Factory extends AFactory
 				p_config += "?dc=" + Std.random( 99999 );
 			}
 			// trace( "Loading Config: \"" + p_config + "\"" );
-			var l_loader:Http = new Http( p_config );
 			try
 			{
+				// this is no longer reliably caught on Chrome
+				var l_loader:Http = new Http( p_config );
 				l_loader.onError = _onIOError;
 				l_loader.onData = _onComplete;
 				l_loader.request();
@@ -197,6 +202,10 @@ class Factory extends AFactory
 	private function _onComplete( p_event:String ):Void
 	{
 		_countConfigsLoaded++;
+		if ( p_event == "" )
+		{
+			return _onIOError( p_event );
+		}
 		var l_string:String = p_event;
 		if ( l_string.substr( 0, 5 ) != "<?xml" )
 		{
