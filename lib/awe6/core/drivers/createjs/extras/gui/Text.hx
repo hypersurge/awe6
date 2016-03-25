@@ -96,6 +96,7 @@ class Text extends GuiEntity
 			}
 			_textField.color = "#" + StringTools.hex( textStyle.color, 6 );
 			_textField.font = ( textStyle.isBold ? "bold " : "" ) + ( textStyle.isItalic ? "italic " : "" ) + textStyle.size + "px '" + textStyle.font + "'";
+			_textField.lineHeight = textStyle.spacingVertical;
 			if ( textStyle.filters != null )
 			{
 				var l_shadowOwner:TextField = _textField;
