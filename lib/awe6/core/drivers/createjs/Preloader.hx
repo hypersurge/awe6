@@ -178,6 +178,10 @@ class Preloader extends APreloader
 	
 	private function _getAudioHoldDelay():Int
 	{
+		if ( _isSoundDisabled ) // no sound, no need for delay
+		{
+			return 0;
+		}
 		if ( !_system.isIos ) // only iOS needs the touch action
 		{
 			return 0;
