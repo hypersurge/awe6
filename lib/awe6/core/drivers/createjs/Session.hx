@@ -70,11 +70,15 @@ class Session extends ASession
 		// end of backwards compatibility
 		if ( _storage != null )
 		{
-			var l_item:String = _storage.getItem( _kernel.factory.id );
-			if ( l_item != null )
+			try
 			{
-				_savedData = _tools.unserialize( l_item );
+				var l_item:String = _storage.getItem( _kernel.factory.id );
+				if ( l_item != null )
+				{
+					_savedData = _tools.unserialize( l_item );
+				}
 			}
+			catch ( p_error:Dynamic ) {} // sometimes browsers behave badly!
 		}
 	}
 	
@@ -82,7 +86,11 @@ class Session extends ASession
 	{
 		if ( _storage != null )
 		{
-			_storage.removeItem( _kernel.factory.id );
+			try
+			{
+				_storage.removeItem( _kernel.factory.id );
+			}
+			catch ( p_error:Dynamic ) {} // sometimes browsers behave badly!
 		}
 		_savedData = {};
 	}
@@ -91,7 +99,11 @@ class Session extends ASession
 	{
 		if ( _storage != null )
 		{
-			_storage.setItem( _kernel.factory.id, _tools.serialize( _savedData ) );
+			try
+			{
+				_storage.setItem( _kernel.factory.id, _tools.serialize( _savedData ) );
+			}
+			catch ( p_error:Dynamic ) {} // sometimes browsers behave badly!
 		}
 	}
 }
