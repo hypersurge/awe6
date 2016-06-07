@@ -51,6 +51,7 @@ import js.Browser;
 	public var isSilk( default, null ):Bool;
 	public var isCocoonjs( default, null ):Bool;
 	public var isCrosswalk( default, null ):Bool;
+	public var isCordova( default, null ):Bool;
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
@@ -71,6 +72,7 @@ import js.Browser;
 			_cocoonOverrides();
 		}
 		isCrosswalk = ~/Crosswalk/.match( userAgent );
+		isCordova = untyped Browser.window.cordova != null;
         if ( ~/Android/.match( userAgent ) )
         {
             isAndroid = true;
