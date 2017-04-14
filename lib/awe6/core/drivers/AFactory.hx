@@ -237,7 +237,7 @@ class AFactory implements IFactory implements IDisposable
 		_kernel = p_kernel;
 		_tools = _kernel.tools;
 		id = ( _tools.toConstCase( StringTools.trim( id ) ) ).substr( 0, 16 );
-		version = StringTools.trim( version ).substr( 0, 10 );
+		version = StringTools.trim( version ).substr( 0, 16 );
 		author = StringTools.trim( author ).substr( 0, 16 );
 	}
 	
