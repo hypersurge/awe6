@@ -30,6 +30,9 @@
 package awe6.core.drivers.openfl;
 import awe6.core.drivers.AAssetManager;
 import openfl.Assets;
+#if (openfl >= "5.0.0")
+import openfl.utils.AssetType;
+#end
 
 /**
  * This AssetManager class provides openfl target overrides.
@@ -54,19 +57,19 @@ class AssetManager extends AAssetManager
 			l_packageId += ".";
 		}
 		var l_assetName:String = StringTools.replace( l_packageId, ".", "/" ) + p_id;
-		if ( Assets.exists( l_assetName, openfl.AssetType.SOUND ) )
+		if ( Assets.exists( l_assetName, AssetType.SOUND ) )
 		{
 			return Assets.getSound( l_assetName );
 		}
-		if ( Assets.exists( l_assetName, openfl.AssetType.IMAGE ) )
+		if ( Assets.exists( l_assetName, AssetType.IMAGE ) )
 		{
 			return Assets.getBitmapData( l_assetName );
 		}
-		if ( Assets.exists( l_assetName, openfl.AssetType.FONT ) )
+		if ( Assets.exists( l_assetName, AssetType.FONT ) )
 		{
 			return Assets.getFont( l_assetName );
 		}
-		if ( Assets.exists( l_assetName, openfl.AssetType.TEXT ) )
+		if ( Assets.exists( l_assetName, AssetType.TEXT ) )
 		{
 			return Assets.getText( l_assetName );
 		}
