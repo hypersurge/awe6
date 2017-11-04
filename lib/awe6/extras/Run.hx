@@ -392,8 +392,6 @@ class Run
 -resource bin/assets/__config.xml@config
 -dce full
 -main Main
--D awe6DriverRemap 
---macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')
 ";
 			case _PROJECT_SWF, _ : "
 -cp src

@@ -38,7 +38,7 @@ package awe6.core;
  **/
 
 #if awe6DriverRemap
-	typedef AAssetManager = awe6.core.drivers.remap.AssetManager;;
+	typedef AAssetManager = awe6.core.drivers.remap.AssetManager;
 #elseif createjs
 	typedef AAssetManager = awe6.core.drivers.createjs.AssetManager;
 #elseif openfl
