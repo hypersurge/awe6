@@ -196,7 +196,7 @@ import js.Browser;
 			{
 				if ( untyped l_screen.orientation.lock != null )
 				{
-					untyped l_screen.orientation.lock( l_orientation );
+					untyped l_screen.orientation.lock( untyped l_orientation );
 				}
 				else if ( untyped l_screen.orientation.lockOrientation != null )
 				{

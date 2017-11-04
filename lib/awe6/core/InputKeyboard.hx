@@ -36,7 +36,9 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-	typedef InputKeyboard = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "InputKeyboard" ) ]>;
+	typedef InputKeyboard = awe6.core.drivers.remap.InputKeyboard;
+#elseif createjs
+	typedef InputKeyboard = awe6.core.drivers.createjs.InputKeyboard;
 #elseif openfl
 	typedef InputKeyboard = awe6.core.drivers.openfl.InputKeyboard;
 #elseif flash
