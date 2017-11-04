@@ -4,8 +4,8 @@
   "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","openfl","createjs","awe6","entity"],
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
-  "releasenote": "OpenFL refactoring / fixes, CreateJS (0.8.2) enhancements, conditional driver typedefs refactored.  Note: library has moved to github (revision number has decreased as a result).  https://github.com/hypersurge/awe6/releases",
-  "version": "2.6.489",
+  "releasenote": "Haxe 3.4.4 compatible release.  HaxeDevelop support, OpenFL 5 support, fixing macro remap issues.  https://github.com/hypersurge/awe6/releases",
+  "version": "2.7.504",
   "url": "http://awe6.org",
   "dependencies": {
 

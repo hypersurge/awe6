@@ -42,7 +42,7 @@ import StringTools;
 
 /**
  * Neko file tools to run after haxelib install.
- * <p>Copies FlashDevelop templates.</p> 
+ * <p>Copies HaxeDevelop / FlashDevelop templates.</p> 
  * @author	Robert Fell
  * @author	Enzo Ferrari
  */
@@ -89,11 +89,11 @@ class Run
 	{
 		if ( _OS == "Windows" )
 		{
-			_copyFlashDevelopTemplates();
+			_copyTemplates();
 		}
 		else
 		{
-			Lib.println( "Error: install option is only available on Windows (requires FlashDevelop)" );
+			Lib.println( "Error: install option is only available on Windows (requires HaxeDevelop / FlashDevelop)" );
 		}
 	}
 
@@ -101,7 +101,7 @@ class Run
 	{
 		if ( _OS == "Windows" )
 		{
-			Lib.println( "Warning: install option is recommended for Windows (use with FlashDevelop)" );
+			Lib.println( "Warning: install option is recommended for Windows (use with HaxeDevelop / FlashDevelop)" );
 		}
 		if ( ( Sys.args().length >= 6 ) && ( Sys.args().length <= 7 ) )
 		{
@@ -185,13 +185,12 @@ class Run
 		}
 	}
 			
-	private function _unzipFlashDevelopTemplates( p_destination:String, p_filter:String = "" ):Void
+	private function _unzipTemplates( p_destination:String, p_filter:String = "" ):Void
 	{
-		var l_source:String = "__resources/flashDevelop.zip";
-		// var l_source:String = "scripts/haxelib/__resources/flashDevelop.zip";
+		var l_source:String = "__resources/templates.zip";
 		if ( !FileSystem.exists( l_source ) )
 		{
-			Lib.println( "Error: FlashDevelop awe6 templates not found: " + l_source + " does not exist." );
+			Lib.println( "Error: HaxeDevelop / FlashDevelop awe6 templates not found: " + l_source + " does not exist." );
 			return;			
 		}
 		var l_zipData = Reader.readZip( File.read( l_source, true ) );
@@ -223,17 +222,22 @@ class Run
 		}
 	}
 
-	private function _copyFlashDevelopTemplates():Void
+	private function _copyTemplates():Void
 	{
-		var l_destination:String = Sys.getEnv( "LocalAppData" ) + "/FlashDevelop";
-		l_destination = StringTools.replace( l_destination, "\\", "/" );
-		if ( !FileSystem.exists( l_destination ) || !FileSystem.isDirectory( l_destination ) )
+		var l_destinations:Array<String> = [Sys.getEnv( "LocalAppData" ) + "/FlashDevelop", Sys.getEnv( "LocalAppData" ) + "/HaxeDevelop"];
+		for ( l_destination in l_destinations )
 		{
-			Lib.println( "Error: Unable to copy FlashDevelop awe6 templates: " + l_destination + " does not exist.  Try unzipping them manually." );
-			return;
+			l_destination = StringTools.replace( l_destination, "\\", "/" );
+			if ( !FileSystem.exists( l_destination ) || !FileSystem.isDirectory( l_destination ) )
+			{
+				Lib.println( "Error: Unable to copy awe6 templates: " + l_destination + " does not exist.  Try unzipping them manually." );
+			}
+			else
+			{
+				_unzipTemplates( l_destination );
+				Lib.println( "Complete: awe6 templates copied successfully to: " + l_destination );
+			}
 		}
-		_unzipFlashDevelopTemplates( l_destination );
-		Lib.println( "Complete: FlashDevelop awe6 templates copied successfully." );
 	}
 	
 	private function _deleteTree( p_path:String ):Void
@@ -328,7 +332,7 @@ class Run
 		}
 		else
 		{
-			_unzipFlashDevelopTemplates( p_projectPath );
+			_unzipTemplates( p_projectPath );
 			_deleteTree( p_projectPath + "/Templates" );
 			switch( p_projectType )
 			{
@@ -342,7 +346,7 @@ class Run
 			// Remove Windows only directories
 			_deleteTree( p_projectPath + "/Projects" );
 			_deleteTree( p_projectPath + "/scripts" );
-			// Remove useless FlashDevelop project files
+			// Remove useless HaxeDevelop / FlashDevelop project files
 			FileSystem.deleteFile( p_projectPath + "/Project.hxproj" );
 			FileSystem.deleteFile( p_projectPath + "/Project.png" );
 			FileSystem.deleteFile( p_projectPath + "/Project.txt" );
@@ -417,7 +421,7 @@ class Run
 		else
 		{
 			var l_scenePath:Path = new Path( p_sceneName );
-			_unzipFlashDevelopTemplates( l_scenePath.dir, "Scene.hx.fdt" );
+			_unzipTemplates( l_scenePath.dir, "Scene.hx.fdt" );
 			var l_templatePath:String = p_sceneName + ".hx" + _TEMPLATE_EXT;
 			FileSystem.rename( l_scenePath.dir + "/Scene.hx.fdt", l_templatePath );
 			_handleTemplate( l_templatePath,
@@ -441,7 +445,7 @@ class Run
 		else
 		{
 			var l_entityPath:Path = new Path( p_entityName );
-			_unzipFlashDevelopTemplates( l_entityPath.dir, "Entity.hx.fdt" );
+			_unzipTemplates( l_entityPath.dir, "Entity.hx.fdt" );
 			var l_templatePath:String = p_entityName + ".hx" + _TEMPLATE_EXT;
 			FileSystem.rename( l_entityPath.dir + "/Entity.hx.fdt", l_templatePath );
 			_handleTemplate( l_templatePath, 
