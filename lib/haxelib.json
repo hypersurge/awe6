@@ -5,7 +5,7 @@
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
   "releasenote": "Haxe 3.4.4 compatible release.  HaxeDevelop support, OpenFL 5 support, fixing macro remap issues.  https://github.com/hypersurge/awe6/releases",
-  "version": "2.7.504",
+  "version": "2.7.509",
   "url": "http://awe6.org",
   "dependencies": {
 
