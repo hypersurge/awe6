@@ -37,7 +37,9 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-	typedef InputMouse = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "InputMouse" ) ]>;
+	typedef InputMouse = awe6.core.drivers.remap.InputMouse;
+#elseif createjs
+	typedef InputMouse = awe6.core.drivers.createjs.InputMouse;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef InputMouse = awe6.core.drivers.openfl.native.InputMouse;

@@ -19,12 +19,12 @@
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="awe6DriverRemap" />
+    <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="Main" />
     <option enabledebug="False" />
-    <option additional="--macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs')&#xA;-resource bin/assets/__config.xml@config&#xA;-dce full" />
+    <option additional="-resource bin/assets/__config.xml@config&#xA;-dce full" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

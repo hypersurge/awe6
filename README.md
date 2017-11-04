@@ -1,4 +1,4 @@
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![Haxelib Version](https://img.shields.io/badge/haxelib-v2.6.489-blue.svg)](http://lib.haxe.org/p/awe6)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![Haxelib Version](https://img.shields.io/badge/haxelib-v2.7.509-blue.svg)](http://lib.haxe.org/p/awe6)
 
 # awe6, the inverted game framework
 
