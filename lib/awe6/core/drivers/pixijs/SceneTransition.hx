@@ -29,13 +29,33 @@
 
 package awe6.core.drivers.pixijs;
 import awe6.core.drivers.ASceneTransition;
+import pixi.core.Pixi.ScaleModes;
+import pixi.core.renderers.SystemRenderer;
+import pixi.core.sprites.Sprite;
 
 /**
- * This class provides an easy driver package to remap from.
- * To use it add compiler conditional: -D awe6DriverRemap
- * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
+ * This SceneTransition class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 class SceneTransition extends ASceneTransition
 {
+	override private function _init():Void 
+	{
+		super._init();
+		var l_renderer:SystemRenderer = untyped _kernel._renderer;
+		var l_texture = l_renderer.generateTexture( untyped _kernel.scenes.scene.view.context, ScaleModes.DEFAULT, 1 );
+		var l_sprite:Sprite = new Sprite( l_texture );
+		_context.interactive = false;
+		_context.addChild( l_sprite );
+	}
+	
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		if ( !isDisposed )
+		{
+			_context.alpha = 1 - progress;
+		}
+	}
 }
+
