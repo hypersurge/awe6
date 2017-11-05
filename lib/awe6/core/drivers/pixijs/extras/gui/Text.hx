@@ -30,17 +30,18 @@
 package awe6.core.drivers.pixijs.extras.gui;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.ITextStyle;
-//typedef TextField = createjs.easeljs.Text;
+typedef PixiTextStyle = pixi.core.text.TextStyle;
+typedef TextField = pixi.core.text.Text;
+
 
 class Text extends GuiEntity
 {
 	public var text( default, set ):String;
 	public var textStyle:ITextStyle;
 	
-//	private var _textField:TextField;
-//	private var _textFieldOutline:TextField;
+	private var _textField:TextField;
+	private var _textFieldOutline:TextField;
 	private var _isMultiline:Bool;
-	private var _isCached:Bool;
 	private var _isDirty:Bool;
 	private var _prevTextStyle:String;
 	
@@ -48,21 +49,85 @@ class Text extends GuiEntity
 	{
 		textStyle = p_textStyle;
 		_isMultiline = p_isMultiline;
-		_isCached = p_isCached;
-		super( p_kernel, p_width, p_height, false );
 		text = p_text;
+		super( p_kernel, p_width, p_height, false );
 	}
 	
-	/*
+	
 	override private function _init():Void 
 	{
 		super._init();
-		_textField = new TextField();
-		_textField.text = text;
+		_textField = new TextField( text );
 		_draw();
 		_context.addChild( _textField );
-		_isDirty = false;
 		_prevTextStyle = textStyle.toString();
+	}
+	
+	private function _createPixiTextStyle( p_textStyle:ITextStyle ):PixiTextStyle
+	{
+		var l_result:PixiTextStyle = new PixiTextStyle();
+		l_result.align = switch ( p_textStyle.align )
+		{
+			case CENTER :
+				"center";
+			case RIGHT :
+				"right";
+			case LEFT, JUSTIFY :
+				"left";
+		}
+		l_result.fill = textStyle.color;
+		l_result.fontFamily = p_textStyle.font;
+		l_result.fontSize = p_textStyle.size;
+		l_result.fontStyle = ( textStyle.isItalic ? "italic " : "normal" );
+		l_result.fontWeight =  ( textStyle.isBold ? "bold " : "normal" );
+		l_result.letterSpacing = p_textStyle.spacingHorizontal;
+		l_result.lineHeight = p_textStyle.spacingVertical;
+		l_result.strokeThickness = p_textStyle.thickness;
+		l_result.stroke = "";
+		l_result.strokeThickness = 0;
+		l_result.dropShadow = false;
+		if ( textStyle.filters != null )
+			{
+				var l_filters = textStyle.filters.copy();
+				if ( ( l_filters.length == 2 ) || ( l_filters.length == 6 ) )
+				{
+					l_result.stroke = l_filters.shift();
+					l_result.strokeThickness = l_filters.shift() * 2;
+				}
+				if ( l_filters.length == 4 )
+				{
+					l_result.dropShadow = true;
+					l_result.dropShadowColor = l_filters[0];
+					l_result.dropShadowAlpha = .65;
+					l_result.dropShadowBlur = l_filters[3];
+					l_result.dropShadowAngle = l_filters[1];
+					l_result.dropShadowDistance = l_filters[2];
+				}
+			}
+		return l_result;
+	}
+	
+	private function _alignTextField( p_textField:TextField, p_textStyle:ITextStyle ):Void
+	{
+		p_textField.anchor.x = switch( p_textStyle.align )
+		{
+			case CENTER :
+				.5;
+			case RIGHT :
+				1;
+			case LEFT, JUSTIFY :
+				0;
+		}
+		p_textField.x = switch( p_textStyle.align )
+		{
+			case CENTER :
+				width * .5;
+			case RIGHT :
+				width;
+			case LEFT, JUSTIFY :
+				0;
+		}
+		p_textField.y = -( p_textField.style.strokeThickness / 2 );
 	}
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void 
@@ -78,57 +143,14 @@ class Text extends GuiEntity
 		
 	private function _draw():Void
 	{
-		_textField.lineWidth = width;
 		if ( _prevTextStyle != textStyle.toString() )
 		{
-			switch ( textStyle.align )
-			{
-				case LEFT :
-					_textField.textAlign = "left";
-				case CENTER :
-					_textField.textAlign = "center";
-					_textField.x = width * .5;
-				case RIGHT :
-					_textField.textAlign = "right";
-					_textField.x = width;
-				case JUSTIFY :
-					_textField.textAlign = "left";
-			}
-			_textField.color = "#" + StringTools.hex( textStyle.color, 6 );
-			_textField.font = ( textStyle.isBold ? "bold " : "" ) + ( textStyle.isItalic ? "italic " : "" ) + textStyle.size + "px '" + textStyle.font + "'";
-			_textField.lineHeight = textStyle.spacingVertical;
-			if ( textStyle.filters != null )
-			{
-				var l_shadowOwner:TextField = _textField;
-				l_shadowOwner.shadow = null;
-				var l_filters = textStyle.filters.copy();
-				if ( ( _textFieldOutline != null ) && ( _textFieldOutline.parent != null ) )
-				{
-					_textFieldOutline.parent.removeChild( _textFieldOutline );
-				}
-				_textFieldOutline = null;
-				if ( ( l_filters.length == 2 ) || ( l_filters.length == 6 ) )
-				{
-					_textFieldOutline = _textField.clone();
-					_textFieldOutline.color = "#" + StringTools.hex( l_filters.shift(), 6 );
-					untyped _textFieldOutline.outline = l_filters.shift() * 2;
-					_context.addChildAt(_textFieldOutline, 0 );
-					l_shadowOwner = _textFieldOutline;
-				}
-				if ( l_filters.length == 4 )
-				{
-					l_shadowOwner.shadow = new Shadow( "#" + StringTools.hex( l_filters[0], 6 ), l_filters[1], l_filters[2], l_filters[3] );
-				}
-			}
-		}
-		if ( _isCached )
-		{
-			_context.cache( 0, 0, width, height );
+			_textField.style = _createPixiTextStyle( textStyle );
+			_alignTextField( _textField, textStyle );
 		}
 		_isDirty = false;
 	}
 	
-	*/
 	private function set_text( p_value:String ):String
 	{
 		if ( p_value == null )
@@ -140,11 +162,14 @@ class Text extends GuiEntity
 			return text;
 		}
 		text = p_value;
-/*		_textField.text = text;
+		if ( _textField != null )
+		{
+			_textField.text = text;
+		}
 		if ( _textFieldOutline != null )
 		{
 			_textFieldOutline.text = text;
-		}*/
+		}
 		_isDirty = true;
 		return text;
 	}	
