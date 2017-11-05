@@ -3,5 +3,7 @@
 /demos/openfl/export
 /demos/createjs/bin/game.js
 /demos/createjs/bin/manifest.appcache
+/demos/pixijs/bin/game.js
+/demos/pixijs/bin/manifest.appcache
 /samples/createJsBumblebee/bin/game.js
 /samples/createJsBumblebee/bin/manifest.appcache

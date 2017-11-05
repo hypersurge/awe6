@@ -39,6 +39,8 @@ package awe6.core;
 	typedef Kernel = awe6.core.drivers.remap.Kernel;
 #elseif createjs
 	typedef Kernel = awe6.core.drivers.createjs.Kernel;
+#elseif pixijs
+	typedef Kernel = awe6.core.drivers.pixijs.Kernel;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef Kernel = awe6.core.drivers.openfl.native.Kernel;

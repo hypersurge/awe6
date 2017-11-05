@@ -41,6 +41,8 @@ package awe6.core;
 	typedef AFactory = awe6.core.drivers.remap.Factory;
 #elseif createjs
 	typedef AFactory = awe6.core.drivers.createjs.Factory;
+#elseif pixijs
+	typedef AFactory = awe6.core.drivers.pixijs.Factory;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef AFactory = awe6.core.drivers.openfl.native.Factory;

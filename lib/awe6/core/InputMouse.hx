@@ -40,6 +40,8 @@ package awe6.core;
 	typedef InputMouse = awe6.core.drivers.remap.InputMouse;
 #elseif createjs
 	typedef InputMouse = awe6.core.drivers.createjs.InputMouse;
+#elseif pixijs
+	typedef InputMouse = awe6.core.drivers.pixijs.InputMouse;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef InputMouse = awe6.core.drivers.openfl.native.InputMouse;

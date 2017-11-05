@@ -41,6 +41,8 @@ package awe6.core;
 	typedef AAssetManager = awe6.core.drivers.remap.AssetManager;
 #elseif createjs
 	typedef AAssetManager = awe6.core.drivers.createjs.AssetManager;
+#elseif pixijs
+	typedef AAssetManager = awe6.core.drivers.pixijs.AssetManager;
 #elseif openfl
 	typedef AAssetManager = awe6.core.drivers.openfl.AssetManager;
 #elseif flash

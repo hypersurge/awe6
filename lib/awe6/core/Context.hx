@@ -39,6 +39,8 @@ package awe6.core;
 	typedef Context = awe6.core.drivers.remap.Context;
 #elseif createjs
 	typedef Context = awe6.core.drivers.createjs.Context;
+#elseif pixijs
+	typedef Context = awe6.core.drivers.pixijs.Context;
 #elseif openfl
 	typedef Context = awe6.core.drivers.openfl.Context;
 #elseif flash

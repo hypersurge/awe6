@@ -39,6 +39,8 @@ package awe6.core;
 	typedef View = awe6.core.drivers.remap.View;
 #elseif createjs
 	typedef View = awe6.core.drivers.createjs.View;
+#elseif pixijs
+	typedef View = awe6.core.drivers.pixijs.View;
 #elseif openfl
 	typedef View = awe6.core.drivers.openfl.View;
 #elseif flash
