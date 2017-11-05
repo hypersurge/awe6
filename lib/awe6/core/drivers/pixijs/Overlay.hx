@@ -28,14 +28,53 @@
  */
 
 package awe6.core.drivers.pixijs;
+import awe6.core.Context;
+import awe6.core.View;
 import awe6.core.drivers.AOverlay;
+import pixi.core.graphics.Graphics;
+import pixi.core.sprites.Sprite;
 
 /**
- * This class provides an easy driver package to remap from.
- * To use it add compiler conditional: -D awe6DriverRemap
- * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
+ * This Overlay class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 class Overlay extends AOverlay
 {
+	private var _pauseSnapshot:Sprite;
+	
+	override private function _driverInit():Void
+	{
+		cast( _borderView, View ).context.interactive = false;
+		_context.interactive = false;
+		
+		_pauseContext = new Context();
+		_pauseContext.interactive = false;
+		var l_graphics:Graphics = new Graphics();
+		l_graphics.beginFill( _pauseColor, _pauseAlpha );
+		l_graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		_pauseContext.addChild( l_graphics );
+		
+		_flashContext = new Context();
+		_flashContext.interactive = false;
+	}
+	
+	override private function _updater( p_deltaTime:Int = 0 ):Void 
+	{
+		super._updater( p_deltaTime );
+		_flashContext.alpha = _flashAlpha;
+		_flashContext.visible = _flashAlpha != 0;
+	}
+	
+	override public function flash( ?p_duration:Float, p_asTime:Bool = true, p_startingAlpha:Float = 1, p_color:Int = 0xFFFFFF ):Void
+	{
+		_flashContext.removeChildren();
+		var l_graphics:Graphics = new Graphics();
+		l_graphics.beginFill( p_color );
+		l_graphics.drawRect( 0, 0, _kernel.factory.width, _kernel.factory.height );
+		_flashContext.addChild( l_graphics );
+		p_duration = ( p_duration != null ) ? p_duration : p_asTime ? 500 : _kernel.factory.targetFramerate * .5;
+		_flashDuration = _flashStartingDuration = p_duration;
+		_flashAsTime = p_asTime;
+		_flashAlpha = _flashStartingAlpha = _tools.limit( p_startingAlpha, 0, 1 );
+	}
 }

@@ -29,58 +29,58 @@
 
 package awe6.core.drivers.pixijs.extras.gui;
 import awe6.interfaces.IKernel;
-//import createjs.easeljs.Bitmap;
+import pixi.core.Pixi.BlendModes;
+import pixi.core.sprites.Sprite;
+import pixi.core.textures.Texture;
 
 class Image extends GuiEntity 
 {	
 	public var alpha( get, set ):Float;
 	
-	private var _imageData:Dynamic; // String, CanvasElement, ImageElement
-	private var _bitmap:Bitmap;
+	private var _texture:Texture;
+	private var _sprite:Sprite;
 	private var _isAdd:Bool;
 	
-	public function new( p_kernel:IKernel, p_imageData:Dynamic, p_isAdd:Bool = false, p_alpha:Float = 1 )
+	public function new( p_kernel:IKernel, p_texture:Texture, p_isAdd:Bool = false, p_alpha:Float = 1 )
 	{
-		_imageData = p_imageData;
+		_texture = p_texture;
 		_isAdd = p_isAdd;
 		super( p_kernel, false );
 		alpha = p_alpha;
 	}
 	
-	/*
 	override private function _init():Void 
 	{
 		super._init();
-		_context.mouseEnabled = false;
-		configure( _imageData, _isAdd );
+		_context.interactive = false;
+		configure( _texture, _isAdd );
 	}
 	
-	public function configure( p_imageData:Dynamic, p_isAdd:Bool = false ):Void
+	public function configure( p_texture:Texture, p_isAdd:Bool = false ):Void
 	{
-		_imageData = p_imageData;
+		_texture = p_texture;
 		_isAdd = p_isAdd;
-		if ( ( _bitmap != null ) && ( _bitmap.parent != null ) )
+		if ( ( _sprite != null ) && ( _sprite.parent != null ) )
 		{
-			_bitmap.parent.removeChild( _bitmap );
+			_sprite.parent.removeChild( _sprite );
 		}
-		_bitmap = new Bitmap( _imageData );
-		_bitmap.compositeOperation = _isAdd ? "lighter" : "source-over";
-		if ( _bitmap.image != null )
+		_sprite = new Sprite( _texture );
+		_sprite.blendMode = _isAdd ? BlendModes.ADD : BlendModes.NORMAL;
+		if ( _sprite.image != null )
 		{
-			width = _bitmap.image.width;
-			height = _bitmap.image.height;
+			width = _sprite.width;
+			height = _sprite.height;
 		}
-		_context.addChild( _bitmap );
+		_context.addChild( _sprite );
 	}
 	
 	private function get_alpha():Float
 	{
-		return _bitmap.alpha;
+		return _sprite.alpha;
 	}
 	
 	private function set_alpha( p_value:Float ):Float
 	{
-		return _bitmap.alpha = p_value;
+		return _sprite.alpha = p_value;
 	}
-	*/
 }

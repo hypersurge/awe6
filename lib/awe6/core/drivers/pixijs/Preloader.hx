@@ -73,7 +73,7 @@ class Preloader extends APreloader
 		_loader = new Loader( "", 10 );
 		for ( i in _assets )
 		{
-			_loader.add( i, "as" + i + l_dc );
+			_loader.add( i, i + l_dc );
 		}
 		Timer.delay( _loader.load.bind( _onComplete ), 200 ); // allows time to display preloader
 	}
@@ -85,7 +85,7 @@ class Preloader extends APreloader
 	
 	override private function get_progress():Float
 	{
-		return _loader.progress;
+		return _loader.progress / 100;
 	}
 	
 	private function _onComplete( ?p_event:Event ):Void

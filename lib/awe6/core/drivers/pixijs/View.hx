@@ -28,14 +28,68 @@
  */
 
 package awe6.core.drivers.pixijs;
+import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This class provides an easy driver package to remap from.
- * To use it add compiler conditional: -D awe6DriverRemap
- * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
+ * This View class provides CreateJS target overrides.
  * @author	Robert Fell
  */
 class View extends AView
 {
+	private var _container:Context;
+	
+	override private function _init():Void 
+	{
+		if ( context == null )
+		{
+			context = new Context(); 
+		}
+		super._init();
+	}
+	
+	override private function _driverDisposer():Void 
+	{
+		if ( ( context != null ) && ( context.parent != null ) )
+		{
+			try
+			{
+				context.parent.removeChild( context );
+			}
+			catch ( l_error:Dynamic ) {}
+		}
+	}
+	
+	override private function _driverDraw():Void
+	{
+		if ( _container != null && _container.parent != null )
+		{
+			_container.parent.removeChild( _container );
+		}
+		_container = new Context();
+		_container.interactive = false;
+		context.addChild( _container );
+		var l_children:Array<View> = cast _children;
+		for ( i in l_children )
+		{
+			if ( i.isVisible )
+			{
+				_container.addChild( i.context );
+			}
+		}
+	}
+	
+	override private function set_x( p_value:Float ):Float
+	{
+		context.x = p_value;
+		return super.set_x( p_value );
+	}
+	
+	override private function set_y( p_value:Float ):Float
+	{
+		context.y = p_value;
+		return super.set_y( p_value );
+	}
+	
 }
+

@@ -33,6 +33,7 @@ import awe6.core.Context;
 import awe6.core.View;
 import awe6.interfaces.IView;
 import pixi.core.sprites.Sprite;
+import pixi.core.Pixi.BlendModes;
 
 class AssetManager extends AAssetManager
 {
@@ -91,7 +92,9 @@ class AssetManager extends AAssetManager
 	
 	public function createSphere():Sprite
 	{
-		return new Sprite(_kernel.assets.getAsset(Assets.Sphere__png).texture);
+		var l_result = new Sprite(_kernel.assets.getAsset(Assets.Sphere__png).texture);
+		l_result.blendMode = Math.random() < .5 ? BlendModes.ADD : BlendModes.NORMAL;
+		return l_result;
 	}
 
 	public function createButtonUp():Sprite

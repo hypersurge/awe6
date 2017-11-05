@@ -30,16 +30,13 @@
 package awe6.core.drivers.pixijs;
 import awe6.core.drivers.AKernel;
 import awe6.interfaces.EOverlayButton;
-import js.html.CanvasElement;
-import pixi.core.ticker.Ticker;
-//import createjs.easeljs.Shape;
-//import createjs.easeljs.Stage;
-//import createjs.easeljs.Ticker;
 import haxe.Timer;
 import js.Browser;
+import js.html.CanvasElement;
 import js.html.Event;
 import pixi.core.renderers.Detector;
 import pixi.core.renderers.SystemRenderer;
+import pixi.core.ticker.Ticker;
 
 /**
  * This Kernel class provides PixiJS target overrides.
@@ -50,8 +47,6 @@ class Kernel extends AKernel
 	public var system( default, null ):System;
 	
 	private var _canvas:CanvasElement;
-//	private var _stage:Stage;
-//	private var _stageDynamic:Dynamic;
 	private var _ticker:Ticker;
 	private var _timeElapsedSinceRender:Float;
 	private var _renderer:SystemRenderer;
@@ -73,19 +68,10 @@ class Kernel extends AKernel
 	{
 		system = new System( this );
 		_scaleX = _scaleY = 1;
-		
 		_canvas = cast( factory, Factory ).canvas;
-		_renderer = Detector.autoDetectRenderer( { view: _canvas }, factory.width, factory.height );
+		_renderer = Detector.autoDetectRenderer( { view: _canvas } );
+		_renderer.resize( factory.width, factory.height );
 		_renderer.backgroundColor = factory.bgColor;
-		
-		
-		/*
-		_stage.tickOnUpdate = false;
-		_stage.mouseEnabled = false;
-		Ticker.setFPS( factory.targetFramerate );
-		Ticker.timingMode = Ticker.RAF_SYNCHED;
-		Ticker.addEventListener( "tick", _onEnterFrame );
-		*/
 		_canvas.style.setProperty( "-ms-touch-action", "none", "" );
 		_canvas.style.setProperty( "image-rendering", "-o-crisp-edges", "" );
 		_canvas.style.setProperty( "image-rendering", "optimize-contrast", "" );
@@ -100,8 +86,7 @@ class Kernel extends AKernel
 		_canvas.style.setProperty( "-ms-user-select", "none", "" );
 		_canvas.addEventListener( "contextmenu", _onContextMenu, false );
 		Browser.window.addEventListener( "unload", _onUnload );
-		_ticker = new Ticker();
-		_ticker.autoStart = true;
+		_ticker = Ticker.shared;
 		_ticker.add( _onEnterFrame );
 	}
 	
@@ -123,7 +108,7 @@ class Kernel extends AKernel
 
 	override private function _driverDisposer():Void
 	{
-		//_stage.canvas.removeEventListener( "contextmenu", _onContextMenu );
+		_canvas.removeEventListener( "contextmenu", _onContextMenu );
 	}
 	
 	private function _onEnterFrame():Void
@@ -131,19 +116,12 @@ class Kernel extends AKernel
 		_timeElapsedSinceRender += _ticker.elapsedMS;
 		if ( _timeElapsedSinceRender < ( 1000 / factory.targetFramerate ) ) return;
 		_timeElapsedSinceRender = 0;
-//		if ( untyped ( p_event.paused != null ) && ( p_event.paused == true ) ) // special case to allow Ticker.pause / above Kernel pausing
-		{
-			//_stage.tickOnUpdate = false;
-		}
-//		else
-		{
-			_updates++;
-			_updater( 0 ); // avoid isActive
-//			_stage.tickOnUpdate = isActive;
-//			_stageDynamic.update( p_event ); // using dynamic hack until CreateJS externs are patched to properly allow event into update
-			_renderer.render( _context );
-			_renderer.backgroundColor = Std.random( 10000 );
-		}
+		_updates++;
+		_updater( 0 ); // avoid isActive
+//		_context.scale.x = 1/.75;
+//		_context.scale.y = 1/.666;
+		_renderer.render( _context );
+		//_renderer.backgroundColor = Std.random( 10000 );
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{
@@ -230,12 +208,6 @@ class Kernel extends AKernel
 		_canvas.style.setProperty( "height", Math.round( l_factoryHeight * _scaleY ) + "px", "" );
 		_canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
 		_canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
-		/*
-		_stage.canvas.style.setProperty( "width", Math.round( l_factoryWidth * _scaleX ) + "px", "" );
-		_stage.canvas.style.setProperty( "height", Math.round( l_factoryHeight * _scaleY ) + "px", "" );
-		_stage.canvas.style.setProperty( "margin-left", l_marginX + "px", "" );
-		_stage.canvas.style.setProperty( "margin-top", l_marginY + "px", "" );
-		*/
 	}
 	
 }

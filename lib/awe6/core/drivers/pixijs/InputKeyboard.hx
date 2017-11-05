@@ -29,13 +29,95 @@
 
 package awe6.core.drivers.pixijs;
 import awe6.core.drivers.AInputKeyboard;
+import awe6.interfaces.EKey;
+import js.Browser;
+import js.html.Document;
+import js.html.KeyboardEvent;
 
 /**
- * This class provides an easy driver package to remap from.
- * To use it add compiler conditional: -D awe6DriverRemap
- * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
+ * This InputKeyboard class provides CreateJS target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard
 {
+	private var _document:Document;
+	private var _preventDefaultKeyCodes:Array<Int>; // storing as KeyCoes rather than EKey to save additional lookups
+	
+	override private function _driverInit():Void 
+	{
+		_document = Browser.document; // must be linked to Browser
+		_preventDefaultKeyCodes = [];
+		_document.addEventListener( "keydown", _onKeyDown );
+		_document.addEventListener( "keyup", _onKeyUp );
+	}
+	
+	override private function _disposer():Void 
+	{
+		_document.removeEventListener( "keydown", _onKeyDown );
+		_document.removeEventListener( "keyup", _onKeyUp );
+		super._disposer();
+	}
+	
+	private function _onKeyDown( p_event:KeyboardEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		if ( _preventDefaultKeyCodes.indexOf( p_event.keyCode ) != -1 )
+		{
+			p_event.preventDefault();
+		}
+		_addEvent( p_event.keyCode, true );
+	}
+	
+	private function _onKeyUp( p_event:KeyboardEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		if ( _preventDefaultKeyCodes.indexOf( p_event.keyCode ) != -1 )
+		{
+			p_event.preventDefault();
+		}
+		_addEvent( p_event.keyCode, false );
+	}
+	
+	@:keep public function preventDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		if ( p_keyTypes == null )
+		{
+			return;
+		}
+		for ( i in p_keyTypes )
+		{
+			var l_keyCode:Int = getKeyCode( i );
+			if ( !Lambda.has( _preventDefaultKeyCodes, l_keyCode ) )
+			{
+				_preventDefaultKeyCodes.push( l_keyCode );
+			}
+		}
+	}
+	
+	@:keep public function allowDefaultForKeys( p_keyTypes:Array<EKey> ):Void
+	{
+		if ( p_keyTypes == null )
+		{
+			return;
+		}
+		var i:Int = 0;      
+		while ( i < _preventDefaultKeyCodes.length )
+		{
+			var l_keyType:EKey = getKey( _preventDefaultKeyCodes[i] );
+			if ( Lambda.has( p_keyTypes, l_keyType ) )
+			{
+				_preventDefaultKeyCodes.splice( i, 1 );
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
 }
