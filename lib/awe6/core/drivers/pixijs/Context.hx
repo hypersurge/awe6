@@ -30,7 +30,7 @@
 package awe6.core.drivers.pixijs;
 
 /**
- * This Context class provides CreateJS target overrides.
+ * This Context class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 typedef Context = pixi.core.display.Container;

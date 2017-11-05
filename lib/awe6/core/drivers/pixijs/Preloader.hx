@@ -92,7 +92,7 @@ class Preloader extends APreloader
 	{
 		if ( _isComplete ) return;
 		_isComplete = true;
-		AssetManager.loader = _loader; // static handshake to exchange the loadQueue
+		AssetManager.loader = _loader; // static handshake to exchange the loader
 		_completedDelay = _audioHoldDelay; // we'll subtract p_deltaTime from this until it's time to call _continue
 		if ( _audioHoldDelay != 0 )
 		{

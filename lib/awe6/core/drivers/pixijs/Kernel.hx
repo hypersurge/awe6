@@ -118,10 +118,7 @@ class Kernel extends AKernel
 		_timeElapsedSinceRender = 0;
 		_updates++;
 		_updater( 0 ); // avoid isActive
-//		_context.scale.x = 1/.75;
-//		_context.scale.y = 1/.666;
 		_renderer.render( _context );
-		//_renderer.backgroundColor = Std.random( 10000 );
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{

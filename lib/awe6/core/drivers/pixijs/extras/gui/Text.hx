@@ -33,7 +33,6 @@ import awe6.interfaces.ITextStyle;
 typedef PixiTextStyle = pixi.core.text.TextStyle;
 typedef TextField = pixi.core.text.Text;
 
-
 class Text extends GuiEntity
 {
 	public var text( default, set ):String;

@@ -54,13 +54,13 @@ class Factory extends AFactory
 	{
 		if ( p_isPreconfig )
 		{
-			id = "awe6CreatejsDemo";
+			id = "awe6PixijsDemo";
 			version = "0.1.000"; // major.minor.revision ... I recommend you use your SVN revision # for revision version, and automatically insert it into this file :-)
 			author = "Robert Fell";
 			isDecached = false;
 			width = 600;
 			height = 400;
-			bgColor = 0x000080;
+			bgColor = 0x000000;
 			startingSceneType = EScene.INTRO;
 			targetFramerate = 60;
 			isFixedUpdates = false;

@@ -5,7 +5,7 @@ package ;
  * @author Robert Fell
  */
 
-@:build( awe6.core.drivers.createjs.AssetsBuilder.build( "bin/", "assets/" ) )
+@:build( awe6.core.drivers.pixijs.AssetsBuilder.build( "bin/", "assets/" ) )
 
 class Assets
 {

@@ -29,13 +29,13 @@
 
 package awe6.core.drivers.pixijs;
 import awe6.core.Context;
-import awe6.core.drivers.AFactory;
 import awe6.core.Macros;
+import awe6.core.drivers.AFactory;
 import awe6.interfaces.EKey;
 import haxe.Http;
-import haxe.io.Bytes;
 import haxe.Log;
 import haxe.PosInfos;
+import haxe.io.Bytes;
 import js.Browser;
 import js.html.CanvasElement;
 
@@ -220,7 +220,7 @@ class Factory extends AFactory
 	
 	override private function _getAssetUrls():Array<String>
 	{
-		var l_result = Macros.getFolderContents( "bin/assets/", true, "bin/", "createjs.min.js\ngame.js\n" ); // has to be hardwired for macro - consider appcache isn't always favorable because of needing to cache all the files, rather than a subset (e.g. audio formats).  It can slow things down, and doesn't work for audio on iOS anyway.
+		var l_result = Macros.getFolderContents( "bin/assets/", true, "bin/", "pixijs.min.js\ngame.js\n" ); // has to be hardwired for macro - consider appcache isn't always favorable because of needing to cache all the files, rather than a subset (e.g. audio formats).  It can slow things down, and doesn't work for audio on iOS anyway.
 		var l_toRemove:Array<String> = [];
 		for ( i in 0...l_result.length )
 		{

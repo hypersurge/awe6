@@ -35,7 +35,7 @@ import js.html.Document;
 import js.html.KeyboardEvent;
 
 /**
- * This InputKeyboard class provides CreateJS target overrides.
+ * This InputKeyboard class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 class InputKeyboard extends AInputKeyboard

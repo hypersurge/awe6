@@ -32,7 +32,7 @@ import awe6.core.Context;
 import awe6.core.drivers.AView;
 
 /**
- * This View class provides CreateJS target overrides.
+ * This View class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 class View extends AView
