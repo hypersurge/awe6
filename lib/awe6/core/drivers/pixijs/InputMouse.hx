@@ -29,13 +29,96 @@
 
 package awe6.core.drivers.pixijs;
 import awe6.core.drivers.AInputMouse;
+import awe6.interfaces.EMouseCursor;
+import js.Browser;
+import js.html.CanvasElement;
+import pixi.interaction.InteractionEvent;
+import pixi.interaction.InteractionManager;
 
 /**
- * This class provides an easy driver package to remap from.
- * To use it add compiler conditional: -D awe6DriverRemap
- * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
+ * This InputMouse class provides PixiJS target overrides.
  * @author	Robert Fell
  */
 class InputMouse extends AInputMouse
 {
+	static private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound, only needed once per application, hence static
+	
+	private var _interactionManager:InteractionManager;
+	private var _canvas:CanvasElement;
+	
+	override private function _driverInit():Void 
+	{
+		_canvas = untyped _kernel.factory.canvas;
+		_interactionManager = untyped _kernel._renderer.plugins.interaction;
+		_interactionManager.on( "pointerdown", _onPointerDown );
+		_interactionManager.on( "pointerup", _onPointerUp );
+		Browser.window.focus();
+	}
+	
+	override private function _disposer():Void 
+	{
+		_interactionManager.off( "pointerdown", _onPointerDown );
+		_interactionManager.off( "pointerup", _onPointerUp );
+		super._disposer();		
+	}	
+	
+	override private function _isWithinBounds():Bool
+	{
+		return ( ( x > 0 ) && ( x < _kernel.factory.width ) && ( y > 0 ) && ( y < _kernel.factory.height ) );
+	}
+	
+	override private function _getPosition():Void
+	{
+		x = Std.int( _interactionManager.mouse.global.x );
+		y = Std.int( _interactionManager.mouse.global.y );
+	}
+	
+	private function _onPointerDown( p_event:InteractionEvent ):Void
+	{
+		Browser.window.focus();
+		if ( !isActive )
+		{
+			return;
+		}
+		var l_button:Int = untyped p_event.data.button ;
+		if ( l_button == 2 ) // disable right click
+		{
+			return;
+		}
+		_buffer.push( true );
+	}
+	
+	private function _onPointerUp( p_event:InteractionEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		var l_button:Int = untyped p_event.data.button ;
+		if ( l_button == 2 ) // disable right click
+		{
+			return;
+		}
+		_buffer.push( false );
+	}
+	
+	override private function set_isVisible( p_value:Bool ):Bool
+	{
+		_canvas.style.cursor = p_value ? "none" : "auto";
+		return super.set_isVisible( p_value );
+	}
+	
+	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
+	{
+		_canvas.style.cursor = switch( p_value )
+		{
+			case ARROW : "crosshair";
+			case AUTO : "auto";
+			case BUTTON : "pointer";
+			case HAND : "pointer";
+			case IBEAM : "text";
+			case SUB_TYPE( p_value ) : p_value; // http://www.w3schools.com/cssref/playit.asp?filename=playcss_cursor&preval=alias
+		}
+		return super.set_cursorType( p_value );
+	}
 }
