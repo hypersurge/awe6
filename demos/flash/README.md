@@ -1,4 +1,4 @@
-# Demo Suite for awe6 SWF Driver #
+# Demo Suite for awe6 Flash Driver #
 
 To build load "awe6Swf.hxproj" & compile in [FlashDevelop](http://flashdevelop.org) or run the following at a command prompt:
 
