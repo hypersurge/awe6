@@ -45,10 +45,12 @@ class InputMouse extends AInputMouse
 	
 	private var _interactionManager:InteractionManager;
 	private var _canvas:CanvasElement;
+	private var _system:System;
 	
 	override private function _driverInit():Void 
 	{
 		_canvas = untyped _kernel.factory.canvas;
+		_system = untyped _kernel.system;
 		_interactionManager = untyped _kernel._renderer.plugins.interaction;
 		_interactionManager.on( "pointerdown", _onPointerDown );
 		_interactionManager.on( "pointerup", _onPointerUp );
@@ -86,6 +88,18 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		_buffer.push( true );
+		
+		if ( _isSoundTriggered )
+		{
+			return;
+		}
+		_kernel.audio.start( "Silence" );
+		_isSoundTriggered = true; // one touch is enough
+		if ( !_system.isDesktop && _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
+		{
+			untyped _kernel.system.requestFullScreen();
+			untyped _kernel.system.requestLockScreen();
+		}
 	}
 	
 	private function _onPointerUp( p_event:InteractionEvent ):Void

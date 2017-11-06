@@ -44,10 +44,7 @@ class Preloader extends APreloader
 	
 	private var _context:Context;
 	private var _system:System;
-	private var _isDesktop:Bool;
 	private var _loader:Loader;
-	private var _validSoundFormat:String;
-	private var _manifest:Array<Dynamic>;
 	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled
 	private var _isSoundDisabled:Bool; // if true then audio asset loading is disabled
 	private var _proprietaryAudioFormat:String; // this format is used if ogg is not supported - defaults to mp3, but can be overridden to mpeg, wav, m4a, mp3, mp4, aiff, wma, mid (if things don't work, double check your serer mime-types - e.g. audio/mp4 m4a)
@@ -60,17 +57,37 @@ class Preloader extends APreloader
 		view = new View( _kernel, _context );
 		super._init();
 		_system = untyped _kernel.system;
-		_isDesktop = _system.isDesktop;
 		_audioHoldDelay = _getAudioHoldDelay();
 		_completedDelay = 0;
+		_loader = new Loader( "", 10 );
 		var l_dc:String = ( _isDecached ? "?dc=" + Std.random( 999999 ) : "" );
 		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
 		if ( ( _proprietaryAudioFormat == null ) || ( _proprietaryAudioFormat == "" ) || ( !Lambda.has( l_audioFormats, _proprietaryAudioFormat ) ) )
 		{
 			_proprietaryAudioFormat = "mp3"; // we default to mp3 to reduce the need for server mime-type configuration, however m4a is our suggested proprietary format (less restrictive licensing, better looping, smaller filesize)
 		}
-		//https://github.com/kittykatattack/learningPixi
-		_loader = new Loader( "", 10 );
+		// we push valid sounds to manifest
+		var l_soundAssets:Array<String> = [];
+		for ( i in _assets )
+		{
+			if ( Lambda.has( l_audioFormats, i.substr( -3 ) ) )
+			{
+				l_soundAssets.push( i );
+			}
+		}
+		var l_isSoundDisabled:Bool = _isSoundDisabled || ( untyped PIXI.sound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+		for ( i in l_soundAssets )
+		{
+			_assets.remove( i );
+			if ( !l_isSoundDisabled && !_isFastTestMode )
+			{
+				var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
+				if ( !_loader.resources.exists( l_id ) )
+				{
+					_loader.add( l_id, i.substr( 0, -4 ) + ".{ogg," + _proprietaryAudioFormat + "}" + l_dc );
+				}
+			}
+		}
 		for ( i in _assets )
 		{
 			_loader.add( i, i + l_dc );
