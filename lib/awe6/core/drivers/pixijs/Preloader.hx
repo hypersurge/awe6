@@ -48,8 +48,8 @@ class Preloader extends APreloader
 	private var _context:Context;
 	private var _system:System;
 	private var _loader:Loader;
-	private var _isFastTestMode:Bool; // if true then audio asset loading is disabled, XHR loading is disabled
 	private var _isSoundDisabled:Bool; // if true then audio asset loading is disabled
+	private var _audioFormat:String; // this format is the one used
 	private var _proprietaryAudioFormat:String; // this format is used if ogg is not supported - defaults to mp3, but can be overridden to mpeg, wav, m4a, mp3, mp4, aiff, wma, mid (if things don't work, double check your serer mime-types - e.g. audio/mp4 m4a)
 	private var _audioHoldDelay:Int; // the time to wait for a touch event to enable audio (override to -1 for indefinite, or set in config)
 	private var _completedDelay:Int; // to measure time waiting for audio touch event
@@ -59,52 +59,57 @@ class Preloader extends APreloader
 		_context = new Context();
 		view = new View( _kernel, _context );
 		super._init();
+		
 		// set up
 		_system = untyped _kernel.system;
-		var l_pixiSound = untyped PIXI.sound;
-		try
-		{
-			l_pixiSound.useLegacy = _kernel.isLocal || !l_pixiSound.supported; // disable WebAudio if using local files (or not supported)
-		}
-		catch ( p_error:Dynamic ) {}
 		_audioHoldDelay = _getAudioHoldDelay();
 		_completedDelay = 0;
 		_loader = new Loader( "", 10 );
+		var l_pixiSound = untyped PIXI.sound;
+		l_pixiSound.useLegacy = _kernel.isLocal || !l_pixiSound.supported; // disable WebAudio if using local files (or not supported)
 		var l_dc:String = ( _isDecached ? "?dc=" + Std.random( 999999 ) : "" );
+		var l_isSoundDisabled:Bool = _isSoundDisabled || ( l_pixiSound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+		
 		// audio format
 		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
 		if ( ( _proprietaryAudioFormat == null ) || ( _proprietaryAudioFormat == "" ) || ( !Lambda.has( l_audioFormats, _proprietaryAudioFormat ) ) )
 		{
 			_proprietaryAudioFormat = "mp3"; // we default to mp3 to reduce the need for server mime-type configuration, however m4a is our suggested proprietary format (less restrictive licensing, better looping, smaller filesize)
 		}
-		var l_audioFormat = _canPlayType( "ogg" ) ? "ogg" : _proprietaryAudioFormat;
+		_audioFormat = _canPlayType( "ogg" ) ? "ogg" : _proprietaryAudioFormat; // but we always favor ogg, if it is supported
 		
-		var l_soundAssets:Array<String> = [];
+		// isolate audio assets
+		var l_audioAssets:Array<String> = [];
 		for ( i in _assets )
 		{
 			if ( Lambda.has( l_audioFormats, i.substr( -3 ) ) )
 			{
-				l_soundAssets.push( i );
+				l_audioAssets.push( i );
 			}
 		}
-		var l_isSoundDisabled:Bool = _isSoundDisabled || ( l_pixiSound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
-		for ( i in l_soundAssets )
+		for ( i in l_audioAssets )
 		{
 			_assets.remove( i );
-			if ( !l_isSoundDisabled && !_isFastTestMode )
-			{
-				var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
-				if ( !_loader.resources.exists( l_id ) )
-				{
-					_loader.add( l_id, i.substr( 0, -4 ) + "." + l_audioFormat + l_dc );
-				}
-			}
 		}
+		
+		// add to loader
 		for ( i in _assets )
 		{
 			_loader.add( i, i + l_dc );
 		}
-		Timer.delay( _loader.load.bind( _onComplete ), 200 ); // allows time to display preloader
+		if ( !l_isSoundDisabled )
+		{
+			for ( i in l_audioAssets )
+			{
+				if ( i.substr( -3 ) == _audioFormat )
+				{
+					_loader.add( "assets.audio." + i.split( "/" ).pop().substr( 0, -4 ), i + l_dc );
+				}
+			}
+		}
+		
+		// start the loader after a delay - allows time to display preloader
+		Timer.delay( _loader.load.bind( _onComplete ), 200 );
 	}
 	
 	override private function _next():Void
