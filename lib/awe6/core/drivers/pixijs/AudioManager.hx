@@ -46,6 +46,8 @@ typedef Sound = {
 	volumeAll: Float,
 	muteAll: Void->Void,
 	unmuteAll: Void->Void,
+	supported:Bool,
+	useLegacy:Bool,
 };
 typedef SoundInstance = {
 	play:?SoundOptions->Void,
@@ -182,7 +184,7 @@ class _HelperSound extends _AHelperSound
 		_sound.volume = _volume;
 		if ( _pan != 0 )
 		{
-			if ( _panFilter == null )
+			if ( AudioManager.sound.supported && !AudioManager.sound.useLegacy && ( _panFilter == null ) )
 			{
 				try
 				{

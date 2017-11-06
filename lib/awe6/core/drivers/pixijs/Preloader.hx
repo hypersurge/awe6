@@ -30,6 +30,8 @@
 package awe6.core.drivers.pixijs;
 import awe6.core.drivers.APreloader;
 import haxe.Timer;
+import js.Browser;
+import js.html.AudioElement;
 import js.html.Event;
 import pixi.loaders.Loader;
 
@@ -41,6 +43,7 @@ class Preloader extends APreloader
 {
 	private static inline var _CONFIG_AUDIO_HOLD_DELAY = "settings.audioHoldDelay";
 	private static inline var _ATTRIBUTE_AUDIO_HOLD_DELAY = "audioHoldDelay";
+	private static var _audioElement:AudioElement;
 	
 	private var _context:Context;
 	private var _system:System;
@@ -56,17 +59,26 @@ class Preloader extends APreloader
 		_context = new Context();
 		view = new View( _kernel, _context );
 		super._init();
+		// set up
 		_system = untyped _kernel.system;
+		var l_pixiSound = untyped PIXI.sound;
+		try
+		{
+			l_pixiSound.useLegacy = _kernel.isLocal || !l_pixiSound.supported; // disable WebAudio if using local files (or not supported)
+		}
+		catch ( p_error:Dynamic ) {}
 		_audioHoldDelay = _getAudioHoldDelay();
 		_completedDelay = 0;
 		_loader = new Loader( "", 10 );
 		var l_dc:String = ( _isDecached ? "?dc=" + Std.random( 999999 ) : "" );
+		// audio format
 		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
 		if ( ( _proprietaryAudioFormat == null ) || ( _proprietaryAudioFormat == "" ) || ( !Lambda.has( l_audioFormats, _proprietaryAudioFormat ) ) )
 		{
 			_proprietaryAudioFormat = "mp3"; // we default to mp3 to reduce the need for server mime-type configuration, however m4a is our suggested proprietary format (less restrictive licensing, better looping, smaller filesize)
 		}
-		// we push valid sounds to manifest
+		var l_audioFormat = _canPlayType( "ogg" ) ? "ogg" : _proprietaryAudioFormat;
+		
 		var l_soundAssets:Array<String> = [];
 		for ( i in _assets )
 		{
@@ -75,7 +87,7 @@ class Preloader extends APreloader
 				l_soundAssets.push( i );
 			}
 		}
-		var l_isSoundDisabled:Bool = _isSoundDisabled || ( untyped PIXI.sound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
+		var l_isSoundDisabled:Bool = _isSoundDisabled || ( l_pixiSound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 		for ( i in l_soundAssets )
 		{
 			_assets.remove( i );
@@ -84,7 +96,7 @@ class Preloader extends APreloader
 				var l_id:String = "assets.audio." + i.split( "/" ).pop().substr( 0, -4 );
 				if ( !_loader.resources.exists( l_id ) )
 				{
-					_loader.add( l_id, i.substr( 0, -4 ) + ".{ogg," + _proprietaryAudioFormat + "}" + l_dc );
+					_loader.add( l_id, i.substr( 0, -4 ) + "." + l_audioFormat + l_dc );
 				}
 			}
 		}
@@ -171,5 +183,19 @@ class Preloader extends APreloader
 		}
 		catch ( p_error:Dynamic ) { }
 		return l_result;
+	}
+	
+	private function _canPlayType( p_extension:String ):Bool
+	{
+		if ( _audioElement == null )
+		{
+			_audioElement = cast Browser.document.createElement( "audio" );
+		}
+		if ( _audioElement.canPlayType == null )
+		{
+			return false;
+		}
+		var l_result = _audioElement.canPlayType( "audio/" + p_extension );
+		return !( ( l_result == "" ) || ( l_result == "no" ) );
 	}
 }

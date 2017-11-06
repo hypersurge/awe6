@@ -69,7 +69,7 @@ class Kernel extends AKernel
 		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_canvas = cast( factory, Factory ).canvas;
-		_renderer = Detector.autoDetectRenderer( { view: _canvas } );
+		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal );
 		_renderer.resize( factory.width, factory.height );
 		_renderer.backgroundColor = factory.bgColor;
 		_canvas.style.setProperty( "-ms-touch-action", "none", "" );
