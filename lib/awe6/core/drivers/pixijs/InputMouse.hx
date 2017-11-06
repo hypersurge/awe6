@@ -91,18 +91,6 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		_buffer.push( true );
-		
-		if ( _isSoundTriggered )
-		{
-			return;
-		}
-		_kernel.audio.start( "Silence" );
-		_isSoundTriggered = true; // one touch is enough
-		if ( !_system.isDesktop && _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
-		{
-			_system.requestFullScreen();
-			_system.requestLockScreen();
-		}
 	}
 	
 	private function _onPointerUp( p_event:InteractionEvent ):Void
@@ -117,6 +105,19 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		_buffer.push( false );
+		
+		
+		if ( _isSoundTriggered )
+		{
+			return;
+		}
+		_kernel.audio.start( "Silence" );
+		_isSoundTriggered = true; // one touch is enough
+		if ( !_system.isDesktop && _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
+		{
+			_system.requestFullScreen();
+			_system.requestLockScreen();
+		}
 	}
 	
 	override private function set_isVisible( p_value:Bool ):Bool
