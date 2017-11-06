@@ -42,6 +42,7 @@ typedef SoundOptions = {
 };
 typedef Sound = {
 	play:String->?SoundOptions->SoundInstance,
+	find:String->SoundInstance,
 	volumeAll: Float,
 	muteAll: Void->Void,
 	unmuteAll: Void->Void,
@@ -53,6 +54,9 @@ typedef SoundInstance = {
 	loop:Bool,
 	filters:Array<Dynamic>,
 };
+typedef SoundFilterPan = {
+	pan:Float,
+}
 
 /**
  * This AudioManager class provides PixiJS target overrides.
@@ -132,7 +136,7 @@ class AudioManager extends AAudioManager
 class _HelperSound extends _AHelperSound
 {
 	private var _sound:SoundInstance;
-	private var _panFilter:Dynamic;
+	private var _panFilter:SoundFilterPan;
 	
 	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
@@ -143,14 +147,16 @@ class _HelperSound extends _AHelperSound
 	{
 		try
 		{
+			_sound = AudioManager.sound.find( "assets.audio." + id );
 			var l_options:SoundOptions = {
 				complete:_onSoundComplete,
 				start: _startTime,
 				loop: _loops != 0,
 			};
-			_sound = AudioManager.sound.play( "assets.audio." + id, l_options );
+			_sound.volume = _volume;
+			_sound.play( l_options );
 		}
-		catch ( p_error:Dynamic ) {}
+		catch ( p_error:Dynamic ) { _sound = null; }
 		if ( _sound == null )
 		{
 			return dispose();
@@ -168,21 +174,24 @@ class _HelperSound extends _AHelperSound
 		if ( p_asRelative )
 		{
 			_volume *= _sound.volume;
-//			if ( _panFilter != null )
-//			{
-//				_pan *= _panFilter.pan;
-//			}
+			if ( _panFilter != null )
+			{
+				_pan *= _panFilter.pan;
+			}
 		}
 		_sound.volume = _volume;
-//		if ( _pan != 0 )
-//		{
-//			if ( _panFilter == null )
-//			{
-//				_panFilter = untyped __js__( "new PIXI.sound.filters.StereoFilter( this._pan )" );
-//				_sound.filters = [_panFilter];
-//			}
-//		}
-		// filters not working?
+		if ( _pan != 0 )
+		{
+			if ( _panFilter == null )
+			{
+				try
+				{
+					_panFilter = untyped __js__( "new PIXI.sound.filters.StereoFilter( this._pan )" );
+					_sound.filters = [_panFilter];
+				}
+				catch ( p_error:Dynamic ) { _pan = 0; }
+			}
+		}
 	}
 
 	override private function _driverStop():Void
