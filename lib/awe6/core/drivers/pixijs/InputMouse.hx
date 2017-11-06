@@ -71,8 +71,11 @@ class InputMouse extends AInputMouse
 	
 	override private function _getPosition():Void
 	{
-		x = Std.int( _interactionManager.mouse.global.x );
-		y = Std.int( _interactionManager.mouse.global.y );
+		if ( ( _interactionManager.eventData != null ) && ( _interactionManager.eventData.data != null ) && ( _interactionManager.eventData.data != null ) )
+		{
+			x = Std.int( _interactionManager.eventData.data.global.x );
+			y = Std.int( _interactionManager.eventData.data.global.y );
+		}
 	}
 	
 	private function _onPointerDown( p_event:InteractionEvent ):Void
@@ -82,7 +85,7 @@ class InputMouse extends AInputMouse
 		{
 			return;
 		}
-		var l_button:Int = untyped p_event.data.button ;
+		var l_button:Int = untyped p_event.data.button;
 		if ( l_button == 2 ) // disable right click
 		{
 			return;
@@ -97,8 +100,8 @@ class InputMouse extends AInputMouse
 		_isSoundTriggered = true; // one touch is enough
 		if ( !_system.isDesktop && _kernel.isFullScreen && untyped _kernel.factory.isNativeExperience ) // take advantage of the touch event and request fullscreen and lock if possible (isNativeExperience can be overridden in config or html)
 		{
-			untyped _kernel.system.requestFullScreen();
-			untyped _kernel.system.requestLockScreen();
+			_system.requestFullScreen();
+			_system.requestLockScreen();
 		}
 	}
 	
