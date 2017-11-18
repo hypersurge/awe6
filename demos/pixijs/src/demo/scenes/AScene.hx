@@ -64,7 +64,7 @@ class AScene extends Scene
 			addEntity( _title, true, 100 );
 		}
 		view.addChild( _assetManager.background, 0 );
-		_kernel.audio.start( "MusicMenu", EAudioChannel.MUSIC, -1, 0, .125, 0, true );
+		_kernel.audio.start( Assets.audio_MusicMenu, EAudioChannel.MUSIC, -1, 0, .125, 0, true );
 	}
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void 

@@ -82,13 +82,13 @@ class Button extends BasicButton
 
 	override public function onClick():Void
 	{
-		_kernel.audio.start( "ButtonDown", EAudioChannel.INTERFACE );
+		_kernel.audio.start( Assets.audio_ButtonDown, EAudioChannel.INTERFACE );
 		super.onClick();
 	}
 
 	override public function onRollOver():Void
 	{
-		_kernel.audio.start( "ButtonOver", EAudioChannel.INTERFACE );
+		_kernel.audio.start( Assets.audio_ButtonOver, EAudioChannel.INTERFACE );
 		super.onRollOver();
 	}
 }

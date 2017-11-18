@@ -59,8 +59,8 @@ class Game extends AScene
 		_timer.y = 70;
 		addEntity( _timer, true, 1000 );
 
-		_kernel.audio.stop( "MusicMenu", EAudioChannel.MUSIC );
-		_kernel.audio.start( "MusicGame", EAudioChannel.MUSIC, -1, 0, .5, 0, true );
+		_kernel.audio.stop( Assets.audio_MusicMenu, EAudioChannel.MUSIC );
+		_kernel.audio.start( Assets.audio_MusicGame, EAudioChannel.MUSIC, -1, 0, .5, 0, true );
 		for ( i in 0...10 )
 		{
 			addEntity( new Sphere( _kernel ), true, i + 10 );
