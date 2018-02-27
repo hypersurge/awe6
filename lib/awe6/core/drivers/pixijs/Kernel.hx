@@ -48,7 +48,7 @@ class Kernel extends AKernel
 	
 	private var _canvas:CanvasElement;
 	private var _ticker:Ticker;
-	private var _timeElapsedSinceRender:Float;
+	private var _timeOfLastRender:Int;
 	private var _renderer:SystemRenderer;
 	private var _scaleX:Float;
 	private var _scaleY:Float;
@@ -72,22 +72,11 @@ class Kernel extends AKernel
 		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal );
 		_renderer.resize( factory.width, factory.height );
 		_renderer.backgroundColor = factory.bgColor;
-		_canvas.style.setProperty( "-ms-touch-action", "none", "" );
-		_canvas.style.setProperty( "image-rendering", "-o-crisp-edges", "" );
-		_canvas.style.setProperty( "image-rendering", "optimize-contrast", "" );
-		_canvas.style.setProperty( "-ms-interpolation-mode", "nearest-neighbor", "" );
-		_canvas.style.setProperty( "-webkit-tap-highlight-color", "rgba(0,0,0,0)", "" );
-		_canvas.style.setProperty( "-moz-tap-highlight-color", "rgba(0,0,0,0)", "" );
-		_canvas.style.setProperty( "tap-highlight-color", "rgba(0,0,0,0)", "" );
-		_canvas.style.setProperty( "user-select", "none", "" );
-		_canvas.style.setProperty( "-webkit-touch-callout", "none", "" );
-		_canvas.style.setProperty( "-webkit-user-select", "none", "" );
-		_canvas.style.setProperty( "-moz-user-select", "none", "" );
-		_canvas.style.setProperty( "-ms-user-select", "none", "" );
 		_canvas.addEventListener( "contextmenu", _onContextMenu, false );
 		Browser.window.addEventListener( "unload", _onUnload );
 		_ticker = Ticker.shared;
 		_ticker.add( _onEnterFrame );
+		_timeOfLastRender = Std.int( Date.now().getTime() );
 	}
 	
 	private function _onUnload( p_event:Event ):Void
@@ -113,9 +102,11 @@ class Kernel extends AKernel
 	
 	private function _onEnterFrame():Void
 	{
-		_timeElapsedSinceRender += _ticker.elapsedMS;
-		if ( _timeElapsedSinceRender < ( 1000 / factory.targetFramerate ) ) return;
-		_timeElapsedSinceRender = 0;
+		var l_now:Int = Std.int( Date.now().getTime() );
+		var l_delta:Int = l_now - _timeOfLastRender;
+		var l_interval = Std.int( 1000 / factory.targetFramerate );
+		if ( l_delta < l_interval ) return;
+		_timeOfLastRender = l_now - ( l_delta % l_interval );
 		_updates++;
 		_updater( 0 ); // avoid isActive
 		_renderer.render( _context );
