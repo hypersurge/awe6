@@ -63,7 +63,7 @@ class AssetsBuilder
 				var l_extension = l_fileName.substr( -3, 3 );
 				if ( _audioFormats.indexOf( l_extension ) == -1 )
 				{
-					l_fileReferences.push( new _HelperFileRef( p_directory + l_fileName, p_rootDirectory ) );
+					if ( l_fileName.substr( 0, 2 ) != "__" ) l_fileReferences.push( new _HelperFileRef( p_directory + l_fileName, p_rootDirectory ) );
 				}
 				else
 				{
