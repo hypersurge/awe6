@@ -85,6 +85,8 @@ class Text extends GuiEntity
 		l_result.stroke = "";
 		l_result.strokeThickness = 0;
 		l_result.dropShadow = false;
+		l_result.wordWrap = _isMultiline;
+		l_result.wordWrapWidth = width;
 		if ( textStyle.filters != null )
 			{
 				var l_filters = textStyle.filters.copy();
