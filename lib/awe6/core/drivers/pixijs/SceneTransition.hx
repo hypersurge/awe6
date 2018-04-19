@@ -32,6 +32,7 @@ import awe6.core.drivers.ASceneTransition;
 import pixi.core.Pixi.RendererType;
 import pixi.core.Pixi.ScaleModes;
 import pixi.core.display.DisplayObject;
+import pixi.core.math.shapes.Rectangle;
 import pixi.core.renderers.SystemRenderer;
 import pixi.core.sprites.Sprite;
 
@@ -47,15 +48,14 @@ class SceneTransition extends ASceneTransition
 		var l_renderer:SystemRenderer = untyped _kernel._renderer;
 		var l_displayObject:DisplayObject = untyped _kernel.scenes.scene.view.context;
 		var l_bounds = l_displayObject.getBounds();
-		var l_texture = l_renderer.generateTexture( l_displayObject, ScaleModes.DEFAULT, 1 );
-		var l_sprite:Sprite = new Sprite( l_texture );
-		if ( l_renderer.type == RendererType.WEBGL ) // TODO: workaround for current lack of region support in generateTexture and difference in modes
+		if ( ( l_renderer != null ) && ( l_displayObject != null ) )
 		{
-			l_sprite.x = l_bounds.x;
-			l_sprite.y = l_bounds.y;
+			var l_rectangle = new Rectangle( 0, 0, _kernel.factory.width, _kernel.factory.height );
+			var l_texture = l_renderer.generateTexture( l_displayObject, ScaleModes.DEFAULT, 1, l_rectangle );
+			var l_sprite:Sprite = new Sprite( l_texture );
+			_context.interactive = false;
+			_context.addChild( l_sprite );
 		}
-		_context.interactive = false;
-		_context.addChild( l_sprite );
 	}
 	
 	override private function _updater( p_deltaTime:Int = 0 ):Void 
