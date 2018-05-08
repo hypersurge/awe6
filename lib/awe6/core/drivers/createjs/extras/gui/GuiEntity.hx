@@ -32,6 +32,7 @@ import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
+import createjs.easeljs.Shape;
 
 class GuiEntity extends Entity implements IPositionable
 {
@@ -52,6 +53,15 @@ class GuiEntity extends Entity implements IPositionable
 		height = p_height;
 		_context = new Context();
 		setPosition( 0, 0 );
+		if ( p_isMasked )
+		{
+			var l_mask:Shape = new Shape();
+			l_mask.graphics.beginFill( "#FF0000" );
+			l_mask.graphics.drawRect( 0, 0, width, height );
+			l_mask.graphics.endFill();
+			_context.addChild( l_mask );
+			_context.mask = l_mask;
+		}
 		super( p_kernel, _context );
 	}
 	

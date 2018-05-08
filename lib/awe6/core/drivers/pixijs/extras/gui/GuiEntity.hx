@@ -32,6 +32,7 @@ import awe6.core.Context;
 import awe6.core.Entity;
 import awe6.interfaces.IKernel;
 import awe6.interfaces.IPositionable;
+import pixi.core.graphics.Graphics;
 
 class GuiEntity extends Entity implements IPositionable
 {
@@ -52,6 +53,14 @@ class GuiEntity extends Entity implements IPositionable
 		height = p_height;
 		_context = new Context();
 		setPosition( 0, 0 );
+		if ( p_isMasked )
+		{
+			var l_mask:Graphics = new Graphics();
+			l_mask.beginFill( 0xFF0000 );
+			l_mask.drawRect( 0, 0, width, height );
+			l_mask.endFill();
+			_context.mask = _context.addChild( l_mask );
+		}
 		super( p_kernel, _context );
 	}
 	
