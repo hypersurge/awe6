@@ -98,6 +98,10 @@ class AInputMouse extends Process implements IInputMouse
 		_deltaTimePrev = p_deltaTime;
 		super._updater( p_deltaTime );
 		
+		_xPrev = x;
+		_yPrev = y;
+		_getPosition();
+		
 		_handleButton( EMouseButton.LEFT, _buffer.length > 0 ? _buffer.shift() : _buttonLeft.isDown, p_deltaTime );
 		_handleButton( EMouseButton.MIDDLE, _isMiddleDown(), p_deltaTime );
 		_handleButton( EMouseButton.RIGHT, _isRightDown(), p_deltaTime );
@@ -105,9 +109,6 @@ class AInputMouse extends Process implements IInputMouse
 		_deltaScroll = scroll - _scrollPrev;
 		_scrollPrev = scroll;
 		
-		_xPrev = x;
-		_yPrev = y;
-		_getPosition();
 		_deltaX = x - _xPrev;
 		_deltaY = y - _yPrev;
 		isMoving = ( ( x != _xPrev ) || ( y != _yPrev ) );

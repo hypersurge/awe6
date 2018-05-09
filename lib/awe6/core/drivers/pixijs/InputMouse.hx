@@ -52,6 +52,7 @@ class InputMouse extends AInputMouse
 		_canvas = untyped _kernel.factory.canvas;
 		_system = untyped _kernel.system;
 		_interactionManager = untyped _kernel._renderer.plugins.interaction;
+		_interactionManager.interactionFrequency = 100;
 		_interactionManager.on( "pointerdown", _onPointerDown );
 		_interactionManager.on( "pointerup", _onPointerUp );
 		Browser.window.focus();
@@ -71,7 +72,7 @@ class InputMouse extends AInputMouse
 	
 	override private function _getPosition():Void
 	{
-		if ( ( _interactionManager.eventData != null ) && ( _interactionManager.eventData.data != null ) && ( _interactionManager.eventData.data != null ) )
+		if ( ( _interactionManager.eventData != null ) && ( _interactionManager.eventData.data != null ) && ( _interactionManager.eventData.data.global != null ) )
 		{
 			x = Std.int( _interactionManager.eventData.data.global.x );
 			y = Std.int( _interactionManager.eventData.data.global.y );
