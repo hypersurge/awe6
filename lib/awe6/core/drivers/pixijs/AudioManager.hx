@@ -157,6 +157,12 @@ class _HelperSound extends _AHelperSound
 			};
 			_sound.volume = _volume;
 			_sound.play( l_options );
+			// temporary fix to Chrome sound issue - may not be needed?
+			// https://github.com/pixijs/pixi-sound/issues/65
+			if ( untyped AudioManager.sound.webaudio.WebAudioContext.ctx && ( untyped AudioManager.sound.webaudio.WebAudioContext.ctx.state == "suspended" ) )
+			{
+				untyped AudioManager.sound.webaudio.WebAudioContext.ctx.resume();
+			}
 		}
 		catch ( p_error:Dynamic ) { _sound = null; }
 		if ( _sound == null )
