@@ -123,6 +123,12 @@ class _HelperSound extends _AHelperSound
 		try
 		{
 			_sound = Sound.play( "assets.audio." + id, 0, _startTime, _loops, _volume, _pan );
+			// temporary fix to Chrome sound issue
+			// https://github.com/CreateJS/SoundJS/issues/297
+			if ( untyped createjs.WebAudioPlugin.context && ( untyped createjs.WebAudioPlugin.context.state == "suspended" ) )
+			{
+				untyped createjs.WebAudioPlugin.context.resume();
+			}
 		}
 		catch ( p_error:Dynamic ) {}
 		if ( _sound == null )
