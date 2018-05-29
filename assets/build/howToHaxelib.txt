@@ -1,13 +1,13 @@
 haxelib build list:
-	Export /assets/templates/flashDevelop, zip and replace /lib/__resources/flashDevelop.zip
+	Copy contents of /assets/templates/flashDevelop to a zip and replace /lib/__resources/template.zip
 	Run /assets/build/compileRun.hxml (to generate /lib/run.n)
 	Run /app/compileHaxedoc.hxml (to generate /lib/haxedoc.xml)
 	Update /lib/haxelib.json with relevant version and comments (increment minor version, and set revision to number of commits+1 as seen on https://github.com/hypersurge/awe6
-	Git commit to Master, push to github
-	Zip /app/scripts/haxelib name as awe6-X,X,X.zip
+	Copy contents of /lib/ to a zip and rename as awe6-X,X,X.zip
 	Virus scan (and manually review) awe6-X,X,X.zip
 	Test: haxelib install awe6-X,X,X.zip
 	Test run: haxelib run awe6 install
 	Perform tests: create a new project with each template, build it
+	Git commit and push to Github Remote, merge to Master
 	Submit: haxelib submit awe6-X,X,X.zip
 	Create a new release on https://github.com/hypersurge/awe6/releases

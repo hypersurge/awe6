@@ -19,5 +19,5 @@ A simple game to show:
 To build load "bumblebee.hxproj" & compile in [FlashDevelop](http://flashdevelop.org) or run the following at a command prompt:
 
 ```
-haxe -main Main -cp src -lib awe6 -lib createjs -D awe6DriverRemap --macro awe6.core.Macros.setDriverRemap('awe6.core.drivers.createjs') -resource bin/assets/__config.xml@config -dce full -js bin/game.js
+haxe -main Main -cp src -lib awe6 -lib createjs -resource bin/assets/__config.xml@config -dce full -js bin/game.js
 ```

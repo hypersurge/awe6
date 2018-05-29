@@ -38,7 +38,9 @@ package awe6.core;
  **/
 
 #if awe6DriverRemap
-	typedef AFactory = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Factory" ) ]>;
+	typedef AFactory = awe6.core.drivers.remap.Factory;
+#elseif createjs
+	typedef AFactory = awe6.core.drivers.createjs.Factory;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef AFactory = awe6.core.drivers.openfl.native.Factory;

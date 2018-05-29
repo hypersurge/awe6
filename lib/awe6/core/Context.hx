@@ -36,7 +36,9 @@ package awe6.core;
  * @author	Robert Fell
  */
 #if awe6DriverRemap
-	typedef Context = haxe.macro.MacroType<[ awe6.core.Macros.driverRemap( "Context" ) ]>;
+	typedef Context = awe6.core.drivers.remap.Context;
+#elseif createjs
+	typedef Context = awe6.core.drivers.createjs.Context;
 #elseif openfl
 	typedef Context = awe6.core.drivers.openfl.Context;
 #elseif flash

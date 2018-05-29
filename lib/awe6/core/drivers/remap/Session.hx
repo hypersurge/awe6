@@ -32,13 +32,8 @@ import awe6.core.drivers.ASession;
 
 /**
  * This class provides an easy driver package to remap from.
- * <p>Usage of such a driver requires 4 steps:</p>
- * <ul>
- * <li>Copy this package to your own namespace (e.g. "your.customdriver.package").</li>
- * <li>Extend / override / refactor as necessary - paying special attention to the "_driver" prefixed members.</li>
- * <li>Add compiler conditional: -D awe6DriverRemap</li>
- * <li>Add compiler macro: --macro awe6.core.Macros.setDriverRemap('your.customdriver.package')</li>
- * </ul>
+ * To use it add compiler conditional: -D awe6DriverRemap
+ * Or, you may prefer to create your driver in a new namespace, and add a new directive for its mapping.
  * @author	Robert Fell
  */
 class Session extends ASession
