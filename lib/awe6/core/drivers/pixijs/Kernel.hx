@@ -163,30 +163,10 @@ class Kernel extends AKernel
 				case SUB_TYPE( p_type ) :
 					if ( ( p_type.bleedWidth != null ) && ( p_type.bleedHeight != null ) )
 					{
-						var l_preserveWidth:Int = l_factoryWidth - ( Std.parseInt( p_type.bleedWidth ) * 2 );
-						var l_preserveHeight:Int = l_factoryHeight - ( Std.parseInt( p_type.bleedHeight ) * 2 );
-						if ( ( l_factoryHeight / l_factoryWidth ) > ( l_windowHeight / l_windowWidth ) )
-						{
-							if ( ( l_preserveHeight / l_factoryWidth ) > ( l_windowHeight / l_windowWidth ) )
-							{
-								_scaleX = _scaleY = l_windowHeight / l_preserveHeight;
-							}
-							else
-							{
-								_scaleY = _scaleX = l_windowWidth / l_factoryWidth;
-							}
-						}
-						else
-						{
-							if ( ( l_factoryHeight / l_preserveWidth ) > ( l_windowHeight / l_windowWidth ) )
-							{
-								_scaleY = _scaleX = l_windowHeight / l_factoryHeight;
-							}
-							else
-							{
-								_scaleY = _scaleX = l_windowWidth / l_preserveWidth;
-							}
-						}
+						var l_preserveWidth:Int = l_factoryWidth - ( Std.parseInt( p_type.bleedWidth + '' ) * 2 );
+						var l_preserveHeight:Int = l_factoryHeight - ( Std.parseInt( p_type.bleedHeight + '' ) * 2 );
+						var l_innerScale:Float = Math.min( l_windowWidth / l_preserveWidth, l_windowHeight / l_preserveHeight );
+						_scaleX = _scaleY = l_innerScale;
 					}
 			}
 			l_marginX = Math.round( ( l_windowWidth - ( l_factoryWidth * _scaleX ) ) / 2 );
