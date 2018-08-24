@@ -83,7 +83,7 @@ class Macros
 	  */
 	macro public static function getFolderContents( p_folderPath:String, p_isAppcache:Bool = false, p_appcacheFolderPath:String, p_appcacheExtra:String )
 	{
-		haxe.macro.Context.registerModuleDependency( "awe6.core.Macros", p_folderPath + "/__config.xml" ); // Compilation server will cache these paths unless config changes
+		haxe.macro.Context.registerModuleDependency( "awe6.core.Macros", p_folderPath + "/__Config.xml" ); // Compilation server will cache these paths unless config changes
 		function recursive( p_folderPath:String ):Array<String>
 		{
 			if ( p_folderPath.substr( -1 ) == "/" )
