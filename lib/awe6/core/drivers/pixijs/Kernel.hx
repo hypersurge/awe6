@@ -69,7 +69,7 @@ class Kernel extends AKernel
 		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_canvas = cast( factory, Factory ).canvas;
-		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal );
+		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal || ( _canvas.getAttribute( "forceCanvas" ) == "true" ) );
 		_renderer.resize( factory.width, factory.height );
 		_renderer.backgroundColor = factory.bgColor;
 		_canvas.addEventListener( "contextmenu", _onContextMenu, false );
