@@ -45,7 +45,7 @@ class AssetsBuilder
 	#if macro
 	private static var _audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
 	
-	public static function build( p_base:String, p_directory:String ):Array<Field>
+	public static function build( p_base:String, p_directory:String, ?p_decache:Dynamic ):Array<Field>
 	{
 		return buildDirectory( p_base, p_directory, p_directory );
 	}

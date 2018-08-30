@@ -44,7 +44,7 @@ class ConfigBuilder
 {
 	#if macro
 	
-    public static function build( p_config:String ):Array<Field>
+    public static function build( p_config:String, ?p_decache:Dynamic ):Array<Field>
     {
 		var l_data:String = File.read( p_config ).readAll().toString();
 		return traverseElements( Xml.parse( l_data ).firstElement().elements(), "" );
