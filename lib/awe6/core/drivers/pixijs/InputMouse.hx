@@ -86,6 +86,7 @@ class InputMouse extends AInputMouse
 		{
 			return;
 		}
+		_getPosition();
 		var l_button:Int = untyped p_event.data.button;
 		if ( l_button == 2 ) // disable right click
 		{
@@ -100,6 +101,7 @@ class InputMouse extends AInputMouse
 		{
 			return;
 		}
+		_getPosition();
 		var l_button:Int = untyped p_event.data.button ;
 		if ( l_button == 2 ) // disable right click
 		{
