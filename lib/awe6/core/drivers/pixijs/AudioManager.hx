@@ -33,15 +33,15 @@ import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
 import js.Browser;
 import js.html.Event;
-typedef SoundOptions = {
+typedef PlayOptions = {
 	?complete:Void->Void,
-	?start:Int,
+	?start:Float,
 	?end:Int,
 	?speed:Float,
 	?loop:Bool,
 };
 typedef Sound = {
-	play:String->?SoundOptions->SoundInstance,
+	play:String->?PlayOptions->SoundInstance,
 	find:String->SoundInstance,
 	volumeAll: Float,
 	muteAll: Void->Void,
@@ -50,7 +50,7 @@ typedef Sound = {
 	useLegacy:Bool,
 };
 typedef SoundInstance = {
-	play:?SoundOptions->Void,
+	play:?PlayOptions->Void,
 	stop:Void->Void,
 	volume:Float,
 	loop:Bool,
@@ -150,9 +150,9 @@ class _HelperSound extends _AHelperSound
 		try
 		{
 			_sound = AudioManager.sound.find( "assets.audio." + id );
-			var l_options:SoundOptions = {
+			var l_options:PlayOptions = {
 				complete:_onSoundComplete,
-				start: _startTime,
+				start: _startTime / 1000,
 				loop: _loops != 0,
 			};
 			_sound.volume = _volume;
