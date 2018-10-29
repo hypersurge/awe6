@@ -39,6 +39,7 @@ typedef PlayOptions = {
 	?end:Int,
 	?speed:Float,
 	?loop:Bool,
+	?volume:Float,
 };
 typedef Sound = {
 	play:String->?PlayOptions->SoundInstance,
@@ -50,7 +51,7 @@ typedef Sound = {
 	useLegacy:Bool,
 };
 typedef SoundInstance = {
-	play:?PlayOptions->Void,
+	play:?PlayOptions->SoundInstance,
 	stop:Void->Void,
 	volume:Float,
 	loop:Bool,
@@ -149,14 +150,14 @@ class _HelperSound extends _AHelperSound
 	{
 		try
 		{
-			_sound = AudioManager.sound.find( "assets.audio." + id );
+			var l_soundAsset = AudioManager.sound.find( "assets.audio." + id );
 			var l_options:PlayOptions = {
 				complete:_onSoundComplete,
 				start: _startTime / 1000,
 				loop: _loops != 0,
+				volume: _volume,
 			};
-			_sound.volume = _volume;
-			_sound.play( l_options );
+			_sound = l_soundAsset.play( l_options );
 			// temporary fix to Chrome sound issue - may not be needed?
 			// https://github.com/pixijs/pixi-sound/issues/65
 			if ( untyped AudioManager.sound.webaudio.WebAudioContext.ctx && ( untyped AudioManager.sound.webaudio.WebAudioContext.ctx.state == "suspended" ) )
