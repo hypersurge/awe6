@@ -30,6 +30,7 @@
 package awe6.core.drivers.pixijs;
 import awe6.interfaces.IKernel;
 import js.Browser;
+import pixi.core.renderers.webgl.WebGLRenderer;
 	
 /**
  * Detects device operating system. Thanks to System.js by MrDoob, Modernizr, Richard Davey
@@ -55,6 +56,7 @@ import js.Browser;
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
+	public var isWebGL( get, null ):Bool;
 	public var isRotated:Bool;
 	
 	private var _kernel:IKernel;
@@ -109,6 +111,13 @@ import js.Browser;
         {
             isDesktop = false;
         }
+	}
+	
+	private function get_isWebGL():Bool
+	{
+		var l_renderer = untyped _kernel._renderer;
+		if ( l_renderer == null ) return false;
+		return Std.is( l_renderer, WebGLRenderer ); 
 	}
 	
 	private function _cocoonOverrides()
