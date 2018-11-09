@@ -40,6 +40,8 @@
 	typedef ASession = awe6.core.drivers.remap.Session;
 #elseif createjs
 	typedef ASession = awe6.core.drivers.createjs.Session;
+#elseif pixijs
+	typedef ASession = awe6.core.drivers.pixijs.Session;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef ASession = awe6.core.drivers.openfl.native.Session;

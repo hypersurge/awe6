@@ -79,7 +79,7 @@ class Sphere extends Entity
 		view.priority = Std.int( _bouncer.y );
 		if ( _isHit() )
 		{
-			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, _bouncer.x / _kernel.factory.width );
+			_kernel.audio.start( "Sfx" + ( Std.random( 4 ) + 1 ), EAudioChannel.EFFECTS, 0, 0, 1, ( ( _bouncer.x / _kernel.factory.width ) * 2 ) - 1 );
 			_kernel.overlay.flash( 100, true, 1, Std.random( 0xFFFFFF ) );
 			dispose();
 		}

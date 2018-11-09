@@ -40,6 +40,8 @@ package awe6.core;
 	typedef APreloader = awe6.core.drivers.remap.Preloader;
 #elseif createjs
 	typedef APreloader = awe6.core.drivers.createjs.Preloader;
+#elseif pixijs
+	typedef APreloader = awe6.core.drivers.pixijs.Preloader;
 #elseif openfl
 	typedef APreloader = awe6.core.drivers.openfl.Preloader;
 #elseif flash

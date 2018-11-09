@@ -39,6 +39,8 @@ package awe6.core;
 	typedef SceneTransition = awe6.core.drivers.remap.SceneTransition;
 #elseif createjs
 	typedef SceneTransition = awe6.core.drivers.createjs.SceneTransition;
+#elseif pixijs
+	typedef SceneTransition = awe6.core.drivers.pixijs.SceneTransition;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef SceneTransition = awe6.core.drivers.openfl.native.SceneTransition;

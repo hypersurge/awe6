@@ -39,6 +39,8 @@ package awe6.core;
 	typedef Overlay = awe6.core.drivers.remap.Overlay;
 #elseif createjs
 	typedef Overlay = awe6.core.drivers.createjs.Overlay;
+#elseif pixijs
+	typedef Overlay = awe6.core.drivers.pixijs.Overlay;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef Overlay = awe6.core.drivers.openfl.native.Overlay;

@@ -39,6 +39,8 @@ package awe6.core;
 	typedef InputKeyboard = awe6.core.drivers.remap.InputKeyboard;
 #elseif createjs
 	typedef InputKeyboard = awe6.core.drivers.createjs.InputKeyboard;
+#elseif pixijs
+	typedef InputKeyboard = awe6.core.drivers.pixijs.InputKeyboard;
 #elseif openfl
 	typedef InputKeyboard = awe6.core.drivers.openfl.InputKeyboard;
 #elseif flash

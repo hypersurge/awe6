@@ -39,6 +39,8 @@ package awe6.core;
 	typedef AudioManager = awe6.core.drivers.remap.AudioManager;
 #elseif createjs
 	typedef AudioManager = awe6.core.drivers.createjs.AudioManager;
+#elseif pixijs
+	typedef AudioManager = awe6.core.drivers.pixijs.AudioManager;
 #elseif openfl
 	#if ( cpp || neko )
 		typedef AudioManager = awe6.core.drivers.openfl.native.AudioManager;
