@@ -1,0 +1,45 @@
+package $(PackageName);
+import awe6.core.APreloader;
+import awe6.core.drivers.createjs.extras.gui.Text;
+import awe6.interfaces.ETextStyle;
+import createjs.easeljs.Shape;
+
+/**
+$(CBI)* ...
+$(CBI)* @author $(DefaultUser)
+$(CBI)*/
+
+class Preloader extends APreloader $(CSLB){
+	private var _bg:Shape;
+	private var _fg:Shape;
+
+	override private function _init():Void $(CSLB){
+		super._init();
+		_bg = new Shape();
+		_bg.graphics.beginFill( "#202020" );
+		_bg.graphics.drawRect( -1, -1, 102, 12 );
+		_bg.graphics.endFill();
+		_fg = new Shape();
+		_fg.graphics.beginFill( "#cccccc" );
+		_fg.graphics.drawRect( 0, 0, 100, 10 );
+		_fg.graphics.endFill();
+		_bg.x = _fg.x = ( _kernel.factory.width - 100 ) * .5;
+		_bg.y = _fg.y = ( _kernel.factory.height - 10 ) * .5;
+		_context.addChild( _bg );
+		_context.addChild( _fg );
+	}
+	
+	override private function _updater( p_deltaTime:Int = 0 ):Void $(CSLB){
+		super._updater( p_deltaTime );
+		_fg.scaleX = progress;
+	}
+	
+	override private function _showAudioHoldMessage():Void $(CSLB){
+		var l_text:Text = new Text( _kernel, _kernel.factory.width, 20, _kernel.getConfig( "gui.preloaderComplete" ), _kernel.factory.createTextStyle( ETextStyle.BODY ) );
+		l_text.setPosition( 0, _bg.y - 5 );
+		view.addChild( l_text.view );
+		_context.removeChild( _bg );
+		_context.removeChild( _fg );
+	}
+	
+}
