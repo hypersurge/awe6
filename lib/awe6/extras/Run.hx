@@ -56,6 +56,7 @@ class Run
 	private static inline var _PROJECT_SWF = "swf";
 	private static inline var _PROJECT_OPENFL = "openfl";
 	private static inline var _PROJECT_CREATEJS = "createjs";
+	private static inline var _PROJECT_PIXIJS = "pixijs";
 	// Creation targets	
 	private static inline var _TARGET_PROJECT = "project";
 	private static inline var _TARGET_SCENE = "scene";
@@ -121,7 +122,7 @@ class Run
 			if ( _callingDir == null ) _callingDir = "./";
 			if ( l_target == _TARGET_PROJECT )
 			{
-				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_OPENFL ) || ( l_projectType == _PROJECT_CREATEJS ) )
+				if ( ( l_projectType == _PROJECT_SWF ) || ( l_projectType == _PROJECT_OPENFL ) || ( l_projectType == _PROJECT_CREATEJS ) || ( l_projectType == _PROJECT_PIXIJS ) )
 				{
 					_createProjectFromTemplate( l_projectType, l_projectPath, l_packageName, l_authorName );
 				}
@@ -166,7 +167,7 @@ class Run
 		{
 			Lib.println( "Syntax:");
 			Lib.println("   to create a new project" );
-			Lib.println("     haxelib run awe6 create project " + _PROJECT_SWF + "|" + _PROJECT_OPENFL + "|" + _PROJECT_CREATEJS + " <name> <package> <author>" );
+			Lib.println("     haxelib run awe6 create project " + _PROJECT_SWF + "|" + _PROJECT_OPENFL + "|" + _PROJECT_CREATEJS + "|" + _PROJECT_PIXIJS + " <name> <package> <author>" );
 			Lib.println("   to create scenes or entities" );
 			Lib.println("     haxelib run awe6 create " + _TARGET_SCENE + "|" + _TARGET_ENTITY + " <name> <package> <author>" );
 		}
@@ -336,6 +337,8 @@ class Run
 			_deleteTree( p_projectPath + "/Templates" );
 			switch( p_projectType )
 			{
+				case _PROJECT_PIXIJS :
+					_moveAllFilesToDir( p_projectPath + "/Projects/375 Haxe - awe6 PixiJS Project", p_projectPath );
 				case _PROJECT_CREATEJS :
 					_moveAllFilesToDir( p_projectPath + "/Projects/374 Haxe - awe6 CreateJS Project", p_projectPath );
 				case _PROJECT_OPENFL :
@@ -383,6 +386,15 @@ class Run
 		{
 			case _PROJECT_OPENFL : "
 -cmd \"lime test flash\"
+";
+			case _PROJECT_PIXIJS : "
+-cp src
+-js bin/game.js
+-lib awe6
+-lib pixijs
+-resource bin/assets/__config.xml@config
+-dce full
+-main Main
 ";
 			case _PROJECT_CREATEJS : "
 -cp src

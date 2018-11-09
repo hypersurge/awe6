@@ -2648,6 +2648,10 @@
 		<extends path="awe6.interfaces.IEntityCollection"/>
 		<extends path="awe6.interfaces.IViewable"/>
 		<extends path="awe6.interfaces.IProcess"/>
+		<get_parent public="1" set="method">
+			<f a=""><c path="awe6.interfaces.IEntity"/></f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</get_parent>
 		<set_id public="1" set="method">
 			<f a="value">
 				<c path="String"/>
@@ -2655,10 +2659,6 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_id>
-		<get_parent public="1" set="method">
-			<f a=""><c path="awe6.interfaces.IEntity"/></f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</get_parent>
 		<id public="1" set="accessor">
 			<c path="String"/>
 			<haxe_doc><![CDATA[* The unique identifier of this entity.
@@ -2768,13 +2768,6 @@
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="awe6.interfaces.IPositionable" params="" file="../../lib/awe6/interfaces/IPositionable.hx" interface="1">
-		<set_x public="1" set="method">
-			<f a="value">
-				<x path="Float"/>
-				<x path="Float"/>
-			</f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</set_x>
 		<set_y public="1" set="method">
 			<f a="value">
 				<x path="Float"/>
@@ -2782,6 +2775,13 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_y>
+		<set_x public="1" set="method">
+			<f a="value">
+				<x path="Float"/>
+				<x path="Float"/>
+			</f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</set_x>
 		<x public="1" set="accessor">
 			<x path="Float"/>
 			<haxe_doc>* The horizontal position.</haxe_doc>
@@ -4951,13 +4951,6 @@
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="awe6.interfaces.IInputMouse" params="" file="../../lib/awe6/interfaces/IInputMouse.hx" interface="1">
-		<set_isVisible public="1" set="method">
-			<f a="value">
-				<x path="Bool"/>
-				<x path="Bool"/>
-			</f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</set_isVisible>
 		<set_cursorType public="1" set="method">
 			<f a="value">
 				<e path="awe6.interfaces.EMouseCursor"/>
@@ -4965,6 +4958,13 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_cursorType>
+		<set_isVisible public="1" set="method">
+			<f a="value">
+				<x path="Bool"/>
+				<x path="Bool"/>
+			</f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</set_isVisible>
 		<x public="1" set="null">
 			<x path="Int"/>
 			<haxe_doc>* The horizontal component of the mouse position.</haxe_doc>
@@ -5205,100 +5205,100 @@
 	<x path="Int"/>
 	<x path="Void"/>
 </f></_updater>
-		<_isMiddleDown set="method" line="130"><f a=""><x path="Bool"/></f></_isMiddleDown>
-		<_isRightDown set="method" line="135"><f a=""><x path="Bool"/></f></_isRightDown>
-		<_isWithinBounds set="method" line="140"><f a=""><x path="Bool"/></f></_isWithinBounds>
-		<_getPosition set="method" line="145"><f a=""><x path="Void"/></f></_getPosition>
-		<_handleButton set="method" line="151"><f a="p_type:p_isDown:?p_deltaTime">
+		<_isMiddleDown set="method" line="131"><f a=""><x path="Bool"/></f></_isMiddleDown>
+		<_isRightDown set="method" line="136"><f a=""><x path="Bool"/></f></_isRightDown>
+		<_isWithinBounds set="method" line="141"><f a=""><x path="Bool"/></f></_isWithinBounds>
+		<_getPosition set="method" line="146"><f a=""><x path="Void"/></f></_getPosition>
+		<_handleButton set="method" line="152"><f a="p_type:p_isDown:?p_deltaTime">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 	<x path="Int"/>
 	<x path="Void"/>
 </f></_handleButton>
-		<_disposer set="method" line="182" override="1"><f a=""><x path="Void"/></f></_disposer>
-		<_reset set="method" line="187"><f a="?p_event">
+		<_disposer set="method" line="183" override="1"><f a=""><x path="Void"/></f></_disposer>
+		<_reset set="method" line="188"><f a="?p_event">
 	<d/>
 	<x path="Void"/>
 </f></_reset>
-		<_getButton set="method" line="195"><f a="p_type">
+		<_getButton set="method" line="196"><f a="p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<c path="awe6.core.drivers._AInputMouse._HelperButton"/>
 </f></_getButton>
-		<getDeltaX public="1" set="method" line="212"><f a="?p_asTime">
+		<getDeltaX public="1" set="method" line="213"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getDeltaX>
-		<getDeltaY public="1" set="method" line="222"><f a="?p_asTime">
+		<getDeltaY public="1" set="method" line="223"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getDeltaY>
-		<getSpeed public="1" set="method" line="232"><f a="?p_asTime">
+		<getSpeed public="1" set="method" line="233"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getSpeed>
-		<getDeltaScroll public="1" set="method" line="240"><f a="?p_asTime">
+		<getDeltaScroll public="1" set="method" line="241"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getDeltaScroll>
-		<getIsButtonDoubleClick public="1" set="method" line="250"><f a="?p_type:?p_delay">
+		<getIsButtonDoubleClick public="1" set="method" line="251"><f a="?p_type:?p_delay">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 	<x path="Bool"/>
 </f></getIsButtonDoubleClick>
-		<getIsButtonDrag public="1" set="method" line="256"><f a="?p_type:?p_delay">
+		<getIsButtonDrag public="1" set="method" line="257"><f a="?p_type:?p_delay">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 	<x path="Bool"/>
 </f></getIsButtonDrag>
-		<getStillDuration public="1" set="method" line="262"><f a="?p_asTime">
+		<getStillDuration public="1" set="method" line="263"><f a="?p_asTime">
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getStillDuration>
-		<getIsButtonDown public="1" set="method" line="267"><f a="?p_type">
+		<getIsButtonDown public="1" set="method" line="268"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 </f></getIsButtonDown>
-		<getIsButtonPress public="1" set="method" line="273"><f a="?p_type">
+		<getIsButtonPress public="1" set="method" line="274"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 </f></getIsButtonPress>
-		<getIsButtonRelease public="1" set="method" line="279"><f a="?p_type">
+		<getIsButtonRelease public="1" set="method" line="280"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 </f></getIsButtonRelease>
-		<getButtonDownDuration public="1" set="method" line="285"><f a="?p_type:?p_asTime:?p_isPrevious">
+		<getButtonDownDuration public="1" set="method" line="286"><f a="?p_type:?p_asTime:?p_isPrevious">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getButtonDownDuration>
-		<getButtonUpDuration public="1" set="method" line="295"><f a="?p_type:?p_asTime:?p_isPrevious">
+		<getButtonUpDuration public="1" set="method" line="296"><f a="?p_type:?p_asTime:?p_isPrevious">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Bool"/>
 	<x path="Bool"/>
 	<x path="Int"/>
 </f></getButtonUpDuration>
-		<getButtonDragWidth public="1" set="method" line="305"><f a="?p_type">
+		<getButtonDragWidth public="1" set="method" line="306"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 </f></getButtonDragWidth>
-		<getButtonDragHeight public="1" set="method" line="311"><f a="?p_type">
+		<getButtonDragHeight public="1" set="method" line="312"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 </f></getButtonDragHeight>
-		<getButtonLastClickedX public="1" set="method" line="317"><f a="?p_type">
+		<getButtonLastClickedX public="1" set="method" line="318"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 </f></getButtonLastClickedX>
-		<getButtonLastClickedY public="1" set="method" line="323"><f a="?p_type">
+		<getButtonLastClickedY public="1" set="method" line="324"><f a="?p_type">
 	<e path="awe6.interfaces.EMouseButton"/>
 	<x path="Int"/>
 </f></getButtonLastClickedY>
-		<set_isVisible set="method" line="329"><f a="p_value">
+		<set_isVisible set="method" line="330"><f a="p_value">
 	<x path="Bool"/>
 	<x path="Bool"/>
 </f></set_isVisible>
-		<set_cursorType set="method" line="335"><f a="p_value">
+		<set_cursorType set="method" line="336"><f a="p_value">
 	<e path="awe6.interfaces.EMouseCursor"/>
 	<e path="awe6.interfaces.EMouseCursor"/>
 </f></set_cursorType>
@@ -5324,7 +5324,7 @@
 		<timeUpPrevious public="1"><x path="Int"/></timeUpPrevious>
 		<clickX public="1"><x path="Int"/></clickX>
 		<clickY public="1"><x path="Int"/></clickY>
-		<new public="1" set="method" line="357"><f a="p_kernel">
+		<new public="1" set="method" line="358"><f a="p_kernel">
 	<c path="awe6.interfaces.IKernel"/>
 	<x path="Void"/>
 </f></new>
@@ -5347,24 +5347,6 @@
 	<class path="awe6.interfaces.IKernel" params="" file="../../lib/awe6/interfaces/IKernel.hx" interface="1">
 		<extends path="awe6.interfaces.ILogger"/>
 		<extends path="awe6.interfaces.IPauseable"/>
-		<set_isEyeCandy public="1" set="method">
-			<f a="value">
-				<x path="Bool"/>
-				<x path="Bool"/>
-			</f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</set_isEyeCandy>
-		<set_isFullScreen public="1" set="method">
-			<f a="value">
-				<x path="Bool"/>
-				<x path="Bool"/>
-			</f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</set_isFullScreen>
-		<get_session public="1" set="method">
-			<f a=""><c path="awe6.interfaces.ISession"/></f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</get_session>
 		<set_session public="1" set="method">
 			<f a="value">
 				<c path="awe6.interfaces.ISession"/>
@@ -5372,6 +5354,24 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_session>
+		<get_session public="1" set="method">
+			<f a=""><c path="awe6.interfaces.ISession"/></f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</get_session>
+		<set_isFullScreen public="1" set="method">
+			<f a="value">
+				<x path="Bool"/>
+				<x path="Bool"/>
+			</f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</set_isFullScreen>
+		<set_isEyeCandy public="1" set="method">
+			<f a="value">
+				<x path="Bool"/>
+				<x path="Bool"/>
+			</f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</set_isEyeCandy>
 		<isDebug public="1" set="null">
 			<x path="Bool"/>
 			<haxe_doc>* Defined by the IFactory, can be used for conditional logic relating to build modes and debug.</haxe_doc>
@@ -5577,10 +5577,6 @@
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="awe6.interfaces.IOverlay" params="" file="../../lib/awe6/interfaces/IOverlay.hx" interface="1">
-		<get_pauseEntity public="1" set="method">
-			<f a=""><c path="awe6.interfaces.IEntity"/></f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</get_pauseEntity>
 		<set_pauseEntity public="1" set="method">
 			<f a="value">
 				<c path="awe6.interfaces.IEntity"/>
@@ -5588,6 +5584,10 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_pauseEntity>
+		<get_pauseEntity public="1" set="method">
+			<f a=""><c path="awe6.interfaces.IEntity"/></f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</get_pauseEntity>
 		<pauseEntity public="1" get="accessor" set="accessor">
 			<c path="awe6.interfaces.IEntity"/>
 			<haxe_doc>* An optional IEntity which is displayed and updated when the game is paused.</haxe_doc>
@@ -6025,10 +6025,6 @@
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="awe6.interfaces.IPriority" params="" file="../../lib/awe6/interfaces/IPriority.hx" interface="1">
-		<get_priority public="1" set="method">
-			<f a=""><x path="Int"/></f>
-			<meta><m n=":compilerGenerated"/></meta>
-		</get_priority>
 		<set_priority public="1" set="method">
 			<f a="value">
 				<x path="Int"/>
@@ -6036,6 +6032,10 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_priority>
+		<get_priority public="1" set="method">
+			<f a=""><x path="Int"/></f>
+			<meta><m n=":compilerGenerated"/></meta>
+		</get_priority>
 		<priority public="1" get="accessor" set="accessor">
 			<x path="Int"/>
 			<haxe_doc><![CDATA[* The rank score of this item.
@@ -6049,10 +6049,10 @@
 		<extends path="awe6.interfaces.IDisposable"/>
 		<extends path="awe6.interfaces.IPositionable"/>
 		<extends path="awe6.interfaces.IPriority"/>
-		<get_parent public="1" set="method">
-			<f a=""><c path="awe6.interfaces.IView"/></f>
+		<get_isInViewStack public="1" set="method">
+			<f a=""><x path="Bool"/></f>
 			<meta><m n=":compilerGenerated"/></meta>
-		</get_parent>
+		</get_isInViewStack>
 		<set_isVisible public="1" set="method">
 			<f a="value">
 				<x path="Bool"/>
@@ -6060,10 +6060,10 @@
 			</f>
 			<meta><m n=":compilerGenerated"/></meta>
 		</set_isVisible>
-		<get_isInViewStack public="1" set="method">
-			<f a=""><x path="Bool"/></f>
+		<get_parent public="1" set="method">
+			<f a=""><c path="awe6.interfaces.IView"/></f>
 			<meta><m n=":compilerGenerated"/></meta>
-		</get_isInViewStack>
+		</get_parent>
 		<owner public="1" set="null">
 			<d/>
 			<haxe_doc>* Optional: the object who this view represents.</haxe_doc>
@@ -7501,6 +7501,7 @@
 			<f a=""><c path="String"/></f>
 			<meta><m n=":keep"/></meta>
 		</toString>
+		<new public="1" set="method" line="28"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>This exception is raised when reading while data is no longer available in the `haxe.io.Input`.</haxe_doc>
 		<meta><m n=":keep"/></meta>
 	</class>
