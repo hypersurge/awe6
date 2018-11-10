@@ -1,6 +1,6 @@
 package $(PackageDot)scenes;
 import awe6.core.Scene;
-import awe6.core.drivers.createjs.extras.gui.Text;
+import awe6.core.drivers.pixijs.extras.gui.Text;
 import awe6.interfaces.ETextStyle;
 import awe6.interfaces.EScene;
 import awe6.interfaces.IKernel;

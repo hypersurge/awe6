@@ -85,26 +85,26 @@ class AssetManager extends AAssetManager
 			case OVERLAY_UNPAUSE_OVER : Assets.overlay_buttons_UnpauseOver__png;
 			case BACKGROUND : Assets.scenes_Background__png;
 		}
-		var l_sprite = new Sprite(_kernel.assets.getAsset(l_url).texture);
+		var l_sprite = new Sprite( _kernel.assets.getAsset( l_url ).texture );
 		l_context.addChild( l_sprite );
 		return new View( _kernel, l_context );
 	}
 	
 	public function createSphere():Sprite
 	{
-		var l_result = new Sprite(_kernel.assets.getAsset(Assets.Sphere__png).texture);
+		var l_result = new Sprite( _kernel.assets.getAsset( Assets.Sphere__png ).texture );
 		l_result.blendMode = Math.random() < .5 ? BlendModes.ADD : BlendModes.NORMAL;
 		return l_result;
 	}
 
 	public function createButtonUp():Sprite
 	{
-		return new Sprite(_kernel.assets.getAsset(Assets.ButtonUp__png).texture);
+		return new Sprite( _kernel.assets.getAsset( Assets.ButtonUp__png ).texture );
 	}
 	
 	public function createButtonOver():Sprite
 	{
-		return new Sprite(_kernel.assets.getAsset(Assets.ButtonOver__png).texture);
+		return new Sprite( _kernel.assets.getAsset( Assets.ButtonOver__png ).texture );
 	}
 }
 

@@ -3,7 +3,7 @@ import awe6.core.AAssetManager;
 import awe6.core.Context;
 import awe6.core.View;
 import awe6.interfaces.IView;
-import createjs.easeljs.Bitmap;
+import pixi.core.sprites.Sprite;
 
 /**
 $(CBI)* ...
@@ -53,8 +53,8 @@ class AssetManager extends AAssetManager $(CSLB){
 			case OVERLAY_UNPAUSE_UP : Assets.overlay_buttons_UnpauseUp__png;
 			case OVERLAY_UNPAUSE_OVER : Assets.overlay_buttons_UnpauseOver__png;
 		}
-		var l_bitmap:Bitmap = new Bitmap( getAsset( l_url ) );
-		l_context.addChild( l_bitmap );
+		var l_sprite = new Sprite( _kernel.assets.getAsset( l_url ).texture );
+		l_context.addChild( l_sprite );
 		return new View( _kernel, l_context );
 	}
 	

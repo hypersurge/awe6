@@ -1,5 +1,5 @@
 haxelib build list:
-	Copy contents of /assets/templates/flashDevelop to a zip and replace /lib/__resources/template.zip
+	Copy contents of /assets/templates/flashDevelop to a zip and replace /lib/__resources/templates.zip
 	Run /assets/build/compileRun.hxml (to generate /lib/run.n)
 	Run /app/compileHaxedoc.hxml (to generate /lib/haxedoc.xml)
 	Update /lib/haxelib.json with relevant version and comments (increment minor version, and set revision to number of commits+1 as seen on https://github.com/hypersurge/awe6

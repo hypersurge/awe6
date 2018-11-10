@@ -2,7 +2,7 @@ package ;
 
 import demo.Factory;
 import haxe.Resource;
-import pixi.core.display.Container;
+import awe6.core.Context;
 
 /**
  * ...
@@ -18,7 +18,7 @@ class Main
 		#else
 		var l_isDebug:Bool = false;
 		#end
-		var l_factory = new Factory( new Container(), l_isDebug, Resource.getString( "config" ) );
+		var l_factory = new Factory( new Context(), l_isDebug, Resource.getString( "config" ) );
 	}
 
 	public function new()
