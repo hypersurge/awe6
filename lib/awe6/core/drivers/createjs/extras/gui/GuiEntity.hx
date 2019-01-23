@@ -59,6 +59,7 @@ class GuiEntity extends Entity implements IPositionable
 			l_mask.graphics.beginFill( "#FF0000" );
 			l_mask.graphics.drawRect( 0, 0, width, height );
 			l_mask.graphics.endFill();
+			l_mask.visible = false;
 			_context.addChild( l_mask );
 			_context.mask = l_mask;
 		}
