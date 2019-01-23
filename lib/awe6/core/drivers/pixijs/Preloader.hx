@@ -62,11 +62,11 @@ class Preloader extends APreloader
 		
 		// set up
 		_system = untyped _kernel.system;
-		_audioHoldDelay = _getAudioHoldDelay();
 		_completedDelay = 0;
 		_loader = new Loader( "", 10 );
 		var l_pixiSound = untyped PIXI.sound;
 		l_pixiSound.useLegacy = _kernel.isLocal || !l_pixiSound.supported; // disable WebAudio if using local files (or not supported)
+		_audioHoldDelay = _getAudioHoldDelay();
 		var l_dc:String = ( _isDecached ? "?dc=" + Std.random( 999999 ) : "" );
 		var l_isSoundDisabled:Bool = _isSoundDisabled || ( l_pixiSound == null ) || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 		
@@ -169,10 +169,15 @@ class Preloader extends APreloader
 		{
 			return 0;
 		}
-		if ( !_system.isIos ) // only iOS needs the touch action
+		try
 		{
-			return 0;
+			var l_pixiSound = untyped PIXI.sound;
+			if ( ( l_pixiSound.useLegacy ) || ( l_pixiSound._context._ctx.state != "suspended" ) ) // sound context already enabled, no need for delay
+			{
+				return 0;
+			}
 		}
+		catch ( p_error:Dynamic ) {}
 		var l_result:Int = -1; // by default wait forever
 		if ( _kernel.factory.config.exists( _CONFIG_AUDIO_HOLD_DELAY ) )
 		{

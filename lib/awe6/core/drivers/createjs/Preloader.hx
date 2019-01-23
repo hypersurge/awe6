@@ -63,7 +63,7 @@ class Preloader extends APreloader
 		super._init();
 		_system = untyped _kernel.system;
 		_isDesktop = _system.isDesktop;
-		_audioHoldDelay = _getAudioHoldDelay();
+		_audioHoldDelay = 0;
 		_completedDelay = 0;
 		var l_dc:String = ( _isDecached ? "?dc=" + Std.random( 999999 ) : "" );
 		var l_audioFormats:Array<String> = ["mp3", "ogg", "mpeg", "wav", "m4a", "mp4", "aiff", "wma", "mid"];
@@ -76,6 +76,7 @@ class Preloader extends APreloader
 		_manifest = [];
 		if ( Sound.initializeDefaultPlugins() )
 		{
+			_audioHoldDelay = _getAudioHoldDelay();
 			var l_isSoundDisabled:Bool = _isSoundDisabled || ( _system.isAndroid && _getIsStockAndroidBrowser() ); // Android Stock (pre-Chrome version) has slow loading, single track audio that doesn't play without user initiated event, hence disabled.  Chrome is default from Android 4.3+
 			_validSoundFormat = Sound.getCapability( "ogg" ) ? "ogg" : Sound.getCapability( _proprietaryAudioFormat ) ? _proprietaryAudioFormat : "noValidFormat"; // favor .ogg with fallback to _proprietaryAudioFormat (IE & Safari don't do ogg, boo!)
 			_activePlugin = Sound.activePlugin;
@@ -182,10 +183,14 @@ class Preloader extends APreloader
 		{
 			return 0;
 		}
-		if ( !_system.isIos ) // only iOS needs the touch action
+		try
 		{
-			return 0;
+			if ( ( Sound.activePlugin != "[WebAudioPlugin]" ) || ( Sound.activePlugin.context.state != "suspended" ) ) // sound context already enabled, no need for delay
+			{
+				return 0;
+			}
 		}
+		catch ( p_error:Dynamic ) {}
 		var l_result:Int = -1; // by default wait forever
 		if ( _kernel.factory.config.exists( _CONFIG_AUDIO_HOLD_DELAY ) )
 		{
