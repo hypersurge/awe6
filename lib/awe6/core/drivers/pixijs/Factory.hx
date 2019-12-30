@@ -66,7 +66,7 @@ class Factory extends AFactory
 			// removes PosInfos in the wild
 			Log.trace = function( p_value:Dynamic, ?p_infos:PosInfos ):Void
 			{
-				untyped js.Boot.__trace( p_value, null );
+				Browser.window.console.log( p_value );
 			}
 		}
 		canvas = cast Browser.document.getElementById( "gameCanvas" );

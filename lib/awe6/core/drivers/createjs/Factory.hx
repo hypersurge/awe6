@@ -36,6 +36,7 @@ import haxe.Http;
 import haxe.io.Bytes;
 import haxe.Log;
 import haxe.PosInfos;
+import js.Browser;
 
 /**
  * This Factory class provides CreateJS target overrides.
@@ -63,7 +64,7 @@ class Factory extends AFactory
 			// removes PosInfos in the wild
 			Log.trace = function( p_value:Dynamic, ?p_infos:PosInfos ):Void
 			{
-				untyped js.Boot.__trace( p_value, null );
+				Browser.window.console.log( p_value );
 			}
 		}
 		var l_context = new Context();
