@@ -216,4 +216,23 @@ import js.Browser;
 		{
 		}
 	}
+	
+	public function requestDeviceOrientation():Void
+	{
+		if ( isDesktop )
+		{
+			return;
+		}
+		// we can't guarantee the result, hence it is a request
+		try
+		{
+			if ( ( untyped Browser.window.DeviceMotionEvent != null ) && ( untyped Browser.window.DeviceMotionEvent.requestPermission != null ) )
+			{
+				untyped Browser.window.DeviceMotionEvent.requestPermission();
+			}
+		}
+		catch ( p_error:Dynamic )
+		{
+		}
+	}
 }
