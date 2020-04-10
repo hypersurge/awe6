@@ -6,6 +6,6 @@
 
 * [Objectives](https://github.com/hypersurge/awe6/wiki/Home)
 * [Installation Instructions](https://github.com/hypersurge/awe6/wiki/Quick-Start)
-* [API](http://htmlpreview.github.io/?https://raw.githubusercontent.com/hypersurge/awe6/api/index.html)
+* [API](https://hypersurge.github.io/awe6/api/)
 * [Game Showcase](https://github.com/hypersurge/awe6/wiki/Showcase)
 * [Further Help / awe6 forum](http://groups.google.com/group/awe6)
