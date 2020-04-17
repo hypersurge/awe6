@@ -4,8 +4,8 @@
   "tags": ["game","cross","flash","cpp","js","javascript","openfl","html5","openfl","createjs","pixijs","awe6","entity"],
   "description": "awe6 is game inverted: a scalable, flexible and intuitive framework for the rapid development of quality games.  For more information visit awe6.org",
   "contributors": ["hypersurge"],
-  "releasenote": "Added PixiJS driver and macro enhancements.  https://github.com/hypersurge/awe6/releases",
-  "version": "2.8.548",
+  "releasenote": "Haxe 4 compatible.  https://github.com/hypersurge/awe6/releases",
+  "version": "2.9.559",
   "url": "http://awe6.org",
   "dependencies": {
 
