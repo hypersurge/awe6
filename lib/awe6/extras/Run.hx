@@ -392,7 +392,7 @@ class Run
 -js bin/game.js
 -lib awe6
 -lib pixijs
--resource bin/assets/__config.xml@config
+-resource bin/assets/__Config.xml@config
 -dce full
 -main Main
 ";
@@ -401,7 +401,7 @@ class Run
 -js bin/game.js
 -lib awe6
 -lib createjs
--resource bin/assets/__config.xml@config
+-resource bin/assets/__Config.xml@config
 -dce full
 -main Main
 ";
