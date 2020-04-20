@@ -25,7 +25,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="Main" />
     <option enabledebug="False" />
-    <option additional="-resource bin/assets/__config.xml@config&#xA;-dce full" />
+    <option additional="-resource bin/assets/__Config.xml@config&#xA;-dce full" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

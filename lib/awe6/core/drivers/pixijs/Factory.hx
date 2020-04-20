@@ -46,7 +46,7 @@ import js.html.CanvasElement;
 class Factory extends AFactory
 {
 	private static inline var _CONFIG_ASCII_ART = "settings.asciiArt";
-	private static inline var _CONFIG_URL = "assets/__config.xml";
+	private static inline var _CONFIG_URL = "assets/__Config.xml";
 	private static inline var _CONFIG_JOIN_NODE = "settings.joinXml";
 	private static inline var _CONFIG_FULL_SCREEN = "settings.fullScreen"; // none, desktop, mobile, all, default [desktop true, mobile false]
 	private static inline var _CONFIG_NATIVE_EXPERIENCE = "settings.nativeExperience"; // true, false
