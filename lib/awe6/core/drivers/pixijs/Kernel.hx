@@ -71,7 +71,7 @@ class Kernel extends AKernel
 		_canvas = cast( factory, Factory ).canvas;
 
 		// Pixijs v5 simplified Rendering pretty substantially; resize method has been made private and is always enabled
-		// Encapsulating options like this is so much easier than original implementation
+		// Encapsulating options like this is so much cleaner than original implementation
 		var options:RenderOptions = {};
 		options.view = _canvas;
 		options.width = factory.width;
