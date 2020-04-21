@@ -33,7 +33,7 @@ import pixi.core.Pixi.RendererType;
 import pixi.core.Pixi.ScaleModes;
 import pixi.core.display.DisplayObject;
 import pixi.core.math.shapes.Rectangle;
-import pixi.core.renderers.SystemRenderer;
+import pixi.core.renderers.webgl.Renderer;
 import pixi.core.sprites.Sprite;
 
 /**
@@ -45,7 +45,7 @@ class SceneTransition extends ASceneTransition
 	override private function _init():Void 
 	{
 		super._init();
-		var l_renderer:SystemRenderer = untyped _kernel._renderer;
+		var l_renderer:Renderer = untyped _kernel._renderer;
 		var l_displayObject:DisplayObject = untyped _kernel.scenes.scene.view.context;
 		var l_bounds = l_displayObject.getBounds();
 		if ( ( l_renderer != null ) && ( l_displayObject != null ) )

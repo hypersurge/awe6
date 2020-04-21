@@ -34,8 +34,8 @@ import haxe.Timer;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.Event;
-import pixi.core.renderers.Detector;
-import pixi.core.renderers.SystemRenderer;
+import pixi.core.RenderOptions;
+import pixi.core.renderers.webgl.Renderer;
 import pixi.core.ticker.Ticker;
 
 /**
@@ -49,7 +49,7 @@ class Kernel extends AKernel
 	private var _canvas:CanvasElement;
 	private var _ticker:Ticker;
 	private var _timeOfLastRender:Int;
-	private var _renderer:SystemRenderer;
+	private var _renderer:Renderer;
 	private var _scaleX:Float;
 	private var _scaleY:Float;
 	private var _prevWindowSize:String;
@@ -69,9 +69,16 @@ class Kernel extends AKernel
 		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_canvas = cast( factory, Factory ).canvas;
-		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal || ( _canvas.getAttribute( "forceCanvas" ) == "true" ) );
-		_renderer.resize( factory.width, factory.height );
-		_renderer.backgroundColor = factory.bgColor;
+
+		// Pixijs v5 simplified Rendering pretty substantially; resize method has been made private and is always enabled
+		// Encapsulating options like this is so much easier than original implementation
+		var options:RenderOptions = {};
+		options.view = _canvas;
+		options.width = factory.width;
+		options.height = factory.height;
+		options.backgroundColor = factory.bgColor;
+
+		_renderer = new Renderer( options );
 		_canvas.addEventListener( "contextmenu", _onContextMenu, false );
 		Browser.window.addEventListener( "unload", _onUnload );
 		_ticker = Ticker.shared;

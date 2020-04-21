@@ -30,7 +30,7 @@
 package awe6.core.drivers.pixijs;
 import awe6.interfaces.IKernel;
 import js.Browser;
-import pixi.core.renderers.webgl.WebGLRenderer;
+import pixi.core.renderers.webgl.Renderer;
 	
 /**
  * Detects device operating system. Thanks to System.js by MrDoob, Modernizr, Richard Davey
@@ -117,7 +117,9 @@ import pixi.core.renderers.webgl.WebGLRenderer;
 	{
 		var l_renderer = untyped _kernel._renderer;
 		if ( l_renderer == null ) return false;
-		return Std.is( l_renderer, WebGLRenderer ); 
+
+		// WebGLRenderer is now just Renderer
+		return Std.is( l_renderer, Renderer ); 
 	}
 	
 	private function _cocoonOverrides()
