@@ -30,7 +30,11 @@
 package awe6.core.drivers.pixijs;
 import awe6.interfaces.IKernel;
 import js.Browser;
-import pixi.core.renderers.webgl.WebGLRenderer;
+#if (pixijs >= "5.0.0")
+typedef WebGLRenderer = pixi.core.renderers.webgl.Renderer;
+#else
+typedef WebGLRenderer = pixi.core.renderers.webgl.WebGLRenderer;
+#end
 	
 /**
  * Detects device operating system. Thanks to System.js by MrDoob, Modernizr, Richard Davey

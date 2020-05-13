@@ -34,9 +34,14 @@ import haxe.Timer;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.Event;
-import pixi.core.renderers.Detector;
-import pixi.core.renderers.SystemRenderer;
 import pixi.core.ticker.Ticker;
+#if (pixijs >= "5.0.0")
+private typedef Detector = pixi.core.Pixi;
+private typedef AbstractRenderer = pixi.core.renderers.AbstractRenderer;
+#else
+private typedef Detector = pixi.core.renderers.Detector;
+private typedef AbstractRenderer = pixi.core.renderers.SystemRenderer;
+#end
 
 /**
  * This Kernel class provides PixiJS target overrides.
@@ -49,7 +54,7 @@ class Kernel extends AKernel
 	private var _canvas:CanvasElement;
 	private var _ticker:Ticker;
 	private var _timeOfLastRender:Int;
-	private var _renderer:SystemRenderer;
+	private var _renderer:AbstractRenderer;
 	private var _scaleX:Float;
 	private var _scaleY:Float;
 	private var _prevWindowSize:String;
@@ -69,9 +74,7 @@ class Kernel extends AKernel
 		system = new System( this );
 		_scaleX = _scaleY = 1;
 		_canvas = cast( factory, Factory ).canvas;
-		_renderer = Detector.autoDetectRenderer( { view: _canvas }, isLocal || ( _canvas.getAttribute( "forceCanvas" ) == "true" ) );
-		_renderer.resize( factory.width, factory.height );
-		_renderer.backgroundColor = factory.bgColor;
+		_renderer = untyped Detector.autoDetectRenderer( { view: _canvas, backgroundColor: factory.bgColor, width: factory.width, height: factory.height, forceCanvas: isLocal || ( _canvas.getAttribute( "forceCanvas" ) == "true" ) } ); //  it's ok for 4, 5
 		_canvas.addEventListener( "contextmenu", _onContextMenu, false );
 		Browser.window.addEventListener( "unload", _onUnload );
 		_ticker = Ticker.shared;
@@ -109,7 +112,7 @@ class Kernel extends AKernel
 		_timeOfLastRender = l_now - ( l_delta % l_interval );
 		_updates++;
 		_updater( 0 ); // avoid isActive
-		_renderer.render( _context );
+		untyped _renderer.render( _context ); // it's ok for 4, 5, WebGL, Canvas
 		var l_windowSize:String = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
 		if ( _prevWindowSize != l_windowSize )
 		{

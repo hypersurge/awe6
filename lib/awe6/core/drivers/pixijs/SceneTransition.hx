@@ -33,8 +33,12 @@ import pixi.core.Pixi.RendererType;
 import pixi.core.Pixi.ScaleModes;
 import pixi.core.display.DisplayObject;
 import pixi.core.math.shapes.Rectangle;
-import pixi.core.renderers.SystemRenderer;
 import pixi.core.sprites.Sprite;
+#if (pixijs >= "5.0.0")
+private typedef AbstractRenderer = pixi.core.renderers.AbstractRenderer;
+#else
+private typedef AbstractRenderer = pixi.core.renderers.SystemRenderer;
+#end
 
 /**
  * This SceneTransition class provides PixiJS target overrides.
@@ -45,7 +49,7 @@ class SceneTransition extends ASceneTransition
 	override private function _init():Void 
 	{
 		super._init();
-		var l_renderer:SystemRenderer = untyped _kernel._renderer;
+		var l_renderer:AbstractRenderer = untyped _kernel._renderer;
 		var l_displayObject:DisplayObject = untyped _kernel.scenes.scene.view.context;
 		var l_bounds = l_displayObject.getBounds();
 		if ( ( l_renderer != null ) && ( l_displayObject != null ) )
