@@ -54,13 +54,14 @@ typedef WebGLRenderer = pixi.core.renderers.webgl.WebGLRenderer;
 	public var isLinux( default, null ):Bool;
 	public var isMacOs( default, null ):Bool;
 	public var isSilk( default, null ):Bool;
-	public var isCocoonjs( default, null ):Bool;
+	public var isKaiOs( default, null ):Bool;
 	public var isCrosswalk( default, null ):Bool;
 	public var isCordova( default, null ):Bool;
 	public var isWindows( default, null ):Bool;
 	public var isWindowsPhone( default, null ):Bool;
 	public var isDesktop( default, null ):Bool;
 	public var isWebGL( get, null ):Bool;
+	public var isFullScreenSupported( get, null ):Bool;
 	public var isRotated:Bool;
 	
 	private var _kernel:IKernel;
@@ -72,11 +73,7 @@ typedef WebGLRenderer = pixi.core.renderers.webgl.WebGLRenderer;
 		isAndroid = isChromeOs = isIos = isLinux = isMacOs = isSilk = isWindows = isWindowsPhone = isDesktop = false;
         userAgent = Browser.navigator.userAgent;
 		isSilk = ~/Silk/.match( userAgent ); // standalone test because Silk coexists
-		isCocoonjs = untyped Browser.navigator.isCocoonJS == true;
-		if ( isCocoonjs )
-		{
-			_cocoonOverrides();
-		}
+		isKaiOs = ~/KAIOS/.match( userAgent ); // standalone test because KaiOS coexists
 		isCrosswalk = ~/Crosswalk/.match( userAgent );
 		isCordova = untyped Browser.window.cordova != null;
         if ( ~/Android/.match( userAgent ) )
@@ -124,18 +121,18 @@ typedef WebGLRenderer = pixi.core.renderers.webgl.WebGLRenderer;
 		return Std.is( l_renderer, WebGLRenderer ); 
 	}
 	
-	private function _cocoonOverrides()
+	private function get_isFullScreenSupported():Bool
 	{
-		untyped __js__('
-		Image.prototype.naturalWidth = function()
+		try
 		{
-			return this.width;
+			var l_element = Browser.document.documentElement;
+			if ( l_element.requestFullscreen != null ) return true;
+			if ( untyped l_element.msRequestFullscreen != null ) return true;
+			if ( untyped l_element.mozRequestFullScreen != null ) return true;
+			if ( untyped l_element.webkitRequestFullscreen != null ) return true;
 		}
-		Image.prototype.naturalHeight = function()
-		{
-			return this.height;
-		}
-		');
+		catch ( p_error:Dynamic ) {}
+		return false;
 	}
 	
 	public function requestFullScreen():Void
