@@ -32,6 +32,7 @@ import awe6.core.drivers.AAudioManager;
 import awe6.interfaces.EAudioChannel;
 import awe6.interfaces.IKernel;
 import js.Browser;
+import js.Syntax;
 import js.html.Event;
 typedef PlayOptions = {
 	?complete:Void->Void,
@@ -195,7 +196,7 @@ class _HelperSound extends _AHelperSound
 			{
 				try
 				{
-					_panFilter = untyped __js__( "new PIXI.sound.filters.StereoFilter( this._pan )" );
+					_panFilter = Syntax.code( "new PIXI.sound.filters.StereoFilter( this._pan )" );
 					_sound.filters = [_panFilter];
 				}
 				catch ( p_error:Dynamic ) { _pan = 0; }
