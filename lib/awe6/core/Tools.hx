@@ -352,7 +352,7 @@ class Tools implements ITools
 		}
 		var l_age:Float = p_age / 1000;
 		var l_seconds:Int = Math.floor( l_age );
-		var l_remainder:String = Std.string( Math.round( ( l_age - l_seconds ) * 100 ) );
+		var l_remainder:String = Std.string( Math.floor( ( l_age - l_seconds ) * 100 ) );
 		var l_minutes:Int = 0;
 		while ( l_seconds > 59 )
 		{
