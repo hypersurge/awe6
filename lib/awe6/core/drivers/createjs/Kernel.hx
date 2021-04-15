@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ import js.html.Event;
 class Kernel extends AKernel
 {
 	public var system( default, null ):System;
-	
+
 	private var _stage:Stage;
 	private var _stageDynamic:Dynamic;
 	private var _scaleX:Float;
@@ -60,7 +60,7 @@ class Kernel extends AKernel
 		}
 		return l_result;
 	}
-	
+
 	override private function _driverInit():Void
 	{
 		system = new System( this );
@@ -95,13 +95,13 @@ class Kernel extends AKernel
 		_stage.canvas.addEventListener( "contextmenu", _onContextMenu, false );
 		Browser.window.addEventListener( "unload", _onUnload );
 	}
-	
+
 	private function _onUnload( p_event:Event ):Void
 	{
 		Browser.window.removeEventListener( "unload", _onUnload );
 		session.save();
 	}
-	
+
 	private function _onContextMenu( p_event:Event ):Void
 	{
 		p_event.preventDefault();
@@ -116,7 +116,7 @@ class Kernel extends AKernel
 	{
 		_stage.canvas.removeEventListener( "contextmenu", _onContextMenu );
 	}
-	
+
 	private function _onEnterFrame( p_event:Event ):Void
 	{
 		if ( untyped ( p_event.paused != null ) && ( p_event.paused == true ) ) // special case to allow Ticker.pause / above Kernel pausing
@@ -136,11 +136,11 @@ class Kernel extends AKernel
 			_driverSetIsFullScreen( isFullScreen );
 		}
 	}
-	
+
 	override private function _driverSetIsEyeCandy( p_value:Bool ):Void
 	{
 	}
-	
+
 	override private function _driverSetIsFullScreen( p_value:Bool ):Void
 	{
 		_prevWindowSize = Browser.window.innerWidth + ":" + Browser.window.innerHeight;
@@ -186,6 +186,14 @@ class Kernel extends AKernel
 						var l_preserveWidth:Int = l_factoryWidth - ( Std.parseInt( p_type.bleedWidth + '' ) * 2 );
 						var l_preserveHeight:Int = l_factoryHeight - ( Std.parseInt( p_type.bleedHeight + '' ) * 2 );
 						var l_innerScale:Float = Math.min( l_windowWidth / l_preserveWidth, l_windowHeight / l_preserveHeight );
+						if ( p_type.isBleedInternal == true )
+						{
+							var l_aspectRatio:Float = Math.min( l_factoryWidth / l_preserveHeight, Math.max( l_preserveWidth / l_factoryHeight, l_windowWidth / l_windowHeight ) );
+							var l_origAspectRatio = l_factoryWidth / l_factoryHeight;
+							var l_normal = l_origAspectRatio / l_aspectRatio;
+							if ( l_normal < 1 ) l_normal = l_aspectRatio / l_origAspectRatio;
+							l_innerScale = Math.min( l_normal * l_windowWidth / l_factoryWidth, l_normal * l_windowHeight / l_factoryHeight );
+						}
 						_scaleX = _scaleY = l_innerScale;
 					}
 			}
@@ -199,5 +207,5 @@ class Kernel extends AKernel
 		// scrollTo hack would go here, it doesn't work on modern browsers and can cause unexpected results!?
 		// if ( p_value ) Browser.window.scrollTo( 0, 1 );
 	}
-	
+
 }
