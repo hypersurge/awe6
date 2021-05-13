@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,7 @@ import awe6.core.drivers.AInputMouse;
 import awe6.interfaces.EMouseCursor;
 import js.Browser;
 import js.html.CanvasElement;
+import js.html.WheelEvent;
 import pixi.interaction.InteractionEvent;
 import pixi.interaction.InteractionManager;
 
@@ -42,12 +43,12 @@ import pixi.interaction.InteractionManager;
 class InputMouse extends AInputMouse
 {
 	static private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound, only needed once per application, hence static
-	
+
 	private var _interactionManager:InteractionManager;
 	private var _canvas:CanvasElement;
 	private var _system:System;
-	
-	override private function _driverInit():Void 
+
+	override private function _driverInit():Void
 	{
 		_canvas = untyped _kernel.factory.canvas;
 		_system = untyped _kernel.system;
@@ -55,21 +56,23 @@ class InputMouse extends AInputMouse
 		_interactionManager.interactionFrequency = 100;
 		_interactionManager.on( "pointerdown", _onPointerDown );
 		_interactionManager.on( "pointerup", _onPointerUp );
+		if ( _system.isDesktop ) Browser.document.addEventListener( "wheel", _onWheel );
 		Browser.window.focus();
 	}
-	
-	override private function _disposer():Void 
+
+	override private function _disposer():Void
 	{
 		_interactionManager.off( "pointerdown", _onPointerDown );
 		_interactionManager.off( "pointerup", _onPointerUp );
-		super._disposer();		
-	}	
-	
+		if ( _system.isDesktop ) Browser.document.removeEventListener( "wheel", _onWheel );
+		super._disposer();
+	}
+
 	override private function _isWithinBounds():Bool
 	{
 		return ( ( x > 0 ) && ( x < _kernel.factory.width ) && ( y > 0 ) && ( y < _kernel.factory.height ) );
 	}
-	
+
 	override private function _getPosition():Void
 	{
 		if ( ( _interactionManager.eventData != null ) && ( _interactionManager.eventData.data != null ) && ( _interactionManager.eventData.data.global != null ) )
@@ -78,7 +81,7 @@ class InputMouse extends AInputMouse
 			y = Std.int( _interactionManager.eventData.data.global.y );
 		}
 	}
-	
+
 	private function _onPointerDown( p_event:InteractionEvent ):Void
 	{
 		Browser.window.focus();
@@ -94,7 +97,7 @@ class InputMouse extends AInputMouse
 		}
 		_buffer.push( true );
 	}
-	
+
 	private function _onPointerUp( p_event:InteractionEvent ):Void
 	{
 		if ( !isActive )
@@ -108,8 +111,6 @@ class InputMouse extends AInputMouse
 			return;
 		}
 		_buffer.push( false );
-		
-		
 		if ( _isSoundTriggered )
 		{
 			return;
@@ -122,13 +123,22 @@ class InputMouse extends AInputMouse
 			_system.requestLockScreen();
 		}
 	}
-	
+
+	private function _onWheel( p_event:WheelEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		scroll += Math.round( p_event.deltaY );
+	}
+
 	override private function set_isVisible( p_value:Bool ):Bool
 	{
 		_canvas.style.cursor = p_value ? "none" : "auto";
 		return super.set_isVisible( p_value );
 	}
-	
+
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 		_canvas.style.cursor = switch( p_value )

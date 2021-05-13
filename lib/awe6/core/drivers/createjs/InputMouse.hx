@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,13 +43,13 @@ import js.html.TouchEvent;
 class InputMouse extends AInputMouse
 {
 	static private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound, only needed once per application, hence static
-	
+
 	private var _stage:Stage;
 	private var _isTouch:Bool;
 	private var _touchX:Int;
 	private var _touchY:Int;
-	
-	override private function _driverInit():Void 
+
+	override private function _driverInit():Void
 	{
 		_stage = untyped _kernel._stage;
 		_isTouch = Touch.isSupported() && untyped !_kernel.system.isDesktop; // too much to consider with mice and touch, so disabling touch
@@ -66,10 +66,11 @@ class InputMouse extends AInputMouse
 			_stage.addEventListener( "stagemousedown", _onMouseDown );
 			_stage.addEventListener( "stagemouseup", _onMouseUp );
 		}
+		if ( _system.isDesktop ) Browser.document.addEventListener( "wheel", _onWheel );
 		Browser.window.focus();
 	}
-	
-	override private function _disposer():Void 
+
+	override private function _disposer():Void
 	{
 		if ( _isTouch )
 		{
@@ -83,14 +84,15 @@ class InputMouse extends AInputMouse
 			_stage.removeEventListener( "stagemousedown", _onMouseDown );
 			_stage.removeEventListener( "stagemouseup", _onMouseUp );
 		}
-		super._disposer();		
-	}	
-	
+		if ( _system.isDesktop ) Browser.document.removeEventListener( "wheel", _onWheel );
+		super._disposer();
+	}
+
 	override private function _isWithinBounds():Bool
 	{
 		return _stage.mouseInBounds;
 	}
-	
+
 	override private function _getPosition():Void
 	{
 		if ( !_isTouch )
@@ -106,7 +108,7 @@ class InputMouse extends AInputMouse
 		x = ( x == _kernel.factory.width ) ? _xPrev : x;
 		y = ( y == _kernel.factory.height ) ? _yPrev : y;
 	}
-	
+
 	private function _onTouchStart( p_event:TouchEvent ):Void
 	{
 		_onMouseDown( cast p_event );
@@ -114,7 +116,7 @@ class InputMouse extends AInputMouse
 		x = _touchX;
 		y = _touchY;
 	}
-	
+
 	private function _onTouchEnd( p_event:TouchEvent ):Void
 	{
 		_onMouseUp( cast p_event );
@@ -131,7 +133,7 @@ class InputMouse extends AInputMouse
 			untyped _kernel.system.requestLockScreen();
 		}
 	}
-	
+
 	private function _onTouch( p_event:TouchEvent ):Void
 	{
 		try
@@ -159,7 +161,7 @@ class InputMouse extends AInputMouse
 		}
 		_buffer.push( true );
 	}
-	
+
 	private function _onMouseUp( p_event:MouseEvent ):Void
 	{
 		if ( !isActive )
@@ -172,13 +174,22 @@ class InputMouse extends AInputMouse
 		}
 		_buffer.push( false );
 	}
-	
+
+	private function _onWheel( p_event:WheelEvent ):Void
+	{
+		if ( !isActive )
+		{
+			return;
+		}
+		scroll += Math.round( p_event.deltaY );
+	}
+
 	override private function set_isVisible( p_value:Bool ):Bool
 	{
 		_stage.cursor = p_value ? "none" : "auto";
 		return super.set_isVisible( p_value );
 	}
-	
+
 	override private function set_cursorType( p_value:EMouseCursor ):EMouseCursor
 	{
 		_stage.canvas.style.cursor = switch( p_value )
@@ -192,7 +203,7 @@ class InputMouse extends AInputMouse
 		}
 		return super.set_cursorType( p_value );
 	}
-	
+
 	// enable this if you want cursors, otherwise it's a performance hit for no other benefit so is disabled by default (as per CreateJS)
 	public function enableMouseOver( p_updatesPerSecond:Float = 20 ):Void
 	{
