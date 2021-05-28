@@ -35,6 +35,8 @@ import createjs.easeljs.Stage;
 import createjs.easeljs.Touch;
 import js.Browser;
 import js.html.TouchEvent;
+import js.html.WheelEvent;
+
 
 /**
  * This InputMouse class provides CreateJS target overrides.
@@ -45,6 +47,7 @@ class InputMouse extends AInputMouse
 	static private var _isSoundTriggered:Bool; // a hack for Mobile Browsers that mute audio until a user touch event initiates the "first" sound, only needed once per application, hence static
 
 	private var _stage:Stage;
+	private var _system:System;
 	private var _isTouch:Bool;
 	private var _touchX:Int;
 	private var _touchY:Int;
@@ -52,6 +55,7 @@ class InputMouse extends AInputMouse
 	override private function _driverInit():Void
 	{
 		_stage = untyped _kernel._stage;
+		_system = untyped _kernel.system;
 		_isTouch = Touch.isSupported() && untyped !_kernel.system.isDesktop; // too much to consider with mice and touch, so disabling touch
 		if ( _isTouch )
 		{
