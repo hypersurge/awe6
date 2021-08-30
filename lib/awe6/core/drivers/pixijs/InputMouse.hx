@@ -56,6 +56,7 @@ class InputMouse extends AInputMouse
 		_interactionManager.interactionFrequency = 100;
 		_interactionManager.on( "pointerdown", _onPointerDown );
 		_interactionManager.on( "pointerup", _onPointerUp );
+		_interactionManager.on( "pointerupoutside", _onPointerUp );
 		if ( _system.isDesktop ) Browser.document.addEventListener( "wheel", _onWheel );
 		Browser.window.focus();
 	}
@@ -64,6 +65,7 @@ class InputMouse extends AInputMouse
 	{
 		_interactionManager.off( "pointerdown", _onPointerDown );
 		_interactionManager.off( "pointerup", _onPointerUp );
+		_interactionManager.off( "pointerupoutside", _onPointerUp );
 		if ( _system.isDesktop ) Browser.document.removeEventListener( "wheel", _onWheel );
 		super._disposer();
 	}
