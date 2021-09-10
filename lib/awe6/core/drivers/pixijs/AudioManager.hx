@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -56,7 +56,9 @@ typedef SoundInstance = {
 	stop:Void->Void,
 	volume:Float,
 	loop:Bool,
-	filters:Array<Dynamic>,
+	_media:{
+		filters:Array<Dynamic>,
+	},
 };
 typedef SoundFilterPan = {
 	pan:Float,
@@ -70,15 +72,15 @@ class AudioManager extends AAudioManager
 {
 	public static var sound:Sound = untyped PIXI.sound;
 	private var _visibilityWasMute:Bool;
-	
-	override private function _init():Void 
+
+	override private function _init():Void
 	{
 		super._init();
 		_visibilityWasMute = isMute;
 		Browser.document.addEventListener( "visibilitychange", _onVisibilityChange );
 	}
-	
-	override private function _disposer():Void 
+
+	override private function _disposer():Void
 	{
 		Browser.document.removeEventListener( "visibilitychange", _onVisibilityChange );
 		super._disposer();
@@ -107,7 +109,7 @@ class AudioManager extends AAudioManager
 			trace( p_error );
 		}
 	}
-	
+
 	private function _onVisibilityChange( p_event:Event ):Void
 	{
 		var l_isHidden:Bool = _getVisibilityPropery();
@@ -121,7 +123,7 @@ class AudioManager extends AAudioManager
 			isMute = _visibilityWasMute;
 		}
 	}
-	
+
 	private function _getVisibilityPropery():Bool
 	{
 		var l_vendorPrefixes:Array<String> = [ "hidden", "mozHidden", "msHidden", "oHidden", "webkitHidden" ];
@@ -134,19 +136,19 @@ class AudioManager extends AAudioManager
 		}
 		return Browser.document.hidden;
 	}
-	
+
 }
 
 class _HelperSound extends _AHelperSound
 {
 	private var _sound:SoundInstance;
 	private var _panFilter:SoundFilterPan;
-	
+
 	public function new( p_kernel:IKernel, p_id:String, p_packageId:String, ?p_audioChannelType:EAudioChannel, p_loops:Int = 1, p_startTime:Int = 0, p_volume:Float = 1, p_pan:Float = 0, ?p_onCompleteCallback:Void->Void )
 	{
-		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops == 1 ? 0 : p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );	
+		super( p_kernel, p_id, p_packageId, p_audioChannelType, p_loops == 1 ? 0 : p_loops, p_startTime, p_volume, p_pan, p_onCompleteCallback );
 	}
-	
+
 	override private function _driverInit():Void
 	{
 		try
@@ -174,7 +176,7 @@ class _HelperSound extends _AHelperSound
 		_driverTransform();
 		return;
 	}
-	
+
 	override private function _driverTransform( p_asRelative:Bool = false ):Void
 	{
 		if ( _sound == null )
@@ -197,7 +199,7 @@ class _HelperSound extends _AHelperSound
 				try
 				{
 					_panFilter = Syntax.code( "new PIXI.sound.filters.StereoFilter( this._pan )" );
-					_sound.filters = [_panFilter];
+					_sound._media.filters = [_panFilter];
 				}
 				catch ( p_error:Dynamic ) { _pan = 0; }
 			}
@@ -216,7 +218,7 @@ class _HelperSound extends _AHelperSound
 		}
 		catch ( p_error:Dynamic ) {}
 	}
-	
+
 	private function _onSoundComplete():Void
 	{
 		if ( _onCompleteCallback != null )
@@ -225,7 +227,7 @@ class _HelperSound extends _AHelperSound
 		}
 		dispose();
 	}
-	
+
 	override private function _driverDisposer():Void
 	{
 		if ( _sound != null )
@@ -233,5 +235,4 @@ class _HelperSound extends _AHelperSound
 			stop();
 		}
 	}
-	
 }
