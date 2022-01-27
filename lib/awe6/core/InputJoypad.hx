@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -59,7 +59,7 @@ class InputJoypad implements IInputJoypad
 	private var _keySecondaryAlt:EKey;
 	private var _joypadTouchType:EJoypadTouch;
 	private var _joypadStateCache:_JoypadState;
-	
+
 	public function new( p_kernel:IKernel, ?p_up:EKey, ?p_right:EKey, ?p_down:EKey, ?p_left:EKey, ?p_primary:EKey, ?p_secondary:EKey, ?p_upAlt:EKey, ?p_rightAlt:EKey, ?p_downAlt:EKey, ?p_leftAlt:EKey, ?p_primaryAlt:EKey, ?p_secondaryAlt:EKey, ?p_joypadTouchType:EJoypadTouch )
 	{
 		_kernel = p_kernel;
@@ -76,15 +76,15 @@ class InputJoypad implements IInputJoypad
 		_keyPrimaryAlt = ( p_primaryAlt != null ) ? p_primaryAlt : EKey.Q;
 		_keySecondaryAlt = ( p_secondaryAlt != null ) ? p_secondaryAlt : EKey.E;
 		_joypadTouchType = ( p_joypadTouchType != null ) ? p_joypadTouchType : _kernel.factory.joypadTouchType;
-		_isTouchEnabled = _kernel.factory.joypadTouchType != EJoypadTouch.DISABLED;
+		_isTouchEnabled = _joypadTouchType != EJoypadTouch.DISABLED;
 		_joypadStateCache = { age:0, isFire:false, isUp:false, isRight:false, isDown:false, isLeft:false, isPrevFire:false, isPrevUp:false, isPrevRight:false, isPrevDown:false, isPrevLeft:false };
 	}
-	
+
 	public function toString():String
 	{
 		return Std.string( { up:getIsButtonDown( EJoypadButton.UP ), right:getIsButtonDown( EJoypadButton.RIGHT ), down:getIsButtonDown( EJoypadButton.DOWN ), left:getIsButtonDown( EJoypadButton.LEFT ), fire:getIsButtonDown( EJoypadButton.FIRE ), primary:getIsButtonDown( EJoypadButton.PRIMARY ), secondary:getIsButtonDown( EJoypadButton.SECONDARY ) } );
 	}
-	
+
 	private function _checkKeyboard( p_type:EJoypadButton, p_function:EKey->Bool ):Bool
 	{
 		switch ( p_type )
@@ -105,22 +105,22 @@ class InputJoypad implements IInputJoypad
 				return p_function( _keySecondary ) || p_function( _keySecondaryAlt );
 		}
 	}
-	
+
 	public function getIsButtonDown( p_type:EJoypadButton ):Bool
 	{
 		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyDown ) || ( _isTouchEnabled && _checkTouchIsDown( p_type ) );
 	}
-	
+
 	public function getIsButtonPress( p_type:EJoypadButton ):Bool
 	{
 		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyPress ) || ( _isTouchEnabled && _checkTouchIsPress( p_type ) );
 	}
-	
+
 	public function getIsButtonRelease( p_type:EJoypadButton ):Bool
 	{
 		return _checkKeyboard( p_type, _kernel.inputs.keyboard.getIsKeyRelease ) || ( _isTouchEnabled && _checkTouchIsRelease( p_type ) );
 	}
-	
+
 	public function getButtonDownDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
 	{
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyDownDuration;
@@ -142,7 +142,7 @@ class InputJoypad implements IInputJoypad
 				return Std.int( Math.max( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
-	
+
 	public function getButtonUpDuration( p_type:EJoypadButton, p_asTime:Bool = true, p_isPrevious:Bool = false ):Int
 	{
 		var l_function:EKey->Bool->Bool->Float = _kernel.inputs.keyboard.getKeyUpDuration;
@@ -164,7 +164,7 @@ class InputJoypad implements IInputJoypad
 				return Std.int( Math.min( l_function( _keySecondary, p_asTime, p_isPrevious ), l_function( _keySecondaryAlt, p_asTime, p_isPrevious ) ) );
 		}
 	}
-	
+
 	private function _getTouchButtonPosition( p_type:EJoypadButton ):{ x:Float, y:Float }
 	{
 		return switch( p_type )
@@ -176,7 +176,7 @@ class InputJoypad implements IInputJoypad
 			case FIRE, PRIMARY, SECONDARY : { x: _kernel.factory.width * .5, y: _kernel.factory.height * .5 };
 		}
 	}
-	
+
 	private function _getClosestTouchButton( ?p_x:Float, ?p_y:Float ):EJoypadButton
 	{
 		if ( p_x == null )
@@ -201,7 +201,7 @@ class InputJoypad implements IInputJoypad
 		}
 		return l_result;
 	}
-	
+
 	private function _getTouchState():_JoypadState
 	{
 		if ( !_assignMouse() || ( _mouse.getAge() == _joypadStateCache.age ) )
@@ -257,7 +257,7 @@ class InputJoypad implements IInputJoypad
 		_joypadStateCache = l_result;
 		return _joypadStateCache;
 	}
-	
+
 	private function _checkTouchIsDown( p_type:EJoypadButton ):Bool
 	{
 		var l_state:_JoypadState = _getTouchState();
@@ -270,7 +270,7 @@ class InputJoypad implements IInputJoypad
 			case FIRE, PRIMARY, SECONDARY : l_state.isFire;
 		}
 	}
-	
+
 	private function _checkTouchIsPress( p_type:EJoypadButton ):Bool
 	{
 		var l_state:_JoypadState = _getTouchState();
@@ -283,7 +283,7 @@ class InputJoypad implements IInputJoypad
 			case FIRE, PRIMARY, SECONDARY : l_state.isFire && !l_state.isPrevFire;
 		}
 	}
-	
+
 	private function _checkTouchIsRelease( p_type:EJoypadButton ):Bool
 	{
 		var l_state:_JoypadState = _getTouchState();
@@ -296,7 +296,7 @@ class InputJoypad implements IInputJoypad
 			case FIRE, PRIMARY, SECONDARY : !l_state.isFire && l_state.isPrevFire;
 		}
 	}
-	
+
 	private inline function _assignMouse():Bool
 	{
 		if ( _mouse != null )
@@ -313,7 +313,7 @@ class InputJoypad implements IInputJoypad
 			return false;
 		}
 	}
-	
+
 }
 
 private typedef _JoypadState = { age:Int, isFire:Bool, isUp:Bool, isRight:Bool, isDown:Bool, isLeft:Bool, isPrevFire:Bool, isPrevUp:Bool, isPrevRight:Bool, isPrevDown:Bool, isPrevLeft:Bool }
