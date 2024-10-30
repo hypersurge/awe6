@@ -1,23 +1,23 @@
 /*
- *                        _____ 
+ *                        _____
  *     _____      _____  / ___/
- *    /__   | /| /   _ \/ __ \ 
- *   / _  / |/ |/ /  __  /_/ / 
- *   \___/|__/|__/\___/\____/  
+ *    /__   | /| /   _ \/ __ \
+ *   / _  / |/ |/ /  __  /_/ /
+ *   \___/|__/|__/\___/\____/
  *    awe6 is game, inverted
- * 
+ *
  * Copyright (c) 2010, Robert Fell, awe6.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,13 +37,12 @@ class Text extends GuiEntity
 {
 	public var text( default, set ):String;
 	public var textStyle:ITextStyle;
-	
+
 	private var _textField:TextField;
-	private var _textFieldOutline:TextField;
 	private var _isMultiline:Bool;
 	private var _isDirty:Bool;
 	private var _prevTextStyle:String;
-	
+
 	public function new( p_kernel:IKernel, p_width:Float, p_height:Float, p_text:String = "", ?p_textStyle:ITextStyle, p_isMultiline:Bool = false, p_isCached:Bool = false )
 	{
 		textStyle = p_textStyle;
@@ -51,9 +50,9 @@ class Text extends GuiEntity
 		text = p_text;
 		super( p_kernel, p_width, p_height, false );
 	}
-	
-	
-	override private function _init():Void 
+
+
+	override private function _init():Void
 	{
 		super._init();
 		_textField = new TextField( text );
@@ -61,8 +60,8 @@ class Text extends GuiEntity
 		_context.addChild( _textField );
 		_prevTextStyle = textStyle.toString();
 	}
-	
-	private function _createPixiTextStyle( p_textStyle:ITextStyle ):PixiTextStyle
+
+	public static function createPixiTextStyle( p_textStyle:ITextStyle, ?p_wordWrapWidth:Float ):PixiTextStyle
 	{
 		var l_result:PixiTextStyle = new PixiTextStyle();
 		l_result.align = switch ( p_textStyle.align )
@@ -74,22 +73,21 @@ class Text extends GuiEntity
 			case LEFT, JUSTIFY :
 				"left";
 		}
-		l_result.fill = textStyle.color;
+		l_result.fill = p_textStyle.color;
 		l_result.fontFamily = p_textStyle.font;
 		l_result.fontSize = p_textStyle.size;
-		l_result.fontStyle = ( textStyle.isItalic ? "italic " : "normal" );
-		l_result.fontWeight =  ( textStyle.isBold ? "bold " : "normal" );
+		l_result.fontStyle = ( p_textStyle.isItalic ? "italic " : "normal" );
+		l_result.fontWeight =  ( p_textStyle.isBold ? "bold " : "normal" );
 		l_result.letterSpacing = p_textStyle.spacingHorizontal;
 		l_result.lineHeight = p_textStyle.spacingVertical;
 		l_result.strokeThickness = p_textStyle.thickness;
 		l_result.stroke = "";
-		l_result.strokeThickness = 0;
 		l_result.dropShadow = false;
-		l_result.wordWrap = _isMultiline;
-		l_result.wordWrapWidth = width;
-		if ( textStyle.filters != null )
+		l_result.wordWrap = p_wordWrapWidth != null;
+		l_result.wordWrapWidth = p_wordWrapWidth;
+		if ( p_textStyle.filters != null )
 			{
-				var l_filters = textStyle.filters.copy();
+				var l_filters = p_textStyle.filters.copy();
 				if ( ( l_filters.length == 2 ) || ( l_filters.length == 6 ) )
 				{
 					l_result.stroke = l_filters.shift();
@@ -107,7 +105,7 @@ class Text extends GuiEntity
 			}
 		return l_result;
 	}
-	
+
 	private function _alignTextField( p_textField:TextField, p_textStyle:ITextStyle ):Void
 	{
 		p_textField.anchor.x = switch( p_textStyle.align )
@@ -130,8 +128,8 @@ class Text extends GuiEntity
 		}
 		p_textField.y = -( p_textField.style.strokeThickness / 2 );
 	}
-	
-	override private function _updater( p_deltaTime:Int = 0 ):Void 
+
+	override private function _updater( p_deltaTime:Int = 0 ):Void
 	{
 		super._updater( p_deltaTime );
 		_isDirty = _isDirty || ( _prevTextStyle != textStyle.toString() );
@@ -141,17 +139,17 @@ class Text extends GuiEntity
 		}
 		_prevTextStyle = textStyle.toString();
 	}
-		
+
 	private function _draw():Void
 	{
 		if ( _prevTextStyle != textStyle.toString() )
 		{
-			_textField.style = _createPixiTextStyle( textStyle );
+			_textField.style = createPixiTextStyle( textStyle, _isMultiline ? width : null );
 			_alignTextField( _textField, textStyle );
 		}
 		_isDirty = false;
 	}
-	
+
 	private function set_text( p_value:String ):String
 	{
 		if ( p_value == null )
@@ -167,11 +165,7 @@ class Text extends GuiEntity
 		{
 			_textField.text = text;
 		}
-		if ( _textFieldOutline != null )
-		{
-			_textFieldOutline.text = text;
-		}
 		_isDirty = true;
 		return text;
-	}	
+	}
 }
